@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+  <bean id="queryMetadataService" class="gov.nih.nci.ncicb.cadsr.serviceimpl.QueryMetadataServiceImpl" singleton="false" />
+  <bean id="caAdapterService" class="gov.nih.nci.ncicb.cadsr.serviceimpl.CaAdapterServiceImpl" singleton="false" >
+     <property name="csvEDCIGL7MappingFile"><value>Pathofthemappingfile</value></property>
+  </bean>
+  <bean id="generateMessageService" class="gov.nih.nci.ncicb.cadsr.serviceimpl.GenerateMessageServiceImpl" singleton="false" >
+     <property name="queryMetadataService" ><ref local="queryMetadataService"/></property>
+     <property name="caAdapterService" ><ref local="caAdapterService"/></property>
+  </bean>  
+</beans>
+
+
