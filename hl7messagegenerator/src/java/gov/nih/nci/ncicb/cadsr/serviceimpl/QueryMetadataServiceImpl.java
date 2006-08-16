@@ -7,9 +7,13 @@ import gov.nih.nci.ncicb.cadsr.edci.domain.GlobalDefinitions;
 import gov.nih.nci.ncicb.cadsr.service.QueryMetadataService;
 import gov.nih.nci.ncicb.cadsr.service.ServiceException;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 public class QueryMetadataServiceImpl implements QueryMetadataService
 {
     private EDCIDAOFactory daoFactory;
+    private static Logger logger = LogManager.getLogger(QueryMetadataService.class);
     
     public QueryMetadataServiceImpl() {
     }
@@ -27,6 +31,7 @@ public class QueryMetadataServiceImpl implements QueryMetadataService
        return globalDefinitions;
       }
       catch (Exception e) {
+          logger.error("Error getting GlobalDefinitions.", e);
           throw new ServiceException("Error getting GlobalDefinitions.", e);
       }
     }
