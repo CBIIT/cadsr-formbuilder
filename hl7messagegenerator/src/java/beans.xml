@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
-  <bean id="queryMetadataService" class="gov.nih.nci.ncicb.cadsr.serviceimpl.QueryMetadataServiceImpl" singleton="false" />
+  <bean id="daoFactory" class="gov.nih.nci.ncicb.cadsr.dao.impl.EDCIDAOFactoryImpl"/>
+  <bean id="queryMetadataService" class="gov.nih.nci.ncicb.cadsr.serviceimpl.QueryMetadataServiceImpl" singleton="false" >
+     <property name="daoFactory"><ref local="daoFactory" /></property>
+  </bean>
   <bean id="caAdapterService" class="gov.nih.nci.ncicb.cadsr.serviceimpl.CaAdapterServiceImpl" singleton="false" >
      <property name="csvEDCIGL7MappingFile"><value>Pathofthemappingfile</value></property>
   </bean>
   <bean id="generateMessageService" class="gov.nih.nci.ncicb.cadsr.serviceimpl.GenerateMessageServiceImpl" singleton="false" >
      <property name="queryMetadataService" ><ref local="queryMetadataService"/></property>
      <property name="caAdapterService" ><ref local="caAdapterService"/></property>
-  </bean>  
+  </bean> 
+  <bean id="serviceLocator" class="gov.nih.nci.ncicb.cadsr.servicelocator.ServiceLocator" >
+     <property name="caCOREUrl" ><value>http://cabio-dev.nci.nih.gov/cacore31/http/remoteService</value></property>
+  </bean>
+  <bean id="globalDefinitionsDAO" class="gov.nih.nci.ncicb.cadsr.dao.impl.GlobalDefinitionsDAOImpl" >
+     <property name="serviceLocator"><ref local="serviceLocator"></ref></property>
+  </bean>
 </beans>
 
 

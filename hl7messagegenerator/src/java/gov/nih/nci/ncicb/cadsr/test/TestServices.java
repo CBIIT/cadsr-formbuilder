@@ -27,10 +27,10 @@ public class TestServices extends TestCase {
        beanFactory = new XmlBeanFactory(resource);
     }
     
-    public void testGenerateMessageService() {
+    public void testQueryMetadataService() {
       try {
-        GenerateMessageService generateMessageService = (GenerateMessageService)beanFactory.getBean("generateMessageService");
-        generateMessageService.geteDCIHL7Message("fdjfkdjfdkj");
+        QueryMetadataService queryMetadataService = (QueryMetadataService)beanFactory.getBean("queryMetadataService");
+        queryMetadataService.getGlobalDefinitions("A68C74F0-9B90-58E6-E034-0003BA0B1A09");
       }
       catch(Exception e){
           e.printStackTrace();
