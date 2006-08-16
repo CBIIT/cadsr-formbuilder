@@ -15,10 +15,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 
 public class GlobalDefinitionsDAOImpl  extends EDCIDAOImpl implements GlobalDefinitionsDAO
 {
-
+   
+    private static Logger logger = LogManager.getLogger(GlobalDefinitionsDAO.class);
+    
     public GlobalDefinitionsDAOImpl() 
     {
     }
@@ -62,6 +67,7 @@ public class GlobalDefinitionsDAOImpl  extends EDCIDAOImpl implements GlobalDefi
 
           }
         }catch(Exception e) {
+            logger.error("Error querying DataElements.", e);
             throw new DataAccessException("Error querying DataElements.", e);
         }
         return globalDefinitions;
