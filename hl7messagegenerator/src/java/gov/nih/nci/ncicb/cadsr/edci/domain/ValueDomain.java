@@ -1,14 +1,15 @@
 package gov.nih.nci.ncicb.cadsr.edci.domain;
 
-public abstract class ValueDomain {
+public class ValueDomain {
     private String datatype;
-    private String decimalPlaces;
+    private Integer decimalPlaces;
     private String description;
     private String GUID;
-    private String maximumLength;
+    private Integer maximumLength;
     private String name;
     private String namespace;
     private String sasFormatName;
+    private String isEnumeratedFlag;
     
     public ValueDomain() {
     }
@@ -21,11 +22,11 @@ public abstract class ValueDomain {
         return datatype;
     }
 
-    public void setDecimalPlaces(String decimalPlaces) {
+    public void setDecimalPlaces(Integer decimalPlaces) {
         this.decimalPlaces = decimalPlaces;
     }
 
-    public String getDecimalPlaces() {
+    public Integer getDecimalPlaces() {
         return decimalPlaces;
     }
 
@@ -45,11 +46,11 @@ public abstract class ValueDomain {
         return GUID;
     }
 
-    public void setMaximumLength(String maximumLength) {
+    public void setMaximumLength(Integer maximumLength) {
         this.maximumLength = maximumLength;
     }
 
-    public String getMaximumLength() {
+    public Integer getMaximumLength() {
         return maximumLength;
     }
 
@@ -75,5 +76,13 @@ public abstract class ValueDomain {
 
     public String getSasFormatName() {
         return sasFormatName;
+    }
+    
+    public void setIsEnumeratedFlag(String isEnumeratedFlag) {
+        this.isEnumeratedFlag = isEnumeratedFlag;
+    }
+
+    public String getIsEnumeratedFlag() {
+        return isEnumeratedFlag;
     }
 }
