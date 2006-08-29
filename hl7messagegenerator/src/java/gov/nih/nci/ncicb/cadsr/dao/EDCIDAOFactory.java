@@ -8,4 +8,6 @@ public interface  EDCIDAOFactory {
    
     public GlobalDefinitionsDAO getGlobalDefinitionsDAO() throws DataAccessException;
     
+    public InstrumentDAO getInstrumentDAO() throws DataAccessException;
+    
 }

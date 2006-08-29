@@ -1,36 +1,33 @@
 package gov.nih.nci.ncicb.cadsr.edci.domain;
 
+import java.io.Serializable;
+
 import java.util.Collection;
 
-public class GlobalDefinitions {
-    private Collection<ValueDomain> valueDomainCollection;
-    private Collection<DataElementConcept> dataElementConceptCollection;
-    private Collection<DataElement> dataElementCollection;
+public interface GlobalDefinitions extends Serializable{
+
+    public void addValueDomain(ValueDomain valueDomain);
     
-    public GlobalDefinitions() {
-    }
+    public void setValueDomainCollection(Collection<ValueDomain> valueDomainCollection);
+    
+    public Collection<ValueDomain> getValueDomainCollection();
+    
+    public void addDataElementConcept(DataElementConcept dataElementConcept);
 
-    public void setValueDomainCollection(Collection<ValueDomain> valueDomainCollection) {
-        this.valueDomainCollection = valueDomainCollection;
-    }
+    public void setDataElementConceptCollection(Collection<DataElementConcept> dataElementConceptCollection);
 
-    public Collection<ValueDomain> getValueDomainCollection() {
-        return valueDomainCollection;
-    }
+    public Collection<DataElementConcept> getDataElementConceptCollection();
+    
+    public void addDataElement(DataElement dataElement);
 
-    public void setDataElementConceptCollection(Collection<DataElementConcept> dataElementConceptCollection) {
-        this.dataElementConceptCollection = dataElementConceptCollection;
-    }
+    public void setDataElementCollection(Collection<DataElement> dataElementCollection);
 
-    public Collection<DataElementConcept> getDataElementConceptCollection() {
-        return dataElementConceptCollection;
-    }
+    public Collection<DataElement> getDataElementCollection();
+    
+    public void addDataElementGroup(DataElementGroup  dataElementGroup);  
 
-    public void setDataElementCollection(Collection<DataElement> dataElementCollection) {
-        this.dataElementCollection = dataElementCollection;
-    }
+    public void setDataElementGroupCollection(Collection<DataElementGroup> dataElementGroupCollection);
 
-    public Collection<DataElement> getDataElementCollection() {
-        return dataElementCollection;
-    }
+    public Collection<DataElementGroup> getDataElementGroupCollection();
+    
 }

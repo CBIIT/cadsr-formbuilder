@@ -1,53 +1,33 @@
 package gov.nih.nci.ncicb.cadsr.edci.domain;
 
+import gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementImpl;
+
+import java.io.Serializable;
+
 import java.util.Collection;
 
-public class DataElementGroup {
-    private String GUID;
-    private String description;
-    private String name;
-    private String namespace;
-    private Collection<DataElement> dataElementCollection;
-    public DataElementGroup() {
-    }
+public interface DataElementGroup extends Serializable {
 
-    public void setGUID(String gUID) {
-        this.GUID = gUID;
-    }
+    public void setGUID(String gUID);
 
-    public String getGUID() {
-        return GUID;
-    }
+    public String getGUID();
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public void setDescription(String description);
 
-    public String getDescription() {
-        return description;
-    }
+    public String getDescription();
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setName(String name);
 
-    public String getName() {
-        return name;
-    }
+    public String getName();
 
-    public void setNamespace(String namespace) {
-        this.namespace = namespace;
-    }
+    public void setNamespace(String namespace);
 
-    public String getNamespace() {
-        return namespace;
-    }
+    public String getNamespace();
+    
+    public void addDataElement(DataElement dataElement);
 
-    public void setDataElementCollection(Collection<DataElement> dataElementCollection) {
-        this.dataElementCollection = dataElementCollection;
-    }
+    public void setDataElementCollection(Collection<DataElement> dataElementCollection);
 
-    public Collection<DataElement> getDataElementCollection() {
-        return dataElementCollection;
-    }
+    public Collection<DataElement> getDataElementCollection();
+    
 }
