@@ -1,52 +1,23 @@
 package gov.nih.nci.ncicb.cadsr.edci.domain;
 
-public class DataElementConcept {
-    private String definition;
-    private String description;
-    private String guid;
-    private String name;
-    private String intent;
-    
-    public DataElementConcept() {
-    }
+import java.io.Serializable;
 
-    public void setDefinition(String definition) {
-        this.definition = definition;
-    }
+public interface DataElementConcept extends Serializable{
 
-    public String getDefinition() {
-        return definition;
-    }
+    public void setDefinition(String definition);
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public String getDefinition();
 
-    public String getDescription() {
-        return description;
-    }
+    public void setDescription(String description);
 
-    public void setGuid(String guid) {
-        this.guid = guid;
-    }
+    public String getDescription();
 
-    public String getGuid() {
-        return guid;
-    }
+    public void setGUID(String guid);
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public String getGUID();
 
-    public String getName() {
-        return name;
-    }
+    public void setName(String name);
 
-    public void setIntent(String intent) {
-        this.intent = intent;
-    }
+    public String getName();
 
-    public String getIntent() {
-        return intent;
-    }
 }

@@ -1,109 +1,53 @@
 package gov.nih.nci.ncicb.cadsr.edci.domain;
 
+import java.io.Serializable;
+
 import java.util.Collection;
 
-public class DataElement {
-    private String eVDSubsetId;
-    private String GUID;
-    private String dataElementConceptGUID;
-    private String definition;
-    private String description;
-    private String name;
-    private String namespace;
-    private String valueDomainGUID;
-    private Collection<DataElementGroup> dataElementGroupCollection;
-    private Collection<DataElementAlias> dataElementAliasCollection;
-    private Collection<DataElementText> dataElementTextCollection;
+public interface DataElement extends Serializable{
 
-    public DataElement() {
-    }
+    public void setEVDSubsetId(String eVDSubsetId) ;
 
-    public void setEVDSubsetId(String eVDSubsetId) {
-        this.eVDSubsetId = eVDSubsetId;
-    }
-
-    public String getEVDSubsetId() {
-        return eVDSubsetId;
-    }
+    public String getEVDSubsetId() ;
 
 
-    public void setDataElementAliasCollection(Collection<DataElementAlias> dataElementAliasCollection) {
-        this.dataElementAliasCollection = dataElementAliasCollection;
-    }
+    public void setAlternateDesignationCollection(Collection<AlternateDesignation> alternateDesignationCollection) ;
 
-    public Collection<DataElementAlias> getDataElementAliasCollection() {
-        return dataElementAliasCollection;
-    }
+    public Collection<AlternateDesignation> getAlternateDesignationCollection() ;
+    
+    public void addAlternateDesignation(AlternateDesignation alternateDesignation);
+    
+    public void setDataElementTextCollection(Collection<DataElementText> dataElementTextCollection) ;
+    
+    public Collection<DataElementText> getDataElementTextCollection() ;
+    
+    public void addDataElementText(DataElementText dataElementText);
 
-    public void setDataElementTextCollection(Collection<DataElementText> dataElementTextCollection) {
-        this.dataElementTextCollection = dataElementTextCollection;
-    }
+    public void setDataElementConceptGUID(String dataElementConceptGUID);
 
-    public Collection<DataElementText> getDataElementTextCollection() {
-        return dataElementTextCollection;
-    }
+    public String getDataElementConceptGUID() ;
 
-    public void setDataElementConceptGUID(String dataElementConceptGUID) {
-        this.dataElementConceptGUID = dataElementConceptGUID;
-    }
+    public void setDefinition(String definition);
 
-    public String getDataElementConceptGUID() {
-        return dataElementConceptGUID;
-    }
+    public String getDefinition() ;
 
-    public void setDefinition(String definition) {
-        this.definition = definition;
-    }
+    public void setDescription(String description) ;
 
-    public String getDefinition() {
-        return definition;
-    }
+    public String getDescription() ;
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public void setName(String name) ;
 
-    public String getDescription() {
-        return description;
-    }
+    public String getName() ;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setNamespace(String namespace) ;
 
-    public String getName() {
-        return name;
-    }
+    public String getNamespace() ;
 
-    public void setNamespace(String namespace) {
-        this.namespace = namespace;
-    }
+    public void setValueDomainGUID(String valueDomainGUID) ;
 
-    public String getNamespace() {
-        return namespace;
-    }
+    public String getValueDomainGUID() ;
+    
+    public void setGUID(String gUID) ;
 
-    public void setValueDomainGUID(String valueDomainGUID) {
-        this.valueDomainGUID = valueDomainGUID;
-    }
-
-    public String getValueDomainGUID() {
-        return valueDomainGUID;
-    }
-
-    public void setDataElementGroupCollection(Collection<DataElementGroup> dataElementGroupCollection) {
-        this.dataElementGroupCollection = dataElementGroupCollection;
-    }
-
-    public Collection<DataElementGroup> getDataElementGroupCollection() {
-        return dataElementGroupCollection;
-    }
-
-    public void setGUID(String gUID) {
-        this.GUID = gUID;
-    }
-
-    public String getGUID() {
-        return GUID;
-    }
+    public String getGUID() ;
 }

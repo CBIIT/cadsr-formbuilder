@@ -1,45 +1,27 @@
 package gov.nih.nci.ncicb.cadsr.edci.domain;
 
+import gov.nih.nci.ncicb.cadsr.edci.domain.impl.EVDElementImpl;
+
 import java.util.Collection;
 
-public class EVDSubset {
-    private boolean isBaseSubsetFlag;
-    private String radioButtonLabel;
-    private String subsetId;
-    private Collection<EVDElement> eVDElementCollection;
+public interface EVDSubset {
+
+    public void setBaseSubsetFlag(boolean isBaseSubsetFlag);
+
+    public boolean isBaseSubsetFlag();
+
+    public void setRadioButtonLabel(String radioButtonLabel);
+
+    public String getRadioButtonLabel();
+
+    public void setSubsetId(String subsetId);
+
+    public String getSubsetId();
     
-    public EVDSubset() {
-    }
+    public void addElementInSubset(ElementInSubset elementsInSubset);
 
-    public void setIsBaseSubsetFlag(boolean isBaseSubsetFlag) {
-        this.isBaseSubsetFlag = isBaseSubsetFlag;
-    }
+    public void setElementInSubsetCollection(Collection<ElementInSubset> elementsInSubsetCollection);
 
-    public boolean isIsBaseSubsetFlag() {
-        return isBaseSubsetFlag;
-    }
-
-    public void setRadioButtonLabel(String radioButtonLabel) {
-        this.radioButtonLabel = radioButtonLabel;
-    }
-
-    public String getRadioButtonLabel() {
-        return radioButtonLabel;
-    }
-
-    public void setSubsetId(String subsetId) {
-        this.subsetId = subsetId;
-    }
-
-    public String getSubsetId() {
-        return subsetId;
-    }
-
-    public void setEVDElementCollection(Collection<EVDElement> eVDElementCollection) {
-        this.eVDElementCollection = eVDElementCollection;
-    }
-
-    public Collection<EVDElement> getEVDElementCollection() {
-        return eVDElementCollection;
-    }
+    public Collection<ElementInSubset> getElementInSubsetCollection();
+    
 }

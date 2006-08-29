@@ -7,12 +7,9 @@ import gov.nih.nci.cadsr.domain.NonenumeratedValueDomain;
 import gov.nih.nci.cadsr.domain.Question;
 import gov.nih.nci.cadsr.domain.ReferenceDocument;
 import gov.nih.nci.ncicb.cadsr.dao.DataAccessException;
+import gov.nih.nci.ncicb.cadsr.dao.DomainObjectFactory;
 import gov.nih.nci.ncicb.cadsr.dao.GlobalDefinitionsDAO;
-import gov.nih.nci.ncicb.cadsr.edci.domain.DataElement;
-import gov.nih.nci.ncicb.cadsr.edci.domain.DataElementConcept;
-import gov.nih.nci.ncicb.cadsr.edci.domain.ValueDomain;
-import gov.nih.nci.ncicb.cadsr.edci.domain.DataElementGroup;
-import gov.nih.nci.ncicb.cadsr.edci.domain.GlobalDefinitions;
+import gov.nih.nci.ncicb.cadsr.edci.domain.*;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
 import java.util.ArrayList;
@@ -23,7 +20,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 
-public class GlobalDefinitionsDAOImpl  extends EDCIDAOImpl implements GlobalDefinitionsDAO
+public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements GlobalDefinitionsDAO
 {
    
     private static Logger logger = LogManager.getLogger(GlobalDefinitionsDAO.class);
@@ -35,7 +32,8 @@ public class GlobalDefinitionsDAOImpl  extends EDCIDAOImpl implements GlobalDefi
     public GlobalDefinitions getGlobalDefinitions(String formIdSeq) throws DataAccessException {
         Form form = new Form();
         form.setId(formIdSeq);
-        GlobalDefinitions globalDefinitions = new GlobalDefinitions();
+        //DomainObjectFactory domainObjectFactory = getDomainObjectFactory();
+        GlobalDefinitions globalDefinitions = domainObjectFactory.getGlobalDefinitions();
         try {
           ApplicationService applicationService = serviceLocator.getCaDSRPublicApiService();
           List forms = applicationService.search(Form.class.getName(), form);
@@ -48,15 +46,15 @@ public class GlobalDefinitionsDAOImpl  extends EDCIDAOImpl implements GlobalDefi
               ArrayList<ValueDomain> valueDomains = new ArrayList<ValueDomain>();
               
               for (Module module:modules)   {
-                  DataElementGroup dataElementGroup = new DataElementGroup();
+                  DataElementGroup dataElementGroup = domainObjectFactory.getDataElementGroup();
                   dataElementGroup.setDescription(module.getPreferredDefinition());
                   dataElementGroup.setName(module.getLongName());
                   dataElementGroup.setNamespace("NCI");
                   Collection<Question> questions = module.getQuestionCollection();
                   for (Question question:questions){
-                      DataElement eDCIDE = new DataElement();
-                      DataElementConcept eDCIDEC = new DataElementConcept();
-                      ValueDomain eDCIVD = new ValueDomain();
+                      DataElement eDCIDE = domainObjectFactory.getDataElement();
+                      DataElementConcept eDCIDEC = domainObjectFactory.getDataElementConcept();
+                      ValueDomain eDCIVD = domainObjectFactory.getValueDomain();
                       gov.nih.nci.cadsr.domain.DataElement dE = question.getDataElement();
                       eDCIDE.setDefinition(dE.getPreferredDefinition());
                       Collection<ReferenceDocument> referenceDocuments = dE.getReferenceDocumentCollection();
@@ -72,7 +70,7 @@ public class GlobalDefinitionsDAOImpl  extends EDCIDAOImpl implements GlobalDefi
                       eDCIDE.setDataElementConceptGUID(dE.getDataElementConcept().getId());
                       
                       gov.nih.nci.cadsr.domain.DataElementConcept dEC = question.getDataElement().getDataElementConcept();
-                      eDCIDEC.setGuid(dEC.getId());
+                      eDCIDEC.setGUID(dEC.getId());
                       eDCIDEC.setDefinition(dEC.getPreferredDefinition());
                       eDCIDEC.setName(dEC.getLongName());
                       eDCIDEC.setDescription(dEC.getConceptualDomain().getPreferredDefinition());
@@ -87,10 +85,10 @@ public class GlobalDefinitionsDAOImpl  extends EDCIDAOImpl implements GlobalDefi
                       eDCIVD.setName(vD.getLongName());
                       eDCIVD.setNamespace("NCI");
                       if (vD instanceof EnumeratedValueDomain) {
-                                      eDCIVD.setIsEnumeratedFlag("Yes");
+                                      eDCIVD.setIsEnumeratedFlag(true);
                                   }
                      else if (vD instanceof NonenumeratedValueDomain) {
-                                      eDCIVD.setIsEnumeratedFlag("No");
+                                      eDCIVD.setIsEnumeratedFlag(false);
                                   }
                 
                       dataElements.add(eDCIDE);

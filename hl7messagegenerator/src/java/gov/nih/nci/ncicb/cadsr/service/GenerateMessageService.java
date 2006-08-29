@@ -12,4 +12,7 @@ public interface GenerateMessageService {
 
    public String geteDCIHL7Message(String formIdSeq ) throws ServiceException;
    
+    public String getDCIDefsMessage(String formIdSeq ) throws ServiceException;
+
+   
 }

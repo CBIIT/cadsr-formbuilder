@@ -1,42 +1,22 @@
 package gov.nih.nci.ncicb.cadsr.edci.domain;
 
-public class EVDElementText {
-    private String helpText;
-    private String language;
-    private String valueMeaning;
-    private String valueMeaningDescription;
-    public EVDElementText() {
-    }
+import java.io.Serializable;
 
-    public void setHelpText(String helpText) {
-        this.helpText = helpText;
-    }
+public interface EVDElementText extends  Serializable {
 
-    public String getHelpText() {
-        return helpText;
-    }
+    public void setHelpText(String helpText);
 
-    public void setLanguage(String language) {
-        this.language = language;
-    }
+    public String getHelpText();
 
-    public String getLanguage() {
-        return language;
-    }
+    public void setLanguage(String language);
 
-    public void setValueMeaning(String valueMeaning) {
-        this.valueMeaning = valueMeaning;
-    }
+    public String getLanguage();
 
-    public String getValueMeaning() {
-        return valueMeaning;
-    }
+    public void setValueMeaning(String valueMeaning);
 
-    public void setValueMeaningDescription(String valueMeaningDescription) {
-        this.valueMeaningDescription = valueMeaningDescription;
-    }
+    public String getValueMeaning();
 
-    public String getValueMeaningDescription() {
-        return valueMeaningDescription;
-    }
+    public void setValueMeaningDescription(String valueMeaningDescription);
+
+    public String getValueMeaningDescription();
 }

@@ -1,88 +1,42 @@
 package gov.nih.nci.ncicb.cadsr.edci.domain;
 
-public class ValueDomain {
-    private String datatype;
-    private Integer decimalPlaces;
-    private String description;
-    private String GUID;
-    private Integer maximumLength;
-    private String name;
-    private String namespace;
-    private String sasFormatName;
-    private String isEnumeratedFlag;
+import java.io.Serializable;
+
+public interface ValueDomain extends Serializable {
+
+    public void setDatatype(String datatype);
+
+    public String getDatatype();
+
+    public void setDecimalPlaces(int decimalPlaces);
     
-    public ValueDomain() {
-    }
+    public int getDecimalPlaces();
 
-    public void setDatatype(String datatype) {
-        this.datatype = datatype;
-    }
+    public void setDescription(String description);
 
-    public String getDatatype() {
-        return datatype;
-    }
+    public String getDescription();
 
-    public void setDecimalPlaces(Integer decimalPlaces) {
-        this.decimalPlaces = decimalPlaces;
-    }
+    public void setGUID(String gUID) ;
 
-    public Integer getDecimalPlaces() {
-        return decimalPlaces;
-    }
+    public String getGUID();
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public void setMaximumLength(int maximumLength);
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setGUID(String gUID) {
-        this.GUID = gUID;
-    }
-
-    public String getGUID() {
-        return GUID;
-    }
-
-    public void setMaximumLength(Integer maximumLength) {
-        this.maximumLength = maximumLength;
-    }
-
-    public Integer getMaximumLength() {
-        return maximumLength;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setNamespace(String namespace) {
-        this.namespace = namespace;
-    }
-
-    public String getNamespace() {
-        return namespace;
-    }
-
-    public void setSasFormatName(String sasFormatName) {
-        this.sasFormatName = sasFormatName;
-    }
-
-    public String getSasFormatName() {
-        return sasFormatName;
-    }
+    public int getMaximumLength();
     
-    public void setIsEnumeratedFlag(String isEnumeratedFlag) {
-        this.isEnumeratedFlag = isEnumeratedFlag;
-    }
+    public void setName(String name);
+    
+    public String getName();
 
-    public String getIsEnumeratedFlag() {
-        return isEnumeratedFlag;
-    }
+    public void setNamespace(String namespace);
+    
+    public String getNamespace();
+
+    public void setSasFormatName(String sasFormatName);
+
+    public String getSasFormatName();
+    
+    public void setIsEnumeratedFlag(boolean isEnumeratedFlag);
+    
+    public boolean getIsEnumeratedFlag();
 }

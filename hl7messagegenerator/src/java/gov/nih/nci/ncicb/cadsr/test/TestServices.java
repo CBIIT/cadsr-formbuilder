@@ -18,6 +18,10 @@ public class TestServices extends TestCase {
     public TestServices() {
     }
     
+    public TestServices(String method) {
+      super(method);
+    }    
+    
     public void tearDown() {
       beanFactory = null;    
     }
@@ -27,10 +31,23 @@ public class TestServices extends TestCase {
        beanFactory = new XmlBeanFactory(resource);
     }
     
+    
     public void testQueryMetadataService() {
       try {
         QueryMetadataService queryMetadataService = (QueryMetadataService)beanFactory.getBean("queryMetadataService");
-        queryMetadataService.getGlobalDefinitions("A68C74F0-9B90-58E6-E034-0003BA0B1A09");
+        queryMetadataService.getInstrumentMetaData("1B4FBBDD-9FD4-5F94-E044-0003BA0B1A09");
+      }
+      catch(Exception e){
+          e.printStackTrace();
+          fail(e.getMessage());
+      }
+    }
+    
+    public void testGenerateDCIDefMessage() {
+      try {
+        GenerateMessageService generateMessageService = (GenerateMessageService)beanFactory.getBean("generateMessageService");
+        String message = generateMessageService.getDCIDefsMessage("1B4FBBDD-9FD4-5F94-E044-0003BA0B1A09");
+        System.out.println("Message :\n"+message);
       }
       catch(Exception e){
           e.printStackTrace();
@@ -39,7 +56,10 @@ public class TestServices extends TestCase {
     }
     
     public static Test suite() {
-      return new TestSuite(TestServices.class);
+      TestSuite suite = new TestSuite();
+      //suite.addTest(new TestServices("testGenerateDCIDefMessage"));
+      suite.addTest(new TestServices("testQueryMetadataService"));
+      return suite;
     }
 
     public static void main(String args[]) {

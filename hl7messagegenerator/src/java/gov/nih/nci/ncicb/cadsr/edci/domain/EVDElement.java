@@ -1,44 +1,23 @@
 package gov.nih.nci.ncicb.cadsr.edci.domain;
 
+import gov.nih.nci.ncicb.cadsr.edci.domain.impl.EVDElementTextImpl;
+import gov.nih.nci.ncicb.cadsr.edci.domain.impl.EVDSubsetImpl;
+
+import java.io.Serializable;
+
 import java.util.Collection;
 
-public class EVDElement {
-    private String sequenceNumber;
-    private String value;
-    private Collection<EVDElementText> eVDElementTextCollection;
-    private Collection<EVDSubset> eVDSubsetCollection;
-    public EVDElement() {
-    }
+public interface EVDElement extends Serializable {
 
-    public void setSequenceNumber(String sequenceNumber) {
-        this.sequenceNumber = sequenceNumber;
-    }
+    public void setValue(String value);
 
-    public String getSequenceNumber() {
-        return sequenceNumber;
-    }
+    public String getValue();
+    
+    public void addEVDElementText(EVDElementText evdElementText);
+    
+    public void setEVDElementTextCollection(Collection<EVDElementText> eVDElementTextCollection);
 
-    public void setValue(String value) {
-        this.value = value;
-    }
+    public Collection<EVDElementText> getEVDElementTextCollection();
 
-    public String getValue() {
-        return value;
-    }
-
-    public void setEVDElementTextCollection(Collection<EVDElementText> eVDElementTextCollection) {
-        this.eVDElementTextCollection = eVDElementTextCollection;
-    }
-
-    public Collection<EVDElementText> getEVDElementTextCollection() {
-        return eVDElementTextCollection;
-    }
-
-    public void setEVDSubsetCollection(Collection<EVDSubset> eVDSubsetCollection) {
-        this.eVDSubsetCollection = eVDSubsetCollection;
-    }
-
-    public Collection<EVDSubset> getEVDSubsetCollection() {
-        return eVDSubsetCollection;
-    }
+    
 }
