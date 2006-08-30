@@ -3,7 +3,6 @@ package gov.nih.nci.ncicb.cadsr.serviceimpl;
 import gov.nih.nci.ncicb.cadsr.dao.EDCIDAOFactory;
 import gov.nih.nci.ncicb.cadsr.dao.GlobalDefinitionsDAO;
 import gov.nih.nci.ncicb.cadsr.dao.InstrumentDAO;
-import gov.nih.nci.ncicb.cadsr.dto.FormMetaData;
 import gov.nih.nci.ncicb.cadsr.edci.domain.GlobalDefinitions;
 import gov.nih.nci.ncicb.cadsr.edci.domain.Instrument;
 import gov.nih.nci.ncicb.cadsr.service.QueryMetadataService;
