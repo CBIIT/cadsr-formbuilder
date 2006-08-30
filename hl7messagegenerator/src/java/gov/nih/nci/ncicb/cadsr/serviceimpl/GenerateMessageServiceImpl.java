@@ -1,6 +1,6 @@
 package gov.nih.nci.ncicb.cadsr.serviceimpl;
 
-import gov.nih.nci.ncicb.cadsr.dto.FormMetaData;
+
 import gov.nih.nci.ncicb.cadsr.edci.domain.GlobalDefinitions;
 import gov.nih.nci.ncicb.cadsr.edci.domain.Instrument;
 import gov.nih.nci.ncicb.cadsr.edci.domain.impl.GlobalDefinitionsImpl;
@@ -15,6 +15,9 @@ import java.io.StringWriter;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+
+import org.exolab.castor.util.LocalConfiguration;
+import org.exolab.castor.xml.Marshaller;
 
 public class GenerateMessageServiceImpl implements GenerateMessageService
 {
@@ -61,7 +64,8 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
     protected String getDCIDefsMessage(GlobalDefinitions globalDefinitions) throws ServiceException {
         try {
             StringWriter sw = new StringWriter();
-            ((GlobalDefinitionsImpl)globalDefinitions).marshal(sw); 
+            LocalConfiguration.getInstance().getProperties().setProperty("org.exolab.castor.indent","true");
+            Marshaller.marshal(globalDefinitions, sw);
             sw.close();
             return sw.toString();
         }

@@ -2,6 +2,8 @@ package gov.nih.nci.ncicb.cadsr.edci.domain;
 
 import java.io.Serializable;
 
+import java.util.Collection;
+
 public interface ValueDomain extends Serializable {
 
     public void setDatatype(String datatype);
@@ -39,4 +41,16 @@ public interface ValueDomain extends Serializable {
     public void setIsEnumeratedFlag(boolean isEnumeratedFlag);
     
     public boolean getIsEnumeratedFlag();
+    
+    public void addEVDElement(EVDElement evdElement);
+    
+    public void setEVDElementCollection(Collection<EVDElement> evdElements);
+    
+    public Collection<EVDElement> getEVDElementCollection();
+    
+    public void addEVDSubset(EVDSubset evdSubset);
+    
+    public void setEVDSubsetCollection(Collection<EVDSubset> evdSubsets);
+    
+    public Collection<EVDSubset> getEVDSubsetCollection();
 }

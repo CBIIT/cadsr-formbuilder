@@ -57,8 +57,8 @@ public class TestServices extends TestCase {
     
     public static Test suite() {
       TestSuite suite = new TestSuite();
-      //suite.addTest(new TestServices("testGenerateDCIDefMessage"));
-      suite.addTest(new TestServices("testQueryMetadataService"));
+      suite.addTest(new TestServices("testGenerateDCIDefMessage"));
+      //suite.addTest(new TestServices("testQueryMetadataService"));
       return suite;
     }
 

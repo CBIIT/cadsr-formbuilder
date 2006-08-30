@@ -31,7 +31,12 @@
   <bean id="globalDefinitions" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.GlobalDefinitionsImpl" singleton="false"/>
   <bean id="dataElementGroup" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementGroupImpl" singleton="false" />
   <bean id="dataElementConcept" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementConceptImpl" singleton="false" />
+  <bean id="dataElementText" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementTextImpl" singleton="false" />
   <bean id="valueDomain" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.ValueDomainImpl" singleton="false" />
+  <bean id="eVDSubset" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.EVDSubsetImpl" singleton="false" />
+  <bean id="eVDElement" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.EVDElementImpl" singleton="false" />
+  <bean id="eVDElementText" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.EVDElementTextImpl" singleton="false" />  
+  <bean id="elementInSubset" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.ElementInSubsetImpl" singleton="false" />    
 
 </beans>
 
