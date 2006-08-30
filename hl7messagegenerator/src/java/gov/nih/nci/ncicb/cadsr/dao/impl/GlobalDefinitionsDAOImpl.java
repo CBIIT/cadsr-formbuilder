@@ -6,6 +6,8 @@ import gov.nih.nci.cadsr.domain.Module;
 import gov.nih.nci.cadsr.domain.NonenumeratedValueDomain;
 import gov.nih.nci.cadsr.domain.Question;
 import gov.nih.nci.cadsr.domain.ReferenceDocument;
+import gov.nih.nci.cadsr.domain.ValueDomainPermissibleValue;
+import gov.nih.nci.ncicb.cadsr.constants.DefaultEDCIValues;
 import gov.nih.nci.ncicb.cadsr.dao.DataAccessException;
 import gov.nih.nci.ncicb.cadsr.dao.DomainObjectFactory;
 import gov.nih.nci.ncicb.cadsr.dao.GlobalDefinitionsDAO;
@@ -66,7 +68,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
                       }
                       eDCIDE.setGUID(dE.getId());
                       eDCIDE.setName(dE.getLongName());
-                      eDCIDE.setNamespace("NCI");
+                      eDCIDE.setNamespace(DefaultEDCIValues.NAMESPACE);
                       eDCIDE.setDataElementConceptGUID(dE.getDataElementConcept().getId());
                       
                       gov.nih.nci.cadsr.domain.DataElementConcept dEC = question.getDataElement().getDataElementConcept();
@@ -83,14 +85,31 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
                       eDCIVD.setGUID(vD.getId());
                       eDCIVD.setMaximumLength(vD.getMaximumLengthNumber());
                       eDCIVD.setName(vD.getLongName());
-                      eDCIVD.setNamespace("NCI");
+                      eDCIVD.setNamespace(DefaultEDCIValues.NAMESPACE);
                       if (vD instanceof EnumeratedValueDomain) {
-                                      eDCIVD.setIsEnumeratedFlag(true);
+                             eDCIVD.setIsEnumeratedFlag(true);
+                             EnumeratedValueDomain eVD = (EnumeratedValueDomain) vD;
+                             Collection<ValueDomainPermissibleValue> eVDS = eVD.getValueDomainPermissibleValueCollection();  
+                                     for (ValueDomainPermissibleValue vDPVS:eVDS){
+                                          EVDElement EVDE = domainObjectFactory.getEVDElement();
+                                          EVDE.setValue(vDPVS.getPermissibleValue().getValue());
+                                          EVDElementText eVDET = domainObjectFactory.getEVDElementText();
+                                          ElementInSubset eSS = domainObjectFactory.getElementInSubset();
+                                          eVDET.setValueMeaning(vDPVS.getPermissibleValue().getValueMeaning().getShortMeaning());
+                                          eVDET.setValueMeaningDescription(vDPVS.getPermissibleValue().getValueMeaning().getDescription());
+                                          eVDET.setLanguage(DefaultEDCIValues.LANGUAGE);
+                                          ArrayList <EVDElementText> eVDETC = new ArrayList <EVDElementText> ();
+                                          eVDETC.add(eVDET);
+                                          EVDE.setEVDElementTextCollection(eVDETC);
+                                          eDCIVD.addEVDElement(EVDE);
+        
+                                      }    
                                   }
                      else if (vD instanceof NonenumeratedValueDomain) {
                                       eDCIVD.setIsEnumeratedFlag(false);
                                   }
-                
+                      
+                   
                       dataElements.add(eDCIDE);
                       dataElementConcepts.add(eDCIDEC);
                       valueDomains.add(eDCIVD);
