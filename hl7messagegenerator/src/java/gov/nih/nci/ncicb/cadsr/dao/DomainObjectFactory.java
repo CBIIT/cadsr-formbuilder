@@ -10,7 +10,7 @@ import gov.nih.nci.ncicb.cadsr.edci.domain.EVDSubset;
 import gov.nih.nci.ncicb.cadsr.edci.domain.ElementInSubset;
 import gov.nih.nci.ncicb.cadsr.edci.domain.GlobalDefinitions;
 import gov.nih.nci.ncicb.cadsr.edci.domain.ValueDomain;
-import gov.nih.nci.ncicb.cadsr.edci.domain.impl.GlobalDefinitionsImpl;
+//import gov.nih.nci.ncicb.cadsr.edci.domain.impl.GlobalDefinitionsImpl;
 
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
