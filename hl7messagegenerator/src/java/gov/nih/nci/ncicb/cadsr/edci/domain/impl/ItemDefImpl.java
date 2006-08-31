@@ -1,10 +1,11 @@
 package gov.nih.nci.ncicb.cadsr.edci.domain.impl;
 
+import gov.nih.nci.ncicb.cadsr.edci.domain.ItemDef;
 import gov.nih.nci.ncicb.cadsr.edci.domain.RangeCheck;
 
 import java.util.Collection;
 
-public class ItemDefImpl {
+public class ItemDefImpl implements ItemDef{
 
     private String dataElementGUID;
     private String enumeratedValueDomainSubsetId;

@@ -1,5 +1,6 @@
 package gov.nih.nci.ncicb.cadsr.servicelocator;
 
+import gov.nih.nci.ncicb.cadsr.dao.EDCIDAOFactory;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
 
@@ -74,7 +75,7 @@ public class ServiceLocator {
        }
        return dataSource;
     }
-    
+
     private DataSource getOracleDataSource() throws ServiceLocatorException{
       try {
         OracleDataSource ods = new OracleDataSource();
