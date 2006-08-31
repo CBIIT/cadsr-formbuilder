@@ -10,4 +10,5 @@ public interface  EDCIDAOFactory {
     
     public InstrumentDAO getInstrumentDAO() throws DataAccessException;
     
+    
 }

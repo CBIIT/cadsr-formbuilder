@@ -43,6 +43,17 @@ public class TestServices extends TestCase {
       }
     }
     
+    public void testQueryInstrumentMetadata() {
+      try {
+        QueryMetadataService queryMetadataService = (QueryMetadataService)beanFactory.getBean("queryMetadataService");
+        queryMetadataService.getInstrumentMetaData("1B4FBBDD-9FD4-5F94-E044-0003BA0B1A09");
+      }
+      catch(Exception e){
+          e.printStackTrace();
+          fail(e.getMessage());
+      }
+    }
+    
     public void testGenerateDCIDefMessage() {
       try {
         GenerateMessageService generateMessageService = (GenerateMessageService)beanFactory.getBean("generateMessageService");
@@ -59,6 +70,7 @@ public class TestServices extends TestCase {
       TestSuite suite = new TestSuite();
       suite.addTest(new TestServices("testGenerateDCIDefMessage"));
       //suite.addTest(new TestServices("testQueryMetadataService"));
+      //suite.addTest(new TestServices("testQueryInstrumentMetadata"));
       return suite;
     }
 

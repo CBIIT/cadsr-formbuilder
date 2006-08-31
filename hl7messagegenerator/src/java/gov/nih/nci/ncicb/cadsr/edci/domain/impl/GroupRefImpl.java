@@ -1,13 +1,14 @@
 package gov.nih.nci.ncicb.cadsr.edci.domain.impl;
 
 import gov.nih.nci.ncicb.cadsr.edci.domain.GroupDef;
+import gov.nih.nci.ncicb.cadsr.edci.domain.GroupRef;
 import gov.nih.nci.ncicb.cadsr.edci.domain.GroupRefHelp;
 
 import gov.nih.nci.ncicb.cadsr.edci.domain.ItemRef;
 
 import java.util.Collection;
 
-public class GroupRefImpl {
+public class GroupRefImpl implements GroupRef {
     private GroupDef groupDef;
     private String id;
     private String maximumItemRefRepeats;

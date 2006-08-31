@@ -9,7 +9,7 @@ import gov.nih.nci.cadsr.domain.Question;
 import gov.nih.nci.cadsr.domain.QuestionRepetition;
 import gov.nih.nci.cadsr.domain.TriggerAction;
 import gov.nih.nci.cadsr.domain.ValidValue;
-import gov.nih.nci.ncicb.cadsr.constants.DefaultEDCIValues;
+import gov.nih.nci.ncicb.cadsr.constants.EDCIConfiguration;
 import gov.nih.nci.ncicb.cadsr.constants.MessageGeneratorConstants;
 import gov.nih.nci.ncicb.cadsr.dao.DataAccessException;
 import gov.nih.nci.ncicb.cadsr.dao.InstrumentDAO;
@@ -45,13 +45,22 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
     private static Logger logger = LogManager.getLogger(InstrumentDAO.class);
     public InstrumentDAOImpl() {
     }
-    
+    /**
+     * Query and update the Instrument object with the Section data, including 
+     * SectionDef and SectionRef.
+     * @param instrument
+     * @param form
+     * @param globalDefinitions
+     * @return
+     * @throws DataAccessException
+     */
     protected Instrument updateSectionData(Instrument instrument,Form form, GlobalDefinitions globalDefinitions) throws DataAccessException
     {
+          EDCIConfiguration config = EDCIConfiguration.getInstance();
           //Create the SectionDef
           SectionDef sectionDef = new SectionDefImpl();
           sectionDef.setDescription(form.getPreferredDefinition());
-          sectionDef.setGUID(getGUID());
+          sectionDef.setGUID(geteDCIGUID(getGUID()));
           //Set the sectionDef ID
           sectionDef.setName(form.getLongName());;
 
@@ -60,7 +69,7 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
           SectionRef sectionRef = new SectionRefImpl();
           sectionRef.setId(form.getId());
           sectionRef.setName(form.getLongName());
-          sectionRef.setNavigationSequenceNumber(DefaultEDCIValues.SECTION_REF_NAVIGATION_SEQUENCE_NUMBER);
+          sectionRef.setNavigationSequenceNumber(config.getProperty("sectionRefNavigationSequenceNumber"));
           sectionRef.setSectionDef(sectionDef);
      
           //Get groupData
@@ -77,7 +86,13 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
           instrument.setSectionRefCollection(sectionRefs);
           return instrument;
     }
-    
+    /**
+     * Query Group data including GroupDef and GroupRef.
+     * @param form
+     * @param globalDefinitions
+     * @return
+     * @throws DataAccessException
+     */
     protected Map getGroupData(Form form, GlobalDefinitions globalDefinitions) throws DataAccessException {
         Collection<Module> modules = form.getModuleCollection();
         Collection<GroupDef> groupDefs = new ArrayList<GroupDef>(modules.size());
@@ -87,9 +102,9 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
           //Create the GroupDef
           GroupDef groupDef = new GroupDefImpl();
           DataElementGroup dataElementGroup = getDataElementGroup(module, globalDefinitions);
-          groupDef.setDataElementGroupGUID(dataElementGroup.getGUID());
+          groupDef.setDataElementGroupGUID(geteDCIGUID(dataElementGroup.getGUID()));
           groupDef.setDescription(module.getPreferredDefinition());
-          groupDef.setId(getGUID());
+          groupDef.setId(geteDCIGUID(getGUID()));
           Integer maximumQuestionRepeat = module.getMaximumQuestionRepeat();
           if ((maximumQuestionRepeat != null)&&(maximumQuestionRepeat.intValue()>0))
           {
@@ -126,20 +141,27 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
         groupData.put("groupRefs", groupRefs);
         return groupData;
     }
-    
+    /**
+     * Query the ItemRef, and ItemDef data using caCORE API. 
+     * @param module
+     * @param globalDefinitions
+     * @return
+     * @throws DataAccessException
+     */
     
     protected Map getItemData(Module module, GlobalDefinitions globalDefinitions) throws DataAccessException {
         Collection<Question> questions = module.getQuestionCollection();
         Collection<ItemDef> itemDefs = new ArrayList<ItemDef>(questions.size());
         Collection<ItemRef> itemRefs = new ArrayList<ItemRef>(questions.size());
+        EDCIConfiguration config = EDCIConfiguration.getInstance();
         try 
         {
           for (Question question:questions){
             //Create the ItemDef
             ItemDef itemDef = (ItemDef)new ItemDefImpl();
             DataElement dataElement = getDataElement(question, globalDefinitions);
-            itemDef.setDataElementGUID(dataElement.getGUID());
-            itemDef.setId(getGUID());
+            itemDef.setDataElementGUID(geteDCIGUID(dataElement.getGUID()));
+            itemDef.setId(geteDCIGUID(getGUID()));
             // isMandatory new for 3.2
             //itemDef.setIsMandatoryFlag(question.isMandatory());
             itemDef.setOccurenceSn(question.getDisplayOrder().toString());
@@ -159,7 +181,7 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
             itemRef.setNavigationSequenceNumber(question.getDisplayOrder().toString());
             ItemRefPrompt itemRefPrompt = new ItemRefPromptImpl();
             itemRefPrompt.setPrompt(question.getLongName());
-            itemRefPrompt.setLanguage(DefaultEDCIValues.LANGUAGE);
+            itemRefPrompt.setLanguage(config.getProperty("default.language"));
             Collection<ItemRefPrompt> itemRefPrompts = new ArrayList<ItemRefPrompt>(1);
             itemRef.setItemRefPromptCollection(itemRefPrompts);
             ValidValue  defaultValidValue = null;
@@ -210,13 +232,42 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
             throw new DataAccessException("Error getting item data.",e);
         }
     }
-    
-    protected DataElementGroup getDataElementGroup(Module module, GlobalDefinitions globalDefinitions) throws DataAccessException{
+    /**
+     * Returns the DataElementGroup corressponding to a Module from GlobalDefinitions
+     * @param module
+     * @param globalDefinitions
+     * @return
+     * @throws DataAccessException
+     */
+    protected DataElementGroup getDataElementGroup(Module module, GlobalDefinitions globalDefinitions) throws DataAccessException
+    {
         String moduleName = module.getLongName();
-         
-        return new DataElementGroupImpl();
+        DataElementGroup dataElementGroup = null;
+        try {
+          if ((moduleName != null)&&(!(moduleName.equals(""))))
+          {
+             Collection<DataElementGroup> dataElementGroups = globalDefinitions.getDataElementGroupCollection(); 
+             for (DataElementGroup deg: dataElementGroups){
+                 if (moduleName.equals(deg.getName())) {
+                     dataElementGroup = deg; break;
+                 }
+              }
+              throw new Exception("Could not find DataElementGroup for module "+moduleName);
+           }
+        }
+        catch(Exception e) {
+            logger.error("Error finding DataElementGroup for module "+moduleName);
+            throw new DataAccessException("Error finding DataElementGroup for module "+moduleName);
+        }
+        return dataElementGroup;
     }
-    
+    /**
+     * Returns the DataElement associated with a Question from GlobalDefinitions
+     * @param question
+     * @param globalDefinitions
+     * @return
+     * @throws DataAccessException
+     */
     protected DataElement getDataElement(Question question, GlobalDefinitions globalDefinitions) throws DataAccessException{
         String guid = question.getDataElement().getId();
         Collection<DataElement> dataElements = globalDefinitions.getDataElementCollection();
@@ -231,12 +282,49 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
         }
         return searchedDE;
     }  
-    
+    /**
+     * Returns EVDSubset used by a Question.
+     * @param question
+     * @param globalDefinitions
+     * @return
+     * @throws DataAccessException
+     */
     protected EVDSubset getEVDSubset(Question question, GlobalDefinitions globalDefinitions ) throws DataAccessException {
-        //Get the EVD SubSet used by this question
-        return new EVDSubsetImpl();
+        Collection validValues = question.getValidValueCollection();
+        gov.nih.nci.cadsr.domain.ValueDomain cadsrVD = question.getValueDomain();
+        EVDSubset searchedEVDSubset = null;
+        try 
+        {
+           ValueDomain itemVD = null;
+           for(ValueDomain valueDomain: globalDefinitions.getValueDomainCollection()) {
+              if (valueDomain.getGUID().indexOf(cadsrVD.getId()) > 0) {
+                  itemVD = valueDomain; break;
+              }
+           }
+           //Search for EVDSubset if the ValueDomain is Enumerated
+           if ((itemVD != null)&&(itemVD.getIsEnumeratedFlag()))
+           {
+              Collection<EVDSubset> evdSubsets = itemVD.getEVDSubsetCollection();
+              for (EVDSubset evdSubset: evdSubsets) {
+                  if (evdSubset.getElementInSubsetCollection().size() == validValues.size()) {
+                     //Compare the valid Values individually
+                     searchedEVDSubset = evdSubset; break;
+                  }
+              }
+           }
+        }
+        catch(Exception e) {
+            logger.error("Error finding EVDSubset for Question "+question.getLongName(),e);
+            throw new DataAccessException("Error finding EVDSubset for Question "+question.getLongName(),e);
+        }
+       return searchedEVDSubset;
     }
-    
+    /**
+     * Query TriggerActions where a FormElement is the source  using caCORE API
+     * @param sourceFormElement
+     * @return
+     * @throws Exception
+     */
     protected Collection<TriggerAction> getTriggerActions(FormElement sourceFormElement) throws Exception {
         Collection<TriggerAction> triggerActions;
         try {
@@ -253,7 +341,12 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
             throw new DataAccessException("Error querying TriggerActions from caDSR.",e);
         }
     }
-    
+    /**
+     * Generate eDCI TriggeredActions for caDSR TriggerActions
+     * @param caDSRTriggerActions
+     * @return
+     * @throws DataAccessException
+     */
     protected Collection<TriggeredAction> getEDCITriggeredActions(Collection<TriggerAction> caDSRTriggerActions) throws DataAccessException {
         try {
             Collection<TriggeredAction> triggeredActions = new ArrayList<TriggeredAction>(caDSRTriggerActions.size());
@@ -273,11 +366,18 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
             throw new DataAccessException("Error creating eDCI TriggeredActions.", e);
         }
     }
-
+   /**
+     * Query the Instrument metadata using the caCORE API.
+     * @param formIdSeq
+     * @param globalDefinitions
+     * @return Instrument
+     * @throws DataAccessException
+     */
     public Instrument getInstrument(String formIdSeq, GlobalDefinitions globalDefinitions) throws DataAccessException {
         Form form = new Form();
         form.setId(formIdSeq);
         Instrument instrument = new InstrumentImpl();
+        EDCIConfiguration config = EDCIConfiguration.getInstance();
         try {
             ApplicationService appService = serviceLocator.getCaDSRPublicApiService();
             List<Form> forms = appService.search(Form.class,form);
@@ -289,9 +389,9 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
                 instrument.setIsTemplateDciFlag(new Boolean(false));
             }
             instrument.setName(qForm.getLongName());
-            instrument.setNamespace(DefaultEDCIValues.NAMESPACE);
+            instrument.setNamespace(config.getProperty("default.namespace"));
             instrument.setDescription(qForm.getPreferredDefinition());
-            instrument.setGUID(getGUID());
+            instrument.setGUID(geteDCIGUID(getGUID()));
             instrument.setCreationTimestamp(qForm.getDateCreated());
             //which protocol to use
             //Get the Instructions
@@ -300,7 +400,7 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
             for (gov.nih.nci.cadsr.domain.Instruction caDSRInstruction: caDSRInstructions){
                Instruction instruction = new InstructionImpl();
                instruction.setInstructionText(caDSRInstruction.getLongName());
-               instruction.setLanguage(DefaultEDCIValues.LANGUAGE);
+               instruction.setLanguage(config.getProperty("default.language"));
                instructions.add(instruction);
             }
             instrument.setPersistentInformationCollection(instructions);
