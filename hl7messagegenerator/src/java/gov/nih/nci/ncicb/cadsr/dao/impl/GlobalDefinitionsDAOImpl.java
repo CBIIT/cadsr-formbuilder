@@ -6,6 +6,7 @@ import gov.nih.nci.cadsr.domain.Module;
 import gov.nih.nci.cadsr.domain.NonenumeratedValueDomain;
 import gov.nih.nci.cadsr.domain.Question;
 import gov.nih.nci.cadsr.domain.ReferenceDocument;
+import gov.nih.nci.cadsr.domain.ValidValue;
 import gov.nih.nci.cadsr.domain.ValueDomainPermissibleValue;
 import gov.nih.nci.ncicb.cadsr.constants.DefaultEDCIValues;
 import gov.nih.nci.ncicb.cadsr.dao.DataAccessException;
@@ -71,12 +72,15 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
                       eDCIDE.setNamespace(DefaultEDCIValues.NAMESPACE);
                       eDCIDE.setDataElementConceptGUID(dE.getDataElementConcept().getId());
                       
+                      // Set Data Element concept for the Data Element
                       gov.nih.nci.cadsr.domain.DataElementConcept dEC = question.getDataElement().getDataElementConcept();
                       eDCIDEC.setGUID(dEC.getId());
                       eDCIDEC.setDefinition(dEC.getPreferredDefinition());
                       eDCIDEC.setName(dEC.getLongName());
                       eDCIDEC.setDescription(dEC.getConceptualDomain().getPreferredDefinition());
                       
+                      // Set Value Domain for the Data Element
+                     
                       eDCIDE.setValueDomainGUID(dE.getValueDomain().getId());
                       gov.nih.nci.cadsr.domain.ValueDomain vD = question.getDataElement().getValueDomain();
                       eDCIVD.setDatatype(vD.getDatatypeName());
@@ -86,23 +90,68 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
                       eDCIVD.setMaximumLength(vD.getMaximumLengthNumber());
                       eDCIVD.setName(vD.getLongName());
                       eDCIVD.setNamespace(DefaultEDCIValues.NAMESPACE);
+                      
+                      //if the value domain is enumerated then
                       if (vD instanceof EnumeratedValueDomain) {
                              eDCIVD.setIsEnumeratedFlag(true);
                              EnumeratedValueDomain eVD = (EnumeratedValueDomain) vD;
+                             
+                             // base subset based on then value domain
+                             EVDSubset baseEVDS = domainObjectFactory.getEVDSubset();
+                             baseEVDS.setBaseSubsetFlag(true);
+                             
+                             // subset based on use in question
+                             EVDSubset eVDSS = domainObjectFactory.getEVDSubset();
+                             eVDSS.setBaseSubsetFlag(false);
+                             
+                             // get all permissible values for the valid value
                              Collection<ValueDomainPermissibleValue> eVDS = eVD.getValueDomainPermissibleValueCollection();  
+                                    Integer i = 0;
                                      for (ValueDomainPermissibleValue vDPVS:eVDS){
-                                          EVDElement EVDE = domainObjectFactory.getEVDElement();
-                                          EVDE.setValue(vDPVS.getPermissibleValue().getValue());
+                                          i++;
+                                          
+                                          // element for a permissible Value
+                                          EVDElement eVDE = domainObjectFactory.getEVDElement();
+                                          eVDE.setValue(vDPVS.getPermissibleValue().getValue());
+                                          
+                                          ArrayList <EVDElementText> eVDETC = new ArrayList <EVDElementText> ();
+                                          
+                                          // value meaning for the permissible value
                                           EVDElementText eVDET = domainObjectFactory.getEVDElementText();
-                                          ElementInSubset eSS = domainObjectFactory.getElementInSubset();
+                                          
                                           eVDET.setValueMeaning(vDPVS.getPermissibleValue().getValueMeaning().getShortMeaning());
                                           eVDET.setValueMeaningDescription(vDPVS.getPermissibleValue().getValueMeaning().getDescription());
                                           eVDET.setLanguage(DefaultEDCIValues.LANGUAGE);
-                                          ArrayList <EVDElementText> eVDETC = new ArrayList <EVDElementText> ();
                                           eVDETC.add(eVDET);
-                                          EVDE.setEVDElementTextCollection(eVDETC);
-                                          eDCIVD.addEVDElement(EVDE);
-        
+                                          
+                                          // Add the Element Text Collection to the Element
+                                          eVDE.setEVDElementTextCollection(eVDETC);
+                                          
+                                          // Create a base subset  element
+                                          ElementInSubset baseESS = domainObjectFactory.getElementInSubset();
+                                         // get its value from permissible values of value domain
+                                          baseESS.setValue(eVDE.getValue());
+                                          baseESS.setSequenceNumber(i);
+                                          
+                                          // Create a subset element
+                                          ElementInSubset eSS = domainObjectFactory.getElementInSubset();
+                                          eSS.setValue(eVDE.getValue());
+                                          
+                                          // set its value based on it's usage by the question
+                                          Collection <ValidValue> vVC = new ArrayList <ValidValue>();
+                                          vVC = question.getValidValueCollection();
+                                          for (ValidValue validValue:vVC){
+                                              if (validValue.getLongName().equals(eSS.getValue())){
+                                              //add to the subset only if it is found in the question
+                                                  eVDSS.addElementInSubset(eSS);
+                                                  eSS.setSequenceNumber(validValue.getDisplayOrder());
+                                              }
+                                          }
+                                         
+                                          baseEVDS.addElementInSubset(baseESS);
+                                          eDCIVD.addEVDElement(eVDE);
+                                          
+                                          
                                       }    
                                   }
                      else if (vD instanceof NonenumeratedValueDomain) {
