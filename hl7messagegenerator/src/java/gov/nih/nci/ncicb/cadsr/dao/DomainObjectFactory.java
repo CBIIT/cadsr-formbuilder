@@ -1,5 +1,6 @@
 package gov.nih.nci.ncicb.cadsr.dao;
 
+import gov.nih.nci.ncicb.cadsr.edci.domain.AlternateDesignation;
 import gov.nih.nci.ncicb.cadsr.edci.domain.DataElement;
 import gov.nih.nci.ncicb.cadsr.edci.domain.DataElementConcept;
 import gov.nih.nci.ncicb.cadsr.edci.domain.DataElementGroup;
@@ -29,6 +30,10 @@ public class DomainObjectFactory {
           return globalDefinitions;
     }
     
+    public AlternateDesignation getAlternateDesignation()  {
+          AlternateDesignation alternateDesignation = (AlternateDesignation)beanFactory.getBean("alternateDesignation");
+          return alternateDesignation;
+    }
     public DataElement getDataElement()  {
           DataElement dataElement = (DataElement)beanFactory.getBean("dataElement");
           return dataElement;

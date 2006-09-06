@@ -1,5 +1,6 @@
 package gov.nih.nci.ncicb.cadsr.dao.impl;
 
+import gov.nih.nci.cadsr.domain.Designation;
 import gov.nih.nci.cadsr.domain.EnumeratedValueDomain;
 import gov.nih.nci.cadsr.domain.Form;
 import gov.nih.nci.cadsr.domain.Module;
@@ -60,13 +61,53 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
                       ValueDomain eDCIVD = domainObjectFactory.getValueDomain();
                       gov.nih.nci.cadsr.domain.DataElement dE = question.getDataElement();
                       eDCIDE.setDefinition(dE.getPreferredDefinition());
+                      
+                      //Get the description
                       Collection<ReferenceDocument> referenceDocuments = dE.getReferenceDocumentCollection();
+                      
                       for (ReferenceDocument referenceDocument:referenceDocuments){
+    
                           if (referenceDocument.getType().equals("Description")) {
                               eDCIDE.setDescription(referenceDocument.getDoctext());
                               break;
                           }
+                         
+        
                       }
+                      
+        // Get Data Element Text Collection for eDCIDE
+                      Collection<DataElementText> dETC = new ArrayList <DataElementText> ();
+                     
+                      for (ReferenceDocument referenceDocument:referenceDocuments){
+                      
+                          if (referenceDocument.getType().equals("Preferred Question Text") || referenceDocument.getType().equals("Alternate Question Text")){
+                              DataElementText dET = domainObjectFactory.getDataElementText();
+                              dET.setPrompt(referenceDocument.getDoctext());
+                              dET.setLanguage(referenceDocument.getLanguageName());
+                              dETC.add(dET);
+                          }
+                      
+                      }       
+                      if (dETC.isEmpty()){
+                          DataElementText dET = domainObjectFactory.getDataElementText();
+                          dET.setPrompt(dE.getLongName());
+                          dET.setLanguage(DefaultEDCIValues.LANGUAGE);
+                          dETC.add(dET);
+                      }
+                    
+                      eDCIDE.setDataElementTextCollection(dETC);
+                      
+       // Get Alternate DEsignations for eDCI
+                     Collection<AlternateDesignation> aDC = new ArrayList <AlternateDesignation> ();
+                     Collection<Designation> designations = dE.getDesignationCollection();             
+                     for (Designation designation:designations){
+                        AlternateDesignation aD = domainObjectFactory.getAlternateDesignation();
+                        aD.setLanguage(designation.getLanguageName());
+                        aD.setName(designation.getName());
+                        aD.setType(designation.getType());
+                        aDC.add(aD);
+                     }
+                      eDCIDE.setAlternateDesignationCollection(aDC);
                       eDCIDE.setGUID(dE.getId());
                       eDCIDE.setName(dE.getLongName());
                       eDCIDE.setNamespace(DefaultEDCIValues.NAMESPACE);
@@ -84,7 +125,9 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
                       eDCIDE.setValueDomainGUID(dE.getValueDomain().getId());
                       gov.nih.nci.cadsr.domain.ValueDomain vD = question.getDataElement().getValueDomain();
                       eDCIVD.setDatatype(vD.getDatatypeName());
+                      if (vD.getDecimalPlace()!=null){
                       eDCIVD.setDecimalPlaces(vD.getDecimalPlace());
+                      }
                       eDCIVD.setDescription(vD.getPreferredDefinition());
                       eDCIVD.setGUID(vD.getId());
                       eDCIVD.setMaximumLength(vD.getMaximumLengthNumber());
