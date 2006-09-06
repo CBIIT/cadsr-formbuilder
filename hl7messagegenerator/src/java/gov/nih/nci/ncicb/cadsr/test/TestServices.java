@@ -54,6 +54,17 @@ public class TestServices extends TestCase {
       }
     }
     
+    public void testQueryGlobalDefinitionMetadata() {
+      try {
+        QueryMetadataService queryMetadataService = (QueryMetadataService)beanFactory.getBean("queryMetadataService");
+        queryMetadataService.getGlobalDefinitions("1B4FBBDD-9FD4-5F94-E044-0003BA0B1A09");
+      }
+      catch(Exception e){
+          e.printStackTrace();
+          fail(e.getMessage());
+      }
+    }
+    
     public void testGenerateDCIDefMessage() {
       try {
         GenerateMessageService generateMessageService = (GenerateMessageService)beanFactory.getBean("generateMessageService");

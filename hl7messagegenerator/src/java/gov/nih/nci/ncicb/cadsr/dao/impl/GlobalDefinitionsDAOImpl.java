@@ -99,10 +99,12 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
                              // base subset based on then value domain
                              EVDSubset baseEVDS = domainObjectFactory.getEVDSubset();
                              baseEVDS.setBaseSubsetFlag(true);
+                             baseEVDS.setSubsetId(geteDCIGUID(getGUID()));
                              
                              // subset based on use in question
                              EVDSubset eVDSS = domainObjectFactory.getEVDSubset();
                              eVDSS.setBaseSubsetFlag(false);
+                             eVDSS.setSubsetId(geteDCIGUID(getGUID()));
                              
                              // get all permissible values for the valid value
                              Collection<ValueDomainPermissibleValue> eVDS = eVD.getValueDomainPermissibleValueCollection();  
@@ -151,14 +153,18 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
                                           baseEVDS.addElementInSubset(baseESS);
                                           eDCIVD.addEVDElement(eVDE);
                                           
-                                          
-                                      }    
+                                      } 
+                                      
+                                      eDCIDE.setEVDSubsetId(baseEVDS.getSubsetId());
+                                      eDCIVD.addEVDSubset(baseEVDS);
+                                      if ( !baseEVDS.equals(eVDSS)){
+                                        eDCIVD.addEVDSubset(eVDSS);
+                                      }
                                   }
                      else if (vD instanceof NonenumeratedValueDomain) {
                                       eDCIVD.setIsEnumeratedFlag(false);
                                   }
                       
-                   
                       dataElements.add(eDCIDE);
                       dataElementConcepts.add(eDCIDEC);
                       valueDomains.add(eDCIVD);
