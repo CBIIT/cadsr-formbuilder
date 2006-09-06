@@ -37,6 +37,7 @@
   <bean id="eVDElement" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.EVDElementImpl" singleton="false" />
   <bean id="eVDElementText" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.EVDElementTextImpl" singleton="false" />  
   <bean id="elementInSubset" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.ElementInSubsetImpl" singleton="false" />    
+  <bean id="alternateDesignation" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.AlternateDesignationImpl" singleton="false" />    
 
 </beans>
 
