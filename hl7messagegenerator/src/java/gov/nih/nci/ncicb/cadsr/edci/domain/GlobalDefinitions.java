@@ -3,6 +3,7 @@ package gov.nih.nci.ncicb.cadsr.edci.domain;
 import java.io.Serializable;
 
 import java.util.Collection;
+import java.util.Date;
 
 public interface GlobalDefinitions extends Serializable{
 
@@ -29,5 +30,9 @@ public interface GlobalDefinitions extends Serializable{
     public void setDataElementGroupCollection(Collection<DataElementGroup> dataElementGroupCollection);
 
     public Collection<DataElementGroup> getDataElementGroupCollection();
+    
+    public Date getActivityTime();
+    
+    public void setActivityTime(Date activityTime);
     
 }

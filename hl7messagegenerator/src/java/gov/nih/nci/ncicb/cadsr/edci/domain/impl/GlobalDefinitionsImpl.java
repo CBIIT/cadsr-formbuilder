@@ -1,8 +1,8 @@
 /*
- * This class was automatically generated with 
- * <a href="http://www.castor.org">Castor 1.0.2</a>, using an XML
+ * This class was automatically generated with
+ * <a href="http://www.castor.org">Castor 0.9.9</a>, using an XML
  * Schema.
- * $Id: GlobalDefinitionsImpl.java,v 1.2 2006-08-30 13:08:28 marwahah Exp $
+ * $Id: GlobalDefinitionsImpl.java,v 1.3 2006-09-07 14:22:38 marwahah Exp $
  */
 
 package gov.nih.nci.ncicb.cadsr.edci.domain.impl;
@@ -12,19 +12,25 @@ package gov.nih.nci.ncicb.cadsr.edci.domain.impl;
 //---------------------------------/
 
 import gov.nih.nci.ncicb.cadsr.edci.domain.DataElement;
+
 import gov.nih.nci.ncicb.cadsr.edci.domain.DataElementConcept;
 import gov.nih.nci.ncicb.cadsr.edci.domain.DataElementGroup;
-import gov.nih.nci.ncicb.cadsr.edci.domain.GlobalDefinitions;
 
+import gov.nih.nci.ncicb.cadsr.edci.domain.GlobalDefinitions;
 import gov.nih.nci.ncicb.cadsr.edci.domain.ValueDomain;
 
+import java.io.Reader;
+import java.io.Serializable;
+import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.Date;
+import java.util.Enumeration;
 
 /**
  * Definitions of objects that are used across multiple Instruments
- * 
- * @version $Revision: 1.2 $ $Date: 2006-08-30 13:08:28 $
+ *
+ * @version $Revision: 1.3 $ $Date: 2006-09-07 14:22:38 $
  */
 public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefinitions {
 
@@ -34,9 +40,14 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
     //--------------------------/
 
     /**
+     * Field _activityTime
+     */
+    private java.util.Date _activityTime;
+
+    /**
      * This class represents all value domains, enumerated or not.
      * A ValueDomain is a set of accepted representations for the
-     * intended meanings of a DataElementConcept. 
+     * intended meanings of a DataElementConcept.
      */
     private java.util.ArrayList _valueDomainImplList;
 
@@ -67,13 +78,13 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
      //- Constructors -/
     //----------------/
 
-    public GlobalDefinitionsImpl() 
+    public GlobalDefinitionsImpl()
      {
         super();
-        _valueDomainImplList = new java.util.ArrayList();
-        _dataElementConceptImplList = new java.util.ArrayList();
-        _dataElementImplList = new java.util.ArrayList();
-        _dataElementGroupImplList = new java.util.ArrayList();
+        _valueDomainImplList = new ArrayList();
+        _dataElementConceptImplList = new ArrayList();
+        _dataElementImplList = new ArrayList();
+        _dataElementGroupImplList = new ArrayList();
     } //-- gov.nih.nci.ncicb.cadsr.edci.domain.impl.GlobalDefinitionsImpl()
 
 
@@ -83,22 +94,22 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
 
     /**
      * Method addDataElementConceptImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param vDataElementConceptImpl
      */
     public void addDataElementConceptImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementConceptImpl vDataElementConceptImpl)
         throws java.lang.IndexOutOfBoundsException
     {
         _dataElementConceptImplList.add(vDataElementConceptImpl);
-    } //-- void addDataElementConceptImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementConceptImpl) 
+    } //-- void addDataElementConceptImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementConceptImpl)
 
     /**
      * Method addDataElementConceptImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param index
      * @param vDataElementConceptImpl
      */
@@ -106,26 +117,26 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
         throws java.lang.IndexOutOfBoundsException
     {
         _dataElementConceptImplList.add(index, vDataElementConceptImpl);
-    } //-- void addDataElementConceptImpl(int, gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementConceptImpl) 
+    } //-- void addDataElementConceptImpl(int, gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementConceptImpl)
 
     /**
      * Method addDataElementGroupImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param vDataElementGroupImpl
      */
     public void addDataElementGroupImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementGroupImpl vDataElementGroupImpl)
         throws java.lang.IndexOutOfBoundsException
     {
         _dataElementGroupImplList.add(vDataElementGroupImpl);
-    } //-- void addDataElementGroupImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementGroupImpl) 
+    } //-- void addDataElementGroupImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementGroupImpl)
 
     /**
      * Method addDataElementGroupImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param index
      * @param vDataElementGroupImpl
      */
@@ -133,26 +144,26 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
         throws java.lang.IndexOutOfBoundsException
     {
         _dataElementGroupImplList.add(index, vDataElementGroupImpl);
-    } //-- void addDataElementGroupImpl(int, gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementGroupImpl) 
+    } //-- void addDataElementGroupImpl(int, gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementGroupImpl)
 
     /**
      * Method addDataElementImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param vDataElementImpl
      */
     public void addDataElementImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementImpl vDataElementImpl)
         throws java.lang.IndexOutOfBoundsException
     {
         _dataElementImplList.add(vDataElementImpl);
-    } //-- void addDataElementImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementImpl) 
+    } //-- void addDataElementImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementImpl)
 
     /**
      * Method addDataElementImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param index
      * @param vDataElementImpl
      */
@@ -160,26 +171,26 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
         throws java.lang.IndexOutOfBoundsException
     {
         _dataElementImplList.add(index, vDataElementImpl);
-    } //-- void addDataElementImpl(int, gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementImpl) 
+    } //-- void addDataElementImpl(int, gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementImpl)
 
     /**
      * Method addValueDomainImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param vValueDomainImpl
      */
     public void addValueDomainImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.ValueDomainImpl vValueDomainImpl)
         throws java.lang.IndexOutOfBoundsException
     {
         _valueDomainImplList.add(vValueDomainImpl);
-    } //-- void addValueDomainImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.ValueDomainImpl) 
+    } //-- void addValueDomainImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.ValueDomainImpl)
 
     /**
      * Method addValueDomainImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param index
      * @param vValueDomainImpl
      */
@@ -187,97 +198,108 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
         throws java.lang.IndexOutOfBoundsException
     {
         _valueDomainImplList.add(index, vValueDomainImpl);
-    } //-- void addValueDomainImpl(int, gov.nih.nci.ncicb.cadsr.edci.domain.impl.ValueDomainImpl) 
+    } //-- void addValueDomainImpl(int, gov.nih.nci.ncicb.cadsr.edci.domain.impl.ValueDomainImpl)
 
     /**
      * Method clearDataElementConceptImpl
-     * 
+     *
      */
     public void clearDataElementConceptImpl()
     {
         _dataElementConceptImplList.clear();
-    } //-- void clearDataElementConceptImpl() 
+    } //-- void clearDataElementConceptImpl()
 
     /**
      * Method clearDataElementGroupImpl
-     * 
+     *
      */
     public void clearDataElementGroupImpl()
     {
         _dataElementGroupImplList.clear();
-    } //-- void clearDataElementGroupImpl() 
+    } //-- void clearDataElementGroupImpl()
 
     /**
      * Method clearDataElementImpl
-     * 
+     *
      */
     public void clearDataElementImpl()
     {
         _dataElementImplList.clear();
-    } //-- void clearDataElementImpl() 
+    } //-- void clearDataElementImpl()
 
     /**
      * Method clearValueDomainImpl
-     * 
+     *
      */
     public void clearValueDomainImpl()
     {
         _valueDomainImplList.clear();
-    } //-- void clearValueDomainImpl() 
+    } //-- void clearValueDomainImpl()
 
     /**
      * Method enumerateDataElementConceptImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @return Enumeration
      */
     public java.util.Enumeration enumerateDataElementConceptImpl()
     {
-        return Collections.enumeration(_dataElementConceptImplList);
-    } //-- java.util.Enumeration enumerateDataElementConceptImpl() 
+        return new org.exolab.castor.util.IteratorEnumeration(_dataElementConceptImplList.iterator());
+    } //-- java.util.Enumeration enumerateDataElementConceptImpl()
 
     /**
      * Method enumerateDataElementGroupImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @return Enumeration
      */
     public java.util.Enumeration enumerateDataElementGroupImpl()
     {
-        return Collections.enumeration(_dataElementGroupImplList);
-    } //-- java.util.Enumeration enumerateDataElementGroupImpl() 
+        return new org.exolab.castor.util.IteratorEnumeration(_dataElementGroupImplList.iterator());
+    } //-- java.util.Enumeration enumerateDataElementGroupImpl()
 
     /**
      * Method enumerateDataElementImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @return Enumeration
      */
     public java.util.Enumeration enumerateDataElementImpl()
     {
-        return Collections.enumeration(_dataElementImplList);
-    } //-- java.util.Enumeration enumerateDataElementImpl() 
+        return new org.exolab.castor.util.IteratorEnumeration(_dataElementImplList.iterator());
+    } //-- java.util.Enumeration enumerateDataElementImpl()
 
     /**
      * Method enumerateValueDomainImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @return Enumeration
      */
     public java.util.Enumeration enumerateValueDomainImpl()
     {
-        return Collections.enumeration(_valueDomainImplList);
-    } //-- java.util.Enumeration enumerateValueDomainImpl() 
+        return new org.exolab.castor.util.IteratorEnumeration(_valueDomainImplList.iterator());
+    } //-- java.util.Enumeration enumerateValueDomainImpl()
+
+    /**
+     * Returns the value of field 'activityTime'.
+     *
+     * @return Date
+     * @return the value of field 'activityTime'.
+     */
+    public java.util.Date getActivityTime()
+    {
+        return this._activityTime;
+    } //-- java.util.Date getActivityTime()
 
     /**
      * Method getDataElementConceptImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param index
      * @return DataElementConceptImpl
      */
@@ -285,18 +307,18 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
         throws java.lang.IndexOutOfBoundsException
     {
         //-- check bounds for index
-        if ((index < 0) || (index >= _dataElementConceptImplList.size())) {
+        if ((index < 0) || (index > _dataElementConceptImplList.size())) {
             throw new IndexOutOfBoundsException();
         }
-        
+
         return (gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementConceptImpl) _dataElementConceptImplList.get(index);
-    } //-- gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementConceptImpl getDataElementConceptImpl(int) 
+    } //-- gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementConceptImpl getDataElementConceptImpl(int)
 
     /**
      * Method getDataElementConceptImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @return DataElementConceptImpl
      */
     public gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementConceptImpl[] getDataElementConceptImpl()
@@ -307,25 +329,25 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
             mArray[index] = (gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementConceptImpl) _dataElementConceptImplList.get(index);
         }
         return mArray;
-    } //-- gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementConceptImpl[] getDataElementConceptImpl() 
+    } //-- gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementConceptImpl[] getDataElementConceptImpl()
 
     /**
      * Method getDataElementConceptImplCount
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @return int
      */
     public int getDataElementConceptImplCount()
     {
         return _dataElementConceptImplList.size();
-    } //-- int getDataElementConceptImplCount() 
+    } //-- int getDataElementConceptImplCount()
 
     /**
      * Method getDataElementGroupImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param index
      * @return DataElementGroupImpl
      */
@@ -333,18 +355,18 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
         throws java.lang.IndexOutOfBoundsException
     {
         //-- check bounds for index
-        if ((index < 0) || (index >= _dataElementGroupImplList.size())) {
+        if ((index < 0) || (index > _dataElementGroupImplList.size())) {
             throw new IndexOutOfBoundsException();
         }
-        
+
         return (gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementGroupImpl) _dataElementGroupImplList.get(index);
-    } //-- gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementGroupImpl getDataElementGroupImpl(int) 
+    } //-- gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementGroupImpl getDataElementGroupImpl(int)
 
     /**
      * Method getDataElementGroupImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @return DataElementGroupImpl
      */
     public gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementGroupImpl[] getDataElementGroupImpl()
@@ -355,25 +377,25 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
             mArray[index] = (gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementGroupImpl) _dataElementGroupImplList.get(index);
         }
         return mArray;
-    } //-- gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementGroupImpl[] getDataElementGroupImpl() 
+    } //-- gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementGroupImpl[] getDataElementGroupImpl()
 
     /**
      * Method getDataElementGroupImplCount
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @return int
      */
     public int getDataElementGroupImplCount()
     {
         return _dataElementGroupImplList.size();
-    } //-- int getDataElementGroupImplCount() 
+    } //-- int getDataElementGroupImplCount()
 
     /**
      * Method getDataElementImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param index
      * @return DataElementImpl
      */
@@ -381,18 +403,18 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
         throws java.lang.IndexOutOfBoundsException
     {
         //-- check bounds for index
-        if ((index < 0) || (index >= _dataElementImplList.size())) {
+        if ((index < 0) || (index > _dataElementImplList.size())) {
             throw new IndexOutOfBoundsException();
         }
-        
+
         return (gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementImpl) _dataElementImplList.get(index);
-    } //-- gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementImpl getDataElementImpl(int) 
+    } //-- gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementImpl getDataElementImpl(int)
 
     /**
      * Method getDataElementImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @return DataElementImpl
      */
     public gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementImpl[] getDataElementImpl()
@@ -403,25 +425,25 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
             mArray[index] = (gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementImpl) _dataElementImplList.get(index);
         }
         return mArray;
-    } //-- gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementImpl[] getDataElementImpl() 
+    } //-- gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementImpl[] getDataElementImpl()
 
     /**
      * Method getDataElementImplCount
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @return int
      */
     public int getDataElementImplCount()
     {
         return _dataElementImplList.size();
-    } //-- int getDataElementImplCount() 
+    } //-- int getDataElementImplCount()
 
     /**
      * Method getValueDomainImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param index
      * @return ValueDomainImpl
      */
@@ -429,18 +451,18 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
         throws java.lang.IndexOutOfBoundsException
     {
         //-- check bounds for index
-        if ((index < 0) || (index >= _valueDomainImplList.size())) {
+        if ((index < 0) || (index > _valueDomainImplList.size())) {
             throw new IndexOutOfBoundsException();
         }
-        
+
         return (gov.nih.nci.ncicb.cadsr.edci.domain.impl.ValueDomainImpl) _valueDomainImplList.get(index);
-    } //-- gov.nih.nci.ncicb.cadsr.edci.domain.impl.ValueDomainImpl getValueDomainImpl(int) 
+    } //-- gov.nih.nci.ncicb.cadsr.edci.domain.impl.ValueDomainImpl getValueDomainImpl(int)
 
     /**
      * Method getValueDomainImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @return ValueDomainImpl
      */
     public gov.nih.nci.ncicb.cadsr.edci.domain.impl.ValueDomainImpl[] getValueDomainImpl()
@@ -451,25 +473,25 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
             mArray[index] = (gov.nih.nci.ncicb.cadsr.edci.domain.impl.ValueDomainImpl) _valueDomainImplList.get(index);
         }
         return mArray;
-    } //-- gov.nih.nci.ncicb.cadsr.edci.domain.impl.ValueDomainImpl[] getValueDomainImpl() 
+    } //-- gov.nih.nci.ncicb.cadsr.edci.domain.impl.ValueDomainImpl[] getValueDomainImpl()
 
     /**
      * Method getValueDomainImplCount
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @return int
      */
     public int getValueDomainImplCount()
     {
         return _valueDomainImplList.size();
-    } //-- int getValueDomainImplCount() 
+    } //-- int getValueDomainImplCount()
 
     /**
      * Method removeDataElementConceptImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param vDataElementConceptImpl
      * @return boolean
      */
@@ -477,13 +499,13 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
     {
         boolean removed = _dataElementConceptImplList.remove(vDataElementConceptImpl);
         return removed;
-    } //-- boolean removeDataElementConceptImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementConceptImpl) 
+    } //-- boolean removeDataElementConceptImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementConceptImpl)
 
     /**
      * Method removeDataElementGroupImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param vDataElementGroupImpl
      * @return boolean
      */
@@ -491,13 +513,13 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
     {
         boolean removed = _dataElementGroupImplList.remove(vDataElementGroupImpl);
         return removed;
-    } //-- boolean removeDataElementGroupImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementGroupImpl) 
+    } //-- boolean removeDataElementGroupImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementGroupImpl)
 
     /**
      * Method removeDataElementImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param vDataElementImpl
      * @return boolean
      */
@@ -505,13 +527,13 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
     {
         boolean removed = _dataElementImplList.remove(vDataElementImpl);
         return removed;
-    } //-- boolean removeDataElementImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementImpl) 
+    } //-- boolean removeDataElementImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementImpl)
 
     /**
      * Method removeValueDomainImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param vValueDomainImpl
      * @return boolean
      */
@@ -519,13 +541,23 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
     {
         boolean removed = _valueDomainImplList.remove(vValueDomainImpl);
         return removed;
-    } //-- boolean removeValueDomainImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.ValueDomainImpl) 
+    } //-- boolean removeValueDomainImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.ValueDomainImpl)
+
+    /**
+     * Sets the value of field 'activityTime'.
+     *
+     * @param activityTime the value of field 'activityTime'.
+     */
+    public void setActivityTime(java.util.Date activityTime)
+    {
+        this._activityTime = activityTime;
+    } //-- void setActivityTime(java.util.Date)
 
     /**
      * Method setDataElementConceptImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param index
      * @param vDataElementConceptImpl
      */
@@ -533,17 +565,17 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
         throws java.lang.IndexOutOfBoundsException
     {
         //-- check bounds for index
-        if ((index < 0) || (index >= _dataElementConceptImplList.size())) {
+        if ((index < 0) || (index > _dataElementConceptImplList.size())) {
             throw new IndexOutOfBoundsException();
         }
         _dataElementConceptImplList.set(index, vDataElementConceptImpl);
-    } //-- void setDataElementConceptImpl(int, gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementConceptImpl) 
+    } //-- void setDataElementConceptImpl(int, gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementConceptImpl)
 
     /**
      * Method setDataElementConceptImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param dataElementConceptImplArray
      */
     public void setDataElementConceptImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementConceptImpl[] dataElementConceptImplArray)
@@ -553,13 +585,13 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
         for (int i = 0; i < dataElementConceptImplArray.length; i++) {
             _dataElementConceptImplList.add(dataElementConceptImplArray[i]);
         }
-    } //-- void setDataElementConceptImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementConceptImpl) 
+    } //-- void setDataElementConceptImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementConceptImpl)
 
     /**
      * Method setDataElementGroupImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param index
      * @param vDataElementGroupImpl
      */
@@ -567,17 +599,17 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
         throws java.lang.IndexOutOfBoundsException
     {
         //-- check bounds for index
-        if ((index < 0) || (index >= _dataElementGroupImplList.size())) {
+        if ((index < 0) || (index > _dataElementGroupImplList.size())) {
             throw new IndexOutOfBoundsException();
         }
         _dataElementGroupImplList.set(index, vDataElementGroupImpl);
-    } //-- void setDataElementGroupImpl(int, gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementGroupImpl) 
+    } //-- void setDataElementGroupImpl(int, gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementGroupImpl)
 
     /**
      * Method setDataElementGroupImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param dataElementGroupImplArray
      */
     public void setDataElementGroupImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementGroupImpl[] dataElementGroupImplArray)
@@ -587,13 +619,13 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
         for (int i = 0; i < dataElementGroupImplArray.length; i++) {
             _dataElementGroupImplList.add(dataElementGroupImplArray[i]);
         }
-    } //-- void setDataElementGroupImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementGroupImpl) 
+    } //-- void setDataElementGroupImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementGroupImpl)
 
     /**
      * Method setDataElementImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param index
      * @param vDataElementImpl
      */
@@ -601,17 +633,17 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
         throws java.lang.IndexOutOfBoundsException
     {
         //-- check bounds for index
-        if ((index < 0) || (index >= _dataElementImplList.size())) {
+        if ((index < 0) || (index > _dataElementImplList.size())) {
             throw new IndexOutOfBoundsException();
         }
         _dataElementImplList.set(index, vDataElementImpl);
-    } //-- void setDataElementImpl(int, gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementImpl) 
+    } //-- void setDataElementImpl(int, gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementImpl)
 
     /**
      * Method setDataElementImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param dataElementImplArray
      */
     public void setDataElementImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementImpl[] dataElementImplArray)
@@ -621,13 +653,13 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
         for (int i = 0; i < dataElementImplArray.length; i++) {
             _dataElementImplList.add(dataElementImplArray[i]);
         }
-    } //-- void setDataElementImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementImpl) 
+    } //-- void setDataElementImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementImpl)
 
     /**
      * Method setValueDomainImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param index
      * @param vValueDomainImpl
      */
@@ -635,17 +667,17 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
         throws java.lang.IndexOutOfBoundsException
     {
         //-- check bounds for index
-        if ((index < 0) || (index >= _valueDomainImplList.size())) {
+        if ((index < 0) || (index > _valueDomainImplList.size())) {
             throw new IndexOutOfBoundsException();
         }
         _valueDomainImplList.set(index, vValueDomainImpl);
-    } //-- void setValueDomainImpl(int, gov.nih.nci.ncicb.cadsr.edci.domain.impl.ValueDomainImpl) 
+    } //-- void setValueDomainImpl(int, gov.nih.nci.ncicb.cadsr.edci.domain.impl.ValueDomainImpl)
 
     /**
      * Method setValueDomainImpl
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * @param valueDomainImplArray
      */
     public void setValueDomainImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.ValueDomainImpl[] valueDomainImplArray)
@@ -655,7 +687,7 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
         for (int i = 0; i < valueDomainImplArray.length; i++) {
             _valueDomainImplList.add(valueDomainImplArray[i]);
         }
-    } //-- void setValueDomainImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.ValueDomainImpl) 
+    } //-- void setValueDomainImpl(gov.nih.nci.ncicb.cadsr.edci.domain.impl.ValueDomainImpl)
 
     public void addValueDomain(ValueDomain valueDomain) {
        addValueDomainImpl((ValueDomainImpl)valueDomain);
@@ -716,4 +748,5 @@ public class GlobalDefinitionsImpl implements java.io.Serializable, GlobalDefini
     public Collection<DataElementGroup> getDataElementGroupCollection() {
         return _dataElementGroupImplList;
     }
+
 }
