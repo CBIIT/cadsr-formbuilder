@@ -53,4 +53,20 @@ public interface ValueDomain extends Serializable {
     public void setEVDSubsetCollection(Collection<EVDSubset> evdSubsets);
     
     public Collection<EVDSubset> getEVDSubsetCollection();
+    
+    public void setSourceCodingSystem(String sourceCodingSystem);
+    
+    public String getSourceCodingSystem();
+    
+    public String getSourceCodingSystemGUID();
+    
+    public void setSourceCodingSystemGUID(String sourceCodingSystemGUID);
+    
+    public String getSourceCodingSystemVersion();
+
+    public void setSourceCodingSystemVersion(String sourceCodingSystemVersion);
+    
+    public String getSourceDomainId();
+    
+    public void setSourceDomainId(String sourceDomainId);
 }
