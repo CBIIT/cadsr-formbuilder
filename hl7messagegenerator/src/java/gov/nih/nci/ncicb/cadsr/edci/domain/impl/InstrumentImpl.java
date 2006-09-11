@@ -84,7 +84,7 @@ public class InstrumentImpl implements Instrument{
         return namespace;
     }
 
-    public void setSectionDefCollection(Collection<SectionDef> sectionDefCollection) {
+    public void setSectionDefCollection(Collection sectionDefCollection) {
         this.sectionDefCollection = sectionDefCollection;
     }
 
@@ -92,7 +92,8 @@ public class InstrumentImpl implements Instrument{
         return sectionDefCollection;
     }
 
-    public void setSectionRefCollection(Collection<SectionRef> sectionRefCollection) {
+    public void setSectionRefCollection(Collection sectionRefCollection)
+     {
         this.sectionRefCollection = sectionRefCollection;
     }
 
