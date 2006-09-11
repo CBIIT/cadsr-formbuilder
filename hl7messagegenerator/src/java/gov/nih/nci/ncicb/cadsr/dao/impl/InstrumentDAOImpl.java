@@ -1,6 +1,7 @@
 package gov.nih.nci.ncicb.cadsr.dao.impl;
 
 import gov.nih.nci.cadsr.domain.Designation;
+import gov.nih.nci.cadsr.domain.EnumeratedValueDomain;
 import gov.nih.nci.cadsr.domain.Form;
 import gov.nih.nci.cadsr.domain.FormElement;
 import gov.nih.nci.cadsr.domain.Module;
@@ -40,7 +41,9 @@ import java.util.Map;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-
+/**
+ * Implements the InstumentDAO interface using the caDSR API.
+ */
 public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO{
     private static Logger logger = LogManager.getLogger(InstrumentDAO.class);
     public InstrumentDAOImpl() {
@@ -58,7 +61,7 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
     {
           EDCIConfiguration config = EDCIConfiguration.getInstance();
           //Create the SectionDef
-          SectionDef sectionDef = new SectionDefImpl();
+          SectionDef sectionDef = domainObjectFactory.getSectionDef();
           sectionDef.setDescription(form.getPreferredDefinition());
           sectionDef.setGUID(geteDCIGUID(getGUID()));
           //Set the sectionDef ID
@@ -66,7 +69,7 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
 
           
           //Create the SectionRef, it refers to the sectionDef
-          SectionRef sectionRef = new SectionRefImpl();
+          SectionRef sectionRef = domainObjectFactory.getSectionRef();
           sectionRef.setId(form.getId());
           sectionRef.setName(form.getLongName());
           sectionRef.setNavigationSequenceNumber(config.getProperty("sectionRefNavigationSequenceNumber"));
@@ -100,7 +103,7 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
         
         for (Module module:modules){
           //Create the GroupDef
-          GroupDef groupDef = new GroupDefImpl();
+          GroupDef groupDef = domainObjectFactory.getGroupDef();
           DataElementGroup dataElementGroup = getDataElementGroup(module, globalDefinitions);
           groupDef.setDataElementGroupGUID(geteDCIGUID(dataElementGroup.getGUID()));
           groupDef.setDescription(module.getPreferredDefinition());
@@ -114,7 +117,7 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
               groupDef.setRepeatingGroupFlag("false");
           }
           //Create the GroupRef
-          GroupRef groupRef =  (GroupRef)new GroupRefImpl();
+          GroupRef groupRef =  domainObjectFactory.getGroupRef();
           groupRef.setGroupDef(groupDef);
           groupRef.setId(module.getId());
           groupRef.setMaximumItemRefRepeats(module.getMaximumQuestionRepeat()==null?null:module.getMaximumQuestionRepeat().toString());
@@ -124,7 +127,7 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
           Collection<Designation> designations = module.getDesignationCollection();
           Collection<GroupAlias> groupAliases = new ArrayList<GroupAlias>(designations.size());
           for (Designation designation:designations) {
-              GroupAlias  groupAlias = new GroupAliasImpl();
+              GroupAlias  groupAlias = domainObjectFactory.getGroupAlias();
               groupAlias.setName(designation.getName());
               groupAlias.setSystem(designation.getType());
               groupAliases.add(groupAlias);
@@ -158,7 +161,7 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
         {
           for (Question question:questions){
             //Create the ItemDef
-            ItemDef itemDef = (ItemDef)new ItemDefImpl();
+            ItemDef itemDef = domainObjectFactory.getItemDef();
             DataElement dataElement = getDataElement(question, globalDefinitions);
             itemDef.setDataElementGUID(geteDCIGUID(dataElement.getGUID()));
             itemDef.setId(geteDCIGUID(getGUID()));
@@ -167,19 +170,22 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
             itemDef.setOccurenceSn(question.getDisplayOrder().toString());
             //Range check based on 3.2
             //Get the enumeratedValueDomainSubSetId
-            EVDSubset evdSubset = getEVDSubset(question,globalDefinitions);
-            itemDef.setEnumeratedValueDomainSubsetId(evdSubset.getSubsetId());  
+            if (question.getDataElement().getValueDomain() instanceof EnumeratedValueDomain)
+            {
+               EVDSubset evdSubset = getEVDSubset(question,globalDefinitions);
+               itemDef.setEnumeratedValueDomainSubsetId(evdSubset.getSubsetId());  
+            }
             itemDefs.add(itemDef);
 
             
             
             //Create the ItemRef
-            ItemRef itemRef = new ItemRefImpl();
+            ItemRef itemRef = domainObjectFactory.getItemRef();
             itemRef.setId(question.getId());
             itemRef.setIsModifiableFlag(question.getIsEditable());
             itemRef.setItemDef(itemDef);
             itemRef.setNavigationSequenceNumber(question.getDisplayOrder().toString());
-            ItemRefPrompt itemRefPrompt = new ItemRefPromptImpl();
+            ItemRefPrompt itemRefPrompt = domainObjectFactory.getItemRefPrompt();
             itemRefPrompt.setPrompt(question.getLongName());
             itemRefPrompt.setLanguage(config.getProperty("default.language"));
             Collection<ItemRefPrompt> itemRefPrompts = new ArrayList<ItemRefPrompt>(1);
@@ -203,7 +209,7 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
             Collection<QuestionRepetition> questionRepetitions = question.getQuestionRepetitionCollection();
             Collection<ExplicitItemRefRepetition> explicitItemRefRepetitions = new ArrayList<ExplicitItemRefRepetition>(questionRepetitions.size());
             for (QuestionRepetition questionRepetition: questionRepetitions){
-                ExplicitItemRefRepetition explicitItemRefRepetition = new ExplicitItemRefRepetitionImpl();
+                ExplicitItemRefRepetition explicitItemRefRepetition = domainObjectFactory.getExplicitItemRefRepetition();
                 explicitItemRefRepetition.setIsModifiableFlag(questionRepetition.getIsEditable());
                 explicitItemRefRepetition.setRepeatSequenceNumber(questionRepetition.getRepeatSequenceNumber().toString());
                 if (defaultValidValue != null){
@@ -252,7 +258,10 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
                      dataElementGroup = deg; break;
                  }
               }
-              throw new Exception("Could not find DataElementGroup for module "+moduleName);
+              if (dataElementGroup == null)
+              {
+                 throw new Exception("Could not find DataElementGroup for module "+moduleName);
+              }
            }
         }
         catch(Exception e) {
@@ -271,7 +280,7 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
     protected DataElement getDataElement(Question question, GlobalDefinitions globalDefinitions) throws DataAccessException{
         String guid = question.getDataElement().getId();
         Collection<DataElement> dataElements = globalDefinitions.getDataElementCollection();
-        DataElement searchedDE = new DataElementImpl();
+        DataElement searchedDE = domainObjectFactory.getDataElement();
         if (dataElements != null)
         {
            for(DataElement dataElement:dataElements){
@@ -291,7 +300,7 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
      */
     protected EVDSubset getEVDSubset(Question question, GlobalDefinitions globalDefinitions ) throws DataAccessException {
         Collection validValues = question.getValidValueCollection();
-        gov.nih.nci.cadsr.domain.ValueDomain cadsrVD = question.getValueDomain();
+        gov.nih.nci.cadsr.domain.ValueDomain cadsrVD = question.getDataElement().getValueDomain();
         EVDSubset searchedEVDSubset = null;
         try 
         {
@@ -351,7 +360,7 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
         try {
             Collection<TriggeredAction> triggeredActions = new ArrayList<TriggeredAction>(caDSRTriggerActions.size());
             for(TriggerAction triggerAction: caDSRTriggerActions) {
-                TriggeredAction triggeredAction = new TriggeredActionImpl();
+                TriggeredAction triggeredAction = domainObjectFactory.getTriggeredAction();
                 triggeredAction.setAction(triggerAction.getAction());
                 triggeredAction.setCriterionValue(triggerAction.getCriterionValue());
                 triggeredAction.setForcedValue(triggerAction.getForcedValue());
@@ -376,7 +385,7 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
     public Instrument getInstrument(String formIdSeq, GlobalDefinitions globalDefinitions) throws DataAccessException {
         Form form = new Form();
         form.setId(formIdSeq);
-        Instrument instrument = new InstrumentImpl();
+        Instrument instrument = domainObjectFactory.getInstrument();
         EDCIConfiguration config = EDCIConfiguration.getInstance();
         try {
             ApplicationService appService = serviceLocator.getCaDSRPublicApiService();
@@ -398,7 +407,7 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
             Collection<gov.nih.nci.cadsr.domain.Instruction> caDSRInstructions = qForm.getInstruction();
             Collection<Instruction> instructions = new ArrayList<Instruction>(caDSRInstructions.size());
             for (gov.nih.nci.cadsr.domain.Instruction caDSRInstruction: caDSRInstructions){
-               Instruction instruction = new InstructionImpl();
+               Instruction instruction = domainObjectFactory.getInstruction();
                instruction.setInstructionText(caDSRInstruction.getLongName());
                instruction.setLanguage(config.getProperty("default.language"));
                instructions.add(instruction);

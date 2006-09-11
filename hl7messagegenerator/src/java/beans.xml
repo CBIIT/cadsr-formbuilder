@@ -26,6 +26,7 @@
   </bean>
   <bean id="instrumentDAO" class="gov.nih.nci.ncicb.cadsr.dao.impl.InstrumentDAOImpl" >
      <property name="serviceLocator"><ref local="serviceLocator"></ref></property>
+     <property name="domainObjectFactory"><ref local="domainObjectFactory"></ref></property>     
   </bean>  
   <bean id="dataElement" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementImpl" singleton="false" />
   <bean id="globalDefinitions" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.GlobalDefinitionsImpl" singleton="false"/>
@@ -38,6 +39,18 @@
   <bean id="eVDElementText" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.EVDElementTextImpl" singleton="false" />  
   <bean id="elementInSubset" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.ElementInSubsetImpl" singleton="false" />    
   <bean id="alternateDesignation" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.AlternateDesignationImpl" singleton="false" />    
+  <bean id="itemDef" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.ItemDefImpl"  singleton="false" />
+  <bean id="groupDef" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.GroupDefImpl" singleton="false" />
+  <bean id="sectionDef" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.SectionDefImpl" singleton="false" />
+  <bean id="instrument" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.InstrumentImpl" singleton="false" />
+  <bean id="itemRef" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.ItemRefImpl" singleton="false" />
+  <bean id="groupRef" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.GroupRefImpl" singleton="false" />
+  <bean id="sectionRef" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.SectionRefImpl" singleton="false" />
+  <bean id="groupAlias" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.GroupAliasImpl" singleton="false" />
+  <bean id="explicitItemRefRepetition" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.ExplicitItemRefRepetitionImpl" singleton="false" />
+  <bean id="triggeredAction" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.TriggeredActionImpl" singleton="false" />
+  <bean id="instruction" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.InstructionImpl" singleton="false" />
+  <bean id="itemRefPrompt" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.ItemRefPromptImpl" singleton="false" />
 
 </beans>
 
