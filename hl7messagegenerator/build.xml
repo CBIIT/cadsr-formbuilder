@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="HL7 Message Generator" default="compile" basedir=".">
+
+  <property name="src.dir" value="src/java" />
+  <property name="class.dir" value="classes" /> 
+  <property name="lib.dir" value="lib/java" />
+  <property name="dist.dir" value="dist" />
+  <property name="docs.dir" value="docs" />
+  
+  <path id="compile.classpath">
+    <fileset dir="${lib.dir}">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+  
+  <path id="test.classpath">
+     <fileset dir="${dist.dir}">
+        <include name="*.jar"/>
+     </fileset>
+     <fileset dir="${lib.dir}">
+        <include name="*.jar"/>
+     </fileset>
+  </path>
+
+  <target name="clean"> 
+    <delete dir="${class.dir}" failonerror="true" />
+    <delete dir="${dist.dir}" failonerror="true" />
+ </target>
+
+ <target name="init">
+    <mkdir dir="${class.dir}"/> 
+    <mkdir dir="${dist.dir}"/> 
+ </target>
+ <target name="compile" depends="init">
+    <javac
+      destdir="${class.dir}"
+      debug="on"
+      srcdir="${src.dir}"
+      deprecation="true"
+      >
+      <classpath refid="compile.classpath"/>
+    </javac>    
+ </target>
+  <target name="prepare" depends="compile">
+    <copy todir="${class.dir}">    
+      <fileset dir="${src.dir}">
+        <include name="*.properties"/>
+        <include name="*.xml"/>
+        <include name="stylesheets/*" />
+      </fileset>      
+    </copy>
+  </target>
+
+  <target name="dist" depends="prepare">
+    <jar destfile="${dist.dir}/hl7messagegenerator.jar">
+      <fileset dir="${class.dir}">
+      </fileset>
+    </jar>
+  </target>
+  
+  <target name="testQueryGlobalDefinitions" depends="dist" >
+     <junit haltonerror="on" showoutput="yes"  printsummary="yes">
+        <classpath refid="test.classpath"/>
+        <test name="gov.nih.nci.ncicb.cadsr.test.TestQueryGlobalDefinitionsMetadata" />
+     </junit>
+  </target>
+
+  <target name="testQueryInstrumentMetadata" depends="dist" >
+     <junit haltonerror="on" showoutput="yes"  printsummary="yes">
+        <classpath refid="test.classpath"/>
+        <test name="gov.nih.nci.ncicb.cadsr.test.TestQueryInstrumentMetadata" />
+     </junit>
+  </target>
+
+  <target name="testGenerateGlobalDefinitionsMIF" depends="dist" >
+     <junit haltonerror="on" showoutput="yes"  printsummary="yes">
+        <classpath refid="test.classpath"/>
+        <test name="gov.nih.nci.ncicb.cadsr.test.TestGenerateGlobalDefinitionsMIF" />
+     </junit>
+  </target>
+  
+</project>

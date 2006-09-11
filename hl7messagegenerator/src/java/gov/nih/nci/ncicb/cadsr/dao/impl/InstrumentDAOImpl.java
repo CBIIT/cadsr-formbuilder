@@ -167,7 +167,8 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
             itemDef.setId(geteDCIGUID(getGUID()));
             // isMandatory new for 3.2
             //itemDef.setIsMandatoryFlag(question.isMandatory());
-            itemDef.setOccurenceSn(question.getDisplayOrder().toString());
+            //This mapping to displayOrder is incorrect
+            //itemDef.setOccurenceSn(question.getDisplayOrder().toString());
             //Range check based on 3.2
             //Get the enumeratedValueDomainSubSetId
             if (question.getDataElement().getValueDomain() instanceof EnumeratedValueDomain)
