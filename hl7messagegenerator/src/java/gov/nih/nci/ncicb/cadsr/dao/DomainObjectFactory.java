@@ -9,14 +9,28 @@ import gov.nih.nci.ncicb.cadsr.edci.domain.EVDElement;
 import gov.nih.nci.ncicb.cadsr.edci.domain.EVDElementText;
 import gov.nih.nci.ncicb.cadsr.edci.domain.EVDSubset;
 import gov.nih.nci.ncicb.cadsr.edci.domain.ElementInSubset;
+import gov.nih.nci.ncicb.cadsr.edci.domain.ExplicitItemRefRepetition;
 import gov.nih.nci.ncicb.cadsr.edci.domain.GlobalDefinitions;
+import gov.nih.nci.ncicb.cadsr.edci.domain.GroupAlias;
+import gov.nih.nci.ncicb.cadsr.edci.domain.GroupDef;
+import gov.nih.nci.ncicb.cadsr.edci.domain.GroupRef;
+import gov.nih.nci.ncicb.cadsr.edci.domain.Instruction;
+import gov.nih.nci.ncicb.cadsr.edci.domain.Instrument;
+import gov.nih.nci.ncicb.cadsr.edci.domain.ItemDef;
+import gov.nih.nci.ncicb.cadsr.edci.domain.ItemRef;
+import gov.nih.nci.ncicb.cadsr.edci.domain.ItemRefPrompt;
+import gov.nih.nci.ncicb.cadsr.edci.domain.SectionDef;
+import gov.nih.nci.ncicb.cadsr.edci.domain.SectionRef;
+import gov.nih.nci.ncicb.cadsr.edci.domain.TriggeredAction;
 import gov.nih.nci.ncicb.cadsr.edci.domain.ValueDomain;
 //import gov.nih.nci.ncicb.cadsr.edci.domain.impl.GlobalDefinitionsImpl;
 
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
-
+/**
+ * Generate new instances of domain objects.
+ */
 public class DomainObjectFactory {
     BeanFactory beanFactory = null;
         
@@ -77,5 +91,65 @@ public class DomainObjectFactory {
     public ElementInSubset getElementInSubset()  {
           ElementInSubset elementInSubset = (ElementInSubset)beanFactory.getBean("elementInSubset");
           return elementInSubset;
-    }         
+    }     
+    
+    public ItemDef getItemDef() {
+        ItemDef itemDef = (ItemDef)beanFactory.getBean("itemDef");
+        return itemDef;
+    }
+    
+    public Instrument getInstrument() {
+        Instrument instrument = (Instrument)beanFactory.getBean("instrument");
+        return instrument;
+    }
+    
+    public GroupDef getGroupDef() {
+        GroupDef groupDef = (GroupDef)beanFactory.getBean("groupDef");
+        return groupDef;
+    }
+    
+    public SectionDef getSectionDef() {
+        SectionDef sectionDef = (SectionDef)beanFactory.getBean("sectionDef");
+        return sectionDef;
+    }
+    
+    public SectionRef getSectionRef() {
+        SectionRef sectionRef = (SectionRef)beanFactory.getBean("sectionRef");
+        return sectionRef;
+    }
+    
+    public GroupRef getGroupRef() {
+        GroupRef groupRef = (GroupRef)beanFactory.getBean("groupRef");
+        return groupRef;
+    }
+    
+    public ItemRef getItemRef() {
+        ItemRef itemRef = (ItemRef)beanFactory.getBean("itemRef");
+        return itemRef;
+    }
+    
+    public GroupAlias getGroupAlias(){
+        GroupAlias groupAlias = (GroupAlias)beanFactory.getBean("groupAlias");
+        return groupAlias;
+    }
+    
+    public ExplicitItemRefRepetition getExplicitItemRefRepetition(){
+        ExplicitItemRefRepetition explicitItemRefRepetition = (ExplicitItemRefRepetition)beanFactory.getBean("explicitItemRefRepetition");
+        return explicitItemRefRepetition;
+    }    
+    
+    public TriggeredAction getTriggeredAction() {
+        TriggeredAction triggeredAction = (TriggeredAction)beanFactory.getBean("triggeredAction");
+        return triggeredAction;
+    }
+    
+    public Instruction getInstruction() {
+        Instruction instruction = (Instruction)beanFactory.getBean("instruction");
+        return instruction;
+    }
+    
+    public ItemRefPrompt getItemRefPrompt() {
+        ItemRefPrompt itemRefPrompt = (ItemRefPrompt)beanFactory.getBean("itemRefPrompt");
+        return itemRefPrompt;
+    }    
 }
