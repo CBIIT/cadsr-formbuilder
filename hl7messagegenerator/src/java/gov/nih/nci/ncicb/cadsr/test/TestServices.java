@@ -12,6 +12,9 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
 
+/**
+ * Unit tests for the service layer.
+ */
 public class TestServices extends TestCase {
     BeanFactory beanFactory;
     
@@ -68,7 +71,7 @@ public class TestServices extends TestCase {
     public void testGenerateDCIDefMessage() {
       try {
         GenerateMessageService generateMessageService = (GenerateMessageService)beanFactory.getBean("generateMessageService");
-        String message = generateMessageService.getDCIDefsMessage("1B4FBBDD-9FD4-5F94-E044-0003BA0B1A09");
+        String message = generateMessageService.generateMessage("1B4FBBDD-9FD4-5F94-E044-0003BA0B1A09","user", generateMessageService.GLOBAL_DEFINITIONS_MIF);
         System.out.println("Message :\n"+message);
       }
       catch(Exception e){
