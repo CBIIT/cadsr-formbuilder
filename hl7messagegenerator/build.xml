@@ -79,6 +79,9 @@
        </javadoc>
   </target>
   
+  <!-- Following targets test the HL7 message generator software.
+       They test the software using a particular form idseq -->
+  <!-- Test querying GlobalDefinitions metadata -->
   <target name="testQueryGlobalDefinitions" depends="dist" >
      <junit haltonerror="on" showoutput="yes"  printsummary="yes">
         <classpath refid="test.classpath"/>
@@ -86,6 +89,7 @@
      </junit>
   </target>
 
+  <!-- Test Querying Instrument metadata -->
   <target name="testQueryInstrumentMetadata" depends="dist" >
      <junit haltonerror="on" showoutput="yes"  printsummary="yes">
         <classpath refid="test.classpath"/>
@@ -93,6 +97,7 @@
      </junit>
   </target>
 
+  <!-- Test generating GlobalDefinitions MIF message. -->
   <target name="testGenerateGlobalDefinitionsMIF" depends="dist" >
      <junit haltonerror="on" showoutput="yes"  printsummary="yes">
         <classpath refid="test.classpath"/>
