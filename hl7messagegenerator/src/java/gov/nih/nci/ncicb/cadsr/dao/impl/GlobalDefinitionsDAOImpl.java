@@ -1,4 +1,4 @@
-package gov.nih.nci.ncicb.cadsr.test;
+package gov.nih.nci.ncicb.cadsr.dao.impl;
 
 import gov.nih.nci.cadsr.domain.AdministeredComponent;
 import gov.nih.nci.cadsr.domain.Designation;
