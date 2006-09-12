@@ -36,7 +36,7 @@ public  class EDCIConfiguration {
     }
     /**
      * 
-     * @return
+     * @return an instance of EDCIConfiguration.
      */
     public static EDCIConfiguration getInstance() {
         if (instance == null) {
@@ -45,7 +45,11 @@ public  class EDCIConfiguration {
         }
         return instance;
     }
-    
+    /**
+     * 
+     * @param key
+     * @return Property value.
+     */
     public String getProperty(String key) {
         return properties.getProperty(key);
     }

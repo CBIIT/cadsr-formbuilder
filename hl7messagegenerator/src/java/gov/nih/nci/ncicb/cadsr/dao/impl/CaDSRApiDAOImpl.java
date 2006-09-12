@@ -19,7 +19,10 @@ import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.object.MappingSqlQuery;
 import org.springframework.jdbc.object.StoredProcedure;
-
+/**
+ *   Abstract DAO using the caDSR API for querying the caDSR database.
+ *   It also defines common methods used be the DAOs.
+ */
 public abstract class CaDSRApiDAOImpl {
 
     protected ServiceLocator serviceLocator;
