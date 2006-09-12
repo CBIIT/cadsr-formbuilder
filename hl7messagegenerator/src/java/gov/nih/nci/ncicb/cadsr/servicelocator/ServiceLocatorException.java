@@ -1,5 +1,7 @@
 package gov.nih.nci.ncicb.cadsr.servicelocator;
-
+/**
+ * An exception occurred finding an external resource.
+ */
 public class ServiceLocatorException extends Exception {
     public ServiceLocatorException() {
     }

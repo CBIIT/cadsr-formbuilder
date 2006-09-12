@@ -9,7 +9,9 @@ import gov.nih.nci.ncicb.cadsr.dao.InstrumentDAO;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
-
+/**
+ * Implements the EDCIDAOFactory using the spring framework BeanFactory.
+ */
 public class EDCIDAOFactoryImpl implements EDCIDAOFactory {
     BeanFactory beanFactory = null;
     public EDCIDAOFactoryImpl() {

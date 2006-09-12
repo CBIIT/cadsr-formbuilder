@@ -1,5 +1,7 @@
 package gov.nih.nci.ncicb.cadsr.service;
-
+/**
+ * Exceptions occuring at the Service layer.
+ */
 public class ServiceException extends Exception {
     public ServiceException() {
     }

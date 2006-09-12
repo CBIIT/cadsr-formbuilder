@@ -1,12 +1,10 @@
 package gov.nih.nci.ncicb.cadsr.serviceimpl;
 
-
+import gov.nih.nci.cadsr.domain.Form;
 import gov.nih.nci.ncicb.cadsr.edci.domain.GlobalDefinitions;
 import gov.nih.nci.ncicb.cadsr.edci.domain.Instrument;
-import gov.nih.nci.ncicb.cadsr.edci.domain.impl.GlobalDefinitionsImpl;
 import gov.nih.nci.ncicb.cadsr.service.CaAdapterService;
 import gov.nih.nci.ncicb.cadsr.service.GenerateMessageService;
-
 import gov.nih.nci.ncicb.cadsr.service.QueryMetadataService;
 import gov.nih.nci.ncicb.cadsr.service.ServiceException;
 
@@ -16,31 +14,29 @@ import java.io.StringWriter;
 
 import java.net.URL;
 
+import java.util.Date;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
-
 import javax.xml.transform.dom.DOMSource;
-
 import javax.xml.transform.stream.StreamResult;
-
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import org.apache.xerces.parsers.DOMParser;
-
-import org.exolab.castor.util.LocalConfiguration;
 import org.exolab.castor.xml.Marshaller;
 
 import org.w3c.dom.Document;
 
 
+/**
+ * Implements the GenerateMessage interface.
+ */
 
 
 public class GenerateMessageServiceImpl implements GenerateMessageService
@@ -55,37 +51,171 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
     }
     
     /**
-     * Generates the eDCI HL7 message for the give formIdSeq.
+     * Generates the  message for the give formIdSeq.
      * @param formIdSeq
+     * @param user
+     * @param messageType
      * @return
      * @throws ServiceException
      */
-    public String geteDCIHL7Message(String formIdSeq) throws ServiceException
+     public String generateMessage(String formIdSeq, String user, String messageType ) throws ServiceException
     {
-        Instrument instrument = queryMetadataService.getInstrumentMetaData(formIdSeq);
-        File csvFile = generateCSVFile(instrument);
-        String eDCIHL7Message = caAdapterService.generateeDCIHL7Message(csvFile);
-        
-        return eDCIHL7Message;
-    }
-    
-    public String getDCIDefsMessage(String formIdSeq ) throws ServiceException {
-         try {
-             GlobalDefinitions globalDefinitions = queryMetadataService.getGlobalDefinitions(formIdSeq);
-             return getDCIDefsMessage(globalDefinitions);
-         }
-         catch(Exception e) {
-             logger.error("Error generating DCI def message.",e);
-             throw new ServiceException("Error generating DCI def message.",e);
-         }
-    }
+        try
+        {
+          validateMessageType(messageType);
+          String message = null;
+          if (!validateUserForGeneratingMessage(formIdSeq, user, messageType)) {
+               throw new ServiceException("User does not have sufficient privileges to generate this message.");
+          }
+          GlobalDefinitions globalDefinitions = null;
+          String gdMessage = null;
+          if ((messageType.equals(EDCI))||(messageType.equals(GLOBAL_DEFINITIONS_MIF))) {
+               globalDefinitions = queryMetadataService.getGlobalDefinitions(formIdSeq);
+               gdMessage = getGlobalDefinitionMIFMessage(globalDefinitions);
+          }
+          String instrumentMessage = null;
+          if ((messageType.equals(EDCI))||(messageType.equals(EDCI_WITHOUT_ATTACHMENT)))
+          {
+                Instrument instrument = queryMetadataService.getInstrumentMetaData(formIdSeq);
+                File csvFile = generateCSVFile(instrument);
+                instrumentMessage = caAdapterService.generateeDCIHL7Message(csvFile);
+          }
+          if (messageType.equals(EDCI)) {
+              message = attachGlobalDefinitionsMIF(instrumentMessage, gdMessage);  
+          }
+          if (messageType.equals(EDCI_WITHOUT_ATTACHMENT)) {
+              message = instrumentMessage;
+          }
+          if (messageType.equals(GLOBAL_DEFINITIONS_MIF)) {
+                message = gdMessage;
+          }
+          return message;
+        }
+        catch (ServiceException se) {
+            logger.error(se);throw se;
+        }
+        catch (Exception e) {
+            logger.error("Error generating message. "+formIdSeq+" "+user+" "+messageType, e);
+            throw new ServiceException("Error generating message. "+formIdSeq+" "+user+" "+messageType, e);
+        }
 
+    }
+   /**
+     * Generate message for given form publicId, and version.
+     * @param publicId
+     * @param version
+     * @param user
+     * @param messageType
+     * @return
+     * @throws ServiceException
+     */
+    public String generateMessage(String publicId, String version, String user, String messageType ) throws ServiceException{
+       try {
+           Form form = queryMetadataService.getForm(publicId, version);
+           return generateMessage(form.getId(), user, messageType);
+       }
+        catch (ServiceException se) {
+            logger.error(se);throw se;
+        }
+        catch (Exception e) {
+            logger.error("Error generating message. "+publicId+" "+version+" "+user+" "+messageType, e);
+            throw new ServiceException("Error generating message. "+publicId+" "+version+" "+user+" "+messageType, e);
+        }       
+    }
+    /**
+     * Gets the message from the database.
+     * @param formIdSeq
+     * @param messageType
+     * @return
+     * @throws ServiceException
+     */
+    public String getMessage(String formIdSeq,Date generateDate ,String messageType) throws ServiceException {
+        try {
+            String instrumentMessage = queryMetadataService.getInstrumentMessage(formIdSeq, generateDate);
+            String gdMessage = queryMetadataService.getGlobalDefinitionsMessage(formIdSeq, generateDate);
+            String message = null;
+            if (messageType.equals(EDCI)) {
+                message = attachGlobalDefinitionsMIF(instrumentMessage, gdMessage);  
+            }
+            if (messageType.equals(EDCI_WITHOUT_ATTACHMENT)) {
+                message = instrumentMessage;
+            }
+            if (messageType.equals(GLOBAL_DEFINITIONS_MIF)) {
+                  message = gdMessage;
+            }
+            return message;            
+        }
+        catch (ServiceException se) {
+            logger.error(se);throw se;
+        }
+        catch (Exception e) {
+            logger.error("Error generating message. "+formIdSeq+" "+" "+messageType, e);
+            throw new ServiceException("Error generating message. "+formIdSeq+" "+messageType, e);
+        }
+    }
+    /**
+     * Gets the message from the database.
+     * @param publicId
+     * @param version
+     * @param generateDate
+     * @param messageType
+     * @return
+     * @throws ServiceException
+     */
+    public String getMessage(String publicId,String version,Date generateDate, String messageType) throws ServiceException {
+        try {
+            Form form = queryMetadataService.getForm(publicId, version);
+            return getMessage(form.getId(), generateDate,messageType);
+        }
+         catch (ServiceException se) {
+             logger.error(se);throw se;
+         }
+         catch (Exception e) {
+             logger.error("Error generating message. "+publicId+" "+version+" "+" "+messageType, e);
+             throw new ServiceException("Error generating message. "+publicId+" "+version+" "+" "+messageType, e);
+         }       
+    }
+    /**
+     * Validates the messageType
+     * @param messageType
+     * @throws ServiceException
+     */
+    protected void validateMessageType(String messageType) throws ServiceException {
+        if ((messageType == null)&&
+           (!(messageType.equals(EDCI)))&&
+            (!(messageType.equals(EDCI_WITHOUT_ATTACHMENT)))&&
+            (!(messageType.equals(GLOBAL_DEFINITIONS_MIF)))) {
+                throw new ServiceException("Invalid messageType. messageType can be :"+EDCI+", "+EDCI_WITHOUT_ATTACHMENT+", "+GLOBAL_DEFINITIONS_MIF);
+            }
+    }
+    /**
+     * Returns true if a user has privileges to generate message for a given form.
+     * otherwise returns false.
+     * @param formIdSeq
+     * @param user
+     * @param messageType
+     * @return
+     * @throws ServiceException
+     */
+    protected boolean validateUserForGeneratingMessage(String formIdSeq,String user, String messageType) throws ServiceException {
+        return true;
+    }
     
+    /**
+     * Generate the csv file ftom the Instrument metadata.
+     * @param instrument
+     * @return
+     * @throws ServiceException
+     */
     protected File generateCSVFile(Instrument instrument) throws ServiceException
     {
        return null;    
     }
-    
+    /**
+     * Transformer for GlobalDefinitionsToMif stylesheet.
+     * @return
+     * @throws ServiceException
+     */
     protected Transformer getGlobalDefinitionsToMifStyleSheetTransformer() throws ServiceException
     {
        try {
@@ -93,12 +223,13 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
           {
              TransformerFactory transformerFactory = TransformerFactory.newInstance();
              //transformerFactory.setURIResolver(new EDCIURIResolver());
+             //The name of the stylesheet should be a property
              URL styleSheetUrl = getClass().getResource("/stylesheets/gd2mif.xsl");
              InputStream styleSheetStream = styleSheetUrl.openStream();
              Source styleSheet = new StreamSource(styleSheetStream);
-             System.out.println("System id "+styleSheet.getSystemId());
-             System.out.println("URL path "+styleSheetUrl.getPath().substring(0,styleSheetUrl.getPath().lastIndexOf("/")));
-             System.out.println("URI "+styleSheetUrl.toURI().toString());
+             logger.debug("System id "+styleSheet.getSystemId());
+             logger.debug("URL path "+styleSheetUrl.getPath().substring(0,styleSheetUrl.getPath().lastIndexOf("/")));
+             logger.debug("URI "+styleSheetUrl.toURI().toString());
              styleSheet.setSystemId(styleSheetUrl.toURI().toString());
              Templates templates = transformerFactory.newTemplates(styleSheet);
              gdToMifTransformer = templates.newTransformer();
@@ -110,8 +241,13 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
            throw new ServiceException("Error getting the GlobalDefinitionsToMIF stylesheet.", e);
        }
     }
-    
-    protected String getDCIDefsMessage(GlobalDefinitions globalDefinitions) throws ServiceException {
+    /**
+     * Generate the GlobalDefinitions MIF message.
+     * @param globalDefinitions
+     * @return
+     * @throws ServiceException
+     */
+    protected String getGlobalDefinitionMIFMessage(GlobalDefinitions globalDefinitions) throws ServiceException {
         try {
             //Create the GlobalDefinitions document
             DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -120,14 +256,27 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
             //Apply the stylesheet to transform the document to MIF format.
             Transformer transformer = getGlobalDefinitionsToMifStyleSheetTransformer();
             Source source = new DOMSource(document);
-            transformer.transform (source, new StreamResult(System.out));
-
-            return "";
+            StringWriter sWriter = new StringWriter();
+            transformer.transform (source, new StreamResult(sWriter));
+            String gdMIFMessage = sWriter.getBuffer().toString();
+            logger.debug(gdMIFMessage);
+            return gdMIFMessage;
         }
         catch (Exception e){
             logger.error("Error marshalling GlobalDefinitions.",e);
             throw new ServiceException("Error marshalling GlobalDefinitions.",e);
         }
+    }
+    /**
+     * Attache the GlobalDefinitions MIF to the instrumentMessage.
+     * @param instrumentMessage
+     * @param attachment
+     * @return
+     * @throws ServiceException
+     */
+    protected String attachGlobalDefinitionsMIF(String instrumentMessage, String attachment) throws ServiceException 
+    {
+        return instrumentMessage+attachment;
     }
     
     public void setQueryMetadataService(QueryMetadataService queryMetadataService) {

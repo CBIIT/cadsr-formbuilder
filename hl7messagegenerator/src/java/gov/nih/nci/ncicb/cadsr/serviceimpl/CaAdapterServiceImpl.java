@@ -4,6 +4,10 @@ import gov.nih.nci.ncicb.cadsr.service.CaAdapterService;
 
 import java.io.File;
 
+
+/**
+ * Implements the CaAdapterService interface.
+ */
 public class CaAdapterServiceImpl implements CaAdapterService {
 
     private String csvEDCIGL7MappingFile;

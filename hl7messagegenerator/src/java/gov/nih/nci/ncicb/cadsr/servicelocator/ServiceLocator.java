@@ -17,7 +17,12 @@ import oracle.jdbc.pool.OracleDataSource;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-
+/**
+ * ServiceLocator used to get external resources:
+ * - caDSR API ApplicationService.
+ * - caDSR DataSource for direct JDBC access.
+ * - generateMessageService
+ */
 public class ServiceLocator {
     private  static final String CADSR_DATASOURCE = "cadsr_datasource";
     private  static final String CADSR_PUBLIC_API = "cadsr_public_api";
@@ -34,6 +39,7 @@ public class ServiceLocator {
     }
     
     /**
+     * Get the caDSR API applicationService.
      * @return caDSR Public API ApplicationService
      * @throws ServiceLocatorException
      */
@@ -52,18 +58,23 @@ public class ServiceLocator {
        }
         return appService;
     }
-    
+    /**
+     * Returns the caDSR dataSource.
+     * @return
+     * @throws ServiceLocatorException
+     */
     public DataSource getCaDSRDataSource() throws ServiceLocatorException {
        DataSource dataSource = (DataSource)cache.get(CADSR_DATASOURCE);
        try{
           if (dataSource == null)
-          {
+          {     //Try to get the dataSource from a JNDI lookup.
                 try {
                   InitialContext initialContext = new InitialContext();
                   dataSource = (DataSource)initialContext.lookup(caDSRDataSourceName);
                 }
                 catch(NamingException ne){
                     logger.warn("Error getting InitialContext.Trying to create the DataSource directly ..", ne);
+                    //Create a new DataSource from the properties file.
                     dataSource = getOracleDataSource();
                 }
                 cache.put("CADSR_DATASOURCE", dataSource);
@@ -75,7 +86,11 @@ public class ServiceLocator {
        }
        return dataSource;
     }
-
+    /**
+     * Creates a dataSource from properties file.
+     * @return
+     * @throws ServiceLocatorException
+     */
     private DataSource getOracleDataSource() throws ServiceLocatorException{
       try {
         OracleDataSource ods = new OracleDataSource();

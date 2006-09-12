@@ -25,12 +25,15 @@
   <target name="clean"> 
     <delete dir="${class.dir}" failonerror="true" />
     <delete dir="${dist.dir}" failonerror="true" />
+    <delete dir="${docs.dir}" failonerror="true" />
  </target>
 
  <target name="init">
     <mkdir dir="${class.dir}"/> 
     <mkdir dir="${dist.dir}"/> 
+    <mkdir dir="${docs.dir}" />
  </target>
+ 
  <target name="compile" depends="init">
     <javac
       destdir="${class.dir}"
@@ -41,7 +44,8 @@
       <classpath refid="compile.classpath"/>
     </javac>    
  </target>
-  <target name="prepare" depends="compile">
+ 
+ <target name="prepare" depends="compile">
     <copy todir="${class.dir}">    
       <fileset dir="${src.dir}">
         <include name="*.properties"/>
@@ -56,6 +60,23 @@
       <fileset dir="${class.dir}">
       </fileset>
     </jar>
+  </target>
+  
+  <target name="doc" depends="init">
+       <javadoc packagenames="gov.nih.nci.ncicb.cadsr.*"
+                excludepackagenames="gov.nih.nci.ncicb.cadsr.edci.domain.impl,
+                                     gov.nih.nci.ncicb.cadsr.serviceimpl,
+                                     gov.nih.nci.ncicb.cadsr.dao.impl,
+                                     gov.nih.nci.ncicb.cadsr.test"
+                sourcepath="${src.dir}"
+                defaultexcludes="yes"
+                destdir="${docs.dir}"
+                author="true"
+                version="true"
+                use="true"
+                windowtitle="eDCI HL7 API">
+         <group title="eDCI Domain Classes" packages="gov.nih.nci.ncicb.cadsr.edci.domain"/>
+       </javadoc>
   </target>
   
   <target name="testQueryGlobalDefinitions" depends="dist" >

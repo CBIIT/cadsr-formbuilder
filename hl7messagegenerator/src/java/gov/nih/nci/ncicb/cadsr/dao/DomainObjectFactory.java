@@ -29,7 +29,7 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
 /**
- * Generate new instances of domain objects.
+ * Generate new instances of eDCI domain objects.
  */
 public class DomainObjectFactory {
     BeanFactory beanFactory = null;
