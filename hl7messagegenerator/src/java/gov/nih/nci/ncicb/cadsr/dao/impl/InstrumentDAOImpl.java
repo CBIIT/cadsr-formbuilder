@@ -489,7 +489,7 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
 
    @Transactional(readOnly=false,
                   rollbackFor=DataAccessException.class)
-    public String storeInstrumentHL7Message(String formIdSeq, String message, String user) throws DataAccessException {
+    public String storeInstrumentHL7Message(String formIdSeq, String message, Date createDate, String user) throws DataAccessException {
         try {
              if (refDocCreator == null) {
                  refDocCreator = new ReferenceDocumentCreator(dataSource);
@@ -505,7 +505,7 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
              referenceDocument.setCreatedBy(user);
              referenceDocument.setId(getGUID());
              referenceDocument.setType(INSTRUMENT_REF_DOC_TYPE);
-             referenceDocument.setName(getRefDocName(form));
+             referenceDocument.setName(getRefDocName(form, createDate));
              referenceDocument.setContext(form.getContext());
              referenceDocument = refDocCreator.createReferenceDocument(referenceDocument, formIdSeq);
              

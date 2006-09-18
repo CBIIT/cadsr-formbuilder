@@ -319,6 +319,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
 
     public String storeGlobalDefinitionsMIFMessage(String formIdSeq, 
                                                    String message, 
+                                                   Date createDate,
                                                    String user) {
         return null;
     }
