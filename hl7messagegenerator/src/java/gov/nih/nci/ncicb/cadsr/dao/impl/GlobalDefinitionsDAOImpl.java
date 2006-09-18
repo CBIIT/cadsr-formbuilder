@@ -11,16 +11,18 @@ import gov.nih.nci.cadsr.domain.Question;
 import gov.nih.nci.cadsr.domain.ReferenceDocument;
 import gov.nih.nci.cadsr.domain.ValidValue;
 import gov.nih.nci.cadsr.domain.ValueDomainPermissibleValue;
-import gov.nih.nci.ncicb.cadsr.constants.DefaultEDCIValues;
+import gov.nih.nci.ncicb.cadsr.constants.EDCIConfiguration;
 import gov.nih.nci.ncicb.cadsr.dao.DataAccessException;
 import gov.nih.nci.ncicb.cadsr.dao.DomainObjectFactory;
 import gov.nih.nci.ncicb.cadsr.dao.GlobalDefinitionsDAO;
 import gov.nih.nci.ncicb.cadsr.dao.impl.CaDSRApiDAOImpl;
+import gov.nih.nci.ncicb.cadsr.dto.ReferenceDocumentAttachment;
 import gov.nih.nci.ncicb.cadsr.edci.domain.*;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.LogManager;
@@ -44,8 +46,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
         //DomainObjectFactory domainObjectFactory = getDomainObjectFactory();
         GlobalDefinitions globalDefinitions = domainObjectFactory.getGlobalDefinitions();
         try {
-          ApplicationService applicationService = serviceLocator.getCaDSRPublicApiService();
-          List forms = applicationService.search(Form.class.getName(), form);
+          List forms = appService.search(Form.class.getName(), form);
             Form qForm;
             qForm = (Form)forms.get(0);
             if (qForm != null)
@@ -91,6 +92,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
     protected gov.nih.nci.ncicb.cadsr.edci.domain.DataElement getDataElement(DataElement dE) throws DataAccessException {
         gov.nih.nci.ncicb.cadsr.edci.domain.DataElement eDCIDE = domainObjectFactory.getDataElement();
         eDCIDE.setDefinition(dE.getPreferredDefinition());
+        EDCIConfiguration config = EDCIConfiguration.getInstance();
         try {
             eDCIDE.setDescription(getDocText(dE,"Description"));
         } catch (DataAccessException e) {
@@ -113,7 +115,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
         }
         eDCIDE.setGUID(dE.getId());
         eDCIDE.setName(dE.getLongName());
-        eDCIDE.setNamespace(DefaultEDCIValues.NAMESPACE);
+        eDCIDE.setNamespace(config.getProperty("default.namespace"));
         eDCIDE.setDataElementConceptGUID(dE.getDataElementConcept().getId());
         eDCIDE.setValueDomainGUID(dE.getValueDomain().getId());
         return eDCIDE;
@@ -143,6 +145,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
   protected ValueDomain getValueDomain(gov.nih.nci.cadsr.domain.DataElement dE, Question question) throws DataAccessException{
       ValueDomain eDCIVD = domainObjectFactory.getValueDomain();
       gov.nih.nci.cadsr.domain.ValueDomain vD = dE.getValueDomain();
+      EDCIConfiguration config = EDCIConfiguration.getInstance();
       eDCIVD.setDatatype(vD.getDatatypeName());
       if (vD.getDecimalPlace()!=null){
       eDCIVD.setDecimalPlaces(vD.getDecimalPlace());
@@ -151,7 +154,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
       eDCIVD.setGUID(vD.getId());
       eDCIVD.setMaximumLength(vD.getMaximumLengthNumber());
       eDCIVD.setName(vD.getLongName());
-      eDCIVD.setNamespace(DefaultEDCIValues.NAMESPACE);
+      eDCIVD.setNamespace(config.getProperty("default.namespace"));
       try{
       eDCIVD.setSourceCodingSystem(getDocText(vD,"VD Reference"));     
       } catch (DataAccessException e) {
@@ -189,7 +192,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
                           
                           eVDET.setValueMeaning(vDPVS.getPermissibleValue().getValueMeaning().getShortMeaning());
                           eVDET.setValueMeaningDescription(vDPVS.getPermissibleValue().getValueMeaning().getDescription());
-                          eVDET.setLanguage(DefaultEDCIValues.LANGUAGE);
+                          eVDET.setLanguage(config.getProperty("default.language"));
                           eVDETC.add(eVDET);
                           
                           // Add the Element Text Collection to the Element
@@ -272,7 +275,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
   protected Collection <DataElementText> getDataElementTextCollection(gov.nih.nci.cadsr.domain.DataElement dE) throws DataAccessException{
       Collection<ReferenceDocument> referenceDocuments = dE.getReferenceDocumentCollection();
       
-      
+       EDCIConfiguration config = EDCIConfiguration.getInstance();
        Collection<DataElementText> dETC = new ArrayList <DataElementText> ();
       
        for (ReferenceDocument referenceDocument:referenceDocuments){
@@ -288,7 +291,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
        if (dETC.isEmpty()){
            DataElementText dET = domainObjectFactory.getDataElementText();
            dET.setPrompt(dE.getLongName());
-           dET.setLanguage(DefaultEDCIValues.LANGUAGE);
+           dET.setLanguage(config.getProperty("default.language"));
            dETC.add(dET);
        }
        
@@ -312,5 +315,20 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
            aDC.add(aD);
         }
          return aDC;
+    }
+
+    public String storeGlobalDefinitionsMIFMessage(String formIdSeq, 
+                                                   String message, 
+                                                   String user) {
+        return null;
+    }
+
+    public ReferenceDocumentAttachment queryGlobalDefinitionsMIFMessage(String formIdSeq, 
+                                                                        Date createDate) {
+        return null;
+    }
+
+    public ReferenceDocumentAttachment queryGlobalDefinitionsMIFMessage(String rdIdSeq) {
+        return null;
     }
 }

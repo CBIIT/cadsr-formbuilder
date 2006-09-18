@@ -37,11 +37,19 @@ public interface QueryMetadataService
     public Form getForm(String publicId, String version ) throws ServiceException;
     /**
      * Gets the Instrument message from the database.
-     * @param idSeq
+     * @param idSeq formIdSeq
+     * @param generateDate message generate date
      * @return eDCI HL7 message without attachment.
      * @throws ServiceException
      */
     public String getInstrumentMessage(String idSeq, Date generateDate ) throws ServiceException;
+    /**
+     * Query Instrument message for a given ReferenceDocument
+     * @param rdIdSeq ReferenceDocument id
+     * @return Instrument HL7 message.
+     * @throws ServiceException
+     */
+    public String getInstrumentMessage(String rdIdSeq) throws ServiceException;
     /**
      * Gets the GlobalDefinitions message from the database.
      * @param idSeq
@@ -49,7 +57,14 @@ public interface QueryMetadataService
      * @throws ServiceException
      */
     public String getGlobalDefinitionsMessage(String idSeq, Date generateDate) throws ServiceException;
-
+    /**
+     * Gets the GlobalDefinitions message from the database.
+     * @param idSeq ReferenceDocument id
+     * @return GlobalDefinitions MIF message.
+     * @throws ServiceException
+     */
+    public String getGlobalDefinitionsMessage(String idSeq) throws ServiceException;
+    
     public void setDaoFactory(EDCIDAOFactory eDCIDAOFactory);
 
     public EDCIDAOFactory getDaoFactory();   

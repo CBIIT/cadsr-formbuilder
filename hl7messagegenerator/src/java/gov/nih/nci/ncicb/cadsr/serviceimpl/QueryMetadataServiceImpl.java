@@ -4,6 +4,7 @@ import gov.nih.nci.cadsr.domain.Form;
 import gov.nih.nci.ncicb.cadsr.dao.EDCIDAOFactory;
 import gov.nih.nci.ncicb.cadsr.dao.GlobalDefinitionsDAO;
 import gov.nih.nci.ncicb.cadsr.dao.InstrumentDAO;
+import gov.nih.nci.ncicb.cadsr.dto.ReferenceDocumentAttachment;
 import gov.nih.nci.ncicb.cadsr.edci.domain.GlobalDefinitions;
 import gov.nih.nci.ncicb.cadsr.edci.domain.Instrument;
 import gov.nih.nci.ncicb.cadsr.service.QueryMetadataService;
@@ -70,8 +71,15 @@ public class QueryMetadataServiceImpl implements QueryMetadataService
      * @param version
      * @return
      */
-    public Form getForm(String publicId, String version) {
-        return null;
+    public Form getForm(String publicId, String version) throws ServiceException{
+       try {
+        InstrumentDAO instrumentDAO = daoFactory.getInstrumentDAO();
+        return instrumentDAO.queryCaDSRForm(publicId, version);
+       }catch (Exception e) {
+           logger.error("Error querying caDSR form for "+publicId+" v"+version,e);
+           throw new ServiceException("Error querying caDSR form for "+publicId+" v"+version,e);
+       }
+
     }
     /**
      * Get the Instrument message from the database.
@@ -79,19 +87,61 @@ public class QueryMetadataServiceImpl implements QueryMetadataService
      * @param generateDate
      * @return
      */
-    public String getInstrumentMessage(String idSeq, Date generateDate) {
-        return null;
+    public String getInstrumentMessage(String idSeq, Date generateDate) throws ServiceException
+    {
+        try {
+         InstrumentDAO instrumentDAO = daoFactory.getInstrumentDAO();
+           ReferenceDocumentAttachment rda = instrumentDAO.queryInstrumentHL7Message(idSeq, generateDate);
+           return rda.getAttachment();
+        }
+        catch(Exception e) {
+            logger.error("Error quering GlobalDefinitions message for form "+idSeq,e);
+            throw new ServiceException("Error quering GlobalDefinitions message for form "+idSeq,e);
+        }
     }
     /**
      * Get the GlobalDefinitions MIF message from the database.
-     * @param idSeq
-     * @param generateDate
+     * @param idSeq form id
+     * @param generateDate message generate date
      * @return
      */
     public String getGlobalDefinitionsMessage(String idSeq, 
-                                              Date generateDate) {
-        return null;
+                                              Date generateDate) throws ServiceException {
+       try {
+         GlobalDefinitionsDAO globalDefinitionsDAO = daoFactory.getGlobalDefinitionsDAO();
+          ReferenceDocumentAttachment rda = globalDefinitionsDAO.queryGlobalDefinitionsMIFMessage(idSeq, generateDate);
+          return rda.getAttachment();
+       }
+       catch(Exception e) {
+           logger.error("Error quering GlobalDefinitions message for form "+idSeq,e);
+           throw new ServiceException("Error quering GlobalDefinitions message for form "+idSeq,e);
+       }
     }
+    
+
+    public String getInstrumentMessage(String rdIdSeq) throws ServiceException{
+        try {
+         InstrumentDAO instrumentDAO = daoFactory.getInstrumentDAO();
+           ReferenceDocumentAttachment rda = instrumentDAO.queryInstrumentHL7Message(rdIdSeq);
+           return rda.getAttachment();
+        }
+        catch(Exception e) {
+            logger.error("Error quering GlobalDefinitions message for form "+rdIdSeq,e);
+            throw new ServiceException("Error quering GlobalDefinitions message for form "+rdIdSeq,e);
+        }
+    }
+
+    public String getGlobalDefinitionsMessage(String idSeq) throws ServiceException {
+        try {
+          GlobalDefinitionsDAO globalDefinitionsDAO = daoFactory.getGlobalDefinitionsDAO();
+           ReferenceDocumentAttachment rda = globalDefinitionsDAO.queryGlobalDefinitionsMIFMessage(idSeq);
+           return rda.getAttachment();
+        }
+        catch(Exception e) {
+            logger.error("Error quering GlobalDefinitions message for form "+idSeq,e);
+            throw new ServiceException("Error quering GlobalDefinitions message for form "+idSeq,e);
+        }
+    }    
 
     public void setDaoFactory(EDCIDAOFactory daoFactory) {
         this.daoFactory = daoFactory;

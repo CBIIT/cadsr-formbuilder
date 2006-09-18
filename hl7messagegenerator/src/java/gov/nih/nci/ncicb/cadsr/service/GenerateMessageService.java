@@ -1,8 +1,12 @@
 package gov.nih.nci.ncicb.cadsr.service;
 
 
+import gov.nih.nci.cadsr.domain.ReferenceDocument;
+import gov.nih.nci.ncicb.cadsr.dao.EDCIDAOFactory;
+
 import java.io.File;
 
+import java.util.Collection;
 import java.util.Date;
 
 
@@ -40,7 +44,7 @@ public interface GenerateMessageService {
      * @return eDCI HL7 message with or without attachment or GlobalDefinitions MIF message.
      * @throws ServiceException
      */
-   public String getMessage(String formIdSeq,Date generateDate, String messageType) throws ServiceException;
+   public String getMessage(String formIdSeq, Date generateDate, String messageType) throws ServiceException;
    
    /**
      * Generates the message for the given formIdSeq, user and messageType
@@ -62,5 +66,13 @@ public interface GenerateMessageService {
      * @throws ServiceException
      */
     public String getMessage(String publicId,String version,Date generateDate, String messageType) throws ServiceException;   
+    
+    public Collection<ReferenceDocument> queryFormMessageReferenceDocuments(String publicId, String version) throws ServiceException;
+    
+    public Collection<ReferenceDocument> queryFormMessageReferenceDocuments(String formIdSeq) throws ServiceException;
+    
+    public void setDaoFactory(EDCIDAOFactory eDCIDAOFactory);
+
+    public EDCIDAOFactory getDaoFactory();     
    
 }
