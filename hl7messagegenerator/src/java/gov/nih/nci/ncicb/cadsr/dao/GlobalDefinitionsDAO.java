@@ -21,11 +21,12 @@ public interface GlobalDefinitionsDAO  {
      * Stores the GlobalDefinitions MIF message.
      * @param formIdSeq
      * @param message
+     * @param createDate
      * @param user
      * @return IdSeq of the ReferenecDocument.
      * @throws DataAccessException
      */
-    public String storeGlobalDefinitionsMIFMessage(String formIdSeq, String message, String user) throws DataAccessException;
+    public String storeGlobalDefinitionsMIFMessage(String formIdSeq, String message,Date createDate, String user) throws DataAccessException;
      /**
        * Queries an existing GlobalDefinitionsMIF message.
        * @param formIdSeq

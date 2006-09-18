@@ -75,11 +75,12 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
           }
           GlobalDefinitions globalDefinitions = null;
           String gdMessage = null;
+          Date createDate = new Date();
           if ((messageType.equals(EDCI))||(messageType.equals(GLOBAL_DEFINITIONS_MIF))) {
                globalDefinitions = queryMetadataService.getGlobalDefinitions(formIdSeq);
                gdMessage = getGlobalDefinitionMIFMessage(globalDefinitions);
                GlobalDefinitionsDAO globalDefinitionsDAO = daoFactory.getGlobalDefinitionsDAO();
-               globalDefinitionsDAO.storeGlobalDefinitionsMIFMessage(formIdSeq, message, user);
+               globalDefinitionsDAO.storeGlobalDefinitionsMIFMessage(formIdSeq, message,createDate, user);
           }
           String instrumentMessage = null;
           if ((messageType.equals(EDCI))||(messageType.equals(EDCI_WITHOUT_ATTACHMENT)))
@@ -88,7 +89,7 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
                 File csvFile = generateCSVFile(instrument);
                 instrumentMessage = caAdapterService.generateeDCIHL7Message(csvFile);
                 InstrumentDAO instrumentDAO = daoFactory.getInstrumentDAO();
-                instrumentDAO.storeInstrumentHL7Message(formIdSeq, message, user);
+                instrumentDAO.storeInstrumentHL7Message(formIdSeq, message,createDate, user);
           }
           if (messageType.equals(EDCI)) {
               message = attachGlobalDefinitionsMIF(instrumentMessage, gdMessage);  

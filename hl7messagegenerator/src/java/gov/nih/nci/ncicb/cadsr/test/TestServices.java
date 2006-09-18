@@ -9,6 +9,7 @@ import gov.nih.nci.ncicb.cadsr.service.*;
 
 import java.util.Collection;
 
+import java.util.Date;
 import java.util.Iterator;
 
 import junit.framework.Test;
@@ -80,7 +81,7 @@ public class TestServices extends TestCase {
         try {
             EDCIDAOFactory daoFactory = (EDCIDAOFactory)beanFactory.getBean("daoFactory");
             InstrumentDAO instrumentDAO = daoFactory.getInstrumentDAO();
-            instrumentDAO.storeInstrumentHL7Message("1B4FBBDD-9FD4-5F94-E044-0003BA0B1A09","message","user");
+            instrumentDAO.storeInstrumentHL7Message("1B4FBBDD-9FD4-5F94-E044-0003BA0B1A09","message", new Date(),"user");
         }
         catch(Exception e) {
             e.printStackTrace();

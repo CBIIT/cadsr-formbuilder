@@ -27,10 +27,11 @@ public interface InstrumentDAO {
      * id of the ReferenceDocument.
      * @param formIdSeq
      * @param message
+     * @param createDate date the message was created.
      * @return id of the ReferenceDocument
      * @throws DataAccessException
      */
-  public String storeInstrumentHL7Message(String formIdSeq, String message, String user) throws DataAccessException;
+  public String storeInstrumentHL7Message(String formIdSeq, String message, Date createDate, String user) throws DataAccessException;
    /**
      * Queries an existing instument HL7 message 
      * @param formIdSeq
