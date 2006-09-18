@@ -1,6 +1,7 @@
 package gov.nih.nci.ncicb.cadsr.dao.impl;
 
 import gov.nih.nci.cadsr.domain.AdministeredComponent;
+import gov.nih.nci.cadsr.domain.DataElement;
 import gov.nih.nci.cadsr.domain.Designation;
 import gov.nih.nci.cadsr.domain.EnumeratedValueDomain;
 import gov.nih.nci.cadsr.domain.Form;
@@ -25,7 +26,9 @@ import java.util.List;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-
+    /**
+     * implements GlobalDefinitionsDAO using the caDSR API
+     */
 public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements GlobalDefinitionsDAO
 {
    
@@ -43,11 +46,12 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
         try {
           ApplicationService applicationService = serviceLocator.getCaDSRPublicApiService();
           List forms = applicationService.search(Form.class.getName(), form);
-          Form qForm = (Form)forms.get(0);
-          if (qForm != null)
+            Form qForm;
+            qForm = (Form)forms.get(0);
+            if (qForm != null)
           {
               Collection<Module> modules = qForm.getModuleCollection();
-              ArrayList<DataElement> dataElements = new ArrayList<DataElement>();
+              ArrayList<gov.nih.nci.ncicb.cadsr.edci.domain.DataElement> dataElements = new ArrayList<gov.nih.nci.ncicb.cadsr.edci.domain.DataElement>();
               ArrayList<DataElementConcept> dataElementConcepts = new ArrayList<DataElementConcept>();
               ArrayList<ValueDomain> valueDomains = new ArrayList<ValueDomain>();
               
@@ -58,19 +62,8 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
                   dataElementGroup.setNamespace("NCI");
                   Collection<Question> questions = module.getQuestionCollection();
                   for (Question question:questions){
-                      DataElement eDCIDE = domainObjectFactory.getDataElement();
-                      gov.nih.nci.cadsr.domain.DataElement dE = question.getDataElement();
-                      eDCIDE.setDefinition(dE.getPreferredDefinition());
-                      eDCIDE.setDescription(getDocText(dE,"Description"));
-                      eDCIDE.setDataElementTextCollection(getDataElementTextCollection(dE));
-                      eDCIDE.setAlternateDesignationCollection(getAlternateDesignationCollection(dE));
-                      eDCIDE.setGUID(dE.getId());
-                      eDCIDE.setName(dE.getLongName());
-                      eDCIDE.setNamespace(DefaultEDCIValues.NAMESPACE);
-                      eDCIDE.setDataElementConceptGUID(dE.getDataElementConcept().getId());
-                      eDCIDE.setValueDomainGUID(dE.getValueDomain().getId());
-                      //if the value domain is enumerated then
-                      dataElements.add(eDCIDE);
+                      DataElement dE = question.getDataElement();
+                      dataElements.add((gov.nih.nci.ncicb.cadsr.edci.domain.DataElement)getDataElement(dE));
                       dataElementConcepts.add(getDataElementConcept(dE));
                       valueDomains.add(getValueDomain(dE,question));
                   }
@@ -89,8 +82,49 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
         return globalDefinitions;
         
     }
-    
-  protected DataElementConcept getDataElementConcept(gov.nih.nci.cadsr.domain.DataElement dE){
+
+    /**
+     * Returns the DataElement
+     * @param dE
+     * @return DataElement
+     */
+    protected gov.nih.nci.ncicb.cadsr.edci.domain.DataElement getDataElement(DataElement dE) throws DataAccessException {
+        gov.nih.nci.ncicb.cadsr.edci.domain.DataElement eDCIDE = domainObjectFactory.getDataElement();
+        eDCIDE.setDefinition(dE.getPreferredDefinition());
+        try {
+            eDCIDE.setDescription(getDocText(dE,"Description"));
+        } catch (DataAccessException e) {
+            logger.error("Error setting DataElement Description.", e);
+            throw new DataAccessException("Error setting DataElement Description.", e);
+        }
+        try {
+            eDCIDE.setDataElementTextCollection(getDataElementTextCollection(dE));
+        } catch (DataAccessException e) {
+            logger.error("Error setting DataElement Text Collection.", e);
+            throw new DataAccessException("Error setting DataElement Text Collection.", e);
+        
+        }
+        try {
+            eDCIDE.setAlternateDesignationCollection(getAlternateDesignationCollection(dE));
+        } catch (DataAccessException e) {
+            logger.error("Error setting DataElement Alternate Designation.", e);
+            throw new DataAccessException("Error setting Alternate Designations.", e);
+        
+        }
+        eDCIDE.setGUID(dE.getId());
+        eDCIDE.setName(dE.getLongName());
+        eDCIDE.setNamespace(DefaultEDCIValues.NAMESPACE);
+        eDCIDE.setDataElementConceptGUID(dE.getDataElementConcept().getId());
+        eDCIDE.setValueDomainGUID(dE.getValueDomain().getId());
+        return eDCIDE;
+    }
+    /**
+     * Returns the DataElementConcept associated with a DataElement
+     * @param dE
+     * @return DataElementConcept
+     * @throws DataAccessException
+     */   
+  protected DataElementConcept getDataElementConcept(gov.nih.nci.cadsr.domain.DataElement dE) throws DataAccessException{
       DataElementConcept eDCIDEC = domainObjectFactory.getDataElementConcept();
       gov.nih.nci.cadsr.domain.DataElementConcept dEC = dE.getDataElementConcept();
       eDCIDEC.setGUID(dEC.getId());
@@ -99,7 +133,13 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
       eDCIDEC.setDescription(dEC.getConceptualDomain().getPreferredDefinition());
       return eDCIDEC;
   }
-
+    /**
+     * Returns the ValueDomain associated with a DataElement
+     * @param dE
+     * @param question
+     * @return ValueDomain
+     * @throws DataAccessException
+     */   
   protected ValueDomain getValueDomain(gov.nih.nci.cadsr.domain.DataElement dE, Question question) throws DataAccessException{
       ValueDomain eDCIVD = domainObjectFactory.getValueDomain();
       gov.nih.nci.cadsr.domain.ValueDomain vD = dE.getValueDomain();
@@ -112,7 +152,12 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
       eDCIVD.setMaximumLength(vD.getMaximumLengthNumber());
       eDCIVD.setName(vD.getLongName());
       eDCIVD.setNamespace(DefaultEDCIValues.NAMESPACE);
-      eDCIVD.setSourceCodingSystem(getDocText(vD,"VD Reference"));
+      try{
+      eDCIVD.setSourceCodingSystem(getDocText(vD,"VD Reference"));     
+      } catch (DataAccessException e) {
+            logger.error("Error setting DataElement Description.", e);
+            throw new DataAccessException("Error setting DataElement Description.", e);
+        }
       if (vD instanceof EnumeratedValueDomain) {
              eDCIVD.setIsEnumeratedFlag(true);
              EnumeratedValueDomain eVD = (EnumeratedValueDomain) vD;
@@ -189,12 +234,20 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
         return eDCIVD;
   }
   
-  protected String getDocText(AdministeredComponent ac, String documentType){
+    /**
+     * Returns the documentText associated with an AdministeredComponent
+     * @param ac
+     * @param documentType
+     * @return documentText
+     * @throws DataAccessException
+     */   
+  protected String getDocText(AdministeredComponent ac, String documentType) throws DataAccessException{
         String docText;
         docText = null;
-        Collection<ReferenceDocument> referenceDocuments = ac.getReferenceDocumentCollection();
-      
-      for (ReferenceDocument referenceDocument:referenceDocuments){
+        Collection <ReferenceDocument> referenceDocuments;
+        referenceDocuments = ac.getReferenceDocumentCollection();
+
+        for (ReferenceDocument referenceDocument:referenceDocuments){
       
           if (referenceDocument.getType().equals(documentType)) {
               docText =referenceDocument.getDoctext();
@@ -207,7 +260,16 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
       return docText;
   }
   
-  protected Collection <DataElementText> getDataElementTextCollection(gov.nih.nci.cadsr.domain.DataElement dE){
+ 
+  
+    /**
+     * Returns Collection of DataElementText associated with a DataElement
+     * @param dE
+     * @return Collection of DataElementText
+     * @throws DataAccessException
+     */   
+     
+  protected Collection <DataElementText> getDataElementTextCollection(gov.nih.nci.cadsr.domain.DataElement dE) throws DataAccessException{
       Collection<ReferenceDocument> referenceDocuments = dE.getReferenceDocumentCollection();
       
       
@@ -215,7 +277,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
       
        for (ReferenceDocument referenceDocument:referenceDocuments){
        
-           if (referenceDocument.getType().equals("Preferred Question Text") || referenceDocument.getType().equals("Alternate Question Text")){
+           if (referenceDocument.getType().equals("Preferred Question Text") ){
                DataElementText dET = domainObjectFactory.getDataElementText();
                dET.setPrompt(referenceDocument.getDoctext());
                dET.setLanguage(referenceDocument.getLanguageName());
@@ -233,8 +295,13 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
        return dETC;
   }
   
-  
-    protected Collection <AlternateDesignation> getAlternateDesignationCollection(gov.nih.nci.cadsr.domain.DataElement dE){
+    /**
+     * Returns a Collection of AlternateDesignations associated with a DataElement
+     * @param dE
+     * @return Collection of AlternateDesignations
+     * @throws DataAccessException
+     */   
+    protected Collection <AlternateDesignation> getAlternateDesignationCollection(gov.nih.nci.cadsr.domain.DataElement dE) throws DataAccessException{
         Collection<AlternateDesignation> aDC = new ArrayList <AlternateDesignation> ();
         Collection<Designation> designations = dE.getDesignationCollection();             
         for (Designation designation:designations){
