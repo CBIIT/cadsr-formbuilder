@@ -13,21 +13,42 @@
      <property name="queryMetadataService" ><ref local="queryMetadataService"/></property>
      <property name="caAdapterService" ><ref local="caAdapterService"/></property>
   </bean> 
-  <bean id="serviceLocator" class="gov.nih.nci.ncicb.cadsr.servicelocator.ServiceLocator" >
-     <property name="caCOREUrl" ><value>http://cabio-dev.nci.nih.gov/cacore31/http/remoteService</value></property>
-     <property name="caDSRDataSourceName"><value>cbDEV</value></property>
-     <property name="caDSRUrl"><value>jdbc:oracle:thin:@cbiodb2-d.nci.nih.gov:1521:CBDEV</value></property>
-     <property name="caDSRUserName"><value>sbrext</value></property>
-     <property name="caDSRPassword"><value>jjuser</value></property>
+  <bean id="appService" class="gov.nih.nci.system.applicationservice.ApplicationServiceProvider" 
+              factory-method="getRemoteInstance">
+        <constructor-arg><value>http://cabio-dev.nci.nih.gov/cacore31/http/remoteService</value></constructor-arg>
   </bean>
-  <bean id="globalDefinitionsDAO" class="gov.nih.nci.ncicb.cadsr.dao.impl.GlobalDefinitionsDAOImpl" >
-     <property name="serviceLocator"><ref local="serviceLocator"></ref></property>
+  <bean id="dataSource" class="oracle.jdbc.pool.OracleDataSource">
+     <property name="URL"><value>jdbc:oracle:thin:@cbiodb2-d.nci.nih.gov:1521:CBDEV</value></property>
+     <property name="user"><value>sbrext</value></property>
+     <property name="password"><value>jjuser</value></property>    
+  </bean>
+  <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+     <property name="dataSource" ref="dataSource"/>
+  </bean>  
+  <bean id="globalDefinitionsDAOTarget" class="gov.nih.nci.ncicb.cadsr.dao.impl.GlobalDefinitionsDAOImpl" >
+     <property name="dataSource"><ref local="dataSource"></ref></property>
+     <property name="appService"><ref local="appService"></ref></property>
      <property name="domainObjectFactory"><ref local="domainObjectFactory"></ref></property>
   </bean>
-  <bean id="instrumentDAO" class="gov.nih.nci.ncicb.cadsr.dao.impl.InstrumentDAOImpl" >
-     <property name="serviceLocator"><ref local="serviceLocator"></ref></property>
+  <bean id="globalDefinitionsDAO" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" >
+      <property name="transactionManager" ref="txManager"/>
+      <property name="target" ref="globalDefinitionsDAOTarget"/>
+      <property name="transactionAttributeSource">
+          <bean class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource"/>
+      </property>
+  </bean>
+  <bean id="instrumentDAOTarget" class="gov.nih.nci.ncicb.cadsr.dao.impl.InstrumentDAOImpl" >
+     <property name="dataSource"><ref local="dataSource"></ref></property>
+     <property name="appService"><ref local="appService"></ref></property>
      <property name="domainObjectFactory"><ref local="domainObjectFactory"></ref></property>     
   </bean>  
+  <bean id="instrumentDAO" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" >
+      <property name="transactionManager" ref="txManager"/>
+      <property name="target" ref="instrumentDAOTarget"/>
+      <property name="transactionAttributeSource">
+          <bean class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource"/>
+      </property>
+  </bean>
   <bean id="dataElement" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementImpl" singleton="false" />
   <bean id="globalDefinitions" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.GlobalDefinitionsImpl" singleton="false"/>
   <bean id="dataElementGroup" class="gov.nih.nci.ncicb.cadsr.edci.domain.impl.DataElementGroupImpl" singleton="false" />

@@ -1,5 +1,6 @@
 package gov.nih.nci.ncicb.cadsr.dao.impl;
 
+import gov.nih.nci.cadsr.domain.Context;
 import gov.nih.nci.cadsr.domain.Designation;
 import gov.nih.nci.cadsr.domain.EnumeratedValueDomain;
 import gov.nih.nci.cadsr.domain.Form;
@@ -8,29 +9,46 @@ import gov.nih.nci.cadsr.domain.Module;
 import gov.nih.nci.cadsr.domain.Protocol;
 import gov.nih.nci.cadsr.domain.Question;
 import gov.nih.nci.cadsr.domain.QuestionRepetition;
+import gov.nih.nci.cadsr.domain.ReferenceDocument;
 import gov.nih.nci.cadsr.domain.TriggerAction;
 import gov.nih.nci.cadsr.domain.ValidValue;
 import gov.nih.nci.ncicb.cadsr.constants.EDCIConfiguration;
 import gov.nih.nci.ncicb.cadsr.constants.MessageGeneratorConstants;
 import gov.nih.nci.ncicb.cadsr.dao.DataAccessException;
+import gov.nih.nci.ncicb.cadsr.dao.GlobalDefinitionsDAO;
 import gov.nih.nci.ncicb.cadsr.dao.InstrumentDAO;
+import gov.nih.nci.ncicb.cadsr.dto.ReferenceDocumentAttachment;
 import gov.nih.nci.ncicb.cadsr.edci.domain.*;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
+import java.sql.SQLException;
+
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import java.util.Map;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * Implements the InstumentDAO interface using the caDSR API.
  */
 public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO{
     private static Logger logger = LogManager.getLogger(InstrumentDAO.class);
+    private ReferenceDocumentCreator refDocCreator;
+    private RefDocAttachmentCreator refDocAttachmentCreator;
+    private QueryRefDocAttachment queryRefDocAttachment;
+    private StoreBlob storeBlob;
+    private SimpleDateFormat formatter = new SimpleDateFormat(":yyyyMMdd:HH:mm:ss");
     public InstrumentDAOImpl() {
     }
     /**
@@ -327,7 +345,6 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
           FormElement formElement = new FormElement();
           formElement.setId(sourceFormElement.getId());
           triggerAction.setSourceFormElement(formElement);
-          ApplicationService appService = serviceLocator.getCaDSRPublicApiService();
           triggerActions = appService.search(TriggerAction.class, triggerAction);
           return triggerActions;
         }
@@ -369,14 +386,10 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
      * @throws DataAccessException
      */
     public Instrument getInstrument(String formIdSeq, GlobalDefinitions globalDefinitions) throws DataAccessException {
-        Form form = new Form();
-        form.setId(formIdSeq);
         Instrument instrument = domainObjectFactory.getInstrument();
         EDCIConfiguration config = EDCIConfiguration.getInstance();
         try {
-            ApplicationService appService = serviceLocator.getCaDSRPublicApiService();
-            List<Form> forms = appService.search(Form.class,form);
-            Form qForm = forms.get(0);
+            Form qForm = queryCaDSRForm(formIdSeq);
             if (qForm.getType().equals(MessageGeneratorConstants.FORM_TYPE_TEMPLATE)) {
                 instrument.setIsTemplateDciFlag(new Boolean(true));
             }
@@ -408,5 +421,214 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
         }
         return instrument;
     }
+    
+    public Form queryCaDSRForm(String idSeq) throws DataAccessException {
+        Form form = new Form();
+        form.setId(idSeq);
+        try {
+            List<Form> forms = appService.search(Form.class,form);
+            if (forms.size() == 0)throw new DataAccessException("Form not found for "+idSeq);
+            Form qForm = forms.get(0);
+            return qForm;
+        }
+        catch (Exception e) {
+            logger.error("Error querying form.",e);
+            throw new DataAccessException("Error querying form.",e);
+        }
+    }
 
+    public Form queryCaDSRForm(String publicId, String version) throws DataAccessException {
+        Form form = new Form();
+        try {
+           form.setPublicID(new Long(publicId));
+           form.setVersion(new Float(version));
+        }
+        catch(Exception e) {
+            throw new DataAccessException("PublicId should be a valid number and version should be a valid floating point number.");
+        }
+        try {
+            List<Form> forms = appService.search(Form.class,form);
+            if (forms.size() == 0) throw new DataAccessException("Form not found for "+publicId+" v"+version);
+            Form qForm = forms.get(0);
+            return qForm;
+        }
+        catch (Exception e) {
+            logger.error("Error querying form.",e);
+            throw new DataAccessException("Error querying form.",e);
+        }
+    }    
+    /**
+     * Get the name of the ReferenceDocument used to store the instrument Hl7 
+     * message based on current date.
+     * @param form
+     * @return name of the ReferenceDocument
+     * @throws DataAccessException
+     */
+    protected String getRefDocName(Form form) throws DataAccessException
+    {      
+       return getRefDocName(form,new Date());
+    }
+    /**
+     * Get the name of the ReferenceDocument used to store the instrument Hl7 
+     * message
+     * @param form
+     * @param createDate
+     * @return name of the ReferenceDocument.
+     * @throws DataAccessException
+     */
+    protected String getRefDocName(Form form, Date createDate) throws DataAccessException
+    {
+       StringBuffer name = new StringBuffer(30);
+       name.append(form.getPublicID().toString());
+       name.append(":v");
+       name.append(form.getVersion());
+       name.append(formatter.format(createDate));
+       
+       return name.toString();
+    }    
+
+   @Transactional(readOnly=false,
+                  rollbackFor=DataAccessException.class)
+    public String storeInstrumentHL7Message(String formIdSeq, String message, String user) throws DataAccessException {
+        try {
+             if (refDocCreator == null) {
+                 refDocCreator = new ReferenceDocumentCreator(dataSource);
+             }
+             if (refDocAttachmentCreator == null) {
+                 refDocAttachmentCreator = new RefDocAttachmentCreator(dataSource);
+             }
+             if (storeBlob == null) {
+                 storeBlob = new StoreBlob(dataSource);
+             }
+             Form form = queryCaDSRForm(formIdSeq);
+             ReferenceDocument referenceDocument = new ReferenceDocument();
+             referenceDocument.setCreatedBy(user);
+             referenceDocument.setId(getGUID());
+             referenceDocument.setType(INSTRUMENT_REF_DOC_TYPE);
+             referenceDocument.setName(getRefDocName(form));
+             referenceDocument.setContext(form.getContext());
+             referenceDocument = refDocCreator.createReferenceDocument(referenceDocument, formIdSeq);
+             
+             ReferenceDocumentAttachment refDocAttachment = new ReferenceDocumentAttachment();
+             refDocAttachment.setReferenceDocument(referenceDocument);
+             refDocAttachment.setMimeType("text/xml");
+             refDocAttachment.setCreatedBy(user);
+             refDocAttachment.setContentType("BLOB");
+             refDocAttachment.setName(referenceDocument.getName());
+             refDocAttachment.setDocSize(new Long(message.length()));
+             refDocAttachment.setAttachment(message);
+             refDocAttachmentCreator.createRefDocAttachment(refDocAttachment);
+             
+             return referenceDocument.getId();
+        }
+        catch (Exception e) {
+            logger.error("Error storing Instrument HL7 message.", e);
+            throw new DataAccessException("Error storing Instrument HL7 message.", e);
+        }
+    }
+
+    public ReferenceDocumentAttachment queryInstrumentHL7Message(String formIdSeq, Date createDate) throws DataAccessException {
+          try {
+              if (queryRefDocAttachment == null){
+                  queryRefDocAttachment = new QueryRefDocAttachment(dataSource);
+              }
+              ReferenceDocument rd = new ReferenceDocument();
+              rd.setType(INSTRUMENT_REF_DOC_TYPE);
+              Form form = queryCaDSRForm(formIdSeq);
+              rd.setName(getRefDocName(form,createDate));
+              List refDocs = appService.search(ReferenceDocument.class,rd);
+              if (refDocs.size() == 0) {
+                  throw new DataAccessException("Instrument Message Reference Document not found for form "+formIdSeq+" date "+formatter.format(createDate));
+              }
+              ReferenceDocument referenceDocument = (ReferenceDocument)refDocs.get(0);
+              ReferenceDocumentAttachment rda = queryRefDocAttachment.query(referenceDocument.getName());
+              rda.setReferenceDocument(referenceDocument);
+              
+              return rda;
+          }
+          catch(Exception e) {
+              logger.error("Error querying ReferenceDocumentAttachment.",e);
+              throw new DataAccessException("Error querying ReferenceDocumentAttachment.",e);
+          }
+    }
+    
+    public ReferenceDocumentAttachment queryInstrumentHL7Message(String rdIdSeq) throws DataAccessException {
+        try {
+            if (queryRefDocAttachment == null){
+                queryRefDocAttachment = new QueryRefDocAttachment(dataSource);
+            }
+            ReferenceDocument rd = new ReferenceDocument();
+            rd.setId(rdIdSeq);
+            List refDocs = appService.search(ReferenceDocument.class,rd);
+            if (refDocs.size() == 0) {
+                throw new DataAccessException("Instrument Message Reference Document not found for "+rdIdSeq);
+            }
+            ReferenceDocument referenceDocument = (ReferenceDocument)refDocs.get(0);
+            ReferenceDocumentAttachment rda = queryRefDocAttachment.query(referenceDocument.getName());
+            rda.setReferenceDocument(referenceDocument);
+            
+            return rda;
+        }
+        catch(Exception e) {
+            logger.error("Error querying ReferenceDocumentAttachment.",e);
+            throw new DataAccessException("Error querying ReferenceDocumentAttachment.",e);
+        }        
+    }
+
+    public Collection<ReferenceDocument> queryFormMessageReferenceDocuments(String publicId, 
+                                                                            String version) throws DataAccessException {
+        try {
+            Form form = queryCaDSRForm(publicId, version);
+            ReferenceDocument qRD1 = new ReferenceDocument();
+            qRD1.setType(INSTRUMENT_REF_DOC_TYPE);
+            ReferenceDocument qRD2 = new ReferenceDocument();
+            qRD2.setType(GlobalDefinitionsDAO.GLOBALDEFINITIONS_REF_DOC_TYPE); 
+            Collection<ReferenceDocument> qRefDocs = new ArrayList<ReferenceDocument>(2);
+            qRefDocs.add(qRD1);
+            qRefDocs.add(qRD2);
+            Form qForm = new Form();
+            qForm.setId(form.getId());
+            qForm.setReferenceDocumentCollection(qRefDocs);
+            List refDocs = appService.search(ReferenceDocument.class, qForm);
+            for (Iterator i = refDocs.iterator(); i.hasNext();) {
+                ReferenceDocument rd = (ReferenceDocument)i.next();
+                logger.debug(" Id-> "+rd.getId());
+                logger.debug(" Type-> "+rd.getType());
+            }
+            return refDocs;
+        }
+        catch(Exception e) {
+            logger.error("Error querying ReferenceDocument for Form "+publicId+" v"+version);
+            throw new DataAccessException("Error querying ReferenceDocument for Form "+publicId+" v"+version);
+        }
+    }
+
+    public Collection<ReferenceDocument> queryFormMessageReferenceDocuments(String formIdSeq) throws DataAccessException
+    {
+        try {
+            ReferenceDocument qRD1 = new ReferenceDocument();
+            qRD1.setType(INSTRUMENT_REF_DOC_TYPE);
+            ReferenceDocument qRD2 = new ReferenceDocument();
+            qRD2.setType(GlobalDefinitionsDAO.GLOBALDEFINITIONS_REF_DOC_TYPE); 
+            Collection<ReferenceDocument> qRefDocs = new ArrayList<ReferenceDocument>(2);
+            qRefDocs.add(qRD1);
+            qRefDocs.add(qRD2);
+            Form qForm = new Form();
+            qForm.setId(formIdSeq);
+            qForm.setReferenceDocumentCollection(qRefDocs);
+            List refDocs = appService.search(ReferenceDocument.class, qForm);
+            for (Iterator i = refDocs.iterator(); i.hasNext();) {
+                ReferenceDocument rd = (ReferenceDocument)i.next();
+                logger.debug(" Id-> "+rd.getId());
+                logger.debug(" Type-> "+rd.getType());
+                logger.debug(" Name-> "+rd.getName());
+            }
+            return refDocs;
+        }
+        catch(Exception e) {
+            logger.error("Error querying ReferenceDocument for Form "+formIdSeq);
+            throw new DataAccessException("Error querying ReferenceDocument for Form "+formIdSeq);
+        }
+
+    }
 }

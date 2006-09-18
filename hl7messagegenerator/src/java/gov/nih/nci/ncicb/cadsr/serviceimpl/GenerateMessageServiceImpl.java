@@ -1,6 +1,10 @@
 package gov.nih.nci.ncicb.cadsr.serviceimpl;
 
 import gov.nih.nci.cadsr.domain.Form;
+import gov.nih.nci.cadsr.domain.ReferenceDocument;
+import gov.nih.nci.ncicb.cadsr.dao.EDCIDAOFactory;
+import gov.nih.nci.ncicb.cadsr.dao.GlobalDefinitionsDAO;
+import gov.nih.nci.ncicb.cadsr.dao.InstrumentDAO;
 import gov.nih.nci.ncicb.cadsr.edci.domain.GlobalDefinitions;
 import gov.nih.nci.ncicb.cadsr.edci.domain.Instrument;
 import gov.nih.nci.ncicb.cadsr.service.CaAdapterService;
@@ -14,6 +18,7 @@ import java.io.StringWriter;
 
 import java.net.URL;
 
+import java.util.Collection;
 import java.util.Date;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -44,6 +49,7 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
     private QueryMetadataService queryMetadataService = null;
     private CaAdapterService caAdapterService = null;
     private Transformer gdToMifTransformer = null;
+    private EDCIDAOFactory daoFactory;
     private static Logger logger = LogManager.getLogger(GenerateMessageServiceImpl.class);
 
     
@@ -72,6 +78,8 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
           if ((messageType.equals(EDCI))||(messageType.equals(GLOBAL_DEFINITIONS_MIF))) {
                globalDefinitions = queryMetadataService.getGlobalDefinitions(formIdSeq);
                gdMessage = getGlobalDefinitionMIFMessage(globalDefinitions);
+               GlobalDefinitionsDAO globalDefinitionsDAO = daoFactory.getGlobalDefinitionsDAO();
+               globalDefinitionsDAO.storeGlobalDefinitionsMIFMessage(formIdSeq, message, user);
           }
           String instrumentMessage = null;
           if ((messageType.equals(EDCI))||(messageType.equals(EDCI_WITHOUT_ATTACHMENT)))
@@ -79,6 +87,8 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
                 Instrument instrument = queryMetadataService.getInstrumentMetaData(formIdSeq);
                 File csvFile = generateCSVFile(instrument);
                 instrumentMessage = caAdapterService.generateeDCIHL7Message(csvFile);
+                InstrumentDAO instrumentDAO = daoFactory.getInstrumentDAO();
+                instrumentDAO.storeInstrumentHL7Message(formIdSeq, message, user);
           }
           if (messageType.equals(EDCI)) {
               message = attachGlobalDefinitionsMIF(instrumentMessage, gdMessage);  
@@ -267,6 +277,16 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
             throw new ServiceException("Error marshalling GlobalDefinitions.",e);
         }
     }
+    
+    public Collection<ReferenceDocument> queryFormMessageReferenceDocuments(String publicId, 
+                                                                            String version) {
+        return null;
+    }
+
+    public Collection<ReferenceDocument> queryFormMessageReferenceDocuments(String formIdSeq) {
+        return null;
+    }
+    
     /**
      * Attache the GlobalDefinitions MIF to the instrumentMessage.
      * @param instrumentMessage
@@ -294,4 +314,14 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
     public CaAdapterService getCaAdapterService() {
         return caAdapterService;
     }
+    
+    public void setDaoFactory(EDCIDAOFactory daoFactory) {
+        this.daoFactory = daoFactory;
+    }
+
+    public EDCIDAOFactory getDaoFactory() {
+        return daoFactory;
+    }
+
+
 }
