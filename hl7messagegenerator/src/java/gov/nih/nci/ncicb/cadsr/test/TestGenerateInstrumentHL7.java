@@ -3,21 +3,22 @@ package gov.nih.nci.ncicb.cadsr.test;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class TestQueryFormReferenceDocuments extends TestServices{
-    public TestQueryFormReferenceDocuments() {
+public class TestGenerateInstrumentHL7 extends TestServices {
+    public TestGenerateInstrumentHL7() {
     }
     
-    public TestQueryFormReferenceDocuments(String method) {
+    public TestGenerateInstrumentHL7(String method) {
        super(method);
     }    
     
     public static Test suite() {
       TestSuite suite = new TestSuite();
-      suite.addTest(new TestQueryFormReferenceDocuments("testQueryReferenceDocuments"));
+      suite.addTest(new TestGenerateInstrumentHL7("testGenerateDCIHL7Message"));
       return suite;
-    }   
+    } 
     
     public static void main(String args[]) {
       junit.textui.TestRunner.run(suite());
-    }      
+    }       
+    
 }

@@ -54,6 +54,8 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
         //DomainObjectFactory domainObjectFactory = getDomainObjectFactory();
         GlobalDefinitions globalDefinitions = domainObjectFactory.getGlobalDefinitions();
         try {
+            //HM activityTime is a mandatory field
+          globalDefinitions.setActivityTime(new Date());
           List forms = appService.search(Form.class.getName(), form);
             Form qForm;
             qForm = (Form)forms.get(0);
@@ -72,10 +74,15 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
                   Collection<Question> questions = module.getQuestionCollection();
                   for (Question question:questions){
                       DataElement dE = question.getDataElement();
-                      dataElements.add((gov.nih.nci.ncicb.cadsr.edci.domain.DataElement)getDataElement(dE));
+                      //HM add the dataElement to the dataElementGroup
+                      gov.nih.nci.ncicb.cadsr.edci.domain.DataElement eDCIDE = (gov.nih.nci.ncicb.cadsr.edci.domain.DataElement)getDataElement(dE);
+                      dataElements.add(eDCIDE);
+                      dataElementGroup.addDataElement(eDCIDE);
                       dataElementConcepts.add(getDataElementConcept(dE));
                       valueDomains.add(getValueDomain(dE,question));
                   }
+                  //HM add dataElementGroup to GlobalDefinitions
+                  globalDefinitions.addDataElementGroup(dataElementGroup);
               }
              globalDefinitions.setDataElementCollection(dataElements);
              globalDefinitions.setDataElementConceptCollection(dataElementConcepts);
@@ -402,6 +409,10 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
               if (storeBlob == null) {
                   storeBlob = new StoreBlob(dataSource);
               }
+             //HM 
+              if (message == null) {
+                   throw new DataAccessException("Global Definitions MIF message is null.");
+              }
               Form form = queryCaDSRForm(formIdSeq);
               ReferenceDocument referenceDocument = new ReferenceDocument();
               referenceDocument.setCreatedBy(user);
@@ -424,8 +435,9 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
               return referenceDocument.getId();
          }
          catch (Exception e) {
-             logger.error("Error storing Instrument HL7 message.", e);
-             throw new DataAccessException("Error storing Instrument HL7 message.", e);
+             //HM changed error message 
+             logger.error("Error storing Global Definitions MIF message.", e);
+             throw new DataAccessException("Error storing Global Definitions MIF message.", e);
          }
      }
 
@@ -440,7 +452,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
                rd.setName(getRefDocName(form,createDate));
                List refDocs = appService.search(ReferenceDocument.class,rd);
                if (refDocs.size() == 0) {
-                   throw new DataAccessException("Instrument Message Reference Document not found for form "+formIdSeq+" date "+formatter.format(createDate));
+                   throw new DataAccessException("Global Definitions MIF Message Reference Document not found for form "+formIdSeq+" date "+formatter.format(createDate));
                }
                ReferenceDocument referenceDocument = (ReferenceDocument)refDocs.get(0);
                ReferenceDocumentAttachment rda = queryRefDocAttachment.query(referenceDocument.getName());

@@ -12,6 +12,7 @@
   <bean id="generateMessageService" class="gov.nih.nci.ncicb.cadsr.serviceimpl.GenerateMessageServiceImpl" singleton="false" >
      <property name="queryMetadataService" ><ref local="queryMetadataService"/></property>
      <property name="caAdapterService" ><ref local="caAdapterService"/></property>
+     <property name="daoFactory"><ref local="daoFactory" /></property>     
   </bean> 
   <bean id="appService" class="gov.nih.nci.system.applicationservice.ApplicationServiceProvider" 
               factory-method="getRemoteInstance">

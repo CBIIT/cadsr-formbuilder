@@ -19,6 +19,7 @@ import gov.nih.nci.ncicb.cadsr.dao.GlobalDefinitionsDAO;
 import gov.nih.nci.ncicb.cadsr.dao.InstrumentDAO;
 import gov.nih.nci.ncicb.cadsr.dto.ReferenceDocumentAttachment;
 import gov.nih.nci.ncicb.cadsr.edci.domain.*;
+import gov.nih.nci.ncicb.cadsr.edci.domain.impl.EVDSubsetImpl;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 
 import java.sql.SQLException;
@@ -26,7 +27,10 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -303,14 +307,15 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
      * @throws DataAccessException
      */
     protected EVDSubset getEVDSubset(Question question, GlobalDefinitions globalDefinitions ) throws DataAccessException {
-        Collection validValues = question.getValidValueCollection();
+        Collection<ValidValue> vvs = question.getValidValueCollection();
         gov.nih.nci.cadsr.domain.ValueDomain cadsrVD = question.getDataElement().getValueDomain();
         EVDSubset searchedEVDSubset = null;
         try 
         {
+           //Find the eDCI ValueDomain which matches the caDSR ValueDomain from the Question
            ValueDomain itemVD = null;
            for(ValueDomain valueDomain: globalDefinitions.getValueDomainCollection()) {
-              if (valueDomain.getGUID().indexOf(cadsrVD.getId()) > 0) {
+              if (valueDomain.getGUID().indexOf(cadsrVD.getId()) >= 0) {
                   itemVD = valueDomain; break;
               }
            }
@@ -318,10 +323,30 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
            if ((itemVD != null)&&(itemVD.getIsEnumeratedFlag()))
            {
               Collection<EVDSubset> evdSubsets = itemVD.getEVDSubsetCollection();
+               //Sort the ValidValues by displayOrder
+               List validValues = new ArrayList(vvs.size());
+               for (ValidValue vv:vvs) validValues.add(vv);
+               Collections.sort(validValues, new ValidValueComparator());              
               for (EVDSubset evdSubset: evdSubsets) {
-                  if (evdSubset.getElementInSubsetCollection().size() == validValues.size()) {
+                  //If the number of elements are same in the evdSubset and validValues compare each value individually.
+                  if (evdSubset.getElementInSubsetCollection().size() == vvs.size()) {
                      //Compare the valid Values individually
-                     searchedEVDSubset = evdSubset; break;
+                     searchedEVDSubset = evdSubset;
+                     List elementsInSubset = Arrays.asList(evdSubset.getElementInSubsetCollection().toArray());
+                     //Sort elementsInSubset by sequence number
+                     Collections.sort(elementsInSubset, new EISComparator());
+                     Iterator ei=elementsInSubset.iterator();
+                     //Verify that order of ValidValues is same as order of Elements in EVDSubset
+                     for (Iterator i=validValues.iterator(); i.hasNext();) {
+                          ValidValue vv = (ValidValue)i.next();
+                          ElementInSubset eis = (ElementInSubset)ei.next();
+                          if (!(vv.getLongName().equals(eis.getValue()))) {
+                              //This is an evdSubset with a different order.
+                              searchedEVDSubset = null;break;
+                          }
+                     }
+                      //Break if EVDSubset found
+                      if (searchedEVDSubset != null) break;
                   }
               }
            }
@@ -500,7 +525,11 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
              if (storeBlob == null) {
                  storeBlob = new StoreBlob(dataSource);
              }
+            if (message == null) {
+                 throw new DataAccessException("Instrument HL7 message is null.");
+            }             
              Form form = queryCaDSRForm(formIdSeq);
+             //Create the ReferenceDocument 
              ReferenceDocument referenceDocument = new ReferenceDocument();
              referenceDocument.setCreatedBy(user);
              referenceDocument.setId(getGUID());
@@ -508,7 +537,7 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
              referenceDocument.setName(getRefDocName(form, createDate));
              referenceDocument.setContext(form.getContext());
              referenceDocument = refDocCreator.createReferenceDocument(referenceDocument, formIdSeq);
-             
+             //Create the ReferenceDocumentAttachment
              ReferenceDocumentAttachment refDocAttachment = new ReferenceDocumentAttachment();
              refDocAttachment.setReferenceDocument(referenceDocument);
              refDocAttachment.setMimeType("text/xml");
@@ -606,24 +635,18 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
     public Collection<ReferenceDocument> queryFormMessageReferenceDocuments(String formIdSeq) throws DataAccessException
     {
         try {
-            ReferenceDocument qRD1 = new ReferenceDocument();
-            qRD1.setType(INSTRUMENT_REF_DOC_TYPE);
-            ReferenceDocument qRD2 = new ReferenceDocument();
-            qRD2.setType(GlobalDefinitionsDAO.GLOBALDEFINITIONS_REF_DOC_TYPE); 
-            Collection<ReferenceDocument> qRefDocs = new ArrayList<ReferenceDocument>(2);
-            qRefDocs.add(qRD1);
-            qRefDocs.add(qRD2);
-            Form qForm = new Form();
-            qForm.setId(formIdSeq);
-            qForm.setReferenceDocumentCollection(qRefDocs);
-            List refDocs = appService.search(ReferenceDocument.class, qForm);
-            for (Iterator i = refDocs.iterator(); i.hasNext();) {
-                ReferenceDocument rd = (ReferenceDocument)i.next();
+            Form qForm = queryCaDSRForm(formIdSeq);
+            Collection<ReferenceDocument> refDocs = qForm.getReferenceDocumentCollection();
+            Collection<ReferenceDocument> rds = new ArrayList<ReferenceDocument>(refDocs.size());
+            for (ReferenceDocument rd: refDocs) {
+                if ((rd.getType().equals(INSTRUMENT_REF_DOC_TYPE))||(rd.getType().equals(GlobalDefinitionsDAO.GLOBALDEFINITIONS_REF_DOC_TYPE))) {
+                     rds.add(rd);
+                }
                 logger.debug(" Id-> "+rd.getId());
                 logger.debug(" Type-> "+rd.getType());
                 logger.debug(" Name-> "+rd.getName());
             }
-            return refDocs;
+            return rds;
         }
         catch(Exception e) {
             logger.error("Error querying ReferenceDocument for Form "+formIdSeq);
@@ -631,4 +654,39 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
         }
 
     }
+    
+    /**
+     * Comparator for sorting ElementInSubset list by sequenceNumber.
+     * Note: this comparator imposes orderings that are inconsistent with equals.
+     */
+    protected class EISComparator implements Comparator {
+        public int compare(Object o1, Object o2) {
+            ElementInSubset eis1 = (ElementInSubset)o1;
+            ElementInSubset eis2 = (ElementInSubset)o2;
+            int i1 = eis1.getSequenceNumber();
+            int i2 = eis2.getSequenceNumber();
+            int retval = -1;
+            if (i1<i2) retval=-1;
+            if (i1==i2) retval=0;
+            if (i1>i2) retval=1;
+            return retval;
+        } 
+    }
+    /**
+     * Comparator for sorting ValidValue list by displayOrder.
+     * Note: this comparator imposes orderings that are inconsistent with equals.
+     */    
+    protected class ValidValueComparator implements Comparator {
+        public int compare(Object o1, Object o2) {
+            ValidValue v1 = (ValidValue)o1;
+            ValidValue v2 = (ValidValue)o2;
+            Integer i1 = v1.getDisplayOrder();
+            Integer i2 = v2.getDisplayOrder();
+            int retval = -1;
+            if (i1<i2) retval=-1;
+            if (i1==i2) retval=0;
+            if (i1>i2) retval=1;
+            return retval;
+        } 
+    }    
 }

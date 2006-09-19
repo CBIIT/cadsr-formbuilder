@@ -23,8 +23,6 @@ public interface GenerateMessageService {
      * Generates the message for the given formIdSeq, user and messageType
      * messageType can be 
      *     -  EDCI
-     *     -  EDCI_WITHOUT_ATTACHMENT
-     *     -  GLOBAL_DEFINITIONS_MIF
      * @param formIdSeq
      * @param user
      * @param messageType 
@@ -45,6 +43,10 @@ public interface GenerateMessageService {
      * @throws ServiceException
      */
    public String getMessage(String formIdSeq, Date generateDate, String messageType) throws ServiceException;
+   
+   /**
+   public String getMessage(String referenceDocumentIdSeq, String messageType) throws ServiceException;
+   */
    
    /**
      * Generates the message for the given formIdSeq, user and messageType

@@ -106,7 +106,7 @@ public class TestServices extends TestCase {
          try {
              EDCIDAOFactory daoFactory = (EDCIDAOFactory)beanFactory.getBean("daoFactory");
              InstrumentDAO instrumentDAO = daoFactory.getInstrumentDAO();
-             Collection refDocs =instrumentDAO.queryFormMessageReferenceDocuments("1D847B70-71DC-7213-E044-0003BA0B1A09");
+             Collection refDocs =instrumentDAO.queryFormMessageReferenceDocuments("1B4FBBDD-9FD4-5F94-E044-0003BA0B1A09");
              for (Iterator i= refDocs.iterator(); i.hasNext();) {
                  ReferenceDocument rd = (ReferenceDocument)i.next();
                  System.out.println("Id -> "+rd.getId());
@@ -131,6 +131,19 @@ public class TestServices extends TestCase {
           fail(e.getMessage());
       }
     }
+    
+    
+    public void testGenerateDCIHL7Message() {
+      try {
+        GenerateMessageService generateMessageService = (GenerateMessageService)beanFactory.getBean("generateMessageService");
+        String message = generateMessageService.generateMessage("1B4FBBDD-9FD4-5F94-E044-0003BA0B1A09","user", generateMessageService.EDCI);
+        System.out.println("Message :\n"+message);
+      }
+      catch(Exception e){
+          e.printStackTrace();
+          fail(e.getMessage());
+      }
+    }    
     
     public static Test suite() {
       TestSuite suite = new TestSuite();
