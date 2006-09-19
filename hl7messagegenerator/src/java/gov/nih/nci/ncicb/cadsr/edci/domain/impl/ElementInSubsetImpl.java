@@ -2,7 +2,7 @@
  * This class was automatically generated with 
  * <a href="http://www.castor.org">Castor 1.0.2</a>, using an XML
  * Schema.
- * $Id: ElementInSubsetImpl.java,v 1.2 2006-08-30 13:08:28 marwahah Exp $
+ * $Id: ElementInSubsetImpl.java,v 1.3 2006-09-19 20:03:22 marwahah Exp $
  */
 
 package gov.nih.nci.ncicb.cadsr.edci.domain.impl;
@@ -12,7 +12,7 @@ import gov.nih.nci.ncicb.cadsr.edci.domain.ElementInSubset;
 /**
  * The value and ordinal position of a constituent of a Subset.
  *
- * @version $Revision: 1.2 $ $Date: 2006-08-30 13:08:28 $
+ * @version $Revision: 1.3 $ $Date: 2006-09-19 20:03:22 $
  */
 public class ElementInSubsetImpl implements java.io.Serializable, ElementInSubset {
 
@@ -131,5 +131,6 @@ public class ElementInSubsetImpl implements java.io.Serializable, ElementInSubse
     {
         this._value = value;
     } //-- void setValue(java.lang.String) 
+
 
 }

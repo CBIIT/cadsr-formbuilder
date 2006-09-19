@@ -43,8 +43,8 @@ public class QueryMetadataServiceImpl implements QueryMetadataService
          return instrument;
         }
         catch (Exception e) {
-            logger.error("Error getting GlobalDefinitions.", e);
-            throw new ServiceException("Error getting GlobalDefinitions.", e);
+            logger.error("Error getting Instrument metadata.", e);
+            throw new ServiceException("Error getting Instrument metadata.", e);
         }        
     }
     /**

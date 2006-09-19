@@ -2,6 +2,7 @@ package gov.nih.nci.ncicb.cadsr.serviceimpl;
 
 import gov.nih.nci.cadsr.domain.Form;
 import gov.nih.nci.cadsr.domain.ReferenceDocument;
+import gov.nih.nci.ncicb.cadsr.constants.EDCIConfiguration;
 import gov.nih.nci.ncicb.cadsr.dao.EDCIDAOFactory;
 import gov.nih.nci.ncicb.cadsr.dao.GlobalDefinitionsDAO;
 import gov.nih.nci.ncicb.cadsr.dao.InstrumentDAO;
@@ -13,6 +14,7 @@ import gov.nih.nci.ncicb.cadsr.service.QueryMetadataService;
 import gov.nih.nci.ncicb.cadsr.service.ServiceException;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 
@@ -68,7 +70,9 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
     {
         try
         {
-          validateMessageType(messageType);
+          if (!(messageType.equals(EDCI))) {
+              throw new ServiceException("Only Instrument HL7 message can be generated.");
+          }
           String message = null;
           if (!validateUserForGeneratingMessage(formIdSeq, user, messageType)) {
                throw new ServiceException("User does not have sufficient privileges to generate this message.");
@@ -80,7 +84,7 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
                globalDefinitions = queryMetadataService.getGlobalDefinitions(formIdSeq);
                gdMessage = getGlobalDefinitionMIFMessage(globalDefinitions);
                GlobalDefinitionsDAO globalDefinitionsDAO = daoFactory.getGlobalDefinitionsDAO();
-               globalDefinitionsDAO.storeGlobalDefinitionsMIFMessage(formIdSeq, message,createDate, user);
+               globalDefinitionsDAO.storeGlobalDefinitionsMIFMessage(formIdSeq, gdMessage,createDate, user);
           }
           String instrumentMessage = null;
           if ((messageType.equals(EDCI))||(messageType.equals(EDCI_WITHOUT_ATTACHMENT)))
@@ -89,7 +93,7 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
                 File csvFile = generateCSVFile(instrument);
                 instrumentMessage = caAdapterService.generateeDCIHL7Message(csvFile);
                 InstrumentDAO instrumentDAO = daoFactory.getInstrumentDAO();
-                instrumentDAO.storeInstrumentHL7Message(formIdSeq, message,createDate, user);
+                instrumentDAO.storeInstrumentHL7Message(formIdSeq, instrumentMessage,createDate, user);
           }
           if (messageType.equals(EDCI)) {
               message = attachGlobalDefinitionsMIF(instrumentMessage, gdMessage);  
@@ -220,7 +224,22 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
      */
     protected File generateCSVFile(Instrument instrument) throws ServiceException
     {
-       return null;    
+      EDCIConfiguration config = EDCIConfiguration.getInstance();
+      String csvFileLocation = config.getProperty("csvFileLocation");
+      try {
+      //Create a csv File from the instrument based on a CSV file specification
+       String instrumentSCSFile = config.getProperty("InstrumentSCSFile");
+      //Is there a way to validate the generated csvFile against csv File specification.
+       
+       //Return a test csv File
+       String testFileName ="040002.csv"; 
+       File csvFile = new File(csvFileLocation+testFileName);
+       return csvFile;    
+      }
+      catch(Exception e){
+          logger.error("Error creating the csvFile.",e);
+          throw new ServiceException("Error creating the csvFile.",e);
+      }
     }
     /**
      * Transformer for GlobalDefinitionsToMif stylesheet.
@@ -233,16 +252,19 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
           if (gdToMifTransformer == null)
           {
              TransformerFactory transformerFactory = TransformerFactory.newInstance();
-             //transformerFactory.setURIResolver(new EDCIURIResolver());
-             //The name of the stylesheet should be a property
-             URL styleSheetUrl = getClass().getResource("/stylesheets/gd2mif.xsl");
+             EDCIConfiguration config = EDCIConfiguration.getInstance();
+             //Read in the Stylesheet.
+             String globalDefinitionsToMIFStylesheet = config.getProperty("GlobalDefinitionsToMIFStyleSheet");
+             URL styleSheetUrl = getClass().getResource(globalDefinitionsToMIFStylesheet);
              InputStream styleSheetStream = styleSheetUrl.openStream();
              Source styleSheet = new StreamSource(styleSheetStream);
              logger.debug("System id "+styleSheet.getSystemId());
              logger.debug("URL path "+styleSheetUrl.getPath().substring(0,styleSheetUrl.getPath().lastIndexOf("/")));
              logger.debug("URI "+styleSheetUrl.toURI().toString());
+             //Set the Stylesheet systemId so that it can load included/imported files.
              styleSheet.setSystemId(styleSheetUrl.toURI().toString());
              Templates templates = transformerFactory.newTemplates(styleSheet);
+             //Create a Transformer.
              gdToMifTransformer = templates.newTransformer();
           }
           return gdToMifTransformer;
