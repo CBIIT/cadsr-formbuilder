@@ -107,7 +107,7 @@ public abstract class CaDSRApiDAOImpl {
           logger.error("Error quering oid.",e);
           throw new DataAccessException("Error quering oid.",e);
       }
-    }    
+    } 
     
 
 

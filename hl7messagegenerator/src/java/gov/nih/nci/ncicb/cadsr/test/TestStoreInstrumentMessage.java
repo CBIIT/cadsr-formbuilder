@@ -1,6 +1,7 @@
 package gov.nih.nci.ncicb.cadsr.test;
 
 import gov.nih.nci.ncicb.cadsr.dao.EDCIDAOFactory;
+import gov.nih.nci.ncicb.cadsr.dao.GlobalDefinitionsDAO;
 import gov.nih.nci.ncicb.cadsr.dao.InstrumentDAO;
 
 import java.util.Date;
@@ -433,6 +434,8 @@ public class TestStoreInstrumentMessage extends TestServices {
             fail(e.getMessage());
         }
     }    
+    
+
     
     public static Test suite() {
       TestSuite suite = new TestSuite();

@@ -11,5 +11,9 @@ public class TestGenerateGlobalDefinitionsMIF extends TestServices{
       TestSuite suite = new TestSuite();
       suite.addTest(new TestServices("testGenerateDCIDefMessage"));
       return suite;
-    }    
+    }   
+    
+    public static void main(String args[]) {
+      junit.textui.TestRunner.run(suite());
+    }     
 }

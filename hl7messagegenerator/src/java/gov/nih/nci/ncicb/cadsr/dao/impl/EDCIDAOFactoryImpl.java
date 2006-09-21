@@ -6,18 +6,24 @@ import gov.nih.nci.ncicb.cadsr.dao.GlobalDefinitionsDAO;
 
 import gov.nih.nci.ncicb.cadsr.dao.InstrumentDAO;
 
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
 /**
  * Implements the EDCIDAOFactory using the spring framework BeanFactory.
  */
-public class EDCIDAOFactoryImpl implements EDCIDAOFactory {
+public class EDCIDAOFactoryImpl implements EDCIDAOFactory, BeanFactoryAware {
     BeanFactory beanFactory = null;
     public EDCIDAOFactoryImpl() {
-        ClassPathResource resource = new ClassPathResource("beans.xml");
-        beanFactory = new XmlBeanFactory(resource);
+        //ClassPathResource resource = new ClassPathResource("beans.xml");
+        //beanFactory = new XmlBeanFactory(resource);
     }
+    
+   public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+       this.beanFactory = beanFactory;
+   }
     
     public GlobalDefinitionsDAO getGlobalDefinitionsDAO() throws DataAccessException {
         try {

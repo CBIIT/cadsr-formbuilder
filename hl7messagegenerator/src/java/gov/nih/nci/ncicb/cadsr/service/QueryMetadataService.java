@@ -21,6 +21,14 @@ public interface QueryMetadataService
      */
    public Instrument getInstrumentMetaData(String idSeq ) throws ServiceException;
    /**
+     * Query Instrument metadata for a given formIdSeq, and using GlobalDefinitions
+     * @param idSeq
+     * @param globalDefinitions
+     * @return
+     * @throws ServiceException
+     */
+   public Instrument getInstrumentMetaData(String idSeq, GlobalDefinitions globalDefinitions ) throws ServiceException;
+   /**
      * Query GlobalDefinitions for a given formIdSeq
      * @param idSeq
      * @return GlobalDefinitions
