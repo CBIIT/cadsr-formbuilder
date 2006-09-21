@@ -35,8 +35,20 @@ public class QueryMetadataServiceImpl implements QueryMetadataService
     public Instrument getInstrumentMetaData(String formIdSeq ) throws ServiceException 
     {
         try {
-         //Query GlobalDefinitions metadata.
-         GlobalDefinitions globalDefinitions = getGlobalDefinitions(formIdSeq);
+           //Query GlobalDefinitions metadata.
+           GlobalDefinitions globalDefinitions = getGlobalDefinitions(formIdSeq);
+           Instrument instrument = getInstrumentMetaData(formIdSeq, globalDefinitions);
+           return instrument;
+        }
+        catch (Exception e) {
+            logger.error("Error getting Instrument metadata.", e);
+            throw new ServiceException("Error getting Instrument metadata.", e);
+        }        
+    }
+
+    public Instrument getInstrumentMetaData(String formIdSeq, GlobalDefinitions globalDefinitions) throws ServiceException 
+    {
+        try {
          //Query Instrument metadata.
          InstrumentDAO instrumentDAO = daoFactory.getInstrumentDAO();
          Instrument instrument = instrumentDAO.getInstrument(formIdSeq, globalDefinitions);
@@ -46,7 +58,7 @@ public class QueryMetadataServiceImpl implements QueryMetadataService
             logger.error("Error getting Instrument metadata.", e);
             throw new ServiceException("Error getting Instrument metadata.", e);
         }        
-    }
+    }    
     /**
      * Query GlobalDefinitions metadata.
      * @param idSeq

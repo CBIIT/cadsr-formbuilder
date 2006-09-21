@@ -28,6 +28,7 @@ import java.util.List;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -46,7 +47,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
     public GlobalDefinitionsDAOImpl() 
     {
     }
-    
+    //@Transactional(readOnly=true)
     public GlobalDefinitions getGlobalDefinitions(String formIdSeq) throws DataAccessException {
         Form form = new Form();
         form.setId(formIdSeq);
@@ -58,6 +59,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
           globalDefinitions.setActivityTime(new Date());
           List forms = appService.search(Form.class.getName(), form);
             Form qForm;
+            if (forms.size()== 0) throw new Exception("Could not find the form for "+formIdSeq);
             qForm = (Form)forms.get(0);
             if (qForm != null)
           {
@@ -396,8 +398,9 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
        return name.toString();
     }    
 
-    @Transactional(readOnly=false,
-                   rollbackFor=DataAccessException.class)
+    //@Transactional(readOnly=false,
+      //             propagation=Propagation.REQUIRED,
+         //          rollbackFor=DataAccessException.class)
      public String storeGlobalDefinitionsMIFMessage(String formIdSeq, String message, Date createDate, String user) throws DataAccessException {
          try {
               if (refDocCreator == null) {
@@ -431,7 +434,6 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
               refDocAttachment.setDocSize(new Long(message.length()));
               refDocAttachment.setAttachment(message);
               refDocAttachmentCreator.createRefDocAttachment(refDocAttachment);
-              
               return referenceDocument.getId();
          }
          catch (Exception e) {

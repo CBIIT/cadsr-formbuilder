@@ -3,6 +3,7 @@ package gov.nih.nci.ncicb.cadsr.serviceimpl;
 import gov.nih.nci.cadsr.domain.Form;
 import gov.nih.nci.cadsr.domain.ReferenceDocument;
 import gov.nih.nci.ncicb.cadsr.constants.EDCIConfiguration;
+import gov.nih.nci.ncicb.cadsr.dao.DataAccessException;
 import gov.nih.nci.ncicb.cadsr.dao.EDCIDAOFactory;
 import gov.nih.nci.ncicb.cadsr.dao.GlobalDefinitionsDAO;
 import gov.nih.nci.ncicb.cadsr.dao.InstrumentDAO;
@@ -23,6 +24,8 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Date;
 
+import javax.sql.DataSource;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Source;
@@ -37,6 +40,10 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import org.exolab.castor.xml.Marshaller;
+
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.w3c.dom.Document;
 
@@ -58,21 +65,18 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
     public GenerateMessageServiceImpl() {
     }
     
-    /**
-     * Generates the  message for the give formIdSeq.
-     * @param formIdSeq
-     * @param user
-     * @param messageType
-     * @return
-     * @throws ServiceException
-     */
+
+     @Transactional(readOnly=false,
+                    propagation=Propagation.REQUIRES_NEW,
+                    rollbackFor=ServiceException.class)     
      public String generateMessage(String formIdSeq, String user, String messageType ) throws ServiceException
     {
         try
         {
-          if (!(messageType.equals(EDCI))) {
+          validateMessageType(messageType);
+          /*if (!(messageType.equals(EDCI))) {
               throw new ServiceException("Only Instrument HL7 message can be generated.");
-          }
+          }*/
           String message = null;
           if (!validateUserForGeneratingMessage(formIdSeq, user, messageType)) {
                throw new ServiceException("User does not have sufficient privileges to generate this message.");
@@ -80,16 +84,15 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
           GlobalDefinitions globalDefinitions = null;
           String gdMessage = null;
           Date createDate = new Date();
-          if ((messageType.equals(EDCI))||(messageType.equals(GLOBAL_DEFINITIONS_MIF))) {
-               globalDefinitions = queryMetadataService.getGlobalDefinitions(formIdSeq);
-               gdMessage = getGlobalDefinitionMIFMessage(globalDefinitions);
-               GlobalDefinitionsDAO globalDefinitionsDAO = daoFactory.getGlobalDefinitionsDAO();
-               globalDefinitionsDAO.storeGlobalDefinitionsMIFMessage(formIdSeq, gdMessage,createDate, user);
-          }
+          globalDefinitions = queryMetadataService.getGlobalDefinitions(formIdSeq);
+          gdMessage = getGlobalDefinitionMIFMessage(globalDefinitions);
+          GlobalDefinitionsDAO globalDefinitionsDAO = daoFactory.getGlobalDefinitionsDAO();
+          globalDefinitionsDAO.storeGlobalDefinitionsMIFMessage(formIdSeq, gdMessage,createDate, user);
+
           String instrumentMessage = null;
           if ((messageType.equals(EDCI))||(messageType.equals(EDCI_WITHOUT_ATTACHMENT)))
           {
-                Instrument instrument = queryMetadataService.getInstrumentMetaData(formIdSeq);
+                Instrument instrument = queryMetadataService.getInstrumentMetaData(formIdSeq, globalDefinitions);
                 File csvFile = generateCSVFile(instrument);
                 instrumentMessage = caAdapterService.generateeDCIHL7Message(csvFile);
                 InstrumentDAO instrumentDAO = daoFactory.getInstrumentDAO();
@@ -146,6 +149,7 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
      */
     public String getMessage(String formIdSeq,Date generateDate ,String messageType) throws ServiceException {
         try {
+            validateMessageType(messageType);
             String instrumentMessage = queryMetadataService.getInstrumentMessage(formIdSeq, generateDate);
             String gdMessage = queryMetadataService.getGlobalDefinitionsMessage(formIdSeq, generateDate);
             String message = null;
@@ -190,6 +194,34 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
              throw new ServiceException("Error generating message. "+publicId+" "+version+" "+" "+messageType, e);
          }       
     }
+    
+    public String getMessage(String referenceDocumentIdSeq, String messageType) throws ServiceException {
+        try {
+            validateMessageType(messageType);
+            String instrumentMessage = queryMetadataService.getInstrumentMessage(referenceDocumentIdSeq);
+            String gdMessage = queryMetadataService.getGlobalDefinitionsMessage(referenceDocumentIdSeq);
+            String message = null;
+            if (messageType.equals(EDCI)) {
+                message = attachGlobalDefinitionsMIF(instrumentMessage, gdMessage);  
+            }
+            if (messageType.equals(EDCI_WITHOUT_ATTACHMENT)) {
+                message = instrumentMessage;
+            }
+            if (messageType.equals(GLOBAL_DEFINITIONS_MIF)) {
+                  message = gdMessage;
+            }
+            return message;            
+        }
+        catch (ServiceException se) {
+            logger.error(se);throw se;
+        }
+        catch (Exception e) {
+            logger.error("Error generating message. "+formIdSeq+" "+" "+messageType, e);
+            throw new ServiceException("Error generating message. "+formIdSeq+" "+messageType, e);
+        }
+        
+    }
+    
     /**
      * Validates the messageType
      * @param messageType
@@ -345,6 +377,6 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
     public EDCIDAOFactory getDaoFactory() {
         return daoFactory;
     }
-
+    
 
 }

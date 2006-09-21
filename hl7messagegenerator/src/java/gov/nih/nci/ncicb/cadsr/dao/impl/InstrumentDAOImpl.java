@@ -41,6 +41,7 @@ import java.util.Map;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -512,8 +513,6 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
        return name.toString();
     }    
 
-   @Transactional(readOnly=false,
-                  rollbackFor=DataAccessException.class)
     public String storeInstrumentHL7Message(String formIdSeq, String message, Date createDate, String user) throws DataAccessException {
         try {
              if (refDocCreator == null) {
