@@ -542,7 +542,7 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
              refDocAttachment.setMimeType("text/xml");
              refDocAttachment.setCreatedBy(user);
              refDocAttachment.setContentType("BLOB");
-             refDocAttachment.setName(referenceDocument.getName());
+             refDocAttachment.setName(getAttachmentName(referenceDocument));
              refDocAttachment.setDocSize(new Long(message.length()));
              refDocAttachment.setAttachment(message);
              refDocAttachmentCreator.createRefDocAttachment(refDocAttachment);
@@ -553,6 +553,14 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
             logger.error("Error storing Instrument HL7 message.", e);
             throw new DataAccessException("Error storing Instrument HL7 message.", e);
         }
+    }
+    /**
+     * Gets the attachment name for ReferenceDocument for Instrument HL7 message
+     * @param refDocName
+     * @return
+     */
+    protected String getAttachmentName(ReferenceDocument refDoc) {
+        return refDoc.getName()+"I";
     }
 
     public ReferenceDocumentAttachment queryInstrumentHL7Message(String formIdSeq, Date createDate) throws DataAccessException {
@@ -569,7 +577,7 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
                   throw new DataAccessException("Instrument Message Reference Document not found for form "+formIdSeq+" date "+formatter.format(createDate));
               }
               ReferenceDocument referenceDocument = (ReferenceDocument)refDocs.get(0);
-              ReferenceDocumentAttachment rda = queryRefDocAttachment.query(referenceDocument.getName());
+              ReferenceDocumentAttachment rda = queryRefDocAttachment.query(getAttachmentName(referenceDocument));
               rda.setReferenceDocument(referenceDocument);
               
               return rda;
@@ -592,7 +600,7 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
                 throw new DataAccessException("Instrument Message Reference Document not found for "+rdIdSeq);
             }
             ReferenceDocument referenceDocument = (ReferenceDocument)refDocs.get(0);
-            ReferenceDocumentAttachment rda = queryRefDocAttachment.query(referenceDocument.getName());
+            ReferenceDocumentAttachment rda = queryRefDocAttachment.query(getAttachmentName(referenceDocument));
             rda.setReferenceDocument(referenceDocument);
             
             return rda;

@@ -74,9 +74,20 @@ public interface GenerateMessageService {
      * @throws ServiceException
      */
     public String getMessage(String publicId,String version,Date generateDate, String messageType) throws ServiceException;   
-    
+    /**
+     * Queries message ReferenceDocument associated with a Form
+     * @param publicId
+     * @param version
+     * @return collection of ReferenceDocument
+     * @throws ServiceException
+     */
     public Collection<ReferenceDocument> queryFormMessageReferenceDocuments(String publicId, String version) throws ServiceException;
-    
+    /**
+     * Queries message ReferenceDocument associated with a Form
+     * @param formIdSeq
+     * @return
+     * @throws ServiceException
+     */
     public Collection<ReferenceDocument> queryFormMessageReferenceDocuments(String formIdSeq) throws ServiceException;
     
     public void setDaoFactory(EDCIDAOFactory eDCIDAOFactory);
