@@ -216,8 +216,8 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
             logger.error(se);throw se;
         }
         catch (Exception e) {
-            logger.error("Error generating message. "+formIdSeq+" "+" "+messageType, e);
-            throw new ServiceException("Error generating message. "+formIdSeq+" "+messageType, e);
+            logger.error("Error getting message. for ReferenceDocument"+referenceDocumentIdSeq+" "+" "+messageType, e);
+            throw new ServiceException("Error getting message. for ReferenceDocument"+referenceDocumentIdSeq+" "+" "+messageType, e);
         }
         
     }
@@ -334,12 +334,29 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
     }
     
     public Collection<ReferenceDocument> queryFormMessageReferenceDocuments(String publicId, 
-                                                                            String version) {
-        return null;
+                                                                            String version) throws ServiceException{
+        try {
+            InstrumentDAO instrumentDAO = daoFactory.getInstrumentDAO();
+            Collection<ReferenceDocument> refDocs = instrumentDAO.queryFormMessageReferenceDocuments(publicId, version);
+            return refDocs;
+        }
+        catch (Exception e ){
+             logger.error("Error querying ReferenceDocument for "+ publicId+" v"+version,e);
+             throw new ServiceException("Error querying ReferenceDocument for "+ publicId+" v"+version,e);
+        }
+
     }
 
-    public Collection<ReferenceDocument> queryFormMessageReferenceDocuments(String formIdSeq) {
-        return null;
+    public Collection<ReferenceDocument> queryFormMessageReferenceDocuments(String formIdSeq) throws ServiceException{
+        try {
+            InstrumentDAO instrumentDAO = daoFactory.getInstrumentDAO();
+            Collection<ReferenceDocument> refDocs = instrumentDAO.queryFormMessageReferenceDocuments(formIdSeq);
+            return refDocs;
+        }
+        catch (Exception e ){
+             logger.error("Error querying ReferenceDocument for "+ formIdSeq,e);
+             throw new ServiceException("Error querying ReferenceDocument for "+ formIdSeq,e);
+        }
     }
     
     /**

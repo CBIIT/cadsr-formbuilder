@@ -397,6 +397,15 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
        
        return name.toString();
     }    
+    
+    /**
+     * Gets the attachment name for ReferenceDocument for GlobalDefinitions MIF message
+     * @param refDocName
+     * @return
+     */
+    protected String getAttachmentName(ReferenceDocument refDoc) {
+        return refDoc.getName()+"G";
+    }    
 
     //@Transactional(readOnly=false,
       //             propagation=Propagation.REQUIRED,
@@ -430,7 +439,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
               refDocAttachment.setMimeType("text/xml");
               refDocAttachment.setCreatedBy(user);
               refDocAttachment.setContentType("BLOB");
-              refDocAttachment.setName(referenceDocument.getName());
+              refDocAttachment.setName(getAttachmentName(referenceDocument));
               refDocAttachment.setDocSize(new Long(message.length()));
               refDocAttachment.setAttachment(message);
               refDocAttachmentCreator.createRefDocAttachment(refDocAttachment);
@@ -457,7 +466,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
                    throw new DataAccessException("Global Definitions MIF Message Reference Document not found for form "+formIdSeq+" date "+formatter.format(createDate));
                }
                ReferenceDocument referenceDocument = (ReferenceDocument)refDocs.get(0);
-               ReferenceDocumentAttachment rda = queryRefDocAttachment.query(referenceDocument.getName());
+               ReferenceDocumentAttachment rda = queryRefDocAttachment.query(getAttachmentName(referenceDocument));
                rda.setReferenceDocument(referenceDocument);
                
                return rda;
@@ -481,7 +490,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
                 throw new DataAccessException("Instrument Message Reference Document not found for "+rdIdSeq);
             }
             ReferenceDocument referenceDocument = (ReferenceDocument)refDocs.get(0);
-            ReferenceDocumentAttachment rda = queryRefDocAttachment.query(referenceDocument.getName());
+            ReferenceDocumentAttachment rda = queryRefDocAttachment.query(getAttachmentName(referenceDocument));
             rda.setReferenceDocument(referenceDocument);
             
             return rda;
