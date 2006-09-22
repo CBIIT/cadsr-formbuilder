@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="HL7 Message Generator" default="compile" basedir=".">
-
+  <property file="build.properties" />
   <property name="src.dir" value="src/java" />
   <property name="class.dir" value="classes" /> 
   <property name="lib.dir" value="lib/java" />
   <property name="dist.dir" value="dist" />
   <property name="docs.dir" value="docs" />
+  <property name="config.dir" value="config" />
+  <property name="caadapter.dir" value="config/caadapter" />
   
   <path id="compile.classpath">
     <fileset dir="${lib.dir}">
       <include name="*.jar"/>
+    </fileset>
+    <fileset dir="${caadapter.dir}/dist">
+      <include name="caadapter.jar" />
     </fileset>
   </path>
   
@@ -20,18 +25,37 @@
      <fileset dir="${lib.dir}">
         <include name="*.jar"/>
      </fileset>
+    <fileset dir="${caadapter.dir}/dist">
+      <include name="caadapter.jar" />
+    </fileset>
+    <fileset dir="${config.dir}/MIF">
+      <include name="mif.zip" />
+    </fileset>
   </path>
 
   <target name="clean"> 
     <delete dir="${class.dir}" failonerror="true" />
     <delete dir="${dist.dir}" failonerror="true" />
     <delete dir="${docs.dir}" failonerror="true" />
+    <delete dir="${caAdapterFilesLocation}" failonerror="true" />
  </target>
 
  <target name="init">
     <mkdir dir="${class.dir}"/> 
+    <mkdir dir="${class.dir}/stylesheets" />
     <mkdir dir="${dist.dir}"/> 
     <mkdir dir="${docs.dir}" />
+    <mkdir dir="${caAdapterFilesLocation}" />
+ </target>
+ 
+ <target name="caadaptersetup"  depends="init">
+    <!-- Copy caAdapter files to the caAdapterFilesLocation -->
+    <copy todir="${caAdapterFilesLocation}">
+       <fileset dir="${caadapter.dir}">
+           <include name="etc/*"/>
+           <include name="schema/**" />
+       </fileset>
+    </copy>
  </target>
  
  <target name="compile" depends="init">
@@ -46,12 +70,18 @@
  </target>
  
  <target name="prepare" depends="compile">
+    <!-- Copy property files and spring xml file.-->
     <copy todir="${class.dir}">    
       <fileset dir="${src.dir}">
         <include name="*.properties"/>
         <include name="*.xml"/>
-        <include name="stylesheets/*" />
       </fileset>      
+    </copy>
+    <!-- Copy StyleSheets -->
+    <copy todir="${class.dir}/stylesheets" >
+       <fileset dir="${config.dir}/gd2mifStylesheets">
+          <include name="*"/>
+       </fileset>
     </copy>
   </target>
 
@@ -82,7 +112,7 @@
   <!-- Following targets test the HL7 message generator software.
        They test the software using a particular form idseq -->
   <!-- Test querying GlobalDefinitions metadata -->
-  <target name="testQueryGlobalDefinitions" depends="dist" >
+  <target name="testQueryGlobalDefinitions" depends="dist,caadaptersetup" >
      <junit haltonerror="on" showoutput="yes"  printsummary="yes">
         <classpath refid="test.classpath"/>
         <test name="gov.nih.nci.ncicb.cadsr.test.TestQueryGlobalDefinitionsMetadata" />
@@ -90,7 +120,7 @@
   </target>
 
   <!-- Test Querying Instrument metadata -->
-  <target name="testQueryInstrumentMetadata" depends="dist" >
+  <target name="testQueryInstrumentMetadata" depends="dist,caadaptersetup" >
      <junit haltonerror="on" showoutput="yes"  printsummary="yes">
         <classpath refid="test.classpath"/>
         <test name="gov.nih.nci.ncicb.cadsr.test.TestQueryInstrumentMetadata" />
@@ -98,11 +128,42 @@
   </target>
 
   <!-- Test generating GlobalDefinitions MIF message. -->
-  <target name="testGenerateGlobalDefinitionsMIF" depends="dist" >
+  <target name="testGenerateGlobalDefinitionsMIF" depends="dist,caadaptersetup" >
      <junit haltonerror="on" showoutput="yes"  printsummary="yes">
         <classpath refid="test.classpath"/>
         <test name="gov.nih.nci.ncicb.cadsr.test.TestGenerateGlobalDefinitionsMIF" />
      </junit>
   </target>
   
+    <!-- Test generating Instrument HL7 message. -->
+    <target name="testGenerateInstrumentHL7" depends="dist,caadaptersetup" >
+       <junit haltonerror="on" fork="yes" showoutput="yes"  printsummary="yes">
+          <classpath refid="test.classpath"/>
+          <test name="gov.nih.nci.ncicb.cadsr.test.TestGenerateInstrumentHL7" />
+       </junit>
+  </target>
+  
+  <!-- Test query form Reference Documents. -->
+  <target name="testQueryReferenceDocuments" depends="dist,caadaptersetup" >
+         <junit haltonerror="on" showoutput="yes"  printsummary="yes">
+            <classpath refid="test.classpath"/>
+            <test name="gov.nih.nci.ncicb.cadsr.test.TestQueryFormReferenceDocuments" />
+         </junit>
+  </target>
+    
+  <!-- Test query Instrument HL7 message. -->
+  <target name="testQueryInstrumentMessge" depends="dist,caadaptersetup" >
+         <junit haltonerror="on" showoutput="yes"  printsummary="yes">
+            <classpath refid="test.classpath"/>
+            <test name="gov.nih.nci.ncicb.cadsr.test.TestQueryInstrumentMessage" />
+         </junit>
+  </target>
+  
+  <!-- Test store Instrument message -->
+    <target name="testStoreInstrumentMessge" depends="dist,caadaptersetup" >
+           <junit haltonerror="on" showoutput="yes"  printsummary="yes">
+              <classpath refid="test.classpath"/>
+              <test name="gov.nih.nci.ncicb.cadsr.test.TestStoreInstrumentMessage" />
+           </junit>
+  </target>
 </project>

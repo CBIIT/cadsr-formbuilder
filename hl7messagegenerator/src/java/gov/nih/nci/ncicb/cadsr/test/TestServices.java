@@ -27,6 +27,7 @@ import org.springframework.core.io.ClassPathResource;
  */
 public class TestServices extends TestCase {
     BeanFactory beanFactory;
+
     protected static final String testInstrumentMessage ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
     "<GlobalDefinitions xmlns=\"urn:hl7-org:v3/mif\" xmlns:sch=\"http://www.ascc.net/xml/schematron\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"urn:hl7-org:v3/mif\n" + 
     "C:\\castor-1.0.2\\eDciGlobalDefs.xsd\">\n" + 
@@ -430,7 +431,10 @@ public class TestServices extends TestCase {
     "        <Member DataElementGUID=\"A7350F3A-74F8-3DAC-E034-0003BA0B1A09\"/>\n" + 
     "        <Member DataElementGUID=\"B4C0EC25-415F-730B-E034-0003BA12F5E7\"/>\n" + 
     "    </DataElementGroup>\n" + 
-    "</GlobalDefinitions>";    
+    "</GlobalDefinitions>"; 
+    
+    protected static String formIdSeq="1B4FBBDD-9FD4-5F94-E044-0003BA0B1A09";
+    protected static String instrumentRefDocIdSeq="1DF7D85C-CF48-36EB-E044-0003BA0B1A09";
     public TestServices() {
     }
     
@@ -451,7 +455,7 @@ public class TestServices extends TestCase {
     public void testQueryMetadataService() {
       try {
         QueryMetadataService queryMetadataService = (QueryMetadataService)beanFactory.getBean("queryMetadataService");
-        queryMetadataService.getInstrumentMetaData("1B4FBBDD-9FD4-5F94-E044-0003BA0B1A09");
+        queryMetadataService.getInstrumentMetaData(formIdSeq);
       }
       catch(Exception e){
           e.printStackTrace();
@@ -462,7 +466,7 @@ public class TestServices extends TestCase {
     public void testQueryInstrumentMetadata() {
       try {
         QueryMetadataService queryMetadataService = (QueryMetadataService)beanFactory.getBean("queryMetadataService");
-        queryMetadataService.getInstrumentMetaData("1B4FBBDD-9FD4-5F94-E044-0003BA0B1A09");
+        queryMetadataService.getInstrumentMetaData(formIdSeq);
       }
       catch(Exception e){
           e.printStackTrace();
@@ -473,7 +477,7 @@ public class TestServices extends TestCase {
     public void testQueryGlobalDefinitionMetadata() {
       try {
         QueryMetadataService queryMetadataService = (QueryMetadataService)beanFactory.getBean("queryMetadataService");
-        queryMetadataService.getGlobalDefinitions("1B4FBBDD-9FD4-5F94-E044-0003BA0B1A09");
+        queryMetadataService.getGlobalDefinitions(formIdSeq);
       }
       catch(Exception e){
           e.printStackTrace();
@@ -485,7 +489,8 @@ public class TestServices extends TestCase {
         try {
             EDCIDAOFactory daoFactory = (EDCIDAOFactory)beanFactory.getBean("daoFactory");
             InstrumentDAO instrumentDAO = daoFactory.getInstrumentDAO();
-            instrumentDAO.storeInstrumentHL7Message("1B4FBBDD-9FD4-5F94-E044-0003BA0B1A09","message", new Date(),"user");
+            String rfIdSeq = instrumentDAO.storeInstrumentHL7Message(formIdSeq,testInstrumentMessage, new Date(),"user");
+            System.out.println("Reference Document idSeq ->"+rfIdSeq);
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -497,7 +502,7 @@ public class TestServices extends TestCase {
         try {
             EDCIDAOFactory daoFactory = (EDCIDAOFactory)beanFactory.getBean("daoFactory");
             InstrumentDAO instrumentDAO = daoFactory.getInstrumentDAO();
-            ReferenceDocumentAttachment rda = instrumentDAO.queryInstrumentHL7Message("1D847B70-71DC-7213-E044-0003BA0B1A09");
+            ReferenceDocumentAttachment rda = instrumentDAO.queryInstrumentHL7Message(instrumentRefDocIdSeq);
             System.out.println(rda.toString());
         }
         catch(Exception e) {
@@ -510,7 +515,7 @@ public class TestServices extends TestCase {
          try {
              EDCIDAOFactory daoFactory = (EDCIDAOFactory)beanFactory.getBean("daoFactory");
              InstrumentDAO instrumentDAO = daoFactory.getInstrumentDAO();
-             Collection refDocs =instrumentDAO.queryFormMessageReferenceDocuments("1B4FBBDD-9FD4-5F94-E044-0003BA0B1A09");
+             Collection refDocs =instrumentDAO.queryFormMessageReferenceDocuments(formIdSeq);
              for (Iterator i= refDocs.iterator(); i.hasNext();) {
                  ReferenceDocument rd = (ReferenceDocument)i.next();
                  System.out.println("Id -> "+rd.getId());
@@ -527,7 +532,7 @@ public class TestServices extends TestCase {
     public void testGenerateDCIDefMessage() {
       try {
         GenerateMessageService generateMessageService = (GenerateMessageService)beanFactory.getBean("generateMessageService");
-        String message = generateMessageService.generateMessage("1B4FBBDD-9FD4-5F94-E044-0003BA0B1A09","user", generateMessageService.GLOBAL_DEFINITIONS_MIF);
+        String message = generateMessageService.generateMessage(formIdSeq,"user", generateMessageService.GLOBAL_DEFINITIONS_MIF);
         System.out.println("Message :\n"+message);
       }
       catch(Exception e){
@@ -540,7 +545,7 @@ public class TestServices extends TestCase {
         try {
             EDCIDAOFactory daoFactory = (EDCIDAOFactory)beanFactory.getBean("daoFactory");
             GlobalDefinitionsDAO gdDAO = daoFactory.getGlobalDefinitionsDAO();
-            String rdIdSeq = gdDAO.storeGlobalDefinitionsMIFMessage("1B4FBBDD-9FD4-5F94-E044-0003BA0B1A09",testInstrumentMessage,new Date(),"user");
+            String rdIdSeq = gdDAO.storeGlobalDefinitionsMIFMessage(formIdSeq,testInstrumentMessage,new Date(),"user");
             System.out.println("Reference Document idseq ->"+rdIdSeq);
         }
         catch(Exception e) {
@@ -552,7 +557,7 @@ public class TestServices extends TestCase {
     public void testGenerateDCIHL7Message() {
       try {
         GenerateMessageService generateMessageService = (GenerateMessageService)beanFactory.getBean("generateMessageService");
-        String message = generateMessageService.generateMessage("1B4FBBDD-9FD4-5F94-E044-0003BA0B1A09","user", generateMessageService.EDCI);
+        String message = generateMessageService.generateMessage(formIdSeq,"user", generateMessageService.EDCI);
         System.out.println("Message :\n"+message);
       }
       catch(Exception e){
