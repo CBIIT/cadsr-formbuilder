@@ -18,6 +18,9 @@ public class TestGenerateInstrumentHL7 extends TestServices {
     } 
     
     public static void main(String args[]) {
+      if (args.length >0) {
+          formIdSeq = args[0];
+      }
       junit.textui.TestRunner.run(suite());
     }       
     
