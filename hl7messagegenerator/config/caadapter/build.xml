@@ -1,0 +1,90 @@
+<project name="hl7sdk-dist" default="usage" basedir=".">
+
+    <!-- HL7SDK directory variables. -->
+    <property file="build.properties" />
+    <property name="lib" location="lib"/>
+    <property name="src" location="src"/>
+    <property name="configclassdir" location="src/gov/nih/nci/hl7/util" />
+    <property name="test" location="src/test"/>
+    <property name="build" location="build"/>
+    <property name="dist" location="dist"/>    
+
+    <property environment="env"/>
+
+    <!-- Other necessary variables. -->
+    <property name="java_policy_file" value="./java.policy"/>
+    <property name="java_logging_file" value="./logging.properties"/>
+
+    <!-- Set the classpath -->
+    <path id="project.class.path">
+        <pathelement location="${build}"/>
+        <!--<pathelement location="${mif}"/>-->
+        <fileset dir="${basedir}">
+            <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${lib}">
+            <include name="**/*.jar"/>
+            <include name="**/*.zip"/>
+        </fileset>
+    </path>
+
+    <!-- For debugging purposes.-->
+    <property name="echo.classpath" refid="project.class.path"/>
+
+ 
+
+    <!-- Delete all previous traces of a build.-->
+    <target name="clean">
+        <delete dir="${build}"/>
+        <delete dir="${dist}"/>
+    </target>
+    
+   
+
+    <target name="compile" >
+        <mkdir dir="${build}"/>
+        
+        <copy todir="${build}">
+            <fileset dir=".">
+                <include name="*.properties"/>
+            </fileset>
+            <fileset dir="${etc}">
+                <include name="*.xml"/>
+                <include name="*.properties"/>
+            </fileset>
+        </copy>
+        <copy  file="Config.java" tofile="${configclassdir}/Config.java">
+            <filterset>
+                 <filter token="caAdapterFilePath" value="${caAdapterFilesLocation}" />
+            </filterset>
+        </copy>
+        <javac
+            srcdir="${src}"
+            destdir="${build}"
+            classpathref="project.class.path"
+            fork="yes"
+            debug="on">
+        </javac>
+
+    </target>
+    
+    <target name="dist" depends="compile">
+         <mkdir dir="${dist}"/>
+             <jar destfile="${dist}/caadapter.jar">
+	       <fileset dir="${build}">
+               </fileset>
+             </jar>
+    </target>
+
+    <target name="launchui" description="launches the GUI">
+        <java fork="yes" classname="gov.nih.nci.hl7.ui.MainFrame"
+            failonerror="true"
+            classpathref="project.class.path">
+        <sysproperty key="java.util.logging.config.file"
+            value="${java_logging_file}"/>
+        <sysproperty key="java.security.policy"
+            value="${java_policy_file}"/>
+        </java>
+    </target>
+
+</project>
