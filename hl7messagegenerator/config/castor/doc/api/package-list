@@ -1,0 +1,8 @@
+org.exolab.castor.builder
+org.exolab.castor.dsml
+org.exolab.castor.jdo
+org.exolab.castor.jdo.util
+org.exolab.castor.mapping
+org.exolab.castor.types
+org.exolab.castor.util
+org.exolab.castor.xml
