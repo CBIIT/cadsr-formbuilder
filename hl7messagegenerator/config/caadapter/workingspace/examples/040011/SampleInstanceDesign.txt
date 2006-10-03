@@ -1,0 +1,1556 @@
+INVESTEVN.id.root => 2.16.840.1.113883.19.240
+INVESTEVN.id.extension => 123456-7
+INVESTEVN.id.assigningAuthorityName => James Doe Memorial Hospital
+
+INVESTEVN.code.code => CT
+INVESTEVN.code.codeSystem => 2.16.840.1.113883.11.19622
+INVESTEVN.code.codeSystemName => ActCode.IndividualCaseSafetyReportType
+INVESTEVN.code.displayName => clinical trial
+
+INVESTEVN.text.inlineText => James Doe Memorial Hospital Investigation Event Test for Clinical Trial
+
+INVESTEVN.statusCode.code => normal  
+INVESTEVN.statusCode.codeSystem => 2.16.840.1.113883.5.14
+INVESTEVN.statusCode.codeSystemName => ActStatus
+INVESTEVN.statusCode.displayName => normal
+
+INVESTEVN.activityTime.low_value => 200510121
+#INVESTEVN.activityTime.high_value => 200510124
+
+INVESTEVN.availabilityTime.value => 20051012101010
+
+pert3.contextControlCode.code => OP
+pert3.contextControlCode.displayName => "overriding, propagating"
+pert3.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+pert3.contextControlCode.codeSystemName => ContextControl 
+
+pert3.contextConductionInd.value => false
+
+pert3.caseSeriousness.code.code => CSER
+pert3.caseSeriousness.code.codeSystem => 2.16.840.1.113883.11.13953
+pert3.caseSeriousness.code.codeSystemName => ActCode.ObservationType 
+pert3.caseSeriousness.code.displayName => ""
+
+pert3.caseSeriousness.value.code => nomal
+pert3.caseSeriousness.value.codeSystem => 2.16.840.1.113883.11.19626
+pert3.caseSeriousness.value.codeSystemName => ObservationValue.CaseSeriousnessCriteria 
+pert3.caseSeriousness.value.displayName => normal
+
+directTarget.admntrdDrug040004.classCode.code => PRSV
+directTarget.admntrdDrug040004.classCode.codeSystem => 2.16.840.1.113883.11.10429
+directTarget.admntrdDrug040004.classCode.codeSystemName => RoleClassPartitive
+directTarget.admntrdDrug040004.classCode.displayName => preservative
+
+directTarget.admntrdDrug040004.subjectOf.approval.id.root => 2.16.840.1.113883.3.26
+directTarget.admntrdDrug040004.subjectOf.approval.id.extension => 304-1043-977
+directTarget.admntrdDrug040004.subjectOf.approval.id.assigningAuthorityName => NCI 
+
+directTarget.admntrdDrug040004.subjectOf.approval.effectiveTime.lowClosed => true
+directTarget.admntrdDrug040004.subjectOf.approval.effectiveTime.low_value => 20051101
+
+directTarget.admntrdDrug040004.subjectOf.approval.author.trtrialAuthrty.territory.code.code => SYSTM  
+directTarget.admntrdDrug040004.subjectOf.approval.author.trtrialAuthrty.territory.code.codeSystem => 2.16.840.1.113883.11.16040
+directTarget.admntrdDrug040004.subjectOf.approval.author.trtrialAuthrty.territory.code.codeSystemName => EntityCode 
+directTarget.admntrdDrug040004.subjectOf.approval.author.trtrialAuthrty.territory.code.displayName => system
+
+#directTarget.admntrdDrug040004.subjectOf.approval.author.trtrialAuthrty.territory.name.use => L
+#directTarget.admntrdDrug040004.subjectOf.approval.author.trtrialAuthrty.territory.name.inlineText => USA
+
+directTarget.admntrdDrug040004.subjectOf.approval.author.trtrialAuthrty.governingAgency.id.root => 2.16.840.1.113883.3.26
+directTarget.admntrdDrug040004.subjectOf.approval.author.trtrialAuthrty.governingAgency.id.extension => 304-1043-966
+directTarget.admntrdDrug040004.subjectOf.approval.author.trtrialAuthrty.governingAgency.id.assigningAuthorityName => NCI 
+
+directTarget.admntrdDrug040004.subjectOf.approval.author.trtrialAuthrty.governingAgency.name.use => L
+directTarget.admntrdDrug040004.subjectOf.approval.author.trtrialAuthrty.governingAgency.name.inlineText => Human and Health Service
+directTarget.admntrdDrug040004.subjectOf.approval.author.trtrialAuthrty.governingAgency.name.suffix => Dept.
+
+directTarget.admntrdDrug040004.subjectOf.approval.holder.aRole.playingManufacturer.id.root => 2.16.840.1.113883.3.26
+directTarget.admntrdDrug040004.subjectOf.approval.holder.aRole.playingManufacturer.id.extension => 304-1043-955
+directTarget.admntrdDrug040004.subjectOf.approval.holder.aRole.playingManufacturer.id.assigningAuthorityName => NCI
+
+directTarget.admntrdDrug040004.subjectOf.approval.holder.aRole.playingManufacturer.code.code => SYSTM  
+directTarget.admntrdDrug040004.subjectOf.approval.holder.aRole.playingManufacturer.code.codeSystem => 2.16.840.1.113883.11.16040
+directTarget.admntrdDrug040004.subjectOf.approval.holder.aRole.playingManufacturer.code.codeSystemName => EntityCode 
+directTarget.admntrdDrug040004.subjectOf.approval.holder.aRole.playingManufacturer.code.displayName => system
+
+directTarget.admntrdDrug040004.subjectOf.approval.holder.aRole.playingManufacturer.name.use => L
+directTarget.admntrdDrug040004.subjectOf.approval.holder.aRole.playingManufacturer.name.inlineText => TopTel
+directTarget.admntrdDrug040004.subjectOf.approval.holder.aRole.playingManufacturer.name.suffix => Co. LTD
+
+directTarget.admntrdDrug040004.subjectOf.approval.holder.aRole.playingManufacturer.telecom.value =>  13014517799
+directTarget.admntrdDrug040004.subjectOf.approval.holder.aRole.playingManufacturer.telecom.use => HP
+
+directTarget.admntrdDrug040004.subjectOf.approval.holder.aRole.playingManufacturer.addr.use => PHYS
+directTarget.admntrdDrug040004.subjectOf.approval.holder.aRole.playingManufacturer.addr.county_in => Montgomery
+directTarget.admntrdDrug040004.subjectOf.approval.holder.aRole.playingManufacturer.addr.postalCode_in => 20852
+directTarget.admntrdDrug040004.subjectOf.approval.holder.aRole.playingManufacturer.addr.streetName_in => Fifth Street
+directTarget.admntrdDrug040004.subjectOf.approval.holder.aRole.playingManufacturer.addr.country_in => Unites States
+directTarget.admntrdDrug040004.subjectOf.approval.holder.aRole.playingManufacturer.addr.state_in => MD
+directTarget.admntrdDrug040004.subjectOf.approval.holder.aRole.playingManufacturer.addr.streetAddressLine_in => 12543
+directTarget.admntrdDrug040004.subjectOf.approval.holder.aRole.playingManufacturer.addr.additionalLocator_in => 705
+directTarget.admntrdDrug040004.subjectOf.approval.holder.aRole.playingManufacturer.addr.city_in => Rockville
+
+directTarget.admntrdDrug040004.partMedication.determinerCode.code => INSTANCE
+directTarget.admntrdDrug040004.partMedication.determinerCode.displayName => specific
+directTarget.admntrdDrug040004.partMedication.determinerCode.codeSystem => 2.16.840.1.113883.11.10878
+directTarget.admntrdDrug040004.partMedication.determinerCode.codeSystemName => EntityDeterminer 
+
+directTarget.admntrdDrug040004.partMedication.code.code => VCCNE
+directTarget.admntrdDrug040004.partMedication.code.codeSystem => 2.16.840.1.113883.11.19667
+directTarget.admntrdDrug040004.partMedication.code.codeSystemName => EntityCode.x_AdministeredSubstance
+directTarget.admntrdDrug040004.partMedication.code.displayName => Vaccine
+
+directTarget.admntrdDrug040004.partMedication.name.use => L
+directTarget.admntrdDrug040004.partMedication.name.inlineText => Triceratomicin
+directTarget.admntrdDrug040004.partMedication.name.suffix => Solution
+
+directTarget.admntrdDrug040004.partMedication.formCode.code => AER
+directTarget.admntrdDrug040004.partMedication.formCode.displayName => Aerosol
+directTarget.admntrdDrug040004.partMedication.formCode.codeSystem => 2.16.840.1.113883.11.16048
+directTarget.admntrdDrug040004.partMedication.formCode.codeSystemName => MaterialForm 
+
+directTarget.admntrdDrug040004.partMedication.lotNumberText.inlineText => RE004-34444-F
+
+directTarget.admntrdDrug040004.partMedication.expirationTime.lowClosed => true
+directTarget.admntrdDrug040004.partMedication.expirationTime.low_value => 20071101
+
+authorOrPerformer.typeCode.code => PRF
+authorOrPerformer.typeCode.displayName => performer
+authorOrPerformer.typeCode.codeSystem => 2.16.840.1.113883.11.19080
+authorOrPerformer.typeCode.codeSystemName => ParticipationType.x_ParticipationAuthorPerformer 
+
+authorOrPerformer.contextControlCode.code => OP
+authorOrPerformer.contextControlCode.displayName => "overriding, propagating"
+authorOrPerformer.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+authorOrPerformer.contextControlCode.codeSystemName => ContextControl 
+
+authorOrPerformer.assignedEntity.code.code => ORG
+authorOrPerformer.assignedEntity.code.codeSystem => 2.16.840.1.113883.11.19381
+authorOrPerformer.assignedEntity.code.codeSystemName => RoleCode.x_AdverseEventReporterQualificationRoleCode
+authorOrPerformer.assignedEntity.code.displayName => organizational contact
+
+authorOrPerformer.assignedEntity.representedScopingOrganization.code.code => HOSP
+authorOrPerformer.assignedEntity.representedScopingOrganization.code.codeSystem => 2.16.840.1.113883.5.1060
+authorOrPerformer.assignedEntity.representedScopingOrganization.code.codeSystemName => EntityCode
+authorOrPerformer.assignedEntity.representedScopingOrganization.code.displayName => HOSPITAL
+
+authorOrPerformer.assignedEntity.representedScopingOrganization.name.use => L
+authorOrPerformer.assignedEntity.representedScopingOrganization.name.inlineText => First Love Hospital
+authorOrPerformer.assignedEntity.representedScopingOrganization.name.suffix => Inc.
+
+authorOrPerformer.assignedEntity.representedScopingOrganization.addr.use => PHYS
+authorOrPerformer.assignedEntity.representedScopingOrganization.addr.county_in => Montgomery
+authorOrPerformer.assignedEntity.representedScopingOrganization.addr.postalCode_in => 20852
+authorOrPerformer.assignedEntity.representedScopingOrganization.addr.streetName_in => Second Street
+authorOrPerformer.assignedEntity.representedScopingOrganization.addr.country_in => Unites States
+authorOrPerformer.assignedEntity.representedScopingOrganization.addr.state_in => MD
+authorOrPerformer.assignedEntity.representedScopingOrganization.addr.streetAddressLine_in => 12543
+authorOrPerformer.assignedEntity.representedScopingOrganization.addr.additionalLocator_in => 705
+authorOrPerformer.assignedEntity.representedScopingOrganization.addr.city_in => Rockville
+
+authorOrPerformer.assignedEntity.assignedOrganization.id.root => 2.16.840.1.113883.3.26
+authorOrPerformer.assignedEntity.assignedOrganization.id.extension => 304-1043-114
+authorOrPerformer.assignedEntity.assignedOrganization.id.assigningAuthorityName => NCI 
+
+authorOrPerformer.assignedEntity.assignedOrganization.code.code => RELIG
+authorOrPerformer.assignedEntity.assignedOrganization.code.codeSystem => 2.16.840.1.113883.11.19624
+authorOrPerformer.assignedEntity.assignedOrganization.code.codeSystemName => EntityCode.IndividualCaseSafetyReportSenderType
+authorOrPerformer.assignedEntity.assignedOrganization.code.displayName => religious institution
+
+authorOrPerformer.assignedEntity.assignedOrganization.name.use => L
+authorOrPerformer.assignedEntity.assignedOrganization.name.inlineText => First Love Hospital
+authorOrPerformer.assignedEntity.assignedOrganization.name.suffix => Inc.
+
+authorOrPerformer.assignedEntity.assignedOrganization.telecom.value =>  13014516369
+authorOrPerformer.assignedEntity.assignedOrganization.telecom.use => HP
+
+authorOrPerformer.assignedEntity.assignedOrganization.addr.use => PHYS
+authorOrPerformer.assignedEntity.assignedOrganization.addr.county_in => Montgomery
+authorOrPerformer.assignedEntity.assignedOrganization.addr.postalCode_in => 20852
+authorOrPerformer.assignedEntity.assignedOrganization.addr.streetName_in => Third Street
+authorOrPerformer.assignedEntity.assignedOrganization.addr.country_in => Unites States
+authorOrPerformer.assignedEntity.assignedOrganization.addr.state_in => MD
+authorOrPerformer.assignedEntity.assignedOrganization.addr.streetAddressLine_in => 12543
+authorOrPerformer.assignedEntity.assignedOrganization.addr.additionalLocator_in => 705
+authorOrPerformer.assignedEntity.assignedOrganization.addr.city_in => Rockville
+ 
+trigger.contextControlCode.code => OP
+trigger.contextControlCode.displayName => "overriding, propagating"
+trigger.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+trigger.contextControlCode.codeSystemName => ContextControl 
+
+trigger.contextConductionInd.value => false
+
+trigger.priorityNumber.value => 2
+
+trigger.reaction.code.code => FDAIMPRINTCD
+trigger.reaction.code.codeSystem => 2.16.840.1.113883.11.13953
+trigger.reaction.code.codeSystemName => ActCode.ObservationType 
+trigger.reaction.code.displayName => imprint code
+
+trigger.reaction.text.inlineText => NCI Investigation Event Test - Reaction
+
+trigger.reaction.effectiveTime.value => 20051012101010
+
+trigger.reaction.value.code => V19635 
+trigger.reaction.value.codeSystem => 2.16.840.1.113883.11.19627
+trigger.reaction.value.codeSystemName => ObservationValue.SubjectReaction
+trigger.reaction.value.displayName => ""
+
+trigger.reaction.interpretationCode.code => B 
+trigger.reaction.interpretationCode.codeSystem => 2.16.840.1.113883.5.83
+trigger.reaction.interpretationCode.codeSystemName => ObservationInterpretation
+trigger.reaction.interpretationCode.displayName => better
+
+trigger.reaction.subject.contextControlCode.code => OP
+trigger.reaction.subject.contextControlCode.displayName => "overriding, propagating"
+trigger.reaction.subject.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+trigger.reaction.subject.contextControlCode.codeSystemName => ContextControl 
+
+trigger.reaction.subject.investigativeSubject.id.root => 2.16.840.1.113883.19.491
+trigger.reaction.subject.investigativeSubject.id.extension => 12345-6-7
+trigger.reaction.subject.investigativeSubject.id.assigningAuthorityName => Top-Tel Pharmacy Co. LTD
+
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.name.use => L
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.name.family_in => Doehundred
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.name.given_in => Peter
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.name.suffix_in => F. 
+
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.telecom.value => 13014516369
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.telecom.use => HP
+
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.administrativeGenderCode.code => M
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.administrativeGenderCode.codeSystem => 2.16.840.1.113883.5.1
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.administrativeGenderCode.codeSystemName => AdministrativeGender
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.administrativeGenderCode.displayName => Male
+
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.birthTime.value => 19620312
+
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.deceasedTime.value => 20060314
+
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.addr.use => PHYS
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.addr.county_in => Montgomery
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.addr.postalCode_in => 20852
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.addr.streetName_in => Third Street
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.addr.country_in => Unites States
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.addr.state_in => MD
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.addr.streetAddressLine_in => 12543
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.addr.additionalLocator_in => 705
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.addr.city_in => Rockville
+ 
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.raceCode.code => 2028-9
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.raceCode.codeSystem => 2.16.840.1.113883.11.14914
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.raceCode.codeSystemName => Race
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.raceCode.displayName => Asian
+
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.ethnicGroupCode.code => 2160-0
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.ethnicGroupCode.codeSystem => 2.16.840.1.113883.11.15836
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.ethnicGroupCode.codeSystemName => Ethnicity
+trigger.reaction.subject.investigativeSubject.subjectAffectedPerson.ethnicGroupCode.displayName => Panamanian
+
+trigger.reaction.subject.investigativeSubject.subjectOf.contextControlCode.code => OP
+trigger.reaction.subject.investigativeSubject.subjectOf.contextControlCode.displayName => "overriding, propagating"
+trigger.reaction.subject.investigativeSubject.subjectOf.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+trigger.reaction.subject.investigativeSubject.subjectOf.contextControlCode.codeSystemName => ContextControl
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.moodCode.code => INT
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.moodCode.displayName => intent
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.moodCode.codeSystem => 2.16.840.1.113883.11.16742
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.moodCode.codeSystemName => ActMood.x_ActMoodIntentEvent 
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.id.root => 2.16.840.1.113883.3.26
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.id.extension => 613424-7
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.id.assigningAuthorityName => NCI
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.code.code => HISTMEDLIST
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.code.codeSystem => 2.16.840.1.113883.11.13953
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.code.codeSystemName => ActCode
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.code.displayName => medication history
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.text.inlineText => The title of Investigative Subject - supply
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.statusCode.code => normal  
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.statusCode.codeSystem => 2.16.840.1.113883.5.14
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.statusCode.codeSystemName => ActStatus
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.statusCode.displayName => normal
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.effectiveTime.low_value => 20051012
+#trigger.reaction.subject.investigativeSubject.subjectOf.supply.effectiveTime.high_value => 20051015
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.priorityCode.code => R  
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.priorityCode.codeSystem => 2.16.840.1.113883.11.16866
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.priorityCode.codeSystemName => ActPriority   
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.priorityCode.displayName => routine
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.confidentialityCode.code => N  
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.confidentialityCode.codeSystem => 2.16.840.1.113883.5.25
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.confidentialityCode.codeSystemName => Confidentiality  
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.confidentialityCode.displayName => normal
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.repeatNumber.low_value => 12
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.repeatNumber.high_value => 14
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.quantity.value => 2
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.quantity.unit => [in_i]
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.expectedUseTime.highClosed => true
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.expectedUseTime.lowClosed => true
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.expectedUseTime.low_value => 20051112
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.expectedUseTime.high_value => 20051115
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.product.distributedProduct.distributedManufacturedMaterial.determinerCode.code => INSTANCE
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.product.distributedProduct.distributedManufacturedMaterial.determinerCode.displayName => specific
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.product.distributedProduct.distributedManufacturedMaterial.determinerCode.codeSystem => 2.16.840.1.113883.11.10878
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.product.distributedProduct.distributedManufacturedMaterial.determinerCode.codeSystemName => EntityDeterminer 
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.product.distributedProduct.distributedManufacturedMaterial.code.code => KIT
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.product.distributedProduct.distributedManufacturedMaterial.code.displayName => kit
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.product.distributedProduct.distributedManufacturedMaterial.code.codeSystem => 2.16.840.1.113883.11.16041
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.product.distributedProduct.distributedManufacturedMaterial.code.codeSystemName => MaterialEntityClassType 
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.product.distributedProduct.distributedManufacturedMaterial.desc.inlineText => Material Entity Class Type
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.product.distributedProduct.distributedManufacturedMaterial.formCode.code => AER
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.product.distributedProduct.distributedManufacturedMaterial.formCode.displayName => Aerosol
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.product.distributedProduct.distributedManufacturedMaterial.formCode.codeSystem => 2.16.840.1.113883.19.45
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.product.distributedProduct.distributedManufacturedMaterial.formCode.codeSystemName => MaterialForm 
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.product.distributedProduct.distributedManufacturedMaterial.lotNumberText.inlineText => CKC-34254-F
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.contextControlCode.code => OP
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.contextControlCode.displayName => "overriding, propagating"
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.contextControlCode.codeSystemName => ContextControl
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.awarenessCode.code => F
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.awarenessCode.codeSystem => 2.16.840.1.113883.11.10310
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.awarenessCode.codeSystemName => TargetAwareness
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.awarenessCode.displayName => full awareness
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.id.root => 2.16.840.1.113883.19.3.26
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.id.extension => 276334-7
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.id.assigningAuthorityName => FDA
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.code.code => ORG
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.code.codeSystem => 2.16.840.1.113883.5.111
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.code.codeSystemName => RoleCode
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.code.displayName => organizational contact
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.name.use => L
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.name.family_in => Doetwo
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.name.given_in => Gerald
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.name.suffix_in => S. 
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.telecom.value => 13014516369
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.telecom.use => HP
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.administrativeGenderCode.code => M
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.administrativeGenderCode.codeSystem => 2.16.840.1.113883.5.1
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.administrativeGenderCode.codeSystemName => AdministrativeGender
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.administrativeGenderCode.displayName => Male
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.birthTime.value => 19620312
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.deceasedTime.value => 19620312
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.addr.use => PHYS
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.addr.county_in => Montgomery
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.addr.postalCode_in => 20852
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.addr.streetName_in => Third Street
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.addr.country_in => Unites States
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.addr.state_in => MD
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.addr.streetAddressLine_in => 12543
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.addr.additionalLocator_in => 705
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.addr.city_in => Rockville
+ 
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.raceCode.code => 2028-9
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.raceCode.codeSystem => 2.16.840.1.113883.11.14914
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.raceCode.codeSystemName => Race
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.subject.associatedPerson.relationshipHolder.raceCode.displayName => Asian
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.contextControlCode.code => OP
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.contextControlCode.displayName => "overriding, propagating"
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.contextControlCode.codeSystemName => ContextControl 
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.notetext.inlineText => These Data are just for test...
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.time.value => 20051012101010
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.modeCode.code => FACE
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.modeCode.codeSystem => 2.16.840.1.113883.11.16543
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.modeCode.codeSystemName => ParticipationMode   
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.modeCode.displayName => face-to-face
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.signatureCode.code => S
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.signatureCode.codeSystem => 2.16.840.1.113883.5.89
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.signatureCode.codeSystemName => ParticipationSignature 
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.signatureCode.displayName => signed
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.id.root => 2.16.840.1.113883.3.26
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.id.extension => 304-1043-114
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.id.assigningAuthorityName => NCI 
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.code.code => ORG
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.code.codeSystem => 2.16.840.1.113883.5.111
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.code.codeSystemName => RoleCode
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.code.displayName => organizational contact
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.addr.use => PHYS
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.addr.county_in => Montgomery
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.addr.postalCode_in => 20852
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.addr.streetName_in => Second Street
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.addr.country_in => Unites States
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.addr.state_in => MD
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.addr.streetAddressLine_in => 12543
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.addr.additionalLocator_in => 705
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.addr.city_in => Rockville
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.telecom.value =>  13014516364
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.telecom.use => HP
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.assignedPerson.name.use => L
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.assignedPerson.name.family_in => Doeighty
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.assignedPerson.name.given_in => Conrard
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.assignedPerson.name.suffix_in => D.
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.id.root => 2.16.840.1.113883.19.3.26
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.id.extension => 304-1043-114
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.id.assigningAuthorityName => FDA 
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.code.code => HOSP
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.code.codeSystem => 2.16.840.1.113883.5.1060
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.code.codeSystemName => EntityCode
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.code.displayName => HOSPITAL
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.name.use => L
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.name.inlineText => First Love Hospital
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.name.suffix => Inc.
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.statusCode.code => active
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.statusCode.displayName => active
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.statusCode.codeSystem => 2.16.840.1.113883.11.16005
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.statusCode.codeSystemName => EntityStatus 
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.telecom.value =>  13014516369
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.telecom.use => HP
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.addr.use => PHYS
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.addr.county_in => Montgomery
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.addr.postalCode_in => 20852
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.addr.streetName_in => Third Street
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.addr.country_in => Unites States
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.addr.state_in => MD
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.addr.streetAddressLine_in => 12543
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.addr.additionalLocator_in => 705
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.addr.city_in => Rockville
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.standardIndustryClassCode.code => HOSP
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.standardIndustryClassCode.codeSystem => 2.16.840.1.113883.11.19298
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.standardIndustryClassCode.codeSystemName => OrganizationIndustryClass
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.author.asgndentt090000.reprsntdOrg150000.standardIndustryClassCode.displayName => HOSPITAL
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.pertinentInformation1.contextControlCode.code => OP
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.pertinentInformation1.contextControlCode.displayName => "overriding, propagating"
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.pertinentInformation1.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.pertinentInformation1.contextControlCode.codeSystemName => ContextControl 
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.pertinentInformation1.contextConductionInd.value => false
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.pertinentInformation1.indication.code.code => INTDX  
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.pertinentInformation1.indication.code.codeSystem => 2.16.840.1.113883.11.16226
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.pertinentInformation1.indication.code.codeSystemName => ObservationType 
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.pertinentInformation1.indication.code.displayName => intermediate diagnosis
+
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.pertinentInformation1.indication.value.code => K25.7
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.pertinentInformation1.indication.value.codeSystem => 2.16.840.1.113883.6.3
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.pertinentInformation1.indication.value.codeSystemName => ICD10 
+trigger.reaction.subject.investigativeSubject.subjectOf.supply.pertinentInformation1.indication.value.displayName => Chronic gastric ulcer without hemorrhage or perforation
+
+trigger.reaction.pertinentInformation2.contextControlCode.code => OP
+trigger.reaction.pertinentInformation2.contextControlCode.displayName => "overriding, propagating"
+trigger.reaction.pertinentInformation2.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+trigger.reaction.pertinentInformation2.contextControlCode.codeSystemName => ContextControl 
+
+trigger.reaction.pertinentInformation2.contextConductionInd.value => false
+
+trigger.reaction.pertinentInformation2.reactionEmphasis.code.code => INTDX  
+trigger.reaction.pertinentInformation2.reactionEmphasis.code.codeSystem => 2.16.840.1.113883.11.16226
+trigger.reaction.pertinentInformation2.reactionEmphasis.code.codeSystemName => ObservationType 
+trigger.reaction.pertinentInformation2.reactionEmphasis.code.displayName => intermediate diagnosis
+
+trigger.reaction.pertinentInformation2.reactionEmphasis.value.code => TEMP
+trigger.reaction.pertinentInformation2.reactionEmphasis.value.codeSystem => 2.16.840.1.113883.11.19631
+trigger.reaction.pertinentInformation2.reactionEmphasis.value.codeSystemName => ObservationType.SubjectReactionEmphasis
+trigger.reaction.pertinentInformation2.reactionEmphasis.value.displayName => Temporal value
+
+trigger.reaction.location.contextControlCode.code => OP
+trigger.reaction.location.contextControlCode.displayName => "overriding, propagating"
+trigger.reaction.location.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+trigger.reaction.location.contextControlCode.codeSystemName => ContextControl 
+
+trigger.reaction.location.svcDlvryLoca240001.id.root => 2.16.840.1.113883.3.26
+trigger.reaction.location.svcDlvryLoca240001.id.extension => 304-1043-114
+trigger.reaction.location.svcDlvryLoca240001.id.assigningAuthorityName => NCI 
+
+trigger.reaction.location.svcDlvryLoca240001.code.code => CHR
+trigger.reaction.location.svcDlvryLoca240001.code.codeSystem => 2.16.840.1.113883.11.17660
+trigger.reaction.location.svcDlvryLoca240001.code.codeSystemName => ServiceDeliveryLocationRoleType
+trigger.reaction.location.svcDlvryLoca240001.code.displayName => Chronic Care Facility
+
+trigger.reaction.pertinentInformation1.contextControlCode.code => OP
+trigger.reaction.pertinentInformation1.contextControlCode.displayName => "overriding, propagating"
+trigger.reaction.pertinentInformation1.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+trigger.reaction.pertinentInformation1.contextControlCode.codeSystemName => ContextControl 
+
+trigger.reaction.pertinentInformation1.contextConductionInd.value => false
+
+trigger.reaction.pertinentInformation1.concurrentObservation.code.code => INTDX  
+trigger.reaction.pertinentInformation1.concurrentObservation.code.codeSystem => 2.16.840.1.113883.11.16226
+trigger.reaction.pertinentInformation1.concurrentObservation.code.codeSystemName => ObservationType 
+trigger.reaction.pertinentInformation1.concurrentObservation.code.displayName => intermediate diagnosis
+
+trigger.reaction.pertinentInformation1.concurrentObservation.negationInd.value => false
+
+trigger.reaction.pertinentInformation1.concurrentObservation.text.inlineText => Concurrent Value? I don't know.
+
+trigger.reaction.pertinentInformation1.concurrentObservation.value.inlineText => 64.23 
+
+trigger.reaction.support.contextControlCode.code => OP
+trigger.reaction.support.contextControlCode.displayName => "overriding, propagating"
+trigger.reaction.support.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+trigger.reaction.support.contextControlCode.codeSystemName => ContextControl 
+
+trigger.reaction.support.contextConductionInd.value => true
+
+trigger.reaction.support.pauseQuantity.value => 2
+trigger.reaction.support.pauseQuantity.unit => [in_i]
+
+trigger.reaction.support.substanceAdministrationStub.id.root => 2.16.840.1.113883.3.26
+trigger.reaction.support.substanceAdministrationStub.id.extension => 304-1043-114
+trigger.reaction.support.substanceAdministrationStub.id.assigningAuthorityName => NCI 
+
+trigger.reaction.causeOf.contextControlCode.code => OP
+trigger.reaction.causeOf.contextControlCode.displayName => "overriding, propagating"
+trigger.reaction.causeOf.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+trigger.reaction.causeOf.contextControlCode.codeSystemName => ContextControl 
+
+trigger.reaction.causeOf.contextConductionInd.value => false
+
+trigger.reaction.causeOf.outcome.code.code => INTDX  
+trigger.reaction.causeOf.outcome.code.codeSystem => 2.16.840.1.113883.11.16226
+trigger.reaction.causeOf.outcome.code.codeSystemName => ObservationType 
+trigger.reaction.causeOf.outcome.code.displayName => intermediate diagnosis
+
+trigger.reaction.causeOf.outcome.value.code => include  
+trigger.reaction.causeOf.outcome.value.codeSystem => 2.16.840.1.113883.11.19630
+trigger.reaction.causeOf.outcome.value.codeSystemName => ObservationType.SubjectReactionOutcome
+trigger.reaction.causeOf.outcome.value.displayName => include
+
+pertinentInformation1.contextControlCode.code => OP
+pertinentInformation1.contextControlCode.displayName => "overriding, propagating"
+pertinentInformation1.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+pertinentInformation1.contextControlCode.codeSystemName => ContextControl 
+
+pertinentInformation1.contextConductionInd.value => false
+
+pertinentInformation1.secondaryCaseNotification.id.root => 2.16.840.1.113883.3.26
+pertinentInformation1.secondaryCaseNotification.id.extension => 123456-7
+pertinentInformation1.secondaryCaseNotification.id.assigningAuthorityName => NCI
+
+pertinentInformation1.secondaryCaseNotification.code.code => TIME_RELATIVE
+pertinentInformation1.secondaryCaseNotification.code.codeSystem => 2.16.840.1.113883.11.13953
+pertinentInformation1.secondaryCaseNotification.code.codeSystemName => ActCode.ObservationType 
+pertinentInformation1.secondaryCaseNotification.code.displayName => relative time sequence
+
+pertinentInformation1.secondaryCaseNotification.title.inlineText => Derivation Expression
+
+pertinentInformation1.secondaryCaseNotification.text.inlineText => These Data are just for test...
+
+pertinentInformation1.secondaryCaseNotification.statusCode.code => normal  
+pertinentInformation1.secondaryCaseNotification.statusCode.codeSystem => 2.16.840.1.113883.5.14
+pertinentInformation1.secondaryCaseNotification.statusCode.codeSystemName => ActStatus
+pertinentInformation1.secondaryCaseNotification.statusCode.displayName => normal
+
+pertinentInformation1.secondaryCaseNotification.effectiveTime.high_value => 20051012
+pertinentInformation1.secondaryCaseNotification.effectiveTime.low_value => 20051012
+
+pertinentInformation1.secondaryCaseNotification.receiver.contextControlCode.code => OP
+pertinentInformation1.secondaryCaseNotification.receiver.contextControlCode.displayName => "overriding, propagating"
+pertinentInformation1.secondaryCaseNotification.receiver.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+pertinentInformation1.secondaryCaseNotification.receiver.contextControlCode.codeSystemName => ContextControl 
+
+pertinentInformation1.secondaryCaseNotification.receiver.time.high_value => 20051012
+pertinentInformation1.secondaryCaseNotification.receiver.time.low_value => 20051012
+
+pertinentInformation1.secondaryCaseNotification.receiver.assignedEntity.code.code => ORG
+pertinentInformation1.secondaryCaseNotification.receiver.assignedEntity.code.codeSystem => 2.16.840.1.113883.11.19381
+pertinentInformation1.secondaryCaseNotification.receiver.assignedEntity.code.codeSystemName => RoleCode.x_AdverseEventReporterQualificationRoleCode
+pertinentInformation1.secondaryCaseNotification.receiver.assignedEntity.code.displayName => organizational contact
+
+pertinentInformation1.secondaryCaseNotification.receiver.assignedEntity.assignedPerson.id.root => 2.16.840.1.113883.3.26
+pertinentInformation1.secondaryCaseNotification.receiver.assignedEntity.assignedPerson.id.extension => 304-1043-114
+pertinentInformation1.secondaryCaseNotification.receiver.assignedEntity.assignedPerson.id.assigningAuthorityName => NCI 
+
+pertinentInformation1.secondaryCaseNotification.receiver.assignedEntity.assignedPerson.name.use => L
+pertinentInformation1.secondaryCaseNotification.receiver.assignedEntity.assignedPerson.name.family_in => Doetwo
+pertinentInformation1.secondaryCaseNotification.receiver.assignedEntity.assignedPerson.name.given_in => Gerald
+pertinentInformation1.secondaryCaseNotification.receiver.assignedEntity.assignedPerson.name.suffix_in => S. 
+
+pertinentInformation1.secondaryCaseNotification.receiver.assignedEntity.assignedPerson.telecom.value =>  13014516369
+pertinentInformation1.secondaryCaseNotification.receiver.assignedEntity.assignedPerson.telecom.use => HP
+
+pertinentInformation1.secondaryCaseNotification.receiver.assignedEntity.assignedPerson.addr.use => PHYS
+pertinentInformation1.secondaryCaseNotification.receiver.assignedEntity.assignedPerson.addr.county_in => Montgomery
+pertinentInformation1.secondaryCaseNotification.receiver.assignedEntity.assignedPerson.addr.postalCode_in => 20852
+pertinentInformation1.secondaryCaseNotification.receiver.assignedEntity.assignedPerson.addr.streetName_in => Third Street
+pertinentInformation1.secondaryCaseNotification.receiver.assignedEntity.assignedPerson.addr.country_in => Unites States
+pertinentInformation1.secondaryCaseNotification.receiver.assignedEntity.assignedPerson.addr.state_in => MD
+pertinentInformation1.secondaryCaseNotification.receiver.assignedEntity.assignedPerson.addr.streetAddressLine_in => 12543
+pertinentInformation1.secondaryCaseNotification.receiver.assignedEntity.assignedPerson.addr.additionalLocator_in => 705
+pertinentInformation1.secondaryCaseNotification.receiver.assignedEntity.assignedPerson.addr.city_in => Rockville
+
+pertinentInformation1.secondaryCaseNotification.author.contextControlCode.code => OP
+pertinentInformation1.secondaryCaseNotification.author.contextControlCode.displayName => "overriding, propagating"
+pertinentInformation1.secondaryCaseNotification.author.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+pertinentInformation1.secondaryCaseNotification.author.contextControlCode.codeSystemName => ContextControl 
+
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.code.code => ORG
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.code.codeSystem => 2.16.840.1.113883.11.19381
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.code.codeSystemName => RoleCode.x_AdverseEventReporterQualificationRoleCode
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.code.displayName => organizational contact
+
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.representedScopingOrganization.code.code => HOSP
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.representedScopingOrganization.code.codeSystem => 2.16.840.1.113883.5.1060
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.representedScopingOrganization.code.codeSystemName => EntityCode
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.representedScopingOrganization.code.displayName => HOSPITAL
+
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.representedScopingOrganization.name.use => L
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.representedScopingOrganization.name.inlineText => First Love Hospital
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.representedScopingOrganization.name.suffix => Inc.
+
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.representedScopingOrganization.addr.use => PHYS
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.representedScopingOrganization.addr.county_in => Montgomery
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.representedScopingOrganization.addr.postalCode_in => 20852
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.representedScopingOrganization.addr.streetName_in => Second Street
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.representedScopingOrganization.addr.country_in => Unites States
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.representedScopingOrganization.addr.state_in => MD
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.representedScopingOrganization.addr.streetAddressLine_in => 12543
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.representedScopingOrganization.addr.additionalLocator_in => 705
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.representedScopingOrganization.addr.city_in => Rockville
+
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.assignedPerson.id.root => 2.16.840.1.113883.3.26
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.assignedPerson.id.extension => 304-1043-114
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.assignedPerson.id.assigningAuthorityName => NCI 
+
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.assignedPerson.name.use => L
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.assignedPerson.name.family_in => Doetwo
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.assignedPerson.name.given_in => Gerald
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.assignedPerson.name.suffix_in => S. 
+
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.assignedPerson.telecom.value =>  13014516369
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.assignedPerson.telecom.use => HP
+
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.assignedPerson.addr.use => PHYS
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.assignedPerson.addr.county_in => Montgomery
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.assignedPerson.addr.postalCode_in => 20852
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.assignedPerson.addr.streetName_in => Third Street
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.assignedPerson.addr.country_in => Unites States
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.assignedPerson.addr.state_in => MD
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.assignedPerson.addr.streetAddressLine_in => 12543
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.assignedPerson.addr.additionalLocator_in => 705
+pertinentInformation1.secondaryCaseNotification.author.assignedEntity.assignedPerson.addr.city_in => Rockville
+
+pertinentInformation1.secondaryCaseNotification.documentationOf.contextControlCode.code => OP
+pertinentInformation1.secondaryCaseNotification.documentationOf.contextControlCode.displayName => "overriding, propagating"
+pertinentInformation1.secondaryCaseNotification.documentationOf.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+pertinentInformation1.secondaryCaseNotification.documentationOf.contextControlCode.codeSystemName => ContextControl 
+
+pertinentInformation1.secondaryCaseNotification.documentationOf.contextConductionInd.value => false
+
+pertinentInformation1.secondaryCaseNotification.documentationOf.primarySourceReport.id.root => 2.16.840.1.113883.3.26
+pertinentInformation1.secondaryCaseNotification.documentationOf.primarySourceReport.id.extension => 123456-7
+pertinentInformation1.secondaryCaseNotification.documentationOf.primarySourceReport.id.assigningAuthorityName => NCI
+
+pertinentInformation1.secondaryCaseNotification.documentationOf.primarySourceReport.code.code => TIME_RELATIVE
+pertinentInformation1.secondaryCaseNotification.documentationOf.primarySourceReport.code.codeSystem => 2.16.840.1.113883.11.13953
+pertinentInformation1.secondaryCaseNotification.documentationOf.primarySourceReport.code.codeSystemName => ActCode.ObservationType 
+pertinentInformation1.secondaryCaseNotification.documentationOf.primarySourceReport.code.displayName => relative time sequence
+
+pertinentInformation1.secondaryCaseNotification.documentationOf.primarySourceReport.title.inlineText => Derivation Expression
+
+pertinentInformation1.secondaryCaseNotification.documentationOf.primarySourceReport.text.inlineText => These Data are just for test...
+
+pertinentInformation1.secondaryCaseNotification.documentationOf.primarySourceReport.statusCode.code => normal  
+pertinentInformation1.secondaryCaseNotification.documentationOf.primarySourceReport.statusCode.codeSystem => 2.16.840.1.113883.5.14
+pertinentInformation1.secondaryCaseNotification.documentationOf.primarySourceReport.statusCode.codeSystemName => ActStatus
+pertinentInformation1.secondaryCaseNotification.documentationOf.primarySourceReport.statusCode.displayName => normal
+
+pertinentInformation1.secondaryCaseNotification.documentationOf.primarySourceReport.effectiveTime.high_value => 20051012
+pertinentInformation1.secondaryCaseNotification.documentationOf.primarySourceReport.effectiveTime.low_value => 20051012
+
+pertinentInformation1.secondaryCaseNotification.pertinentInformation.secondaryCaseNotification.id.root => 2.16.840.1.113883.3.26
+pertinentInformation1.secondaryCaseNotification.pertinentInformation.secondaryCaseNotification.id.extension => 123456-7
+pertinentInformation1.secondaryCaseNotification.pertinentInformation.secondaryCaseNotification.id.assigningAuthorityName => NCI
+
+pertinentInformation1.secondaryCaseNotification.pertinentInformation.secondaryCaseNotification.code.code => TIME_RELATIVE
+pertinentInformation1.secondaryCaseNotification.pertinentInformation.secondaryCaseNotification.code.codeSystem => 2.16.840.1.113883.11.13953
+pertinentInformation1.secondaryCaseNotification.pertinentInformation.secondaryCaseNotification.code.codeSystemName => ActCode.ObservationType 
+pertinentInformation1.secondaryCaseNotification.pertinentInformation.secondaryCaseNotification.code.displayName => relative time sequence
+
+pertinentInformation1.secondaryCaseNotification.pertinentInformation.secondaryCaseNotification.title.inlineText => Derivation Expression
+
+pertinentInformation1.secondaryCaseNotification.pertinentInformation.secondaryCaseNotification.text.inlineText => These Data are just for test...
+
+pertinentInformation1.secondaryCaseNotification.pertinentInformation.secondaryCaseNotification.statusCode.code => normal  
+pertinentInformation1.secondaryCaseNotification.pertinentInformation.secondaryCaseNotification.statusCode.codeSystem => 2.16.840.1.113883.5.14
+pertinentInformation1.secondaryCaseNotification.pertinentInformation.secondaryCaseNotification.statusCode.codeSystemName => ActStatus
+pertinentInformation1.secondaryCaseNotification.pertinentInformation.secondaryCaseNotification.statusCode.displayName => normal
+
+pertinentInformation1.secondaryCaseNotification.pertinentInformation.secondaryCaseNotification.effectiveTime.high_value => 20051012
+pertinentInformation1.secondaryCaseNotification.pertinentInformation.secondaryCaseNotification.effectiveTime.low_value => 20051012
+
+pertinentInformation2.contextControlCode.code => OP
+pertinentInformation2.contextControlCode.displayName => "overriding, propagating"
+pertinentInformation2.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+pertinentInformation2.contextControlCode.codeSystemName => ContextControl 
+
+pertinentInformation2.contextConductionInd.value => true
+
+pertinentInformation2.investigationEvent.id.root => 2.16.840.1.113883.3.26
+pertinentInformation2.investigationEvent.id.extension => 123456-7
+pertinentInformation2.investigationEvent.id.assigningAuthorityName => NCI
+
+pertinentInformation2.investigationEvent.code.code => HISTMEDLIST
+pertinentInformation2.investigationEvent.code.codeSystem => 2.16.840.1.113883.11.13953
+pertinentInformation2.investigationEvent.code.codeSystemName => ActCode
+pertinentInformation2.investigationEvent.code.displayName => medication history
+
+
+pertinentInformation4.contextControlCode.code => OP
+pertinentInformation4.contextControlCode.displayName => "overriding, propagating"
+pertinentInformation4.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+pertinentInformation4.contextControlCode.codeSystemName => ContextControl 
+
+pertinentInformation4.contextConductionInd.value => true
+
+pertinentInformation4.document.code.code => vitalSigns
+pertinentInformation4.document.code.codeSystem => 2.16.840.1.113883.11.16492
+pertinentInformation4.document.code.codeSystemName => ActCode.LogicalObservationIdentifierNamesAndCodes
+pertinentInformation4.document.code.displayName => vital signs
+
+pertinentInformation4.document.title.inlineText => Vital Signs
+
+pertinentInformation4.document.text.inlineText => Vital Signs
+
+pertinentInformation4.document.bibliographicDesignationText.inlineText => Vital Signs- biblio-graphic Designation Text
+
+pertainsToXX1.contextControlCode.code => OP
+pertainsToXX1.contextControlCode.displayName => "overriding, propagating"
+pertainsToXX1.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+pertainsToXX1.contextControlCode.codeSystemName => ContextControl 
+
+pertainsToXX1.contextConductionInd.value => true
+
+pertainsToXX1.priorityNumber.value => 3
+
+pertainsToXX1.substanceAdministrationEvent.id.root => 2.16.840.1.113883.19.3.26
+pertainsToXX1.substanceAdministrationEvent.id.extension => 778384-7
+pertainsToXX1.substanceAdministrationEvent.id.assigningAuthorityName => FDA
+
+pertainsToXX1.substanceAdministrationEvent.text.inlineText => NCI Substance Administration Event Test 001
+
+pertainsToXX1.substanceAdministrationEvent.effectiveTime.value => 20051012101010
+
+pertainsToXX1.substanceAdministrationEvent.repeatNumber.low_value => 0
+pertainsToXX1.substanceAdministrationEvent.repeatNumber.high_value => 10
+
+pertainsToXX1.substanceAdministrationEvent.routeCode.code => CHEW
+pertainsToXX1.substanceAdministrationEvent.routeCode.codeSystem => 2.16.840.1.113883.11.14581
+pertainsToXX1.substanceAdministrationEvent.routeCode.codeSystemName => RouteOfAdministration 
+pertainsToXX1.substanceAdministrationEvent.routeCode.displayName => Chew oral
+
+pertainsToXX1.substanceAdministrationEvent.doseQuantity.value => 2
+pertainsToXX1.substanceAdministrationEvent.doseQuantity.unit => [in_i]
+
+pertainsToXX1.substanceAdministrationEvent.subject.investigativeSubject.id.root => 2.16.840.1.113883.19.3.26
+pertainsToXX1.substanceAdministrationEvent.subject.investigativeSubject.id.extension => 747384-7
+pertainsToXX1.substanceAdministrationEvent.subject.investigativeSubject.id.assigningAuthorityName => FDA
+
+pertainsToXX1.substanceAdministrationEvent.pert11.contextControlCode.code => OP
+pertainsToXX1.substanceAdministrationEvent.pert11.contextControlCode.displayName => "overriding, propagating"
+pertainsToXX1.substanceAdministrationEvent.pert11.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+pertainsToXX1.substanceAdministrationEvent.pert11.contextControlCode.codeSystemName => ContextControl 
+
+pertainsToXX1.substanceAdministrationEvent.pert11.contextConductionInd.value => false
+
+pertainsToXX1.substanceAdministrationEvent.pert11.pauseQuantity.value => 2
+pertainsToXX1.substanceAdministrationEvent.pert11.pauseQuantity.unit => [in_i]
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.moodCode.code => EVN
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.moodCode.displayName => event
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.moodCode.codeSystem => 2.16.840.1.113883.11.10196
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.moodCode.codeSystemName => ActMood.x_ActMoodOrdPrmsEvn 
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.id.root => 2.16.840.1.113883.3.26
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.id.extension => 123456-7
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.id.assigningAuthorityName => NCI
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.code.code => TIME_RELATIVE
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.code.codeSystem => 2.16.840.1.113883.11.13953
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.code.codeSystemName => ActCode.ObservationType 
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.code.displayName => relative time sequence
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.derivationExpr.inlineText => Derivation Expression
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.text.inlineText => These Data are just for test...
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.statusCode.code => normal  
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.statusCode.codeSystem => 2.16.840.1.113883.5.14
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.statusCode.codeSystemName => ActStatus
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.statusCode.displayName => normal
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.effectiveTime.value => 20051012
+#pertainsToXX1.substanceAdministrationEvent.pert11.oberv.effectiveTime.low_value => 20051012
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.priorityCode.code => R  
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.priorityCode.codeSystem => 2.16.840.1.113883.11.16866
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.priorityCode.codeSystemName => ActPriority   
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.priorityCode.displayName => routine
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.confidentialityCode.code => N  
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.confidentialityCode.codeSystem => 2.16.840.1.113883.5.25
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.confidentialityCode.codeSystemName => Confidentiality  
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.confidentialityCode.displayName => normal
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.repeatNumber.low_value => 0
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.repeatNumber.high_value => 10
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.uncertaintyCode.code => U  
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.uncertaintyCode.codeSystem => 2.16.840.1.113883.11.16899
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.uncertaintyCode.codeSystemName => ActUncertainty   
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.uncertaintyCode.displayName => stated with uncertainty
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.languageCode.code => en
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.languageCode.displayName => English
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.languageCode.codeSystem => 2.16.840.1.113883.6.121
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.languageCode.codeSystemName => IETF Network Working Group RFC 3066 - Tags for the Identification of Langugages
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.value.value => 365
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.interpretationCode.code => B 
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.interpretationCode.codeSystem => 2.16.840.1.113883.5.83
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.interpretationCode.codeSystemName => ObservationInterpretation
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.interpretationCode.displayName => better
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.methodCode.code => 0033
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.methodCode.codeSystem => 2.16.840.1.113883.5.84
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.methodCode.codeSystemName => ObservationMethod   
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.methodCode.displayName => Chemical method
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.targetSiteCode.code => TID24i
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.targetSiteCode.codeSystem => 2.16.840.1.113883.11.16537
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.targetSiteCode.codeSystemName => ActSite  
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.targetSiteCode.displayName => 24i
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.contextControlCode.code => OP
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.contextControlCode.displayName => "overriding, propagating"
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.contextControlCode.codeSystemName => ContextControl 
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.time.value => 20051012101010
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.modeCode.code => FACE
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.modeCode.codeSystem => 2.16.840.1.113883.11.16543
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.modeCode.codeSystemName => ParticipationMode   
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.modeCode.displayName => face-to-face
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.signatureCode.code => S
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.signatureCode.codeSystem => 2.16.840.1.113883.5.89
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.signatureCode.codeSystemName => ParticipationSignature 
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.signatureCode.displayName => signed
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.asgndentt090000.id.root => 2.16.840.1.113883.3.26
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.asgndentt090000.id.extension => 304-1043-114
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.asgndentt090000.id.assigningAuthorityName => NCI 
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.asgndentt090000.code.code => ORG
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.asgndentt090000.code.codeSystem => 2.16.840.1.113883.5.111
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.asgndentt090000.code.codeSystemName => RoleCode
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.asgndentt090000.code.displayName => organizational contact
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.asgndentt090000.addr.use => PHYS
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.asgndentt090000.addr.county_in => Montgomery
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.asgndentt090000.addr.postalCode_in => 20852
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.asgndentt090000.addr.streetName_in => Second Street
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.asgndentt090000.addr.country_in => Unites States
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.asgndentt090000.addr.state_in => MD
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.asgndentt090000.addr.streetAddressLine_in => 12543
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.asgndentt090000.addr.additionalLocator_in => 705
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.asgndentt090000.addr.city_in => Rockville
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.asgndentt090000.telecom.value =>  13014516364
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.author.asgndentt090000.telecom.use => HP
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.referenceRange.contextControlCode.code => ON
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.referenceRange.contextControlCode.displayName => overriding non-propagating
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.referenceRange.contextControlCode.codeSystem => 2.16.840.1.113883.11.18937
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.referenceRange.contextControlCode.codeSystemName => ContextControlNonPropagating 
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.referenceRange.contextConductionInd.value => true
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.referenceRange.observationCriterion.negationInd.value => false
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.referenceRange.observationCriterion.text.inlineText => Obervation Criterion
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.referenceRange.observationCriterion.value.value => 334
+
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.referenceRange.observationCriterion.interpretationCode.code => N 
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.referenceRange.observationCriterion.interpretationCode.codeSystem => 2.16.840.1.113883.5.83
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.referenceRange.observationCriterion.interpretationCode.codeSystemName => ObservationInterpretation
+pertainsToXX1.substanceAdministrationEvent.pert11.oberv.referenceRange.observationCriterion.interpretationCode.displayName => normal
+
+pertainsToXX1.substanceAdministrationEvent.consumable.contextControlCode.code => OP
+pertainsToXX1.substanceAdministrationEvent.consumable.contextControlCode.displayName => "overriding, propagating"
+pertainsToXX1.substanceAdministrationEvent.consumable.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+pertainsToXX1.substanceAdministrationEvent.consumable.contextControlCode.codeSystemName => ContextControl 
+
+pertainsToXX1.substanceAdministrationEvent.consumable.admntrdDrug040004.classCode.code => PRSV
+pertainsToXX1.substanceAdministrationEvent.consumable.admntrdDrug040004.classCode.codeSystem => 2.16.840.1.113883.11.10429
+pertainsToXX1.substanceAdministrationEvent.consumable.admntrdDrug040004.classCode.codeSystemName => RoleClassPartitive
+pertainsToXX1.substanceAdministrationEvent.consumable.admntrdDrug040004.classCode.displayName => preservative
+
+pertainsToXX1.substanceAdministrationEvent.consumable.admntrdDrug040004.partMedication.determinerCode.code => INSTANCE
+pertainsToXX1.substanceAdministrationEvent.consumable.admntrdDrug040004.partMedication.determinerCode.displayName => specific
+pertainsToXX1.substanceAdministrationEvent.consumable.admntrdDrug040004.partMedication.determinerCode.codeSystem => 2.16.840.1.113883.11.10878
+pertainsToXX1.substanceAdministrationEvent.consumable.admntrdDrug040004.partMedication.determinerCode.codeSystemName => EntityDeterminer 
+
+pertainsToXX1.substanceAdministrationEvent.consumable.admntrdDrug040004.partMedication.code.code => VCCNE
+pertainsToXX1.substanceAdministrationEvent.consumable.admntrdDrug040004.partMedication.code.codeSystem => 2.16.840.1.113883.11.19667
+pertainsToXX1.substanceAdministrationEvent.consumable.admntrdDrug040004.partMedication.code.codeSystemName => EntityCode.x_AdministeredSubstance
+pertainsToXX1.substanceAdministrationEvent.consumable.admntrdDrug040004.partMedication.code.displayName => Vaccine
+
+pertainsToXX1.substanceAdministrationEvent.consumable.admntrdDrug040004.partMedication.name.use => L
+pertainsToXX1.substanceAdministrationEvent.consumable.admntrdDrug040004.partMedication.name.inlineText => Triceratomicin
+pertainsToXX1.substanceAdministrationEvent.consumable.admntrdDrug040004.partMedication.name.suffix => Solution
+
+pertainsToXX1.substanceAdministrationEvent.consumable.admntrdDrug040004.partMedication.formCode.code => AER
+pertainsToXX1.substanceAdministrationEvent.consumable.admntrdDrug040004.partMedication.formCode.displayName => Aerosol
+pertainsToXX1.substanceAdministrationEvent.consumable.admntrdDrug040004.partMedication.formCode.codeSystem => 2.16.840.1.113883.11.16048
+pertainsToXX1.substanceAdministrationEvent.consumable.admntrdDrug040004.partMedication.formCode.codeSystemName => MaterialForm 
+
+pertainsToXX1.substanceAdministrationEvent.consumable.admntrdDrug040004.partMedication.lotNumberText.inlineText => RE004-34444-F
+
+pertainsToXX1.substanceAdministrationEvent.consumable.admntrdDrug040004.partMedication.expirationTime.lowClosed => true
+pertainsToXX1.substanceAdministrationEvent.consumable.admntrdDrug040004.partMedication.expirationTime.low_value => 20071101
+
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.typeCode.code => PRF
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.typeCode.displayName => performer
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.typeCode.codeSystem => 2.16.840.1.113883.11.19080
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.typeCode.codeSystemName => ParticipationType.x_ParticipationAuthorPerformer 
+
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.contextControlCode.code => OP
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.contextControlCode.displayName => "overriding, propagating"
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.contextControlCode.codeSystemName => ContextControl 
+
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.id.root => 2.16.840.1.113883.3.26
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.id.extension => 304-1043-114
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.id.assigningAuthorityName => NCI 
+
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.code.code => ORG
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.code.codeSystem => 2.16.840.1.113883.5.111
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.code.codeSystemName => RoleCode
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.code.displayName => organizational contact
+
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.addr.use => PHYS
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.addr.county_in => Montgomery
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.addr.postalCode_in => 20852
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.addr.streetName_in => Second Street
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.addr.country_in => Unites States
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.addr.state_in => MD
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.addr.streetAddressLine_in => 12543
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.addr.additionalLocator_in => 705
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.addr.city_in => Rockville
+
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.telecom.value =>  13014516364
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.telecom.use => HP
+
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.id.root => 2.16.840.1.113883.3.26
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.id.extension => 304-1043-114
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.id.assigningAuthorityName => NCI 
+
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.code.code => HOSP
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.code.codeSystem => 2.16.840.1.113883.5.1060
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.code.codeSystemName => EntityCode
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.code.displayName => HOSPITAL
+
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.name.use => L
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.name.inlineText => First Love Hospital
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.name.suffix => Inc.
+
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.statusCode.code => active
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.statusCode.displayName => active
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.statusCode.codeSystem => 2.16.840.1.113883.11.16005
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.statusCode.codeSystemName => EntityStatus 
+
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.telecom.value =>  13014516369
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.telecom.use => HP
+
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.addr.use => PHYS
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.addr.county_in => Montgomery
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.addr.postalCode_in => 20852
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.addr.streetName_in => Third Street
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.addr.country_in => Unites States
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.addr.state_in => MD
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.addr.streetAddressLine_in => 12543
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.addr.additionalLocator_in => 705
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.addr.city_in => Rockville
+
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.standardIndustryClassCode.code => HOSP
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.standardIndustryClassCode.codeSystem => 2.16.840.1.113883.11.19298
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.standardIndustryClassCode.codeSystemName => OrganizationIndustryClass
+pertainsToXX1.substanceAdministrationEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.standardIndustryClassCode.displayName => HOSPITAL
+
+pertainsToXX1.substanceAdministrationEvent.location.contextControlCode.code => OP
+pertainsToXX1.substanceAdministrationEvent.location.contextControlCode.displayName => "overriding, propagating"
+pertainsToXX1.substanceAdministrationEvent.location.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+pertainsToXX1.substanceAdministrationEvent.location.contextControlCode.codeSystemName => ContextControl 
+
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.id.root => 2.16.840.1.113883.3.26
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.id.extension => 304-1043-114
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.id.assigningAuthorityName => NCI 
+
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.code.code => CHR
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.code.codeSystem => 2.16.840.1.113883.11.17660
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.code.codeSystemName => ServiceDeliveryLocationRoleType
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.code.displayName => Chronic Care Facility
+
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.addr.use => PHYS
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.addr.county_in => Montgomery
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.addr.postalCode_in => 20852
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.addr.streetName_in => Seventh Street
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.addr.country_in => Unites States
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.addr.state_in => MD
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.addr.streetAddressLine_in => 12543
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.addr.additionalLocator_in => 705
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.addr.city_in => Rockville
+
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.telecom.value =>  13014516369
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.telecom.use => HP
+
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.statusCode.code => active
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.statusCode.displayName => active
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.statusCode.codeSystem => 2.16.840.1.113883.5.1068
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.statusCode.codeSystemName => RoleStatus 
+
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.effectiveTime.highClosed => true 
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.effectiveTime.high_value => 20061012
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.effectiveTime.lowClosed => true 
+pertainsToXX1.substanceAdministrationEvent.location.svcDlvryLoca240000.effectiveTime.low_value => 20051012
+
+
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation2.contextControlCode.code => OP
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation2.contextControlCode.displayName => "overriding, propagating"
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation2.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation2.contextControlCode.codeSystemName => ContextControl 
+
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation2.contextConductionInd.value => false
+
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation2.actionTaken.code.code => INTDX  
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation2.actionTaken.code.codeSystem => 2.16.840.1.113883.11.16226
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation2.actionTaken.code.codeSystemName => ObservationType 
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation2.actionTaken.code.displayName => intermediate diagnosis
+
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation2.actionTaken.value.code => K25.7
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation2.actionTaken.value.codeSystem => 2.16.840.1.113883.6.3
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation2.actionTaken.value.codeSystemName => ICD10 
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation2.actionTaken.value.displayName => Chronic gastric ulcer without hemorrhage or perforation
+
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation4.contextControlCode.code => OP
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation4.contextControlCode.displayName => "overriding, propagating"
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation4.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation4.contextControlCode.codeSystemName => ContextControl 
+
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation4.contextConductionInd.value => false
+
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation4.interventionCharacterization.code.code => INTDX  
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation4.interventionCharacterization.code.codeSystem => 2.16.840.1.113883.11.16226
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation4.interventionCharacterization.code.codeSystemName => ObservationType 
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation4.interventionCharacterization.code.displayName => intermediate diagnosis
+
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation4.interventionCharacterization.value.code => K25.7
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation4.interventionCharacterization.value.codeSystem => 2.16.840.1.113883.6.3
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation4.interventionCharacterization.value.codeSystemName => ICD10 
+pertainsToXX1.substanceAdministrationEvent.pertinentInformation4.interventionCharacterization.value.displayName => Chronic gastric ulcer without hemorrhage or perforation
+
+
+pertainsToXX2.contextControlCode.code => OP
+pertainsToXX2.contextControlCode.displayName => "overriding, propagating"
+pertainsToXX2.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+pertainsToXX2.contextControlCode.codeSystemName => ContextControl 
+
+pertainsToXX2.contextConductionInd.value => true
+
+pertainsToXX2.priorityNumber.value => 3
+
+pertainsToXX2.procedureEvent.id.root => 2.16.840.1.113883.19.34
+pertainsToXX2.procedureEvent.id.extension => 4334-45-7
+pertainsToXX2.procedureEvent.id.assigningAuthorityName => Amenrican Medical Procedure Association
+
+pertainsToXX2.procedureEvent.code.code => OPR
+pertainsToXX2.procedureEvent.code.codeSystem => 2.16.840.1.113883.11.16493
+pertainsToXX2.procedureEvent.code.codeSystemName => ActCode.ExternallyDefinedActCodes 
+pertainsToXX2.procedureEvent.code.displayName => Operating
+
+pertainsToXX2.procedureEvent.text.inlineText => NCI Medical Procedure Event Test 001
+
+pertainsToXX2.procedureEvent.effectiveTime.value => 20051012101010
+
+pertainsToXX2.procedureEvent.subject.investigativeSubject.id.root => 2.16.840.1.113883.19.3.26
+pertainsToXX2.procedureEvent.subject.investigativeSubject.id.extension => 647821-7
+pertainsToXX2.procedureEvent.subject.investigativeSubject.id.assigningAuthorityName => FDA
+
+pertainsToXX2.procedureEvent.pert21.contextControlCode.code => OP
+pertainsToXX2.procedureEvent.pert21.contextControlCode.displayName => "overriding, propagating"
+pertainsToXX2.procedureEvent.pert21.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+pertainsToXX2.procedureEvent.pert21.contextControlCode.codeSystemName => ContextControl 
+
+pertainsToXX2.procedureEvent.pert21.contextConductionInd.value => false
+
+pertainsToXX2.procedureEvent.pert21.pauseQuantity.value => 2
+pertainsToXX2.procedureEvent.pert21.pauseQuantity.unit => [in_i]
+
+pertainsToXX2.procedureEvent.pert21.oberv.moodCode.code => EVN
+pertainsToXX2.procedureEvent.pert21.oberv.moodCode.displayName => event
+pertainsToXX2.procedureEvent.pert21.oberv.moodCode.codeSystem => 2.16.840.1.113883.11.10196
+pertainsToXX2.procedureEvent.pert21.oberv.moodCode.codeSystemName => ActMood.x_ActMoodOrdPrmsEvn 
+
+pertainsToXX2.procedureEvent.pert21.oberv.id.root => 2.16.840.1.113883.3.26
+pertainsToXX2.procedureEvent.pert21.oberv.id.extension => 123456-7
+pertainsToXX2.procedureEvent.pert21.oberv.id.assigningAuthorityName => NCI
+
+pertainsToXX2.procedureEvent.pert21.oberv.code.code => TIME_RELATIVE
+pertainsToXX2.procedureEvent.pert21.oberv.code.codeSystem => 2.16.840.1.113883.11.13953
+pertainsToXX2.procedureEvent.pert21.oberv.code.codeSystemName => ActCode.ObservationType 
+pertainsToXX2.procedureEvent.pert21.oberv.code.displayName => relative time sequence
+
+pertainsToXX2.procedureEvent.pert21.oberv.derivationExpr.inlineText => Derivation Expression
+
+pertainsToXX2.procedureEvent.pert21.oberv.text.inlineText => These Data are just for test...
+
+pertainsToXX2.procedureEvent.pert21.oberv.statusCode.code => normal  
+pertainsToXX2.procedureEvent.pert21.oberv.statusCode.codeSystem => 2.16.840.1.113883.5.14
+pertainsToXX2.procedureEvent.pert21.oberv.statusCode.codeSystemName => ActStatus
+pertainsToXX2.procedureEvent.pert21.oberv.statusCode.displayName => normal
+
+pertainsToXX2.procedureEvent.pert21.oberv.effectiveTime.value => 20051012
+
+pertainsToXX2.procedureEvent.pert21.oberv.priorityCode.code => R  
+pertainsToXX2.procedureEvent.pert21.oberv.priorityCode.codeSystem => 2.16.840.1.113883.11.16866
+pertainsToXX2.procedureEvent.pert21.oberv.priorityCode.codeSystemName => ActPriority   
+pertainsToXX2.procedureEvent.pert21.oberv.priorityCode.displayName => routine
+
+pertainsToXX2.procedureEvent.pert21.oberv.confidentialityCode.code => N  
+pertainsToXX2.procedureEvent.pert21.oberv.confidentialityCode.codeSystem => 2.16.840.1.113883.5.25
+pertainsToXX2.procedureEvent.pert21.oberv.confidentialityCode.codeSystemName => Confidentiality  
+pertainsToXX2.procedureEvent.pert21.oberv.confidentialityCode.displayName => normal
+
+pertainsToXX2.procedureEvent.pert21.oberv.repeatNumber.low_value => 0
+pertainsToXX2.procedureEvent.pert21.oberv.repeatNumber.high_value => 10
+
+pertainsToXX2.procedureEvent.pert21.oberv.uncertaintyCode.code => U  
+pertainsToXX2.procedureEvent.pert21.oberv.uncertaintyCode.codeSystem => 2.16.840.1.113883.11.16899
+pertainsToXX2.procedureEvent.pert21.oberv.uncertaintyCode.codeSystemName => ActUncertainty   
+pertainsToXX2.procedureEvent.pert21.oberv.uncertaintyCode.displayName => stated with uncertainty
+
+pertainsToXX2.procedureEvent.pert21.oberv.languageCode.code => en
+pertainsToXX2.procedureEvent.pert21.oberv.languageCode.displayName => English
+pertainsToXX2.procedureEvent.pert21.oberv.languageCode.codeSystem => 2.16.840.1.113883.6.121
+pertainsToXX2.procedureEvent.pert21.oberv.languageCode.codeSystemName => IETF Network Working Group RFC 3066 - Tags for the Identification of Langugages
+
+pertainsToXX2.procedureEvent.pert21.oberv.value.value => 365
+
+pertainsToXX2.procedureEvent.pert21.oberv.interpretationCode.code => B 
+pertainsToXX2.procedureEvent.pert21.oberv.interpretationCode.codeSystem => 2.16.840.1.113883.5.83
+pertainsToXX2.procedureEvent.pert21.oberv.interpretationCode.codeSystemName => ObservationInterpretation
+pertainsToXX2.procedureEvent.pert21.oberv.interpretationCode.displayName => better
+
+pertainsToXX2.procedureEvent.pert21.oberv.methodCode.code => 0033
+pertainsToXX2.procedureEvent.pert21.oberv.methodCode.codeSystem => 2.16.840.1.113883.5.84
+pertainsToXX2.procedureEvent.pert21.oberv.methodCode.codeSystemName => ObservationMethod   
+pertainsToXX2.procedureEvent.pert21.oberv.methodCode.displayName => Chemical method
+
+pertainsToXX2.procedureEvent.pert21.oberv.targetSiteCode.code => TID24i
+pertainsToXX2.procedureEvent.pert21.oberv.targetSiteCode.codeSystem => 2.16.840.1.113883.11.16537
+pertainsToXX2.procedureEvent.pert21.oberv.targetSiteCode.codeSystemName => ActSite  
+pertainsToXX2.procedureEvent.pert21.oberv.targetSiteCode.displayName => 24i
+
+pertainsToXX2.procedureEvent.pert21.oberv.author.contextControlCode.code => OP
+pertainsToXX2.procedureEvent.pert21.oberv.author.contextControlCode.displayName => "overriding, propagating"
+pertainsToXX2.procedureEvent.pert21.oberv.author.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+pertainsToXX2.procedureEvent.pert21.oberv.author.contextControlCode.codeSystemName => ContextControl 
+
+pertainsToXX2.procedureEvent.pert21.oberv.author.time.value => 20051012101010
+
+pertainsToXX2.procedureEvent.pert21.oberv.author.modeCode.code => FACE
+pertainsToXX2.procedureEvent.pert21.oberv.author.modeCode.codeSystem => 2.16.840.1.113883.11.16543
+pertainsToXX2.procedureEvent.pert21.oberv.author.modeCode.codeSystemName => ParticipationMode   
+pertainsToXX2.procedureEvent.pert21.oberv.author.modeCode.displayName => face-to-face
+
+pertainsToXX2.procedureEvent.pert21.oberv.author.signatureCode.code => S
+pertainsToXX2.procedureEvent.pert21.oberv.author.signatureCode.codeSystem => 2.16.840.1.113883.5.89
+pertainsToXX2.procedureEvent.pert21.oberv.author.signatureCode.codeSystemName => ParticipationSignature 
+pertainsToXX2.procedureEvent.pert21.oberv.author.signatureCode.displayName => signed
+
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.id.root => 2.16.840.1.113883.3.26
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.id.extension => 304-1043-114
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.id.assigningAuthorityName => NCI 
+
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.code.code => ORG
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.code.codeSystem => 2.16.840.1.113883.5.111
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.code.codeSystemName => RoleCode
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.code.displayName => organizational contact
+
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.addr.use => PHYS
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.addr.county_in => Montgomery
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.addr.postalCode_in => 20852
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.addr.streetName_in => Second Street
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.addr.country_in => Unites States
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.addr.state_in => MD
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.addr.streetAddressLine_in => 12543
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.addr.additionalLocator_in => 705
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.addr.city_in => Rockville
+
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.telecom.value =>  13014516364
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.telecom.use => HP
+
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.id.root => 2.16.840.1.113883.3.26
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.id.extension => 304-1043-114
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.id.assigningAuthorityName => NCI 
+
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.code.code => HOSP
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.code.codeSystem => 2.16.840.1.113883.5.1060
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.code.codeSystemName => EntityCode
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.code.displayName => HOSPITAL
+
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.name.use => L
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.name.inlineText => First Love Hospital
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.name.suffix => Inc.
+
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.statusCode.code => active
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.statusCode.displayName => active
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.statusCode.codeSystem => 2.16.840.1.113883.11.16005
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.statusCode.codeSystemName => EntityStatus 
+
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.telecom.value =>  13014516369
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.telecom.use => HP
+
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.addr.use => PHYS
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.addr.county_in => Montgomery
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.addr.postalCode_in => 20852
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.addr.streetName_in => Third Street
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.addr.country_in => Unites States
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.addr.state_in => MD
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.addr.streetAddressLine_in => 12543
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.addr.additionalLocator_in => 705
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.addr.city_in => Rockville
+
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.standardIndustryClassCode.code => HOSP
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.standardIndustryClassCode.codeSystem => 2.16.840.1.113883.11.19298
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.standardIndustryClassCode.codeSystemName => OrganizationIndustryClass
+pertainsToXX2.procedureEvent.pert21.oberv.author.asgndentt090000.reprsntdOrg150000.standardIndustryClassCode.displayName => HOSPITAL
+
+pertainsToXX2.procedureEvent.pert21.oberv.referenceRange.contextControlCode.code => ON
+pertainsToXX2.procedureEvent.pert21.oberv.referenceRange.contextControlCode.displayName => overriding non-propagating
+pertainsToXX2.procedureEvent.pert21.oberv.referenceRange.contextControlCode.codeSystem => 2.16.840.1.113883.11.18937
+pertainsToXX2.procedureEvent.pert21.oberv.referenceRange.contextControlCode.codeSystemName => ContextControlNonPropagating 
+
+pertainsToXX2.procedureEvent.pert21.oberv.referenceRange.contextConductionInd.value => true
+
+pertainsToXX2.procedureEvent.pert21.oberv.referenceRange.observationCriterion.negationInd.value => false
+
+pertainsToXX2.procedureEvent.pert21.oberv.referenceRange.observationCriterion.text.inlineText => Obervation Criterion
+
+pertainsToXX2.procedureEvent.pert21.oberv.referenceRange.observationCriterion.value.value => 334
+
+pertainsToXX2.procedureEvent.pert21.oberv.referenceRange.observationCriterion.interpretationCode.code => N 
+pertainsToXX2.procedureEvent.pert21.oberv.referenceRange.observationCriterion.interpretationCode.codeSystem => 2.16.840.1.113883.5.83
+pertainsToXX2.procedureEvent.pert21.oberv.referenceRange.observationCriterion.interpretationCode.codeSystemName => ObservationInterpretation
+pertainsToXX2.procedureEvent.pert21.oberv.referenceRange.observationCriterion.interpretationCode.displayName => normal
+
+pertainsToXX2.procedureEvent.device.contextControlCode.code => OP
+pertainsToXX2.procedureEvent.device.contextControlCode.displayName => "overriding, propagating"
+pertainsToXX2.procedureEvent.device.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+pertainsToXX2.procedureEvent.device.contextControlCode.codeSystemName => ContextControl 
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.id.root => 2.16.840.1.113883.3.26
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.id.extension => 304-1043-088
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.id.assigningAuthorityName => NCI 
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.id.root => 2.16.840.1.113883.3.26
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.id.extension => 304-1043-099
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.id.assigningAuthorityName => NCI 
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.existenceTime.highClosed => true
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.existenceTime.lowClosed => true 
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.existenceTime.low_value => 20051012
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.existenceTime.high_value => 20051012
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.lotNumberText.inlineText => CKC-34254-F
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.expirationTime.value => 20051012101010
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.id.root => 2.16.840.1.113883.3.26
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.id.extension => 304-1043-899
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.id.assigningAuthorityName => NCI
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.id.root => 2.16.840.1.113883.3.26
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.id.extension => 304-1043-899
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.id.assigningAuthorityName => NCI
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.code.code => SYSTM
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.code.codeSystem => 2.16.840.1.113883.5.1060
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.code.codeSystemName => EntityCode
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.code.displayName => system
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.manufacturerModelName.code => COMPPKG
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.manufacturerModelName.codeSystem => 2.16.840.1.113883.5.1060
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.manufacturerModelName.codeSystemName => EntityCode
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.manufacturerModelName.displayName => Compliance Package
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.asRegulatedProduct.id.root => 2.16.840.1.113883.3.26
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.asRegulatedProduct.id.extension => 304-1043-899
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.asRegulatedProduct.id.assigningAuthorityName => NCI
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.asRegulatedProduct.regulatoryAuthority.name.use => L
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.asRegulatedProduct.regulatoryAuthority.name.inlineText => First Love Hospital
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.asRegulatedProduct.regulatoryAuthority.name.suffix => Inc.
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.asRegulatedProduct.regulatoryAuthority.addr.use => PHYS
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.asRegulatedProduct.regulatoryAuthority.addr.county_in => Montgomery
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.asRegulatedProduct.regulatoryAuthority.addr.postalCode_in => 20852
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.asRegulatedProduct.regulatoryAuthority.addr.streetName_in => Third Street
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.asRegulatedProduct.regulatoryAuthority.addr.country_in => Unites States
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.asRegulatedProduct.regulatoryAuthority.addr.state_in => MD
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.asRegulatedProduct.regulatoryAuthority.addr.streetAddressLine_in => 12543
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.asRegulatedProduct.regulatoryAuthority.addr.additionalLocator_in => 705
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.inventoryItem.manufacturedDeviceModel.asRegulatedProduct.regulatoryAuthority.addr.city_in => Rockville
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.asManufacturedProduct.id.root => 2.16.840.1.113883.3.26
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.asManufacturedProduct.id.extension => 304-1043-899
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.asManufacturedProduct.id.assigningAuthorityName => NCI
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.asManufacturedProduct.manufacturer.code.code => HOSP
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.asManufacturedProduct.manufacturer.code.codeSystem => 2.16.840.1.113883.5.1060
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.asManufacturedProduct.manufacturer.code.codeSystemName => EntityCode
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.asManufacturedProduct.manufacturer.code.displayName => HOSPITAL
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.asManufacturedProduct.manufacturer.name.use => L
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.asManufacturedProduct.manufacturer.name.family_in => Doeten
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.asManufacturedProduct.manufacturer.name.given_in => Sammy
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.asManufacturedProduct.manufacturer.name.suffix_in => S. 
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.asManufacturedProduct.manufacturer.telecom.value =>  13014516369
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.asManufacturedProduct.manufacturer.telecom.use => HP
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.asManufacturedProduct.manufacturer.addr.use => PHYS
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.asManufacturedProduct.manufacturer.addr.county_in => Montgomery
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.asManufacturedProduct.manufacturer.addr.postalCode_in => 20852
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.asManufacturedProduct.manufacturer.addr.streetName_in => Third Street
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.asManufacturedProduct.manufacturer.addr.country_in => Unites States
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.asManufacturedProduct.manufacturer.addr.state_in => MD
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.asManufacturedProduct.manufacturer.addr.streetAddressLine_in => 12543
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.asManufacturedProduct.manufacturer.addr.additionalLocator_in => 705
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.identifiedDevice.asManufacturedProduct.manufacturer.addr.city_in => Rockville
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.assigningDeviceIdentifierIssuer.name.use => L
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.assigningDeviceIdentifierIssuer.name.inlineText => American Medical Device Association
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.assigningDeviceIdentifierIssuer.name.suffix => Inc.
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.id.root => 2.16.840.1.113883.19.3.26
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.id.extension => 304-1043-114
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.id.assigningAuthorityName => FDA 
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.effectiveTime.lowClosed => true
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.effectiveTime.low_value => 20051101
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.author.trtrialAuthrty.territory.code.code => SYSTM  
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.author.trtrialAuthrty.territory.code.codeSystem => 2.16.840.1.113883.11.16040
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.author.trtrialAuthrty.territory.code.codeSystemName => EntityCode 
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.author.trtrialAuthrty.territory.code.displayName => system
+
+#pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.author.trtrialAuthrty.territory.name.use => L
+#pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.author.trtrialAuthrty.territory.name.inlineText => USA
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.author.trtrialAuthrty.governingAgency.id.root => 2.16.840.1.113883.3.26
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.author.trtrialAuthrty.governingAgency.id.extension => 304-1043-966
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.author.trtrialAuthrty.governingAgency.id.assigningAuthorityName => NCI 
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.author.trtrialAuthrty.governingAgency.name.use => L
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.author.trtrialAuthrty.governingAgency.name.inlineText => Human and Health Service
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.author.trtrialAuthrty.governingAgency.name.suffix => Dept.
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.code.code => SYSTM  
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.code.codeSystem => 2.16.840.1.113883.11.16040
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.code.codeSystemName => EntityCode 
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.code.displayName => system
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.name.use => L
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.name.inlineText => TopTel
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.name.suffix => Co. LTD
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.telecom.value =>  13014517799
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.telecom.use => HP
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.addr.use => PHYS
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.addr.county_in => Montgomery
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.addr.postalCode_in => 20852
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.addr.streetName_in => Fifth Street
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.addr.country_in => Unites States
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.addr.state_in => MD
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.addr.streetAddressLine_in => 12543
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.addr.additionalLocator_in => 705
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.addr.city_in => Rockville
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.asAgent.representedManufacturer.code.code => SYSTM  
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.asAgent.representedManufacturer.code.codeSystem => 2.16.840.1.113883.11.16040
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.asAgent.representedManufacturer.code.codeSystemName => EntityCode 
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.asAgent.representedManufacturer.code.displayName => system
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.asAgent.representedManufacturer.name.use => L
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.asAgent.representedManufacturer.name.inlineText => TopTel
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.asAgent.representedManufacturer.name.suffix => Co. LTD
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.asAgent.representedManufacturer.telecom.value =>  13014517799
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.asAgent.representedManufacturer.telecom.use => HP
+
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.asAgent.representedManufacturer.addr.use => PHYS
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.asAgent.representedManufacturer.addr.county_in => Montgomery
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.asAgent.representedManufacturer.addr.postalCode_in => 20852
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.asAgent.representedManufacturer.addr.streetName_in => Fifth Street
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.asAgent.representedManufacturer.addr.country_in => Unites States
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.asAgent.representedManufacturer.addr.state_in => MD
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.asAgent.representedManufacturer.addr.streetAddressLine_in => 12543
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.asAgent.representedManufacturer.addr.additionalLocator_in => 705
+pertainsToXX2.procedureEvent.device.identifiedDevice040005.subjectOf.approval.holder.aRole.playingManufacturer.asAgent.representedManufacturer.addr.city_in => Rockville
+
+pertainsToXX2.procedureEvent.authorOrPerformer.typeCode.code => PRF
+pertainsToXX2.procedureEvent.authorOrPerformer.typeCode.displayName => performer
+pertainsToXX2.procedureEvent.authorOrPerformer.typeCode.codeSystem => 2.16.840.1.113883.11.19080
+pertainsToXX2.procedureEvent.authorOrPerformer.typeCode.codeSystemName => ParticipationType.x_ParticipationAuthorPerformer 
+
+pertainsToXX2.procedureEvent.authorOrPerformer.contextControlCode.code => OP
+pertainsToXX2.procedureEvent.authorOrPerformer.contextControlCode.displayName => "overriding, propagating"
+pertainsToXX2.procedureEvent.authorOrPerformer.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+pertainsToXX2.procedureEvent.authorOrPerformer.contextControlCode.codeSystemName => ContextControl 
+
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.id.root => 2.16.840.1.113883.3.26
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.id.extension => 304-1043-114
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.id.assigningAuthorityName => NCI 
+
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.code.code => ORG
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.code.codeSystem => 2.16.840.1.113883.5.111
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.code.codeSystemName => RoleCode
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.code.displayName => organizational contact
+
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.addr.use => PHYS
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.addr.county_in => Montgomery
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.addr.postalCode_in => 20852
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.addr.streetName_in => Second Street
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.addr.country_in => Unites States
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.addr.state_in => MD
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.addr.streetAddressLine_in => 12543
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.addr.additionalLocator_in => 705
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.addr.city_in => Rockville
+
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.telecom.value =>  13014516364
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.telecom.use => HP
+
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.id.root => 2.16.840.1.113883.3.26
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.id.extension => 304-1043-114
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.id.assigningAuthorityName => NCI 
+
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.code.code => HOSP
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.code.codeSystem => 2.16.840.1.113883.5.1060
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.code.codeSystemName => EntityCode
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.code.displayName => HOSPITAL
+
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.name.use => L
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.name.inlineText => First Love Hospital
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.name.suffix => Inc.
+
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.statusCode.code => active
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.statusCode.displayName => active
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.statusCode.codeSystem => 2.16.840.1.113883.11.16005
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.statusCode.codeSystemName => EntityStatus 
+
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.telecom.value =>  13014516369
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.telecom.use => HP
+
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.addr.use => PHYS
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.addr.county_in => Montgomery
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.addr.postalCode_in => 20852
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.addr.streetName_in => Third Street
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.addr.country_in => Unites States
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.addr.state_in => MD
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.addr.streetAddressLine_in => 12543
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.addr.additionalLocator_in => 705
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.addr.city_in => Rockville
+
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.standardIndustryClassCode.code => HOSP
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.standardIndustryClassCode.codeSystem => 2.16.840.1.113883.11.19298
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.standardIndustryClassCode.codeSystemName => OrganizationIndustryClass
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.standardIndustryClassCode.displayName => HOSPITAL
+
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.contactParty.id.root => 2.16.840.1.113883.3.26
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.contactParty.id.extension => 304-1043-114
+pertainsToXX2.procedureEvent.authorOrPerformer.asgndentt090000.reprsntdOrg150000.contactParty.id.assigningAuthorityName => NCI 
+
+pertainsToXX2.procedureEvent.location.contextControlCode.code => OP
+pertainsToXX2.procedureEvent.location.contextControlCode.displayName => "overriding, propagating"
+pertainsToXX2.procedureEvent.location.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+pertainsToXX2.procedureEvent.location.contextControlCode.codeSystemName => ContextControl 
+
+pertainsToXX2.procedureEvent.location.svcDlvryLoca240001.id.root => 2.16.840.1.113883.19.3.26
+pertainsToXX2.procedureEvent.location.svcDlvryLoca240001.id.extension => 304-1043-114
+pertainsToXX2.procedureEvent.location.svcDlvryLoca240001.id.assigningAuthorityName => FDA 
+
+pertainsToXX2.procedureEvent.location.svcDlvryLoca240001.code.code => CHR
+pertainsToXX2.procedureEvent.location.svcDlvryLoca240001.code.codeSystem => 2.16.840.1.113883.11.17660
+pertainsToXX2.procedureEvent.location.svcDlvryLoca240001.code.codeSystemName => ServiceDeliveryLocationRoleType
+pertainsToXX2.procedureEvent.location.svcDlvryLoca240001.code.displayName => Chronic Care Facility
+
+pertainsToXX2.procedureEvent.pertinentInformation1.contextControlCode.code => OP
+pertainsToXX2.procedureEvent.pertinentInformation1.contextControlCode.displayName => "overriding, propagating"
+pertainsToXX2.procedureEvent.pertinentInformation1.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+pertainsToXX2.procedureEvent.pertinentInformation1.contextControlCode.codeSystemName => ContextControl 
+
+pertainsToXX2.procedureEvent.pertinentInformation1.contextConductionInd.value => false
+
+pertainsToXX2.procedureEvent.pertinentInformation1.actionTaken.code.code => INTDX  
+pertainsToXX2.procedureEvent.pertinentInformation1.actionTaken.code.codeSystem => 2.16.840.1.113883.11.16226
+pertainsToXX2.procedureEvent.pertinentInformation1.actionTaken.code.codeSystemName => ObservationType 
+pertainsToXX2.procedureEvent.pertinentInformation1.actionTaken.code.displayName => intermediate diagnosis
+
+pertainsToXX2.procedureEvent.pertinentInformation1.actionTaken.value.code => K25.7
+pertainsToXX2.procedureEvent.pertinentInformation1.actionTaken.value.codeSystem => 2.16.840.1.113883.6.3
+pertainsToXX2.procedureEvent.pertinentInformation1.actionTaken.value.codeSystemName => ICD10 
+pertainsToXX2.procedureEvent.pertinentInformation1.actionTaken.value.displayName => Chronic gastric ulcer without hemorrhage or perforation
+
+pertainsToXX2.procedureEvent.pertinentInformation3.contextControlCode.code => OP
+pertainsToXX2.procedureEvent.pertinentInformation3.contextControlCode.displayName => "overriding, propagating"
+pertainsToXX2.procedureEvent.pertinentInformation3.contextControlCode.codeSystem => 2.16.840.1.113883.5.1057
+pertainsToXX2.procedureEvent.pertinentInformation3.contextControlCode.codeSystemName => ContextControl 
+
+pertainsToXX2.procedureEvent.pertinentInformation3.contextConductionInd.value => false
+
+pertainsToXX2.procedureEvent.pertinentInformation3.interventionCharacterization.code.code => INTDX  
+pertainsToXX2.procedureEvent.pertinentInformation3.interventionCharacterization.code.codeSystem => 2.16.840.1.113883.11.16226
+pertainsToXX2.procedureEvent.pertinentInformation3.interventionCharacterization.code.codeSystemName => ObservationType 
+pertainsToXX2.procedureEvent.pertinentInformation3.interventionCharacterization.code.displayName => intermediate diagnosis
+
+pertainsToXX2.procedureEvent.pertinentInformation3.interventionCharacterization.value.code => K25.7
+pertainsToXX2.procedureEvent.pertinentInformation3.interventionCharacterization.value.codeSystem => 2.16.840.1.113883.6.3
+pertainsToXX2.procedureEvent.pertinentInformation3.interventionCharacterization.value.codeSystemName => ICD10 
+pertainsToXX2.procedureEvent.pertinentInformation3.interventionCharacterization.value.displayName => Chronic gastric ulcer without hemorrhage or perforation

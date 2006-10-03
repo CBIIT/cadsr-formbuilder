@@ -153,8 +153,33 @@ public class QueryMetadataServiceImpl implements QueryMetadataService
             logger.error("Error quering GlobalDefinitions message for form "+idSeq,e);
             throw new ServiceException("Error quering GlobalDefinitions message for form "+idSeq,e);
         }
-    }    
-
+    }   
+    
+    public String getGlobalDefinitionsMessage(String idSeq, String name) throws ServiceException {
+        try {
+          GlobalDefinitionsDAO globalDefinitionsDAO = daoFactory.getGlobalDefinitionsDAO();
+           ReferenceDocumentAttachment rda = globalDefinitionsDAO.queryGlobalDefinitionsMIFMessage(idSeq, name);
+           return rda.getAttachment();
+        }
+        catch(Exception e) {
+            logger.error("Error quering GlobalDefinitions message for form "+idSeq,e);
+            throw new ServiceException("Error quering GlobalDefinitions message for form "+idSeq,e);
+        }        
+    }
+    
+    
+    public String getInstrumentMessage(String idSeq, String name) throws ServiceException
+    {
+        try {
+         InstrumentDAO instrumentDAO = daoFactory.getInstrumentDAO();
+           ReferenceDocumentAttachment rda = instrumentDAO.queryInstrumentHL7Message(idSeq, name);
+           return rda.getAttachment();
+        }
+        catch(Exception e) {
+            logger.error("Error quering GlobalDefinitions message for form "+idSeq+ " ref doc "+name,e);
+            throw new ServiceException("Error quering GlobalDefinitions message for form "+idSeq+ " ref doc "+name,e);
+        }
+    }
     public void setDaoFactory(EDCIDAOFactory daoFactory) {
         this.daoFactory = daoFactory;
     }

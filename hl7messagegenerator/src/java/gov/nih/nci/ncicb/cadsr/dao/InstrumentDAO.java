@@ -41,6 +41,15 @@ public interface InstrumentDAO {
      */
   public ReferenceDocumentAttachment queryInstrumentHL7Message(String formIdSeq, Date createDate) throws DataAccessException;
   /**
+     * Queries an existing instument HL7 message
+     * @param formIdSeq
+     * @param refDocName
+     * @return
+     * @throws DataAccessException
+     */
+  public ReferenceDocumentAttachment queryInstrumentHL7Message(String formIdSeq,String refDocName) throws DataAccessException;
+   
+  /**
      * 
      * @param rdIdSeq
      * @return ReferenceDocumentAttachment for the HL7 message

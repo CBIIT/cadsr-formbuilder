@@ -2,7 +2,9 @@ package gov.nih.nci.ncicb.cadsr.test;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-
+/**
+ * Test generating an Instrument HL7 message.
+ */
 public class TestGenerateInstrumentHL7 extends TestServices {
     public TestGenerateInstrumentHL7() {
     }

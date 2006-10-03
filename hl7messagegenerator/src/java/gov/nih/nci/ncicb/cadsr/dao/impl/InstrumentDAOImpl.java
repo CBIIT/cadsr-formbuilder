@@ -588,6 +588,35 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
           }
     }
     
+    public ReferenceDocumentAttachment queryInstrumentHL7Message(String formIdSeq,String refDocName) throws DataAccessException{
+        try {
+            if (queryRefDocAttachment == null){
+                queryRefDocAttachment = new QueryRefDocAttachment(dataSource);
+            }
+            ReferenceDocument rd = new ReferenceDocument();
+            rd.setName(refDocName);
+            rd.setType(INSTRUMENT_REF_DOC_TYPE);
+            Form form = new Form();
+            form.setId(formIdSeq);
+            Collection<ReferenceDocument> rds = new ArrayList(1);
+            rds.add(rd);
+            form.setReferenceDocumentCollection(rds);
+            List refDocs = appService.search(ReferenceDocument.class,rd);
+            if (refDocs.size() == 0) {
+                throw new DataAccessException("Instrument Message Reference Document not found for "+formIdSeq+ " ref doc "+refDocName);
+            }
+            ReferenceDocument referenceDocument = (ReferenceDocument)refDocs.get(0);
+            ReferenceDocumentAttachment rda = queryRefDocAttachment.query(getAttachmentName(referenceDocument));
+            rda.setReferenceDocument(referenceDocument);
+            
+            return rda;
+        }
+        catch(Exception e) {
+            logger.error("Error querying ReferenceDocumentAttachment.",e);
+            throw new DataAccessException("Error querying ReferenceDocumentAttachment.",e);
+        }         
+    }
+    
     public ReferenceDocumentAttachment queryInstrumentHL7Message(String rdIdSeq) throws DataAccessException {
         try {
             if (queryRefDocAttachment == null){

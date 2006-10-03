@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<COCT_MT150003.Organization xmlns="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" classCode="ORG">
+   <id root="2.16.840.1.113883.19.4" extension="1111GHHMO"/>
+   <id root="2.16.840.1.113883.19.5" extension="2222"/>
+   <code code="RAD" codeSystem="2.16.840.1.113883.19.2"/>
+   <name>Good Health HMO</name>
+   <name>Good Health Radiology</name>
+   <name>GHHMOR</name>
+   <contactParty classCode="CON">
+      <id root="2.16.840.1.113883.19.1" extension="12345"/>
+      <id root="2.16.840.1.113883.19.2" extension="23456"/>
+      <id root="2.16.840.1.113883.19.3" extension="34567"/>
+      <addr>
+         <postalCode partType="ZIP">20852</postalCode>
+         <state partType="STA">MD</state>
+         <streetAddressLine partType="SAL">123 Main St.Suite 500</streetAddressLine>
+         <city partType="CTY">Rockville</city>
+      </addr>
+      <addr>
+         <postalCode partType="ZIP">20002</postalCode>
+         <state partType="STA">DC</state>
+         <streetAddressLine partType="SAL">456 Washington BlvdSuite 1000</streetAddressLine>
+         <city partType="CTY">Washington</city>
+      </addr>
+      <contactPerson classCode="PSN" determinerCode="INSTANCE">
+         <name>
+            <family partType="FAM">Shang</family>
+            <given partType="GIV">Lee</given>
+         </name>
+      </contactPerson>
+   </contactParty>
+</COCT_MT150003.Organization>

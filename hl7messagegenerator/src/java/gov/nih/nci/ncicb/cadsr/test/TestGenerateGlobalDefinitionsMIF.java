@@ -2,7 +2,9 @@ package gov.nih.nci.ncicb.cadsr.test;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-
+/**
+ *  Test generating GlobalDefinitions MIF message.
+ */
 public class TestGenerateGlobalDefinitionsMIF extends TestServices{
     public TestGenerateGlobalDefinitionsMIF() {
     }

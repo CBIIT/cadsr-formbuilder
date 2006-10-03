@@ -2,7 +2,9 @@ package gov.nih.nci.ncicb.cadsr.test;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-
+/**
+ * Test querying Form ReferenceDocument.
+ */
 public class TestQueryFormReferenceDocuments extends TestServices{
     public TestQueryFormReferenceDocuments() {
     }

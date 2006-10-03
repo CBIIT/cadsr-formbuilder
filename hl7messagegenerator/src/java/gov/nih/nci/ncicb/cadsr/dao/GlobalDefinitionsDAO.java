@@ -42,5 +42,14 @@ public interface GlobalDefinitionsDAO  {
        * @throws DataAccessException
        */
     public ReferenceDocumentAttachment queryGlobalDefinitionsMIFMessage(String rdIdSeq) throws DataAccessException;
+    /**
+     * 
+     * @param formIdSeq
+     * @param referenceDocumentName
+     * @return
+     * @throws DataAccessException
+     */
+    public ReferenceDocumentAttachment queryGlobalDefinitionsMIFMessage(String formIdSeq, String referenceDocumentName) throws DataAccessException;
+    
        
 }

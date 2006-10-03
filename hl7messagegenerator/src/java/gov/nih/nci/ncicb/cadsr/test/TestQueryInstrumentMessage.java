@@ -7,7 +7,9 @@ import gov.nih.nci.ncicb.cadsr.dto.ReferenceDocumentAttachment;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
+/**
+ * Test querying Instrument message.
+ */
 public class TestQueryInstrumentMessage extends TestServices{
     public TestQueryInstrumentMessage() {
     }

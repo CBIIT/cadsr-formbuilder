@@ -72,6 +72,24 @@ public interface QueryMetadataService
      * @throws ServiceException
      */
     public String getGlobalDefinitionsMessage(String idSeq) throws ServiceException;
+    /**
+     * 
+     * @param idSeq formIdSeq
+     * @param name referenceDocument Name
+     * @return
+     * @throws ServiceException
+     */
+    public String getGlobalDefinitionsMessage(String idSeq, String name) throws ServiceException;
+
+    /**
+     * 
+     * @param idSeq  formIdSeq
+     * @param name  referenceDocument Name
+     * @return
+     * @throws ServiceException
+     */
+    public String getInstrumentMessage(String idSeq, String name) throws ServiceException;
+
     
     public void setDaoFactory(EDCIDAOFactory eDCIDAOFactory);
 

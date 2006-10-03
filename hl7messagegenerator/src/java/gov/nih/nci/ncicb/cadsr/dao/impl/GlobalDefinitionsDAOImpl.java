@@ -1,5 +1,6 @@
 package gov.nih.nci.ncicb.cadsr.dao.impl;
 
+import gov.nih.nci.cadsr.domain.Address;
 import gov.nih.nci.cadsr.domain.AdministeredComponent;
 import gov.nih.nci.cadsr.domain.DataElement;
 import gov.nih.nci.cadsr.domain.Designation;
@@ -7,6 +8,8 @@ import gov.nih.nci.cadsr.domain.EnumeratedValueDomain;
 import gov.nih.nci.cadsr.domain.Form;
 import gov.nih.nci.cadsr.domain.Module;
 import gov.nih.nci.cadsr.domain.NonenumeratedValueDomain;
+import gov.nih.nci.cadsr.domain.Organization;
+import gov.nih.nci.cadsr.domain.Person;
 import gov.nih.nci.cadsr.domain.Question;
 import gov.nih.nci.cadsr.domain.ReferenceDocument;
 import gov.nih.nci.cadsr.domain.ValidValue;
@@ -67,6 +70,16 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
               ArrayList<gov.nih.nci.ncicb.cadsr.edci.domain.DataElement> dataElements = new ArrayList<gov.nih.nci.ncicb.cadsr.edci.domain.DataElement>();
               ArrayList<DataElementConcept> dataElementConcepts = new ArrayList<DataElementConcept>();
               ArrayList<ValueDomain> valueDomains = new ArrayList<ValueDomain>();
+              
+              /*
+              Person person = new Person();
+              Collection<Address> addrs = person.getAddressCollection();
+              Organization org = new Organization();
+              org.getAddressCollection();
+              AdministeredComponent ac = new AdministeredComponent();
+              Collection<ReferenceDocument> rds =ac.getReferenceDocumentCollection();
+              for(ReferenceDocument rd:rds){
+              }*/
               
               for (Module module:modules)   {
                   DataElementGroup dataElementGroup = domainObjectFactory.getDataElementGroup();
@@ -477,7 +490,34 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
            }
      }
      
-  
+    public ReferenceDocumentAttachment queryGlobalDefinitionsMIFMessage(String formIdSeq, String referenceDocumentName) throws DataAccessException {
+        try {
+            if (queryRefDocAttachment == null){
+                queryRefDocAttachment = new QueryRefDocAttachment(dataSource);
+            }
+            ReferenceDocument rd = new ReferenceDocument();
+            rd.setName(referenceDocumentName);
+            rd.setType(GLOBALDEFINITIONS_REF_DOC_TYPE);
+            Collection<ReferenceDocument> rds = new ArrayList(1);
+            rds.add(rd);
+            Form form = new Form();
+            form.setReferenceDocumentCollection(rds);
+            List refDocs = appService.search(ReferenceDocument.class,rd);
+            if (refDocs.size() == 0) {
+                throw new DataAccessException("Instrument Message Reference Document not found for "+formIdSeq+ " ref doc "+referenceDocumentName);
+            }
+            ReferenceDocument referenceDocument = (ReferenceDocument)refDocs.get(0);
+            ReferenceDocumentAttachment rda = queryRefDocAttachment.query(getAttachmentName(referenceDocument));
+            rda.setReferenceDocument(referenceDocument);
+            
+            return rda;
+        }
+        catch(Exception e) {
+            logger.error("Error querying ReferenceDocumentAttachment.",e);
+            throw new DataAccessException("Error querying ReferenceDocumentAttachment.",e);
+        }          
+    }
+
     public ReferenceDocumentAttachment queryGlobalDefinitionsMIFMessage(String rdIdSeq) throws DataAccessException {
         try {
             if (queryRefDocAttachment == null){
