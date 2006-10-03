@@ -166,4 +166,12 @@
               <test name="gov.nih.nci.ncicb.cadsr.test.TestStoreInstrumentMessage" />
            </junit>
   </target>
+  
+  <!-- Test get Instrument message -->
+    <target name="testGetInstrumentMessge" depends="dist,caadaptersetup" >
+           <junit haltonerror="on" showoutput="yes"  printsummary="yes">
+              <classpath refid="test.classpath"/>
+              <test name="gov.nih.nci.ncicb.cadsr.test.TestGeteDCIHL7Message" />
+           </junit>
+  </target>  
 </project>

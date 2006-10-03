@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<csvMetadata uuid="8ddb5149-67ed-45ca-818d-54d399bfe91f" version="1.2">
+   <segment name="ORGS" uuid="4091c23c-a399-4cf7-a08a-823b86f2ca1c">
+      <segment name="ORGID" uuid="4d4b320f-20be-4a90-91eb-10141f19d1dc">
+         <field column="1" name="Root" uuid="489fd6c1-11e6-411f-ba30-4eb5e68b3c91"/>
+         <field column="2" name="Extension" uuid="963efdfb-2e01-49f5-8402-b956d0555e66"/>
+      </segment>
+      <segment name="ORGNM" uuid="b1006392-ce15-4bb0-b0a6-a954ffe60616">
+         <field column="1" name="Name" uuid="8ed6f272-fad9-483c-9107-59f68ca0cba7"/>
+      </segment>
+      <segment name="ORGAD" uuid="51dff09b-d465-4459-9d54-e539b972e67d">
+         <field column="1" name="Street_1" uuid="6e85f611-1eae-4d78-959a-e0da5f45db2d"/>
+         <field column="2" name="Street_2" uuid="01481c37-eb56-4952-a7e2-16047c63adcd"/>
+         <field column="3" name="City" uuid="8adf806b-c5e3-4944-b28c-a465ceed75be"/>
+         <field column="4" name="State" uuid="8df56848-725c-499f-97f7-7c8c7c948fe6"/>
+         <field column="5" name="Zip_Code" uuid="36c7951f-4331-4d57-a3c1-ccd14db226b3"/>
+      </segment>
+      <segment name="PERSNM" uuid="06af39c3-39bc-4044-98b0-88fd8875f4f7">
+         <field column="1" name="First_Name" uuid="995c5fdd-65ae-4fe3-ae8c-fb651a215952"/>
+         <field column="2" name="Last_Name" uuid="ca1dc88e-b8a7-4439-96aa-d546089ebd12"/>
+         <field column="3" name="Middle_Initial" uuid="be3e58fc-b69d-4ccf-8ccb-d94ec74f6d8a"/>
+         <field column="4" name="Job_Code" uuid="c62cd56c-b25e-422f-b8e0-bfd1faa05e43"/>
+      </segment>
+      <segment name="PERSID" uuid="f150a834-2dda-4b9f-9bd2-c13d08b3d3bc">
+         <field column="1" name="Root" uuid="532c633b-d276-444f-8053-30db615c8a93"/>
+         <field column="2" name="Extension" uuid="6a23220e-7cd5-4b56-8190-7d93a79214fa"/>
+      </segment>
+      <segment name="PERSAD" uuid="b68f8424-9a98-4557-a6d7-d67428679bf5">
+         <field column="1" name="Street_1" uuid="b05138aa-5f32-46a6-819f-3e8fe38ff987"/>
+         <field column="2" name="Street_2" uuid="7756467a-34a7-4717-b9e8-62163603f017"/>
+         <field column="3" name="City" uuid="083b0a59-f860-4c8b-ae76-3d4f38e42e9a"/>
+         <field column="4" name="State" uuid="bcfeaba6-3516-4f26-ae33-f217ba1eb6fa"/>
+         <field column="5" name="Zip_Code" uuid="404987ce-7b47-445b-9a6e-2baaeb3a579e"/>
+      </segment>
+      <field column="1" name="ORG_CODE" uuid="b81892ec-af24-4299-9406-f316c206b403"/>
+   </segment>
+</csvMetadata>

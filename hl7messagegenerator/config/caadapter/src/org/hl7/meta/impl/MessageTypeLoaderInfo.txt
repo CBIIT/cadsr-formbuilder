@@ -1,0 +1,102 @@
+Meta Classes and members to be populated by messageTypeLoader.
+Peter Hendler
+A list of what has to be done to load a MessageType by a loader with some unresolved questions.
+
+Useful for implementing any type of MessageTypeLoader that will use Skirmantas original meta classes.
+
+Would like a way to link these members to specific places in the MIF file.
+Perhaps a sample MIF file, with annotations next to the values saying where they go in the metaClasses
+described below.  If each slot here has a symbol we could just put the symbol next to the place in the
+MIF file where you find the value.  I'll start each symbol with an astrix.
+
+With this info, I could write the xPath queries to get the values to populate the meta classes.
+
+
+---------------------------------------------------------------------------------------------------
+                                            Symbol to Mark MIF file next to where values can be found.
+MessageType  Loader will do these
+ name String                                *mtn
+ rootclass CloneClass                       *mtrc
+ addCloneClass CloneClass                   *mtcc
+ 
+Feature  Loader will not do these here
+ cardinality Cardinality
+ conformance Conformance
+ constriant String
+ name String
+ mandatory boolean  
+ parent CloneClass  (the clone class where the feature belongs) 
+ RimClass String  (the name of the RIM class where the feature was originally defined)
+ RimPropertyName String  (the property name inside the RIM class. May be the attribute name or the association name)
+ 
+Attribute extends Feature Loader will do these
+ cardinality Cardinality                     *acd
+ conformance Conformance                     *acnf
+ constriant String                           *acst
+ name String                                 *an
+ mandatory boolean                           *am 
+ parent CloneClass                           *ap
+ codeingStrength CodingStrength              *acs
+ Datetype Datatype                           *adt 
+ DefaultValue String                         *adf
+ Domains String[] (where to find this in MIF file?)
+ FixedValues String[]                        *afv
+ RimClass String                             *arc
+ RimPropertyName String                      *arpn
+   
+
+CloneClass  Loader will do these
+ choices String[]  (What is this, and where to find it in MIF file?  How related to ChoiceAssociation?)
+                                             *ccch
+ fullName String  (What is this, and where to find it in MIF file?)
+                                             *ccfb
+ name String                                 *ccn
+ rimClass String                             *ccrc
+ addAssociation Association
+ addAttribute Attribute
+
+Association extends Feature Loader will not do these here
+ metSource MetSource
+
+CloneClassAssociation extends Association  Loader will do these
+ cardinality Cardinality                     *ccacrd
+ conformance Conformance                     *ccacnf
+ constriant String                           *ccacst
+ name String                                 *ccan
+ mandatory boolean                           *ccam 
+ parent CloneClass                           *ccap 
+ RimClass String                             *ccarc
+ RimPropertyName String                      *ccarpn
+ metSource MetSource                         *ccams
+ Prefix String                               *ccapx
+ Target CloneClass                           *ccat
+
+CmetAssociation extends Association  Loader will do these
+ cardinality Cardinality                     *cmacrd
+ conformance Conformance                     *cmacnf
+ constriant String                           *cmacst
+ name String                                 *cman
+ mandatory boolean                           *cmam 
+ parent CloneClass                           *cmap 
+ RimClass String                             *cmarc
+ RimPropertyName String                      *cmarpn
+ metSource MetSource                         *cmams
+ cmetID String                               *cmacmid
+ cmetCache CmetCache (Is there just one shared amoung all CMETS in the MessageType?)
+
+ChoiceAssociation  extends Association  Loader will do these
+ cardinality Cardinality                     *chacrd
+ conformance Conformance                     *chacnf
+ constriant String                           *chacst
+ name String                                 *chan
+ mandatory boolean                           *cham
+ parent CloneClass                           *chap 
+ RimClass String                             *charc
+ RimPropertyName String                      *charpn
+ metSource MetSource                         *chams
+ Target CloneClass  (What is this in case of ChoiceAssociation?)
+                                             *chat
+ addChoice Association                       *chaca
+ 
+
+MetSource (Is this needed?  Why?  To prevent infinite recursion? How do we get this info from MIF file?)

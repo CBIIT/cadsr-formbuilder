@@ -1,0 +1,828 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<InvestigationEvent xmlns="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" classCode="INVSTG" moodCode="EVN">
+   <id root="2.16.840.1.113883.19.240" extension="123456-7" assigningAuthorityName="James Doe Memorial Hospital"/>
+   <code code="CT" displayName="clinical trial" codeSystem="2.16.840.1.113883.11.19622" codeSystemName="ActCode.IndividualCaseSafetyReportType"/>
+   <text representation="TXT" mediaType="text/plain">James Doe Memorial Hospital Investigation Event Test for Clinical Trial</text>
+   <statusCode code="normal"/>
+   <activityTime xsi:type="IVL_TS">
+      <low value="200510121"/>
+   </activityTime>
+   <availabilityTime value="20051012101010"/>
+   <directTarget typeCode="DIR">
+      <administeredDrug classCode="PRSV">
+         <partMedication classCode="MMAT" determinerCode="INSTANCE">
+            <code code="VCCNE" displayName="Vaccine" codeSystem="2.16.840.1.113883.11.19667" codeSystemName="EntityCode.x_AdministeredSubstance"/>
+            <name use="L">Triceratomicin<suffix partType="SFX" representation="TXT" mediaType="text/plain">Solution</suffix>
+            </name>
+            <formCode code="AER" displayName="Aerosol" codeSystem="2.16.840.1.113883.11.16048" codeSystemName="MaterialForm"/>
+            <lotNumberText representation="TXT" mediaType="text/plain">RE004-34444-F</lotNumberText>
+            <expirationTime xsi:type="IVL_TS">
+               <low inclusive="true" value="20071101"/>
+            </expirationTime>
+         </partMedication>
+         <subjectOf typeCode="SBJ">
+            <approval classCode="CNTRCT" moodCode="EVN">
+               <id root="2.16.840.1.113883.3.26" extension="304-1043-977" assigningAuthorityName="NCI"/>
+               <effectiveTime xsi:type="IVL_TS">
+                  <low inclusive="true" value="20051101"/>
+               </effectiveTime>
+               <holder typeCode="HLD">
+                  <aRole classCode="ROL">
+                     <playingManufacturer classCode="ORG" determinerCode="INSTANCE">
+                        <id root="2.16.840.1.113883.3.26" extension="304-1043-955" assigningAuthorityName="NCI"/>
+                        <code code="SYSTM" displayName="system" codeSystem="2.16.840.1.113883.11.16040" codeSystemName="EntityCode"/>
+                        <name use="L">TopTel<suffix partType="SFX" representation="TXT" mediaType="text/plain">Co. LTD</suffix>
+                        </name>
+                        <telecom value="tel:13014517799" use="HP"/>
+                        <addr use="PHYS">
+                           <county representation="TXT" mediaType="text/plain" partType="CPA">Montgomery</county>
+                           <postalCode representation="TXT" mediaType="text/plain" partType="ZIP">20852</postalCode>
+                           <streetName representation="TXT" mediaType="text/plain" partType="STR">Fifth Street</streetName>
+                           <country representation="TXT" mediaType="text/plain" partType="CNT">Unites States</country>
+                           <state representation="TXT" mediaType="text/plain" partType="STA">MD</state>
+                           <streetAddressLine representation="TXT" mediaType="text/plain" partType="SAL">12543</streetAddressLine>
+                           <additionalLocator representation="TXT" mediaType="text/plain" partType="ADL">705</additionalLocator>
+                           <city representation="TXT" mediaType="text/plain" partType="CTY">Rockville</city>
+                        </addr>
+                     </playingManufacturer>
+                  </aRole>
+               </holder>
+               <author typeCode="AUT">
+                  <territorialAuthority classCode="TERR">
+                     <territory classCode="STATE" determinerCode="INSTANCE">
+                        <code code="SYSTM" displayName="system" codeSystem="2.16.840.1.113883.11.16040" codeSystemName="EntityCode"/>
+                     </territory>
+                     <governingAgency classCode="PUB" determinerCode="INSTANCE">
+                        <id root="2.16.840.1.113883.3.26" extension="304-1043-966" assigningAuthorityName="NCI"/>
+                        <name use="L">Human and Health Service<suffix representation="TXT" mediaType="text/plain" partType="SFX">Dept.</suffix>
+                        </name>
+                     </governingAgency>
+                  </territorialAuthority>
+               </author>
+            </approval>
+         </subjectOf>
+      </administeredDrug>
+   </directTarget>
+   <authorOrPerformer typeCode="PRF" contextControlCode="OP">
+      <assignedEntity classCode="ASSIGNED">
+         <code code="ORG" displayName="organizational contact" codeSystem="2.16.840.1.113883.11.19381" codeSystemName="RoleCode.x_AdverseEventReporterQualificationRoleCode"/>
+         <assignedOrganization classCode="ORG" determinerCode="INSTANCE">
+            <id root="2.16.840.1.113883.3.26" extension="304-1043-114" assigningAuthorityName="NCI"/>
+            <code code="RELIG" displayName="religious institution" codeSystem="2.16.840.1.113883.11.19624" codeSystemName="EntityCode.IndividualCaseSafetyReportSenderType"/>
+            <name use="L">First Love Hospital<suffix representation="TXT" mediaType="text/plain" partType="SFX">Inc.</suffix>
+            </name>
+            <telecom value="tel:13014516369" use="HP"/>
+            <addr use="PHYS">
+               <county representation="TXT" mediaType="text/plain" partType="CPA">Montgomery</county>
+               <postalCode representation="TXT" mediaType="text/plain" partType="ZIP">20852</postalCode>
+               <streetName representation="TXT" mediaType="text/plain" partType="STR">Third Street</streetName>
+               <country representation="TXT" mediaType="text/plain" partType="CNT">Unites States</country>
+               <state representation="TXT" mediaType="text/plain" partType="STA">MD</state>
+               <streetAddressLine representation="TXT" mediaType="text/plain" partType="SAL">12543</streetAddressLine>
+               <additionalLocator representation="TXT" mediaType="text/plain" partType="ADL">705</additionalLocator>
+               <city representation="TXT" mediaType="text/plain" partType="CTY">Rockville</city>
+            </addr>
+         </assignedOrganization>
+         <representedScopingOrganization classCode="ORG" determinerCode="INSTANCE">
+            <code code="HOSP" displayName="HOSPITAL" codeSystem="2.16.840.1.113883.5.1060" codeSystemName="EntityCode"/>
+            <name use="L">First Love Hospital<suffix representation="TXT" mediaType="text/plain" partType="SFX">Inc.</suffix>
+            </name>
+            <addr use="PHYS">
+               <county representation="TXT" mediaType="text/plain" partType="CPA">Montgomery</county>
+               <postalCode representation="TXT" mediaType="text/plain" partType="ZIP">20852</postalCode>
+               <streetName representation="TXT" mediaType="text/plain" partType="STR">Second Street</streetName>
+               <country representation="TXT" mediaType="text/plain" partType="CNT">Unites States</country>
+               <state representation="TXT" mediaType="text/plain" partType="STA">MD</state>
+               <streetAddressLine representation="TXT" mediaType="text/plain" partType="SAL">12543</streetAddressLine>
+               <additionalLocator representation="TXT" mediaType="text/plain" partType="ADL">705</additionalLocator>
+               <city representation="TXT" mediaType="text/plain" partType="CTY">Rockville</city>
+            </addr>
+         </representedScopingOrganization>
+      </assignedEntity>
+   </authorOrPerformer>
+   <trigger typeCode="TRIG" contextControlCode="OP" contextConductionInd="false">
+      <priorityNumber value="2"/>
+      <reaction classCode="OBS" moodCode="EVN">
+         <code code="FDAIMPRINTCD" displayName="imprint code" codeSystem="2.16.840.1.113883.11.13953" codeSystemName="ActCode.ObservationType"/>
+         <text mediaType="text/plain" representation="TXT">NCI Investigation Event Test - Reaction</text>
+         <effectiveTime xsi:type="SXCM_TS" value="20051012101010"/>
+         <value code="V19635" codeSystem="2.16.840.1.113883.11.19627" codeSystemName="ObservationValue.SubjectReaction"/>
+         <interpretationCode xsi:type="CE" code="B" displayName="better" codeSystem="2.16.840.1.113883.5.83" codeSystemName="ObservationInterpretation"/>
+         <subject typeCode="SBJ" contextControlCode="OP">
+            <investigativeSubject classCode="INVSBJ">
+               <id root="2.16.840.1.113883.19.491" extension="12345-6-7" assigningAuthorityName="Top-Tel Pharmacy Co. LTD"/>
+               <subjectAffectedPerson classCode="PSN" determinerCode="INSTANCE">
+                  <name xsi:type="EN" use="L">
+                     <family partType="FAM" representation="TXT" mediaType="text/plain">Doehundred</family>
+                     <suffix partType="SFX" representation="TXT" mediaType="text/plain">F.</suffix>
+                     <given partType="GIV" representation="TXT" mediaType="text/plain">Peter</given>
+                  </name>
+                  <telecom xsi:type="TEL" value="tel:13014516369" use="HP"/>
+                  <administrativeGenderCode code="M" displayName="Male" codeSystem="2.16.840.1.113883.5.1" codeSystemName="AdministrativeGender"/>
+                  <birthTime value="19620312"/>
+                  <deceasedTime value="20060314"/>
+                  <addr xsi:type="AD" use="PHYS">
+                     <county representation="TXT" mediaType="text/plain" partType="CPA">Montgomery</county>
+                     <postalCode representation="TXT" mediaType="text/plain" partType="ZIP">20852</postalCode>
+                     <streetName representation="TXT" mediaType="text/plain" partType="STR">Third Street</streetName>
+                     <country representation="TXT" mediaType="text/plain" partType="CNT">Unites States</country>
+                     <state representation="TXT" mediaType="text/plain" partType="STA">MD</state>
+                     <streetAddressLine representation="TXT" mediaType="text/plain" partType="SAL">12543</streetAddressLine>
+                     <additionalLocator representation="TXT" mediaType="text/plain" partType="ADL">705</additionalLocator>
+                     <city representation="TXT" mediaType="text/plain" partType="CTY">Rockville</city>
+                  </addr>
+                  <raceCode xsi:type="CE" code="2028-9" displayName="Asian" codeSystem="2.16.840.1.113883.11.14914" codeSystemName="Race"/>
+                  <ethnicGroupCode xsi:type="CE" code="2160-0" displayName="Panamanian" codeSystem="2.16.840.1.113883.11.15836" codeSystemName="Ethnicity"/>
+               </subjectAffectedPerson>
+               <subjectOf typeCode="SBJ" contextControlCode="OP">
+                  <supply classCode="SPLY" moodCode="INT">
+                     <id root="2.16.840.1.113883.3.26" extension="613424-7" assigningAuthorityName="NCI"/>
+                     <code code="HISTMEDLIST" displayName="medication history" codeSystem="2.16.840.1.113883.11.13953" codeSystemName="ActCode"/>
+                     <text mediaType="text/plain" representation="TXT">The title of Investigative Subject - supply</text>
+                     <statusCode code="normal"/>
+                     <effectiveTime xsi:type="IVL_TS">
+                        <low value="20051012"/>
+                     </effectiveTime>
+                     <priorityCode xsi:type="CE" code="R" displayName="routine" codeSystem="2.16.840.1.113883.11.16866" codeSystemName="ActPriority"/>
+                     <confidentialityCode xsi:type="CE" code="N" displayName="normal" codeSystem="2.16.840.1.113883.5.25" codeSystemName="Confidentiality"/>
+                     <repeatNumber xsi:type="IVL_INT">
+                        <low value="12"/>
+                        <high value="14"/>
+                     </repeatNumber>
+                     <quantity value="2" unit="[in_i]"/>
+                     <expectedUseTime xsi:type="IVL_TS">
+                        <low inclusive="true" value="20051112"/>
+                        <high inclusive="true" value="20051115"/>
+                     </expectedUseTime>
+                     <subject typeCode="SBJ" contextControlCode="OP">
+                        <awarenessCode code="F" displayName="full awareness" codeSystem="2.16.840.1.113883.11.10310" codeSystemName="TargetAwareness"/>
+                        <associatedPerson classCode="PRS">
+                           <id root="2.16.840.1.113883.19.3.26" extension="276334-7" assigningAuthorityName="FDA"/>
+                           <code code="ORG" displayName="organizational contact" codeSystem="2.16.840.1.113883.5.111" codeSystemName="RoleCode"/>
+                           <relationshipHolder classCode="PSN" determinerCode="INSTANCE">
+                              <name xsi:type="EN" use="L">
+                                 <family partType="FAM" representation="TXT" mediaType="text/plain">Doetwo</family>
+                                 <suffix partType="SFX" representation="TXT" mediaType="text/plain">S.</suffix>
+                                 <given partType="GIV" representation="TXT" mediaType="text/plain">Gerald</given>
+                              </name>
+                              <telecom xsi:type="TEL" value="tel:13014516369" use="HP"/>
+                              <administrativeGenderCode code="M" displayName="Male" codeSystem="2.16.840.1.113883.5.1" codeSystemName="AdministrativeGender"/>
+                              <birthTime value="19620312"/>
+                              <deceasedTime value="19620312"/>
+                              <addr xsi:type="AD" use="PHYS">
+                                 <county representation="TXT" mediaType="text/plain" partType="CPA">Montgomery</county>
+                                 <postalCode representation="TXT" mediaType="text/plain" partType="ZIP">20852</postalCode>
+                                 <streetName representation="TXT" mediaType="text/plain" partType="STR">Third Street</streetName>
+                                 <country representation="TXT" mediaType="text/plain" partType="CNT">Unites States</country>
+                                 <state representation="TXT" mediaType="text/plain" partType="STA">MD</state>
+                                 <streetAddressLine representation="TXT" mediaType="text/plain" partType="SAL">12543</streetAddressLine>
+                                 <additionalLocator representation="TXT" mediaType="text/plain" partType="ADL">705</additionalLocator>
+                                 <city representation="TXT" mediaType="text/plain" partType="CTY">Rockville</city>
+                              </addr>
+                              <raceCode xsi:type="CE" code="2028-9" displayName="Asian" codeSystem="2.16.840.1.113883.11.14914" codeSystemName="Race"/>
+                           </relationshipHolder>
+                        </associatedPerson>
+                     </subject>
+                     <product typeCode="PRD">
+                        <distributedProduct classCode="DST">
+                           <distributedManufacturedMaterial classCode="MMAT" determinerCode="INSTANCE">
+                              <code code="KIT" displayName="kit" codeSystem="2.16.840.1.113883.11.16041" codeSystemName="MaterialEntityClassType"/>
+                              <desc mediaType="text/plain" representation="TXT">Material Entity Class Type</desc>
+                              <formCode code="AER" displayName="Aerosol" codeSystem="2.16.840.1.113883.19.45" codeSystemName="MaterialForm"/>
+                              <lotNumberText representation="TXT" mediaType="text/plain">CKC-34254-F</lotNumberText>
+                           </distributedManufacturedMaterial>
+                        </distributedProduct>
+                     </product>
+                     <author typeCode="AUT" contextControlCode="OP">
+                        <noteText mediaType="text/plain" representation="TXT">These Data are just for test...</noteText>
+                        <time value="20051012101010"/>
+                        <modeCode code="FACE" displayName="face-to-face" codeSystem="2.16.840.1.113883.11.16543" codeSystemName="ParticipationMode"/>
+                        <signatureCode code="S" displayName="signed" codeSystem="2.16.840.1.113883.5.89" codeSystemName="ParticipationSignature"/>
+                        <assignedEntity classCode="ASSIGNED">
+                           <id xsi:type="II" root="2.16.840.1.113883.3.26" extension="304-1043-114" assigningAuthorityName="NCI"/>
+                           <code code="ORG" displayName="organizational contact" codeSystem="2.16.840.1.113883.5.111" codeSystemName="RoleCode"/>
+                           <addr xsi:type="AD" use="PHYS">
+                              <county representation="TXT" mediaType="text/plain" partType="CPA">Montgomery</county>
+                              <postalCode representation="TXT" mediaType="text/plain" partType="ZIP">20852</postalCode>
+                              <streetName representation="TXT" mediaType="text/plain" partType="STR">Second Street</streetName>
+                              <country representation="TXT" mediaType="text/plain" partType="CNT">Unites States</country>
+                              <state representation="TXT" mediaType="text/plain" partType="STA">MD</state>
+                              <streetAddressLine representation="TXT" mediaType="text/plain" partType="SAL">12543</streetAddressLine>
+                              <additionalLocator representation="TXT" mediaType="text/plain" partType="ADL">705</additionalLocator>
+                              <city representation="TXT" mediaType="text/plain" partType="CTY">Rockville</city>
+                           </addr>
+                           <telecom xsi:type="TEL" value="tel:13014516364" use="HP"/>
+                           <assignedPerson classCode="PSN" determinerCode="INSTANCE">
+                              <name xsi:type="EN" use="L">
+                                 <family partType="FAM" representation="TXT" mediaType="text/plain">Doeighty</family>
+                                 <suffix partType="SFX" representation="TXT" mediaType="text/plain">D.</suffix>
+                                 <given partType="GIV" representation="TXT" mediaType="text/plain">Conrard</given>
+                              </name>
+                           </assignedPerson>
+                           <representedOrganization classCode="ORG" determinerCode="INSTANCE">
+                              <id xsi:type="II" root="2.16.840.1.113883.19.3.26" extension="304-1043-114" assigningAuthorityName="FDA"/>
+                              <code code="HOSP" displayName="HOSPITAL" codeSystem="2.16.840.1.113883.5.1060" codeSystemName="EntityCode"/>
+                              <name xsi:type="ON" use="L">First Love Hospital<suffix representation="TXT" mediaType="text/plain" partType="SFX">Inc.</suffix>
+                              </name>
+                              <statusCode code="active"/>
+                              <telecom xsi:type="TEL" value="tel:13014516369" use="HP"/>
+                              <addr xsi:type="AD" use="PHYS">
+                                 <county representation="TXT" mediaType="text/plain" partType="CPA">Montgomery</county>
+                                 <postalCode representation="TXT" mediaType="text/plain" partType="ZIP">20852</postalCode>
+                                 <streetName representation="TXT" mediaType="text/plain" partType="STR">Third Street</streetName>
+                                 <country representation="TXT" mediaType="text/plain" partType="CNT">Unites States</country>
+                                 <state representation="TXT" mediaType="text/plain" partType="STA">MD</state>
+                                 <streetAddressLine representation="TXT" mediaType="text/plain" partType="SAL">12543</streetAddressLine>
+                                 <additionalLocator representation="TXT" mediaType="text/plain" partType="ADL">705</additionalLocator>
+                                 <city representation="TXT" mediaType="text/plain" partType="CTY">Rockville</city>
+                              </addr>
+                              <standardIndustryClassCode code="HOSP" displayName="HOSPITAL" codeSystem="2.16.840.1.113883.11.19298" codeSystemName="OrganizationIndustryClass"/>
+                           </representedOrganization>
+                        </assignedEntity>
+                     </author>
+                     <pertinentInformation1 typeCode="PERT" contextControlCode="OP" contextConductionInd="false">
+                        <indication classCode="OBS" moodCode="EVN">
+                           <code code="INTDX" displayName="intermediate diagnosis" codeSystem="2.16.840.1.113883.11.16226" codeSystemName="ObservationType"/>
+                           <value code="K25.7" displayName="Chronic gastric ulcer without hemorrhage or perforation" codeSystem="2.16.840.1.113883.6.3" codeSystemName="ICD10"/>
+                        </indication>
+                     </pertinentInformation1>
+                  </supply>
+               </subjectOf>
+            </investigativeSubject>
+         </subject>
+         <location typeCode="LOC" contextControlCode="OP">
+            <serviceDeliveryLocation classCode="SDLOC">
+               <id xsi:type="II" root="2.16.840.1.113883.3.26" extension="304-1043-114" assigningAuthorityName="NCI"/>
+               <code code="CHR" displayName="Chronic Care Facility" codeSystem="2.16.840.1.113883.11.17660" codeSystemName="ServiceDeliveryLocationRoleType"/>
+            </serviceDeliveryLocation>
+         </location>
+         <pertinentInformation1 typeCode="PERT" contextControlCode="OP" contextConductionInd="false">
+            <concurrentObservation classCode="OBS" moodCode="EVN" negationInd="false">
+               <code code="INTDX" displayName="intermediate diagnosis" codeSystem="2.16.840.1.113883.11.16226" codeSystemName="ObservationType"/>
+               <text mediaType="text/plain" representation="TXT">Concurrent Value? I don't know.</text>
+               <value xsi:type="ST" representation="TXT" mediaType="text/plain">64.23</value>
+            </concurrentObservation>
+         </pertinentInformation1>
+         <pertinentInformation2 typeCode="PERT" contextControlCode="OP" contextConductionInd="false">
+            <reactionEmphasis classCode="OBS" moodCode="EVN">
+               <code code="INTDX" displayName="intermediate diagnosis" codeSystem="2.16.840.1.113883.11.16226" codeSystemName="ObservationType"/>
+               <value code="TEMP" displayName="Temporal value" codeSystem="2.16.840.1.113883.11.19631" codeSystemName="ObservationType.SubjectReactionEmphasis"/>
+            </reactionEmphasis>
+         </pertinentInformation2>
+         <support typeCode="SPRT" contextControlCode="OP" contextConductionInd="true">
+            <pauseQuantity value="2" unit="[in_i]"/>
+            <substanceAdministrationStub classCode="SBADM" moodCode="EVN">
+               <id root="2.16.840.1.113883.3.26" extension="304-1043-114" assigningAuthorityName="NCI"/>
+            </substanceAdministrationStub>
+         </support>
+         <causeOf typeCode="CAUS" contextControlCode="OP" contextConductionInd="false">
+            <outcome classCode="OBS" moodCode="EVN">
+               <code code="INTDX" displayName="intermediate diagnosis" codeSystem="2.16.840.1.113883.11.16226" codeSystemName="ObservationType"/>
+               <value code="include" displayName="include" codeSystem="2.16.840.1.113883.11.19630" codeSystemName="ObservationType.SubjectReactionOutcome"/>
+            </outcome>
+         </causeOf>
+      </reaction>
+   </trigger>
+   <pertinentInformation1 typeCode="PERT" contextControlCode="OP" contextConductionInd="false">
+      <secondaryCaseNotification classCode="OBS" moodCode="EVN">
+         <id root="2.16.840.1.113883.3.26" extension="123456-7" assigningAuthorityName="NCI"/>
+         <code code="TIME_RELATIVE" displayName="relative time sequence" codeSystem="2.16.840.1.113883.11.13953" codeSystemName="ActCode.ObservationType"/>
+         <title representation="TXT" mediaType="text/plain">Derivation Expression</title>
+         <text mediaType="text/plain" representation="TXT">These Data are just for test...</text>
+         <statusCode code="normal"/>
+         <effectiveTime xsi:type="IVL_TS">
+            <low value="20051012"/>
+            <high value="20051012"/>
+         </effectiveTime>
+         <receiver typeCode="RCV" contextControlCode="OP">
+            <time xsi:type="IVL_TS">
+               <low value="20051012"/>
+               <high value="20051012"/>
+            </time>
+            <assignedEntity classCode="ASSIGNED">
+               <code code="ORG" displayName="organizational contact" codeSystem="2.16.840.1.113883.11.19381" codeSystemName="RoleCode.x_AdverseEventReporterQualificationRoleCode"/>
+               <assignedPerson classCode="PSN" determinerCode="INSTANCE">
+                  <id xsi:type="II" root="2.16.840.1.113883.3.26" extension="304-1043-114" assigningAuthorityName="NCI"/>
+                  <name use="L">
+                     <family representation="TXT" mediaType="text/plain" partType="FAM">Doetwo</family>
+                     <suffix representation="TXT" mediaType="text/plain" partType="SFX">S.</suffix>
+                     <given representation="TXT" mediaType="text/plain" partType="GIV">Gerald</given>
+                  </name>
+                  <telecom value="tel:13014516369" use="HP"/>
+                  <addr use="PHYS">
+                     <county representation="TXT" mediaType="text/plain" partType="CPA">Montgomery</county>
+                     <postalCode representation="TXT" mediaType="text/plain" partType="ZIP">20852</postalCode>
+                     <streetName representation="TXT" mediaType="text/plain" partType="STR">Third Street</streetName>
+                     <country representation="TXT" mediaType="text/plain" partType="CNT">Unites States</country>
+                     <state representation="TXT" mediaType="text/plain" partType="STA">MD</state>
+                     <streetAddressLine representation="TXT" mediaType="text/plain" partType="SAL">12543</streetAddressLine>
+                     <additionalLocator representation="TXT" mediaType="text/plain" partType="ADL">705</additionalLocator>
+                     <city representation="TXT" mediaType="text/plain" partType="CTY">Rockville</city>
+                  </addr>
+               </assignedPerson>
+            </assignedEntity>
+         </receiver>
+         <author typeCode="AUT" contextControlCode="OP">
+            <assignedEntity classCode="ASSIGNED">
+               <code code="ORG" displayName="organizational contact" codeSystem="2.16.840.1.113883.11.19381" codeSystemName="RoleCode.x_AdverseEventReporterQualificationRoleCode"/>
+               <assignedPerson classCode="PSN" determinerCode="INSTANCE">
+                  <id xsi:type="II" root="2.16.840.1.113883.3.26" extension="304-1043-114" assigningAuthorityName="NCI"/>
+                  <name use="L">
+                     <family representation="TXT" mediaType="text/plain" partType="FAM">Doetwo</family>
+                     <suffix representation="TXT" mediaType="text/plain" partType="SFX">S.</suffix>
+                     <given representation="TXT" mediaType="text/plain" partType="GIV">Gerald</given>
+                  </name>
+                  <telecom value="tel:13014516369" use="HP"/>
+                  <addr use="PHYS">
+                     <county representation="TXT" mediaType="text/plain" partType="CPA">Montgomery</county>
+                     <postalCode representation="TXT" mediaType="text/plain" partType="ZIP">20852</postalCode>
+                     <streetName representation="TXT" mediaType="text/plain" partType="STR">Third Street</streetName>
+                     <country representation="TXT" mediaType="text/plain" partType="CNT">Unites States</country>
+                     <state representation="TXT" mediaType="text/plain" partType="STA">MD</state>
+                     <streetAddressLine representation="TXT" mediaType="text/plain" partType="SAL">12543</streetAddressLine>
+                     <additionalLocator representation="TXT" mediaType="text/plain" partType="ADL">705</additionalLocator>
+                     <city representation="TXT" mediaType="text/plain" partType="CTY">Rockville</city>
+                  </addr>
+               </assignedPerson>
+               <representedScopingOrganization classCode="ORG" determinerCode="INSTANCE">
+                  <code code="HOSP" displayName="HOSPITAL" codeSystem="2.16.840.1.113883.5.1060" codeSystemName="EntityCode"/>
+                  <name use="L">First Love Hospital<suffix representation="TXT" mediaType="text/plain" partType="SFX">Inc.</suffix>
+                  </name>
+                  <addr use="PHYS">
+                     <county representation="TXT" mediaType="text/plain" partType="CPA">Montgomery</county>
+                     <postalCode representation="TXT" mediaType="text/plain" partType="ZIP">20852</postalCode>
+                     <streetName representation="TXT" mediaType="text/plain" partType="STR">Second Street</streetName>
+                     <country representation="TXT" mediaType="text/plain" partType="CNT">Unites States</country>
+                     <state representation="TXT" mediaType="text/plain" partType="STA">MD</state>
+                     <streetAddressLine representation="TXT" mediaType="text/plain" partType="SAL">12543</streetAddressLine>
+                     <additionalLocator representation="TXT" mediaType="text/plain" partType="ADL">705</additionalLocator>
+                     <city representation="TXT" mediaType="text/plain" partType="CTY">Rockville</city>
+                  </addr>
+               </representedScopingOrganization>
+            </assignedEntity>
+         </author>
+         <documentationOf typeCode="DOC" contextControlCode="OP" contextConductionInd="false">
+            <primarySourceReport classCode="OBS" moodCode="EVN">
+               <id root="2.16.840.1.113883.3.26" extension="123456-7" assigningAuthorityName="NCI"/>
+               <code code="TIME_RELATIVE" displayName="relative time sequence" codeSystem="2.16.840.1.113883.11.13953" codeSystemName="ActCode.ObservationType"/>
+               <title representation="TXT" mediaType="text/plain">Derivation Expression</title>
+               <text mediaType="text/plain" representation="TXT">These Data are just for test...</text>
+               <statusCode code="normal"/>
+               <effectiveTime xsi:type="IVL_TS">
+                  <low value="20051012"/>
+                  <high value="20051012"/>
+               </effectiveTime>
+            </primarySourceReport>
+         </documentationOf>
+         <pertinentInformation typeCode="PERT">
+            <secondaryCaseNotification classCode="OBS" moodCode="EVN">
+               <id root="2.16.840.1.113883.3.26" extension="123456-7" assigningAuthorityName="NCI"/>
+               <code code="TIME_RELATIVE" displayName="relative time sequence" codeSystem="2.16.840.1.113883.11.13953" codeSystemName="ActCode.ObservationType"/>
+               <title representation="TXT" mediaType="text/plain">Derivation Expression</title>
+               <text mediaType="text/plain" representation="TXT">These Data are just for test...</text>
+               <statusCode code="normal"/>
+               <effectiveTime xsi:type="IVL_TS">
+                  <low value="20051012"/>
+                  <high value="20051012"/>
+               </effectiveTime>
+            </secondaryCaseNotification>
+         </pertinentInformation>
+      </secondaryCaseNotification>
+   </pertinentInformation1>
+   <pertinentInformation2 typeCode="PERT" contextControlCode="OP" contextConductionInd="true">
+      <investigationEvent classCode="INVSTG" moodCode="EVN">
+         <id xsi:type="II" root="2.16.840.1.113883.3.26" extension="123456-7" assigningAuthorityName="NCI"/>
+         <code code="HISTMEDLIST" displayName="medication history" codeSystem="2.16.840.1.113883.11.13953" codeSystemName="ActCode"/>
+      </investigationEvent>
+   </pertinentInformation2>
+   <pertinentInformation3 typeCode="PERT" contextControlCode="OP" contextConductionInd="false">
+      <caseSeriousness classCode="OBS" moodCode="EVN">
+         <code code="CSER" codeSystem="2.16.840.1.113883.11.13953" codeSystemName="ActCode.ObservationType"/>
+         <value code="nomal" displayName="normal" codeSystem="2.16.840.1.113883.11.19626" codeSystemName="ObservationValue.CaseSeriousnessCriteria"/>
+      </caseSeriousness>
+   </pertinentInformation3>
+   <pertinentInformation4 typeCode="PERT" contextControlCode="OP" contextConductionInd="true">
+      <document classCode="DOC" moodCode="EVN">
+         <code code="vitalSigns" displayName="vital signs" codeSystem="2.16.840.1.113883.11.16492" codeSystemName="ActCode.LogicalObservationIdentifierNamesAndCodes"/>
+         <title representation="TXT" mediaType="text/plain">Vital Signs</title>
+         <text mediaType="text/plain" representation="TXT">Vital Signs</text>
+         <bibliographicDesignationText mediaType="text/plain" representation="TXT">Vital Signs- biblio-graphic Designation Text</bibliographicDesignationText>
+      </document>
+   </pertinentInformation4>
+   <pertainsTo typeCode="PERT" contextControlCode="OP" contextConductionInd="true">
+      <priorityNumber value="3"/>
+      <substanceAdministrationEvent classCode="SBADM" moodCode="EVN">
+         <id root="2.16.840.1.113883.19.3.26" extension="778384-7" assigningAuthorityName="FDA"/>
+         <text representation="TXT" mediaType="text/plain">NCI Substance Administration Event Test 001</text>
+         <effectiveTime xsi:type="SXCM_TS" value="20051012101010"/>
+         <repeatNumber xsi:type="IVL_INT">
+            <low value="0"/>
+            <high value="10"/>
+         </repeatNumber>
+         <routeCode code="CHEW" displayName="Chew oral" codeSystem="2.16.840.1.113883.11.14581" codeSystemName="RouteOfAdministration"/>
+         <doseQuantity value="2" unit="[in_i]"/>
+         <subject typeCode="SBJ">
+            <investigativeSubject classCode="INVSBJ">
+               <id root="2.16.840.1.113883.19.3.26" extension="747384-7" assigningAuthorityName="FDA"/>
+            </investigativeSubject>
+         </subject>
+         <consumable typeCode="CSM" contextControlCode="OP">
+            <administeredDrug classCode="PRSV">
+               <partMedication classCode="MMAT" determinerCode="INSTANCE">
+                  <code code="VCCNE" displayName="Vaccine" codeSystem="2.16.840.1.113883.11.19667" codeSystemName="EntityCode.x_AdministeredSubstance"/>
+                  <name use="L">Triceratomicin<suffix partType="SFX" representation="TXT" mediaType="text/plain">Solution</suffix>
+                  </name>
+                  <formCode code="AER" displayName="Aerosol" codeSystem="2.16.840.1.113883.11.16048" codeSystemName="MaterialForm"/>
+                  <lotNumberText representation="TXT" mediaType="text/plain">RE004-34444-F</lotNumberText>
+                  <expirationTime xsi:type="IVL_TS">
+                     <low inclusive="true" value="20071101"/>
+                  </expirationTime>
+               </partMedication>
+            </administeredDrug>
+         </consumable>
+         <authorOrPerformer typeCode="PRF" contextControlCode="OP">
+            <assignedEntity classCode="ASSIGNED">
+               <id xsi:type="II" root="2.16.840.1.113883.3.26" extension="304-1043-114" assigningAuthorityName="NCI"/>
+               <code code="ORG" displayName="organizational contact" codeSystem="2.16.840.1.113883.5.111" codeSystemName="RoleCode"/>
+               <addr xsi:type="AD" use="PHYS">
+                  <county representation="TXT" mediaType="text/plain" partType="CPA">Montgomery</county>
+                  <postalCode representation="TXT" mediaType="text/plain" partType="ZIP">20852</postalCode>
+                  <streetName representation="TXT" mediaType="text/plain" partType="STR">Second Street</streetName>
+                  <country representation="TXT" mediaType="text/plain" partType="CNT">Unites States</country>
+                  <state representation="TXT" mediaType="text/plain" partType="STA">MD</state>
+                  <streetAddressLine representation="TXT" mediaType="text/plain" partType="SAL">12543</streetAddressLine>
+                  <additionalLocator representation="TXT" mediaType="text/plain" partType="ADL">705</additionalLocator>
+                  <city representation="TXT" mediaType="text/plain" partType="CTY">Rockville</city>
+               </addr>
+               <telecom xsi:type="TEL" value="tel:13014516364" use="HP"/>
+               <representedOrganization classCode="ORG" determinerCode="INSTANCE">
+                  <id xsi:type="II" root="2.16.840.1.113883.3.26" extension="304-1043-114" assigningAuthorityName="NCI"/>
+                  <code code="HOSP" displayName="HOSPITAL" codeSystem="2.16.840.1.113883.5.1060" codeSystemName="EntityCode"/>
+                  <name xsi:type="ON" use="L">First Love Hospital<suffix representation="TXT" mediaType="text/plain" partType="SFX">Inc.</suffix>
+                  </name>
+                  <statusCode code="active"/>
+                  <telecom xsi:type="TEL" value="tel:13014516369" use="HP"/>
+                  <addr xsi:type="AD" use="PHYS">
+                     <county representation="TXT" mediaType="text/plain" partType="CPA">Montgomery</county>
+                     <postalCode representation="TXT" mediaType="text/plain" partType="ZIP">20852</postalCode>
+                     <streetName representation="TXT" mediaType="text/plain" partType="STR">Third Street</streetName>
+                     <country representation="TXT" mediaType="text/plain" partType="CNT">Unites States</country>
+                     <state representation="TXT" mediaType="text/plain" partType="STA">MD</state>
+                     <streetAddressLine representation="TXT" mediaType="text/plain" partType="SAL">12543</streetAddressLine>
+                     <additionalLocator representation="TXT" mediaType="text/plain" partType="ADL">705</additionalLocator>
+                     <city representation="TXT" mediaType="text/plain" partType="CTY">Rockville</city>
+                  </addr>
+                  <standardIndustryClassCode code="HOSP" displayName="HOSPITAL" codeSystem="2.16.840.1.113883.11.19298" codeSystemName="OrganizationIndustryClass"/>
+               </representedOrganization>
+            </assignedEntity>
+         </authorOrPerformer>
+         <location typeCode="LOC" contextControlCode="OP">
+            <serviceDeliveryLocation classCode="SDLOC">
+               <id xsi:type="II" root="2.16.840.1.113883.3.26" extension="304-1043-114" assigningAuthorityName="NCI"/>
+               <code code="CHR" displayName="Chronic Care Facility" codeSystem="2.16.840.1.113883.11.17660" codeSystemName="ServiceDeliveryLocationRoleType"/>
+               <addr xsi:type="AD" use="PHYS">
+                  <county representation="TXT" mediaType="text/plain" partType="CPA">Montgomery</county>
+                  <postalCode representation="TXT" mediaType="text/plain" partType="ZIP">20852</postalCode>
+                  <streetName representation="TXT" mediaType="text/plain" partType="STR">Seventh Street</streetName>
+                  <country representation="TXT" mediaType="text/plain" partType="CNT">Unites States</country>
+                  <state representation="TXT" mediaType="text/plain" partType="STA">MD</state>
+                  <streetAddressLine representation="TXT" mediaType="text/plain" partType="SAL">12543</streetAddressLine>
+                  <additionalLocator representation="TXT" mediaType="text/plain" partType="ADL">705</additionalLocator>
+                  <city representation="TXT" mediaType="text/plain" partType="CTY">Rockville</city>
+               </addr>
+               <telecom xsi:type="TEL" value="tel:13014516369" use="HP"/>
+               <statusCode code="active"/>
+               <effectiveTime xsi:type="IVL_TS">
+                  <low inclusive="true" value="20051012"/>
+                  <high inclusive="true" value="20061012"/>
+               </effectiveTime>
+            </serviceDeliveryLocation>
+         </location>
+         <pertinentInformation1 typeCode="PERT" contextControlCode="OP" contextConductionInd="false">
+            <pauseQuantity value="2" unit="[in_i]"/>
+            <observation classCode="OBS" moodCode="EVN">
+               <id root="2.16.840.1.113883.3.26" extension="123456-7" assigningAuthorityName="NCI"/>
+               <code code="TIME_RELATIVE" displayName="relative time sequence" codeSystem="2.16.840.1.113883.11.13953" codeSystemName="ActCode.ObservationType"/>
+               <derivationExpr representation="TXT" mediaType="text/plain">Derivation Expression</derivationExpr>
+               <text mediaType="text/plain" representation="TXT">These Data are just for test...</text>
+               <statusCode code="normal"/>
+               <effectiveTime xsi:type="SXCM_TS" value="20051012"/>
+               <priorityCode xsi:type="CE" code="R" displayName="routine" codeSystem="2.16.840.1.113883.11.16866" codeSystemName="ActPriority"/>
+               <confidentialityCode xsi:type="CE" code="N" displayName="normal" codeSystem="2.16.840.1.113883.5.25" codeSystemName="Confidentiality"/>
+               <repeatNumber xsi:type="IVL_INT">
+                  <low value="0"/>
+                  <high value="10"/>
+               </repeatNumber>
+               <uncertaintyCode code="U" displayName="stated with uncertainty" codeSystem="2.16.840.1.113883.11.16899" codeSystemName="ActUncertainty"/>
+               <languageCode code="en"/>
+               <value xsi:type="INT" value="365"/>
+               <interpretationCode xsi:type="CE" code="B" displayName="better" codeSystem="2.16.840.1.113883.5.83" codeSystemName="ObservationInterpretation"/>
+               <methodCode code="0033" displayName="Chemical method" codeSystem="2.16.840.1.113883.5.84" codeSystemName="ObservationMethod"/>
+               <targetSiteCode code="TID24i" displayName="24i" codeSystem="2.16.840.1.113883.11.16537" codeSystemName="ActSite"/>
+               <author typeCode="AUT" contextControlCode="OP">
+                  <time value="20051012101010"/>
+                  <modeCode code="FACE" displayName="face-to-face" codeSystem="2.16.840.1.113883.11.16543" codeSystemName="ParticipationMode"/>
+                  <signatureCode code="S" displayName="signed" codeSystem="2.16.840.1.113883.5.89" codeSystemName="ParticipationSignature"/>
+                  <assignedEntity classCode="ASSIGNED">
+                     <id xsi:type="II" root="2.16.840.1.113883.3.26" extension="304-1043-114" assigningAuthorityName="NCI"/>
+                     <code code="ORG" displayName="organizational contact" codeSystem="2.16.840.1.113883.5.111" codeSystemName="RoleCode"/>
+                     <addr xsi:type="AD" use="PHYS">
+                        <county representation="TXT" mediaType="text/plain" partType="CPA">Montgomery</county>
+                        <postalCode representation="TXT" mediaType="text/plain" partType="ZIP">20852</postalCode>
+                        <streetName representation="TXT" mediaType="text/plain" partType="STR">Second Street</streetName>
+                        <country representation="TXT" mediaType="text/plain" partType="CNT">Unites States</country>
+                        <state representation="TXT" mediaType="text/plain" partType="STA">MD</state>
+                        <streetAddressLine representation="TXT" mediaType="text/plain" partType="SAL">12543</streetAddressLine>
+                        <additionalLocator representation="TXT" mediaType="text/plain" partType="ADL">705</additionalLocator>
+                        <city representation="TXT" mediaType="text/plain" partType="CTY">Rockville</city>
+                     </addr>
+                     <telecom xsi:type="TEL" value="tel:13014516364" use="HP"/>
+                  </assignedEntity>
+               </author>
+               <referenceRange typeCode="REFV" contextControlCode="ON" contextConductionInd="true">
+                  <observationCriterion classCode="OBS" moodCode="EVN.CRT" negationInd="false">
+                     <text mediaType="text/plain" representation="TXT">Obervation Criterion</text>
+                     <value xsi:type="INT" value="334"/>
+                     <interpretationCode code="N"/>
+                  </observationCriterion>
+               </referenceRange>
+            </observation>
+         </pertinentInformation1>
+         <pertinentInformation2 typeCode="PERT" contextControlCode="OP" contextConductionInd="false">
+            <actionTaken classCode="OBS" moodCode="EVN">
+               <code code="INTDX" displayName="intermediate diagnosis" codeSystem="2.16.840.1.113883.11.16226" codeSystemName="ObservationType"/>
+               <value code="K25.7" displayName="Chronic gastric ulcer without hemorrhage or perforation" codeSystem="2.16.840.1.113883.6.3" codeSystemName="ICD10"/>
+            </actionTaken>
+         </pertinentInformation2>
+         <pertinentInformation4 typeCode="PERT" contextControlCode="OP" contextConductionInd="false">
+            <interventionCharacterization classCode="OBS" moodCode="EVN">
+               <code code="INTDX" displayName="intermediate diagnosis" codeSystem="2.16.840.1.113883.11.16226" codeSystemName="ObservationType"/>
+               <value code="K25.7" displayName="Chronic gastric ulcer without hemorrhage or perforation" codeSystem="2.16.840.1.113883.6.3" codeSystemName="ICD10"/>
+            </interventionCharacterization>
+         </pertinentInformation4>
+      </substanceAdministrationEvent>
+   </pertainsTo>
+   <pertainsTo typeCode="PERT" contextControlCode="OP" contextConductionInd="true">
+      <priorityNumber value="3"/>
+      <procedureEvent classCode="PROC" moodCode="EVN">
+         <id root="2.16.840.1.113883.19.34" extension="4334-45-7" assigningAuthorityName="Amenrican Medical Procedure Association"/>
+         <code code="OPR" displayName="Operating" codeSystem="2.16.840.1.113883.11.16493" codeSystemName="ActCode.ExternallyDefinedActCodes"/>
+         <text mediaType="text/plain" representation="TXT">NCI Medical Procedure Event Test 001</text>
+         <effectiveTime xsi:type="SXCM_TS" value="20051012101010"/>
+         <subject typeCode="SBJ">
+            <investigativeSubject classCode="INVSBJ">
+               <id root="2.16.840.1.113883.19.3.26" extension="647821-7" assigningAuthorityName="FDA"/>
+            </investigativeSubject>
+         </subject>
+         <device typeCode="DEV" contextControlCode="OP">
+            <identifiedDevice classCode="IDENT">
+               <id xsi:type="II" root="2.16.840.1.113883.3.26" extension="304-1043-088" assigningAuthorityName="NCI"/>
+               <identifiedDevice classCode="DEV" determinerCode="INSTANCE">
+                  <id root="2.16.840.1.113883.3.26" extension="304-1043-099" assigningAuthorityName="NCI"/>
+                  <existenceTime xsi:type="IVL_TS">
+                     <low inclusive="true" value="20051012"/>
+                     <high inclusive="true" value="20051012"/>
+                  </existenceTime>
+                  <lotNumberText representation="TXT" mediaType="text/plain">CKC-34254-F</lotNumberText>
+                  <expirationTime value="20051012101010"/>
+                  <asManufacturedProduct classCode="MANU">
+                     <id xsi:type="II" root="2.16.840.1.113883.3.26" extension="304-1043-899" assigningAuthorityName="NCI"/>
+                     <manufacturerOrReprocessor classCode="ORG" determinerCode="INSTANCE">
+                        <code code="HOSP" displayName="HOSPITAL" codeSystem="2.16.840.1.113883.5.1060" codeSystemName="EntityCode"/>
+                        <name use="L">
+                           <family partType="FAM" representation="TXT" mediaType="text/plain">Doeten</family>
+                           <suffix partType="SFX" representation="TXT" mediaType="text/plain">S.</suffix>
+                           <given partType="GIV" representation="TXT" mediaType="text/plain">Sammy</given>
+                        </name>
+                        <telecom value="tel:13014516369" use="HP"/>
+                        <addr use="PHYS">
+                           <county representation="TXT" mediaType="text/plain" partType="CPA">Montgomery</county>
+                           <postalCode representation="TXT" mediaType="text/plain" partType="ZIP">20852</postalCode>
+                           <streetName representation="TXT" mediaType="text/plain" partType="STR">Third Street</streetName>
+                           <country representation="TXT" mediaType="text/plain" partType="CNT">Unites States</country>
+                           <state representation="TXT" mediaType="text/plain" partType="STA">MD</state>
+                           <streetAddressLine representation="TXT" mediaType="text/plain" partType="SAL">12543</streetAddressLine>
+                           <additionalLocator representation="TXT" mediaType="text/plain" partType="ADL">705</additionalLocator>
+                           <city representation="TXT" mediaType="text/plain" partType="CTY">Rockville</city>
+                        </addr>
+                     </manufacturerOrReprocessor>
+                  </asManufacturedProduct>
+                  <inventoryItem classCode="MANU">
+                     <id xsi:type="II" root="2.16.840.1.113883.3.26" extension="304-1043-899" assigningAuthorityName="NCI"/>
+                     <manufacturedDeviceModel classCode="DEV" determinerCode="KIND">
+                        <id xsi:type="II" root="2.16.840.1.113883.3.26" extension="304-1043-899" assigningAuthorityName="NCI"/>
+                        <code code="SYSTM" displayName="system" codeSystem="2.16.840.1.113883.5.1060" codeSystemName="EntityCode"/>
+                        <manufacturerModelName nullFlavor="NI"/>
+                        <asRegulatedProduct classCode="RGPR">
+                           <id xsi:type="II" root="2.16.840.1.113883.3.26" extension="304-1043-899" assigningAuthorityName="NCI"/>
+                           <regulatoryAuthority classCode="ORG" determinerCode="INSTANCE">
+                              <name use="L">First Love Hospital<suffix representation="TXT" mediaType="text/plain" partType="SFX">Inc.</suffix>
+                              </name>
+                              <addr use="PHYS">
+                                 <county representation="TXT" mediaType="text/plain" partType="CPA">Montgomery</county>
+                                 <postalCode representation="TXT" mediaType="text/plain" partType="ZIP">20852</postalCode>
+                                 <streetName representation="TXT" mediaType="text/plain" partType="STR">Third Street</streetName>
+                                 <country representation="TXT" mediaType="text/plain" partType="CNT">Unites States</country>
+                                 <state representation="TXT" mediaType="text/plain" partType="STA">MD</state>
+                                 <streetAddressLine representation="TXT" mediaType="text/plain" partType="SAL">12543</streetAddressLine>
+                                 <additionalLocator representation="TXT" mediaType="text/plain" partType="ADL">705</additionalLocator>
+                                 <city representation="TXT" mediaType="text/plain" partType="CTY">Rockville</city>
+                              </addr>
+                           </regulatoryAuthority>
+                        </asRegulatedProduct>
+                     </manufacturedDeviceModel>
+                  </inventoryItem>
+               </identifiedDevice>
+               <assigningDeviceIdentifierIssuer classCode="ORG" determinerCode="INSTANCE">
+                  <name use="L">American Medical Device Association<suffix representation="TXT" mediaType="text/plain" partType="SFX">Inc.</suffix>
+                  </name>
+               </assigningDeviceIdentifierIssuer>
+               <subjectOf typeCode="SBJ">
+                  <approval classCode="CNTRCT" moodCode="EVN">
+                     <id root="2.16.840.1.113883.19.3.26" extension="304-1043-114" assigningAuthorityName="FDA"/>
+                     <effectiveTime xsi:type="IVL_TS">
+                        <low inclusive="true" value="20051101"/>
+                     </effectiveTime>
+                     <holder typeCode="HLD">
+                        <aRole classCode="ROL">
+                           <playingManufacturerOrReprocessor classCode="ORG" determinerCode="INSTANCE">
+                              <code code="SYSTM" displayName="system" codeSystem="2.16.840.1.113883.11.16040" codeSystemName="EntityCode"/>
+                              <name use="L">TopTel<suffix partType="SFX" representation="TXT" mediaType="text/plain">Co. LTD</suffix>
+                              </name>
+                              <telecom value="tel:13014517799" use="HP"/>
+                              <addr use="PHYS">
+                                 <county representation="TXT" mediaType="text/plain" partType="CPA">Montgomery</county>
+                                 <postalCode representation="TXT" mediaType="text/plain" partType="ZIP">20852</postalCode>
+                                 <streetName representation="TXT" mediaType="text/plain" partType="STR">Fifth Street</streetName>
+                                 <country representation="TXT" mediaType="text/plain" partType="CNT">Unites States</country>
+                                 <state representation="TXT" mediaType="text/plain" partType="STA">MD</state>
+                                 <streetAddressLine representation="TXT" mediaType="text/plain" partType="SAL">12543</streetAddressLine>
+                                 <additionalLocator representation="TXT" mediaType="text/plain" partType="ADL">705</additionalLocator>
+                                 <city representation="TXT" mediaType="text/plain" partType="CTY">Rockville</city>
+                              </addr>
+                              <asAgent classCode="AGNT">
+                                 <representedManufacturerOrReprocessor classCode="ORG" determinerCode="INSTANCE">
+                                    <code code="SYSTM" displayName="system" codeSystem="2.16.840.1.113883.11.16040" codeSystemName="EntityCode"/>
+                                    <name use="L">TopTel<suffix partType="SFX" representation="TXT" mediaType="text/plain">Co. LTD</suffix>
+                                    </name>
+                                    <telecom value="tel:13014517799" use="HP"/>
+                                    <addr use="PHYS">
+                                       <county representation="TXT" mediaType="text/plain" partType="CPA">Montgomery</county>
+                                       <postalCode representation="TXT" mediaType="text/plain" partType="ZIP">20852</postalCode>
+                                       <streetName representation="TXT" mediaType="text/plain" partType="STR">Fifth Street</streetName>
+                                       <country representation="TXT" mediaType="text/plain" partType="CNT">Unites States</country>
+                                       <state representation="TXT" mediaType="text/plain" partType="STA">MD</state>
+                                       <streetAddressLine representation="TXT" mediaType="text/plain" partType="SAL">12543</streetAddressLine>
+                                       <additionalLocator representation="TXT" mediaType="text/plain" partType="ADL">705</additionalLocator>
+                                       <city representation="TXT" mediaType="text/plain" partType="CTY">Rockville</city>
+                                    </addr>
+                                 </representedManufacturerOrReprocessor>
+                              </asAgent>
+                           </playingManufacturerOrReprocessor>
+                        </aRole>
+                     </holder>
+                     <author typeCode="AUT">
+                        <territorialAuthority classCode="TERR">
+                           <territory classCode="STATE" determinerCode="INSTANCE">
+                              <code code="SYSTM" displayName="system" codeSystem="2.16.840.1.113883.11.16040" codeSystemName="EntityCode"/>
+                           </territory>
+                           <governingAgency classCode="PUB" determinerCode="INSTANCE">
+                              <id root="2.16.840.1.113883.3.26" extension="304-1043-966" assigningAuthorityName="NCI"/>
+                              <name use="L">Human and Health Service<suffix representation="TXT" mediaType="text/plain" partType="SFX">Dept.</suffix>
+                              </name>
+                           </governingAgency>
+                        </territorialAuthority>
+                     </author>
+                  </approval>
+               </subjectOf>
+            </identifiedDevice>
+         </device>
+         <authorOrPerformer typeCode="PRF" contextControlCode="OP">
+            <assignedEntity classCode="ASSIGNED">
+               <id xsi:type="II" root="2.16.840.1.113883.3.26" extension="304-1043-114" assigningAuthorityName="NCI"/>
+               <code code="ORG" displayName="organizational contact" codeSystem="2.16.840.1.113883.5.111" codeSystemName="RoleCode"/>
+               <addr xsi:type="AD" use="PHYS">
+                  <county representation="TXT" mediaType="text/plain" partType="CPA">Montgomery</county>
+                  <postalCode representation="TXT" mediaType="text/plain" partType="ZIP">20852</postalCode>
+                  <streetName representation="TXT" mediaType="text/plain" partType="STR">Second Street</streetName>
+                  <country representation="TXT" mediaType="text/plain" partType="CNT">Unites States</country>
+                  <state representation="TXT" mediaType="text/plain" partType="STA">MD</state>
+                  <streetAddressLine representation="TXT" mediaType="text/plain" partType="SAL">12543</streetAddressLine>
+                  <additionalLocator representation="TXT" mediaType="text/plain" partType="ADL">705</additionalLocator>
+                  <city representation="TXT" mediaType="text/plain" partType="CTY">Rockville</city>
+               </addr>
+               <telecom xsi:type="TEL" value="tel:13014516364" use="HP"/>
+               <representedOrganization classCode="ORG" determinerCode="INSTANCE">
+                  <id xsi:type="II" root="2.16.840.1.113883.3.26" extension="304-1043-114" assigningAuthorityName="NCI"/>
+                  <code code="HOSP" displayName="HOSPITAL" codeSystem="2.16.840.1.113883.5.1060" codeSystemName="EntityCode"/>
+                  <name xsi:type="ON" use="L">First Love Hospital<suffix representation="TXT" mediaType="text/plain" partType="SFX">Inc.</suffix>
+                  </name>
+                  <statusCode code="active"/>
+                  <telecom xsi:type="TEL" value="tel:13014516369" use="HP"/>
+                  <addr xsi:type="AD" use="PHYS">
+                     <county representation="TXT" mediaType="text/plain" partType="CPA">Montgomery</county>
+                     <postalCode representation="TXT" mediaType="text/plain" partType="ZIP">20852</postalCode>
+                     <streetName representation="TXT" mediaType="text/plain" partType="STR">Third Street</streetName>
+                     <country representation="TXT" mediaType="text/plain" partType="CNT">Unites States</country>
+                     <state representation="TXT" mediaType="text/plain" partType="STA">MD</state>
+                     <streetAddressLine representation="TXT" mediaType="text/plain" partType="SAL">12543</streetAddressLine>
+                     <additionalLocator representation="TXT" mediaType="text/plain" partType="ADL">705</additionalLocator>
+                     <city representation="TXT" mediaType="text/plain" partType="CTY">Rockville</city>
+                  </addr>
+                  <standardIndustryClassCode code="HOSP" displayName="HOSPITAL" codeSystem="2.16.840.1.113883.11.19298" codeSystemName="OrganizationIndustryClass"/>
+                  <contactParty classCode="CON">
+                     <id xsi:type="II" root="2.16.840.1.113883.3.26" extension="304-1043-114" assigningAuthorityName="NCI"/>
+                  </contactParty>
+               </representedOrganization>
+            </assignedEntity>
+         </authorOrPerformer>
+         <location typeCode="LOC" contextControlCode="OP">
+            <serviceDeliveryLocation classCode="SDLOC">
+               <id xsi:type="II" root="2.16.840.1.113883.19.3.26" extension="304-1043-114" assigningAuthorityName="FDA"/>
+               <code code="CHR" displayName="Chronic Care Facility" codeSystem="2.16.840.1.113883.11.17660" codeSystemName="ServiceDeliveryLocationRoleType"/>
+            </serviceDeliveryLocation>
+         </location>
+         <pertinentInformation1 typeCode="PERT" contextControlCode="OP" contextConductionInd="false">
+            <actionTaken classCode="OBS" moodCode="EVN">
+               <code code="INTDX" displayName="intermediate diagnosis" codeSystem="2.16.840.1.113883.11.16226" codeSystemName="ObservationType"/>
+               <value code="K25.7" displayName="Chronic gastric ulcer without hemorrhage or perforation" codeSystem="2.16.840.1.113883.6.3" codeSystemName="ICD10"/>
+            </actionTaken>
+         </pertinentInformation1>
+         <pertinentInformation2 typeCode="PERT" contextControlCode="OP" contextConductionInd="false">
+            <pauseQuantity value="2" unit="[in_i]"/>
+            <observation classCode="OBS" moodCode="EVN">
+               <id root="2.16.840.1.113883.3.26" extension="123456-7" assigningAuthorityName="NCI"/>
+               <code code="TIME_RELATIVE" displayName="relative time sequence" codeSystem="2.16.840.1.113883.11.13953" codeSystemName="ActCode.ObservationType"/>
+               <derivationExpr representation="TXT" mediaType="text/plain">Derivation Expression</derivationExpr>
+               <text mediaType="text/plain" representation="TXT">These Data are just for test...</text>
+               <statusCode code="normal"/>
+               <effectiveTime xsi:type="SXCM_TS" value="20051012"/>
+               <priorityCode code="R" displayName="routine" codeSystem="2.16.840.1.113883.11.16866" codeSystemName="ActPriority"/>
+               <confidentialityCode xsi:type="CE" code="N" displayName="normal" codeSystem="2.16.840.1.113883.5.25" codeSystemName="Confidentiality"/>
+               <repeatNumber xsi:type="IVL_INT">
+                  <low value="0"/>
+                  <high value="10"/>
+               </repeatNumber>
+               <uncertaintyCode code="U" displayName="stated with uncertainty" codeSystem="2.16.840.1.113883.11.16899" codeSystemName="ActUncertainty"/>
+               <languageCode code="en"/>
+               <value xsi:type="INT" value="365"/>
+               <interpretationCode xsi:type="CE" code="B" displayName="better" codeSystem="2.16.840.1.113883.5.83" codeSystemName="ObservationInterpretation"/>
+               <methodCode code="0033" displayName="Chemical method" codeSystem="2.16.840.1.113883.5.84" codeSystemName="ObservationMethod"/>
+               <targetSiteCode code="TID24i" displayName="24i" codeSystem="2.16.840.1.113883.11.16537" codeSystemName="ActSite"/>
+               <author typeCode="AUT" contextControlCode="OP">
+                  <time value="20051012101010"/>
+                  <modeCode code="FACE" displayName="face-to-face" codeSystem="2.16.840.1.113883.11.16543" codeSystemName="ParticipationMode"/>
+                  <signatureCode code="S" displayName="signed" codeSystem="2.16.840.1.113883.5.89" codeSystemName="ParticipationSignature"/>
+                  <assignedEntity classCode="ASSIGNED">
+                     <id xsi:type="II" root="2.16.840.1.113883.3.26" extension="304-1043-114" assigningAuthorityName="NCI"/>
+                     <code code="ORG" displayName="organizational contact" codeSystem="2.16.840.1.113883.5.111" codeSystemName="RoleCode"/>
+                     <addr xsi:type="AD" use="PHYS">
+                        <county representation="TXT" mediaType="text/plain" partType="CPA">Montgomery</county>
+                        <postalCode representation="TXT" mediaType="text/plain" partType="ZIP">20852</postalCode>
+                        <streetName representation="TXT" mediaType="text/plain" partType="STR">Second Street</streetName>
+                        <country representation="TXT" mediaType="text/plain" partType="CNT">Unites States</country>
+                        <state representation="TXT" mediaType="text/plain" partType="STA">MD</state>
+                        <streetAddressLine representation="TXT" mediaType="text/plain" partType="SAL">12543</streetAddressLine>
+                        <additionalLocator representation="TXT" mediaType="text/plain" partType="ADL">705</additionalLocator>
+                        <city representation="TXT" mediaType="text/plain" partType="CTY">Rockville</city>
+                     </addr>
+                     <telecom xsi:type="TEL" value="tel:13014516364" use="HP"/>
+                     <representedOrganization classCode="ORG" determinerCode="INSTANCE">
+                        <id xsi:type="II" root="2.16.840.1.113883.3.26" extension="304-1043-114" assigningAuthorityName="NCI"/>
+                        <code code="HOSP" displayName="HOSPITAL" codeSystem="2.16.840.1.113883.5.1060" codeSystemName="EntityCode"/>
+                        <name xsi:type="ON" use="L">First Love Hospital<suffix representation="TXT" mediaType="text/plain" partType="SFX">Inc.</suffix>
+                        </name>
+                        <statusCode code="active"/>
+                        <telecom xsi:type="TEL" value="tel:13014516369" use="HP"/>
+                        <addr xsi:type="AD" use="PHYS">
+                           <county representation="TXT" mediaType="text/plain" partType="CPA">Montgomery</county>
+                           <postalCode representation="TXT" mediaType="text/plain" partType="ZIP">20852</postalCode>
+                           <streetName representation="TXT" mediaType="text/plain" partType="STR">Third Street</streetName>
+                           <country representation="TXT" mediaType="text/plain" partType="CNT">Unites States</country>
+                           <state representation="TXT" mediaType="text/plain" partType="STA">MD</state>
+                           <streetAddressLine representation="TXT" mediaType="text/plain" partType="SAL">12543</streetAddressLine>
+                           <additionalLocator representation="TXT" mediaType="text/plain" partType="ADL">705</additionalLocator>
+                           <city representation="TXT" mediaType="text/plain" partType="CTY">Rockville</city>
+                        </addr>
+                        <standardIndustryClassCode code="HOSP" displayName="HOSPITAL" codeSystem="2.16.840.1.113883.11.19298" codeSystemName="OrganizationIndustryClass"/>
+                     </representedOrganization>
+                  </assignedEntity>
+               </author>
+               <referenceRange typeCode="REFV" contextControlCode="ON" contextConductionInd="true">
+                  <observationCriterion classCode="OBS" moodCode="EVN.CRT" negationInd="false">
+                     <text mediaType="text/plain" representation="TXT">Obervation Criterion</text>
+                     <value xsi:type="INT" value="334"/>
+                     <interpretationCode code="N"/>
+                  </observationCriterion>
+               </referenceRange>
+            </observation>
+         </pertinentInformation2>
+         <pertinentInformation3 typeCode="PERT" contextControlCode="OP" contextConductionInd="false">
+            <interventionCharacterization classCode="OBS" moodCode="EVN">
+               <code code="INTDX" displayName="intermediate diagnosis" codeSystem="2.16.840.1.113883.11.16226" codeSystemName="ObservationType"/>
+               <value code="K25.7" displayName="Chronic gastric ulcer without hemorrhage or perforation" codeSystem="2.16.840.1.113883.6.3" codeSystemName="ICD10"/>
+            </interventionCharacterization>
+         </pertinentInformation3>
+      </procedureEvent>
+   </pertainsTo>
+</InvestigationEvent>

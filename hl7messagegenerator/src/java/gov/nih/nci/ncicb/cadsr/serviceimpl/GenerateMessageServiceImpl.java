@@ -195,11 +195,11 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
          }       
     }
     
-    public String getMessage(String referenceDocumentIdSeq, String messageType) throws ServiceException {
+    public String getMessage(String formIdSeq, String referenceDocumentName, String messageType) throws ServiceException {
         try {
             validateMessageType(messageType);
-            String instrumentMessage = queryMetadataService.getInstrumentMessage(referenceDocumentIdSeq);
-            String gdMessage = queryMetadataService.getGlobalDefinitionsMessage(referenceDocumentIdSeq);
+            String instrumentMessage = queryMetadataService.getInstrumentMessage(formIdSeq, referenceDocumentName);
+            String gdMessage = queryMetadataService.getGlobalDefinitionsMessage(formIdSeq, referenceDocumentName);
             String message = null;
             if (messageType.equals(EDCI)) {
                 message = attachGlobalDefinitionsMIF(instrumentMessage, gdMessage);  
@@ -216,8 +216,8 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
             logger.error(se);throw se;
         }
         catch (Exception e) {
-            logger.error("Error getting message. for ReferenceDocument"+referenceDocumentIdSeq+" "+" "+messageType, e);
-            throw new ServiceException("Error getting message. for ReferenceDocument"+referenceDocumentIdSeq+" "+" "+messageType, e);
+            logger.error("Error getting message. for ReferenceDocument"+formIdSeq+ " ref doc "+referenceDocumentName+" "+" "+messageType, e);
+            throw new ServiceException("Error getting message. for ReferenceDocument"+formIdSeq+ " ref doc "+referenceDocumentName+" "+" "+messageType, e);
         }
         
     }

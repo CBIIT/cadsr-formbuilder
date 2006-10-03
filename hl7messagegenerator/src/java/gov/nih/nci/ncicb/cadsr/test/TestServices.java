@@ -8,6 +8,8 @@ import gov.nih.nci.ncicb.cadsr.dto.ReferenceDocumentAttachment;
 import gov.nih.nci.ncicb.cadsr.service.*;
 
 
+import gov.nih.nci.ncicb.cadsr.servicelocator.ServiceLocator;
+
 import java.util.Collection;
 
 import java.util.Date;
@@ -23,7 +25,7 @@ import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
 
 /**
- * Unit tests for the service layer.
+ * Define unit tests for eDCI message generator service layer.
  */
 public class TestServices extends TestCase {
     BeanFactory beanFactory;
@@ -435,6 +437,7 @@ public class TestServices extends TestCase {
     
     protected static String formIdSeq="1B4FBBDD-9FD4-5F94-E044-0003BA0B1A09";
     protected static String instrumentRefDocIdSeq="1DF7D85C-CF48-36EB-E044-0003BA0B1A09";
+    protected static String refDocName = "2353509:v1.0:20060921:10:43:08";
     public TestServices() {
     }
     
@@ -531,7 +534,7 @@ public class TestServices extends TestCase {
     
     public void testGenerateDCIDefMessage() {
       try {
-        GenerateMessageService generateMessageService = (GenerateMessageService)beanFactory.getBean("generateMessageService");
+        GenerateMessageService generateMessageService = new ServiceLocator().getGenerateMessageService();
         String message = generateMessageService.generateMessage(formIdSeq,"user", generateMessageService.GLOBAL_DEFINITIONS_MIF);
         System.out.println("Message :\n"+message);
       }
@@ -552,12 +555,26 @@ public class TestServices extends TestCase {
             e.printStackTrace();
             fail(e.getMessage());
         }
-    }     
+    }    
+    
+    public void testGeteDCIHL7Message() {
+        try {
+            GenerateMessageService generateMessageService = new ServiceLocator().getGenerateMessageService();
+            String message = generateMessageService.getMessage(formIdSeq,refDocName, generateMessageService.EDCI);
+            System.out.println("eDCI HL7 message "+message);
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+                fail(e.getMessage());
+            }
+    }
     
     public void testGenerateDCIHL7Message() {
       try {
-        GenerateMessageService generateMessageService = (GenerateMessageService)beanFactory.getBean("generateMessageService");
-        String message = generateMessageService.generateMessage(formIdSeq,"user", generateMessageService.EDCI);
+        GenerateMessageService generateMessageService = new ServiceLocator().getGenerateMessageService();
+        //String message = generateMessageService.generateMessage(formIdSeq,"user", generateMessageService.EDCI);
+        //form for QA
+         String message = generateMessageService.generateMessage("A68C74F0-9B90-58E6-E034-0003BA0B1A09","user", generateMessageService.EDCI);
         System.out.println("Message :\n"+message);
       }
       catch(Exception e){

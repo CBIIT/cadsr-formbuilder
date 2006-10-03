@@ -1,0 +1,152 @@
+<!-- edited with XML Spy v3.5 NT (http://www.xmlspy.com) by George Beeler (Beeler Consulting LLC) -->
+<!--
+* Copyright 2002 Health Level Seven, Inc. All Rights Reserved.
+*
+* This software is the proprietary information of Health Level Seven, Inc.
+* Use is subject to license terms.
+-->
+<!--
+	add local elements to various classes
+	defined in the main DTD
+  -->
+<!ENTITY % local.ref.class "| classRef | assocRef|invAssocRef | attRef | dtRef | stateRef | sbjRef">
+<!ENTITY % local.p.class "|sbjArea|cls|attr|assoc|invAssocRef|stateEngine|state|transition">
+<!ENTITY % local.emph.class "| ital">
+<!ENTITY % local.header.mdl ", legalese">
+<!--
+	include the main DTD
+  -->
+<!ENTITY % v3pub SYSTEM 'v3pub.dtd'>
+%v3pub;
+<!--
+	declare new elements/attributes here
+	to be useful, these new elements have to
+	appear in the local classes above
+  -->
+<!ENTITY % AttAtt "Cardinality CDATA #REQUIRED
+	DomainSpec CDATA #IMPLIED
+	CodingStrength CDATA #IMPLIED">
+<!ENTITY % ConstAtt "Mandatory (M) #IMPLIED
+	Note CDATA #IMPLIED
+	Default CDATA #IMPLIED
+	DefaultUpdateMode CDATA #IMPLIED
+	UpdateModeSet CDATA #IMPLIED
+	Conformance (R | NP) #IMPLIED">
+<!ELEMENT legalese EMPTY>
+<!ATTLIST legalese
+	copyRightOwner CDATA #IMPLIED
+	copyRightDate CDATA #IMPLIED
+	copyRightNotation CDATA #IMPLIED
+	renderer CDATA #IMPLIED
+	renderNotation CDATA #IMPLIED
+	contactEmail CDATA #IMPLIED
+	contactName CDATA #IMPLIED
+	contactNote CDATA #IMPLIED
+>
+<!ATTLIST RIM
+	id ID #REQUIRED
+	modelID CDATA #REQUIRED
+	modelType (RIM | RMIM | MIM) #REQUIRED
+	developOrgn CDATA #IMPLIED
+	developCommittee CDATA #IMPLIED
+>
+<!ELEMENT RIM (header, body)>
+<!ATTLIST sbjArea
+	id ID #REQUIRED
+	name CDATA #REQUIRED
+	parentArea IDREF #IMPLIED
+>
+<!ELEMENT sbjArea (p*, sbjArea*, classRef*)>
+<!ATTLIST cls
+	id ID #REQUIRED
+	abst (True | False) #IMPLIED
+	name CDATA #REQUIRED
+	shortName CDATA #IMPLIED
+	superType IDREF #IMPLIED
+	primeSA IDREF #IMPLIED
+>
+<!ELEMENT cls (rimParent?, p*, designNote*, subTypes?, attr*, assocs?, stateEngine?)>
+<!ATTLIST designNote
+	noteType CDATA #REQUIRED
+	noteNumber CDATA #REQUIRED
+>
+<!ELEMENT designNote (p*)>
+<!ELEMENT rimParent EMPTY>
+<!ATTLIST rimParent
+	rimFQN CDATA #REQUIRED
+	rimRef CDATA #REQUIRED
+>
+<!ELEMENT classRef EMPTY>
+<!ATTLIST classRef
+	%ref-req.att;
+>
+<!ELEMENT ital (%p.pcd.mix;)*>
+<!ELEMENT subTypes (classRef)*>
+<!ELEMENT assocs (assocRef)*>
+<!--"type" in the attribute list of attr, should really be an external IDREF to a data type specification.-->
+<!ATTLIST attr
+	id ID #REQUIRED
+	name CDATA #REQUIRED
+	type CDATA #IMPLIED
+	shortName CDATA #IMPLIED
+	parentClass IDREF #REQUIRED
+	%AttAtt;
+	%ConstAtt;
+>
+<!ELEMENT attr (rimParent?, dtRef?, p*, v23Ref*, designNote*)>
+<!ELEMENT v23Ref (#PCDATA)>
+<!ATTLIST assoc
+	id ID #REQUIRED
+	srceClass IDREF #REQUIRED
+	fwdName CDATA #REQUIRED
+	srceCard CDATA #REQUIRED
+	fwdDisplay CDATA #REQUIRED
+	destClass IDREF #REQUIRED
+	invName CDATA #REQUIRED
+	destCard CDATA #REQUIRED
+	invDisplay CDATA #REQUIRED
+	%ConstAtt;
+>
+<!ELEMENT assoc (rimParent?, p*, designNote*)>
+<!ELEMENT assocRef EMPTY>
+<!ATTLIST assocRef
+	%ref-req.att;
+>
+<!ELEMENT invAssocRef EMPTY>
+<!ATTLIST invAssocRef
+	id ID #REQUIRED
+	fwdID IDREF #REQUIRED
+>
+<!ATTLIST stateEngine
+	parentClass IDREF #REQUIRED
+>
+<!ELEMENT stateEngine (state+, transition+)>
+<!ATTLIST state
+	id ID #REQUIRED
+	name CDATA #REQUIRED
+	parentClass IDREF #REQUIRED
+>
+<!ELEMENT state (p*)>
+<!ATTLIST transition
+	id ID #REQUIRED
+	name CDATA #REQUIRED
+	startState IDREF #REQUIRED
+	endState IDREF #REQUIRED
+>
+<!ELEMENT transition (p*)>
+<!ELEMENT attRef EMPTY>
+<!ATTLIST attRef
+	%ref-req.att;
+>
+<!ELEMENT dtRef EMPTY>
+<!ATTLIST dtRef
+	ref NMTOKEN #REQUIRED
+>
+<!ELEMENT stateRef EMPTY>
+<!ATTLIST stateRef
+	%ref-req.att;
+>
+<!ELEMENT sbjRef EMPTY>
+<!ATTLIST sbjRef
+	%ref-req.att;
+>

@@ -1,0 +1,183 @@
+MIF Snippets.    examples of CloneClass and Associations and Choices.  To be used in conjunction with
+the MessageTypeLoaderInfo.txt file to show where data can be found in MIF files to populate the
+org.hl7.meta.impl classes during Message Loading.   Would like to match the "symbols" defined in the 
+
+MessageTypeLoaderInfo.txt file  to places in this file to demonstrate where to find the correct
+information.
+
+
+
+HEADER
+
+<serializedStaticModel xmlns="urn:hl7-org:v3/mif" representationKind="serialized" isSerializable="true" packageKind="id" name="040001" title="ICSRReactionReportHMD">
+   <packageLocation root="DEFN" section="HM" subSection="PO" domain="RR" artifact="HD-deprecated" xmlns:mif="urn:hl7-org:v3/mif"/>
+   <header xmlns:mif="urn:hl7-org:v3/mif">
+      <renderingInformation schemaVersion="1" application="RoseTree 2.9.65">
+         <renderingNotes>RoseTreeToMIFStaticModel.xsl version: 1.1</renderingNotes>
+      </renderingInformation>
+      <legalese copyrightOwner="Health Level Seven, Inc." copyrightYears="2004">
+         <notation>All rights reserved.</notation>
+      </legalese>
+   </header>
+   <derivationSupplier staticModelDerivationId="1" xmlns:mif="urn:hl7-org:v3/mif">
+      <targetStaticModel root="DEFN" artifact="RIM" version="00"/>
+   </derivationSupplier>
+   <derivationSupplier staticModelDerivationId="2" xmlns:mif="urn:hl7-org:v3/mif">
+      <targetStaticModel root="DEFN" section="HM" subSection="PO" domain="RR" artifact="RM-deprecated" id="040001"/>
+   </derivationSupplier>
+   <ownedEntryPoint useKind="SemanticPayload" xmlns:mif="urn:hl7-org:v3/mif">
+   
+   
+   
+   Example of root class and three attributes
+   
+         <specializedClass>
+         <class [[[*mtrc]]]name="InvestigationEvent" isAbstract="false">
+            <derivationSupplier staticModelDerivationId="1" [[[*mtcc]]]className="Observation"/>
+            <derivationSupplier staticModelDerivationId="2" className="InvestigationEvent"/>
+            <annotations/>
+            <attribute [[[*an]]]name="classCode" sortKey="1" isStructural="true" [[[*acd]]]minimumMultiplicity="1" maximumMultiplicity="1" [[[*am]]]isMandatory="true" [[[*acnf]]]conformance="R" [[[*adf]]]fixedValue="INVSTG">
+               <annotations/>
+               <derivationSupplier staticModelDerivationId="1" [[[*ap]]][[[*arc]]]className="Act" [[[*arpn]]]attributeName="classCode"/>
+               <derivationSupplier staticModelDerivationId="2" className="InvestigationEvent" attributeName="classCode"/>
+               [[[*adt]]]<type name="CS"/>
+               <supplierDomainSpecification [[[*acs]]]codingStrength="CNE" domainName="ActClass" mnemonic="INVSTG"/>
+            </attribute>
+            <attribute name="moodCode" sortKey="2" isStructural="true" minimumMultiplicity="1" maximumMultiplicity="1" isMandatory="true" conformance="R" fixedValue="EVN">
+               <annotations/>
+               <derivationSupplier staticModelDerivationId="1" className="Act" attributeName="moodCode"/>
+               <derivationSupplier staticModelDerivationId="2" className="InvestigationEvent" attributeName="moodCode"/>
+               <type name="CS"/>
+               <supplierDomainSpecification codingStrength="CNE" domainName="ActMood" mnemonic="EVN"/>
+            </attribute>
+            <attribute name="id" sortKey="3" minimumMultiplicity="1" maximumMultiplicity="1" isMandatory="false" conformance="R">
+               <annotations>
+                  <designComments>
+                     <text>
+                        <p>world wide ID</p>
+                     </text>
+                  </designComments>
+               </annotations>
+               <derivationSupplier staticModelDerivationId="1" className="Act" attributeName="id"/>
+               <derivationSupplier staticModelDerivationId="2" className="InvestigationEvent" attributeName="id"/>
+               <type name="II"/>
+            </attribute>
+            
+            
+            Top section of deeply nesting association
+            
+             <association sortKey="1">
+               <targetConnection [[[*ccan]]]name="directTarget" [[[*ccacrd]]]minimumMultiplicity="0" maximumMultiplicity="1" [[[*ccam]]]isMandatory="false" sortKey="AA________">
+                  <annotations/>
+                  <derivationSupplier staticModelDerivationId="1" [[[*ccarc]]]className="Act" [[[*ccarpn]]]associationEndName="participation"/>
+                  <derivationSupplier staticModelDerivationId="2" className="Act" associationEndName="directTarget"/>
+                  <participantClass>
+                     <class [[[*ccn]]]name="DirectTarget2" isAbstract="false">
+                        <derivationSupplier staticModelDerivationId="1"  [[[*ccrc]]]className="Participation"/>
+                        <derivationSupplier staticModelDerivationId="2" className="DirectTarget2"/>
+                        <annotations/>
+                        <attribute name="typeCode" sortKey="1" isStructural="true" minimumMultiplicity="1" maximumMultiplicity="1" isMandatory="true" conformance="R" defaultValue="DIR">
+                           <annotations/>
+                           <derivationSupplier staticModelDerivationId="1" className="Participation" attributeName="typeCode"/>
+                           <derivationSupplier staticModelDerivationId="2" className="DirectTarget2" attributeName="typeCode"/>
+                           <type name="CS"/>
+                           <supplierDomainSpecification codingStrength="CNE" domainName="ParticipationTargetDirect" mnemonic="DIR"/>
+                        </attribute>
+                        <attribute name="contextControlCode" sortKey="2" isStructural="true" minimumMultiplicity="0" maximumMultiplicity="1" isMandatory="false">
+                           <annotations/>
+                           <derivationSupplier staticModelDerivationId="1" className="Participation" attributeName="contextControlCode"/>
+                           <derivationSupplier staticModelDerivationId="2" className="DirectTarget2" attributeName="contextControlCode"/>
+                           <type name="CS"/>
+                           <supplierDomainSpecification codingStrength="CNE" domainName="ContextControl"/>
+                        </attribute>
+                        
+                        
+                        
+                        One complete Association with some CMETS
+                        
+                         <association sortKey="1">
+                           <targetConnection name="product" minimumMultiplicity="1" maximumMultiplicity="1" isMandatory="false" sortKey="BZ">
+                              <annotations/>
+                              <derivationSupplier staticModelDerivationId="1" className="Participation" associationEndName="role"/>
+                              <derivationSupplier staticModelDerivationId="2" className="Participation" associationEndName="participant"/>
+                              <participantClassSpecialization className="R_DeviceUniversal" traversalName="identifiedDevice"/>
+                              <participantClassSpecialization className="R_DrugUniversal" traversalName="administeredDrug"/>
+                              <participantClass>
+                                 <class name="Product2" isAbstract="true">
+                                    <derivationSupplier staticModelDerivationId="1" className="Role"/>
+                                    <derivationSupplier staticModelDerivationId="2" className="Product2"/>
+                                    <annotations/>
+                                    <specializationChild sortKey="1">
+                                       <specializedClass>
+                                          <commonModelElementRef name="R_DeviceUniversal" isAbstract="false">
+                                             <derivationSupplier staticModelDerivationId="1" className="RoleHeir"/>
+                                             <derivationSupplier staticModelDerivationId="2" className="R_DeviceUniversal"/>
+                                             <annotations/>
+                                          </commonModelElementRef>
+                                       </specializedClass>
+                                    </specializationChild>
+                                    <specializationChild sortKey="2">
+                                       <specializedClass>
+                                          <commonModelElementRef name="R_DrugUniversal" isAbstract="false">
+                                             <derivationSupplier staticModelDerivationId="1" className="RoleHeir"/>
+                                             <derivationSupplier staticModelDerivationId="2" className="R_DrugUniversal"/>
+                                             <annotations/>
+                                          </commonModelElementRef>
+                                       </specializedClass>
+                                    </specializationChild>
+                                 </class>
+                              </participantClass>
+                           </targetConnection>
+                           <sourceConnection>
+                              <nonTraversableConnection [[[*ccap]]]participantClassName="DirectTarget2"/>
+                           </sourceConnection>
+                        </association>
+                        
+                        
+                        Header of CMET
+                        
+ <serializedStaticModel xmlns="urn:hl7-org:v3/mif" representationKind="serialized" isSerializable="true" packageKind="id" [[[*cmacmid]]]name="090102" title="R_AssignedPerson Identified/Confirmable">
+   <packageLocation root="DEFN" section="IM" subSection="CO" domain="CT" artifact="HD-deprecated" xmlns:mif="urn:hl7-org:v3/mif"/>
+   <header xmlns:mif="urn:hl7-org:v3/mif">
+      <renderingInformation schemaVersion="1" application="RoseTree 2.9.65">
+         <renderingNotes>RoseTreeToMIFStaticModel.xsl version: 1.1</renderingNotes>
+      </renderingInformation>
+      <legalese copyrightOwner="Health Level Seven, Inc." copyrightYears="2004">
+         <notation>All rights reserved.</notation>
+      </legalese>
+   </header>
+   <derivationSupplier staticModelDerivationId="1" xmlns:mif="urn:hl7-org:v3/mif">
+      <targetStaticModel root="DEFN" artifact="RIM" version="00"/>
+   </derivationSupplier>
+   <derivationSupplier staticModelDerivationId="2" xmlns:mif="urn:hl7-org:v3/mif">
+      <targetStaticModel root="DEFN" section="IM" subSection="CO" domain="CT" artifact="RM-deprecated" id="090102"/>
+   </derivationSupplier>
+   <ownedEntryPoint useKind="SemanticPayload" xmlns:mif="urn:hl7-org:v3/mif">
+   
+    <specializedClass>
+         <class name="AssignedEntity" isAbstract="false">
+            <derivationSupplier staticModelDerivationId="1" [[[*cmarc]]]className="RoleHeir"/>
+            <derivationSupplier staticModelDerivationId="2" className="AssignedEntity"/>
+   
+   
+   A Choice Association from inside a CMEt
+   
+ <ownedAssociation sortKey="1">
+
+<connections>
+
+<traversableConnection  [[[*cman]]][[[*chan]]]name="assignedPrincipalChoiceList" participantClassName="PrincipalChoiceList" [[[*cmacrd]]][[[*chacrd]]]minimumMultiplicity="0" maximumMultiplicity="1"  [[[*cmam]]]  [[[*cham]]]isMandatory="false">
+<derivationSupplier staticModelDerivationId="1" [[[*charc]]]className="RoleHeir" [[[*chat]]]associationEndName="player"/>
+<derivationSupplier staticModelDerivationId="2" className="RoleHeir" associationEndName="assignedPrincipalChoiceList"/>
+<derivationSupplier staticModelDerivationId="3" className="RoleHeir" associationEndName="assignedPrincipalChoiceList"/>
+<!--abstract-->
+<participantClassSpecialization [[[*chaca]]]className="Organization" artifactCode="COCT_MT090000" traversalName="assignedOrganization"/>
+<participantClassSpecialization className="Person" artifactCode="COCT_MT090000" traversalName="assignedPerson"/>
+<participantClassSpecialization className="Device" artifactCode="COCT_MT090000" traversalName="assignedDevice"/>
+</traversableConnection>
+-
+	<nonTraversableConnection [[[*chap]]]participantClassName="AssignedEntity">
+<!--not abstract-->
+</nonTraversableConnection>
+</connections>
+</ownedAssociation>

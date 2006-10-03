@@ -2,7 +2,9 @@ package gov.nih.nci.ncicb.cadsr.test;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-
+/**
+ * Test querying Instrument metadata
+ */
 public class TestQueryInstrumentMetadata extends TestServices{
     public TestQueryInstrumentMetadata() {
     }
