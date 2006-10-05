@@ -121,7 +121,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
      */
     protected gov.nih.nci.ncicb.cadsr.edci.domain.DataElement getDataElement(DataElement dE) throws DataAccessException {
         gov.nih.nci.ncicb.cadsr.edci.domain.DataElement eDCIDE = domainObjectFactory.getDataElement();
-        eDCIDE.setDefinition(dE.getPreferredDefinition());
+        eDCIDE.setDefinition(dE.getPreferredDefinition().substring(1,255));
         EDCIConfiguration config = EDCIConfiguration.getInstance();
         try {
             eDCIDE.setDescription(getDocText(dE,"Description"));
@@ -160,7 +160,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
       DataElementConcept eDCIDEC = domainObjectFactory.getDataElementConcept();
       gov.nih.nci.cadsr.domain.DataElementConcept dEC = dE.getDataElementConcept();
       eDCIDEC.setGUID(dEC.getId());
-      eDCIDEC.setDefinition(dEC.getPreferredDefinition());
+      eDCIDEC.setDefinition(dEC.getPreferredDefinition().substring(1,255));
       eDCIDEC.setName(dEC.getLongName());
       eDCIDEC.setDescription(dEC.getConceptualDomain().getPreferredDefinition());
       return eDCIDEC;
@@ -180,7 +180,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
       if (vD.getDecimalPlace()!=null){
       eDCIVD.setDecimalPlaces(vD.getDecimalPlace());
       }
-      eDCIVD.setDescription(vD.getPreferredDefinition());
+      eDCIVD.setDescription(vD.getPreferredDefinition().substring(1,255));
       eDCIVD.setGUID(vD.getId());
       eDCIVD.setMaximumLength(vD.getMaximumLengthNumber());
       eDCIVD.setName(vD.getLongName());
@@ -221,7 +221,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
                           EVDElementText eVDET = domainObjectFactory.getEVDElementText();
                           
                           eVDET.setValueMeaning(vDPVS.getPermissibleValue().getValueMeaning().getShortMeaning());
-                          eVDET.setValueMeaningDescription(vDPVS.getPermissibleValue().getValueMeaning().getDescription());
+                          eVDET.setValueMeaningDescription(vDPVS.getPermissibleValue().getValueMeaning().getDescription().substring(1,255));
                           eVDET.setLanguage(config.getProperty("default.language"));
                           eVDETC.add(eVDET);
                           
