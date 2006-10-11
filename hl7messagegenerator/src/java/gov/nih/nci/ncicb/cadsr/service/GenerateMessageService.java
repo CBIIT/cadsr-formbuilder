@@ -24,7 +24,6 @@ public interface GenerateMessageService {
      * messageType can be 
      *     -  EDCI
      *     -  EDCI_WITHOUT_ATTACHMENT
-     *     -  GLOBAL_DEFINITIONS_MIF
      * @param formIdSeq
      * @param user
      * @param messageType 
@@ -37,7 +36,6 @@ public interface GenerateMessageService {
      * messageType can be 
      *     -  EDCI
      *     -  EDCI_WITHOUT_ATTACHMENT
-     *     -  GLOBAL_DEFINITIONS_MIF
      * @param formIdSeq
      * @param generateDate
      * @param messageType
@@ -91,8 +89,6 @@ public interface GenerateMessageService {
      */
     public Collection<ReferenceDocument> queryFormMessageReferenceDocuments(String formIdSeq) throws ServiceException;
     
-    public void setDaoFactory(EDCIDAOFactory eDCIDAOFactory);
-
-    public EDCIDAOFactory getDaoFactory();     
+  
    
 }
