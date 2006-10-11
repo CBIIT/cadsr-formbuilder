@@ -12,7 +12,7 @@
  
   <bean id="appService" class="gov.nih.nci.system.applicationservice.ApplicationServiceProvider" 
               factory-method="getRemoteInstance">
-        <constructor-arg><value>http://cabio-dev.nci.nih.gov/cacore32/http/remoteService</value></constructor-arg>
+        <constructor-arg><value>http://cbiodev104.nci.nih.gov:59080/cacore32/http/remoteService</value></constructor-arg>
   </bean>
   <bean id="dataSource" class="oracle.jdbc.pool.OracleDataSource">
      <property name="URL"><value>jdbc:oracle:thin:@cbiodb2-d.nci.nih.gov:1521:CBDEV</value></property>

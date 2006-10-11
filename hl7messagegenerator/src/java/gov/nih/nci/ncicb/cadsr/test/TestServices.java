@@ -572,9 +572,9 @@ public class TestServices extends TestCase {
     public void testGenerateDCIHL7Message() {
       try {
         GenerateMessageService generateMessageService = new ServiceLocator().getGenerateMessageService();
-        //String message = generateMessageService.generateMessage(formIdSeq,"user", generateMessageService.EDCI);
+        String message = generateMessageService.generateMessage(formIdSeq,"user", generateMessageService.EDCI);
         //form for QA
-         String message = generateMessageService.generateMessage("A68C74F0-9B90-58E6-E034-0003BA0B1A09","user", generateMessageService.EDCI);
+         //String message = generateMessageService.generateMessage("A68C74F0-9B90-58E6-E034-0003BA0B1A09","user", generateMessageService.EDCI);
         System.out.println("Message :\n"+message);
       }
       catch(Exception e){

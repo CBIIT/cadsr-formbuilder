@@ -9,11 +9,13 @@ import gov.nih.nci.cadsr.domain.Form;
 import gov.nih.nci.cadsr.domain.Module;
 import gov.nih.nci.cadsr.domain.NonenumeratedValueDomain;
 import gov.nih.nci.cadsr.domain.Organization;
+import gov.nih.nci.cadsr.domain.PermissibleValue;
 import gov.nih.nci.cadsr.domain.Person;
 import gov.nih.nci.cadsr.domain.Question;
 import gov.nih.nci.cadsr.domain.ReferenceDocument;
 import gov.nih.nci.cadsr.domain.ValidValue;
 import gov.nih.nci.cadsr.domain.ValueDomainPermissibleValue;
+import gov.nih.nci.cadsr.domain.ValueMeaning;
 import gov.nih.nci.ncicb.cadsr.constants.EDCIConfiguration;
 import gov.nih.nci.ncicb.cadsr.dao.DataAccessException;
 import gov.nih.nci.ncicb.cadsr.dao.GlobalDefinitionsDAO;
@@ -39,15 +41,15 @@ import org.springframework.transaction.annotation.Transactional;
      */
 public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements GlobalDefinitionsDAO
 {
-   
+
     private static Logger logger = LogManager.getLogger(GlobalDefinitionsDAO.class);
     private ReferenceDocumentCreator refDocCreator;
     private RefDocAttachmentCreator refDocAttachmentCreator;
     private QueryRefDocAttachment queryRefDocAttachment;
     private StoreBlob storeBlob;
     private SimpleDateFormat formatter = new SimpleDateFormat(":yyyyMMdd:HH:mm:ss");
-    
-    public GlobalDefinitionsDAOImpl() 
+
+    public GlobalDefinitionsDAOImpl()
     {
     }
     //@Transactional(readOnly=true)
@@ -70,17 +72,8 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
               ArrayList<gov.nih.nci.ncicb.cadsr.edci.domain.DataElement> dataElements = new ArrayList<gov.nih.nci.ncicb.cadsr.edci.domain.DataElement>();
               ArrayList<DataElementConcept> dataElementConcepts = new ArrayList<DataElementConcept>();
               ArrayList<ValueDomain> valueDomains = new ArrayList<ValueDomain>();
-              
-              /*
-              Person person = new Person();
-              Collection<Address> addrs = person.getAddressCollection();
-              Organization org = new Organization();
-              org.getAddressCollection();
-              AdministeredComponent ac = new AdministeredComponent();
-              Collection<ReferenceDocument> rds =ac.getReferenceDocumentCollection();
-              for(ReferenceDocument rd:rds){
-              }*/
-              
+
+
               for (Module module:modules)   {
                   DataElementGroup dataElementGroup = domainObjectFactory.getDataElementGroup();
                   dataElementGroup.setDescription(module.getPreferredDefinition());
@@ -103,15 +96,15 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
              globalDefinitions.setDataElementConceptCollection(dataElementConcepts);
              globalDefinitions.setValueDomainCollection(valueDomains);
           }
-            
+
         }catch(Exception e) {
             logger.error("Error querying DataElements.", e);
             throw new DataAccessException("Error querying DataElements.", e);
         }
-        
-       
+
+
         return globalDefinitions;
-        
+
     }
 
     /**
@@ -121,7 +114,10 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
      */
     protected gov.nih.nci.ncicb.cadsr.edci.domain.DataElement getDataElement(DataElement dE) throws DataAccessException {
         gov.nih.nci.ncicb.cadsr.edci.domain.DataElement eDCIDE = domainObjectFactory.getDataElement();
-        eDCIDE.setDefinition(dE.getPreferredDefinition().substring(1,255));
+        if (dE.getPreferredDefinition() != null)
+        {
+          eDCIDE.setDefinition(dE.getPreferredDefinition().substring(0, Math.min(255,dE.getPreferredDefinition().length())));
+        }
         EDCIConfiguration config = EDCIConfiguration.getInstance();
         try {
             eDCIDE.setDescription(getDocText(dE,"Description"));
@@ -134,14 +130,14 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
         } catch (DataAccessException e) {
             logger.error("Error setting DataElement Text Collection.", e);
             throw new DataAccessException("Error setting DataElement Text Collection.", e);
-        
+
         }
         try {
             eDCIDE.setAlternateDesignationCollection(getAlternateDesignationCollection(dE));
         } catch (DataAccessException e) {
             logger.error("Error setting DataElement Alternate Designation.", e);
             throw new DataAccessException("Error setting Alternate Designations.", e);
-        
+
         }
         eDCIDE.setGUID(dE.getId());
         eDCIDE.setName(dE.getLongName());
@@ -155,12 +151,15 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
      * @param dE
      * @return DataElementConcept
      * @throws DataAccessException
-     */   
+     */
   protected DataElementConcept getDataElementConcept(gov.nih.nci.cadsr.domain.DataElement dE) throws DataAccessException{
       DataElementConcept eDCIDEC = domainObjectFactory.getDataElementConcept();
       gov.nih.nci.cadsr.domain.DataElementConcept dEC = dE.getDataElementConcept();
       eDCIDEC.setGUID(dEC.getId());
-      eDCIDEC.setDefinition(dEC.getPreferredDefinition().substring(1,255));
+      if (dEC.getPreferredDefinition() != null)
+      {
+        eDCIDEC.setDefinition(dEC.getPreferredDefinition().substring(0, Math.min(255,dEC.getPreferredDefinition().length())));
+      }
       eDCIDEC.setName(dEC.getLongName());
       eDCIDEC.setDescription(dEC.getConceptualDomain().getPreferredDefinition());
       return eDCIDEC;
@@ -171,7 +170,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
      * @param question
      * @return ValueDomain
      * @throws DataAccessException
-     */   
+     */
   protected ValueDomain getValueDomain(gov.nih.nci.cadsr.domain.DataElement dE, Question question) throws DataAccessException{
       ValueDomain eDCIVD = domainObjectFactory.getValueDomain();
       gov.nih.nci.cadsr.domain.ValueDomain vD = dE.getValueDomain();
@@ -180,13 +179,16 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
       if (vD.getDecimalPlace()!=null){
       eDCIVD.setDecimalPlaces(vD.getDecimalPlace());
       }
-      eDCIVD.setDescription(vD.getPreferredDefinition().substring(1,255));
+      if (vD.getPreferredDefinition() != null)
+      {
+        eDCIVD.setDescription(vD.getPreferredDefinition().substring(0, Math.min(255,vD.getPreferredDefinition().length())));
+      }
       eDCIVD.setGUID(vD.getId());
       eDCIVD.setMaximumLength(vD.getMaximumLengthNumber());
       eDCIVD.setName(vD.getLongName());
       eDCIVD.setNamespace(config.getProperty("default.namespace"));
       try{
-      eDCIVD.setSourceCodingSystem(getDocText(vD,"VD Reference"));     
+      eDCIVD.setSourceCodingSystem(getDocText(vD,"VD Reference"));
       } catch (DataAccessException e) {
             logger.error("Error setting DataElement Description.", e);
             throw new DataAccessException("Error setting DataElement Description.", e);
@@ -194,50 +196,55 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
       if (vD instanceof EnumeratedValueDomain) {
              eDCIVD.setIsEnumeratedFlag(true);
              EnumeratedValueDomain eVD = (EnumeratedValueDomain) vD;
-             
+
              // base subset based on then value domain
              EVDSubset baseEVDS = domainObjectFactory.getEVDSubset();
              baseEVDS.setBaseSubsetFlag(true);
              baseEVDS.setSubsetId(geteDCIGUID(getGUID()));
-             
+
              // subset based on use in question
              EVDSubset eVDSS = domainObjectFactory.getEVDSubset();
              eVDSS.setBaseSubsetFlag(false);
              eVDSS.setSubsetId(geteDCIGUID(getGUID()));
-             
+
              // get all permissible values for the valid value
-             Collection<ValueDomainPermissibleValue> eVDS = eVD.getValueDomainPermissibleValueCollection();  
+             Collection<ValueDomainPermissibleValue> eVDS = eVD.getValueDomainPermissibleValueCollection();
                     Integer i = 0;
                      for (ValueDomainPermissibleValue vDPVS:eVDS){
                           i++;
-                          
+
                           // element for a permissible Value
                           EVDElement eVDE = domainObjectFactory.getEVDElement();
                           eVDE.setValue(vDPVS.getPermissibleValue().getValue());
-                          
+
                           ArrayList <EVDElementText> eVDETC = new ArrayList <EVDElementText> ();
-                          
+
                           // value meaning for the permissible value
                           EVDElementText eVDET = domainObjectFactory.getEVDElementText();
-                          
-                          eVDET.setValueMeaning(vDPVS.getPermissibleValue().getValueMeaning().getShortMeaning());
-                          eVDET.setValueMeaningDescription(vDPVS.getPermissibleValue().getValueMeaning().getDescription().substring(1,255));
+                          PermissibleValue pv = vDPVS.getPermissibleValue();
+                          ValueMeaning vm = pv.getValueMeaning();
+                          eVDET.setValueMeaning(vm.getShortMeaning());
+                          String valueMeaningDescription = vDPVS.getPermissibleValue().getValueMeaning().getDescription();
+                          if (valueMeaningDescription != null)
+                          {
+                            eVDET.setValueMeaningDescription(valueMeaningDescription.substring(0,Math.min(valueMeaningDescription.length(),255)));
+					      }
                           eVDET.setLanguage(config.getProperty("default.language"));
                           eVDETC.add(eVDET);
-                          
+
                           // Add the Element Text Collection to the Element
                           eVDE.setEVDElementTextCollection(eVDETC);
-                          
+
                           // Create a base subset  element
                           ElementInSubset baseESS = domainObjectFactory.getElementInSubset();
                          // get its value from permissible values of value domain
                           baseESS.setValue(eVDE.getValue());
                           baseESS.setSequenceNumber(i);
-                          
+
                           // Create a subset element
                           ElementInSubset eSS = domainObjectFactory.getElementInSubset();
                           eSS.setValue(eVDE.getValue());
-                          
+
                           // set its value based on it's usage by the question
                           Collection <ValidValue> vVC = new ArrayList <ValidValue>();
                           vVC = question.getValidValueCollection();
@@ -248,12 +255,12 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
                                   eSS.setSequenceNumber(validValue.getDisplayOrder());
                               }
                           }
-                         
+
                           baseEVDS.addElementInSubset(baseESS);
                           eDCIVD.addEVDElement(eVDE);
-                          
-                      } 
-                      
+
+                      }
+
                       //eDCIDE.setEVDSubsetId(baseEVDS.getSubsetId());
                       eDCIVD.addEVDSubset(baseEVDS);
                       if ( !baseEVDS.equals(eVDSS)){
@@ -263,17 +270,17 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
       else if (vD instanceof NonenumeratedValueDomain) {
                       eDCIVD.setIsEnumeratedFlag(false);
                   }
-                  
+
         return eDCIVD;
   }
-  
+
     /**
      * Returns the documentText associated with an AdministeredComponent
      * @param ac
      * @param documentType
      * @return documentText
      * @throws DataAccessException
-     */   
+     */
   protected String getDocText(AdministeredComponent ac, String documentType) throws DataAccessException{
         String docText;
         docText = null;
@@ -281,62 +288,65 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
         referenceDocuments = ac.getReferenceDocumentCollection();
 
         for (ReferenceDocument referenceDocument:referenceDocuments){
-      
+
           if (referenceDocument.getType().equals(documentType)) {
               docText =referenceDocument.getDoctext();
               break;
           }
-         
-      
+
+
       }
-      
+
       return docText;
   }
-  
- 
-  
+
+
+
     /**
      * Returns Collection of DataElementText associated with a DataElement
      * @param dE
      * @return Collection of DataElementText
      * @throws DataAccessException
-     */   
-     
+     */
+
   protected Collection <DataElementText> getDataElementTextCollection(gov.nih.nci.cadsr.domain.DataElement dE) throws DataAccessException{
       Collection<ReferenceDocument> referenceDocuments = dE.getReferenceDocumentCollection();
-      
+
        EDCIConfiguration config = EDCIConfiguration.getInstance();
        Collection<DataElementText> dETC = new ArrayList <DataElementText> ();
-      
+
        for (ReferenceDocument referenceDocument:referenceDocuments){
-       
+
            if (referenceDocument.getType().equals("Preferred Question Text") ){
                DataElementText dET = domainObjectFactory.getDataElementText();
                dET.setPrompt(referenceDocument.getDoctext());
                dET.setLanguage(referenceDocument.getLanguageName());
+               if (dET.getLanguage() == null) {
+                   dET.setLanguage(config.getProperty("default.language"));
+               }
                dETC.add(dET);
            }
-       
-       }       
+
+       }
        if (dETC.isEmpty()){
            DataElementText dET = domainObjectFactory.getDataElementText();
            dET.setPrompt(dE.getLongName());
            dET.setLanguage(config.getProperty("default.language"));
            dETC.add(dET);
        }
-       
+
        return dETC;
   }
-  
+
     /**
      * Returns a Collection of AlternateDesignations associated with a DataElement
      * @param dE
      * @return Collection of AlternateDesignations
      * @throws DataAccessException
-     */   
+     */
     protected Collection <AlternateDesignation> getAlternateDesignationCollection(gov.nih.nci.cadsr.domain.DataElement dE) throws DataAccessException{
         Collection<AlternateDesignation> aDC = new ArrayList <AlternateDesignation> ();
-        Collection<Designation> designations = dE.getDesignationCollection();             
+        Collection<Designation> designations = dE.getDesignationCollection();
         for (Designation designation:designations){
            AlternateDesignation aD = domainObjectFactory.getAlternateDesignation();
            aD.setLanguage(designation.getLanguageName());
@@ -380,20 +390,20 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
             logger.error("Error querying form.",e);
             throw new DataAccessException("Error querying form.",e);
         }
-    }   
+    }
     /**
-     * Get the name of the ReferenceDocument used to store the instrument Hl7 
+     * Get the name of the ReferenceDocument used to store the instrument Hl7
      * message based on current date.
      * @param form
      * @return name of the ReferenceDocument
      * @throws DataAccessException
      */
     protected String getRefDocName(Form form) throws DataAccessException
-    {      
+    {
        return getRefDocName(form,new Date());
     }
     /**
-     * Get the name of the ReferenceDocument used to store the instrument Hl7 
+     * Get the name of the ReferenceDocument used to store the instrument Hl7
      * message
      * @param form
      * @param createDate
@@ -407,10 +417,10 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
        name.append(":v");
        name.append(form.getVersion());
        name.append(formatter.format(createDate));
-       
+
        return name.toString();
-    }    
-    
+    }
+
     /**
      * Gets the attachment name for ReferenceDocument for GlobalDefinitions MIF message
      * @param refDocName
@@ -418,7 +428,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
      */
     protected String getAttachmentName(ReferenceDocument refDoc) {
         return refDoc.getName()+"G";
-    }    
+    }
 
     //@Transactional(readOnly=false,
       //             propagation=Propagation.REQUIRED,
@@ -434,7 +444,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
               if (storeBlob == null) {
                   storeBlob = new StoreBlob(dataSource);
               }
-             //HM 
+             //HM
               if (message == null) {
                    throw new DataAccessException("Global Definitions MIF message is null.");
               }
@@ -446,7 +456,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
               referenceDocument.setName(getRefDocName(form, createDate));
               referenceDocument.setContext(form.getContext());
               referenceDocument = refDocCreator.createReferenceDocument(referenceDocument, formIdSeq);
-              
+
               ReferenceDocumentAttachment refDocAttachment = new ReferenceDocumentAttachment();
               refDocAttachment.setReferenceDocument(referenceDocument);
               refDocAttachment.setMimeType("text/xml");
@@ -459,7 +469,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
               return referenceDocument.getId();
          }
          catch (Exception e) {
-             //HM changed error message 
+             //HM changed error message
              logger.error("Error storing Global Definitions MIF message.", e);
              throw new DataAccessException("Error storing Global Definitions MIF message.", e);
          }
@@ -481,7 +491,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
                ReferenceDocument referenceDocument = (ReferenceDocument)refDocs.get(0);
                ReferenceDocumentAttachment rda = queryRefDocAttachment.query(getAttachmentName(referenceDocument));
                rda.setReferenceDocument(referenceDocument);
-               
+
                return rda;
            }
            catch(Exception e) {
@@ -489,7 +499,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
                throw new DataAccessException("Error querying ReferenceDocumentAttachment.",e);
            }
      }
-     
+
     public ReferenceDocumentAttachment queryGlobalDefinitionsMIFMessage(String formIdSeq, String referenceDocumentName) throws DataAccessException {
         try {
             if (queryRefDocAttachment == null){
@@ -509,13 +519,13 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
             ReferenceDocument referenceDocument = (ReferenceDocument)refDocs.get(0);
             ReferenceDocumentAttachment rda = queryRefDocAttachment.query(getAttachmentName(referenceDocument));
             rda.setReferenceDocument(referenceDocument);
-            
+
             return rda;
         }
         catch(Exception e) {
             logger.error("Error querying ReferenceDocumentAttachment.",e);
             throw new DataAccessException("Error querying ReferenceDocumentAttachment.",e);
-        }          
+        }
     }
 
     public ReferenceDocumentAttachment queryGlobalDefinitionsMIFMessage(String rdIdSeq) throws DataAccessException {
@@ -532,15 +542,15 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
             ReferenceDocument referenceDocument = (ReferenceDocument)refDocs.get(0);
             ReferenceDocumentAttachment rda = queryRefDocAttachment.query(getAttachmentName(referenceDocument));
             rda.setReferenceDocument(referenceDocument);
-            
+
             return rda;
         }
         catch(Exception e) {
             logger.error("Error querying ReferenceDocumentAttachment.",e);
             throw new DataAccessException("Error querying ReferenceDocumentAttachment.",e);
-        }        
+        }
     }
-    
-   
-   
+
+
+
 }
