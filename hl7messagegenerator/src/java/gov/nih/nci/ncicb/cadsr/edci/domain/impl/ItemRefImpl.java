@@ -5,6 +5,7 @@ import gov.nih.nci.ncicb.cadsr.edci.domain.ItemDef;
 import gov.nih.nci.ncicb.cadsr.edci.domain.ItemRef;
 import gov.nih.nci.ncicb.cadsr.edci.domain.ItemRefHelp;
 import gov.nih.nci.ncicb.cadsr.edci.domain.ItemRefPrompt;
+import gov.nih.nci.ncicb.cadsr.edci.domain.PersistentInformation;
 import gov.nih.nci.ncicb.cadsr.edci.domain.RangeCheck;
 
 import gov.nih.nci.ncicb.cadsr.edci.domain.TriggeredAction;
@@ -25,6 +26,8 @@ public class ItemRefImpl implements ItemRef {
     private Collection<TriggeredAction> triggeredActionCollection;
     private Collection<ExplicitItemRefRepetition> explicitItemRefRepetitionCollection;
     private Collection<RangeCheck> rangeCheckCollection;
+    private Collection<PersistentInformation> persistentInformationCollection;
+
     
     public ItemRefImpl() {
     }
@@ -124,4 +127,12 @@ public class ItemRefImpl implements ItemRef {
     public Collection<ExplicitItemRefRepetition> getExplicitItemRefRepetitionCollection() {
         return explicitItemRefRepetitionCollection;
     }
+    
+    public void setPersistentInformationCollection(Collection persistentInformationCollection) {
+        this.persistentInformationCollection = persistentInformationCollection;
+    }
+
+    public Collection getPersistentInformationCollection() {
+        return persistentInformationCollection;
+    }    
 }

@@ -259,13 +259,13 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
       EDCIConfiguration config = EDCIConfiguration.getInstance();
       String csvFileLocation = config.getProperty("csvFileLocation");
       try {
-      //Create a csv File from the instrument based on a CSV file specification
-       String instrumentSCSFile = config.getProperty("InstrumentSCSFile");
+        CSVFileGenerator csvFileGenerator = new CSVFileGenerator();
+        File csvFile = csvFileGenerator.getCSVFile(instrument);
       //Is there a way to validate the generated csvFile against csv File specification.
        
-       //Return a test csv File
+       //Return a test csv File for now
        String testFileName ="040002.csv"; 
-       File csvFile = new File(csvFileLocation+testFileName);
+       csvFile = new File(csvFileLocation+testFileName);
        return csvFile;    
       }
       catch(Exception e){
@@ -288,6 +288,15 @@ public class GenerateMessageServiceImpl implements GenerateMessageService
              //Read in the Stylesheet.
              String globalDefinitionsToMIFStylesheet = config.getProperty("GlobalDefinitionsToMIFStyleSheet");
              URL styleSheetUrl = getClass().getResource(globalDefinitionsToMIFStylesheet);
+             if (styleSheetUrl == null) {
+                File file = new File(globalDefinitionsToMIFStylesheet);
+                if (file.exists()) {
+                   styleSheetUrl = file.toURL();
+                }
+                else {
+                     throw new ServiceException("Cannot find the global definitions to MIF stylesheet. Tried "+globalDefinitionsToMIFStylesheet);
+                }
+             }
              InputStream styleSheetStream = styleSheetUrl.openStream();
              Source styleSheet = new StreamSource(styleSheetStream);
              logger.debug("System id "+styleSheet.getSystemId());

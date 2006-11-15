@@ -2,6 +2,8 @@ package gov.nih.nci.ncicb.cadsr.edci.domain;
 
 import java.io.Serializable;
 
+import java.util.Collection;
+
 public interface ItemDef extends Serializable {
 
     public void setDataElementGUID(String dataElementGUID);
@@ -31,4 +33,12 @@ public interface ItemDef extends Serializable {
     public void setOccurenceSn(String occurenceSn);
 
     public String getOccurenceSn();
+    
+    public void setRangeCheckCollection(Collection<RangeCheck> rangeCheckCollection) ;
+
+    public Collection<RangeCheck> getRangeCheckCollection();
+    
+    public void setNavigationSequenceNumber(String navigationSequenceNumber) ;
+
+    public String getNavigationSequenceNumber();    
 }

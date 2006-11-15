@@ -2,7 +2,7 @@ package gov.nih.nci.ncicb.cadsr.edci.domain;
 
 import java.io.Serializable;
 
-public interface Instruction extends Serializable{
+public interface Instruction extends PersistentInformation{
 
     public void setInstructionText(String instructionText);
 

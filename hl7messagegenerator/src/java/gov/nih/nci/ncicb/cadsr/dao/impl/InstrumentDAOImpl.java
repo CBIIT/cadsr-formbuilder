@@ -8,6 +8,7 @@ import gov.nih.nci.cadsr.domain.FormElement;
 import gov.nih.nci.cadsr.domain.Module;
 import gov.nih.nci.cadsr.domain.Protocol;
 import gov.nih.nci.cadsr.domain.Question;
+import gov.nih.nci.cadsr.domain.QuestionConditionComponents;
 import gov.nih.nci.cadsr.domain.QuestionRepetition;
 import gov.nih.nci.cadsr.domain.ReferenceDocument;
 import gov.nih.nci.cadsr.domain.TriggerAction;
@@ -78,7 +79,7 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
           
           //Create the SectionRef, it refers to the sectionDef
           SectionRef sectionRef = domainObjectFactory.getSectionRef();
-          sectionRef.setId(form.getId());
+          sectionRef.setId(geteDCIGUID(form.getId()));
           sectionRef.setName(form.getLongName());
           sectionRef.setNavigationSequenceNumber(config.getProperty("sectionRefNavigationSequenceNumber"));
           sectionRef.setSectionDef(sectionDef);
@@ -113,8 +114,9 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
           //Create the GroupDef
           GroupDef groupDef = domainObjectFactory.getGroupDef();
           DataElementGroup dataElementGroup = getDataElementGroup(module, globalDefinitions);
-          groupDef.setDataElementGroupGUID(geteDCIGUID(dataElementGroup.getGUID()));
+          groupDef.setDataElementGroupGUID(dataElementGroup.getGUID());
           groupDef.setDescription(module.getPreferredDefinition());
+          groupDef.setName(module.getLongName());
           groupDef.setId(geteDCIGUID(getGUID()));
           Integer maximumQuestionRepeat = module.getMaximumQuestionRepeat();
           if ((maximumQuestionRepeat != null)&&(maximumQuestionRepeat.intValue()>0))
@@ -131,8 +133,9 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
           groupRef.setMaximumItemRefRepeats(module.getMaximumQuestionRepeat()==null?null:module.getMaximumQuestionRepeat().toString());
           groupRef.setName(module.getLongName());
           groupRef.setNavigationSequenceNumber(module.getDisplayOrder().toString());
-          
-          Collection<Designation> designations = module.getDesignationCollection();
+          //
+          //Collection<Designation> designations = module.getDesignationCollection();
+           Collection<Designation> designations = form.getDesignationCollection();
           Collection<GroupAlias> groupAliases = new ArrayList<GroupAlias>(designations.size());
           for (Designation designation:designations) {
               GroupAlias  groupAlias = domainObjectFactory.getGroupAlias();
@@ -174,10 +177,20 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
             itemDef.setDataElementGUID(geteDCIGUID(dataElement.getGUID()));
             itemDef.setId(geteDCIGUID(getGUID()));
             // isMandatory new for 3.2
-            //itemDef.setIsMandatoryFlag(question.isMandatory());
-            //This mapping to displayOrder is incorrect
-            //itemDef.setOccurenceSn(question.getDisplayOrder().toString());
-            //Range check based on 3.2
+            itemDef.setIsMandatoryFlag(question.getIsMandatory());
+            itemDef.setNavigationSequenceNumber(question.getDisplayOrder().toString());
+            //?Range check based on 3.2
+            /**
+             * Need more information from Prerna to create RangeCheck.
+            Collection<QuestionConditionComponents> qcs = question.getQuestionComponentCollection();
+            for (QuestionConditionComponents qcc: qcs) {
+                RangeCheck rc = domainObjectFactory.getRangeCheck();
+                rc.setComparator(qcc.getOperand());
+                rc.setSoftHard(config.getProperty("default.rangeCheck.softHard"));
+                rc.setUnitOfMeasure(qcc.getQuestion().getValueDomain().getUOMName());
+                qcc.getQuestionCondition().
+            }
+            */
             //Get the enumeratedValueDomainSubSetId
             if (question.getDataElement().getValueDomain() instanceof EnumeratedValueDomain)
             {
@@ -185,7 +198,7 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
                itemDef.setEnumeratedValueDomainSubsetId(evdSubset.getSubsetId());  
             }
             itemDefs.add(itemDef);
-
+            
             
             
             //Create the ItemRef
@@ -198,6 +211,7 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
             itemRefPrompt.setPrompt(question.getLongName());
             itemRefPrompt.setLanguage(config.getProperty("default.language"));
             Collection<ItemRefPrompt> itemRefPrompts = new ArrayList<ItemRefPrompt>(1);
+            itemRefPrompts.add(itemRefPrompt);
             itemRef.setItemRefPromptCollection(itemRefPrompts);
             ValidValue  defaultValidValue = null;
             if ((question.getDefaultValidValueId()== null)||(question.getDefaultValidValueId().equals(""))) {
@@ -214,6 +228,16 @@ public class InstrumentDAOImpl  extends CaDSRApiDAOImpl implements InstrumentDAO
                 }
                 itemRef.setDefaultValue(defaultValidValue.getLongName());
             }
+            //Set Instructions
+             Collection<gov.nih.nci.cadsr.domain.Instruction> questionInstructions = question.getInstruction();
+             Collection<Instruction> instructions = new ArrayList<Instruction>(questionInstructions.size());
+             for (gov.nih.nci.cadsr.domain.Instruction caDSRInstruction: questionInstructions){
+                Instruction instruction = domainObjectFactory.getInstruction();
+                instruction.setInstructionText(caDSRInstruction.getLongName());
+                instruction.setLanguage(config.getProperty("default.language"));
+                instructions.add(instruction);
+             }            
+             itemRef.setPersistentInformationCollection(instructions);
             //set ExplicitItemRefRepetition
             Collection<QuestionRepetition> questionRepetitions = question.getQuestionRepetitionCollection();
             Collection<ExplicitItemRefRepetition> explicitItemRefRepetitions = new ArrayList<ExplicitItemRefRepetition>(questionRepetitions.size());

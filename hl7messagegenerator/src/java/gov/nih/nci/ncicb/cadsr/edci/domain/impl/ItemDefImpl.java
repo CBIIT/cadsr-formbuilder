@@ -15,7 +15,15 @@ public class ItemDefImpl implements ItemDef{
     private String isSectionDifferentiatorFlag;
     private String occurenceSn;
     private Collection<RangeCheck> rangeCheckCollection;
+    private String navigationSequenceNumber;
+    
+    public void setRangeCheckCollection(Collection<RangeCheck> rangeCheckCollection) {
+        this.rangeCheckCollection = rangeCheckCollection;
+    }
 
+    public Collection<RangeCheck> getRangeCheckCollection() {
+        return rangeCheckCollection;
+    }
     
     public ItemDefImpl() {
     }
@@ -75,5 +83,13 @@ public class ItemDefImpl implements ItemDef{
     public String getOccurenceSn() {
         return occurenceSn;
     }
+    
+    public void setNavigationSequenceNumber(String navigationSequenceNumber) {
+        this.navigationSequenceNumber = navigationSequenceNumber;
+    }
+
+    public String getNavigationSequenceNumber() {
+        return navigationSequenceNumber;
+    }    
 
 }

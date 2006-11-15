@@ -62,7 +62,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
         try {
             //HM activityTime is a mandatory field
           globalDefinitions.setActivityTime(new Date());
-          List forms = appService.search(Form.class.getName(), form);
+          List forms = (List)appService.search(Form.class.getName(), form);
             Form qForm;
             if (forms.size()== 0) throw new Exception("Could not find the form for "+formIdSeq);
             qForm = (Form)forms.get(0);
@@ -79,6 +79,7 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
                   dataElementGroup.setDescription(module.getPreferredDefinition());
                   dataElementGroup.setName(module.getLongName());
                   dataElementGroup.setNamespace(config.getProperty("default.namespace"));
+                  dataElementGroup.setGUID(geteDCIGUID(getGUID()));
                   Collection<Question> questions = module.getQuestionCollection();
                   for (Question question:questions){
                       DataElement dE = question.getDataElement();
@@ -223,13 +224,16 @@ public class GlobalDefinitionsDAOImpl  extends CaDSRApiDAOImpl implements Global
                           EVDElementText eVDET = domainObjectFactory.getEVDElementText();
                           PermissibleValue pv = vDPVS.getPermissibleValue();
                           ValueMeaning vm = pv.getValueMeaning();
-                          eVDET.setValueMeaning(vm.getShortMeaning());
-                          String valueMeaningDescription = vDPVS.getPermissibleValue().getValueMeaning().getDescription();
-                          if (valueMeaningDescription != null)
-                          {
-                            eVDET.setValueMeaningDescription(valueMeaningDescription.substring(0,Math.min(valueMeaningDescription.length(),255)));
-					      }
-                          eVDET.setLanguage(config.getProperty("default.language"));
+                          //? Getting an error querying short meaning 
+                           eVDET.setValueMeaning(vm.getShortMeaning());
+                            //eVDET.setValueMeaning("valueMeaningShortMeaning");
+                           String valueMeaningDescription = vDPVS.getPermissibleValue().getValueMeaning().getDescription();
+                            //String valueMeaningDescription = "valueMeaningDescription";
+                           if (valueMeaningDescription != null)
+                           {
+                             eVDET.setValueMeaningDescription(valueMeaningDescription.substring(0,Math.min(valueMeaningDescription.length(),255)));
+                           }
+                           eVDET.setLanguage(config.getProperty("default.language"));
                           eVDETC.add(eVDET);
 
                           // Add the Element Text Collection to the Element

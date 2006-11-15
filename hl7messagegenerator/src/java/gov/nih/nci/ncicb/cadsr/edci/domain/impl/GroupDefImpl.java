@@ -12,6 +12,7 @@ public class GroupDefImpl implements GroupDef {
     private String dataElementGroupGUID;
     private String description;
     private String id;
+    private String name;
     private String repeatingGroupFlag;
     private Collection<GroupAlias> groupAliasCollection;
     private Collection<ItemDef> itemDefCollection;
@@ -66,4 +67,12 @@ public class GroupDefImpl implements GroupDef {
     public Collection getItemDefCollection() {
         return itemDefCollection;
     }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }    
 }
