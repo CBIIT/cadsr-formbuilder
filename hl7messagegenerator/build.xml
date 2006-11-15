@@ -58,6 +58,7 @@
     </copy>
  </target>
  
+
  <target name="compile" depends="init">
     <javac
       destdir="${class.dir}"
@@ -82,6 +83,9 @@
        <fileset dir="${config.dir}/gd2mifStylesheets">
           <include name="*"/>
        </fileset>
+       <fileset dir="${config.dir}/eDCIToCSVStylesheets">
+          <include name="*"/>
+       </fileset>       
     </copy>
   </target>
 
@@ -174,4 +178,12 @@
               <test name="gov.nih.nci.ncicb.cadsr.test.TestGeteDCIHL7Message" />
            </junit>
   </target>  
+  
+  <!-- Test generate CSV File -->
+    <target name="testGenerateCSVFile" depends="dist,caadaptersetup"  >
+           <junit fork="yes" haltonerror="on" showoutput="yes"  printsummary="yes">
+              <classpath refid="test.classpath"/>
+              <test name="gov.nih.nci.ncicb.cadsr.test.TestGenerateCSVFile" />
+           </junit>
+  </target>    
 </project>

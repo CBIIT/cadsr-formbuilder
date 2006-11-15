@@ -29,4 +29,8 @@ public interface GroupDef extends Serializable{
     public void setItemDefCollection(Collection itemDefCollection);
 
     public Collection getItemDefCollection();
+    
+    public void setName(String name);
+
+    public String getName();    
 }

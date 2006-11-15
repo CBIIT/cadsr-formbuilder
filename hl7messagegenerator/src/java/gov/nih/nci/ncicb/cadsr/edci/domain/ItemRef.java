@@ -59,4 +59,10 @@ public interface ItemRef extends Serializable{
     public void setExplicitItemRefRepetitionCollection(Collection<ExplicitItemRefRepetition> explicitItemRefRepetitionCollection) ;
 
     public Collection<ExplicitItemRefRepetition> getExplicitItemRefRepetitionCollection() ;
+    
+    public void setPersistentInformationCollection(Collection persistentInformationCollection);
+
+    public Collection getPersistentInformationCollection();    
+    
+  
 }

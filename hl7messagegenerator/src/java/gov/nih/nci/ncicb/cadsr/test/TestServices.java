@@ -1,6 +1,7 @@
 package gov.nih.nci.ncicb.cadsr.test;
 
 import gov.nih.nci.cadsr.domain.ReferenceDocument;
+import gov.nih.nci.ncicb.cadsr.constants.EDCIConfiguration;
 import gov.nih.nci.ncicb.cadsr.dao.EDCIDAOFactory;
 import gov.nih.nci.ncicb.cadsr.dao.GlobalDefinitionsDAO;
 import gov.nih.nci.ncicb.cadsr.dao.InstrumentDAO;
@@ -556,6 +557,22 @@ public class TestServices extends TestCase {
             fail(e.getMessage());
         }
     }    
+    
+    public void testGenerateCSVFile() {
+        try  {
+            GenerateMessageService generateMessageService = new ServiceLocator().getGenerateMessageService();
+            generateMessageService.generateMessage(formIdSeq,"user", generateMessageService.EDCI_WITHOUT_ATTACHMENT);
+            EDCIConfiguration config = EDCIConfiguration.getInstance();
+            String csvLocation = config.getProperty("csvFileLocation");
+            System.out.println("Verify the csv file generated in "+csvLocation);
+
+        } catch (Exception ex)  {
+            ex.printStackTrace();
+            fail(ex.getMessage());
+        } finally  {
+        }
+        
+    }
     
     public void testGeteDCIHL7Message() {
         try {

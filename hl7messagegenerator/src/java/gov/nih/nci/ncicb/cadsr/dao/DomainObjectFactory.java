@@ -19,6 +19,7 @@ import gov.nih.nci.ncicb.cadsr.edci.domain.Instrument;
 import gov.nih.nci.ncicb.cadsr.edci.domain.ItemDef;
 import gov.nih.nci.ncicb.cadsr.edci.domain.ItemRef;
 import gov.nih.nci.ncicb.cadsr.edci.domain.ItemRefPrompt;
+import gov.nih.nci.ncicb.cadsr.edci.domain.RangeCheck;
 import gov.nih.nci.ncicb.cadsr.edci.domain.SectionDef;
 import gov.nih.nci.ncicb.cadsr.edci.domain.SectionRef;
 import gov.nih.nci.ncicb.cadsr.edci.domain.TriggeredAction;
@@ -152,4 +153,9 @@ public class DomainObjectFactory {
         ItemRefPrompt itemRefPrompt = (ItemRefPrompt)beanFactory.getBean("itemRefPrompt");
         return itemRefPrompt;
     }    
+    
+    public RangeCheck getRangeCheck() {
+        RangeCheck rangeCheck = (RangeCheck)beanFactory.getBean("rangeCheck");
+        return rangeCheck;
+    }
 }
