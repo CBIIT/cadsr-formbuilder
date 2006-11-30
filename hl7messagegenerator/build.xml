@@ -38,6 +38,9 @@
     <delete dir="${dist.dir}" failonerror="true" />
     <delete dir="${docs.dir}" failonerror="true" />
     <delete dir="${caAdapterFilesLocation}" failonerror="true" />
+    <delete dir="${InstrumentSCSFileLocation}" failonerror="true" />    
+    <delete dir="${InstrumentMAPFileLocation}" failonerror="true" />    
+    <delete dir="${InstrumentH3SFileLocation}" failonerror="true" />    
  </target>
 
  <target name="init">
@@ -46,6 +49,10 @@
     <mkdir dir="${dist.dir}"/> 
     <mkdir dir="${docs.dir}" />
     <mkdir dir="${caAdapterFilesLocation}" />
+    <mkdir dir="${csvFileLocation}" />
+    <mkdir dir="${InstrumentSCSFileLocation}" />
+    <mkdir dir="${InstrumentMAPFileLocation}" />
+    <mkdir dir="${InstrumentH3SFileLocation}" />    
  </target>
  
  <target name="caadaptersetup"  depends="init">
@@ -56,6 +63,26 @@
            <include name="schema/**" />
        </fileset>
     </copy>
+    <copy todir="${InstrumentSCSFileLocation}">
+       <fileset dir="${config.dir}/InstrumentSCSFile/">
+           <include name="*"/>
+       </fileset>
+    </copy>    
+    <copy todir="${csvFileLocation}">
+       <fileset dir="${config.dir}/SampleCSVFile/">
+           <include name="*"/>
+       </fileset>
+    </copy>        
+    <copy todir="${InstrumentMAPFileLocation}">
+       <fileset dir="${config.dir}/InstrumentMapFile/">
+           <include name="*"/>
+       </fileset>
+    </copy>      
+    <copy todir="${InstrumentH3SFileLocation}">
+       <fileset dir="${config.dir}/InstrumentH3SFile/">
+           <include name="*"/>
+       </fileset>
+    </copy>       
  </target>
  
 
@@ -72,7 +99,10 @@
  
  <target name="prepare" depends="compile">
     <!-- Copy property files and spring xml file.-->
-    <copy todir="${class.dir}">    
+    <filter token="CSVFileLocation" value="${csvFileLocation}"/>
+    <filter token="SCSFileLocation" value="${InstrumentSCSFileLocation}"/>
+    <filter token="MAPFileLocation" value="${InstrumentMAPFileLocation}"/>    
+    <copy todir="${class.dir}" filtering="true">    
       <fileset dir="${src.dir}">
         <include name="*.properties"/>
         <include name="*.xml"/>
