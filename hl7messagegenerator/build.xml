@@ -117,7 +117,7 @@
        They test the software using a particular form idseq -->
   <!-- Test querying GlobalDefinitions metadata -->
   <target name="testQueryGlobalDefinitions" depends="dist,caadaptersetup" >
-     <junit haltonerror="on" showoutput="yes"  printsummary="yes">
+     <junit fork="yes" haltonerror="on" showoutput="yes"  printsummary="yes">
         <classpath refid="test.classpath"/>
         <test name="gov.nih.nci.ncicb.cadsr.test.TestQueryGlobalDefinitionsMetadata" />
      </junit>
@@ -125,7 +125,7 @@
 
   <!-- Test Querying Instrument metadata -->
   <target name="testQueryInstrumentMetadata" depends="dist,caadaptersetup" >
-     <junit haltonerror="on" showoutput="yes"  printsummary="yes">
+     <junit fork="yes" haltonerror="on" showoutput="yes"  printsummary="yes">
         <classpath refid="test.classpath"/>
         <test name="gov.nih.nci.ncicb.cadsr.test.TestQueryInstrumentMetadata" />
      </junit>
@@ -133,7 +133,7 @@
 
   <!-- Test generating GlobalDefinitions MIF message. -->
   <target name="testGenerateGlobalDefinitionsMIF" depends="dist,caadaptersetup" >
-     <junit haltonerror="on" showoutput="yes"  printsummary="yes">
+     <junit fork="yes" haltonerror="on" showoutput="yes"  printsummary="yes">
         <classpath refid="test.classpath"/>
         <test name="gov.nih.nci.ncicb.cadsr.test.TestGenerateGlobalDefinitionsMIF" />
      </junit>
@@ -141,7 +141,7 @@
   
     <!-- Test generating Instrument HL7 message. -->
     <target name="testGenerateInstrumentHL7" depends="dist,caadaptersetup" >
-       <junit haltonerror="on" fork="yes" showoutput="yes"  printsummary="yes">
+       <junit  haltonerror="on" fork="yes" showoutput="yes"  printsummary="yes">
           <classpath refid="test.classpath"/>
           <test name="gov.nih.nci.ncicb.cadsr.test.TestGenerateInstrumentHL7" />
        </junit>
@@ -149,7 +149,7 @@
   
   <!-- Test query form Reference Documents. -->
   <target name="testQueryReferenceDocuments" depends="dist,caadaptersetup" >
-         <junit haltonerror="on" showoutput="yes"  printsummary="yes">
+         <junit fork="yes" haltonerror="on" showoutput="yes"  printsummary="yes">
             <classpath refid="test.classpath"/>
             <test name="gov.nih.nci.ncicb.cadsr.test.TestQueryFormReferenceDocuments" />
          </junit>
@@ -157,7 +157,7 @@
     
   <!-- Test query Instrument HL7 message. -->
   <target name="testQueryInstrumentMessge" depends="dist,caadaptersetup" >
-         <junit haltonerror="on" showoutput="yes"  printsummary="yes">
+         <junit fork="yes" haltonerror="on" showoutput="yes"  printsummary="yes">
             <classpath refid="test.classpath"/>
             <test name="gov.nih.nci.ncicb.cadsr.test.TestQueryInstrumentMessage" />
          </junit>
@@ -165,7 +165,7 @@
   
   <!-- Test store Instrument message -->
     <target name="testStoreInstrumentMessge" depends="dist,caadaptersetup" >
-           <junit haltonerror="on" showoutput="yes"  printsummary="yes">
+           <junit fork="yes" haltonerror="on" showoutput="yes"  printsummary="yes">
               <classpath refid="test.classpath"/>
               <test name="gov.nih.nci.ncicb.cadsr.test.TestStoreInstrumentMessage" />
            </junit>
@@ -173,7 +173,7 @@
   
   <!-- Test get Instrument message -->
     <target name="testGetInstrumentMessge" depends="dist,caadaptersetup" >
-           <junit haltonerror="on" showoutput="yes"  printsummary="yes">
+           <junit fork="yes" haltonerror="on" showoutput="yes"  printsummary="yes">
               <classpath refid="test.classpath"/>
               <test name="gov.nih.nci.ncicb.cadsr.test.TestGeteDCIHL7Message" />
            </junit>
