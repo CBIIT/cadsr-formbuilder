@@ -1,10 +1,10 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.service;
 
-import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderConstants;
-import gov.nih.nci.ncicb.cadsr.servicelocator.ServiceLocator;
-import gov.nih.nci.ncicb.cadsr.servicelocator.ServiceLocatorFactory;
-import gov.nih.nci.ncicb.cadsr.util.logging.Log;
-import gov.nih.nci.ncicb.cadsr.util.logging.LogFactory;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.common.FormBuilderConstants;
+import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocator;
+import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocatorFactory;
+import gov.nih.nci.ncicb.cadsr.common.util.logging.Log;
+import gov.nih.nci.ncicb.cadsr.common.util.logging.LogFactory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
@@ -20,7 +20,7 @@ import org.apache.struts.config.ModuleConfig;
 
 public class ServiceDelegateFactory implements PlugIn {
   private static Log log = LogFactory.getLog(ServiceDelegateFactory.class.getName());
-  private static final String SERVICE_LOCATOR_TYPE="gov.nih.nci.ncicb.cadsr.servicelocator.ServiceLocator";
+  private static final String SERVICE_LOCATOR_TYPE="gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocator";
   private String serviceClassName =
     "gov.nih.nci.ncicb.cadsr.formbuilder.service.ejb.FormBuilderDynamicRemoteServiceDelegateImpl";
   private ServiceLocator locator = null;    
@@ -108,7 +108,7 @@ public class ServiceDelegateFactory implements PlugIn {
   {
       Class serviceClass = Class.forName("gov.nih.nci.ncicb.cadsr.formbuilder.service.ejb.FormBuilderDynamicRemoteServiceDelegateImpl");
       Class[] paramTypes = new Class[1];
-      paramTypes[0]= Class.forName("gov.nih.nci.ncicb.cadsr.servicelocator.ServiceLocator");
+      paramTypes[0]= Class.forName("gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocator");
       
       Object[] objTypes = new Object[1];
       ServiceLocator locator= ServiceLocatorFactory.getEJBLocator();

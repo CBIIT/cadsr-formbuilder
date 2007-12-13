@@ -1,10 +1,10 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.NavigationConstants;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants;
 
-import gov.nih.nci.ncicb.cadsr.jsp.bean.PaginationBean;
+import gov.nih.nci.ncicb.cadsr.common.jsp.bean.PaginationBean;
 import java.util.List;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;

@@ -1,12 +1,12 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.common;
 
-import gov.nih.nci.ncicb.cadsr.resource.ClassSchemeItem;
-import gov.nih.nci.ncicb.cadsr.resource.Form;
-import gov.nih.nci.ncicb.cadsr.resource.FormElement;
-import gov.nih.nci.ncicb.cadsr.resource.Module;
-import gov.nih.nci.ncicb.cadsr.resource.Question;
-import gov.nih.nci.ncicb.cadsr.resource.FormValidValue;
-import gov.nih.nci.ncicb.cadsr.resource.Protocol;
+import gov.nih.nci.ncicb.cadsr.common.resource.ClassSchemeItem;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormElement;
+import gov.nih.nci.ncicb.cadsr.common.resource.Module;
+import gov.nih.nci.ncicb.cadsr.common.resource.Question;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue;
+import gov.nih.nci.ncicb.cadsr.common.resource.Protocol;
 
 import java.util.Iterator;
 import java.util.List;

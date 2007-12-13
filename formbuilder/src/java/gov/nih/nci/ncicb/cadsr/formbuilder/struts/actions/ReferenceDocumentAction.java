@@ -1,20 +1,20 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
-import gov.nih.nci.ncicb.cadsr.dto.AttachmentTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.ContextTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.ReferenceDocumentTransferObject;
-import gov.nih.nci.ncicb.cadsr.exception.DMLException;
+import gov.nih.nci.ncicb.cadsr.common.dto.AttachmentTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.formbeans.FormBuilderBaseDynaFormBean;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
+import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.formbeans.ReferenceDocFormBean;
-import gov.nih.nci.ncicb.cadsr.resource.AdminComponent;
-import gov.nih.nci.ncicb.cadsr.resource.Attachment;
-import gov.nih.nci.ncicb.cadsr.resource.Context;
-import gov.nih.nci.ncicb.cadsr.resource.Form;
-import gov.nih.nci.ncicb.cadsr.resource.ReferenceDocument;
-import gov.nih.nci.ncicb.cadsr.util.DBUtil;
+import gov.nih.nci.ncicb.cadsr.common.resource.AdminComponent;
+import gov.nih.nci.ncicb.cadsr.common.resource.Attachment;
+import gov.nih.nci.ncicb.cadsr.common.resource.Context;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.ReferenceDocument;
+import gov.nih.nci.ncicb.cadsr.common.util.DBUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -162,7 +162,7 @@ public class ReferenceDocumentAction
     DBUtil dbUtil = new DBUtil();
 
     //String dsName = CDEBrowserParams.getInstance("cdebrowser").getSbrDSN();
-    dbUtil.getOracleConnectionFromContainer();
+    dbUtil.getConnectionFromContainer();  // getOracleConnectionFromContainer();
 
     String sqlStmt = "SELECT blob_content, mime_type, doc_size from reference_blobs where name = ?";
     log.info(sqlStmt);
@@ -566,7 +566,7 @@ public class ReferenceDocumentAction
                                              HttpServletResponse response) throws IOException, ServletException {
   /*
   int displayOrder = Integer.parseInt(request.getParameter("selectedRefDocId"));
-  FormBuilderBaseDynaFormBean dynaForm = (FormBuilderBaseDynaFormBean)form;
+  GenericDynaFormBean dynaForm = (GenericDynaFormBean)form;
   dynaForm.set("selectedRefDocId"
   */
   return mapping.findForward("gotoCreateReferenceDoc");
@@ -587,7 +587,7 @@ public class ReferenceDocumentAction
   */
  public ActionForward saveNewReferenceDoc(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                           HttpServletResponse response) throws IOException, ServletException {
-  FormBuilderBaseDynaFormBean createForm = (FormBuilderBaseDynaFormBean)form;
+  GenericDynaFormBean createForm = (GenericDynaFormBean)form;
 
   String docName = (String)createForm.get("docName");
   String contextIdSeq = (String)createForm.get("contextIdSeq");
@@ -640,7 +640,7 @@ public class ReferenceDocumentAction
   */
  public ActionForward cancelCreateReferenceDoc(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                                HttpServletResponse response) throws IOException, ServletException {
-  FormBuilderBaseDynaFormBean createForm = (FormBuilderBaseDynaFormBean)form;
+  GenericDynaFormBean createForm = (GenericDynaFormBean)form;
 
   createForm.clear();
 
@@ -868,7 +868,7 @@ public class ReferenceDocumentAction
                                     HttpServletResponse response) throws IOException, ServletException {
   int displayOrder = Integer.parseInt(request.getParameter("selectedRefDocId"));
 
-  FormBuilderBaseDynaFormBean dynaForm = (FormBuilderBaseDynaFormBean)form;
+  GenericDynaFormBean dynaForm = (GenericDynaFormBean)form;
   Form crf = (Form)getSessionObject(request, CRF);
   List refDocs = crf.getRefereceDocs();
   ReferenceDocument refDoc = (ReferenceDocument)refDocs.get(displayOrder);
@@ -897,7 +897,7 @@ public class ReferenceDocumentAction
   */
  public ActionForward cancelEditReferenceDoc(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                              HttpServletResponse response) throws IOException, ServletException {
-  FormBuilderBaseDynaFormBean editForm = (FormBuilderBaseDynaFormBean)form;
+  GenericDynaFormBean editForm = (GenericDynaFormBean)form;
 
   editForm.clear();
 
@@ -937,7 +937,7 @@ public class ReferenceDocumentAction
   */
  public ActionForward saveEditReferenceDoc(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                            HttpServletResponse response) throws IOException, ServletException {
-  FormBuilderBaseDynaFormBean dynaForm = (FormBuilderBaseDynaFormBean)form;
+  GenericDynaFormBean dynaForm = (GenericDynaFormBean)form;
 
   Form crf = (Form)getSessionObject(request, CRF);
   List refDocs = crf.getRefereceDocs();
@@ -1023,7 +1023,7 @@ public class ReferenceDocumentAction
    DBUtil dbUtil = new DBUtil();
 
    //String dsName = CDEBrowserParams.getInstance("cdebrowser").getSbrDSN();
-   dbUtil.getOracleConnectionFromContainer();
+   dbUtil.getConnectionFromContainer();  // getOracleConnectionFromContainer();
    conn = dbUtil.getConnection();
    conn.setAutoCommit(false);
    //make new row

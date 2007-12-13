@@ -1,8 +1,8 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.common;
 
-import gov.nih.nci.ncicb.cadsr.exception.NestedCheckedException;
+import gov.nih.nci.ncicb.cadsr.common.exception.NestedCheckedException;
 import java.lang.reflect.InvocationTargetException;
-import gov.nih.nci.ncicb.cadsr.exception.DMLException;
+import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
 public class FormBuilderException extends NestedCheckedException {
   public FormBuilderException(String msg) {
     super(msg);

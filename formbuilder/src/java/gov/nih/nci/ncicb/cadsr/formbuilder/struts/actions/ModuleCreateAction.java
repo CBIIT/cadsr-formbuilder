@@ -1,15 +1,15 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
-import gov.nih.nci.ncicb.cadsr.CaDSRConstants;
-import gov.nih.nci.ncicb.cadsr.dto.FormInstructionTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.InstructionTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormInstructionTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.InstructionTransferObject;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.formbeans.FormBuilderBaseDynaFormBean;
-import gov.nih.nci.ncicb.cadsr.jsp.bean.PaginationBean;
-import gov.nih.nci.ncicb.cadsr.resource.Form;
-import gov.nih.nci.ncicb.cadsr.resource.Instruction;
-import gov.nih.nci.ncicb.cadsr.util.StringUtils;
+import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
+import gov.nih.nci.ncicb.cadsr.common.jsp.bean.PaginationBean;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
+import gov.nih.nci.ncicb.cadsr.common.util.StringUtils;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,10 +29,10 @@ import java.util.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import gov.nih.nci.ncicb.cadsr.dto.ModuleTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.ModuleInstructionTransferObject;
-import gov.nih.nci.ncicb.cadsr.resource.Module;
-import gov.nih.nci.ncicb.cadsr.resource.ModuleInstruction;
+import gov.nih.nci.ncicb.cadsr.common.dto.ModuleTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ModuleInstructionTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.resource.Module;
+import gov.nih.nci.ncicb.cadsr.common.resource.ModuleInstruction;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormActionUtil;
 
 
