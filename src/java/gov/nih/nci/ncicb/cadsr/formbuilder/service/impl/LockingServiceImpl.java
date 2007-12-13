@@ -1,9 +1,9 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.service.impl;
 
-import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormElementLocker;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.LockingService;
-import gov.nih.nci.ncicb.cadsr.resource.NCIUser;
-import gov.nih.nci.ncicb.cadsr.servicelocator.ServiceLocatorException;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.common.FormElementLocker;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.service.LockingService;
+import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
+import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocatorException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;

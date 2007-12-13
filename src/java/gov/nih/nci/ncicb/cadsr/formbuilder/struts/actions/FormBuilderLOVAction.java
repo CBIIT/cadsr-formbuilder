@@ -1,12 +1,13 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.NavigationConstants;
-import gov.nih.nci.ncicb.cadsr.lov.ProtocolsLOVBean;
-import gov.nih.nci.ncicb.cadsr.util.CDEBrowserParams;
-import gov.nih.nci.ncicb.cadsr.util.DBUtil;
-import gov.nih.nci.ncicb.cadsr.util.TabInfoBean;
+//import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants;
+import gov.nih.nci.ncicb.cadsr.common.lov.ClassificationsLOVBean;
+import gov.nih.nci.ncicb.cadsr.common.lov.ProtocolsLOVBean;
+import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
+import gov.nih.nci.ncicb.cadsr.common.util.DBUtil;
+import gov.nih.nci.ncicb.cadsr.common.util.TabInfoBean;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -15,7 +16,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
 
-import gov.nih.nci.ncicb.cadsr.resource.Context;
+import gov.nih.nci.ncicb.cadsr.common.ProcessConstants;
+import gov.nih.nci.ncicb.cadsr.common.resource.Context;
 
 import java.io.IOException;
 
@@ -47,7 +49,7 @@ public class FormBuilderLOVAction extends FormBuilderBaseDispatchAction {
 				       ActionForm form,
     HttpServletRequest request,
     HttpServletResponse response) throws IOException, ServletException {
-    FormBuilderServiceDelegate service = getFormBuilderService();
+    //FormBuilderServiceDelegate service = getFormBuilderService();
     DynaActionForm searchForm = (DynaActionForm) form;
     String protocolLongName =
       (String) searchForm.get(this.PROTOCOLS_LOV_PROTO_LONG_NAME);
@@ -118,6 +120,69 @@ public class FormBuilderLOVAction extends FormBuilderBaseDispatchAction {
           (ProtocolsLOVBean) getSessionObject(request, this.PROTOCOLS_LOV_BEAN);
         plb.getCommonLOVBean().resetRequest(request);
       }
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
+    finally {
+      try {
+        dbUtil.returnConnection();
+      }
+      catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+
+    return mapping.findForward(SUCCESS);
+  }
+
+  /**
+   * Returns all forms for the given criteria.
+   *
+   * @param mapping The ActionMapping used to select this instance.
+   * @param form The optional ActionForm bean for this request.
+   * @param request The HTTP Request we are processing.
+   * @param response The HTTP Response we are processing.
+   *
+   * @return
+   *
+   * @throws IOException
+   * @throws ServletException
+   */
+  public ActionForward getClassificationsLOV(
+				       ActionMapping mapping,
+				       ActionForm form,
+    HttpServletRequest request,
+    HttpServletResponse response) throws IOException, ServletException {
+    //FormBuilderServiceDelegate service = getFormBuilderService();
+    DynaActionForm searchForm = (DynaActionForm) form;
+    DBUtil dbUtil = new DBUtil();
+
+    try {
+        String contextIdSeq = request.getParameter("P_CONTE_IDSEQ");
+        request.setAttribute("P_CONTE_IDSEQ", contextIdSeq);
+        String performQuery = request.getParameter("performQuery");
+        String chk = (String)searchForm.get("chkContext");
+        ClassificationsLOVBean clb;
+
+	    TabInfoBean tib = new TabInfoBean("cdebrowser_lov_tabs");
+	    tib.processRequest(request);
+	
+	    if (tib.getMainTabNum() != 0) {
+	        tib.setMainTabNum(0);
+	    }
+	    setSessionObject(request, "tib", tib);
+	
+	    dbUtil.getConnectionFromContainer();
+	    if (performQuery == null) {
+	    	  clb = new ClassificationsLOVBean(request, dbUtil, chk, contextIdSeq);
+	        setSessionObject(request, ProcessConstants.CS_LOV, clb);
+	    }
+	    else {
+	    	  clb =
+	          (ClassificationsLOVBean) getSessionObject(request, ProcessConstants.CS_LOV);
+	    	  clb.getCommonLOVBean().resetRequest(request);
+	    }
     }
     catch (Exception ex) {
       ex.printStackTrace();

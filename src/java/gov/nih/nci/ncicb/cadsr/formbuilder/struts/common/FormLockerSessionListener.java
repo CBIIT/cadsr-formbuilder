@@ -2,8 +2,8 @@ package gov.nih.nci.ncicb.cadsr.formbuilder.struts.common;
 
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormAction;
 
-import gov.nih.nci.ncicb.cadsr.servicelocator.ApplicationServiceLocator;
-import gov.nih.nci.ncicb.cadsr.servicelocator.ServiceLocatorException;
+import gov.nih.nci.ncicb.cadsr.common.servicelocator.ApplicationServiceLocator;
+import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocatorException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSessionEvent;

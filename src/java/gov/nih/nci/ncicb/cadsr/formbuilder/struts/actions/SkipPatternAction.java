@@ -1,15 +1,15 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
-import gov.nih.nci.ncicb.cadsr.CaDSRConstants;
-import gov.nih.nci.ncicb.cadsr.dto.CSITransferObject;
+import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
+import gov.nih.nci.ncicb.cadsr.common.dto.CSITransferObject;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.formbeans.FormBuilderBaseDynaFormBean;
-import gov.nih.nci.ncicb.cadsr.jsp.bean.PaginationBean;
-import gov.nih.nci.ncicb.cadsr.resource.Form;
-import gov.nih.nci.ncicb.cadsr.resource.NCIUser;
-import gov.nih.nci.ncicb.cadsr.util.StringPropertyComparator;
-import gov.nih.nci.ncicb.cadsr.util.StringUtils;
+import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
+import gov.nih.nci.ncicb.cadsr.common.jsp.bean.PaginationBean;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
+import gov.nih.nci.ncicb.cadsr.common.util.StringPropertyComparator;
+import gov.nih.nci.ncicb.cadsr.common.util.StringUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -38,22 +38,22 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import gov.nih.nci.ncicb.cadsr.dto.FormTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.ContextTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.ProtocolTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.TriggerActionChangesTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.TriggerActionTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.TriggerActionChangesTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.TriggerActionTransferObject;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormJspUtil;
-import gov.nih.nci.ncicb.cadsr.resource.ClassSchemeItem;
-import gov.nih.nci.ncicb.cadsr.resource.Context;
-import gov.nih.nci.ncicb.cadsr.resource.FormElement;
-import gov.nih.nci.ncicb.cadsr.resource.FormValidValue;
-import gov.nih.nci.ncicb.cadsr.resource.Module;
-import gov.nih.nci.ncicb.cadsr.resource.Protocol;
-import gov.nih.nci.ncicb.cadsr.resource.Question;
-import gov.nih.nci.ncicb.cadsr.resource.TriggerAction;
+import gov.nih.nci.ncicb.cadsr.common.resource.ClassSchemeItem;
+import gov.nih.nci.ncicb.cadsr.common.resource.Context;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormElement;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue;
+import gov.nih.nci.ncicb.cadsr.common.resource.Module;
+import gov.nih.nci.ncicb.cadsr.common.resource.Protocol;
+import gov.nih.nci.ncicb.cadsr.common.resource.Question;
+import gov.nih.nci.ncicb.cadsr.common.resource.TriggerAction;
 
-import gov.nih.nci.ncicb.cadsr.resource.TriggerActionChanges;
+import gov.nih.nci.ncicb.cadsr.common.resource.TriggerActionChanges;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -106,7 +106,7 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
 
 
     DynaActionForm searchForm = (DynaActionForm) form;
-    FormBuilderBaseDynaFormBean formBean  = (FormBuilderBaseDynaFormBean)form;
+    GenericDynaFormBean formBean  = (GenericDynaFormBean)form;
     formBean.clear();
     //Add the new Skip Source
     Form sourceForm = (Form) getSessionObject(request,CRF);
@@ -153,7 +153,7 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
 
 
       DynaActionForm searchForm = (DynaActionForm) form;
-      FormBuilderBaseDynaFormBean formBean  = (FormBuilderBaseDynaFormBean)form;
+      GenericDynaFormBean formBean  = (GenericDynaFormBean)form;
 
       //Add the new Skip Source
       Module sourceModule = (Module) getSessionObject(request,MODULE);
@@ -206,7 +206,7 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
       DynaActionForm searchForm = (DynaActionForm) form;
       String triggerIndexStr = (String)searchForm.get(TRIGGER_ACTION_INDEX);
       int triggerIndex= Integer.parseInt(triggerIndexStr);
-      FormBuilderBaseDynaFormBean formBean  = (FormBuilderBaseDynaFormBean)form;
+      GenericDynaFormBean formBean  = (GenericDynaFormBean)form;
 
 
       Module sourceModule = (Module) getSessionObject(request,MODULE);
@@ -268,7 +268,7 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
 
 
       DynaActionForm searchForm = (DynaActionForm) form;
-      FormBuilderBaseDynaFormBean formBean  = (FormBuilderBaseDynaFormBean)form;
+      GenericDynaFormBean formBean  = (GenericDynaFormBean)form;
       String questionIndexStr = (String)formBean.get(SK_QUESTION_INDEX);
       String validvalueIndexStr = (String)formBean.get(SK_VALID_VALUE_INDEX);
       int qIndex= Integer.parseInt(questionIndexStr);
@@ -327,7 +327,7 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
 
 
       DynaActionForm searchForm = (DynaActionForm) form;
-      FormBuilderBaseDynaFormBean formBean  = (FormBuilderBaseDynaFormBean)form;
+      GenericDynaFormBean formBean  = (GenericDynaFormBean)form;
       String triggerIndexStr = (String)searchForm.get(TRIGGER_ACTION_INDEX);
       int triggerIndex= Integer.parseInt(triggerIndexStr);
 
@@ -423,7 +423,7 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
       HttpServletResponse response) throws IOException, ServletException {
 
       DynaActionForm searchForm = (DynaActionForm) form;
-      FormBuilderBaseDynaFormBean formBean  = (FormBuilderBaseDynaFormBean)form;
+      GenericDynaFormBean formBean  = (GenericDynaFormBean)form;
 
        String formIdSeq = (String) formBean.get(FORM_ID_SEQ);
         Form crf = null;
@@ -489,7 +489,7 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
       HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
       DynaActionForm searchForm = (DynaActionForm) form;
-      FormBuilderBaseDynaFormBean formBean  = (FormBuilderBaseDynaFormBean)form;
+      GenericDynaFormBean formBean  = (GenericDynaFormBean)form;
       //String indexStr = (String)formBean.get(MODULE_INDEX);
       //MODULE_INDEX is the source module index.
       String indexStr = (String)request.getParameter(TARGET_MODULE_INDEX);
@@ -523,7 +523,7 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
       HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
       DynaActionForm searchForm = (DynaActionForm) form;
-      FormBuilderBaseDynaFormBean formBean  = (FormBuilderBaseDynaFormBean)form;
+      GenericDynaFormBean formBean  = (GenericDynaFormBean)form;
       //String modIndexStr = (String)formBean.get(TARGET_MODULE_INDEX);
        //String modIndexStr = (String)formBean.get(MODULE_INDEX);
 

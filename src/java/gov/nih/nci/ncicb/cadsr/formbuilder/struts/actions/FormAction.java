@@ -1,14 +1,14 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
-import gov.nih.nci.ncicb.cadsr.CaDSRConstants;
+import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.formbeans.FormBuilderBaseDynaFormBean;
-import gov.nih.nci.ncicb.cadsr.jsp.bean.PaginationBean;
-import gov.nih.nci.ncicb.cadsr.resource.Form;
-import gov.nih.nci.ncicb.cadsr.resource.NCIUser;
-import gov.nih.nci.ncicb.cadsr.util.StringPropertyComparator;
-import gov.nih.nci.ncicb.cadsr.util.StringUtils;
+import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
+import gov.nih.nci.ncicb.cadsr.common.jsp.bean.PaginationBean;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
+import gov.nih.nci.ncicb.cadsr.common.util.StringPropertyComparator;
+import gov.nih.nci.ncicb.cadsr.common.util.StringUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -37,12 +37,12 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import gov.nih.nci.ncicb.cadsr.dto.FormTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.ContextTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.ProtocolTransferObject;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.resource.Context;
-import gov.nih.nci.ncicb.cadsr.resource.Protocol;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
+import gov.nih.nci.ncicb.cadsr.common.resource.Context;
+import gov.nih.nci.ncicb.cadsr.common.resource.Protocol;
 
 
 public class FormAction extends FormBuilderSecureBaseDispatchAction {
@@ -131,7 +131,6 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
         csCsiIdSeq,
         publicId, version, moduleLongName,cdePublicId,
         (NCIUser)getSessionObject(request,this.USER_KEY));
-
     }
     setSessionObject(request, this.FORM_SEARCH_RESULTS, forms,true);    
     //Initialize and add the PagenationBean to the Session
@@ -178,7 +177,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
     //Set the lookup values in the session
     setInitLookupValues(request);
     DynaActionForm searchForm = (DynaActionForm) form;
-    FormBuilderBaseDynaFormBean formBean  = (FormBuilderBaseDynaFormBean)form;
+    GenericDynaFormBean formBean  = (GenericDynaFormBean)form;
     formBean.clear();
     removeSessionObject(request, this.FORM_SEARCH_RESULTS);
     removeSessionObject(request, this.FORM_SEARCH_RESULTS_PAGINATION);
@@ -448,7 +447,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
       contextIdSeq = "";
     }
 
-    FormBuilderBaseDynaFormBean searchForm = (FormBuilderBaseDynaFormBean) form;
+    GenericDynaFormBean searchForm = (GenericDynaFormBean) form;
     searchForm.clear();
     searchForm.set(this.PROTOCOL_ID_SEQ, protocolIdSeq);
     searchForm.set(this.PROTOCOLS_LOV_NAME_FIELD, protocolLongName);
@@ -489,7 +488,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
     HttpServletRequest request,
     HttpServletResponse response) throws IOException, ServletException {
     
-    FormBuilderBaseDynaFormBean formBean  = (FormBuilderBaseDynaFormBean)form;
+    GenericDynaFormBean formBean  = (GenericDynaFormBean)form;
     formBean.clear();
     formBean.set(FormConstants.LATEST_VERSION_INDICATOR, FormConstants.LATEST_VERSION);  //default 
     removeSessionObject(request,FORM_SEARCH_RESULTS);
