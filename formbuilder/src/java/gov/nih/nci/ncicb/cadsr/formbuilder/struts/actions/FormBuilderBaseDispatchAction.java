@@ -1,20 +1,21 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
-import gov.nih.nci.ncicb.cadsr.CaDSRConstants;
-import gov.nih.nci.ncicb.cadsr.resource.Context;
-import gov.nih.nci.ncicb.cadsr.util.SessionUtils;
-import gov.nih.nci.ncicb.cadsr.exception.FatalException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderConstants;
+import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
+import gov.nih.nci.ncicb.cadsr.common.resource.Context;
+import gov.nih.nci.ncicb.cadsr.common.util.SessionUtils;
+import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.exception.FatalException;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.common.FormBuilderConstants;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.ServiceDelegateFactory;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.ServiceStartupException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.NavigationConstants;
-import gov.nih.nci.ncicb.cadsr.persistence.PersistenceConstants;
-import gov.nih.nci.ncicb.cadsr.resource.Form;
-import gov.nih.nci.ncicb.cadsr.resource.NCIUser;
-import gov.nih.nci.ncicb.cadsr.struts.common.*;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants;
+import gov.nih.nci.ncicb.cadsr.common.persistence.PersistenceConstants;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
+import gov.nih.nci.ncicb.cadsr.common.struts.common.*;
 
 
 import java.util.Iterator;
@@ -165,7 +166,18 @@ public class FormBuilderBaseDispatchAction extends BaseDispatchAction
     if (obj == null) {
       Collection contexts = getFormBuilderService().getAllContexts();
       setSessionObject(req, ALL_CONTEXTS, contexts);
-    }
+/*      try {
+		Iterator colIt = contexts.iterator();
+		  while(colIt.hasNext())
+			{		
+			  Context context = (Context)colIt.next();
+			  System.out.println("name : " + context.getName());
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+*/    }
 
     obj = getSessionObject(req, ALL_WORKFLOWS);
 
@@ -206,10 +218,10 @@ public class FormBuilderBaseDispatchAction extends BaseDispatchAction
       setSessionObject(req, USER_CONTEXTS, contexts);
     }
    
-   //Set the forms to be cleared if logedout or syserror
-   setObjectsForClear(req.getSession(),"searchForm");
-   setObjectsForClear(req.getSession(),"moduleEditForm");
-   setObjectsForClear(req.getSession(),"formEditForm");
+    //Set the forms to be cleared if logedout or syserror
+    setObjectsForClear(req.getSession(),"searchForm");
+    setObjectsForClear(req.getSession(),"moduleEditForm");
+    setObjectsForClear(req.getSession(),"formEditForm");
 
   }
 

@@ -2,7 +2,7 @@ package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
 import gov.nih.nci.cadsr.sentinel.util.DSRAlert;
 import gov.nih.nci.cadsr.sentinel.util.DSRAlertImpl;
-import gov.nih.nci.ncicb.cadsr.util.CDEBrowserParams;
+import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
 
 import java.io.IOException;
 
@@ -18,7 +18,7 @@ import org.apache.struts.action.ActionMapping;
 
 
 
-import gov.nih.nci.ncicb.cadsr.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
 
 import org.apache.struts.action.DynaActionForm;
 

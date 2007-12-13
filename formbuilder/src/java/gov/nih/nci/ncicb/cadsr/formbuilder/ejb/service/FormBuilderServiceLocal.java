@@ -1,15 +1,15 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service;
 
-import gov.nih.nci.ncicb.cadsr.exception.DMLException;
-import gov.nih.nci.ncicb.cadsr.resource.Form;
-import gov.nih.nci.ncicb.cadsr.resource.FormInstructionChanges;
-import gov.nih.nci.ncicb.cadsr.resource.Instruction;
-import gov.nih.nci.ncicb.cadsr.resource.InstructionChanges;
-import gov.nih.nci.ncicb.cadsr.resource.ModuleChanges;
-import gov.nih.nci.ncicb.cadsr.resource.NCIUser;
-import gov.nih.nci.ncicb.cadsr.resource.Module;
-import gov.nih.nci.ncicb.cadsr.resource.CDECart;
-import gov.nih.nci.ncicb.cadsr.resource.CDECartItem;
+import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormInstructionChanges;
+import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
+import gov.nih.nci.ncicb.cadsr.common.resource.InstructionChanges;
+import gov.nih.nci.ncicb.cadsr.common.resource.ModuleChanges;
+import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
+import gov.nih.nci.ncicb.cadsr.common.resource.Module;
+import gov.nih.nci.ncicb.cadsr.common.resource.CDECart;
+import gov.nih.nci.ncicb.cadsr.common.resource.CDECartItem;
 
 import java.util.Collection;
 import java.util.Map;

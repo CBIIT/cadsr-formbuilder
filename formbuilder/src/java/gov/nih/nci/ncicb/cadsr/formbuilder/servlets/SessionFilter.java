@@ -1,4 +1,4 @@
-package gov.nih.nci.ncicb.cadsr.cdebrowser.servlets;
+package gov.nih.nci.ncicb.cadsr.formbuilder.servlets;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;

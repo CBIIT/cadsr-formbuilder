@@ -1,43 +1,43 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
-import gov.nih.nci.ncicb.cadsr.CaDSRConstants;
-import gov.nih.nci.ncicb.cadsr.dto.FormValidValueChangeTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.FormValidValueChangesTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.FormValidValueTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.InstructionChangesTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.InstructionTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.ModuleChangesTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.ModuleTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.QuestionChangeTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.ValueDomainTransferObject;
-import gov.nih.nci.ncicb.cadsr.exception.FatalException;
+import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormValidValueChangeTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormValidValueChangesTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormValidValueTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.InstructionChangesTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.InstructionTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ModuleChangesTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ModuleTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.QuestionChangeTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ValueDomainTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.exception.FatalException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.formbeans.FormBuilderBaseDynaFormBean;
+import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormActionUtil;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.resource.AdminComponent;
-import gov.nih.nci.ncicb.cadsr.resource.ClassSchemeItem;
-import gov.nih.nci.ncicb.cadsr.resource.DataElement;
-import gov.nih.nci.ncicb.cadsr.resource.Definition;
-import gov.nih.nci.ncicb.cadsr.resource.Designation;
-import gov.nih.nci.ncicb.cadsr.resource.Form;
-import gov.nih.nci.ncicb.cadsr.resource.FormElement;
-import gov.nih.nci.ncicb.cadsr.resource.FormValidValue;
-import gov.nih.nci.ncicb.cadsr.resource.FormValidValueChange;
-import gov.nih.nci.ncicb.cadsr.resource.FormValidValueChanges;
-import gov.nih.nci.ncicb.cadsr.resource.Instruction;
-import gov.nih.nci.ncicb.cadsr.resource.InstructionChanges;
-import gov.nih.nci.ncicb.cadsr.resource.Module;
-import gov.nih.nci.ncicb.cadsr.resource.ModuleChanges;
-import gov.nih.nci.ncicb.cadsr.resource.Orderable;
-import gov.nih.nci.ncicb.cadsr.resource.Question;
-import gov.nih.nci.ncicb.cadsr.resource.QuestionChange;
-import gov.nih.nci.ncicb.cadsr.resource.TriggerAction;
-import gov.nih.nci.ncicb.cadsr.resource.ValidValue;
-import gov.nih.nci.ncicb.cadsr.resource.ValueDomain;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
+import gov.nih.nci.ncicb.cadsr.common.resource.AdminComponent;
+import gov.nih.nci.ncicb.cadsr.common.resource.ClassSchemeItem;
+import gov.nih.nci.ncicb.cadsr.common.resource.DataElement;
+import gov.nih.nci.ncicb.cadsr.common.resource.Definition;
+import gov.nih.nci.ncicb.cadsr.common.resource.Designation;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormElement;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormValidValueChange;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormValidValueChanges;
+import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
+import gov.nih.nci.ncicb.cadsr.common.resource.InstructionChanges;
+import gov.nih.nci.ncicb.cadsr.common.resource.Module;
+import gov.nih.nci.ncicb.cadsr.common.resource.ModuleChanges;
+import gov.nih.nci.ncicb.cadsr.common.resource.Orderable;
+import gov.nih.nci.ncicb.cadsr.common.resource.Question;
+import gov.nih.nci.ncicb.cadsr.common.resource.QuestionChange;
+import gov.nih.nci.ncicb.cadsr.common.resource.TriggerAction;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValidValue;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomain;
 
-import gov.nih.nci.ncicb.cadsr.resource.ValueMeaning;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValueMeaning;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -45,7 +45,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
-import gov.nih.nci.ncicb.cadsr.util.DTOTransformer;
+import gov.nih.nci.ncicb.cadsr.common.util.DTOTransformer;
 import java.io.IOException;
 
 import java.util.ArrayList;
@@ -796,7 +796,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
       }
       return mapping.findForward(FAILURE);
     }
-    FormBuilderBaseDynaFormBean clearForm = (FormBuilderBaseDynaFormBean) form;
+    GenericDynaFormBean clearForm = (GenericDynaFormBean) form;
     clearForm.clear();
     removeSessionObject(request, AVAILABLE_VALID_VALUES_MAP);
     removeSessionObject(request,CLONED_MODULE);
@@ -876,7 +876,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
     ActionForm form,
     HttpServletRequest request,
     HttpServletResponse response) throws IOException, ServletException {
-    FormBuilderBaseDynaFormBean moduleEditForm = (FormBuilderBaseDynaFormBean) form;
+    GenericDynaFormBean moduleEditForm = (GenericDynaFormBean) form;
 
     Integer moduleIndex = (Integer) moduleEditForm.get(MODULE_INDEX);
 
@@ -1754,7 +1754,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
       ActionForm form,
       HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
-      FormBuilderBaseDynaFormBean moduleEditForm = (FormBuilderBaseDynaFormBean) form;
+      GenericDynaFormBean moduleEditForm = (GenericDynaFormBean) form;
 
        /**
       Integer questionIndex = (Integer) moduleEditForm.get(QUESTION_INDEX);
@@ -1854,7 +1854,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
       ActionForm form,
       HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
-      FormBuilderBaseDynaFormBean subsetForm = (FormBuilderBaseDynaFormBean) form;
+      GenericDynaFormBean subsetForm = (GenericDynaFormBean) form;
       /**
       Question currQuestion = (Question) getSessionObject(request, "currentQuestion");
       List subsettedVDs = (List)getSessionObject(request, "subsettedVDs");

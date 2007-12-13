@@ -1,31 +1,31 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
-import gov.nih.nci.ncicb.cadsr.CaDSRConstants;
-import gov.nih.nci.ncicb.cadsr.dto.ContextTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.FormInstructionChangesTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.FormTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.InstructionChangesTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.InstructionTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.ProtocolTransferObject;
-import gov.nih.nci.ncicb.cadsr.exception.FatalException;
+import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
+import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormInstructionChangesTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.InstructionChangesTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.InstructionTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.exception.FatalException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormActionUtil;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.NavigationConstants;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.formbeans.FormBuilderBaseDynaFormBean;
-import gov.nih.nci.ncicb.cadsr.persistence.PersistenceConstants;
-import gov.nih.nci.ncicb.cadsr.resource.Context;
-import gov.nih.nci.ncicb.cadsr.resource.Form;
-import gov.nih.nci.ncicb.cadsr.resource.FormInstructionChanges;
-import gov.nih.nci.ncicb.cadsr.resource.Instruction;
-import gov.nih.nci.ncicb.cadsr.resource.InstructionChanges;
-import gov.nih.nci.ncicb.cadsr.resource.Module;
-import gov.nih.nci.ncicb.cadsr.resource.NCIUser;
-import gov.nih.nci.ncicb.cadsr.resource.Orderable;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants;
+import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
+import gov.nih.nci.ncicb.cadsr.common.persistence.PersistenceConstants;
+import gov.nih.nci.ncicb.cadsr.common.resource.Context;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormInstructionChanges;
+import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
+import gov.nih.nci.ncicb.cadsr.common.resource.InstructionChanges;
+import gov.nih.nci.ncicb.cadsr.common.resource.Module;
+import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
+import gov.nih.nci.ncicb.cadsr.common.resource.Orderable;
 
-import gov.nih.nci.ncicb.cadsr.resource.Protocol;
-import gov.nih.nci.ncicb.cadsr.resource.Question;
+import gov.nih.nci.ncicb.cadsr.common.resource.Protocol;
+import gov.nih.nci.ncicb.cadsr.common.resource.Question;
 
 import java.io.IOException;
 
@@ -114,8 +114,8 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
     }
 
     if ((crf != null) && (formEditForm != null)) {
-      FormBuilderBaseDynaFormBean dynaFormEditForm =
-        (FormBuilderBaseDynaFormBean) formEditForm;
+      GenericDynaFormBean dynaFormEditForm =
+        (GenericDynaFormBean) formEditForm;
       dynaFormEditForm.clear();
       dynaFormEditForm.set(FORM_ID_SEQ, crf.getFormIdseq());
       dynaFormEditForm.set(FORM_LONG_NAME, crf.getLongName());
@@ -749,7 +749,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
      }    
      
      
-    FormBuilderBaseDynaFormBean editForm = (FormBuilderBaseDynaFormBean) form;
+    GenericDynaFormBean editForm = (GenericDynaFormBean) form;
     removeSessionObject(request, DELETED_MODULES);
     removeSessionObject(request, CLONED_CRF);
     removeSessionObject(request,FORM_EDIT_ADDED_PROTOCOLS);
@@ -788,7 +788,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
     ActionForm form,
     HttpServletRequest request,
     HttpServletResponse response) throws IOException, ServletException {
-    FormBuilderBaseDynaFormBean editForm = (FormBuilderBaseDynaFormBean) form;
+    GenericDynaFormBean editForm = (GenericDynaFormBean) form;
     removeSessionObject(request, FORM_EDIT_HEADER);
     removeSessionObject(request, FORM_EDIT_UPDATED_MODULES);
     removeSessionObject(request, FORM_EDIT_DELETED_MODULES);

@@ -1,28 +1,28 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.common;
 
-import gov.nih.nci.ncicb.cadsr.dto.CSITransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.ProtocolTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.TriggerActionChangesTransferObject;
-import gov.nih.nci.ncicb.cadsr.persistence.dao.ConceptDAO;
-import gov.nih.nci.ncicb.cadsr.persistence.dao.ValueDomainDAO;
-import gov.nih.nci.ncicb.cadsr.resource.ClassSchemeItem;
-import gov.nih.nci.ncicb.cadsr.resource.ConceptDerivationRule;
-import gov.nih.nci.ncicb.cadsr.resource.Form;
-import gov.nih.nci.ncicb.cadsr.resource.FormElement;
-import gov.nih.nci.ncicb.cadsr.resource.FormValidValue;
-import gov.nih.nci.ncicb.cadsr.resource.Module;
-import gov.nih.nci.ncicb.cadsr.resource.Orderable;
-import gov.nih.nci.ncicb.cadsr.resource.Protocol;
-import gov.nih.nci.ncicb.cadsr.resource.Question;
+import gov.nih.nci.ncicb.cadsr.common.dto.CSITransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.TriggerActionChangesTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ConceptDAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ValueDomainDAO;
+import gov.nih.nci.ncicb.cadsr.common.resource.ClassSchemeItem;
+import gov.nih.nci.ncicb.cadsr.common.resource.ConceptDerivationRule;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormElement;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue;
+import gov.nih.nci.ncicb.cadsr.common.resource.Module;
+import gov.nih.nci.ncicb.cadsr.common.resource.Orderable;
+import gov.nih.nci.ncicb.cadsr.common.resource.Protocol;
+import gov.nih.nci.ncicb.cadsr.common.resource.Question;
 
-import gov.nih.nci.ncicb.cadsr.resource.QuestionRepitition;
-import gov.nih.nci.ncicb.cadsr.resource.ReferenceDocument;
-import gov.nih.nci.ncicb.cadsr.resource.TriggerAction;
-import gov.nih.nci.ncicb.cadsr.resource.TriggerActionChanges;
+import gov.nih.nci.ncicb.cadsr.common.resource.QuestionRepitition;
+import gov.nih.nci.ncicb.cadsr.common.resource.ReferenceDocument;
+import gov.nih.nci.ncicb.cadsr.common.resource.TriggerAction;
+import gov.nih.nci.ncicb.cadsr.common.resource.TriggerActionChanges;
 
-import gov.nih.nci.ncicb.cadsr.resource.ValidValue;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValidValue;
 
-import gov.nih.nci.ncicb.cadsr.resource.ValueDomain;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomain;
 
 import java.util.ArrayList;
 import java.util.HashMap;

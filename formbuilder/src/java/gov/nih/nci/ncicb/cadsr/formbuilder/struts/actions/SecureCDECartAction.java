@@ -1,27 +1,27 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
-import gov.nih.nci.ncicb.cadsr.CaDSRConstants;
-import gov.nih.nci.ncicb.cadsr.dto.CDECartItemTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.CDECartTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.FormValidValueTransferObject;
-import gov.nih.nci.ncicb.cadsr.dto.QuestionTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
+import gov.nih.nci.ncicb.cadsr.common.dto.CDECartItemTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.CDECartTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormValidValueTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormActionUtil;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConstants;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.formbeans.CDECartFormBean;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.formbeans.FormBuilderBaseDynaFormBean;
-import gov.nih.nci.ncicb.cadsr.jsp.bean.PaginationBean;
-import gov.nih.nci.ncicb.cadsr.resource.CDECart;
-import gov.nih.nci.ncicb.cadsr.resource.CDECartItem;
-import gov.nih.nci.ncicb.cadsr.resource.DataElement;
-import gov.nih.nci.ncicb.cadsr.resource.Form;
-import gov.nih.nci.ncicb.cadsr.resource.FormValidValue;
-import gov.nih.nci.ncicb.cadsr.resource.Module;
-import gov.nih.nci.ncicb.cadsr.resource.NCIUser;
-import gov.nih.nci.ncicb.cadsr.resource.Question;
-import gov.nih.nci.ncicb.cadsr.resource.ValidValue;
-import gov.nih.nci.ncicb.cadsr.util.DTOTransformer;
+import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
+import gov.nih.nci.ncicb.cadsr.common.jsp.bean.PaginationBean;
+import gov.nih.nci.ncicb.cadsr.common.resource.CDECart;
+import gov.nih.nci.ncicb.cadsr.common.resource.CDECartItem;
+import gov.nih.nci.ncicb.cadsr.common.resource.DataElement;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue;
+import gov.nih.nci.ncicb.cadsr.common.resource.Module;
+import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
+import gov.nih.nci.ncicb.cadsr.common.resource.Question;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValidValue;
+import gov.nih.nci.ncicb.cadsr.common.util.DTOTransformer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -359,7 +359,7 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
 
       CDECart cart =
         (CDECart) this.getSessionObject(request, CaDSRConstants.CDE_CART);
-      saveMessage("cadsr.cdecart.save.success",request);
+      saveMessage("cadsr.common.cdecart.save.success",request);
     }
     catch (FormBuilderException exp) {
       if (log.isErrorEnabled()) {
@@ -416,7 +416,7 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
       
       service.removeFromCDECart(savedItems,userName);
       sessionCart.removeDataElements(items);
-      saveMessage("cadsr.cdecart.delete.success",request);
+      saveMessage("cadsr.common.cdecart.delete.success",request);
     }
     catch (FormBuilderException exp) {
       if (log.isErrorEnabled()) {

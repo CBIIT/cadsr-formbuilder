@@ -1,19 +1,19 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
-import gov.nih.nci.ncicb.cadsr.cdebrowser.jsp.util.CDEDetailsUtils;
+import gov.nih.nci.ncicb.cadsr.common.jsp.util.CDEDetailsUtils;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
-import gov.nih.nci.ncicb.cadsr.resource.DataElement;
-import gov.nih.nci.ncicb.cadsr.resource.Form;
-import gov.nih.nci.ncicb.cadsr.resource.FormValidValue;
-import gov.nih.nci.ncicb.cadsr.resource.Module;
-import gov.nih.nci.ncicb.cadsr.resource.NCIUser;
-import gov.nih.nci.ncicb.cadsr.resource.Protocol;
-import gov.nih.nci.ncicb.cadsr.resource.Question;
-import gov.nih.nci.ncicb.cadsr.resource.ValueDomain;
-import gov.nih.nci.ncicb.cadsr.util.ApplicationParameters;
-import gov.nih.nci.ncicb.cadsr.util.CDEBrowserParams;
-import gov.nih.nci.ncicb.cadsr.util.ContentTypeHelper;
+import gov.nih.nci.ncicb.cadsr.common.resource.DataElement;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue;
+import gov.nih.nci.ncicb.cadsr.common.resource.Module;
+import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
+import gov.nih.nci.ncicb.cadsr.common.resource.Protocol;
+import gov.nih.nci.ncicb.cadsr.common.resource.Question;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomain;
+import gov.nih.nci.ncicb.cadsr.common.util.ApplicationParameters;
+import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
+import gov.nih.nci.ncicb.cadsr.common.util.ContentTypeHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
