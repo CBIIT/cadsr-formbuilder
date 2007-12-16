@@ -25,7 +25,7 @@
 </td>
 
 <td width="30%" align="right">
- <FONT color="white" size=-2 face=arial>Version @cdebrowser.version@&nbsp;&nbsp;Build @cdebrowser.build@
+ <FONT color="white" size=-2 face=arial>Version @formbuilder.version@&nbsp;&nbsp;Build @formbuilder.build@
  <%=CDEBrowserParams.mode%></FONT>
 </TD>
 
