@@ -686,12 +686,14 @@
       <url-pattern>/formPublishAction.do</url-pattern>
 </filter-mapping>
 <!--end of form edit filter-->
-  <listener>
+ <listener>
   <listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>
    </listener>  
+<!--  
   <listener>
      <listener-class>gov.nih.nci.ncicb.cadsr.formbuilder.servlets.CDEBrowserSessionListener</listener-class>
    </listener>  
+   -->
   <listener>
      <listener-class>gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormLockerSessionListener</listener-class>
     </listener>  
