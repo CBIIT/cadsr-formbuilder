@@ -1,3 +1,6 @@
+<%
+  CDEBrowserParams params = CDEBrowserParams.getInstance();
+%>
 
  		<table width="80%" align="center" cellpadding="0" cellspacing="1" border="0" class="OraBGAccentVeryDark">  
              
@@ -70,7 +73,7 @@
                                  <tr>
                                    <logic:present name="question" property = "dataElement">
                                      <td align="right" width="70" class="UnderlineOraFieldText" >                        
-                                       <html:link href='<%="http://localhost:8080/CDEBrowser/search?dataElementDetails=9&PageId=DataElementsGroup&queryDE=yes&FirstTimer=0"%>'
+                                       <html:link href='<%=params.getCdeBrowserUrl() + "/search?dataElementDetails=9&PageId=DataElementsGroup&queryDE=yes&FirstTimer=0"%>'
                                           paramId = "p_de_idseq"
                                            paramName="question"
                                            paramProperty="dataElement.deIdseq"
@@ -218,7 +221,7 @@
                                      </td>
                                      <td class="OraFieldText">
                                        
-<%=CDEDetailsUtils.getConceptCodesUrl(question.getDataElement().getValueDomain().getConceptDerivationRule(),CDEBrowserParams.getInstance(),"link",",")%>
+<%=CDEDetailsUtils.getConceptCodesUrl(question.getDataElement().getValueDomain().getConceptDerivationRule(),params,"link",",")%>
                                      </td>
                                     </tr>
                                    </table>                                                            
