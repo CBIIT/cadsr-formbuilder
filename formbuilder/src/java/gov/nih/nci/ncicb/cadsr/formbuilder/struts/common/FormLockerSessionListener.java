@@ -4,6 +4,7 @@ import gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormAction;
 
 import gov.nih.nci.ncicb.cadsr.common.servicelocator.ApplicationServiceLocator;
 import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocatorException;
+import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSessionEvent;
@@ -21,6 +22,7 @@ public class FormLockerSessionListener implements HttpSessionListener{
         if (log.isDebugEnabled()){
             log.debug("New session " + se.getSession().getId() + " is created");
         }
+        CDEBrowserParams.reloadInstance();
         return;
     }
 
