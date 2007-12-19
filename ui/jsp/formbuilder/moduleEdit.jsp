@@ -310,6 +310,7 @@ function clearProtocol() {
 
 -->
 <%
+  CDEBrowserParams URLparams = CDEBrowserParams.getInstance();
 
   // To jum to the correct location on the screen
   String jumpto = (String)request.getAttribute(CaDSRConstants.ANCHOR);
@@ -585,7 +586,7 @@ function clearProtocol() {
                                  </html:textarea>
                                  </td>        
                                   <td class="OraHeaderBlack" align="center" width="70" >
-                                   <html:link href='<%="http://localhost:8080/CDEBrowser/search?dataElementDetails=9&PageId=DataElementsGroup&queryDE=yes&FirstTimer=0"%>' 
+                                   <html:link href='<%=URLparams.getCdeBrowserUrl() +"/search?dataElementDetails=9&PageId=DataElementsGroup&queryDE=yes&FirstTimer=0"%>' 
                                       paramId="p_de_idseq" paramName="question" paramProperty="dataElement.deIdseq" target="_blank">
                                     <bean:write name="question" property="dataElement.CDEId"/>
                                    </html:link>

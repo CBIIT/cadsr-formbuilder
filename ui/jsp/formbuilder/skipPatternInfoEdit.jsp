@@ -35,6 +35,8 @@ function submitForm(methodName) {
     pageContext.setAttribute("skipTargetType",skipTargetType);
     pageContext.setAttribute("skipTarget",triggerAction.getActionTarget());    
 
+ 	CDEBrowserParams URLparams = CDEBrowserParams.getInstance();
+
     %>
 
   </HEAD>
@@ -99,7 +101,7 @@ function submitForm(methodName) {
                       <bean:write  name="skipSource" property="question.longName"/> 
                     </td>
                    <td width="7%" align=right>
-                        <html:link page='<%="/search?dataElementDetails=9&PageId=DataElementsGroup&queryDE=yes"%>'
+                        <html:link href='<%=URLparams.getCdeBrowserUrl() + "/search?dataElementDetails=9&PageId=DataElementsGroup&queryDE=yes"%>'
                                 paramId = "p_de_idseq"
                                 paramName="skipSource"
                                 paramProperty="question.dataElement.deIdseq"
@@ -181,7 +183,7 @@ function submitForm(methodName) {
                       <bean:write  name="skipTarget" property="longName"/> 
                     </td>
                    <td width="5%" align=right>
-                        <html:link page='<%="/search?dataElementDetails=9&PageId=DataElementsGroup&queryDE=yes"%>'
+                        <html:link href='<%=params.getCdeBrowserUrl() + "/search?dataElementDetails=9&PageId=DataElementsGroup&queryDE=yes"%>'
                                 paramId = "p_de_idseq"
                                 paramName="skipTarget"
                                 paramProperty="dataElement.deIdseq"

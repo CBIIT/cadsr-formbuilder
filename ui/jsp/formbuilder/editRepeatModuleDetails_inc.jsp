@@ -45,7 +45,7 @@
                                  <tr>
                                    <logic:present name="question" property = "dataElement">
                                      <td align="right" width="70" class="UnderlineOraFieldText" >                        
-                                            <html:link page='<%="/search?dataElementDetails=9&PageId=DataElementsGroup&queryDE=yes"%>'
+                                            <html:link href='<%=params.getCdeBrowserUrl() + "/search?dataElementDetails=9&PageId=DataElementsGroup&queryDE=yes"%>'
                                                paramId = "p_de_idseq"
                                                 paramName="question"
                                                 paramProperty="dataElement.deIdseq"

@@ -30,7 +30,7 @@
                                                       <bean:write  name="targetQuestion" property="longName"/> 
                                                     </td>
                                                    <td width="5%" align=right>
-                                                        <html:link page='<%="/search?dataElementDetails=9&PageId=DataElementsGroup&queryDE=yes"%>'
+                                                        <html:link href='<%=params.getCdeBrowserUrl() + "/search?dataElementDetails=9&PageId=DataElementsGroup&queryDE=yes"%>'
                                                                 paramId = "p_de_idseq"
                                                                 paramName="targetQuestion"
                                                                 paramProperty="dataElement.deIdseq"

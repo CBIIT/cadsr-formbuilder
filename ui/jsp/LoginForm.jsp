@@ -1,4 +1,8 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
+<%@page import="gov.nih.nci.ncicb.cadsr.common.util.* " %>
+<%
+  CDEBrowserParams params = CDEBrowserParams.getInstance();
+%>
 <html>
 <head>
 <title>Login</title>
@@ -93,7 +97,7 @@ function clearForm()
 		     <TR>
 		        <td colspan="1" align="left" nowrap><a href="javascript:submitForm()"><img src=<%=request.getContextPath()%>/i/logon.gif border=0 alt="Logon"></a></td>
 		        <td colspan="1" align="left" nowrap><a href="javascript:clearForm()"><img src=<%=request.getContextPath()%>/i/clear.gif border=0 alt="Clear"></a></td>
-		        <td colspan="1" align="left" nowrap><a target="_blank" href="<%="http://localhost:8080/CDEBrowser/cdeBrowse.jsp?PageId=DataElementsGroup"%>"><img src=<%=request.getContextPath()%>/i/return_cdebrowse.gif border=0 alt="Cancel"></a></td>
+		        <td colspan="1" align="left" nowrap><a target="_blank" href="<%=params.getCdeBrowserUrl() + "/cdeBrowse.jsp?PageId=DataElementsGroup"%>"><img src=<%=request.getContextPath()%>/i/return_cdebrowse.gif border=0 alt="Cancel"></a></td>
 		    </TR>  
 		  </table>    
       	</td>
