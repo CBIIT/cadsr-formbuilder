@@ -162,7 +162,7 @@ function details(linkParms ){
       
       <tr >
         <td>
-          <a target="_blank" href='<%= "http://localhost:8080/CDEBrowser/cdeBrowse.jsp?src=gotoChangeAssociation&amp;moduleIndex=" +  moduleIndex + "&amp;questionIndex=" + request.getParameter("questionIndex") %>'><html:img src='<%=urlPrefix+"i/add_more_data_elements.gif"%>' border="0" alt="Add more data elements"/></a>
+          <a target="_blank" href='<%= params.getCdeBrowserUrl() +"/cdeBrowse.jsp?src=gotoChangeAssociation&amp;moduleIndex=" +  moduleIndex + "&amp;questionIndex=" + request.getParameter("questionIndex") %>'><html:img src='<%=urlPrefix+"i/add_more_data_elements.gif"%>' border="0" alt="Add more data elements"/></a>
           </td>
       <logic:empty name="<%=CaDSRConstants.CDE_CART%>" property = "dataElements">
         <td>
