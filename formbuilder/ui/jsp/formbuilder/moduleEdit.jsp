@@ -310,7 +310,7 @@ function clearProtocol() {
 
 -->
 <%
-  CDEBrowserParams URLparams = CDEBrowserParams.getInstance();
+  CDEBrowserParams params = CDEBrowserParams.getInstance();
 
   // To jum to the correct location on the screen
   String jumpto = (String)request.getAttribute(CaDSRConstants.ANCHOR);
@@ -329,11 +329,11 @@ function clearProtocol() {
       String urlPrefix = contextPath+"/";
 
       // Prepare parameter map for add and edit linx
-      java.util.Map params = new java.util.HashMap();
-      params.put(FormConstants.MODULE_INDEX, moduleIndex);
-      // params.put(FormConstants.QUESTION_INDEX, request.getParameter(FormConstants.QUESTION_INDEX));
+      java.util.Map paramMap = new java.util.HashMap();
+      paramMap.put(FormConstants.MODULE_INDEX, moduleIndex);
+      // paramMap.put(FormConstants.QUESTION_INDEX, request.getParameter(FormConstants.QUESTION_INDEX));
 
-      pageContext.setAttribute("params", params); 
+      pageContext.setAttribute("params", paramMap); 
 
       %>
     <html:form action="/moduleSaveAction.do">
@@ -454,7 +454,7 @@ function clearProtocol() {
               <tr align="right">                      
                 <td align="right" width="3%">
                   <%
-                    params.put(FormConstants.QUESTION_INDEX, new Integer(0));
+                    paramMap.put(FormConstants.QUESTION_INDEX, new Integer(0));
                     %>
                   <html:link action='<%="/gotoAddQuestion?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GO_TO_ADD_QUESTION%>'
                     name="params" 
@@ -498,7 +498,7 @@ function clearProtocol() {
                 </logic:empty>                        
                 <td align="right" width="3%">
                   <%
-                    params.put(FormConstants.QUESTION_INDEX, questionIndex);
+                    paramMap.put(FormConstants.QUESTION_INDEX, questionIndex);
                     %>
                   <html:link action='<%="/gotoAddQuestion?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GO_TO_ADD_QUESTION%>'
                     name="params" 
@@ -586,7 +586,7 @@ function clearProtocol() {
                                  </html:textarea>
                                  </td>        
                                   <td class="OraHeaderBlack" align="center" width="70" >
-                                   <html:link href='<%=URLparams.getCdeBrowserUrl() +"/search?dataElementDetails=9&PageId=DataElementsGroup&queryDE=yes&FirstTimer=0"%>' 
+                                   <html:link href='<%=params.getCdeBrowserUrl() +"/search?dataElementDetails=9&PageId=DataElementsGroup&queryDE=yes&FirstTimer=0"%>' 
                                       paramId="p_de_idseq" paramName="question" paramProperty="dataElement.deIdseq" target="_blank">
                                     <bean:write name="question" property="dataElement.CDEId"/>
                                    </html:link>
@@ -763,7 +763,7 @@ function clearProtocol() {
                                      </td>
                                      <td class="OraFieldText">
                                        
-<%=CDEDetailsUtils.getConceptCodesUrl(question.getDataElement().getValueDomain().getConceptDerivationRule(),CDEBrowserParams.getInstance(),"link",",")%>
+<%=CDEDetailsUtils.getConceptCodesUrl(question.getDataElement().getValueDomain().getConceptDerivationRule(),params,"link",",")%>
                                      </td>
                                     </tr>
                             </logic:present>
@@ -1128,7 +1128,7 @@ function clearProtocol() {
                   </logic:empty>               
                  <td align="right" width="1%">
                   <%
-                    params.put(FormConstants.QUESTION_INDEX, questionSize);
+                    paramMap.put(FormConstants.QUESTION_INDEX, questionSize);
                     %>
                     <html:link action='<%="/gotoAddQuestion?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GO_TO_ADD_QUESTION%>'
                       name="params" 

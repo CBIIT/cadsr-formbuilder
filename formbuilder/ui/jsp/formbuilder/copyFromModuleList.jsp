@@ -16,7 +16,7 @@
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams"%>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.jsp.util.CDEDetailsUtils"%>
 
-
+<% CDEBrowserParams params = CDEBrowserParams.getInstance(); %>
  <HTML>
   <HEAD>
     <TITLE>Formbuilder: Module Cart</TITLE>
