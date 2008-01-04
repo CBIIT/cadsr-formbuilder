@@ -1,7 +1,3 @@
-<%
-  CDEBrowserParams params = CDEBrowserParams.getInstance();
-%>
-
  		<table width="80%" align="center" cellpadding="0" cellspacing="1" border="0" class="OraBGAccentVeryDark">  
              
                  <tr>                 

@@ -8,8 +8,8 @@
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.CaDSRConstants"%>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants"%>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants"%>
-<%@ page import="gov.nih.nci.ncicb.cadsr.common.CaDSRConstants"%>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.resource.DataElement"%>
+<%@ page import="gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams"%>
 
 <html:html>
 <HEAD>
@@ -54,6 +54,7 @@ function details(linkParms ){
 <BODY topmargin=0 bgcolor="#ffffff" topmargin="0">
 
 <% 
+  CDEBrowserParams params = CDEBrowserParams.getInstance();
   String urlPrefix = "";
 %>
 <%@ include file="../common/in_process_common_header_inc.jsp"%>

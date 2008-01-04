@@ -53,7 +53,7 @@ function goPage(pageInfo) {
 
 function anotherDataElementDetails(linkParms, version )
 {
-  var urlString="/CDEBrowser/search?dataElementDetails=9" + linkParms + "&PageId=GetDetailsGroup"+"&queryDE=yes";
+  var urlString="/search?dataElementDetails=9" + linkParms + "&PageId=GetDetailsGroup"+"&queryDE=yes";
   
   //remove the dot. javascript does not like dot.
   var temp = new Array();

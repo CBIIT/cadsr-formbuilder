@@ -17,7 +17,7 @@
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams"%>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.jsp.util.CDEDetailsUtils"%>
 
-
+<% CDEBrowserParams params = CDEBrowserParams.getInstance();%> 
 
 <%
    // TO DO : Replace this with appropriate struts tags

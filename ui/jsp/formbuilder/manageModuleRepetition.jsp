@@ -16,7 +16,8 @@
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.jsp.util.CDEDetailsUtils"%>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.resource.Form"%>
 <%@ page import="java.util.*"%>
- 
+<% CDEBrowserParams params = CDEBrowserParams.getInstance();%> 
+
  <HTML>
   <HEAD>
     <TITLE>Formbuilder: Manage module repetitions</TITLE>
