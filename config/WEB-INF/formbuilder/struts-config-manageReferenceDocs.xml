@@ -3,7 +3,7 @@
 <struts-config>
  <form-beans> 
   <form-bean name="refDocForm"
-                    type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.formbeans.ReferenceDocFormBean"/>
+                    type="gov.nih.nci.ncicb.cadsr.common.struts.formbeans.ReferenceDocFormBean"/>
  
   
 

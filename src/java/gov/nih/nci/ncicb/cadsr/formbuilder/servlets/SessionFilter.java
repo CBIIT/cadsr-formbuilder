@@ -45,7 +45,7 @@ public class SessionFilter implements javax.servlet.Filter
               ((HttpServletResponse)response).sendRedirect(req.getContextPath()+ expiredSessionJSP);
               return;
           }
-      }    
+      }  
       chain.doFilter(request, response);
     }
 
