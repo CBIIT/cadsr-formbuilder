@@ -9,7 +9,7 @@ import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormActionUtil;
 import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.formbeans.CDECartFormBean;
+import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.CDECartFormBean;
 import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
 import gov.nih.nci.ncicb.cadsr.common.jsp.bean.PaginationBean;
 import gov.nih.nci.ncicb.cadsr.common.resource.CDECart;

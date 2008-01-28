@@ -110,6 +110,10 @@
     
     <load-on-startup>1</load-on-startup>
   </servlet>
+  <servlet-mapping>
+    <servlet-name>action</servlet-name>
+    <url-pattern>*.do</url-pattern>
+  </servlet-mapping>
    <filter> 
        <filter-name>SessionFilter</filter-name>
        <filter-class>gov.nih.nci.ncicb.cadsr.formbuilder.servlets.SessionFilter</filter-class>   
@@ -121,31 +125,27 @@
       		<param-name>expiredSessionJSP</param-name>
       		<param-value>expiredSession.jsp</param-value>
     	</init-param> 
-    <init-param>
-      <param-name>debugServiceLocatorClassName</param-name>
-      <param-value>gov.nih.nci.ncicb.cadsr.common.servicelocator.ejb.ServiceLocatorImpl</param-value>
-    </init-param>
-    <init-param>
-      <param-name>debugLoginManagerClassName</param-name>
-      <param-value>gov.nih.nci.ncicb.cadsr.common.security.oc4j.DBUserManager</param-value>
-    </init-param>  
-    <init-param>
-      <param-name>debugUsername</param-name>
-      <param-value>jasur</param-value>
-    </init-param>   
-    <init-param>
-      <param-name>debugPassword</param-name>
-      <param-value>jasur</param-value>
-    </init-param> 
-    <init-param>
-      <param-name>debugLogin</param-name>
-      <param-value>N</param-value>
-    </init-param>         	
+	    <init-param>
+	      <param-name>debugServiceLocatorClassName</param-name>
+	      <param-value>gov.nih.nci.ncicb.cadsr.common.servicelocator.ejb.ServiceLocatorImpl</param-value>
+	    </init-param>
+	    <init-param>
+	      <param-name>debugLoginManagerClassName</param-name>
+	      <param-value>gov.nih.nci.ncicb.cadsr.common.security.oc4j.DBUserManager</param-value>
+	    </init-param>  
+	    <init-param>
+	      <param-name>debugUsername</param-name>
+	      <param-value>jasur</param-value>
+	    </init-param>   
+	    <init-param>
+	      <param-name>debugPassword</param-name>
+	      <param-value>jasur</param-value>
+	    </init-param> 
+	    <init-param>
+	      <param-name>debugLogin</param-name>
+	      <param-value>N</param-value>
+	    </init-param>         	
    </filter>   
-  <servlet-mapping>
-    <servlet-name>action</servlet-name>
-    <url-pattern>*.do</url-pattern>
-  </servlet-mapping>
   <filter-mapping> 
          <filter-name>SessionFilter</filter-name>
          <url-pattern>/search*</url-pattern> 
