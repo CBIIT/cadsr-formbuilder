@@ -97,7 +97,7 @@ function clearForm()
 		     <TR>
 		        <td colspan="1" align="left" nowrap><a href="javascript:submitForm()"><img src=<%=request.getContextPath()%>/i/logon.gif border=0 alt="Logon"></a></td>
 		        <td colspan="1" align="left" nowrap><a href="javascript:clearForm()"><img src=<%=request.getContextPath()%>/i/clear.gif border=0 alt="Clear"></a></td>
-		        <td colspan="1" align="left" nowrap><a target="_blank" href="<%=params.getCdeBrowserUrl() + "/cdeBrowse.jsp?PageId=DataElementsGroup"%>"><img src=<%=request.getContextPath()%>/i/return_cdebrowse.gif border=0 alt="Cancel"></a></td>
+		        <td colspan="1" align="left" nowrap><a target="_blank" href="<%=params.getCdeBrowserUrl() + "/CDEBrowser/cdeBrowse.jsp?PageId=DataElementsGroup"%>"><img src=<%=request.getContextPath()%>/i/return_cdebrowse.gif border=0 alt="Cancel"></a></td>
 		    </TR>  
 		  </table>    
       	</td>

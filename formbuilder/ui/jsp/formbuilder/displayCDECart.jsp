@@ -247,7 +247,7 @@ System.out.println("formbuilder contextpath: " + request.getContextPath());
 <table width="10%" align="center" cellpadding="1" cellspacing="1" border="0" >
   <tr>
     <td>
-      <a href='<%=params.getCdeBrowserUrl() %>/cdeBrowse.jsp?PageId=DataElementsGroup' target="_blank"><html:img src="i/add_more_data_elements.gif" border="0" alt="Add more data elements"/></a>
+      <a href='<%=params.getCdeBrowserUrl() %>/CDEBrowser/cdeBrowse.jsp?PageId=DataElementsGroup' target="_blank"><html:img src="i/add_more_data_elements.gif" border="0" alt="Add more data elements"/></a>
     </td>
   </tr>
 </table>    

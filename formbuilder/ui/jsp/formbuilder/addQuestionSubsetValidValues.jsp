@@ -129,7 +129,7 @@ function submitModuleEdit(methodName) {
                     <bean:write name="selectedDataElement" property="longName"/>
                   </td>
                          <td align="center" width="10%" class="OraHeaderBlack">
-                            <html:link href='<%=params.getCdeBrowserUrl() + "/search?dataElementDetails=9&PageId=DataElementsGroup&queryDE=yes"%>' 
+                            <html:link href='<%=params.getCdeBrowserUrl() + "/CDEBrowser/search?dataElementDetails=9&PageId=DataElementsGroup&queryDE=yes"%>' 
                                paramId="p_de_idseq" paramName="selectedDataElement" paramProperty="deIdseq" target="_blank">
                               <bean:write name="selectedDataElement" property="CDEId"/>
                             </html:link>

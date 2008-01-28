@@ -8,7 +8,7 @@ import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
 import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.formbeans.ReferenceDocFormBean;
+import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.ReferenceDocFormBean;
 import gov.nih.nci.ncicb.cadsr.common.resource.AdminComponent;
 import gov.nih.nci.ncicb.cadsr.common.resource.Attachment;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;

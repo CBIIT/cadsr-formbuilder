@@ -586,7 +586,7 @@ function clearProtocol() {
                                  </html:textarea>
                                  </td>        
                                   <td class="OraHeaderBlack" align="center" width="70" >
-                                   <html:link href='<%=params.getCdeBrowserUrl() +"/search?dataElementDetails=9&PageId=DataElementsGroup&queryDE=yes&FirstTimer=0"%>' 
+                                   <html:link href='<%=params.getCdeBrowserUrl() +"/CDEBrowser/search?dataElementDetails=9&PageId=DataElementsGroup&queryDE=yes&FirstTimer=0"%>' 
                                       paramId="p_de_idseq" paramName="question" paramProperty="dataElement.deIdseq" target="_blank">
                                     <bean:write name="question" property="dataElement.CDEId"/>
                                    </html:link>
