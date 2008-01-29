@@ -10,6 +10,11 @@
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants"%>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.resource.DataElement"%>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams"%>
+<% 
+  CDEBrowserParams params = CDEBrowserParams.getInstance();
+  String browseURL = params.getCdeBrowserUrl();
+  String urlPrefix = "";
+%>
 
 <html:html>
 <HEAD>
@@ -44,7 +49,7 @@
   }
   
 function details(linkParms ){
-  var urlString="search?dataElementDetails=9" + linkParms + "&PageId=DataElementsGroup"+"&queryDE=yes";
+  var urlString="<%=browseURL%>" + "/CDEBrowser/search?dataElementDetails=9" + linkParms + "&PageId=DataElementsGroup"+"&queryDE=yes";
   newBrowserWin(urlString,'deDetails',800,600)
   
 }
@@ -53,10 +58,6 @@ function details(linkParms ){
 </HEAD>
 <BODY topmargin=0 bgcolor="#ffffff" topmargin="0">
 
-<% 
-  CDEBrowserParams params = CDEBrowserParams.getInstance();
-  String urlPrefix = "";
-%>
 <%@ include file="../common/in_process_common_header_inc.jsp"%>
 <jsp:include page="../common/tab_inc.jsp" flush="true">
   <jsp:param name="label" value="Change&nbsp;Association"/>
