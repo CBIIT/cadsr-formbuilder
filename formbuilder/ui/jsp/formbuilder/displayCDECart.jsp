@@ -11,6 +11,8 @@
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.CaDSRConstants"%>
 <%
 String urlPrefix = "";
+  CDEBrowserParams params = CDEBrowserParams.getInstance();
+  String browseURL = params.getCdeBrowserUrl();
 %>
 <HTML>
 <HEAD>
@@ -59,7 +61,7 @@ function ToggleDeleteAll(e){
 }
 
 function details(linkParms ){
-  var urlString="search?dataElementDetails=9" + linkParms + "&PageId=DataElementsGroup"+"&queryDE=yes";
+  var urlString="<%=browseURL%>" + "/CDEBrowser/search?dataElementDetails=9" + linkParms + "&PageId=DataElementsGroup"+"&queryDE=yes";
   newBrowserWin(urlString,'deDetails',800,600)
   
 }
@@ -76,7 +78,6 @@ function retrieveSavedItems() {
 
 <% 
 System.out.println("formbuilder contextpath: " + request.getContextPath());
-  CDEBrowserParams params = CDEBrowserParams.getInstance();
 
   String downloadXMLURL = "javascript:fileDownloadWin('cdebrowser/downloadXMLPage.jsp?src=cdeCart','xmlWin',500,200)";
   String downloadExcelURL = "javascript:fileDownloadWin('cdebrowser/downloadExcelPage.jsp?src=cdeCart','excelWin',500,200)";
