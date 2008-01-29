@@ -8,9 +8,9 @@
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.CaDSRConstants"%>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants"%>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants"%>
-<%@ page import="gov.nih.nci.ncicb.cadsr.common.CaDSRConstants"%>
 <% 
   CDEBrowserParams params = CDEBrowserParams.getInstance();
+  String browseURL = params.getCdeBrowserUrl();
 %>
 <html:html>
 <HEAD>
@@ -100,7 +100,7 @@
       }     
   
 function details(linkParms ){
-  var urlString="search?dataElementDetails=9" + linkParms + "&PageId=DataElementsGroup"+"&queryDE=yes";
+  var urlString="<%=browseURL%>" + "/CDEBrowser/search?dataElementDetails=9" + linkParms + "&PageId=DataElementsGroup"+"&queryDE=yes";
   newBrowserWin(urlString,'deDetails',800,600)
   
 }
