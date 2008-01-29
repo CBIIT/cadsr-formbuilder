@@ -77,10 +77,8 @@ function retrieveSavedItems() {
 <BODY topmargin=0 bgcolor="#ffffff" topmargin="0">
 
 <% 
-System.out.println("formbuilder contextpath: " + request.getContextPath());
-
-  String downloadXMLURL = "javascript:fileDownloadWin('cdebrowser/downloadXMLPage.jsp?src=cdeCart','xmlWin',500,200)";
-  String downloadExcelURL = "javascript:fileDownloadWin('cdebrowser/downloadExcelPage.jsp?src=cdeCart','excelWin',500,200)";
+  String downloadXMLURL = "javascript:fileDownloadWin('" + browseURL + "/CDEBrowser/cdebrowser/downloadXMLPage.jsp?src=cdeCart','xmlWin',500,200)";
+  String downloadExcelURL = "javascript:fileDownloadWin('" + browseURL + "/CDEBrowser/cdebrowser/downloadExcelPage.jsp?src=cdeCart','excelWin',500,200)";
   
   String doneURL = "";
   
