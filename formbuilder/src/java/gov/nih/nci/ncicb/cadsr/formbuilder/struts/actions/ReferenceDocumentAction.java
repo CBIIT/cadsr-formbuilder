@@ -37,7 +37,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import oracle.sql.BLOB;
+//import oracle.sql.BLOB;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -1041,11 +1041,11 @@ public class ReferenceDocumentAction
    rs = ps.executeQuery();
    rs.next();
 
-   BLOB dbBlob = (BLOB)rs.getBlob(1);
+   Blob dbBlob = (Blob)rs.getBlob(1);
    //update blob
    ps = conn.prepareStatement(sqlSetBlob);
    ps.setString(2, attachment.getName());
-   dbBlob.putBytes(1, attFile.getFileData());
+   dbBlob.setBytes(1, attFile.getFileData());
 
    ps.setBlob(1, dbBlob);
    conn.commit();
