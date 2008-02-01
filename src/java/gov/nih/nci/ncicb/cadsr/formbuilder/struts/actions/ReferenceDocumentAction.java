@@ -37,7 +37,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-//import oracle.sql.BLOB;
+import oracle.sql.BLOB;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -400,8 +400,10 @@ public class ReferenceDocumentAction
       FormFile attFile = (FormFile)attachments.get(attachment);
 
       if (attFile != null)
+      {
        if (saveRefDocAttachment(attachment, newRefDoc.getDocIDSeq(), attFile))
         attachments.remove(attachment);
+      }
      }
 
      anythingChanged = true;
@@ -1020,6 +1022,8 @@ public class ReferenceDocumentAction
   PreparedStatement ps = null;
   ResultSet rs = null;
   try {
+   OutputStream os;
+   InputStream is;
    DBUtil dbUtil = new DBUtil();
 
    //String dsName = CDEBrowserParams.getInstance("cdebrowser").getSbrDSN();
@@ -1041,21 +1045,20 @@ public class ReferenceDocumentAction
    rs = ps.executeQuery();
    rs.next();
 
-   Blob dbBlob = (Blob)rs.getBlob(1);
    //update blob
-   ps = conn.prepareStatement(sqlSetBlob);
-   ps.setString(2, attachment.getName());
-   dbBlob.setBytes(1, attFile.getFileData());
-
-   ps.setBlob(1, dbBlob);
-   conn.commit();
-  } catch (SQLException sqlE) {
+   Blob dbBlob = (Blob)rs.getBlob(1);
+   is = attFile.getInputStream();
+   os = dbBlob.setBinaryStream(is.read());
+   conn.commit();   
+  } 
+  catch (SQLException sqlE) {
    if (sqlE.getMessage().indexOf("unique constraint") > 0) {
     throw new DMLException("Document name already exists in the database.");
    }
-  } catch (Exception ex) {
+   log.error("SQLException Caught:", sqlE);
+  } 
+  catch (Exception ex) {
    log.error("Exception Caught:", ex);
-
    throw new DMLException("Exception occurred while saving attachment to the database", ex);
   } finally {
    try {
@@ -1085,7 +1088,6 @@ public class ReferenceDocumentAction
     return false;
    } finally { }
   }
-
   return true;
  }
 
