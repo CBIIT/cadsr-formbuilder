@@ -553,7 +553,6 @@
       </fileset>
 
       <lib dir="${java.lib.dir}">
-        <include name="classes12.jar"/>
        	<include name="cle20.jar"/>
         <include name="xml-apis.jar"/>
        	<include name="xercesImpl.jar"/>
