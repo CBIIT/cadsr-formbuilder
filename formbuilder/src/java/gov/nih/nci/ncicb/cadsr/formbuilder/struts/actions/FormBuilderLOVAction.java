@@ -100,14 +100,14 @@ public class FormBuilderLOVAction extends FormBuilderBaseDispatchAction {
     ProtocolsLOVBean plb;
 
     try {
-      TabInfoBean tib = new TabInfoBean("cdebrowser_lov_tabs");
-      tib.processRequest(request);
-
-      if (tib.getMainTabNum() != 0) {
-        tib.setMainTabNum(0);
-      }
-      setSessionObject(request, this.PROTOCOLS_LOV_TAB_BEAN, tib);
-      CDEBrowserParams params = CDEBrowserParams.getInstance();
+//      TabInfoBean tib = new TabInfoBean("cdebrowser_lov_tabs");
+//      tib.processRequest(request);
+//
+//      if (tib.getMainTabNum() != 0) {
+//        tib.setMainTabNum(0);
+//      }
+//      setSessionObject(request, this.PROTOCOLS_LOV_TAB_BEAN, tib);
+//      CDEBrowserParams params = CDEBrowserParams.getInstance();
       //String dsName = params.getSbrDSN();
       dbUtil.getConnectionFromContainer();
 
@@ -165,13 +165,13 @@ public class FormBuilderLOVAction extends FormBuilderBaseDispatchAction {
         String chk = (String)searchForm.get("chkContext");
         ClassificationsLOVBean clb;
 
-	    TabInfoBean tib = new TabInfoBean("cdebrowser_lov_tabs");
-	    tib.processRequest(request);
-	
-	    if (tib.getMainTabNum() != 0) {
-	        tib.setMainTabNum(0);
-	    }
-	    setSessionObject(request, "tib", tib);
+//	    TabInfoBean tib = new TabInfoBean("cdebrowser_lov_tabs");
+//	    tib.processRequest(request);
+//	
+//	    if (tib.getMainTabNum() != 0) {
+//	        tib.setMainTabNum(0);
+//	    }
+//	    setSessionObject(request, "tib", tib);
 	
 	    dbUtil.getConnectionFromContainer();
 	    if (performQuery == null) {
