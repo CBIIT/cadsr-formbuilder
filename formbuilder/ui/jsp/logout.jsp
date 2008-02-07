@@ -1,5 +1,9 @@
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.CaDSRConstants"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
+<%@page import="gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams" %>
+<%
+  CDEBrowserParams params = CDEBrowserParams.getInstance();
+%>
 <html>
 <head>
 <title>Logout</title>
@@ -16,7 +20,7 @@ if (parent.frames[1])
 	String previousSessionId = (String)request.getParameter(CaDSRConstants.PREVIOUS_SESSION_ID);
   String forwardUrl = "cdeBrowse.jsp";
   if(previousSessionId!=null)
-    forwardUrl=forwardUrl+"?PageId=DataElementsGroup&"+CaDSRConstants.PREVIOUS_SESSION_ID+"="+previousSessionId;
+    forwardUrl="formSearchAction.do";  //forwardUrl+"?PageId=DataElementsGroup&"+CaDSRConstants.PREVIOUS_SESSION_ID+"="+previousSessionId;
 	
 %>
 <body text="#000000" topmargin="0">
@@ -51,7 +55,7 @@ if (parent.frames[1])
       <tr><td>&nbsp;</td></tr>
       <tr class="OraTipLabel">
           <td align="center" class="OraTipLabel">You have been successfully logged out.
-          Click <a target="_top" href="<%=forwardUrl%>">here</a> to return to CDEBrowser.
+          Click <a target="_top" href="<%=forwardUrl%>">here</a> to return to Form Builder Login.
           </td>
       </tr>
       <tr><td>&nbsp;</td></tr>

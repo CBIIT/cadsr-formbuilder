@@ -768,7 +768,7 @@
     <servlet-class>gov.nih.nci.ncicb.cadsr.common.security.LogoutServlet</servlet-class>
     <init-param>
       <param-name>LogoutHome</param-name>
-      <param-value>cdeBrowse.jsp</param-value>
+      <param-value>formSearchAction.do</param-value>
     </init-param>
   </servlet>
   <servlet-mapping>
@@ -807,7 +807,7 @@
     <mime-type>text/plain</mime-type>
   </mime-mapping>
   <welcome-file-list>
-    <welcome-file>cdeBrowse.jsp</welcome-file>
+    <welcome-file>LoginForm.jsp</welcome-file>
   </welcome-file-list>
   <error-page>
     <error-code>403</error-code>

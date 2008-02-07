@@ -56,14 +56,14 @@
                             <tr class="OraTabledata">
                               <td class="OraFieldText" colspan=2>                            
                                 <%
-                                        HashMap params = new java.util.HashMap();
-                                        params.put(FormConstants.SK_QUESTION_INDEX,questionIndex);
-                                        params.put(FormConstants.TARGET_MODULE_INDEX,modIndex);
-                                        params.put(NavigationConstants.METHOD_PARAM,NavigationConstants.SET_QUESTION_AS_TARGET);
+                                        HashMap paramsQ = new java.util.HashMap();
+                                        paramsQ.put(FormConstants.SK_QUESTION_INDEX,questionIndex);
+                                        paramsQ.put(FormConstants.TARGET_MODULE_INDEX,modIndex);
+                                        paramsQ.put(NavigationConstants.METHOD_PARAM,NavigationConstants.SET_QUESTION_AS_TARGET);
                                         if (currentModuleIndex!=null && currentModuleIndex!=""){
-                                            params.put(FormConstants.MODULE_INDEX,currentModuleIndex);
+                                            paramsQ.put(FormConstants.MODULE_INDEX,currentModuleIndex);
                                         }	
-                                        pageContext.setAttribute("linkParams", params);
+                                        pageContext.setAttribute("linkParams", paramsQ);
                                 %>
                                 <html:link  name="linkParams" scope="page"  action="/formbuilder/skipAction">
                                      Skip to this Question
@@ -84,7 +84,7 @@
                                  <tr>
                                    <logic:present name="question" property = "dataElement">
                                      <td align="right" width="70" class="UnderlineOraFieldText" >                        
-                                            <html:link href='<%=URLparams.getCdeBrowserUrl() + "/CDEBrowser/search?dataElementDetails=9&PageId=DataElementsGroup&queryDE=yes"%>'
+                                            <html:link href='<%=params.getCdeBrowserUrl() + "/CDEBrowser/search?dataElementDetails=9&PageId=DataElementsGroup&queryDE=yes"%>'
                                                paramId = "p_de_idseq"
                                                 paramName="question"
                                                 paramProperty="dataElement.deIdseq"

@@ -1,5 +1,5 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
-<%@page import="gov.nih.nci.ncicb.cadsr.common.util.* " %>
+<%@page import="gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams" %>
 <%
   CDEBrowserParams params = CDEBrowserParams.getInstance();
 %>

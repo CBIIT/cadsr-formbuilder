@@ -111,11 +111,11 @@
       scope="request" path="/common/systemError.jsp"
       key="error.system.message"/>
     <exception type="gov.nih.nci.ncicb.cadsr.common.exception.InvalidUserException"
-      scope="request" path="/cdeBrowse.jsp"
+      scope="request" path="/formbuilder/formbuilder.jsp"
       key="error.system.message"/>      
   </global-exceptions>
   <global-forwards>
-    <forward name="cdebrowserHome" path="/cdeBrowse.jsp?PageId=DataElementsGroup" redirect="true"/>
+ <!--  <forward name="cdebrowserHome" path="/cdeBrowse.jsp?PageId=DataElementsGroup" redirect="true"/>   -->  
     <forward name="printerVersion" path="/formbuilder/printerVersion.jsp"
       redirect="true"/>
     <forward name="framedSearchResultsPage" path="/formbuilder/formbuilder.jsp"
@@ -322,13 +322,13 @@
       scope="request"
       type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormBuilderLOVAction"
       validate="false">
-      <forward name="success" path="/cdebrowser/protocolsLOV.jsp"/>
+      <forward name="success" path="/formbuilder/protocolsLOV.jsp"/>
     </action>
     <action name="classificationLOVForm" path="/classificationLOVAction" parameter="method"
       scope="request"
       type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormBuilderLOVAction"
       validate="false">
-      <forward name="success" path="/cdebrowser/classificationsLOV.jsp"/>
+      <forward name="success" path="/formbuilder/classificationsLOV.jsp"/>
     </action>
     <action name="displayCartForm" path="/formCDECartRedirectAction" parameter="method"
       scope="session"
