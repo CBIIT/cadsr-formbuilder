@@ -484,17 +484,17 @@
       <fileset dir="${config.home}">
         <patternset>
           <include name="WEB-INF/*.tld"/>
-          <include name="WEB-INF/struts-config*.xml"/>
+     <!--     <include name="WEB-INF/struts-config*.xml"/>  doesn't exist -->
           <include name="WEB-INF/formbuilder/struts-config*.xml"/>
           <include name="WEB-INF/admin/struts-config*.xml"/>
           <include name="WEB-INF/formbuilder/validat*.xml"/>
           <include name="WEB-INF/jboss-web.xml"/>
           <include name="WEB-INF/spring/*.xml"/>
-          <include name="WEB-INF/ehcache.xml"/>
+       <!--   <include name="WEB-INF/ehcache.xml"/>  -->
           <include name="WEB-INF/cdebrowser-faces-config.xml"/>
           <include name="WEB-INF/*.taglib.xml"/>
-          <include name="WEB-INF/ocbrowser/struts-config*.xml"/>
-          <include name="WEB-INF/cdebrowser/struts-config*.xml"/>
+       <!--   <include name="WEB-INF/ocbrowser/struts-config*.xml"/>  -->
+       <!--   <include name="WEB-INF/cdebrowser/struts-config*.xml"/>  -->
         </patternset>
       </fileset>
     	
