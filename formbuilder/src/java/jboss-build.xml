@@ -206,7 +206,8 @@
   
   <!-- =========== DEV CONFIG ======================= -->
   <target name="dev_config" depends="init">          
-     <copy todir="${classes.build.dir}/WEB-INF/classes">
+  <!--   
+  		<copy todir="${classes.build.dir}/WEB-INF/classes">
          <fileset dir="${config.home}/properties">
            <patternset>
              <include name="*.properties"/>
@@ -214,7 +215,8 @@
              <exclude name="cdebrowser.properties"/>
            </patternset>
          </fileset>
-     </copy>
+     </copy>  
+     -->
      
      <filter token="formbuilder.version" value="${formbuilder.version}"/>
      <filter token="formbuilder.build" value="${formbuilder.build}" />

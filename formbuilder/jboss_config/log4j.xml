@@ -7,299 +7,453 @@
 <!--                                                                       -->
 <!-- ===================================================================== -->
 
-<!-- $Id: log4j.xml,v 1.1 2007-12-13 22:31:23 hegdes Exp $ -->
+<!-- $Id: log4j.xml,v 1.2 2008-02-07 22:04:31 hegdes Exp $ -->
 
 <!--
-   | For more configuration infromation and examples see the Jakarta Log4j
-   | owebsite: http://jakarta.apache.org/log4j
- -->
+    | For more configuration infromation and examples see the Jakarta Log4j
+    | owebsite: http://jakarta.apache.org/log4j
+-->
 
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
 
-   <!-- ================================= -->
-   <!-- Preserve messages in a local file -->
-   <!-- ================================= -->
+    <!-- ================================= -->
+    <!-- Preserve messages in a local file -->
+    <!-- ================================= -->
 
-   <!-- A time/date based rolling appender -->
-   <appender name="FILE" class="org.jboss.logging.appender.DailyRollingFileAppender">
-      <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
-      <param name="File" value="${jboss.server.home.dir}/log/server.log"/>
-      <param name="Append" value="false"/>
+    <!-- A time/date based rolling appender -->
+    <!-- Section deleted to troubleshoot size based implementation -->
 
-      <!-- Rollover at midnight each day -->
-      <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+    <!-- A size based file rolling appender -->
+    <appender name="FILE" class="org.jboss.logging.appender.RollingFileAppender">
+        <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler" />
+        <param name="File" value="${jboss.server.log.dir}/server.log" />
+        <param name="Append" value="true" />
+        <param name="MaxFileSize" value="100MB" />
+        <param name="MaxBackupIndex" value="10" />
+        <param name="DatePattern" value="'.'yyyy-MM-dd-HH" />
 
-      <!-- Rollover at the top of each hour
-      <param name="DatePattern" value="'.'yyyy-MM-dd-HH"/>
-      -->
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p [%c] %m%n" />
+        </layout>
+    </appender>
 
-      <layout class="org.apache.log4j.PatternLayout">
-         <!-- The default pattern: Date Priority [Category] Message\n -->
-         <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+    <!-- ============================== -->
+    <!-- Append messages to the console -->
+    <!-- ============================== -->
 
-         <!-- The full pattern: Date MS Priority [Category] (Thread:NDC) Message\n
-         <param name="ConversionPattern" value="%d %-5r %-5p [%c] (%t:%x) %m%n"/>
-          -->
-      </layout>
-   </appender>
-   
-   <appender name="CDEBROWSER_FILE" class="org.jboss.logging.appender.DailyRollingFileAppender">
-         <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
-         <param name="File" value="${jboss.server.home.dir}/log/cdebrowser.log"/>
-         <param name="Append" value="false"/>
-   
-         <!-- Rollover at midnight each day -->
-         <param name="DatePattern" value="'.'yyyy-MM-dd"/>
-   
-         <!-- Rollover at the top of each hour
-         <param name="DatePattern" value="'.'yyyy-MM-dd-HH"/>
-         -->
-   
-         <layout class="org.apache.log4j.PatternLayout">
+    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+        <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler" />
+        <param name="Target" value="System.out" />
+        <param name="Threshold" value="INFO" />
+
+        <layout class="org.apache.log4j.PatternLayout">
             <!-- The default pattern: Date Priority [Category] Message\n -->
-            <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
-   
+            <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n" />
+        </layout>
+    </appender>
+
+    <!-- ====================== -->
+    <!-- More Appender examples -->
+    <!-- ====================== -->
+
+    <!-- Buffer events and log them asynchronously
+        <appender name="ASYNC" class="org.apache.log4j.AsyncAppender">
+        <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="SMTP"/>
+        </appender>
+    -->
+
+    <!-- EMail events to an administrator
+        <appender name="SMTP" class="org.apache.log4j.net.SMTPAppender">
+        <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
+        <param name="Threshold" value="ERROR"/>
+        <param name="To" value="admin@myhost.domain.com"/>
+        <param name="From" value="nobody@myhost.domain.com"/>
+        <param name="Subject" value="JBoss Sever Errors"/>
+        <param name="SMTPHost" value="localhost"/>
+        <param name="BufferSize" value="10"/>
+        <layout class="org.apache.log4j.PatternLayout">
+        <param name="ConversionPattern" value="[%d{ABSOLUTE},%c{1}] %m%n"/>
+        </layout>
+        </appender>
+    -->
+
+    <!-- Syslog events
+        <appender name="SYSLOG" class="org.apache.log4j.net.SyslogAppender">
+        <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
+        <param name="Facility" value="LOCAL7"/>
+        <param name="FacilityPrinting" value="true"/>
+        <param name="SyslogHost" value="localhost"/>
+        <layout class="org.apache.log4j.PatternLayout">
+        <param name="ConversionPattern" value="[%d{ABSOLUTE},%c{1}] %m%n"/>
+        </layout>
+        </appender>
+    -->
+
+    <!-- Log events to JMS (requires a topic to be created)
+        <appender name="JMS" class="org.apache.log4j.net.JMSAppender">
+        <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
+        <param name="Threshold" value="ERROR"/>
+        <param name="TopicConnectionFactoryBindingName" value="java:/ConnectionFactory"/>
+        <param name="TopicBindingName" value="topic/MyErrorsTopic"/>
+        </appender>
+    -->
+
+    <!-- Log events through SNMP
+        <appender name="TRAP_LOG" class="org.apache.log4j.ext.SNMPTrapAppender">
+        <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
+        <param name="ImplementationClassName" value="org.apache.log4j.ext.JoeSNMPTrapSender"/>
+        <param name="ManagementHost" value="127.0.0.1"/>
+        <param name="ManagementHostTrapListenPort" value="162"/>
+        <param name="EnterpriseOID" value="1.3.6.1.4.1.24.0"/>
+        <param name="LocalIPAddress" value="127.0.0.1"/>
+        <param name="LocalTrapSendPort" value="161"/>
+        <param name="GenericTrapType" value="6"/>
+        <param name="SpecificTrapType" value="12345678"/>
+        <param name="CommunityString" value="public"/>
+        <param name="ForwardStackTraceWithTrap" value="true"/>
+        <param name="Threshold" value="DEBUG"/>
+        <param name="ApplicationTrapOID" value="1.3.6.1.4.1.24.12.10.22.64"/>
+        <layout class="org.apache.log4j.PatternLayout">
+        <param name="ConversionPattern" value="%d,%p,[%t],[%c],%m%n"/>
+        </layout>
+        </appender>
+    -->
+
+    <!--  Emit events as JMX notifications
+        <appender name="JMX" class="org.jboss.monitor.services.JMXNotificationAppender">
+        <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
+        
+        <param name="Threshold" value="WARN"/>
+        <param name="ObjectName" value="jboss.system:service=Logging,type=JMXNotificationAppender"/>
+        
+        <layout class="org.apache.log4j.PatternLayout">
+        <param name="ConversionPattern" value="%d %-5p [%c] %m"/>
+        </layout>
+        </appender>
+    -->
+
+    <!-- ============================== -->
+    <!-- File appender for caCORE 3.2   -->
+    <!-- ============================== -->
+    
+    <appender name="CACORE" class="org.jboss.logging.appender.DailyRollingFileAppender">
+        <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler" />
+        <param name="File" value="${jboss.server.home.dir}/log/caCORE.log" />
+        <param name="Append" value="false" />
+        <param name="Threshold" value="ERROR" />
+    
+        <!-- Rollover at midnight each day -->
+        <param name="DatePattern" value="'.'yyyy-MM-dd" />
+    
+        <!-- Rollover at the top of each hour
+            <param name="DatePattern" value="'.'yyyy-MM-dd-HH"/>
+        -->
+    
+        <layout class="org.apache.log4j.PatternLayout">
+            <!-- The default pattern: Date Priority [Category] Message\n -->
+            <param name="ConversionPattern" value="%d %-5p [%c] %m%n" />
+    
             <!-- The full pattern: Date MS Priority [Category] (Thread:NDC) Message\n
-            <param name="ConversionPattern" value="%d %-5r %-5p [%c] (%t:%x) %m%n"/>
-             -->
-         </layout>
-   </appender>
+                <param name="ConversionPattern" value="%d %-5r %-5p [%c] (%t:%x) %m%n"/>
+            -->
+        </layout>
+    </appender>
 
-   <!-- A size based file rolling appender
-   <appender name="FILE" class="org.jboss.logging.appender.RollingFileAppender">
-     <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
-     <param name="File" value="${jboss.server.home.dir}/log/server.log"/>
-     <param name="Append" value="false"/>
-     <param name="MaxFileSize" value="500KB"/>
-     <param name="MaxBackupIndex" value="1"/>
+    <!-- ============================ -->
+    <!-- Setup the sentinel  Appender -->
+    <!-- ============================ -->
 
-     <layout class="org.apache.log4j.PatternLayout">
-       <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
-     </layout>	    
-   </appender>
-   -->
+    <appender name="CADSRSENTINEL_FILE" class="org.jboss.logging.appender.RollingFileAppender">
+        <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler" />
+        <param name="File" value="/usr/local/jboss404/server/ncicb-core/log/cadsrsentinel_log.txt" />
+        <param name="Append" value="true" />
+        <param name="MaxFileSize" value="200KB" />
+        <param name="MaxBackupIndex" value="3" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p [%c : %L] %m%n" />
+        </layout>
+    </appender>
 
-   <!-- ============================== -->
-   <!-- Append messages to the console -->
-   <!-- ============================== -->
+    <!-- ======================= -->
+    <!-- Setup the cdebrowser Appender -->
+    <!-- ======================= -->
 
-   <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
-      <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
-      <param name="Target" value="System.out"/>
-      <param name="Threshold" value="INFO"/>
+    <appender name="CDEBROWSER_FILE" class="org.jboss.logging.appender.RollingFileAppender">
+        <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler" />
+        <param name="File" value="/local/content/cadsrsentinel/reports/cdebrowser_log.txt" />
+        <!-- <param name="File" value="${jboss.server.home.dir}/log/cdebrowser.log" /> -->
+        <param name="Append" value="false" />
+        <param name="MaxFileSize" value="5MB" />
+        <param name="MaxBackupIndex" value="3" />
+        <param name="Threshold" value="DEBUG" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p [%c] %m%n" />
+        </layout>
+    </appender>
 
-      <layout class="org.apache.log4j.PatternLayout">
-         <!-- The default pattern: Date Priority [Category] Message\n -->
-         <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>
-      </layout>
-   </appender>
+    <!-- ============================ -->
+    <!-- Setup the cdecurate  Appender -->
+    <!-- ============================ -->
 
-   <!-- ====================== -->
-   <!-- More Appender examples -->
-   <!-- ====================== -->
+    <appender name="CDECURATE_FILE" class="org.jboss.logging.appender.RollingFileAppender">
+        <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler" />
+        <param name="File" value="/usr/local/jboss404/server/ncicb-core/log/cdecurate_log.txt" />
+        <param name="Append" value="true" />
+        <param name="MaxFileSize" value="200KB" />
+        <param name="MaxBackupIndex" value="3" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p [%c : %L] %m%n" />
+        </layout>
+    </appender>
 
-   <!-- Buffer events and log them asynchronously
-   <appender name="ASYNC" class="org.apache.log4j.AsyncAppender">
-     <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
-     <appender-ref ref="FILE"/>
-     <appender-ref ref="CONSOLE"/>
-     <appender-ref ref="SMTP"/>
-   </appender>
-   -->
+    <!-- ============================ -->
+    <!-- Setup the CLM Appender -->
+    <!-- ============================ -->
 
-   <!-- EMail events to an administrator
-   <appender name="SMTP" class="org.apache.log4j.net.SMTPAppender">
-     <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
-     <param name="Threshold" value="ERROR"/>
-     <param name="To" value="admin@myhost.domain.com"/>
-     <param name="From" value="nobody@myhost.domain.com"/>
-     <param name="Subject" value="JBoss Sever Errors"/>
-     <param name="SMTPHost" value="localhost"/>
-     <param name="BufferSize" value="10"/>
-     <layout class="org.apache.log4j.PatternLayout">
-       <param name="ConversionPattern" value="[%d{ABSOLUTE},%c{1}] %m%n"/>
-     </layout>
-   </appender>
-   -->
+    <appender name="CLM_MYSQL_APPENDER" class="gov.nih.nci.logging.api.appender.jdbc.JDBCAppender">
+        <param name="application" value="CSMUPT" />
+        <param name="maxBufferSize" value="1" />
+        <param name="dbDriverClass" value="org.gjt.mm.mysql.Driver" />
+        <param name="dbUrl" value="jdbc:mysql://cbiovdev5004.nci.nih.gov:3620/clm" />
+        <param name="dbUser" value="ncisecurity" />
+        <param name="dbPwd" value="ncisecurity" />
+        <param name="useFilter" value="true" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value=":: [%d{ISO8601}] %-5p %c{1}.%M() %x - %m%n" />
+        </layout>
+    </appender>
 
-   <!-- Syslog events
-   <appender name="SYSLOG" class="org.apache.log4j.net.SyslogAppender">
-     <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
-     <param name="Facility" value="LOCAL7"/>
-     <param name="FacilityPrinting" value="true"/>
-     <param name="SyslogHost" value="localhost"/>
-   </appender>
-   -->
+    <!-- ======================= -->
+    <!-- Setup the CTOMWS Appender -->
+    <!-- ======================= -->
 
-   <!-- Log events to JMS (requires a topic to be created)
-   <appender name="JMS" class="org.apache.log4j.net.JMSAppender">
-     <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
-     <param name="Threshold" value="ERROR"/>
-     <param name="TopicConnectionFactoryBindingName" value="java:/ConnectionFactory"/>
-     <param name="TopicBindingName" value="topic/MyErrorsTopic"/>
-   </appender>
-   -->
+    <appender name="CTOMWS_FILE" class="org.jboss.logging.appender.RollingFileAppender">
+        <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler" />
+        <param name="File" value="${jboss.server.home.dir}/log/ctomws.log" />
+        <param name="Append" value="false" />
+        <param name="MaxFileSize" value="5MB" />
+        <param name="MaxBackupIndex" value="3" />
+        <param name="Threshold" value="DEBUG" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p [%c] %m%n" />
+        </layout>
+    </appender>
+<!--        
+       $Header: /share/content/gforge/formbuilder/formbuilder/jboss_config/log4j.xml,v 1.2 2008-02-07 22:04:31 hegdes Exp $
+       $Name: not supported by cvs2svn $
+-->
 
-   <!-- Log events through SNMP
-   <appender name="TRAP_LOG" class="org.apache.log4j.ext.SNMPTrapAppender">
-     <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
-     <param name="ImplementationClassName" value="org.apache.log4j.ext.JoeSNMPTrapSender"/>
-     <param name="ManagementHost" value="127.0.0.1"/>
-     <param name="ManagementHostTrapListenPort" value="162"/>
-     <param name="EnterpriseOID" value="1.3.6.1.4.1.24.0"/>
-     <param name="LocalIPAddress" value="127.0.0.1"/>
-     <param name="LocalTrapSendPort" value="161"/>
-     <param name="GenericTrapType" value="6"/>
-     <param name="SpecificTrapType" value="12345678"/>
-     <param name="CommunityString" value="public"/>
-     <param name="ForwardStackTraceWithTrap" value="true"/>
-     <param name="Threshold" value="DEBUG"/>
-     <param name="ApplicationTrapOID" value="1.3.6.1.4.1.24.12.10.22.64"/>
-     <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d,%p,[%t],[%c],%m%n"/>
-     </layout>
-   </appender>
-   -->
+<!-- ============================ -->
+<!-- Setup the freestyle Appender -->
+<!-- ============================ -->
+<appender name="FREESTYLESEARCH_FILE" class="org.jboss.logging.appender.RollingFileAppender">
+  <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
+  <param name="File" value="/usr/local/jboss404/server/ncicb-core/log/freestylesearch_log.txt"/>
+  <param name="Append" value="true"/>
+  <param name="MaxFileSize" value="200KB"/>
+  <param name="MaxBackupIndex" value="3"/>
+  <layout class="org.apache.log4j.PatternLayout">
+    <param name="ConversionPattern" value="%d %-5p [%c : %L] %m%n"/>
+  </layout>
+</appender>
 
-   <!-- ================ -->
-   <!-- Limit categories -->
-   <!-- ================ -->
+    <!-- ============================== -->
+    <!-- Setup the caCORE Categories -->
+    <!-- ============================== -->
 
-   <!-- Limit the org.apache category to INFO as its DEBUG is verbose -->
-   <category name="org.apache">
-      <priority value="INFO"/>
-   </category>
+    <category name="gov.nih.nci" additivity="false">
+        <priority value="DEBUG" />
+        <appender-ref ref="CACORE" />
+    </category>
 
-   <!-- Limit the org.jgroups category to WARN as its INFO is verbose -->
-   <category name="org.jgroups">
-      <priority value="WARN"/>
-   </category>
+    <!-- ============================ -->
+    <!-- Setup the sentinel category debug-->
+    <!-- ============================ -->
 
-   <!-- Limit apache axis to INFO as its DEBUG is even more verbose -->
-   <category name="org.apache.axis">
-      <priority value="INFO"/>
-   </category>
+    <category name="gov.nih.nci.cadsr.sentinel" additivity="false">
+        <priority value="DEBUG" />
+        <appender-ref ref="CADSRSENTINEL_FILE" />
+    </category>
 
-   <!-- Limit JBoss categories
-   <category name="org.jboss">
-      <priority value="INFO"/>
-   </category>
-   -->
+    <!-- ======================= -->
+    <!-- Setup the cdebrowser category -->
+    <!-- ======================= -->
+    
+    <category name="gov.nih.nci.ncicb.cadsr" additivity="false">
+        <priority value="DEBUG" />
+        <appender-ref ref="CDEBROWSER_FILE" />
+    </category>
+    <!-- ============================ -->
+    <!-- Setup the cdecurate category debug-->
+    <!-- ============================ -->
 
-   <!-- Limit the JSR77 categories -->
-   <category name="org.jboss.management">
-      <priority value="INFO"/>
-   </category>
+    <category name="gov.nih.nci.cadsr.cdecurate" additivity="false">
+        <priority value="DEBUG" />
+        <appender-ref ref="CDECURATE_FILE" />
+    </category>
 
-   <!-- Limit JBoss webservice category
-   <category name="org.jboss.webservice">
-      <priority value="DEBUG"/>
-   </category>
-   -->
+    <!-- ============================== -->
+    <!-- Setup the CSM's CLM Categories -->
+    <!-- ============================== -->
 
-   <!-- Decrease the priority threshold for the org.jboss.varia category
-   <category name="org.jboss.varia">
-     <priority value="DEBUG"/>
-   </category>
-   -->
+    <category name="CSM.Audit.Logging.Event.Authentication">
+        <level value="info" />
+        <appender-ref ref="CLM_MYSQL_APPENDER" />
+    </category>
+    <category name="CSM.Audit.Logging.Event.Authorization">
+        <level value="info" />
+        <appender-ref ref="CLM_MYSQL_APPENDER" />
+    </category>
+    <category name="CSM.Audit.Logging.ObjectState.Authorization">
+        <level value="info" />
+        <appender-ref ref="CLM_MYSQL_APPENDER" />
+    </category>
+    <category name="CSM.Audit.Logging.Authorization">
+        <level value="info" />
+        <appender-ref ref="CLM_MYSQL_APPENDER" />
+    </category>
 
-   <!-- Show the evolution of the DataSource pool in the logs [inUse/Available/Max]
-   <category name="org.jboss.resource.connectionmanager.JBossManagedConnectionPool">
-     <priority value="TRACE" class="org.jboss.logging.XLevel"/>
-   </category>
-   -->
+    <!-- ======================= -->
+    <!-- Setup the CTOMWS category -->
+    <!-- ======================= -->
+    
+    <category name="gov.nih.nci.ctom" additivity="false">
+        <priority value="DEBUG" />
+        <appender-ref ref="CTOMWS_FILE" />
+    </category>
+<!--        
+       $Header: /share/content/gforge/formbuilder/formbuilder/jboss_config/log4j.xml,v 1.2 2008-02-07 22:04:31 hegdes Exp $
+       $Name: not supported by cvs2svn $
+-->
 
-   <!--
-      | An example of enabling the custom TRACE level priority that is used
-      | by the JBoss internals to diagnose low level details. This example
-      | turns on TRACE level msgs for the org.jboss.ejb.plugins package and its
-      | subpackages. This will produce A LOT of logging output.
-   <category name="org.jboss.system">
-     <priority value="TRACE" class="org.jboss.logging.XLevel"/>
-   </category>
-   <category name="org.jboss.ejb.plugins">
-     <priority value="TRACE" class="org.jboss.logging.XLevel"/>
-   </category>
-   -->
-  
-   <!--
-       | Logs these events to SNMP:
-           - server starts/stops
-           - cluster evolution (node death/startup)
-           - When an EJB archive is deployed (and associated verified messages)
-           - When an EAR archive is deployed
-      	 
-   <category name="org.jboss.system.server.Server">
-     <priority value="INFO" />
-     <appender-ref ref="TRAP_LOG"/>
-   </category>
-  
-   <category name="org.jboss.ha.framework.interfaces.HAPartition.lifecycle">
-     <priority value="INFO" />
-     <appender-ref ref="TRAP_LOG"/>
-   </category>
+<!-- ============================ -->
+<!-- Setup the freestyle category debug-->
+<!-- ============================ -->
+<category name="gov.nih.nci.cadsr.freestylesearch" additivity="false">
+  <priority value="INFO"/>
+  <appender-ref ref="FREESTYLESEARCH_FILE"/>
+</category>
 
-   <category name="org.jboss.deployment.MainDeployer">
-     <priority value="ERROR" />
-     <appender-ref ref="TRAP_LOG"/>
-   </category>
-   
-   <category name="org.jboss.ejb.EJBDeployer">
-     <priority value="INFO" />
-     <appender-ref ref="TRAP_LOG"/>
-   </category>
-   
-   <category name="org.jboss.deployment.EARDeployer">
-     <priority value="INFO" />
-     <appender-ref ref="TRAP_LOG"/>
-   </category>
-   
-   
-  <category name="gov.nih.nci.ncicb.cadsr.cdebrowser">
-     <priority value="DEBUG" />
-     <appender-ref ref="CDEBROWSER_FILE"/>
-  </category>
-   -->
-   
-   <!-- ======================= -->
-      <!-- Setup the CDE Browser category -->
-   <!-- ======================= -->
+    <!-- ================ -->
+    <!-- Limit categories -->
+    <!-- ================ -->
+    
+    <!-- Limit the org.apache category to INFO as its DEBUG is verbose -->
+    <category name="org.apache">
+        <priority value="INFO" />
+    </category>
+    
+    <!-- Limit the org.jboss.serial (jboss-serialization) to INFO as its DEBUG is verbose -->
+    <category name="org.jboss.serial">
+        <priority value="INFO" />
+    </category>
+    
+    <!-- Limit the org.jgroups category to WARN as its INFO is verbose -->
+    <category name="org.jgroups">
+        <priority value="WARN" />
+    </category>
+    
+    <!-- Limit the jacorb category to WARN as its INFO is verbose -->
+    <category name="jacorb">
+        <priority value="WARN" />
+    </category>
+    
+    <!-- Limit JBoss categories
+        <category name="org.jboss">
+        <priority value="INFO"/>
+        </category>
+    -->
+    
+    <!-- Limit the JSR77 categories -->
+    <category name="org.jboss.management">
+        <priority value="INFO" />
+    </category>
+    
+    <!-- Limit Axis based webservice category -->
+    <category name="org.jboss.webservice">
+        <priority value="DEBUG" />
+    </category>
+    <category name="org.jboss.axis">
+        <priority value="INFO" />
+    </category>
+    
+    <!-- Limit JBossWS webservice category
+        <category name="org.jboss.ws">
+        <priority value="DEBUG"/>
+        </category>
+    -->
+    
+    <!-- Decrease the priority threshold for the org.jboss.varia category
+        <category name="org.jboss.varia">
+        <priority value="DEBUG"/>
+        </category>
+    -->
+    
+    <!-- Show the evolution of the DataSource pool in the logs [inUse/Available/Max]
+        uncomment for trace connection pool information, luwe
+    -->
+    <category name="org.jboss.resource.connectionmanager.JBossManagedConnectionPool">
+        <priority value="DEBUG" class="org.jboss.logging.XLevel" />
+    </category>
+    
+    <!--
+        | An example of enabling the custom TRACE level priority that is used
+        | by the JBoss internals to diagnose low level details. This example
+        | turns on TRACE level msgs for the org.jboss.ejb.plugins package and its
+        | subpackages. This will produce A LOT of logging output.
+        <category name="org.jboss.system">
+        <priority value="TRACE" class="org.jboss.logging.XLevel"/>
+        </category>
+        <category name="org.jboss.ejb.plugins">
+        <priority value="TRACE" class="org.jboss.logging.XLevel"/>
+        </category>
+    -->
+    
+    <!--
+        | Logs these events to SNMP:
+        - server starts/stops
+        - cluster evolution (node death/startup)
+        - When an EJB archive is deployed (and associated verified messages)
+        - When an EAR archive is deployed
+        
+        <category name="org.jboss.system.server.Server">
+        <priority value="INFO" />
+        <appender-ref ref="TRAP_LOG"/>
+        </category>
+        
+        <category name="org.jboss.ha.framework.interfaces.HAPartition.lifecycle">
+        <priority value="INFO" />
+        <appender-ref ref="TRAP_LOG"/>
+        </category>
+        
+        <category name="org.jboss.deployment.MainDeployer">
+        <priority value="ERROR" />
+        <appender-ref ref="TRAP_LOG"/>
+        </category>
+        
+        <category name="org.jboss.ejb.EJBDeployer">
+        <priority value="INFO" />
+        <appender-ref ref="TRAP_LOG"/>
+        </category>
+        
+        <category name="org.jboss.deployment.EARDeployer">
+        <priority value="INFO" />
+        <appender-ref ref="TRAP_LOG"/>
+        </category>
+        
+    -->
+    
+    <!-- ======================= -->
+    <!-- Setup the Root category -->
+    <!-- ======================= -->
+    
+    <root>
+        <priority value="INFO" />
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </root>
 
-   <category name="gov.nih.nci.ncicb.cadsr" additivity="false">
-     <priority value="DEBUG" />
-     <appender-ref ref="CDEBROWSER_FILE"/>
-   </category>
-   
-   <!-- ======================= -->
-   <!-- Setup the Root category -->
-   <!-- ======================= -->
-
-   <root>
-      <appender-ref ref="FILE"/>
-   </root>
-
-   <!-- Clustering logging -->
-   <!-- Uncomment the following to redirect the org.jgroups and
-      org.jboss.ha categories to a cluster.log file.
-
-   <appender name="CLUSTER" class="org.jboss.logging.appender.RollingFileAppender">
-     <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
-     <param name="File" value="${jboss.server.home.dir}/log/cluster.log"/>
-     <param name="Append" value="false"/>
-     <param name="MaxFileSize" value="500KB"/>
-     <param name="MaxBackupIndex" value="1"/>
-
-     <layout class="org.apache.log4j.PatternLayout">
-       <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
-     </layout>
-   </appender>
-   <category name="org.jgroups">
-     <priority value="DEBUG" />
-     <appender-ref ref="CLUSTER"/>
-   </category>
-   <category name="org.jboss.ha">
-     <priority value="DEBUG" />
-     <appender-ref ref="CLUSTER"/>
-   </category>
-   -->
 </log4j:configuration>
