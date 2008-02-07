@@ -1,4 +1,8 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
+<%@page import="gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams" %>
+<%
+  CDEBrowserParams params = CDEBrowserParams.getInstance();
+%>
 <html>
 <head>
 <title>Login</title>

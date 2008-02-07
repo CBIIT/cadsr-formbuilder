@@ -39,7 +39,7 @@
 <link rel="stylesheet" type="text/css" href="css/TreeBrowser.css"/>
 <script language="JavaScript1.2"
         src="common/skins/CDEBrowser1/JavaScript.js"></script>
-<script src="jsLib/aa/aa.js"></script>
+<script src="jsLib/aa.js"></script>
 <script language="JavaScript1.2">
   <!--
   function performAction(urlParams){
