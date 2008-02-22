@@ -1047,8 +1047,11 @@ public class ReferenceDocumentAction
 
    //update blob
    Blob dbBlob = (Blob)rs.getBlob(1);
-   is = attFile.getInputStream();
-   os = dbBlob.setBinaryStream(is.read());
+   ps = conn.prepareStatement(sqlSetBlob);
+   ps.setString(2, attachment.getName());
+
+   dbBlob.setBytes(1, attFile.getFileData());
+   ps.setBlob(1, dbBlob);
    conn.commit();   
   } 
   catch (SQLException sqlE) {
