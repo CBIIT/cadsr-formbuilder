@@ -807,7 +807,7 @@
     <mime-type>text/plain</mime-type>
   </mime-mapping>
   <welcome-file-list>
-    <welcome-file>LoginForm.jsp</welcome-file>
+    <welcome-file>formSearchAction.do</welcome-file>
   </welcome-file-list>
   <error-page>
     <error-code>403</error-code>
