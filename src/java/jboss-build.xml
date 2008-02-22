@@ -514,6 +514,7 @@
 	      <include name="common/**/*.*"/>  
           <include name="*.jsp"/>
           <include name="*.js"/>
+          <include name="*.do"/>
         </patternset>
       </fileset>
 <!-- why separate them; added it in the above       
