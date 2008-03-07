@@ -1,0 +1,9 @@
+
+    <!-- ============================ -->
+    <!-- Setup the form builder category debug-->
+    <!-- ============================ -->
+
+    <category name="gov.nih.nci.ncicb.cadsr.formbuilder" additivity="false">
+        <priority value="DEBUG" />
+        <appender-ref ref="FORMBUILDER_FILE" />
+    </category>
