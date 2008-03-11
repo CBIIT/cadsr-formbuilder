@@ -1,6 +1,6 @@
 <!-- Copyright 2006 ScenPro, Inc.
 
-    $Header: /share/content/gforge/formbuilder/formbuilder/conf/template.formbuilder-oracle-ds.xml,v 1.1 2008-03-07 00:22:04 hegdes Exp $
+    $Header: /share/content/gforge/formbuilder/formbuilder/conf/template.formbuilder-oracle-ds.xml,v 1.2 2008-03-11 19:20:00 hegdes Exp $
     $Names$
     
     This is the datasource shard by all caDSR tools to verify login credentials.
@@ -9,7 +9,7 @@
 
 <datasources>
     <local-tx-datasource>
-		<jndi-name>jdbc/@CADSR.DS.JNDI.NAME@</jndi-name>
+		<jndi-name>jdbc/@Tool.ds.jndi.Name@</jndi-name>
 		<connection-url>jdbc:oracle:thin:@@CADSR.DS.URL@</connection-url>
 		<driver-class>oracle.jdbc.driver.OracleDriver</driver-class>
 		<user-name>@CADSR.DS.USER@</user-name>

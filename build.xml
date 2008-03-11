@@ -1,13 +1,13 @@
 <!-- Copyright ScenPro, Inc. 2005
-    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.1 2008-03-07 01:03:47 hegdes Exp $
+    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.2 2008-03-11 19:20:00 hegdes Exp $
     $Name: not supported by cvs2svn $
 -->
 <project name="Form Builder Tool" default="init" basedir=".">
 	<description>
         Build and deploy the caDSR Form Builder Tool
     </description>
-	<!-- set global properties for this build -->   <!-- local.build.properties -->
-	<property name="PROP.FILE" location="dev.build.properties"/>   
+	<!-- set global properties for this build -->   <!-- dev.build.properties -->
+	<property name="PROP.FILE" location="local.build.properties"/>   
 	<property file="${PROP.FILE}" />
 	<echo>
         PROP.FILE = ${PROP.FILE}
@@ -16,7 +16,6 @@
         CADSR.DS.USER = ${CADSR.DS.USER}
         CADSR.DS.PSWD = ${CADSR.DS.PSWD}
         CADSR.DS.TNS.ENTRY=${CADSR.DS.TNS.ENTRY}
-		CADSR.DS.JNDI.NAME=${CADSR.DS.JNDI.NAME}
         DEPLOY.LOCATION = ${DEPLOY.LOCATION}
         JBOSS.HOME.DIR = ${JBOSS.HOME.DIR}
         JBOSS.SERVER.DIR = ${JBOSS.SERVER.DIR}
@@ -41,9 +40,6 @@
         TIER.NAME = ${TIER.NAME}
         TOOL.ROOT.DIR = ${TOOL.ROOT.DIR}
         TOOL.LOG.DIR = ${TOOL.LOG.DIR}
-		TOOL.VERSION=${TOOL.VERSION}
-		TOOL.BUILD=${TOOL.BUILD}
-		TOOL.VERSION.SUFFIX=${TOOL.VERSION.SUFFIX}
     </echo>
 	<condition property="check.props">
 		<and>
@@ -52,7 +48,6 @@
 			<isset property="CADSR.DS.USER" />
 			<isset property="CADSR.DS.PSWD" />
 			<isset property="CADSR.DS.TNS.ENTRY" />
-			<isset property="CADSR.DS.JNDI.NAME" />
 			<isset property="TIER" />
 			<isset property="TIER.UPPER" />
 			<isset property="TIER.NAME" />
@@ -63,9 +58,6 @@
 			<isset property="JBOSS.LOG.DIR" />
 			<isset property="TOOL.LOG.DIR" />
 			<isset property="TOOL.ROOT.DIR" />
-			<isset property="TOOL.VERSION" />
-			<isset property="TOOL.BUILD" />
-			<isset property="TOOL.VERSION.SUFFIX" />
 			<isset property="TEST" />
 			<isset property="TEST.VALID.USER" />
 			<isset property="TEST.VALID.PSWD" />
@@ -111,7 +103,6 @@
 	<filter token="CADSR.DS.USER" value="${CADSR.DS.USER}" />
 	<filter token="CADSR.DS.PSWD" value="${CADSR.DS.PSWD}" />
 	<filter token="CADSR.DS.TNS.ENTRY" value="${CADSR.DS.TNS.ENTRY}" />
-	<filter token="CADSR.DS.JNDI.NAME" value="${CADSR.DS.JNDI.NAME}" />
 	<filter token="TEST.VALID.USER" value="${TEST.VALID.USER}" />
 	<filter token="TEST.VALID.PSWD" value="${TEST.VALID.PSWD}" />
 	<filter token="TEST.BAD.USER" value="${TEST.BAD.USER}" />
@@ -121,53 +112,59 @@
 	<filter token="TIER.NAME" value="${TIER.NAME}" />
 	<filter token="TOOL.LOG.DIR" value="${TOOL.LOG.DIR}" />
 	<filter token="JBOSS.LOG.DIR" value="${JBOSS.LOG.DIR}" />
-	<filter token="TOOL.VERSION" value="${TOOL.VERSION}" />
-	<filter token="TOOL.BUILD" value="${TOOL.BUILD}" />
-	<filter token="TOOL.VERSION.SUFFIX" value="${TOOL.VERSION.SUFFIX}" />
 
+	<!-- these values that replaces some tags in the tool, are needed at the build time -->
+	<property name="Tool.ds.jndi.Name" value="FormBuilderDS"/>
+	<property name="Tool.Version" value="4.0.0.0"/>
+	<property name="Tool.Build" value="1"/>
+	<property name="Tool.Support" value="ncicb@pop.nci.nih.gov"/>
+	<property name="Tool.Version.Suffix" value="4_0_0_0"/>
+	
+	<!-- add filter token for jndi name -->
+	<filter token="Tool.ds.jndi.Name" value="${Tool.ds.jndi.Name}"/>
+	
 	<path id="libpath">
 		<fileset dir="${lib.dir}">
-			<include name="**/*.jar" />
-			<include name="**/*.zip" />
+			<include name="**/*.jar"/>
+			<include name="**/*.zip"/>
 		</fileset>
 		<fileset dir="${wlib.dir}">
-			<include name="**/*.jar" />
-			<include name="**/*.zip" />
+			<include name="**/*.jar"/>
+			<include name="**/*.zip"/>
 		</fileset>
 	</path>
 
 	<target name="clean" depends="-prop-check" description="Deletes all project build artifacts and temporary files.">
 		<echo>Remove old artifacts ...</echo>
-		<delete dir="${classes.dir}" />
-		<delete dir="${artifacts.dir}" />
-		<delete file="${web.dir}/web.xml" />
-		<mkdir dir="${classes.dir}" />
-		<mkdir dir="${classes.dir}/temp" />
+		<delete dir="${classes.dir}"/>
+		<delete dir="${artifacts.dir}"/>
+		<delete file="${web.dir}/web.xml"/>
+		<mkdir dir="${classes.dir}"/>
+		<mkdir dir="${classes.dir}/temp"/>
 		<mkdir dir="${artifacts.dir}"/>
-		<mkdir dir="${artifacts.dir}/bin" />
-		<mkdir dir="${artifacts.dir}/dtd" />
-		<mkdir dir="${artifacts.dir}/gforge" />
-		<mkdir dir="${artifacts.dir}/jboss" />
-		<mkdir dir="${artifacts.dir}/sql" />
-		<mkdir dir="${tr.dir}" />
+		<mkdir dir="${artifacts.dir}/bin"/>
+		<mkdir dir="${artifacts.dir}/dtd"/>
+		<mkdir dir="${artifacts.dir}/gforge"/>
+		<mkdir dir="${artifacts.dir}/jboss"/>
+		<mkdir dir="${artifacts.dir}/sql"/>
+		<mkdir dir="${tr.dir}"/>
 	</target>
 
-	<!-- description="Compiles the project source." -->
-	<target name="-compile" depends="clean,-prop-check">
+	<target name="-compile" depends="clean,-prop-check" description="Compiles the project source.">
 		<echo>Compiling project source, debug is ${JDEBUG} ...</echo>
 		<javac srcdir="${src.dir}" destdir="${temp.classes.dir}" tempdir="${temp.dir}" debug="${JDEBUG}">
-			<compilerarg line="-deprecation" />
-			<compilerarg line="-Xlint:unchecked" />
-			<classpath refid="libpath" />
+			<compilerarg line="-deprecation"/>
+			<compilerarg line="-Xlint:unchecked"/>
+			<classpath refid="libpath"/>
 		</javac>
 		
-		<unzip src="${lib.dir}/cadsrutil.jar" dest="${temp.classes.dir}" overwrite="No" />
+		<unzip src="${lib.dir}/cadsrutil.jar" dest="${temp.classes.dir}" overwrite="No"/>
 		<!-- add the jndi name from the template -->		
 		<copy tofile="${classes.dir}/gov/nih/nci/ncicb/cadsr/common/jndi.properties" filtering="true" overwrite="Yes">
-			<fileset file="conf/template.jndi.properties" />
+			<fileset file="conf/template.jndi.properties"/>
 		</copy>
 		<copy tofile="${temp.classes.dir}/gov/nih/nci/ncicb/cadsr/common/persistence/dao/jdbc/jndi.properties" filtering="true" overwrite="Yes">
-			<fileset file="conf/template.jndi.properties" />
+			<fileset file="conf/template.jndi.properties"/>
 		</copy>
 		
 	    <copy todir="${classes.dir}">      
@@ -179,8 +176,7 @@
 	    </copy>
 	</target>
 
-	<!--  description="Assembles the deployment parts into the artifacts folders." -->
-	<target name="-assemble" depends="-compile,-prop-check">
+	<target name="-assemble" depends="-compile,-prop-check" description="Assembles the deployment parts into the artifacts folders.">
 		<echo>Assembling artifacts ...</echo>
 		<delete>
 			<fileset file="${web.dir}/web.xml" />
@@ -213,15 +209,15 @@
 		<fixcrlf srcdir="${artifacts.dir}" eol="lf" includes="**/*.sh, **/*.xml, **/*.properties, **/*.dtd" />
 	</target>
 
-	<!-- description="Compiles the project JSP files to verify syntax." -->
-	<target name="-cjsp" depends="-assemble,-prop-check">
+	<target name="-cjsp" depends="-assemble,-prop-check" description="Compiles the project JSP files to verify syntax.">
 		<copy tofile="${artifacts.dir}/common_bottom_border.jsp" overwrite="true">
 			<fileset file="${jsp.dir}/common/common_bottom_border.jsp"/>
 		</copy>
 		
 		<echo>Compiling JSP files to verify syntax ...</echo>
-		<replaceregexp file="${jsp.dir}/common/common_bottom_border.jsp" match="@TOOL.VERSION@" replace="${TOOL.VERSION}" flags="g"/>
-		<replaceregexp file="${jsp.dir}/common/common_bottom_border.jsp" match="@TOOL.BUILD@" replace="${TOOL.BUILD}" flags="g"/>
+		<replaceregexp file="${jsp.dir}/common/common_bottom_border.jsp" match="@Tool.Version@" replace="${Tool.Version}" flags="g"/>
+		<replaceregexp file="${jsp.dir}/common/common_bottom_border.jsp" match="@Tool.Build@" replace="${Tool.Build}" flags="g"/>
+		<replaceregexp file="${jsp.dir}/common/common_bottom_border.jsp" match="@Tool.Support@" replace="${Tool.Support}" flags="g"/>
 
 		<jspc srcdir="${root.dir}/jsp" destdir="${temp.classes.dir}" compiler="jasper41"  verbose="1" failonerror="no">
 			<classpath refid="libpath"/>
@@ -238,8 +234,7 @@
 		<delete dir="${temp.classes.dir}/org"/>
 	</target>
 
-	<!--  description="builds common jar." -->
-    <target name="-jar_common" depends="-compile">
+    <target name="-jar_common" depends="-compile" description="builds common jar.">
         <jar jarfile="${artifacts.dir}/jboss/common.jar">
           <fileset dir="${temp.classes.dir}">
             <patternset>
@@ -270,8 +265,7 @@
         </jar>
     </target>
 
-	<!--  description="builds persistence jar." -->
-    <target name="-jar_persistence_form" depends="-compile">
+    <target name="-jar_persistence_form" depends="-compile" description="builds persistence jar.">
         <jar jarfile="${artifacts.dir}/jboss/persistence_form.jar">
           <fileset dir="${temp.classes.dir}">
             <patternset>
@@ -287,8 +281,7 @@
         </jar>
     </target>  
 
-	<!--  description="builds formbuilder-ejb jar." -->
-    <target name="-jar_ejb" depends="-compile,-jar_persistence_form,-jar_common">
+    <target name="-jar_ejb" depends="-compile,-jar_persistence_form,-jar_common" description="builds formbuilder-ejb jar.">
 	  <copy tofile="${temp.classes.dir}/ejb/META-INF/ejb-jar.xml" filtering="true">
 		<fileset file="conf/template.ejb-jar.xml" />
 	  </copy>
@@ -317,8 +310,7 @@
        </jar>         
     </target>
 
-	<!--  description="Builds the project WAR file."  -->
-	<target name="-build-war" depends="-cjsp,-prop-check">
+	<target name="-build-war" depends="-cjsp,-prop-check" description="Builds the project WAR file.">
 		<echo>Building deployable WAR file ...</echo>
 		<delete file="${artifacts.dir}/jboss/formbuilder.war" />
 		<!-- copy only classes for the war from the temp direcotry --> 
@@ -370,13 +362,13 @@
 		<war destfile="${artifacts.dir}/jboss/formbuilder.war" basedir="${root.dir}" update="true" webxml="${web.dir}/web.xml">
 		</war>
 		<delete file="${jsp.dir}/cvsdeploy.txt" />
+		<echo>put back the common border jsp into jsp directory ...</echo>
 		<copy tofile="${jsp.dir}/common/common_bottom_border.jsp" overwrite="true">
 			<fileset file="${artifacts.dir}/common_bottom_border.jsp"/>
 		</copy>
 	</target>
 
-	<!--  description="builds formbuilder ear." -->
-    <target name="-build-ear" depends="-jar_ejb,-build-war">            
+    <target name="-build-ear" depends="-jar_ejb,-build-war" description="builds formbuilder ear.">            
 	  <copy tofile="${artifacts.dir}/META-INF/application.xml" filtering="true">
 		<fileset file="conf/template.application.xml" />
 	  </copy>
@@ -403,8 +395,7 @@
       </ear>
     </target>
 	
-	<!--  description="Build the project JAR files."  -->
-	<target name="-build-jar" depends="-assemble,-prop-check">
+	<target name="-build-jar" depends="-assemble,-prop-check" description="Build the project JAR files.">
 		<echo>Building distributable JAR files ...</echo>
         <delete file="${artifacts.dir}/bin/formbuilder.jar" />
         <cvs command="status -v" output="${classes.dir}/cvsdeploy.txt" />
@@ -419,7 +410,7 @@
 	</target>
 
 	<target name="test" if="check.test" depends="-prop-check" description="Execute auto tests on the project logic.">
-		<echo>Performing automated project tests ...</echo>
+		<echo>Performing automated project tests not supported this time...</echo>
 		<!-- needs to rework this later       
         <delete>
             <fileset dir="${tr.dir}" includes="**/*" />
@@ -530,30 +521,25 @@
         <os family="unix" />
     </condition>
 
-	<!--  description="Sets the file permissions after the binaries are deployed." -->
-    <target name="-deploy-auto-local" if="unix.os" unless="remote.deploy" depends="-deploy-binaries-local">
+    <target name="-deploy-auto-local" if="unix.os" unless="remote.deploy" depends="-deploy-binaries-local" description="Sets the file permissions after the binaries are deployed.">
         <echo>Automated local deployment ...</echo>
         <chmod file="${toolBin.dir}/autorun.sh" perm="ugo+rx" />
         <delete file="${toolBin.dir}/autorun.cmd" />
     </target>
 
-	<!--  description="Sets the file permissions after the binaries are deployed." -->
-    <target name="-deploy-auto-remote" if="remote.deploy" depends="-deploy-binaries-remote">
+    <target name="-deploy-auto-remote" if="remote.deploy" depends="-deploy-binaries-remote" description="Sets the file permissions after the binaries are deployed.">
         <echo>Automated remote deployment complete ...</echo>
     </target>
 
-	<!--  description="Deploys the executable product binaries to the local machine." -->
-    <target name="-deploy-binaries" depends="-prop-check,-deploy-binaries-local,-deploy-binaries-remote">
+    <target name="-deploy-binaries" depends="-prop-check,-deploy-binaries-local,-deploy-binaries-remote" description="Deploys the executable product binaries to the local machine.">
         <echo>Product binaries deployed ...</echo>
     </target>
 
-	<!--  description="Deploys the executable product binaries." -->
-    <target name="-deploy-auto" depends="-prop-check,-deploy-auto-local,-deploy-auto-remote">
+    <target name="-deploy-auto" depends="-prop-check,-deploy-auto-local,-deploy-auto-remote" description="Deploys the executable product binaries.">
         <echo>Automated deployment complete ...</echo>
     </target>
 
-	<!--  description="Deploys the executable product binaries." -->
-    <target name="-deploy-binaries-local" depends="-prop-check" unless="remote.deploy">
+    <target name="-deploy-binaries-local" depends="-prop-check" unless="remote.deploy" description="Deploys the executable product binaries.">
         <echo>Deploying binaries to local file system ...</echo>
     <!--    <copy todir="${toolDtd.dir}">
             <fileset dir="dtd" includes="**/*.dtd"/>
@@ -592,8 +578,7 @@
         <move file="${JBOSS.DEPLOY.DIR}/formbuilder.eaz" tofile="${JBOSS.DEPLOY.DIR}/formbuilder.ear" />
     </target>
 
-	<!--  description="Deploys the executable product binaries to a remote machine." -->
-    <target name="-deploy-binaries-remote" depends="-prop-check" if="remote.deploy">
+    <target name="-deploy-binaries-remote" depends="-prop-check" if="remote.deploy" description="Deploys the executable product binaries to a remote machine.">
         <echo>mkdir ${scpPath.dir}</echo>
         <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" failonerror="false" command="mkdir -p ${scpPath.dir}" />
 
@@ -632,34 +617,29 @@
 
     </target>
 
-	<!--  description="Find the possible SQL scripts and flag for execution." -->
-    <target name="-check-sql-files">
+    <target name="-check-sql-files" description="Find the possible SQL scripts and flag for execution.">
         <available file="${artifacts.dir}/sql/load_options.sql" property="found.load_options.sql" />
         <available file="${artifacts.dir}/sql/update_options_url.sql" property="found.update_options_url.sql" />
     </target>
 
-	<!--  description="Execute load_options.sql" -->
-    <target name="-do-load-options" if="found.load_options.sql" depends="-check-sql-files">
+    <target name="-do-load-options" if="found.load_options.sql" depends="-check-sql-files" description="Execute load_options.sql">
         <echo>Deploying caDSR database changes ${CADSR.DS.USER}/${CADSR.DS.PSWD}@${CADSR.DS.TNS.ENTRY} @ ${artifacts.dir}/sql/load_options.sql</echo>
     	<exec dir="." executable="${SQL.EXE}" failonerror="true">
             <arg line="${CADSR.DS.USER}/${CADSR.DS.PSWD}@${CADSR.DS.TNS.ENTRY} @ ${artifacts.dir}/sql/load_options.sql" />
         </exec>
     </target>
 
-	<!--  description="Execute update_options_url.sql" -->
-    <target name="-do-update-options" if="found.update_options_url.sql" depends="-check-sql-files">
+    <target name="-do-update-options" if="found.update_options_url.sql" depends="-check-sql-files" description="Execute update_options_url.sql">
         <echo>Deploying caDSR database changes ${CADSR.DS.USER}/${CADSR.DS.PSWD}@${CADSR.DS.TNS.ENTRY} @ ${artifacts.dir}/sql/update_options_url.sql</echo>
         <exec dir="." executable="${SQL.EXE}" failonerror="true">
             <arg line="${CADSR.DS.USER}/${CADSR.DS.PSWD}@${CADSR.DS.TNS.ENTRY} @ ${artifacts.dir}/sql/update_options_url.sql" />
         </exec>
     </target>
 
-	<!--  description="execute database update scripts" -->
-    <target name="-deploy-db" depends="-do-load-options,-do-update-options">
+    <target name="-deploy-db" depends="-do-load-options,-do-update-options" description="execute database update scripts">
     </target>
 
-	<!--  description="Check for published files." -->
-    <target name="-deploy-gforge-check">
+    <target name="-deploy-gforge-check" description="Check for published files.">
         <condition property="deploy.gforge">
             <or>
                 <available file="${basedir}/gforge/formbuilderapi.jar" />
@@ -669,8 +649,7 @@
         </condition>
     </target>
 
-	<!--  description="Disseminates the public project artifacts, e.g. API JAR files, Javadoc, etc." -->
-    <target name="-deploy-gforge" if="deploy.gforge" depends="-deploy-gforge-check">
+    <target name="-deploy-gforge" if="deploy.gforge" depends="-deploy-gforge-check" description="Disseminates the public project artifacts, e.g. API JAR files, Javadoc, etc.">
         <echo>        
 			Artifacts exist in the ${artifacts.dir}/gforge directory and should be published.
 			Although this is not required for the software deployment please place these files in a location accessible by the development team.    
@@ -687,13 +666,11 @@
         <echo>Built artifacts for ${TIER.NAME}</echo>
     </target>
 
-	<!--  description="Verifies the presence of all required properties." -->
-	<target name="-prop-check" unless="check.props">
+	<target name="-prop-check" unless="check.props" description="Verifies the presence of all required properties.">
 		<fail>Missing one or more properties, see template.build.properties for a complete list.</fail>
 	</target>
 
-	<!--  description="Notify the user that all properties are present." -->
-	<target name="-init-check" if="check.props">
+	<target name="-init-check" if="check.props" description="Notify the user that all properties are present.">
 		<echo>All properties are present.</echo>
 	</target>
 
@@ -701,8 +678,7 @@
 		<fail>This build script must be run with the name of the desired target: build-all, build-product, clean, deploy, javadoc, package-download, test.</fail>
 	</target>
 
-	<!--  description="create the tier specific scripts" -->
-    <target name="-assemble-sql" depends="clean">
+    <target name="-assemble-sql" depends="clean" description="create the tier specific scripts">
         <copy tofile="${artifacts.dir}/sql/load_options.sql" filtering="true">
             <fileset file="conf/template.load_options.sql" />
         </copy>
