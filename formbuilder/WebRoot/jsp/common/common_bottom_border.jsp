@@ -20,15 +20,14 @@
 </FONT>
 </td>
 <td width="30%" align="right">
- <FONT color="white" size=-2 face=arial>Version @TOOL.VERSION@&nbsp;&nbsp;Build @TOOL.BUILD@
+ <FONT color="white" size=-2 face=arial>Version @Tool.Version@&nbsp;&nbsp;Build @Tool.Build@
  <%=CDEBrowserParams.mode%></FONT>
 </TD>
 
 <td td width="70%" align="right">
   <FONT color="white" size=-3 face=arial>
      Please send comments and suggestions to 
-         <A href="mailto:ncicb@pop.nci.nih.gov">ncicb@pop.nci.nih.gov</A>
-      
+         <A href="mailto:@Tool.Support@">@Tool.Support@</A>      
   </FONT>
    &nbsp; &nbsp;
 </td>
