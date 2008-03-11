@@ -6,7 +6,7 @@
      -->
 <beans>
   <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-      <property name="jndiName"><value>java:comp/env/jdbc/@CADSR.DS.JNDI.NAME@</value></property>
+      <property name="jndiName"><value>java:comp/env/jdbc/@Tool.ds.jndi.Name@</value></property>
    </bean>
 
 
