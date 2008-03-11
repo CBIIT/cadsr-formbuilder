@@ -4,7 +4,7 @@
 
     <appender name="FORMBUILDER_FILE" class="org.jboss.logging.appender.RollingFileAppender">
         <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler" />
-        <param name="File" value="${jboss.server.home.dir}/log/formbuilder_log.txt" />
+        <param name="File" value="@JBOSS.LOG.DIR@/formbuilder_log.txt" />
         <param name="Append" value="true" />
         <param name="MaxFileSize" value="200KB" />
         <param name="MaxBackupIndex" value="3" />
