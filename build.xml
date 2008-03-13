@@ -1,5 +1,5 @@
 <!-- Copyright ScenPro, Inc. 2005
-    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.3 2008-03-11 21:34:26 hegdes Exp $
+    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.4 2008-03-13 17:45:57 hegdes Exp $
     $Name: not supported by cvs2svn $
 -->
 <project name="Form Builder Tool" default="init" basedir=".">
@@ -574,7 +574,7 @@
         <scp todir="${SCP.USER}@${SCP.HOST}:${scpPath.dir}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true">
             <fileset dir="${artifacts.dir}" includes="**/*" />
         </scp>
-
+<!--
         <echo>mkdir ${toolDtd.dir}</echo>
         <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" failonerror="false" command="mkdir -p ${toolDtd.dir}" />
         <echo>cp ${scpPath.dir}/dtd/* ${toolDtd.dir}/.</echo>
@@ -586,7 +586,7 @@
         <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" command="cp ${scpPath.dir}/bin/* ${toolBin.dir}/." />
         <echo>chmod +rx ${toolBin.dir}/autorun.sh</echo>
         <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" command="chmod +rx ${toolBin.dir}/autorun.sh" />
-
+-->    	
         <echo>cp ${scpPath.dir}/jboss/*-oracle-ds.xml ${JBOSS.DEPLOY.DIR}/.</echo>
         <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" command="cp ${scpPath.dir}/jboss/*-oracle-ds.xml ${JBOSS.DEPLOY.DIR}/." />
         <echo>cp ${scpPath.dir}/jboss/formbuilder-log4j-*.xml ${JBOSS.CONF.DIR}/log4j/.</echo>
