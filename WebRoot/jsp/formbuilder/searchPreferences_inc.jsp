@@ -4,12 +4,12 @@
     <tr>
         <TD valign="TOP" align="CENTER"  colspan=1>
           <a href="javascript:save()">
-             <img src="../i/save.gif" border=0 alt="Save">
+             <img src="<%=request.getContextPath()%>/i/save.gif" border=0 alt="Save">
           </a>     
         </td>
        <td valign="BOTTOM" align="CENTER">
           <a href="javascript:cancel()">
-             <img src="../i/back.gif" border=0 alt="Cancel">
+             <img src="<%=request.getContextPath()%>/i/back.gif" border=0 alt="Cancel">
           </a>          
         </td>         
     </tr>
