@@ -21,6 +21,14 @@ function clearForm() {
   clearClassSchemeItem();
   document.forms[0].reset();
 }
+
+function gotoFormSearchPrefs() {
+  document.forms[0].<%=NavigationConstants.METHOD_PARAM%>.value="<%=NavigationConstants.GOTO_FORM_SEARCH_PREF%>";
+  document.forms[0].action='<%=request.getContextPath()%>/formSearchPrefAction.do';        
+  document.forms[0].target="_parent";
+  document.forms[0].submit();
+}
+
 -->
 </SCRIPT>
 <%
@@ -75,7 +83,9 @@ function gotoClassificationsLOV() {
       &nbsp;
     </logic:notPresent>
    </b></td>
-          
+   <td align="right" class="MessageText"  width="30%" nowrap>
+   		<a href="javascript:gotoFormSearchPrefs()">Search preferences</a>
+   </td>        
  </tr>   
  <tr>
    <td  align="center" colspan="3"><html:img page="/i/beigedot.gif" border="0"  height="1" width="99%" align="top" /> </td>
