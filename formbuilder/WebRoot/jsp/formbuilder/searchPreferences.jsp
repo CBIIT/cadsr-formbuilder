@@ -47,8 +47,6 @@ function setDefaults() {
       <html:hidden property="<%=FormConstants.MODULE_INDEX%>"/>
       <html:hidden property="<%=FormConstants.QUESTION_INDEX%>"/>
       
-      <%@ include file="searchPreferences_inc.jsp"%>
-
  <table width="100%">
   <tr align="left">
      <td class="OraHeaderSubSub" width="50%" align="left" nowrap>Form search preferences for this session</td>
