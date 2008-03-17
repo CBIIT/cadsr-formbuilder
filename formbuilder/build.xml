@@ -1,5 +1,5 @@
 <!-- Copyright ScenPro, Inc. 2005
-    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.4 2008-03-13 17:45:57 hegdes Exp $
+    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.5 2008-03-17 20:31:19 hegdes Exp $
     $Name: not supported by cvs2svn $
 -->
 <project name="Form Builder Tool" default="init" basedir=".">
@@ -339,6 +339,7 @@
 				<include name="gov/nih/nci/ncicb/cadsr/common/cdebrowser/**/*.*"/>
 				<include name="gov/nih/nci/ncicb/cadsr/common/ocbrowser/**/*.*"/>
 				<include name="gov/nih/nci/ncicb/cadsr/common/formbuilder/**/*.*"/>
+	         	<include name="gov/nih/nci/ncicb/cadsr/common/*"/>
 				<include name="gov/nih/nci/ncicb/oracle/mvc/**"/>
 				<include name="gov/nih/nci/ncicb/webtree/**"/>
 				<include name="gov/nih/nci/ncicb/cadsr/contexttree/**/*.*"/>
