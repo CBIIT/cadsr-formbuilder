@@ -1,5 +1,5 @@
 <!-- Copyright ScenPro, Inc. 2005
-    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.5 2008-03-17 20:31:19 hegdes Exp $
+    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.6 2008-03-18 21:39:25 hegdes Exp $
     $Name: not supported by cvs2svn $
 -->
 <project name="Form Builder Tool" default="init" basedir=".">
@@ -305,7 +305,7 @@
 	<target name="-build-war" depends="-cjsp,-prop-check" description="Builds the project WAR file.">
 		<echo>Building deployable WAR file ...</echo>
 		<delete file="${artifacts.dir}/jboss/formbuilder.war" />
-		<!-- copy only classes for the war from the temp direcotry --> 
+		<!-- copy only classes for the war from the temp direcotry
 	    <copy todir="${classes.dir}">      
           <fileset dir="${temp.classes.dir}">
             <patternset>
@@ -313,6 +313,7 @@
             </patternset>
           </fileset>      
 	    </copy>    
+	     --> 
 	    <copy todir="${classes.dir}">
 	      <fileset dir="${temp.classes.dir}">
 	         <patternset>
@@ -612,10 +613,11 @@
     </target>
 
     <target name="-do-load-options" if="found.load_options.sql" depends="-check-sql-files" description="Execute load_options.sql">
-        <echo>Deploying caDSR database changes ${CADSR.DS.USER}/${CADSR.DS.PSWD}@${CADSR.DS.TNS.ENTRY} @ ${artifacts.dir}/sql/load_options.sql</echo>
+  <!--      <echo>Deploying caDSR database changes ${CADSR.DS.USER}/${CADSR.DS.PSWD}@${CADSR.DS.TNS.ENTRY} @ ${artifacts.dir}/sql/load_options.sql</echo>
     	<exec dir="." executable="${SQL.EXE}" failonerror="true">
             <arg line="${CADSR.DS.USER}/${CADSR.DS.PSWD}@${CADSR.DS.TNS.ENTRY} @ ${artifacts.dir}/sql/load_options.sql" />
         </exec>
+  -->
     </target>
 
     <target name="-do-update-options" if="found.update_options_url.sql" depends="-check-sql-files" description="Execute update_options_url.sql">
