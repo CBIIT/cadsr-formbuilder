@@ -145,11 +145,11 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
       //Instructions
       if(crf.getInstruction()!=null)
       {
-        dynaFormEditForm.set(this.FORM_HEADER_INSTRUCTION, crf.getInstruction().getLongName());
+        dynaFormEditForm.set(this.FORM_HEADER_INSTRUCTION, crf.getInstruction().getPreferredDefinition());
       }
       if(crf.getFooterInstruction()!=null)
       {
-        dynaFormEditForm.set(this.FORM_FOOTER_INSTRUCTION, crf.getFooterInstruction().getLongName());
+        dynaFormEditForm.set(this.FORM_FOOTER_INSTRUCTION, crf.getFooterInstruction().getPreferredDefinition());
       }      
 
     }
@@ -1212,7 +1212,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
          if (!currInstrStr.trim().equals(""))
          {
             Instruction instr = new InstructionTransferObject();
-            instr.setLongName(currInstrStr);
+            instr.setLongName(parent.getLongName());
             instr.setDisplayOrder(0);
             instr.setVersion(new Float(1));
             instr.setAslName("DRAFT NEW");
@@ -1231,19 +1231,20 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
        }
        if(currInstrStr!=null&&orgInstr!=null)
        {
-         if(!currInstrStr.equals(orgInstr.getLongName())&&!currInstrStr.trim().equals(""))
+         if(!currInstrStr.equals(orgInstr.getPreferredDefinition())&&!currInstrStr.trim().equals(""))
            {
              List updatedInstrs = (List)mainMap.get(FormInstructionChanges.UPDATED_INSTRUCTIONS);
              if(updatedInstrs==null)
              {
                 updatedInstrs = new ArrayList();       
              }
-             orgInstr.setLongName(currInstrStr);
+             orgInstr.setLongName(parent.getLongName());
+             orgInstr.setPreferredDefinition(currInstrStr);
              updatedInstrs.add(orgInstr);
              mainMap.put(FormInstructionChanges.UPDATED_INSTRUCTIONS,updatedInstrs);
              return mainMap;     
            }
-           else if(!currInstrStr.equals(orgInstr.getLongName())&&currInstrStr.trim().equals(""))
+           else if(!currInstrStr.equals(orgInstr.getPreferredDefinition())&&currInstrStr.trim().equals(""))
            {
              List toDelete = (List)mainMap.get(FormInstructionChanges.DELETED_INSTRUCTIONS);
              if(toDelete==null)
