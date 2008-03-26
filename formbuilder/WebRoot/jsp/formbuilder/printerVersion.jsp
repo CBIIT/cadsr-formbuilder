@@ -107,7 +107,7 @@
               <bean:message key="cadsr.formbuilder.form.header.instruction"/>
             </td>                
             <td  class="PrinterOraTableColumnHeader">
-              <bean:write  name="<%=FormConstants.CRF%>" property="instruction.longName"/>
+              <bean:write  name="<%=FormConstants.CRF%>" property="instruction.preferredDefinition"/>
             </td>
           </tr>
         </logic:present>
@@ -117,7 +117,7 @@
               <bean:message key="cadsr.formbuilder.form.footer.instruction"/>
             </td>                
             <td  class="PrinterOraTableColumnHeader">
-              <bean:write  name="<%=FormConstants.CRF%>" property="footerInstruction.longName"/>
+              <bean:write  name="<%=FormConstants.CRF%>" property="footerInstruction.preferredDefinition"/>
             </td>
           </tr> 
         </logic:present>              

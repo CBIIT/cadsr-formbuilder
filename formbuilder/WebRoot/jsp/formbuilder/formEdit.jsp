@@ -436,7 +436,7 @@ function repeatDisplay(methodName) {
                                 <bean:message key="cadsr.formbuilder.form.instruction"/> 
                              </td>
                              <td class="OraFieldTextInstruction">
-                               <bean:write  name="module" property="instruction.longName"/>
+                               <bean:write  name="module" property="instruction.preferredDefinition"/>
                              </td>
                             </tr>
                              <tr class="OraTabledata">
@@ -527,7 +527,7 @@ function repeatDisplay(methodName) {
                                         <bean:message key="cadsr.formbuilder.form.instruction"/>
                                      </td>
                                      <td class="OraFieldTextInstruction">
-                                       <bean:write  name="question" property="instruction.longName"/>
+                                       <bean:write  name="question" property="instruction.preferredDefinition"/>
                                      </td>
                                     </tr>
                                    </table>                                                            
@@ -693,7 +693,7 @@ class="OraBGAccentVeryDark" >
                                                     <bean:message key="cadsr.formbuilder.form.instruction"/> 
                                                  </td>
                                                  <td class="OraFieldTextInstruction">
-                                                   <bean:write  name="validValue" property="instruction.longName"/>
+                                                   <bean:write  name="validValue" property="instruction.preferredDefinition"/>
                                                  </td>
                                                 </tr>   
                                               </logic:present>                                                    

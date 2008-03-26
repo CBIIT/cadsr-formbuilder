@@ -117,7 +117,7 @@ public class FormCreateAction extends FormBuilderSecureBaseDispatchAction {
     String headerInstrStr = (String)dynaForm.get(FORM_HEADER_INSTRUCTION);
     if (StringUtils.doesValueExist(headerInstrStr)){
       newFormHdrInst = new InstructionTransferObject();
-      newFormHdrInst.setLongName(headerInstrStr);
+      newFormHdrInst.setLongName(newForm.getLongName());
       newFormHdrInst.setPreferredDefinition(headerInstrStr);
       newFormHdrInst.setContext(context);
       newFormHdrInst.setAslName("DRAFT NEW");
@@ -128,7 +128,7 @@ public class FormCreateAction extends FormBuilderSecureBaseDispatchAction {
     String footerInstrStr = (String)dynaForm.get(FORM_FOOTER_INSTRUCTION);
     if (StringUtils.doesValueExist(footerInstrStr)){
       newFormFtrInst = new InstructionTransferObject();
-      newFormFtrInst.setLongName(footerInstrStr);
+      newFormFtrInst.setLongName(newForm.getLongName());
       newFormFtrInst.setPreferredDefinition(footerInstrStr);
       newFormFtrInst.setContext(context);
       newFormFtrInst.setAslName("DRAFT NEW");
