@@ -996,12 +996,12 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
     String headerInsterStr = (String) editForm.get(FORM_HEADER_INSTRUCTION);
     FormInstructionChanges instrChanges = new FormInstructionChangesTransferObject();
     Map headerInstrChanges  = getInstructionChanges(instrChanges.getFormHeaderInstructionChanges()
-                              , headerInsterStr , clonedCrf.getInstruction(),crf);
+                              , headerInsterStr , clonedCrf.getInstruction(),crf, longName);
     instrChanges.setFormHeaderInstructionChanges(headerInstrChanges);  
     
     String footerInsterStr = (String) editForm.get(FORM_FOOTER_INSTRUCTION);
     Map footerInstrChanges  = getInstructionChanges(instrChanges.getFormFooterInstructionChanges()
-                              , footerInsterStr , clonedCrf.getFooterInstruction(),crf);
+                              , footerInsterStr , clonedCrf.getFooterInstruction(),crf, longName);
     instrChanges.setFormFooterInstructionChanges(footerInstrChanges);                              
                               
                               
@@ -1192,7 +1192,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
     }
   }
   
-  private Map getInstructionChanges(Map mainMap, String currInstrStr , Instruction orgInstr, Form parent)
+  private Map getInstructionChanges(Map mainMap, String currInstrStr , Instruction orgInstr, Form parent, String currNameStr)
   {
     if(mainMap==null)
            mainMap = new HashMap(); 
@@ -1212,7 +1212,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
          if (!currInstrStr.trim().equals(""))
          {
             Instruction instr = new InstructionTransferObject();
-            instr.setLongName(parent.getLongName());
+            instr.setLongName(currNameStr);
             instr.setDisplayOrder(0);
             instr.setVersion(new Float(1));
             instr.setAslName("DRAFT NEW");
@@ -1238,7 +1238,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
              {
                 updatedInstrs = new ArrayList();       
              }
-             orgInstr.setLongName(parent.getLongName());
+             orgInstr.setLongName(currNameStr);
              orgInstr.setPreferredDefinition(currInstrStr);
              updatedInstrs.add(orgInstr);
              mainMap.put(FormInstructionChanges.UPDATED_INSTRUCTIONS,updatedInstrs);

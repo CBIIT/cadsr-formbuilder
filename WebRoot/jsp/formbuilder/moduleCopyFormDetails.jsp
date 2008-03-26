@@ -119,7 +119,7 @@
               <bean:message key="cadsr.formbuilder.form.header.instruction"/>
             </td>                
             <td  class="OraFieldTextInstruction">
-              <bean:write  name="<%=FormConstants.MODULE_COPY_FORM%>" property="instruction.longName"/>
+              <bean:write  name="<%=FormConstants.MODULE_COPY_FORM%>" property="instruction.preferredDefinition"/>
             </td>
           </tr>
         </logic:present>
@@ -129,7 +129,7 @@
               <bean:message key="cadsr.formbuilder.form.footer.instruction"/>
             </td>                
             <td  class="OraFieldTextInstruction">
-              <bean:write  name="<%=FormConstants.MODULE_COPY_FORM%>" property="footerInstruction.longName"/>
+              <bean:write  name="<%=FormConstants.MODULE_COPY_FORM%>" property="footerInstruction.preferredDefinition"/>
             </td>
           </tr> 
         </logic:present>          
