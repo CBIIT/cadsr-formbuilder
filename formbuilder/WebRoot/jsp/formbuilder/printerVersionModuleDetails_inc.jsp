@@ -13,7 +13,7 @@
                                 <bean:message key="cadsr.formbuilder.form.instruction"/> 
                              </td>
                              <td class="PrinterOraTabledata">
-                               <bean:write  name="module" property="instruction.longName"/>
+                               <bean:write  name="module" property="instruction.preferredDefinition"/>
                              </td>
                             </tr>
                            </table>
@@ -81,7 +81,7 @@
                                         <bean:message key="cadsr.formbuilder.form.instruction"/>
                                      </td>
                                      <td class="PrinterOraFieldText">
-                                        <bean:write name="question" property="instruction.longName"/>
+                                        <bean:write name="question" property="instruction.preferredDefinition"/>
                                      </td>
                                     </tr>
                                    </table>                                                            
@@ -244,7 +244,7 @@ class="OraBGAccentBlack" >
                                                     <bean:message key="cadsr.formbuilder.form.instruction"/> 
                                                  </td>
                                                  <td class="PrinterOraFieldText">
-                                                   <bean:write  name="validValue" property="instruction.longName"/>
+                                                   <bean:write  name="validValue" property="instruction.preferredDefinition"/>
                                                  </td>
                                                 </tr>   
                                               </logic:present>  

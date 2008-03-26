@@ -104,7 +104,7 @@ public class ModuleCreateAction extends FormBuilderSecureBaseDispatchAction {
     String modInstrStr = (String)dynaForm.get(MODULE_INSTRUCTION);
     if (StringUtils.doesValueExist(modInstrStr)){
       Instruction newModHdrInst = new InstructionTransferObject();
-      newModHdrInst.setLongName(modInstrStr);
+      newModHdrInst.setLongName(newModule.getLongName());
       newModHdrInst.setPreferredDefinition(modInstrStr);
       newModHdrInst.setContext(crf.getContext());
       newModHdrInst.setAslName("DRAFT NEW");

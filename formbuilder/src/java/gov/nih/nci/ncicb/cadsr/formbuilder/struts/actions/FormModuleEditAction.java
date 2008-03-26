@@ -113,7 +113,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
     if(selectedModule.getInstruction()!=null)
     {
       moduleEditForm.set(
-        MODULE_INSTRUCTION, selectedModule.getInstruction().getLongName());
+        MODULE_INSTRUCTION, selectedModule.getInstruction().getPreferredDefinition());
     }
 
     updateEditFormFromQuestion(selectedModule.getQuestions(), moduleEditForm);
@@ -1227,7 +1227,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
    }
    if(currInstr!=null&&orgInstr==null)
    {
-     if (!currInstr.getLongName().trim().equals(""))
+     if (!currInstr.getPreferredDefinition().trim().equals(""))
      {
        changes.setNewInstruction(currInstr);
        return changes;
@@ -1235,12 +1235,12 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
    }
    if(currInstr!=null&&orgInstr!=null)
    {
-     if(!currInstr.equals(orgInstr)&&!currInstr.getLongName().trim().equals(""))
+     if(!currInstr.equals(orgInstr)&&!currInstr.getPreferredDefinition().trim().equals(""))
        {
          changes.setUpdatedInstruction(currInstr);
          return changes;
        }
-       else if(!currInstr.equals(orgInstr)&&currInstr.getLongName().trim().equals(""))
+       else if(!currInstr.equals(orgInstr)&&currInstr.getPreferredDefinition().trim().equals(""))
        {
          changes.setDeletedInstruction(currInstr);
          return changes;
@@ -1362,7 +1362,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
       Instruction instr = question.getInstruction();
       if(instr!=null)
       {
-        questionInstructionsArr[index] = instr.getLongName();
+        questionInstructionsArr[index] = instr.getPreferredDefinition();
       }
       else
       {
@@ -1394,7 +1394,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
         while(vvIterate.hasNext())
         {
           FormValidValue vv = (FormValidValue) vvIterate.next();
-          String vvInstr = (vv.getInstruction()!=null? vv.getInstruction().getLongName():"");
+          String vvInstr = (vv.getInstruction()!=null? vv.getInstruction().getPreferredDefinition():"");
           String valueMeaningText = vv.getFormValueMeaningText();
           String valueMeaningDesc = vv.getFormValueMeaningDesc();
           valueMeaningTexts[vvIndex] = "";
@@ -1443,7 +1443,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
             Instruction instr = vv.getInstruction();
             if(instr!=null)
             {
-              validValueInstructionsArr[vvIndex] = instr.getLongName();
+              validValueInstructionsArr[vvIndex] = instr.getPreferredDefinition();
             }
             else
             {
@@ -1483,7 +1483,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
             {
               if(instrStr!=null&&!instrStr.trim().equals(""))
               {
-                currVV.getInstruction().setLongName(instrStr);
+                currVV.getInstruction().setPreferredDefinition(instrStr);
                  initNullValues(currVV.getInstruction(),module);
                                              // this is done to take care
                                              // incase the attributes are null
@@ -1496,7 +1496,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
             else if((instrStr!=null)&&(!instrStr.equals("")))
             {
               Instruction instr = new InstructionTransferObject();
-              instr.setLongName(instrStr);
+              instr.setLongName(currVV.getLongName());
               instr.setDisplayOrder(0);
               instr.setVersion(new Float(1));
               instr.setAslName("DRAFT NEW");
@@ -1546,7 +1546,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
         {
           if(instrStr!=null&&!instrStr.trim().equals(""))
           {
-            currQuestion.getInstruction().setLongName(instrStr);
+            currQuestion.getInstruction().setPreferredDefinition(instrStr);
             initNullValues(currQuestion.getInstruction(),module);// this is done to take care
                                                // incase the attributes are null
           }
@@ -1558,7 +1558,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
         else if((instrStr!=null)&&(!instrStr.equals("")))
         {
           Instruction instr = new InstructionTransferObject();
-          instr.setLongName(instrStr);
+          instr.setLongName(currQuestion.getLongName());
           instr.setDisplayOrder(0);
           instr.setVersion(new Float(1));
           instr.setAslName("DRAFT NEW");
@@ -1605,8 +1605,8 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
               instr.setAslName("DRAFT NEW");
       if(instr.getContext()==null)
               instr.setContext(module.getContext());
-      if(instr.getPreferredDefinition()==null)
-              instr.setPreferredDefinition(instr.getLongName());
+      //if(instr.getPreferredDefinition()==null)
+       //       instr.setPreferredDefinition(instr.getLongName());
 
   }
   private Collection getAllVDsForQuestions(List questions) {
@@ -1702,9 +1702,9 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
           instr.setVersion(new Float(1));
           instr.setAslName("DRAFT NEW");
           instr.setContext(module.getContext());
-          instr.setPreferredDefinition(moduleInstruction);
         }
-        instr.setLongName(moduleInstruction);
+        instr.setPreferredDefinition(moduleInstruction);
+        instr.setLongName(longName);
         module.setInstruction(instr);
       }
       else
