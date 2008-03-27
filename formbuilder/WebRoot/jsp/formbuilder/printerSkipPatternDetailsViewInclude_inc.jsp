@@ -80,7 +80,7 @@
                                               <td class="PrinterOraTableColumnHeader" width="20%" nowrap>
                                                 Instruction
                                               </td>
-                                              <td  class="PrinterOraFieldText" width="80%" nowrap>
+                                              <td  class="PrinterOraFieldText">
                                                     <bean:write  name="currTriggerAction" property="instruction"/> 
                                                </td>             
                                              </tr>                                                  
