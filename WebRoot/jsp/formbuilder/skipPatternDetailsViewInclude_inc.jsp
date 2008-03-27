@@ -86,7 +86,7 @@
                                               <td class="OraTableColumnHeader" width="20%" nowrap>
                                                 Instruction
                                               </td>
-                                              <td  class="OraFieldText" width="80%" nowrap>
+                                              <td  class="OraFieldText">
                                                     <bean:write  name="currTriggerAction" property="instruction"/> 
                                                </td>             
                                              </tr>                                                  
