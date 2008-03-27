@@ -139,7 +139,7 @@ public class DownloadAction
    cell = row.createCell((short)0);
    cell.setCellValue("Header Instruction");
    cell.setCellStyle(boldCellStyle);
-   row.createCell((short)1).setCellValue(crf.getInstruction().getLongName());
+   row.createCell((short)1).setCellValue(crf.getInstruction().getPreferredDefinition());
   }
 
   if (crf.getFooterInstruction() != null) {
@@ -148,7 +148,7 @@ public class DownloadAction
    cell = row.createCell((short)0);
    cell.setCellValue("Footer Instruction");
    cell.setCellStyle(boldCellStyle);
-   row.createCell((short)1).setCellValue(crf.getFooterInstruction().getLongName());
+   row.createCell((short)1).setCellValue(crf.getFooterInstruction().getPreferredDefinition());
   }
 
   //export module related info
@@ -234,7 +234,7 @@ public class DownloadAction
     row.createCell((short)0).setCellValue(module.getLongName());
 
     if (module.getInstruction() != null)
-     row.createCell((short)1).setCellValue(module.getInstruction().getLongName());     
+     row.createCell((short)1).setCellValue(module.getInstruction().getPreferredDefinition());     
 
     row.createCell((short)2).setCellValue(""+module.getNumberOfRepeats());
 
@@ -258,7 +258,7 @@ public class DownloadAction
       colNumber += 3;
 
      if (question.getInstruction() != null)
-      row.createCell(colNumber++).setCellValue(question.getInstruction().getLongName());
+      row.createCell(colNumber++).setCellValue(question.getInstruction().getPreferredDefinition());
      else
       colNumber++;
 
@@ -321,7 +321,7 @@ public class DownloadAction
        row.createCell(colNumber++).setCellValue(validValue.getFormValueMeaningDesc());
 
        if (validValue.getInstruction() != null)
-        row.createCell(colNumber++).setCellValue(validValue.getInstruction().getLongName());
+        row.createCell(colNumber++).setCellValue(validValue.getInstruction().getPreferredDefinition());
       }
      }
     }
