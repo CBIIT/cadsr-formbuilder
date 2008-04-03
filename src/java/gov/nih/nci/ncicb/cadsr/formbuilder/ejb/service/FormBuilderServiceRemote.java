@@ -31,7 +31,7 @@ public interface FormBuilderServiceRemote {
         String contextIdSeq, String workflow, String categoryName, String type,
         String classificationIdSeq,
         String publicId, String version, String moduleLongName, String cdePublicId,
-        NCIUser user) throws RemoteException;
+        NCIUser user, String contextRestriction) throws RemoteException;
 
     public Form getFormDetails(String formPK) throws RemoteException;
 

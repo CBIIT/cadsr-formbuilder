@@ -1,27 +1,33 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
 import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
-import gov.nih.nci.ncicb.cadsr.common.resource.Context;
-import gov.nih.nci.ncicb.cadsr.common.util.SessionUtils;
-import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.cdebrowser.DataElementSearchBean;
 import gov.nih.nci.ncicb.cadsr.common.exception.FatalException;
 import gov.nih.nci.ncicb.cadsr.common.formbuilder.common.FormBuilderConstants;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants;
+import gov.nih.nci.ncicb.cadsr.common.resource.Context;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
+import gov.nih.nci.ncicb.cadsr.common.struts.common.BaseDispatchAction;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.ServiceDelegateFactory;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.ServiceStartupException;
-import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants;
-import gov.nih.nci.ncicb.cadsr.common.persistence.PersistenceConstants;
-import gov.nih.nci.ncicb.cadsr.common.resource.Form;
-import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
-import gov.nih.nci.ncicb.cadsr.common.struts.common.*;
 
-
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -31,23 +37,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.DynaActionForm;
-import org.apache.struts.actions.DispatchAction;
-
-
-
-import java.io.IOException;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 
 /**
@@ -161,26 +150,11 @@ public class FormBuilderBaseDispatchAction extends BaseDispatchAction
    * @throws Exception
    */
   protected void setInitLookupValues(HttpServletRequest req) {
-    Object obj = getSessionObject(req, ALL_CONTEXTS);
-    
-    if (obj == null) {
-      Collection contexts = getFormBuilderService().getAllContexts();
-      setSessionObject(req, ALL_CONTEXTS, contexts);
-/*      try {
-		Iterator colIt = contexts.iterator();
-		  while(colIt.hasNext())
-			{		
-			  Context context = (Context)colIt.next();
-			  System.out.println("name : " + context.getName());
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-*/    }
+    Object obj = getSessionObject(req, ALL_CONTEXTS);    
+    if (obj == null)
+    	getExcludedContexts(req, null);
 
     obj = getSessionObject(req, ALL_WORKFLOWS);
-
     if (obj == null) {
       Collection workflows =
         getFormBuilderService().getStatusesForACType(FORM_ADMIN_COMPONENT_TYPE);
@@ -225,6 +199,35 @@ public class FormBuilderBaseDispatchAction extends BaseDispatchAction
 
   }
 
+  private DataElementSearchBean initSearchPreferences(HttpServletRequest request)
+  {
+      DataElementSearchBean searchBean = new DataElementSearchBean();
+      searchBean.initDefaultContextPreferences();
+      setSessionObject(request,"desb", searchBean);
+  	  return searchBean;  	  
+  }
+  
+  public void getExcludedContexts(HttpServletRequest request, DataElementSearchBean excludeBean)
+  {
+	  if (excludeBean == null)
+		  excludeBean = initSearchPreferences(request);
+	  String excludeList = excludeBean.getExcludeContextList();
+	  //get all contexts from the database
+	  Collection<Context> contexts = getFormBuilderService().getAllContexts();
+	  if (!excludeList.equals(""))
+	  {
+		  Collection<Context> exContexts = new ArrayList<Context>();
+	      for (Context context: contexts) {
+	          // if this context is not excluded by user preference
+	          if (excludeList.contains(context.getName()))
+	        	  exContexts.add(context);
+	      }
+	      if (!exContexts.isEmpty())
+	    	  contexts.removeAll(exContexts);
+	  }	  
+	  setSessionObject(request,this.ALL_CONTEXTS, contexts);
+  }
+  
   /**
    * If a iconForm(DynaForm) exist then get the FormDetails for the formIdSeq
    * is retrived.
