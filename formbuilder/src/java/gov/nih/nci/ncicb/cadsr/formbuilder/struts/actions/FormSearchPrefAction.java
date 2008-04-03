@@ -75,12 +75,10 @@ public class FormSearchPrefAction
         String excludeTrainingContext = (String)prefForm.get("excludeTrainingContext");
         
         DataElementSearchBean searchBean  = (DataElementSearchBean)getSessionObject(request,"desb");
-        String excludeList = "";
         if(excludeTestContext.equals("true"))
         {
             searchBean.setExcludeTestContext(true);
             prefForm.set("excludeTestContext","true");
-            excludeList = " '"+CaDSRConstants.CONTEXT_TEST+"'";
         }
         else
         {
@@ -92,8 +90,6 @@ public class FormSearchPrefAction
         {
             searchBean.setExcludeTrainingContext(true);
             prefForm.set("excludeTrainingContext","true");
-            if (!excludeList.equals("")) excludeList += ",";
-            excludeList += " '"+CaDSRConstants.CONTEXT_TRAINING+"'";
         }
         else
         {
@@ -104,13 +100,8 @@ public class FormSearchPrefAction
         prefForm.set("isPreferencesDefault",new Boolean(isPreferencesDefault(searchBean)).toString());
         setSessionObject(request,"desb", searchBean);
         SessionHelper.putValue(request,"desb",searchBean);
+        this.getExcludedContexts(request, searchBean);
         setSessionObject(request,TREE_REFRESH_INDICATOR,YES,true);
-        
-       // List contexts = getFormBuilderService().getAllContexts(excludeList);
-       // setSessionObject(request, ALL_CONTEXTS, contexts);
-        
-       // TreeBacker treeBacker = new TreeBacker();
-       // treeBacker.refreshTree();
     }
     catch(Exception exp)
     {

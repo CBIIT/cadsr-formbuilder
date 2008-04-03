@@ -31,7 +31,7 @@ public interface FormBuilderServiceDelegate {
         String context, String workflow, String category, String type,
         String classificationIdSeq,
         String publicId, String version, String moduleLongName, String cdePublicId,
-        NCIUser user);
+        NCIUser user, String exContexts);
 
     //Publish Change Order
     public Collection getAllFormsForClassification(String classificationIdSeq);

@@ -1,6 +1,7 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.ejb.impl;
 
 import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
+import gov.nih.nci.ncicb.cadsr.common.cdebrowser.DataElementSearchBean;
 import gov.nih.nci.ncicb.cadsr.common.dto.CSITransferObject;
 import gov.nih.nci.ncicb.cadsr.common.ejb.common.SessionBeanAdapter;
 import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
@@ -53,6 +54,7 @@ import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocator;
 import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocatorFactory;
 import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderServiceRemote;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -103,7 +105,7 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
                                   String categoryName, String type,
                                   String classificationIdSeq, String publicId,
                                   String version, String moduleLongName,
-                                  String cdePublicId, NCIUser user)
+                                  String cdePublicId, NCIUser user, String contextRestriction)
     {
         FormDAO dao = daoFactory.getFormDAO();
         ContextDAO contextDao = daoFactory.getContextDAO();
@@ -112,7 +114,7 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
 
         try
         {
-            String contextRestriction = null;
+            //String contextRestriction = null;
             /** TT 1892
             Context ctep = contextDao.getContextByName(Context.CTEP);
 
@@ -1696,7 +1698,5 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
         FormDAO mDAO = daoFactory.getFormDAO();
         return mDAO.getAllReferenceDocuments(acId, null);//docType is not in use
     }
-    
-
 
 }

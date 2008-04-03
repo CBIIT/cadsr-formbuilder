@@ -37,6 +37,8 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import gov.nih.nci.ncicb.cadsr.common.cdebrowser.DataElementSearchBean;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObject;
@@ -125,12 +127,17 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
     }
     else
     {
+    	String exContexts = "";    	
+    	DataElementSearchBean searchBean  = (DataElementSearchBean)getSessionObject(request,"desb");
+    	if (searchBean != null)
+    		exContexts = searchBean.getExcludeContextList();  //this.getExcludeList(searchBean);
+    	
     forms =
       service.getAllForms(
         formLongName, protocolIdSeq, contextIdSeq, workflow, categoryName, type,
         csCsiIdSeq,
         publicId, version, moduleLongName,cdePublicId,
-        (NCIUser)getSessionObject(request,this.USER_KEY));
+        (NCIUser)getSessionObject(request,this.USER_KEY), exContexts);
     }
     setSessionObject(request, this.FORM_SEARCH_RESULTS, forms,true);    
     //Initialize and add the PagenationBean to the Session
