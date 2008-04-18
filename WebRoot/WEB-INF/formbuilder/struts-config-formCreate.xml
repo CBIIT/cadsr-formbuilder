@@ -31,7 +31,6 @@
       input="/jsp/formbuilder/formCreate.jsp"
       >
       <forward name="gotoEdit" path="/formToEditAction.do?method=getFormToEdit"/>
-      <forward name="toSearch" path="/jsp/formbuilder/formSearch.jsp"/>
       <forward name="failure" path="/jsp/formbuilder/formCreate.jsp"/>
     </action>
 

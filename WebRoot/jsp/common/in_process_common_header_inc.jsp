@@ -26,12 +26,6 @@
       </TABLE>
     </td>
   </tr>
-  <tr>
-    <td align="left" class="OraInlineInfoText" nowrap>
-       <logic:present name="nciUser">
-        <bean:message key="user.greet" />
-    	<bean:write name="nciUser" property="username"  scope="session"/>
-       </logic:present>
-    </td>    
-  </tr>
 </TABLE>
+<br>
+
