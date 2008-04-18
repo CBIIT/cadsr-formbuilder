@@ -164,7 +164,7 @@ public class ReferenceDocumentAction
     //String dsName = CDEBrowserParams.getInstance("cdebrowser").getSbrDSN();
     dbUtil.getConnectionFromContainer();  // getOracleConnectionFromContainer();
 
-    String sqlStmt = "SELECT blob_content, mime_type, doc_size from reference_blobs where name = ?";
+    String sqlStmt = "SELECT blob_content, mime_type, doc_size from sbr.reference_blobs_view where name = ?";
     log.info(sqlStmt);
     conn = dbUtil.getConnection();
     ps = conn.prepareStatement(sqlStmt);
@@ -1013,10 +1013,10 @@ public class ReferenceDocumentAction
 
  private boolean saveRefDocAttachment(Attachment attachment, String rd_idseq, FormFile attFile) throws DMLException {
   String
-     sqlNewRow = "INSERT INTO reference_blobs (rd_idseq,name,mime_type,doc_size,content_type,blob_content) "
+     sqlNewRow = "INSERT INTO sbr.reference_blobs_view (rd_idseq,name,mime_type,doc_size,content_type,blob_content) "
                     + "VALUES (?,?,?,?,?,EMPTY_BLOB())",
-     sqlLockRow = "SELECT blob_content FROM reference_blobs " + "WHERE name = ? FOR UPDATE",
-     sqlSetBlob = "UPDATE reference_blobs " + "SET blob_content = ? " + "WHERE name = ?";
+     sqlLockRow = "SELECT blob_content FROM sbr.reference_blobs_view " + "WHERE name = ? FOR UPDATE",
+     sqlSetBlob = "UPDATE sbr.reference_blobs_view " + "SET blob_content = ? " + "WHERE name = ?";
 
   Connection conn = null;
   PreparedStatement ps = null;
