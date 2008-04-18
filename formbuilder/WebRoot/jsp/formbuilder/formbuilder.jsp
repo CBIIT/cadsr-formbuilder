@@ -36,10 +36,10 @@ FormBuilder
 </HEAD>
   <jsp:useBean id="requestMap" scope="request" class="java.util.HashMap"/>
   
-<frameset rows="7%,*">
+<frameset rows="30,*">
   <html:frame page="/jsp/common/topHeader.jsp" frameborder="0" scrolling = "no" frameName="tree_header"/>
   <frameset cols="25%,*">
-    <frameset rows="15%,*">
+    <frameset rows="7%,*">
        <html:frame page="/jsp/common/tree_hdr.jsp"
               name="requestMap"
               frameborder="0"
@@ -55,5 +55,5 @@ FormBuilder
               frameborder="0"
               frameName="body"/>      
   </frameset>
-   
+</frameset>   
 </HTML>

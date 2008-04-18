@@ -1,3 +1,4 @@
+<%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean"%>
 
 <%
 	String urlPrefix = request.getContextPath();
@@ -5,21 +6,27 @@
 %>
 
 <TABLE width=100% Cellpadding=0 Cellspacing=0 border=0>
-  <tr>
-    <td width=98%>&nbsp;</td>
-    <td valign=bottom align=right>
-      <table border=0 cellpadding=0 cellspacing=0>
-        <tr>
-
-
+	<tr>
+		<td width=98% align="left" class="OraInlineInfoText" nowrap>
+			&nbsp;
+			<logic:present name="nciUser">
+				<bean:message key="user.greet" />
+				<bean:write name="nciUser" property="username" scope="session" />
+			</logic:present>
+			<logic:notPresent name="nciUser">
+				&nbsp;
+			</logic:notPresent>
+		</td>
+		<td valign=bottom align=right>
+			<table border=0 cellpadding=0 cellspacing=0>
+				<tr>
 <TD bgcolor="#336699" width="1%" align=LEFT valign=TOP><IMG SRC="<%=urlPrefix%>/i/ctab_open.gif" height=21 width=18 border=0></TD>
 <TD width=1% bgcolor="#336699"><b><font size="-1" face="Arial" color="#FFFFFF"><%=label%></font></b></TD>
 <TD bgcolor="#336699" width="1%" align=RIGHT valign=TOP><IMG SRC="<%=urlPrefix%>/i/ctab_close.gif" height=21 width=12 border=0></TD>
-
-
-</table>
-</td>
-</TR>
+				</tr>
+			</table>
+		</td>
+	</TR>
 </TABLE>
 
 <TABLE width=100% Cellpadding=0 Cellspacing=0 border=0>

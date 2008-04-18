@@ -9,7 +9,6 @@
 <%@page import="gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants" %>
 <%@page import="gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants" %>
 <%@page import="gov.nih.nci.ncicb.cadsr.common.formbuilder.common.FormBuilderConstants" %>
-<%@page import="gov.nih.nci.ncicb.cadsr.common.CaDSRConstants" %>
 <%@page import="gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormJspUtil" %>
 <HTML>
 <HEAD>
@@ -23,14 +22,13 @@
   
   if(jumpto!=null)
     jumptoStr = "onload=\"location.hash='#"+jumpto+"'\"";
- System.out.println("jumptoStr " + jumptoStr);
- 
+
 %>
 </HEAD>
 <BODY topmargin=0 bgcolor="#ffffff" <%=jumptoStr%> ">
 
 <logic:notPresent name="<%=FormConstants.IN_PROCESS%>"> 
-        <%@ include  file="/jsp/common/common_header_no_strip_inc.jsp" %>
+        <%@ include  file="/jsp/common/common_header_inc.jsp" %>
         
         <jsp:include page="/jsp/common/tab_inc.jsp" flush="true">
                 <jsp:param name="label" value="Form&nbsp;Search" />
