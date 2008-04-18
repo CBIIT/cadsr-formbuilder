@@ -51,7 +51,7 @@ public class DownloadTemplateServlet extends HttpServlet  {
       out = response.getOutputStream();
       Connection conn = ch.getConnection();
       String sqlStmt = "SELECT rb.name, rb.mime_type,rb.blob_content " + 
-                       "from reference_blobs rb, reference_documents rd, administered_components ac " +
+                       "from sbr.reference_blobs_view rb, sbr.reference_documents_view rd, sbr.admin_components_view ac " +
                        "where ac.ac_idseq = rd.ac_idseq " +
                        "and rd.rd_idseq = rb.rd_idseq " +
                        "and rd.dctl_name = 'IMAGE_FILE' "+
