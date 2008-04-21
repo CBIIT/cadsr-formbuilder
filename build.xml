@@ -1,5 +1,5 @@
 <!-- Copyright ScenPro, Inc. 2005
-    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.6 2008-03-18 21:39:25 hegdes Exp $
+    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.7 2008-04-21 15:56:09 hegdes Exp $
     $Name: not supported by cvs2svn $
 -->
 <project name="Form Builder Tool" default="init" basedir=".">
@@ -205,6 +205,12 @@
 		</copy>
 		<copy tofile="${artifacts.dir}/jboss/formbuilder-log4j-category.xml" filtering="true">
 			<fileset file="conf/template.formbuilder-log4j-category.xml" />
+		</copy>
+		<copy tofile="${artifacts.dir}/jboss/cadsrutil-log4j-appender.xml" filtering="true">
+			<fileset file="conf/template.cadsrutil-log4j-appender.xml" />
+		</copy>
+		<copy tofile="${artifacts.dir}/jboss/cadsrutil-log4j-category.xml" filtering="true">
+			<fileset file="conf/template.cadsrutil-log4j-category.xml" />
 		</copy>
 		<fixcrlf srcdir="${artifacts.dir}" eol="lf" includes="**/*.sh, **/*.xml, **/*.properties, **/*.dtd" />
 	</target>
