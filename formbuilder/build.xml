@@ -1,5 +1,5 @@
 <!-- Copyright ScenPro, Inc. 2005
-    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.7 2008-04-21 15:56:09 hegdes Exp $
+    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.8 2008-04-21 16:15:41 hegdes Exp $
     $Name: not supported by cvs2svn $
 -->
 <project name="Form Builder Tool" default="init" basedir=".">
@@ -551,6 +551,11 @@
         <copy todir="${JBOSS.CONF.DIR}/log4j">
             <fileset dir="${artifacts.dir}/jboss">
                 <include name="**/formbuilder-log4j-*.xml" />
+            </fileset>
+        </copy>
+        <copy todir="${JBOSS.CONF.DIR}/log4j">
+            <fileset dir="${artifacts.dir}/jboss">
+                <include name="**/cadsrutil-log4j-*.xml" />
             </fileset>
         </copy>
         <concat destfile="log4j.xml" append="no">
