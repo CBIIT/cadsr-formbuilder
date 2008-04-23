@@ -947,6 +947,14 @@ function clearProtocol() {
                                                           </logic:notEmpty>
                                                        </td>                                          
                                                       </tr>
+		                                              <tr class="OraTabledata">
+		                                                 <td  class="OraTableColumnHeader" width="30%">
+		                                                   <bean:message key="cadsr.formbuilder.valueMeaning.idversion" /></td>
+		                                                 <td class="OraFieldText" valign="middle">
+                                                          <html:textarea  styleClass="OraFieldText" rows="1" cols="80" property='<%=FormConstants.FORM_VALUE_MEANING_IDVERSION + "[" + vvInstrIndex + "]"%>' readonly="true">
+                                                          </html:textarea>
+                                                         </td> 
+		                                              </tr>  
                                                       <%--value meaning description--%>
                                                       <tr class="OraTabledata" >
                                                        <td  class="OraTableColumnHeader" width="30%">
@@ -966,6 +974,7 @@ function clearProtocol() {
                                                       </logic:notEmpty>
                                                       <logic:empty name="validValue" property="valueMeaning">
 						         <html:hidden  value="" property="<%=FormConstants.FORM_VALUE_MEANING_TEXT%>"/>
+						         <html:hidden  value="" property="<%=FormConstants.FORM_VALUE_MEANING_IDVERSION%>"/>
 						         <html:hidden  value="" property="<%=FormConstants.FORM_VALUE_MEANING_DESC%>"/>
                                                       </logic:empty>
 </logic:present>
@@ -980,6 +989,15 @@ function clearProtocol() {
                                                        </td>
                                                        <td class="OraFieldText" >      
                                                           <html:textarea  styleClass="OraFieldText" rows="2" cols="80" property='<%=FormConstants.FORM_VALUE_MEANING_TEXT + "[" + vvInstrIndex + "]"%>'>
+                                                          </html:textarea>
+                                                       </td>                                          
+                                                      </tr>
+                                                      <tr class="OraTabledata" >
+                                                       <td  class="OraTableColumnHeader" width="30%">
+                                                            <bean:message key="cadsr.formbuilder.valueMeaning.idversion" />
+                                                       </td>
+                                                       <td class="OraFieldText"  valign="middle">      
+                                                          <html:textarea  styleClass="OraFieldText" rows="1" cols="80" property='<%=FormConstants.FORM_VALUE_MEANING_IDVERSION + "[" + vvInstrIndex + "]"%>'>
                                                           </html:textarea>
                                                        </td>                                          
                                                       </tr>

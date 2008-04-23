@@ -232,6 +232,12 @@ class="OraBGAccentBlack" >
                                                  <td class="PrinterOraFieldText" >
                                                   <bean:write name="validValue" property="formValueMeaningText"/></td>                                          
                                                </tr>  
+                                            	<tr class="OraTabledata">
+                                                 <td  class="OraTableColumnHeader" width="10%" nowrap >
+                                                   <bean:message key="cadsr.formbuilder.valueMeaning.idversion" /></td>
+                                                 <td class="OraFieldText" >
+                                                  <bean:write name="validValue" property="formValueMeaningIdVersion"/></td>                                          
+                                               </tr>  
                                                <tr class="PrinterOraTabledata" >
                                                  <td  class="PrinterOraTableColumnHeader" width="10%" nowrap >
                                                    <bean:message key="cadsr.formbuilder.valueMeaning.description" /></td>

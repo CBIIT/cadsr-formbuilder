@@ -31,7 +31,7 @@ List of Values - Classifications
 <SCRIPT LANGUAGE="JavaScript">
 //<!--
 function passback(P_ID, P_NAME, P_VERSION) {
-   opener.document.forms[0].<%= clb.getJsName() %>.value = P_NAME+' '+P_VERSION;
+   opener.document.forms[0].<%= clb.getJsName() %>.value = P_NAME;
    opener.document.forms[0]['<%= clb.getJsId() %>'].value = P_ID;
    opener.document.forms[0].<%= clb.getJsName() %>.focus();
    window.close();
@@ -137,12 +137,12 @@ function goPage(pageInfo) {
   <table width="100%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
   <tr class="OraTableColumnHeader">
     <th class="OraTableColumnHeader">Class Scheme Item</th>
-    <th class="OraTableColumnHeader">Short Name</th>
-    <th class="OraTableColumnHeader">Long Name</th>
-    <th class="OraTableColumnHeader">Context</th>
-    <th class="OraTableColumnHeader">Version</th>
-    <th class="OraTableColumnHeader">Workflow Status</th>
-    <th class="OraTableColumnHeader">Preferred Definition</th>
+    <th class="OraTableColumnHeader">CSI Public ID Version</th>
+    <th class="OraTableColumnHeader">CS Long Name</th>
+    <th class="OraTableColumnHeader">CS Context</th>
+    <th class="OraTableColumnHeader">CS Public ID Version</th>
+    <th class="OraTableColumnHeader">CS Workflow Status</th>
+    <th class="OraTableColumnHeader">CS Preferred Definition</th>
     
   </tr>
   <tr class="OraTabledata">
