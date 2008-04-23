@@ -8,7 +8,6 @@
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.CaDSRConstants"%>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants"%>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants"%>
-<%@ page import="gov.nih.nci.ncicb.cadsr.common.CaDSRConstants"%>
 <%@page import="gov.nih.nci.ncicb.cadsr.common.formbuilder.common.FormBuilderConstants" %>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.resource.Form"%>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.resource.*"%>

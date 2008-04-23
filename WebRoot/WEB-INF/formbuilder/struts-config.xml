@@ -85,6 +85,7 @@
       <form-property name="questionDefaultValidValueIds" type="java.lang.String[]"/>
       <form-property name="formsValidValueInstructions" type="java.lang.String[]"/>            
       <form-property name="formsValueMeaningTexts" type="java.lang.String[]"/>            
+      <form-property name="formsValueMeaningIdVersions" type="java.lang.String[]"/>            
       <form-property name="formsValueMeaningDescs" type="java.lang.String[]"/>            
       <form-property name="addDeletedQuestionIdSeqArr" type="java.lang.String[]"/>
       <form-property name="validValueIndex" type="java.lang.Integer"/>
