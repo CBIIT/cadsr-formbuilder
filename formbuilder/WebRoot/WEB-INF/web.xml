@@ -695,14 +695,15 @@
       <param-value>/WEB-INF/formbuilder/struts-config.xml,/WEB-INF/formbuilder/struts-config-copy.xml,
            /WEB-INF/formbuilder/struts-config-addQuestion.xml,/WEB-INF/formbuilder/struts-config-cancel.xml,
            /WEB-INF/formbuilder/struts-config-manageClassifications.xml,
-	   /WEB-INF/formbuilder/struts-config-manageProtocols.xml,           
+	   	   /WEB-INF/formbuilder/struts-config-manageProtocols.xml,           
            /WEB-INF/formbuilder/struts-config-designation.xml,
            /WEB-INF/formbuilder/struts-config-version.xml,/WEB-INF/formbuilder/struts-config-module.xml,           
            /WEB-INF/formbuilder/struts-config-formCreate.xml,
            /WEB-INF/formbuilder/struts-config-manageReferenceDocs.xml,/WEB-INF/formbuilder/struts-config-downloadFormToExcel.xml,
            /WEB-INF/formbuilder/struts-config-publish.xml,
            /WEB-INF/admin/struts-config-admin.xml,/WEB-INF/formbuilder/struts-config-skippattern.xml,
-           /WEB-INF/formbuilder/struts-config-moduleRepeats.xml,/WEB-INF/formbuilder/struts-config-setAlert.xml
+           /WEB-INF/formbuilder/struts-config-moduleRepeats.xml,/WEB-INF/formbuilder/struts-config-setAlert.xml,
+           /WEB-INF/formbuilder/struts-config-formSearchPreferences.xml
        </param-value>
     </init-param>
     <init-param>

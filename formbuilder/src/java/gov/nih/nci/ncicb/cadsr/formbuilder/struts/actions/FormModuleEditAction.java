@@ -9,20 +9,10 @@ import gov.nih.nci.ncicb.cadsr.common.dto.InstructionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ModuleChangesTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ModuleTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionChangeTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.ValueDomainTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.exception.FatalException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormActionUtil;
 import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.common.resource.AdminComponent;
-import gov.nih.nci.ncicb.cadsr.common.resource.ClassSchemeItem;
 import gov.nih.nci.ncicb.cadsr.common.resource.DataElement;
-import gov.nih.nci.ncicb.cadsr.common.resource.Definition;
-import gov.nih.nci.ncicb.cadsr.common.resource.Designation;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
-import gov.nih.nci.ncicb.cadsr.common.resource.FormElement;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormValidValueChange;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormValidValueChanges;
@@ -30,26 +20,21 @@ import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
 import gov.nih.nci.ncicb.cadsr.common.resource.InstructionChanges;
 import gov.nih.nci.ncicb.cadsr.common.resource.Module;
 import gov.nih.nci.ncicb.cadsr.common.resource.ModuleChanges;
-import gov.nih.nci.ncicb.cadsr.common.resource.Orderable;
 import gov.nih.nci.ncicb.cadsr.common.resource.Question;
 import gov.nih.nci.ncicb.cadsr.common.resource.QuestionChange;
-import gov.nih.nci.ncicb.cadsr.common.resource.TriggerAction;
 import gov.nih.nci.ncicb.cadsr.common.resource.ValidValue;
 import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomain;
-
 import gov.nih.nci.ncicb.cadsr.common.resource.ValueMeaning;
-
-import java.util.HashMap;
-import java.util.Iterator;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.DynaActionForm;
+import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
 import gov.nih.nci.ncicb.cadsr.common.util.DTOTransformer;
-import java.io.IOException;
+import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
+import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormActionUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -57,7 +42,11 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.jsp.PageContext;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.DynaActionForm;
 
 
 public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
@@ -1381,6 +1370,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
     ListIterator iterate = questions.listIterator();
     int size = getMaxVVSize(questions);
     String[] valueMeaningTexts = new String[size];
+    String[] valueMeaningIdVs = new String[size];
     String[] valueMeaningDescs = new String[size];
     String[] vvInstructions = new String[size];
 
@@ -1396,14 +1386,19 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
           FormValidValue vv = (FormValidValue) vvIterate.next();
           String vvInstr = (vv.getInstruction()!=null? vv.getInstruction().getPreferredDefinition():"");
           String valueMeaningText = vv.getFormValueMeaningText();
+          String valueMeaningIdV = vv.getFormValueMeaningIdVersion();
           String valueMeaningDesc = vv.getFormValueMeaningDesc();
           valueMeaningTexts[vvIndex] = "";
+          valueMeaningIdVs[vvIndex] = "";
           valueMeaningDescs[vvIndex] = "";
           vvInstructions[vvIndex] = "";
           if(valueMeaningText!=null)
           {
             valueMeaningTexts[vvIndex] = valueMeaningText;
           }
+          if(valueMeaningIdV!=null){
+              valueMeaningIdVs[vvIndex] = valueMeaningIdV;
+            }  
           if(valueMeaningDesc!=null){
             valueMeaningDescs[vvIndex] = valueMeaningDesc;
           }  
@@ -1414,6 +1409,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
       }
     List<String[]> ret = new ArrayList(2);
     ret.add(valueMeaningTexts);
+    ret.add(valueMeaningIdVs);
     ret.add(valueMeaningDescs);
     ret.add(vvInstructions);
     
@@ -1756,83 +1752,6 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
       HttpServletResponse response) throws IOException, ServletException {
       GenericDynaFormBean moduleEditForm = (GenericDynaFormBean) form;
 
-       /**
-      Integer questionIndex = (Integer) moduleEditForm.get(QUESTION_INDEX);
-      int currQuestionIndex = questionIndex.intValue();
-      Module module = (Module) getSessionObject(request, MODULE);
-      List questions = module.getQuestions();
-      Question currQuestion = (Question) questions.get(currQuestionIndex);
-
-      DataElement cde = currQuestion.getDataElement();
-      // Need to change the code after the prototype
-      FormBuilderServiceDelegate service = getFormBuilderService();
-      Collection allVdIds = new ArrayList();
-      allVdIds.add(cde.getValueDomain().getVdIdseq());
-      Map validValueMap1 =null;
-      Map validValueMap2 = null;
-      Map validValueMap3 = null;
-
-      try {
-        //Change to get all children CDEs
-        validValueMap1 = service.getValidValues(allVdIds);
-        validValueMap2 = service.getValidValues(allVdIds);
-        validValueMap3 = service.getValidValues(allVdIds);
-      }
-      catch (FormBuilderException exp) {
-        saveError(ERROR_MODULE_RETRIEVE, request);
-        saveError(exp.getErrorCode(),request);
-        if (log.isErrorEnabled()) {
-          log.error("Exp while getting validValue", exp);
-        }
-        mapping.findForward(FAILURE);
-      }
-      List vvList1 = (List)validValueMap1.get(cde.getValueDomain().getVdIdseq());
-      List vvList2 = (List)validValueMap2.get(cde.getValueDomain().getVdIdseq());
-      List vvList3 = (List)validValueMap3.get(cde.getValueDomain().getVdIdseq());
-
-      ValueDomain vd = cde.getValueDomain();
-      ValueDomain vd1 = new ValueDomainTransferObject();
-      DataElement cde1 = new DataElementTrnsferObject();
-      ValueDomain vd2 = new ValueDomainTransferObject();
-      DataElement cde1 = new DataElementTrnsferObject();
-      ValueDomain vd3 = new ValueDomainTransferObject();
-      DataElement cde1 = new DataElementTrnsferObject();
-
-      if(vvList1.size()>4)
-      {
-
-        while( vvList1.size()>2)
-        {
-          vvList1.remove(0);
-        }
-        while( vvList2.size()>3)
-        {
-          vvList2.remove(0);
-        }
-        while( vvList3.size()>4)
-        {
-          vvList3.remove(0);
-        }
-
-        vd1.setValidValues(vvList1);
-
-
-        vd2.setValidValues(vvList2);
-
-        vd3.setValidValues(vvList3);
-
-        Collection subsettedVDs = new ArrayList();
-        subsettedVDs.add(vd1);
-        subsettedVDs.add(vd2);
-        subsettedVDs.add(vd3);
-        setSessionObject(request,"subsettedVDs",subsettedVDs,true);
-        //request.setAttribute("subsettedVDs",subsettedVDs);
-
-        //request.setAttribute("currentQuestion",currQuestion);
-        setSessionObject(request,"currentQuestion",currQuestion,true);
-        setSessionObject(request,"nextQuestion",nextQuestion,true);
-
-       }**/
        return mapping.findForward("viewSubsets");
       }
 
@@ -2002,8 +1921,9 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
         moduleEditForm.set(MODULE_QUESTIONS, questionArr);
         moduleEditForm.set(QUESTION_INSTRUCTIONS, questionInstructionsArr);
         moduleEditForm.set(FORM_VALUE_MEANING_TEXT,(String[])valueMeaningAttr.get(0));
-        moduleEditForm.set(FORM_VALUE_MEANING_DESC,(String[])valueMeaningAttr.get(1));
-        moduleEditForm.set(FORM_VALID_VALUE_INSTRUCTIONS, (String[])valueMeaningAttr.get(2));
+        moduleEditForm.set(FORM_VALUE_MEANING_IDVERSION,(String[])valueMeaningAttr.get(1));
+        moduleEditForm.set(FORM_VALUE_MEANING_DESC,(String[])valueMeaningAttr.get(2));
+        moduleEditForm.set(FORM_VALID_VALUE_INSTRUCTIONS, (String[])valueMeaningAttr.get(3));
 
         //update default values, mandatory.
          List<String[]> defaults = getQuestionAttrAsArray(questions);
@@ -2023,6 +1943,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
         //value meaning, instruction and text
         String[] vvInstructionsArr = (String[]) moduleEditForm.get(FORM_VALID_VALUE_INSTRUCTIONS);
         String[] valueMeaningTextArr = (String[]) moduleEditForm.get(FormConstants.FORM_VALUE_MEANING_TEXT);
+        String[] valueMeaningIdVersionArr = (String[]) moduleEditForm.get(FormConstants.FORM_VALUE_MEANING_IDVERSION);
         String[] valueMeaningDescArr = (String[]) moduleEditForm.get(FormConstants.FORM_VALUE_MEANING_DESC);
         //default value for a question
         String[] questionDefaultValueArr = (String[]) moduleEditForm.get(QUESTION_DEFAULTVALUES);
