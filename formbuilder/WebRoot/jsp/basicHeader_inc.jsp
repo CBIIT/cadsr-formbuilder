@@ -13,7 +13,7 @@
       <TABLE Cellpadding=0 Cellspacing=0 border=0>
         <TR>
           <TD valign="TOP" align="center" width="1%" colspan=1><A target="_blank" HREF="<%=params.getCdeBrowserUrl() + "/CDEBrowser/cdeBrowse.jsp?PageId=DataElementsGroup"%>" TARGET="_top"><IMG SRC="<%=request.getContextPath()%>/i/icon_cdebrowser.gif" alt="CDE Browser" border=0  width=32 height=32></A></TD>
-          <TD valign="TOP" align="left" width="1%" colspan=1><A HREF="javascript:newBrowserWin('<%=request.getContextPath()%>/html/common/help/cdeBrowserHelp.html','helpWin',700,600)"><IMG SRC="<%=request.getContextPath()%>/i/icon_help.gif" alt="Task Help" border=0  width=32 height=32></A></TD>
+          <TD valign="TOP" align="left" width="1%" colspan=1><A HREF="javascript:newBrowserWin('<%=request.getContextPath()%>/html/common/help/cdeBrowserHelp.html','helpWin',1200,900)"><IMG SRC="<%=request.getContextPath()%>/i/icon_help.gif" alt="Task Help" border=0  width=32 height=32></A></TD>
         </TR>
         <TR>
           <TD valign="TOP" align="center" colspan=1><font color=brown face=verdana size=1>&nbsp;CDE Browser&nbsp;</font></TD>

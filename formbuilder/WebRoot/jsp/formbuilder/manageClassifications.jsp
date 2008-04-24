@@ -24,7 +24,7 @@
     <% String urlPrefix = "";
       String pageUrl = "&PageId=DataElementsGroup";
       String protoLOVUrl= 
-      "javascript:newWin('/formbuilder/formLOVAction.do?method=getProtocolsLOV&idVar=" + FormConstants.PROTOCOLS_LOV_ID_FIELD + "&nameVar=" + FormConstants.PROTOCOLS_LOV_NAME_FIELD +pageUrl+"','protoLOV',700,600)";
+      "javascript:newWin('/formbuilder/formLOVAction.do?method=getProtocolsLOV&idVar=" + FormConstants.PROTOCOLS_LOV_ID_FIELD + "&nameVar=" + FormConstants.PROTOCOLS_LOV_NAME_FIELD +pageUrl+"','protoLOV',1200,900)";
       %>
     <%@ include file="../common/in_process_common_header_inc.jsp"%>
     <jsp:include page="../common/tab_inc.jsp" flush="true">
@@ -129,8 +129,8 @@
       <table width="80%" align="center" cellpadding="1" cellspacing="1" bgcolor="#999966">
         <tr class="OraTableColumnHeader">
           <th scope="col">CS* Long Name</th>
-          <th scope="col">CS* Definition</th>
           <th scope="col">CS* Public ID Version</th>
+          <th scope="col">CS* Definition</th>
           <th scope="col">CSI* Name</th>
           <th scope="col">CSI* Public ID Version</th>
           <th scope="col">CSI* Type</th>
@@ -145,16 +145,16 @@
                 <bean:write name="classification" property="classSchemeLongName"/>
               </td>
               <td class="OraFieldText">
+              	<bean:write name="classification" property="csID"/>v<bean:write name="classification" property="csVersion"/>
+              </td>              
+              <td class="OraFieldText">
                 <bean:write name="classification" property="classSchemeDefinition"/>
               </td>
-              <td class="OraFieldText">
-                <bean:write name="classification" property="csVersion"/>
-              </td>              
               <td class="OraFieldText">
                 <bean:write name="classification" property="classSchemeItemName"/>
               </td>
               <td class="OraFieldText">
-                <bean:write name="classification" property="csVersion"/>
+                <bean:write name="classification" property="csiID"/>v<bean:write name="classification" property="csiVersion"/>
               </td>
               <td class="OraFieldText">
                 <bean:write name="classification" property="classSchemeItemType"/>

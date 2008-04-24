@@ -50,11 +50,11 @@ function gotoFormSearchPrefs() {
 function gotoProtocolsLOV() {
      var dest = '<%= protoLOVUrl %>' + '&contextIdSeq=' + document.forms[0].<%= FormConstants.CONTEXT_ID_SEQ %>.value;
 ;
-     newWin(dest, 'ProtocolsLOV', 700, 600);
+     newWin(dest, 'ProtocolsLOV', 1200, 900);
 }
 function gotoClassificationsLOV() {
      var dest = '<%= csLOVUrl %>' + '&P_CONTE_IDSEQ=' + document.forms[0].<%= FormConstants.CONTEXT_ID_SEQ %>.value;
-     newWin(dest, 'ClassificationLOV', 700, 600);
+     newWin(dest, 'ClassificationLOV', 1200, 900);
 }
 -->
 </SCRIPT>

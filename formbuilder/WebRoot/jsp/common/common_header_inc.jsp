@@ -32,7 +32,7 @@
 					</TD>
 					<TD valign="TOP" align="CENTER" width="1%" colspan=1>
 						<A
-							HREF="javascript:newBrowserWin('<%=request.getContextPath()%>/html/common/help/cdeBrowserHelp.html','helpWin',700,600)"><html:img
+							HREF="javascript:newBrowserWin('<%=request.getContextPath()%>/html/common/help/cdeBrowserHelp.html','helpWin',1200,900)"><html:img
 								page="/i/icon_help.gif" alt="Task Help" border="0" width="32"
 								height="32" /> </A>
 						<br>
@@ -94,7 +94,7 @@
 
 		<td align="center" width="12%" height="10" nowrap>
 			<span style="font-size: 10.0pt; font-family: Arial"> <A
-				HREF="javascript:newBrowserWin('<%=request.getContextPath()%>/html/common/help/cdeBrowserHelp.html#NewFeatures','helpWin',700,600)">
+				HREF="javascript:newBrowserWin('<%=request.getContextPath()%>/html/common/help/cdeBrowserHelp.html#NewFeatures','helpWin',1200,900)">
 					What's new</a>&nbsp;&nbsp;</span>
 		</td>
 	</tr>
