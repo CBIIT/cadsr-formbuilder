@@ -82,7 +82,7 @@ function repeatDisplay(methodName) {
     jumptoStr = "onload=\"location.hash='#"+jumpto+"'\"";  
     
   String protoLOVUrl= 
-    "javascript:newWin('"+contextPath+"/formLOVAction.do?method=getProtocolsLOV&idVar=protocolIdSeq&chkContext=true&nameVar=protocolLongName"+pageUrl+"','protoLOV',700,600)";
+    "javascript:newWin('"+contextPath+"/formLOVAction.do?method=getProtocolsLOV&idVar=protocolIdSeq&chkContext=true&nameVar=protocolLongName"+pageUrl+"','protoLOV',1200,900)";
 
 %>
 </SCRIPT>

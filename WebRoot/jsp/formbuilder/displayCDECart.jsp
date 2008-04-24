@@ -8,7 +8,6 @@
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.CaDSRConstants"%>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants"%>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants"%>
-<%@ page import="gov.nih.nci.ncicb.cadsr.common.CaDSRConstants"%>
 <%
 String urlPrefix = "";
   CDEBrowserParams params = CDEBrowserParams.getInstance();
@@ -97,13 +96,8 @@ function retrieveSavedItems() {
     doneURL="formSearchAction.do";
   }
 %>
-<%  
-  if ((src != null) && (!"".equals(src))) {
-%>
-  <%@ include file="../common/in_process_common_header_inc.jsp"%>
-<%
-  }
-%>
+
+<%@ include file="../common/in_process_common_header_inc.jsp"%>
 <jsp:include page="../common/tab_inc.jsp" flush="true">
   <jsp:param name="label" value="CDE&nbsp;Cart"/>
   <jsp:param name="urlPrefix" value=""/>
