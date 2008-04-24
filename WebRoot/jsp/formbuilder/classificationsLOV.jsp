@@ -139,8 +139,8 @@ function goPage(pageInfo) {
     <th class="OraTableColumnHeader">Class Scheme Item</th>
     <th class="OraTableColumnHeader">CSI Public ID Version</th>
     <th class="OraTableColumnHeader">CS Long Name</th>
-    <th class="OraTableColumnHeader">CS Context</th>
     <th class="OraTableColumnHeader">CS Public ID Version</th>
+    <th class="OraTableColumnHeader">CS Context</th>
     <th class="OraTableColumnHeader">CS Workflow Status</th>
     <th class="OraTableColumnHeader">CS Preferred Definition</th>
     
