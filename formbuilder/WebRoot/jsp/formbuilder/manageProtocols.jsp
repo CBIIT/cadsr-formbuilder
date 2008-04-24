@@ -32,7 +32,7 @@
         function gotoProtocolsLOV(contextId) {
              //var dest = "<%= protoLOVUrl %>" + '&contextIdSeq=' + contextId;
              var dest = "<%= protoLOVUrl %>";
-             newWin(dest, 'ProtocolsLOV', 700, 600);
+             newWin(dest, 'ProtocolsLOV', 1200, 900);
         }
     </SCRIPT>
     <%@ include file="../common/in_process_common_header_inc.jsp"%>

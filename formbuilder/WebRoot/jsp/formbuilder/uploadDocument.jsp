@@ -26,7 +26,7 @@
     <% String urlPrefix = "";
       String pageUrl = "&PageId=DataElementsGroup";
       String protoLOVUrl= 
-      "javascript:newWin('/formbuilder/formLOVAction.do?method=getProtocolsLOV&idVar=" + FormConstants.PROTOCOLS_LOV_ID_FIELD + "&nameVar=" + FormConstants.PROTOCOLS_LOV_NAME_FIELD +pageUrl+"','protoLOV',700,600)";
+      "javascript:newWin('/formbuilder/formLOVAction.do?method=getProtocolsLOV&idVar=" + FormConstants.PROTOCOLS_LOV_ID_FIELD + "&nameVar=" + FormConstants.PROTOCOLS_LOV_NAME_FIELD +pageUrl+"','protoLOV',1200,900)";
       %>
     <%@ include file="../common/in_process_common_header_inc.jsp"%>
     <jsp:include page="../common/tab_inc.jsp" flush="true">
