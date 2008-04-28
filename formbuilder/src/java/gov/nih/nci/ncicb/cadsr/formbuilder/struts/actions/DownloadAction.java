@@ -221,6 +221,9 @@ public class DownloadAction
    cell.setCellValue("Form Value Meaning Text");
    cell.setCellStyle(boldCellStyle);
    cell = row.createCell(colNumber++);
+   cell.setCellValue("Form Value Meaning Public ID Version");
+   cell.setCellStyle(boldCellStyle);
+   cell = row.createCell(colNumber++);
    cell.setCellValue("Form Value Meaning Desc.");
    cell.setCellStyle(boldCellStyle);
    cell = row.createCell(colNumber++);
@@ -318,6 +321,7 @@ public class DownloadAction
        colNumber = vvColNum;
        row.createCell(colNumber++).setCellValue(validValue.getLongName());
        row.createCell(colNumber++).setCellValue(validValue.getFormValueMeaningText());
+       row.createCell(colNumber++).setCellValue(validValue.getFormValueMeaningIdVersion());
        row.createCell(colNumber++).setCellValue(validValue.getFormValueMeaningDesc());
 
        if (validValue.getInstruction() != null)
