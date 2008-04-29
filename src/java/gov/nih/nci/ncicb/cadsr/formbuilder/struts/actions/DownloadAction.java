@@ -7,11 +7,9 @@ import gov.nih.nci.ncicb.cadsr.common.resource.DataElement;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue;
 import gov.nih.nci.ncicb.cadsr.common.resource.Module;
-import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
 import gov.nih.nci.ncicb.cadsr.common.resource.Protocol;
 import gov.nih.nci.ncicb.cadsr.common.resource.Question;
 import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomain;
-import gov.nih.nci.ncicb.cadsr.common.util.ApplicationParameters;
 import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
 import gov.nih.nci.ncicb.cadsr.common.util.ContentTypeHelper;
 
