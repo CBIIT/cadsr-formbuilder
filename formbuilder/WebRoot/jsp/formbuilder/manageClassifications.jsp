@@ -154,7 +154,7 @@
                 <bean:write name="classification" property="classSchemeItemName"/>
               </td>
               <td class="OraFieldText">
-                <bean:write name="classification" property="csiID"/>v<bean:write name="classification" property="csiVersion"/>
+                <bean:write name="classification" property="csiId"/>v<bean:write name="classification" property="csiVersion"/>
               </td>
               <td class="OraFieldText">
                 <bean:write name="classification" property="classSchemeItemType"/>
