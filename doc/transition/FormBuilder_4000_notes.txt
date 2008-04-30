@@ -2,7 +2,7 @@
     
                          Form Builder Tool
                           Version 4.0.0.0
-                          April 29, 2008
+                          April 30, 2008
 
        National Cancer Institute Center for Bioinformatics
 
@@ -42,6 +42,8 @@
     -- Confirm and document that the Form Builder code is fully functional on the caCORE 4.0 technology stack. (GF 12121)
 
     -- Adapt the Form Builder build and deployment operations to use the automated deployment process. (GF 12123)
+
+    -- Add ability to set search preferences for Test and Training Contexts. (GF 13023)
 
     -- Form Builder will need to be able to interact with the independent, refactored CDE Cart in order to maintain its existing functionality. (GF 12469)
 
