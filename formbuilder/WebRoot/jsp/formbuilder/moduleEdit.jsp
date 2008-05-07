@@ -941,7 +941,7 @@ function clearProtocol() {
                                                           </html:textarea>
                                                           &nbsp;
                                                           <logic:notEmpty name="validValue" property="valueMeaning.designations">
-                                                            <a href="javaScript:newWin('<%=dest%>', 'Alternates', 800, 600);">
+                                                            <a href="javaScript:newWin('<%=dest%>', 'Alternates', 1200, 900);">
                                                             Modify
                                                             </a>
                                                           </logic:notEmpty>
@@ -965,7 +965,7 @@ function clearProtocol() {
                                                           </html:textarea>
                                                        	<logic:notEmpty name="validValue" property="valueMeaning.definitions">                                            
                                                           &nbsp;
-                                                            <a href="javaScript:newWin('<%=dest%>', 'Alternates', 800, 600);">
+                                                            <a href="javaScript:newWin('<%=dest%>', 'Alternates', 1200, 900);">
                                                            Modify
                                                             </a>
                                                         </logic:notEmpty> <%--definitions--%>

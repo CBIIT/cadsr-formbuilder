@@ -112,6 +112,10 @@
 
       </tr>
       <tr class="OraTabledata">
+        <td class="OraTableColumnHeader">Value Meaning Public ID Version</td>
+        <td class="OraFieldText"><%=vm.getPublicId()%>v<%=vm.getVersion()%></td>
+      </tr>
+      <tr class="OraTabledata">
         <td class="OraTableColumnHeader">Value Meaning Definition</td>
         <td class="OraFieldText"><%=vm.getPreferredDefinition()%>
 	<br>
@@ -132,8 +136,7 @@
 <table width="80%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
 
 <% if (idToCscsi.isEmpty()) {%>
-    <tr class="OraTabledata"> There are no alternate names and definitions
-    </tr>
+    <tr class="OraTabledata"> There are no alternate names and definitions</tr>
     </table>
 <%}else{
 Iterator csiIter = idToCscsi.keySet().iterator();
@@ -143,30 +146,38 @@ while (csiIter.hasNext()) {
     List currAltNames = (List) csToAltName.get(csiId);
     List currAltDefs = (List) csToAltDef.get(csiId);
  %>   
-<table width="80%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
-<TR class="OraTableColumnHeader">
- <th class="OraTableColumnHeader">CS* Long Name</th>
- <th class="OraTableColumnHeader">CS* Definition</th>
- <th class="OraTableColumnHeader">CSI* Name</th>
- <th class="OraTableColumnHeader">CSI* Type</th>
-</TR>
+<table width="80%" align="center" cellpadding="1" cellspacing="1" border="1" class="OraBGAccentVeryDark">
 <% if (currCSI != null) { %>
+	<TR class="OraTableColumnHeader">
+	 <th class="OraTableColumnHeader">CS* Long Name</th>
+	 <th class="OraTableColumnHeader">CS* Public ID Version</th>
+	 <th class="OraTableColumnHeader">CS* Definition</th>
+	 <th class="OraTableColumnHeader">CSI* Name</th>
+	 <th class="OraTableColumnHeader">CSI* Public ID Version</th>
+	 <th class="OraTableColumnHeader">CSI* Type</th>
+	</TR>
       <tr class="OraTabledata">
         <td class="OraFieldText"><%=currCSI.getClassSchemeLongName()%> </td>
+        <td class="OraFieldText"><%=currCSI.getCsID()%>v<%=currCSI.getCsVersion()%></td>
         <td class="OraFieldText"><%=currCSI.getClassSchemeDefinition()%> </td>
         <td class="OraFieldText"><%=currCSI.getClassSchemeItemName()%> </td>
+        <td class="OraFieldText"><%=currCSI.getCsiId()%>v<%=currCSI.getCsiVersion()%></td>
         <td class="OraFieldText"><%=currCSI.getClassSchemeItemType()%> </td>
       </tr>
 <%}else {%>
-      <tr class="OraTabledata">
+      <tr class="OraTabledata"  align="center">
         <td class="OraFieldText" colspan="4">No Classification</td>
 </tr>
 <%}%>
 <tr class="OraTabledata">
-<td class="OraHeaderSubSubSub" width="100%" colspan=4>Alternate Names </td>
+<td class="OraHeaderSubSubSub" width="100%" colspan=4><b>Alternate Names </b></td>
 </tr>
 <tr class="OraTabledata"><td width="100%" colspan=4>
-<table width="100%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
+<table width="100%" align="center" cellpadding="1" cellspacing="1" border="1" class="OraBGAccentVeryDark">
+<%
+  Designation des = null;
+  if (currAltNames!=null && currAltNames.size() > 0) {
+%>
   <tr class="OraTableColumnHeader">
     <th class="OraTableColumnHeader" width="50%">
         <bean:message key="cadsr.formbuilder.valueMeaning.alternate.name"/> </th>
@@ -178,8 +189,6 @@ while (csiIter.hasNext()) {
         <bean:message key="cadsr.formbuilder.valueMeaning.alternate.language"/></th>
   </tr>
 <%
-  Designation des = null;
-  if (currAltNames!=null && currAltNames.size() > 0) {
     for (int i=0;i<currAltNames.size(); i++) {
       des = (Designation)currAltNames.get(i);
 %>
@@ -205,7 +214,7 @@ while (csiIter.hasNext()) {
   }
   else {
 %>
-       <tr class="OraTabledata">
+       <tr class="OraTabledata" align="center">
          <td colspan="4">There are no alternate names for the selected Value Meaning.</td>
        </tr>
 <%
@@ -215,10 +224,13 @@ while (csiIter.hasNext()) {
 </table> 
 </td></tr>
 <tr class="OraTabledata">
-<td class="OraHeaderSubSubSub" width="100%" colspan=4>Alternate Definitions </td>
+<td class="OraHeaderSubSubSub" width="100%" colspan=4><b>Alternate Definitions </b></td>
 </tr>
 <tr class="OraTabledata"><td width="100%" colspan=4>
-<table width="100%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
+<table width="100%" align="center" cellpadding="1" cellspacing="1" border="1" class="OraBGAccentVeryDark">
+<%
+  if (currAltDefs != null && currAltDefs.size() > 0) {
+%>
   <tr class="OraTableColumnHeader">
     <th class="OraTableColumnHeader" width="50%">
         <bean:message key="cadsr.formbuilder.valueMeaning.alternate.definition"/> </th>
@@ -230,7 +242,6 @@ while (csiIter.hasNext()) {
         <bean:message key="cadsr.formbuilder.valueMeaning.alternate.language"/></th>
   </tr>
 <%
-  if (currAltDefs != null && currAltDefs.size() > 0) {
     for (int i=0;i<currAltDefs.size(); i++) {
       Definition def = (Definition)currAltDefs.get(i);
 %>
@@ -256,7 +267,7 @@ while (csiIter.hasNext()) {
   }
   else {
 %>
-       <tr class="OraTabledata">
+       <tr class="OraTabledata" align="center">
          <td colspan="4">There are no alternate definitions for the selected Value Meaning.</td>
        </tr>
 <%
