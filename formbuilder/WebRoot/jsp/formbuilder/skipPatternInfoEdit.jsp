@@ -279,14 +279,13 @@ function submitForm(methodName) {
                 <tr class="OraTableColumnHeader">
                   <th scope="col"> </th>
                   <th scope="col">CS* Long Name</th>
+          		  <th scope="col">CS* Public ID Version</th>
                   <th scope="col">CS* Definition</th>
-                  <th scope="col">CS* Version</th>
                   <th scope="col">CSI* Name</th>
+          		  <th scope="col">CSI* Public ID Version</th>
                   <th scope="col">CSI* Type</th>
-                </tr>
-                
+                </tr>                
                    <logic:iterate id="csi" name="<%=FormConstants.CRF%>" property="classifications" type="gov.nih.nci.ncicb.cadsr.common.resource.ClassSchemeItem" >
-
                         <tr class="OraTabledata">
                            <td class="OraTableColumnHeader" width="5%" nowrap>
                                 <html:multibox property="<%=FormConstants.SELECTED_SKIP_AC_CSIS%>">
@@ -297,14 +296,17 @@ function submitForm(methodName) {
                                 <bean:write name="csi" property="classSchemeLongName"/>     
                           </td>
                           <td class="OraFieldText">
+              					<bean:write name="csi" property="csID"/>v<bean:write name="csi" property="csVersion"/>
+                          </td>                          
+                          <td class="OraFieldText">
                                 <bean:write name="csi" property="classSchemeDefinition"/>  
                           </td>
                           <td class="OraFieldText">
-                                <bean:write name="csi" property="csVersion"/>  
-                          </td>                          
-                          <td class="OraFieldText">
                                 <bean:write name="csi" property="classSchemeItemName"/>  
                           </td>
+			              <td class="OraFieldText">
+			                <bean:write name="csi" property="csiId"/>v<bean:write name="csi" property="csiVersion"/>
+			              </td>
                           <td class="OraFieldText">
                                 <bean:write name="csi" property="classSchemeItemType"/>    
                           </td>
