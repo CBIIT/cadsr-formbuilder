@@ -4,8 +4,6 @@
  <form-beans> 
   <form-bean name="refDocForm"
                     type="gov.nih.nci.ncicb.cadsr.common.struts.formbeans.ReferenceDocFormBean"/>
- 
-  
 
     <form-bean name="createReferenceDocForm"
       type="gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean"
@@ -16,10 +14,7 @@
       <form-property name="docType" type="java.lang.String"/>
       <form-property name="url" type="java.lang.String"/>
       <form-property name="selectedRefDocId" type="java.lang.String"/>
-       
     </form-bean>
-
-  
   </form-beans>  
 
   <action-mappings>
@@ -73,8 +68,9 @@
                path="/manageReferenceDocs.do?method=manageReferenceDocs"
             redirect="false"/>
     </action>    
-
   </action-mappings>
-  <controller maxFileSize="2M" />
-
+<!-- adding this restricts the user in selection of large size files
+  <controller maxFileSize="2M"/>
+ -->
+ 
 </struts-config>
