@@ -56,10 +56,24 @@
       <html:hidden value="" property="<%=NavigationConstants.METHOD_PARAM%>"/>
        
        <table cellpadding="0" cellspacing="0" width="80%" align="center">
-       
+        <tr>
+          <td>
+            &nbsp;
+          </td>
+        </tr>        
+        <tr>
+          <td>
+            If document size is larger than 2MB, the upload time will be significantly increased.
+          </td>
+        </tr>        
+        <tr>
+          <td>
+            &nbsp;
+          </td>
+        </tr>        
         <tr >
-          <td >
-            <html:file  property="uploadedFile" />
+          <td>
+            <html:file size="50%" property="uploadedFile" />
           </td>
         </tr>  
         <tr >
