@@ -24,13 +24,6 @@
 						<font color=brown face=verdana size=1>&nbsp;CDE &nbsp;Cart</font>
 					</TD>
 					<TD valign="TOP" align="CENTER" width="1%" colspan=1>
-						<A HREF="<%="formSearchAction.do"%>" TARGET="_top"><IMG
-								SRC="i/formicon.gif" alt="FormBuilder" border=0 width=32
-								height=32> </A>
-						<br>
-						<font color=brown face=verdana size=1>&nbsp;FormBuilder&nbsp;</font>
-					</TD>
-					<TD valign="TOP" align="CENTER" width="1%" colspan=1>
 						<A
 							HREF="javascript:newBrowserWin('<%=request.getContextPath()%>/html/common/help/cdeBrowserHelp.html','helpWin',1200,900)"><html:img
 								page="/i/icon_help.gif" alt="Task Help" border="0" width="32"
@@ -54,45 +47,42 @@
 <br>
 <TABLE align="left" width="100%" Cellpadding=0 Cellspacing=0 border=0>
 	<tr>
-		<td align="center" width="12%" height="10" nowrap>
+		<td align="center" width="12%" height="10">
 			<span style="font-size: 9pt; font-family: Arial"> <a
-				href="<%=params.getCdeBrowserUrl()%>" target="_blank">CDE
-					Browser&nbsp;</a> </span>
+				href="<%=params.getCdeBrowserUrl()%>" target="_blank">&nbsp;CDE	Browser&nbsp;</a> </span>
 		</td>
-
-		<td align="center" width="12%" height="10" nowrap>
+		<td>|</td>
+		<td align="center" width="12%" height="10">
 			<span style="font-size: 9pt; font-family: Arial"> <a
-				href="<%=params.getAdminToolUrl()%>" target="_blank">Admin
-					Tool&nbsp;</a> </span>
+				href="<%=params.getAdminToolUrl()%>" target="_blank">&nbsp;Admin Tool&nbsp;</a> </span>
 		</td>
-
-		<td align="center" width="12%" height="10" nowrap>
+		<td>|</td>
+		<td align="center" width="12%" height="10">
 			<span style="font-size: 9pt; font-family: Arial"> <a
-				href="<%=params.getCurationToolUrl()%>" target="_blank">
-					Curation Tool&nbsp;</a> </span>
+				href="<%=params.getCurationToolUrl()%>" target="_blank">&nbsp;Curation Tool&nbsp;</a> </span>
 		</td>
-		<td align="center" width="14%" height="10" nowrap>
+		<td>|</td>
+		<td align="center" width="12%" height="10">
 			<span style="font-size: 9pt; font-family: Arial"> <a
-				href="<%=params.getNciMetathesaurusUrl()%>" target="_blank"> NCI
-					Metathesaurus&nbsp;</a> </span>
+				href="<%=params.getSentinelToolUrl()%>" target="_blank">&nbsp;Sentinel Tool&nbsp;</a> </span>
 		</td>
-		<td align="center" width="14%" height="10" nowrap>
+		<td>|</td>
+		<td align="center" width="12%" height="10">
 			<span style="font-size: 9pt; font-family: Arial"> <a
-				href="<%=params.getNciTerminologyServerUrl()%>" target="_blank">
-					NCI Terminology Server&nbsp;</a> </span>
+				href="<%=params.getUmlBrowserUrl()%>" target="_blank">&nbsp;UML Model Browser&nbsp;</a> </span>
 		</td>
-		<td align="center" width="12%" height="10" nowrap>
+		<td>|</td>
+		<td align="center" width="14%" height="10">
 			<span style="font-size: 9pt; font-family: Arial"> <a
-				href="<%=params.getSentinelToolUrl()%>" target="_blank">
-					Sentinel Tool&nbsp;</a> </span>
+				href="<%=params.getNciMetathesaurusUrl()%>" target="_blank">&nbsp;NCI Metathesaurus&nbsp;</a> </span>
 		</td>
-		<td align="center" width="12%" height="10" nowrap>
+		<td>|</td>
+		<td align="center" width="14%" height="10">
 			<span style="font-size: 9pt; font-family: Arial"> <a
-				href="<%=params.getUmlBrowserUrl()%>" target="_blank">UML Model
-					Browser&nbsp;</a> </span>
+				href="<%=params.getNciTerminologyServerUrl()%>" target="_blank">&nbsp;NCI Terminology Server&nbsp;</a> </span>
 		</td>
-
-		<td align="center" width="12%" height="10" nowrap>
+		<td>|</td>
+		<td align="center" width="12%" height="10">
 			<span style="font-size: 10.0pt; font-family: Arial"> <A
 				HREF="javascript:newBrowserWin('<%=request.getContextPath()%>/html/common/help/cdeBrowserHelp.html#NewFeatures','helpWin',1200,900)">
 					What's new</a>&nbsp;&nbsp;</span>
