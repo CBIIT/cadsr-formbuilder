@@ -45,8 +45,6 @@
 
     -- Add ability to set search preferences for Test and Training Contexts. (GF 13023)
 
-    -- Form Builder will need to be able to interact with the independent, refactored CDE Cart in order to maintain its existing functionality. (GF 12469)
-
 
 ----------------------------------------------------------------
     3.0 Bugs Fixed Since Last Release
