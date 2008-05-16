@@ -1,5 +1,5 @@
 <!-- Copyright ScenPro, Inc. 2005
-    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.9 2008-04-21 16:48:24 hegdes Exp $
+    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.10 2008-05-16 20:45:37 hegdes Exp $
     $Name: not supported by cvs2svn $
 -->
 <project name="Form Builder Tool" default="init" basedir=".">
@@ -212,6 +212,12 @@
 		<copy tofile="${artifacts.dir}/jboss/cadsrutil-log4j-category.xml" filtering="true">
 			<fileset file="conf/template.cadsrutil-log4j-category.xml" />
 		</copy>
+		<copy tofile="${artifacts.dir}/jboss/formbuilder-login-config.xml" filtering="true">
+			<fileset file="conf/template.formbuilder-login-config.xml" />
+		</copy>
+		<copy tofile="${artifacts.dir}/jboss/formbuilder-login-config-service.xml" filtering="true">
+			<fileset file="conf/template.formbuilder-login-config-service.xml" />
+		</copy>
 		<fixcrlf srcdir="${artifacts.dir}" eol="lf" includes="**/*.sh, **/*.xml, **/*.properties, **/*.dtd" />
 	</target>
 
@@ -257,7 +263,7 @@
               <include name="gov/nih/nci/ncicb/cadsr/common/persistence/ErrorCodeConstants.class"/>
               <exclude name="gov/nih/nci/ncicb/cadsr/common/servicelocator/ApplicationServiceLocator.class"/>
               <exclude name="gov/nih/nci/ncicb/cadsr/common/servicelocator/ObjectLocator.class"/>
-              <exclude name="gov/nih/nci/ncicb/cadsr/common/servicelocator/spring/*"/>              
+              <exclude name="gov/nih/nci/ncicb/cadsr/common/servicelocator/spring/*"/>
             </patternset>
           </fileset>           
         </jar>
@@ -355,8 +361,9 @@
 				<include name="gov/nih/nci/ncicb/cadsr/formbuilder/service/**"/>
 				<include name="gov/nih/nci/ncicb/cadsr/formbuilder/servlets/**"/>
 	         </patternset>
-	      </fileset>       
+	      </fileset> 
 	    </copy>
+
 		<cvs command="status -v" output="${jsp.dir}/cvsdeploy.txt"/>
 		<delete dir="${temp.classes.dir}" />
 		<war destfile="${artifacts.dir}/jboss/formbuilder.war" basedir="${root.dir}" update="true" webxml="${web.dir}/web.xml">
@@ -548,6 +555,16 @@
                 <include name="**/*-oracle-ds.xml" />
             </fileset>
         </copy>
+        <copy todir="${JBOSS.DEPLOY.DIR}">
+            <fileset dir="${artifacts.dir}/jboss">
+                <include name="**/*-login-config-service.xml" />
+            </fileset>
+        </copy>
+        <copy todir="${JBOSS.CONF.DIR}">
+            <fileset dir="${artifacts.dir}/jboss">
+                <include name="**/*-login-config.xml" />
+            </fileset>
+        </copy>
         <copy todir="${JBOSS.CONF.DIR}/log4j">
             <fileset dir="${artifacts.dir}/jboss">
                 <include name="**/formbuilder-log4j-*.xml" />
@@ -602,6 +619,10 @@
 -->    	
         <echo>cp ${scpPath.dir}/jboss/*-oracle-ds.xml ${JBOSS.DEPLOY.DIR}/.</echo>
         <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" command="cp ${scpPath.dir}/jboss/*-oracle-ds.xml ${JBOSS.DEPLOY.DIR}/." />
+        <echo>cp ${scpPath.dir}/jboss/*-login-config-service.xml ${JBOSS.DEPLOY.DIR}/.</echo>
+        <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" command="cp ${scpPath.dir}/jboss/*-login-config-service.xml ${JBOSS.DEPLOY.DIR}/." />
+        <echo>cp ${scpPath.dir}/jboss/*-login-config.xml ${JBOSS.CONF.DIR}/.</echo>
+        <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" command="cp ${scpPath.dir}/jboss/*-login-config.xml ${JBOSS.CONF.DIR}/." />
         <echo>cp ${scpPath.dir}/jboss/formbuilder-log4j-*.xml ${JBOSS.CONF.DIR}/log4j/.</echo>
         <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" command="cp ${scpPath.dir}/jboss/formbuilder-log4j-*.xml ${JBOSS.CONF.DIR}/log4j/." />
         <echo>cp ${scpPath.dir}/jboss/cadsrutil-log4j-*.xml ${JBOSS.CONF.DIR}/log4j/.</echo>
@@ -627,7 +648,7 @@
 
     <target name="-do-load-options" if="found.load_options.sql" depends="-check-sql-files" description="Execute load_options.sql">
        <echo>Deploying caDSR database changes ${CADSR.DS.USER}/${CADSR.DS.PSWD}@${CADSR.DS.TNS.ENTRY} @ ${artifacts.dir}/sql/load_options.sql</echo>
-    	<exec dir="." executable="${SQL.EXE}" failonerror="true">
+  		<exec dir="." executable="${SQL.EXE}" failonerror="true">
             <arg line="${CADSR.DS.USER}/${CADSR.DS.PSWD}@${CADSR.DS.TNS.ENTRY} @ ${artifacts.dir}/sql/load_options.sql" />
         </exec>
     </target>
