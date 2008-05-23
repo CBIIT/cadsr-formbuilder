@@ -61,8 +61,7 @@ function ToggleDeleteAll(e){
 
 function details(linkParms ){
   var urlString="<%=browseURL%>" + "/CDEBrowser/search?dataElementDetails=9" + linkParms + "&PageId=DataElementsGroup"+"&queryDE=yes";
-  newBrowserWin(urlString,'deDetails',800,600)
-  
+  newBrowserWin(urlString,'deDetails',800,600)  
 }
 
 function retrieveSavedItems() {
@@ -132,7 +131,6 @@ function retrieveSavedItems() {
   <table width="80%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
     <tr class="OraTableColumnHeader">
     <logic:notEmpty name="<%=CaDSRConstants.CDE_CART%>" property = "dataElements">
-      <th>Save<input type="checkbox" name="saveAllChk" value="yes" onClick="ToggleSaveAll(this)"/> </th>
       <th>Delete<input type="checkbox" name="deleteAllChk" value="yes" onClick="ToggleDeleteAll(this)"/></th>
     </logic:notEmpty>
       <th>Long Name</th>
@@ -151,20 +149,12 @@ function retrieveSavedItems() {
     </tr>
   </logic:empty>
   <logic:notEmpty name="<%=CaDSRConstants.CDE_CART%>" property = "dataElements">
-    <logic:iterate id="de" name="<%=CaDSRConstants.CDE_CART%>" type="gov.nih.nci.ncicb.cadsr.common.resource.CDECartItem" property="dataElements">
+    <logic:iterate id="de" name="<%=CaDSRConstants.CDE_CART%>" type="gov.nih.nci.ncicb.cadsr.objectCart.CDECartItem" property="dataElements">
 <%
       String deId = de.getId();
       String detailsURL = "javascript:details('&p_de_idseq="+deId +"')";
 %>
       <tr class="OraTabledata">
-      	<td>
-            <logic:equal name="de" property="persistedInd" value="true">
-              &nbsp;       
-            </logic:equal>
-            <logic:notEqual name="de" property="persistedInd" value="true">
-              <input type="checkbox" name="selectedSaveItems" value="<%=de.getId()%>"/>
-            </logic:notEqual>
-        </td>
         <td>
           <input type="checkbox" name="selectedDeleteItems" value="<%=de.getId()%>"/>
         </td>
@@ -207,11 +197,6 @@ function retrieveSavedItems() {
           </a>
         </td>
 		<logic:notEmpty name="<%=CaDSRConstants.CDE_CART%>" property = "dataElements">
-        <td>
-          <a href="javascript:saveItems()">
-            <html:img src='<%="i/save.gif"%>' border="0" alt="Save"/> 
-          </a>
-        </td>   
         <td>
           <a href="javascript:deleteItems()">
             <html:img src='<%="i/deleteButton.gif"%>' border="0" alt="Delete"/> 
