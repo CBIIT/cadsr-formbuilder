@@ -2,8 +2,6 @@ package gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service;
 
 import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.common.resource.CDECart;
-import gov.nih.nci.ncicb.cadsr.common.resource.CDECartItem;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormInstructionChanges;
 import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
@@ -99,11 +97,11 @@ public interface FormBuilderServiceRemote {
     public boolean validateUser(String username, String password)
         throws RemoteException;
 
-    public CDECart retrieveCDECart(String userName) throws RemoteException;
+ //   public CDECart retrieveCDECart(String userName) throws RemoteException;
 
-    public int addToCDECart(Collection items,String userName) throws RemoteException;
+ //   public int addToCDECart(Collection items,String userName) throws RemoteException;
 
-    public int removeFromCDECart(Collection items,String userName) throws RemoteException;
+ //   public int removeFromCDECart(Collection items,String userName) throws RemoteException;
 
     public int updateDEAssociation(String questionId, String deId,
         String newLongName, String username) throws RemoteException;

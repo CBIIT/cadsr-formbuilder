@@ -1,5 +1,5 @@
 <!-- Copyright ScenPro, Inc. 2005
-    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.10 2008-05-16 20:45:37 hegdes Exp $
+    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.11 2008-05-23 19:12:44 hegdes Exp $
     $Name: not supported by cvs2svn $
 -->
 <project name="Form Builder Tool" default="init" basedir=".">
@@ -95,6 +95,7 @@
 	<property name="scpPath.dir" location="${SCP.PATH}/formbuilder" />
 	<property name="toolBin.dir" location="${TOOL.ROOT.DIR}bin" />
 	<property name="toolDtd.dir" location="${TOOL.ROOT.DIR}htdocs/dtd" />
+	<property name="services.dir" location="${basedir}/services-config" />
 	<condition property="check.test">
 		<equals arg1="${TEST}" arg2="true" trim="true" />
 	</condition>
@@ -171,6 +172,14 @@
             </patternset>
 	      </fileset>      
 	    </copy>
+		<!-- copy cadsr api config files to classess -->
+	    <copy todir="${classes.dir}">
+			<fileset dir="${services.dir}">
+				<patternset>
+					<include name="*.xml"/>
+				</patternset>
+			</fileset>
+		</copy>		
 	</target>
 
 	<target name="-assemble" depends="-compile,-prop-check" description="Assembles the deployment parts into the artifacts folders.">
@@ -244,7 +253,6 @@
             <patternset>
               <include name="gov/nih/nci/ncicb/cadsr/common/resource/*"/>
               <include name="gov/nih/nci/ncicb/cadsr/common/resource/impl/*"/>              
-              <include name="gov/nih/nci/ncicb/cadsr/common/cdecart/**"/>
               <include name="gov/nih/nci/ncicb/cadsr/common/dto/*"/>
               <include name="gov/nih/nci/ncicb/cadsr/common/dto/base/*"/>
               <include name="gov/nih/nci/ncicb/cadsr/common/dto/jdbc/*"/>
@@ -360,6 +368,7 @@
 				<include name="gov/nih/nci/ncicb/cadsr/formbuilder/struts/**"/>
 				<include name="gov/nih/nci/ncicb/cadsr/formbuilder/service/**"/>
 				<include name="gov/nih/nci/ncicb/cadsr/formbuilder/servlets/**"/>
+	            <include name="gov/nih/nci/ncicb/cadsr/objectCart/**"/>
 	         </patternset>
 	      </fileset> 
 	    </copy>

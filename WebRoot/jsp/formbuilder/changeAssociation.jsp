@@ -103,7 +103,7 @@ function details(linkParms ){
   </table>
   </logic:empty>
   <logic:notEmpty name="<%=CaDSRConstants.CDE_CART%>" property = "dataElements">
-    <logic:iterate id="de" name="<%=CaDSRConstants.CDE_CART%>" type="gov.nih.nci.ncicb.cadsr.common.resource.CDECartItem" property="dataElements" indexId="itemId">
+    <logic:iterate id="de" name="<%=CaDSRConstants.CDE_CART%>" type="gov.nih.nci.ncicb.cadsr.objectCart.CDECartItem" property="dataElements" indexId="itemId">
 <%
       String deId = de.getId();
       String detailsURL = "javascript:details('&p_de_idseq="+deId +"')";

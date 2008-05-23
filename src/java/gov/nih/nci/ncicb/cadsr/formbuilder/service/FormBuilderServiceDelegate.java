@@ -1,26 +1,19 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.service;
 
-import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.common.resource.CDECart;
-import gov.nih.nci.ncicb.cadsr.common.resource.CDECartItem;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormInstructionChanges;
 import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
-import gov.nih.nci.ncicb.cadsr.common.resource.InstructionChanges;
 import gov.nih.nci.ncicb.cadsr.common.resource.Module;
 import gov.nih.nci.ncicb.cadsr.common.resource.ModuleChanges;
 import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
-
 import gov.nih.nci.ncicb.cadsr.common.resource.Protocol;
 import gov.nih.nci.ncicb.cadsr.common.resource.QuestionRepitition;
 import gov.nih.nci.ncicb.cadsr.common.resource.ReferenceDocument;
 import gov.nih.nci.ncicb.cadsr.common.resource.TriggerAction;
 import gov.nih.nci.ncicb.cadsr.common.resource.TriggerActionChanges;
 import gov.nih.nci.ncicb.cadsr.common.resource.Version;
+import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 
-import java.rmi.RemoteException;
-
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -92,12 +85,6 @@ public interface FormBuilderServiceDelegate {
 
     public boolean validateUser(String username, String password)
         throws FormBuilderException;
-
-    public CDECart retrieveCDECart(String userName) throws FormBuilderException;
-
-    public int addToCDECart(Collection items,String userName) throws FormBuilderException;
-
-    public int removeFromCDECart(Collection items,String userName) throws FormBuilderException;
 
     public int updateDEAssociation(String questionId, String deId,
         String newLongName, String username) throws FormBuilderException;
