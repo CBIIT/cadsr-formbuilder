@@ -49,13 +49,6 @@
     <container-transaction>
           <method>
             <ejb-name>FormBuilder</ejb-name>
-            <method-name>retrieveCDECart</method-name>
-          </method>
-          <trans-attribute>Supports</trans-attribute>
-    </container-transaction>  
-    <container-transaction>
-          <method>
-            <ejb-name>FormBuilder</ejb-name>
             <method-name>retrieveFormClassifications</method-name>
           </method>
           <trans-attribute>Supports</trans-attribute>

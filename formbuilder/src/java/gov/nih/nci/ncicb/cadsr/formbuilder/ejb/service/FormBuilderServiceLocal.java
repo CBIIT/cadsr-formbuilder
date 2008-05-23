@@ -8,8 +8,6 @@ import gov.nih.nci.ncicb.cadsr.common.resource.InstructionChanges;
 import gov.nih.nci.ncicb.cadsr.common.resource.ModuleChanges;
 import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
 import gov.nih.nci.ncicb.cadsr.common.resource.Module;
-import gov.nih.nci.ncicb.cadsr.common.resource.CDECart;
-import gov.nih.nci.ncicb.cadsr.common.resource.CDECartItem;
 
 import java.util.Collection;
 import java.util.Map;
@@ -96,12 +94,6 @@ public interface FormBuilderServiceLocal  {
   public boolean validateUser(
     String username,
     String password) throws DMLException;
-
-  public CDECart retrieveCDECart(String userName);
-
-  public int addToCDECart(Collection items,String userName);
-
-  public int removeFromCDECart(Collection items,String userName);
 
   public int updateDEAssociation(
     String questionId,

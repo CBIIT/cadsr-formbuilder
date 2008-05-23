@@ -1,11 +1,10 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
 import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
-import gov.nih.nci.ncicb.cadsr.common.dto.CDECartItemTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.CDECartTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.resource.CDECart;
-import gov.nih.nci.ncicb.cadsr.common.resource.CDECartItem;
+import gov.nih.nci.ncicb.cadsr.objectCart.CDECart;
+import gov.nih.nci.ncicb.cadsr.objectCart.impl.CDECartOCImpl;
+import gov.nih.nci.ncicb.cadsr.objectCart.CDECartItem;
 import gov.nih.nci.ncicb.cadsr.common.resource.DataElement;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
 import gov.nih.nci.ncicb.cadsr.common.resource.Module;
@@ -16,6 +15,8 @@ import gov.nih.nci.ncicb.cadsr.common.util.DTOTransformer;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormActionUtil;
+import gov.nih.nci.objectCart.client.ClientManager;
+import gov.nih.nci.objectCart.client.ObjectCartException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -161,7 +162,6 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
     ActionForm form,
     HttpServletRequest request,
     HttpServletResponse response) throws IOException, ServletException {
-    CDECart cart = new CDECartTransferObject();
 
     DynaActionForm dynaForm = (DynaActionForm) form;
     String selectedText = (String) dynaForm.get("selectedText");
@@ -240,14 +240,6 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
           return mapping.findForward(FAILURE);
       }
       
-/*      
-      //clear out the form valid value Id
-      Iterator it = newValidValues.iterator();
-      while (it.hasNext()){
-          FormValidValue fvv = (FormValidValue)it.next();
-          fvv.setValueIdseq(FormConstants.UNKNOWN_VV_ID);
-      }
-*/
       q.setLongName(newLongName);
       
       q.setValidValues(newValidValues);
@@ -283,12 +275,8 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
     ActionForm form,
     HttpServletRequest request,
     HttpServletResponse response) throws IOException, ServletException {
-    //CDECart cart = new CDECartTransferObject();
-    CDECart cart = null;
      
     try {
-      String userName = getLoggedInUsername(request);
-      FormBuilderServiceDelegate service = getFormBuilderService();
       NCIUser user =
         (NCIUser) this.getSessionObject(request, CaDSRConstants.USER_KEY);
 
@@ -296,22 +284,24 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
       CDECart sessionCart =
         (CDECart) this.getSessionObject(request, CaDSRConstants.CDE_CART);
 
-      cart = service.retrieveCDECart(userName);
-
-      //Merge two carts
-      //sessionCart.mergeCart(cart);
-      if (sessionCart != null) {
-        cart.mergeCart(sessionCart);
-      }
-
-      sessionCart = null;
-      this.setSessionObject(request, CaDSRConstants.CDE_CART, cart);
+	 // if (sessionCart == null) {
+		  ClientManager clientManager = ClientManager.getInstance();
+		  String[] cdeCartSchemes = {CaDSRConstants.CDE_CARTSCHEME};
+		  try{
+			  if (!clientManager.isInitialized())
+				  clientManager.initClients(cdeCartSchemes);				    
+		  }catch(ObjectCartException oce){
+			  oce.printStackTrace();
+		  }
+		  sessionCart = new CDECartOCImpl(clientManager, user.getUsername(),CaDSRConstants.CDE_CART,CaDSRConstants.CDE_CARTSCHEME);
+	 // }	  
+      this.setSessionObject(request, CaDSRConstants.CDE_CART, sessionCart);
     }
-    catch (FormBuilderException exp) {
+    catch (Exception exp) {
       if (log.isErrorEnabled()) {
         log.error("Exception on displayCDECart", exp);
       }
-      saveError(exp.getErrorCode(), request);
+      saveError(exp.getMessage(), request);
     }
 
     return mapping.findForward(SUCCESS);
@@ -336,8 +326,8 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
     HttpServletRequest request,
     HttpServletResponse response) throws IOException, ServletException {
     try {
-      String userName = getLoggedInUsername(request);
-      FormBuilderServiceDelegate service = getFormBuilderService();
+/*      String userName = getLoggedInUsername(request);
+     // FormBuilderServiceDelegate service = getFormBuilderService();
       CDECartFormBean myForm = (CDECartFormBean) form;
       String[] selectedSaveItems = myForm.getSelectedSaveItems();
       Collection items = new ArrayList();
@@ -349,17 +339,17 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
         items.add(cartItem);
       }
 
-      service.addToCDECart(items,userName);
+    //  service.addToCDECart(items,userName);
 
-      CDECart cart =
+*/      CDECart cart =
         (CDECart) this.getSessionObject(request, CaDSRConstants.CDE_CART);
       saveMessage("cadsr.common.cdecart.save.success",request);
     }
-    catch (FormBuilderException exp) {
+    catch (Exception exp) {
       if (log.isErrorEnabled()) {
         log.error("Exception on addItems " , exp);
       }
-      saveError(exp.getErrorCode(), request);
+      //saveError(exp.getErrorCode(), request);
     }
 
     return mapping.findForward("addDeleteSuccess");
@@ -384,8 +374,8 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
     HttpServletRequest request,
     HttpServletResponse response) throws IOException, ServletException {
     try {
-      String userName = getLoggedInUsername(request);
-      FormBuilderServiceDelegate service = getFormBuilderService();
+      //String userName = getLoggedInUsername(request);
+      //FormBuilderServiceDelegate service = getFormBuilderService();
       CDECartFormBean myForm = (CDECartFormBean) form;
       String[] selectedDeleteItems = myForm.getSelectedDeleteItems();
       Collection savedItems = new ArrayList();
@@ -399,24 +389,24 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
       CDECartItem item = null;
 
       for (int i = 0; i < selectedDeleteItems.length; i++) {
-        item = sessionCart.findDataElement(selectedDeleteItems[i]);
+//        item = sessionCart.findDataElement(selectedDeleteItems[i]);
 
-        if (item.getPersistedInd()) {
-          savedItems.add(selectedDeleteItems[i]);
-        }
+//        if (item.getPersistedInd()) {
+//          savedItems.add(selectedDeleteItems[i]);
+//        }
 
         items.add(selectedDeleteItems[i]);
       }
       
-      service.removeFromCDECart(savedItems,userName);
+     // service.removeFromCDECart(savedItems,userName);
       sessionCart.removeDataElements(items);
       saveMessage("cadsr.common.cdecart.delete.success",request);
     }
-    catch (FormBuilderException exp) {
+    catch (Exception exp) {
       if (log.isErrorEnabled()) {
         log.error("Exception on removeItems " , exp);
       }
-      saveError(exp.getErrorCode(), request);
+      //saveError(exp.getErrorCode(), request);
     }
 
     return mapping.findForward("addDeleteSuccess");
@@ -460,45 +450,6 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
     HttpServletResponse response) throws IOException, ServletException {
     DynaActionForm dynaForm = (DynaActionForm) form;
     
-    /**
-    String[] selectedItems = (String[]) dynaForm.get(SELECTED_ITEMS);
-
-
-    Form crf = (Form) getSessionObject(request, CRF);
-    Module module = (Module) getSessionObject(request, MODULE);
-    List questions = module.getQuestions();
-
-    //Get the list of Valid Values here
-    
-      int displayOrder = Integer.parseInt((String) dynaForm.get(QUESTION_INDEX));
-
-      DataElement de = (DataElement)getSessionObject(request,"selectedDataElement");
-
-      Question q = new QuestionTransferObject();
-      module.setForm(crf);
-      q.setModule(module);
-
-      List values = de.getValueDomain().getValidValues();
-      List newValidValues = DTOTransformer.toFormValidValueList(values, q);
-      q.setQuesIdseq(new Date().getTime()+"0");
-      q.setValidValues(newValidValues);
-      q.setDataElement(de);
-      q.setLongName(de.getLongName());
-      q.setVersion(crf.getVersion());
-      q.setAslName(crf.getAslName());
-      q.setPreferredDefinition(de.getPreferredDefinition());
-      q.setContext(crf.getContext());
-
-      q.setDisplayOrder(displayOrder);
-
-      if (displayOrder < questions.size()) {
-        questions.add(displayOrder, q);
-        FormActionUtil.incrementDisplayOrder(questions, displayOrder + 1);
-      }
-      else {
-        questions.add(q);
-      }
-   **/
     saveMessage("cadsr.formbuilder.question.add.success",request);
     return mapping.findForward("success");
   } 
@@ -524,4 +475,5 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
     }
     return true;
   }  
+  
 }

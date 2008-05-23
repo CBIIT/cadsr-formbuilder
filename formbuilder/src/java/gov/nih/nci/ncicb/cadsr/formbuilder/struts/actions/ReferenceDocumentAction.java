@@ -9,7 +9,6 @@ import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
 import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
 import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.ReferenceDocFormBean;
-import gov.nih.nci.ncicb.cadsr.common.resource.AdminComponent;
 import gov.nih.nci.ncicb.cadsr.common.resource.Attachment;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
@@ -36,8 +35,6 @@ import java.util.Random;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import oracle.sql.BLOB;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;

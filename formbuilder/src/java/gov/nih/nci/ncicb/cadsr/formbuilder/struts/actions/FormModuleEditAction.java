@@ -1209,31 +1209,28 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
    }
    changes.setParentId(parentId);
 
+   //deleting the existing one
    if(currInstr==null&&orgInstr!=null)
-   {
      changes.setDeletedInstruction(orgInstr);
-     return changes;
-   }
-   if(currInstr!=null&&orgInstr==null)
+   //creating the new one
+   else if(currInstr!=null&&orgInstr==null)
    {
      if (!currInstr.getPreferredDefinition().trim().equals(""))
      {
        changes.setNewInstruction(currInstr);
-       return changes;
      }
    }
-   if(currInstr!=null&&orgInstr!=null)
+   //existed and continue exists
+   else if(currInstr!=null&&orgInstr!=null)
    {
-     if(!currInstr.equals(orgInstr)&&!currInstr.getPreferredDefinition().trim().equals(""))
-       {
+	 String sCurr = currInstr.getPreferredDefinition().trim();
+	 String sOrig = orgInstr.getPreferredDefinition().trim();
+	 //changed from the old and not empty field
+     if(!sCurr.equals(sOrig)&&!sCurr.equals(""))
          changes.setUpdatedInstruction(currInstr);
-         return changes;
-       }
-       else if(!currInstr.equals(orgInstr)&&currInstr.getPreferredDefinition().trim().equals(""))
-       {
+     //changed from the old and empty field means delete from the database
+     else if(!sCurr.equals(sOrig)&&sCurr.equals(""))
          changes.setDeletedInstruction(currInstr);
-         return changes;
-       }
    }
    return changes;
  }

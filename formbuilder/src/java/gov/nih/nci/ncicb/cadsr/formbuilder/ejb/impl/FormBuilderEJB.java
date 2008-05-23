@@ -1,14 +1,12 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.ejb.impl;
 
 import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
-import gov.nih.nci.ncicb.cadsr.common.cdebrowser.DataElementSearchBean;
 import gov.nih.nci.ncicb.cadsr.common.dto.CSITransferObject;
 import gov.nih.nci.ncicb.cadsr.common.ejb.common.SessionBeanAdapter;
 import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
 import gov.nih.nci.ncicb.cadsr.common.persistence.ErrorCodeConstants;
 import gov.nih.nci.ncicb.cadsr.common.persistence.PersistenceConstants;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.AbstractDAOFactory;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.CDECartDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ConceptDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ContextDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.FormDAO;
@@ -25,8 +23,6 @@ import gov.nih.nci.ncicb.cadsr.common.persistence.dao.QuestionRepititionDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ReferenceDocumentDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.TriggerActionDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ValueDomainDAO;
-import gov.nih.nci.ncicb.cadsr.common.resource.CDECart;
-import gov.nih.nci.ncicb.cadsr.common.resource.CDECartItem;
 import gov.nih.nci.ncicb.cadsr.common.resource.ClassSchemeItem;
 import gov.nih.nci.ncicb.cadsr.common.resource.ConceptDerivationRule;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
@@ -54,7 +50,6 @@ import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocator;
 import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocatorFactory;
 import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderServiceRemote;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -652,52 +647,6 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
     public boolean validateUser(String username, String password)
     {
         return false;
-    }
-
-    public CDECart retrieveCDECart(String user)
-    {
-        //String user = getUserName();
-        CDECartDAO myDAO = daoFactory.getCDECartDAO();
-        CDECart cart = myDAO.findCDECart(user);
-
-        return cart;
-    }
-
-    public int addToCDECart(Collection items, String user)
-    {
-        //String user = context.getCallerPrincipal().getName();
-        Iterator it = items.iterator();
-        CDECartItem item = null;
-        CDECartDAO myDAO = daoFactory.getCDECartDAO();
-        int count = 0;
-
-        while (it.hasNext())
-        {
-            item = (CDECartItem)it.next();
-            item.setCreatedBy(user.toUpperCase());
-            myDAO.insertCartItem(item);
-            count++;
-        }
-
-        return count;
-    }
-
-    public int removeFromCDECart(Collection items, String user)
-    {
-        Iterator it = items.iterator();
-        String itemId = null;
-        CDECartDAO myDAO = daoFactory.getCDECartDAO();
-        int count = 0;
-
-        while (it.hasNext())
-        {
-            itemId = (String)it.next();
-
-            myDAO.deleteCartItem(itemId, user);
-            count++;
-        }
-
-        return count;
     }
 
     public Form copyForm(String sourceFormPK, Form newForm)
