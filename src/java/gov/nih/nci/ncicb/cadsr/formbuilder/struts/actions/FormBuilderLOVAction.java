@@ -1,33 +1,24 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
 //import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
-import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants;
+import gov.nih.nci.ncicb.cadsr.common.ProcessConstants;
 import gov.nih.nci.ncicb.cadsr.common.lov.ClassificationsLOVBean;
 import gov.nih.nci.ncicb.cadsr.common.lov.ProtocolsLOVBean;
-import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
-import gov.nih.nci.ncicb.cadsr.common.util.DBUtil;
-import gov.nih.nci.ncicb.cadsr.common.util.TabInfoBean;
-
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.DynaActionForm;
-
-import gov.nih.nci.ncicb.cadsr.common.ProcessConstants;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
+import gov.nih.nci.ncicb.cadsr.common.util.DBUtil;
 
 import java.io.IOException;
-
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.DynaActionForm;
 
 
 public class FormBuilderLOVAction extends FormBuilderBaseDispatchAction {
@@ -159,8 +150,8 @@ public class FormBuilderLOVAction extends FormBuilderBaseDispatchAction {
     DBUtil dbUtil = new DBUtil();
 
     try {
-        String contextIdSeq = request.getParameter("P_CONTE_IDSEQ");
-        request.setAttribute("P_CONTE_IDSEQ", contextIdSeq);
+        String contextIdSeq = request.getParameter(CONTEXT_ID_SEQ);
+        request.setAttribute(CONTEXT_ID_SEQ, contextIdSeq);
         String performQuery = request.getParameter("performQuery");
         String chk = (String)searchForm.get("chkContext");
         ClassificationsLOVBean clb;
