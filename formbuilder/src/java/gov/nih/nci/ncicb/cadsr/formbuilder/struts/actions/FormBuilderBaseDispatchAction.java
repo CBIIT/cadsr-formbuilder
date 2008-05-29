@@ -30,7 +30,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.Globals;
-import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -272,53 +271,6 @@ public class FormBuilderBaseDispatchAction extends BaseDispatchAction
     return crf;
   }
 
-  protected void saveError(
-      String key,
-       HttpServletRequest request) {
-    if (key != null) {
-      ActionError errorMessage = new ActionError(key);
-      ActionErrors errorMessages = null;
-      errorMessages = (ActionErrors)request.getAttribute(Globals.ERROR_KEY);
-      if(errorMessages==null)
-        errorMessages = new ActionErrors();
-
-      errorMessages.add(errorMessages.GLOBAL_ERROR, errorMessage);
-      saveErrors(request,errorMessages);
-    }
-  }
-
-    protected void saveError(
-        String key,
-         HttpServletRequest request,
-         String arg0) {
-      if (key != null) {
-        ActionError errorMessage = new ActionError(key, arg0);
-        ActionErrors errorMessages = null;
-        errorMessages = (ActionErrors)request.getAttribute(Globals.ERROR_KEY);
-        if(errorMessages==null)
-          errorMessages = new ActionErrors();
-
-        errorMessages.add(errorMessages.GLOBAL_ERROR, errorMessage);
-        saveErrors(request,errorMessages);
-      }
-    }
-
-    protected void saveError(
-        String key,
-         HttpServletRequest request,
-         String arg0,
-         String arg1) {
-      if (key != null) {
-        ActionError errorMessage = new ActionError(key, arg0, arg1);
-        ActionErrors errorMessages = null;
-        errorMessages = (ActionErrors)request.getAttribute(Globals.ERROR_KEY);
-        if(errorMessages==null)
-          errorMessages = new ActionErrors();
-
-        errorMessages.add(errorMessages.GLOBAL_ERROR, errorMessage);
-        saveErrors(request,errorMessages);
-      }
-    }
 
   protected void saveMessage(
     String key,
@@ -426,7 +378,7 @@ public class FormBuilderBaseDispatchAction extends BaseDispatchAction
       {
         log.fatal(userName+": Exception in dispatchMethod in method "+name,throwable);
       }
-      saveError(ERROR_FATAL, request);
+      saveMessage(ERROR_FATAL, request);
       throw new FatalException(throwable);
     }
   }

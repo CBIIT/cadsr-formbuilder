@@ -61,7 +61,7 @@ public class FormDesignationsAction
                 log.error("Exception on service.isAllACDesignatedToContext ", exp);
               }
 
-              saveError("cadsr.formbuilder.designation.fail", request);
+              saveMessage("cadsr.formbuilder.designation.fail", request);
               ActionForward forward =  mapping.findForward("failure");
               return forward;
         }     
@@ -94,7 +94,7 @@ public class FormDesignationsAction
           log.error("Exception on saveDesignations ", exp);
         }
 
-        saveError("cadsr.formbuilder.designation.fail", request);
+        saveMessage("cadsr.formbuilder.designation.fail", request);
         ActionForward forward =  mapping.findForward("failure");
         return forward;
       }

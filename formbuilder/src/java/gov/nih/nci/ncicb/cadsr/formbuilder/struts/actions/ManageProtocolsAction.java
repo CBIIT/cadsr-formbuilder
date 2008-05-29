@@ -97,7 +97,7 @@ public class ManageProtocolsAction
         DynaActionForm dynaForm = (DynaActionForm) form;    
         String id = (String)dynaForm.get("protocolIdSeq");
         if (id.length()==0){
-           saveError("cadsr.formbuilder.form.edit.form.manageProtocol.protocol", request);
+           saveMessage("cadsr.formbuilder.form.edit.form.manageProtocol.protocol", request);
            return mapping.findForward(FAILURE);
          }
          
@@ -117,7 +117,7 @@ public class ManageProtocolsAction
            if (log.isDebugEnabled()) {
              log.debug("Exception on getting protocol by PK  " + exp);
            }
-           saveError(exp.getErrorCode(), request);
+           saveMessage(exp.getErrorCode(), request);
            return mapping.findForward(FAILURE);
        }
     return mapping.findForward(SUCCESS);

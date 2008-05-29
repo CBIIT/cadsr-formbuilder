@@ -18,7 +18,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.apache.struts.Globals;
-import org.apache.struts.action.ActionError;
+
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -118,7 +118,7 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
            formClone.setModules(null);
       }
         catch (CloneNotSupportedException exp) {
-          saveError(ERROR_FORM_SAVE_FAILED, request);
+          saveMessage(ERROR_FORM_SAVE_FAILED, request);
           if (log.isErrorEnabled()) {
             log.error("On save, Exception on cloneing Form " + exp);
           }
@@ -222,7 +222,7 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
           if (log.isErrorEnabled()) {
             log.error("Exception while colneing trigger action");
           }
-          saveError(ERROR_SKIP_PATTERN_EDIT,request);
+          saveMessage(ERROR_SKIP_PATTERN_EDIT,request);
           return mapping.findForward("editSkipPattern");
 
       }
@@ -241,7 +241,7 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
             if (log.isErrorEnabled()) {
               log.error("Exception while retriveing Classifications for Skip pattern  " , exp);
             }
-            saveError(ERROR_SKIP_PATTERN_EDIT,request);
+            saveMessage(ERROR_SKIP_PATTERN_EDIT,request);
             return mapping.findForward("editSkipPattern");
         }
 
@@ -358,7 +358,7 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
             if (log.isErrorEnabled()) {
               log.error("Exception while colneing trigger action");
             }
-            saveError(ERROR_SKIP_PATTERN_EDIT,request);
+            saveMessage(ERROR_SKIP_PATTERN_EDIT,request);
             return mapping.findForward("editSkipPattern");
 
         }
@@ -372,7 +372,7 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
             if (log.isErrorEnabled()) {
               log.error("Exception while retriveing Classifications for Skip pattern  " , exp);
             }
-            saveError(ERROR_SKIP_PATTERN_EDIT,request);
+            saveMessage(ERROR_SKIP_PATTERN_EDIT,request);
         }
 
       return mapping.findForward("editSkipPattern");
@@ -435,8 +435,8 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
           if (log.isErrorEnabled()) {
             log.error("Exception getting CRF", exp);
           }
-          saveError(ERROR_FORM_RETRIEVE, request);
-          saveError(ERROR_FORM_DOES_NOT_EXIST, request);
+          saveMessage(ERROR_FORM_RETRIEVE, request);
+          saveMessage(ERROR_FORM_DOES_NOT_EXIST, request);
           return mapping.findForward(FAILURE);
         }
         //Set the form as skip source
@@ -683,8 +683,8 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
             if (log.isErrorEnabled()) {
               log.error("Exception on deleteing  Skip pattern  " , exp);
             }
-        saveError(ERROR_SKIP_PATTERN_DELETE, request);
-            saveError(exp.getErrorCode(), request);
+        saveMessage(ERROR_SKIP_PATTERN_DELETE, request);
+            saveMessage(exp.getErrorCode(), request);
             return mapping.findForward("backToModuleEdit");
 
         }
@@ -730,8 +730,8 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
             if (log.isErrorEnabled()) {
               log.error("Exception on deleteing  Skip pattern  " , exp);
             }
-        saveError(ERROR_SKIP_PATTERN_DELETE, request);
-            saveError(exp.getErrorCode(), request);
+        saveMessage(ERROR_SKIP_PATTERN_DELETE, request);
+            saveMessage(exp.getErrorCode(), request);
             return mapping.findForward("backToModuleEdit");
 
         }
@@ -814,8 +814,8 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
                      if (log.isErrorEnabled()) {
                        log.error("Exception on creating new Skip pattern  " , exp);
                      }
-                 saveError(ERROR_SKIP_PATTERN_CREATE, request);
-                     saveError(exp.getErrorCode(), request);
+                 saveMessage(ERROR_SKIP_PATTERN_CREATE, request);
+                     saveMessage(exp.getErrorCode(), request);
                      return mapping.findForward("editSkipPattern");
 
                  }
@@ -894,8 +894,8 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
                         if (log.isErrorEnabled()) {
                           log.error("Exception on Saving  Skip pattern  " , exp);
                         }
-                    saveError(ERROR_SKIP_PATTERN_SAVE, request);
-                        saveError(exp.getErrorCode(), request);
+                    saveMessage(ERROR_SKIP_PATTERN_SAVE, request);
+                        saveMessage(exp.getErrorCode(), request);
                         return mapping.findForward("editSkipPattern");
 
                     }
@@ -1037,7 +1037,7 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
        {
            if(newTargetId!=null&&newTargetId.equals(action.getActionTarget().getIdseq()))
            {
-               saveError("cadsr.formbuilder.save.skippattern.validate.error.duplicatesourcetarget",request);
+               saveMessage("cadsr.formbuilder.save.skippattern.validate.error.duplicatesourcetarget",request);
                 return false;
            }
            //Check to see is anyother trigger action to diffrent target use
@@ -1051,7 +1051,7 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
                 tempProtocol.setProtoIdseq(newProtIdSeqs[i]);
                 if(action.getProtocols().contains(tempProtocol))
                 {
-                    saveError("cadsr.formbuilder.save.skippattern.validate.error.protocol",request);
+                    saveMessage("cadsr.formbuilder.save.skippattern.validate.error.protocol",request);
                     return false;
                 }
             }
@@ -1065,7 +1065,7 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
                tempCSI.setAcCsiIdseq(newAcCsis[j]);
                if(action.getClassSchemeItems().contains(tempCSI))
                {
-                   saveError("cadsr.formbuilder.save.skippattern.validate.error.classification",request);
+                   saveMessage("cadsr.formbuilder.save.skippattern.validate.error.classification",request);
                   return false;
               }
            }

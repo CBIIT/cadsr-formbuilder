@@ -88,7 +88,7 @@ public class FormBuilderSecureBaseDispatchAction extends FormBuilderBaseDispatch
           }
         }
       }
-      saveError(ERROR_FATAL, request);
+      saveMessage(ERROR_FATAL, request);
       throw new FatalException(throwable);      
     }
   }

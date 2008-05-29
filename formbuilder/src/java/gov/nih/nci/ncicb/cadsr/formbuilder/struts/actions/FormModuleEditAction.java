@@ -121,8 +121,8 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
       validValueMap = service.getValidValues(allVdIds);
     }
     catch (FormBuilderException exp) {
-      saveError(ERROR_MODULE_RETRIEVE, request);
-      saveError(exp.getErrorCode(),request);
+      saveMessage(ERROR_MODULE_RETRIEVE, request);
+      saveMessage(exp.getErrorCode(),request);
       if (log.isErrorEnabled()) {
         log.error("Exp while getting validValue", exp);
       }
@@ -283,7 +283,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
          if (log.isErrorEnabled()) {
            log.error("Exception While checking skip patterns " ,exp);
          }
-         saveError(ERROR_SKIP_PATTERN_TARGET_CHECK, request);
+         saveMessage(ERROR_SKIP_PATTERN_TARGET_CHECK, request);
          return mapping.findForward(MODULE_EDIT);
        }
        
@@ -307,7 +307,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
     }
     else
           {
-              saveError("cadsr.formbuilder.delete.question.skippattern.target",request);
+              saveMessage("cadsr.formbuilder.delete.question.skippattern.target",request);
           }
     updateEditFormFromQuestion(module.getQuestions(), moduleEditForm);
 
@@ -760,8 +760,8 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
           log.error("Exception on saving module  "+module,exp);
         }
 
-        saveError(ERROR_MODULE_SAVE_FAILED, request);
-        saveError(exp.getErrorCode(), request);
+        saveMessage(ERROR_MODULE_SAVE_FAILED, request);
+        saveMessage(exp.getErrorCode(), request);
         return mapping.findForward(FAILURE);
     }
 
@@ -779,7 +779,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
      orgCrf.getModules().add(index.intValue(),newClonedModule);
      }
     catch (CloneNotSupportedException clexp) {
-     saveError(ERROR_MODULE_SAVE_FAILED, request);
+     saveMessage(ERROR_MODULE_SAVE_FAILED, request);
       if (log.isErrorEnabled()) {
         log.error("Exception while cloning module  " + updatedModule,clexp);
       }
@@ -1829,7 +1829,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
             validValueIndex = Integer.parseInt(validValueIndexStr);            
         }catch (Exception e){
             log.error("Could not parse integer for questionIndex, moduleIndex or validValueIndex");
-            saveError("cadsr.formbuilder.valueMeaning.alternate.fail", request);
+            saveMessage("cadsr.formbuilder.valueMeaning.alternate.fail", request);
             throw new FatalException(e);
         }
         
