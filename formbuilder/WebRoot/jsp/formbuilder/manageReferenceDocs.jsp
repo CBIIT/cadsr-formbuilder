@@ -71,7 +71,7 @@
       <table width="80%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
         <tr class="OraTabledata">
           <td width="20%" class="OraTableColumnHeader" nowrap><bean:message key="cadsr.formbuilder.form.name" /></td>
-          <td class="OraFieldText" nowrap>
+          <td class="OraFieldText">
             <bean:write
               name="<%= FormConstants.CRF %>"
               property="longName"
@@ -136,7 +136,7 @@
 
         <tr class="OraTabledata">
           <td width="20%" class="OraTableColumnHeader" nowrap><bean:message key="cadsr.formbuilder.form.definition" /></td>
-          <td class="OraFieldText" nowrap>
+          <td class="OraFieldText">
             <bean:write
               name="<%= FormConstants.CRF %>"
               property="preferredDefinition"
@@ -311,11 +311,9 @@
                <tr class="OraTabledata">
                   <td class="OraTableColumnHeader" width="20%" nowrap>
                     Description 
-                  </td
-                  <td class="OraFieldText" nowrap>
-                  <td  class="OraFieldText" size="80%" nowrap>
-                        <bean:write name="refDoc" property="docText"/>
                   </td>
+                  <td  class="OraFieldText" width="80%">
+                    <bean:write name="refDoc" property="docText"/>
                   </td>
                </tr>                  
                <tr class="OraTabledata">
