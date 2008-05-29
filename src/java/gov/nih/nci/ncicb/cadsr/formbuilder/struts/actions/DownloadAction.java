@@ -57,8 +57,8 @@ public class DownloadAction
     log.error("Exception getting CRF", exp);
    }
 
-   saveError(ERROR_FORM_RETRIEVE, request);
-   saveError(ERROR_FORM_DOES_NOT_EXIST, request);
+   saveMessage(ERROR_FORM_RETRIEVE, request);
+   saveMessage(ERROR_FORM_DOES_NOT_EXIST, request);
    return mapping.findForward(FAILURE);
   }
 

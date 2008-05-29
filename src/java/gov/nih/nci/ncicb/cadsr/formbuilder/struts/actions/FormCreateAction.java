@@ -145,8 +145,8 @@ public class FormCreateAction extends FormBuilderSecureBaseDispatchAction {
         if (log.isErrorEnabled()) {
           log.error("Exception on creating Form  "+newForm , exp);
         }
-  saveError(ERROR_FORM_CREATE, request);
-	saveError(exp.getErrorCode(), request);
+  saveMessage(ERROR_FORM_CREATE, request);
+	saveMessage(exp.getErrorCode(), request);
 	return mapping.findForward("failure");
 	  
     }

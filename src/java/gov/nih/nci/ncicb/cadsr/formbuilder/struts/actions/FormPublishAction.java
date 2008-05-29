@@ -74,7 +74,7 @@ public class FormPublishAction extends FormBuilderSecureBaseDispatchAction {
       if (log.isErrorEnabled()) {
         log.error("Exception while publishing the form "+form , exp);
       }
-      saveError(ERROR_FORM_PUBLISH, request);
+      saveMessage(ERROR_FORM_PUBLISH, request);
 
       return mapping.findForward(SUCCESS);
     }
@@ -116,7 +116,7 @@ public class FormPublishAction extends FormBuilderSecureBaseDispatchAction {
       if (log.isErrorEnabled()) {
         log.error("Exception while unpublishing the form "+form , exp);
       }
-      saveError(ERROR_FORM_UNPUBLISH, request);
+      saveMessage(ERROR_FORM_UNPUBLISH, request);
 
       return mapping.findForward(FAILURE);
     }

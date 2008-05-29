@@ -104,7 +104,7 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
             de.setReferenceDocs(refDocs);
       String questionLongName = de.getLongCDEName();
       if (!isValidCDE(de)){
-         saveError("cadsr.formbuilder.form.question.add.badCDE", request, de.getLongName());
+         saveMessage("cadsr.formbuilder.form.question.add.badCDE", request, de.getLongName());
          questionLongName = "Data Element " + de.getLongName() + " does not have Preferred Question Text";         
           //user can still continue
          //return mapping.findForward(FAILURE);
@@ -136,7 +136,7 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
             if (log.isErrorEnabled()) {
               log.error("Exception on getting reference documents or Permissible values for the Data Element de Idseq=" + de.getIdseq() , exp);
             }
-            saveError(exp.getErrorCode(), request);
+            saveMessage(exp.getErrorCode(), request);
             return mapping.findForward(FAILURE);
     }       
         
@@ -211,12 +211,12 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
            if (log.isErrorEnabled()) {
              log.error("Exception on getting reference documents for the Data Element " , exp);
            }
-           saveError(exp.getErrorCode(), request);
+           saveMessage(exp.getErrorCode(), request);
            return mapping.findForward(FAILURE);
        }       
         
       if (!isValidCDE(de)){
-          saveError("cadsr.formbuilder.form.question.add.badCDE", request, de.getLongName());
+          saveMessage("cadsr.formbuilder.form.question.add.badCDE", request, de.getLongName());
           //return mapping.findForward(FAILURE);
           //user can still continue
       }
@@ -236,7 +236,7 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
       }catch (FormBuilderException fbe){
           log.error("Exception on getting valid values for the Data Element Value Doamin , vdIdSeq=" 
                                 +  de.getValueDomain().getVdIdseq(), fbe);
-          saveError("cadsr.formbuilder.question.changeAssociation.newAssociation.fail", request);
+          saveMessage("cadsr.formbuilder.question.changeAssociation.newAssociation.fail", request);
           return mapping.findForward(FAILURE);
       }
       
@@ -301,7 +301,7 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
       if (log.isErrorEnabled()) {
         log.error("Exception on displayCDECart", exp);
       }
-      saveError(exp.getMessage(), request);
+      saveMessage(exp.getMessage(), request);
     }
 
     return mapping.findForward(SUCCESS);
@@ -349,7 +349,6 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
       if (log.isErrorEnabled()) {
         log.error("Exception on addItems " , exp);
       }
-      //saveError(exp.getErrorCode(), request);
     }
 
     return mapping.findForward("addDeleteSuccess");
@@ -398,7 +397,6 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
         items.add(selectedDeleteItems[i]);
       }
       
-     // service.removeFromCDECart(savedItems,userName);
       sessionCart.removeDataElements(items);
       saveMessage("cadsr.common.cdecart.delete.success",request);
     }
@@ -406,7 +404,6 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
       if (log.isErrorEnabled()) {
         log.error("Exception on removeItems " , exp);
       }
-      //saveError(exp.getErrorCode(), request);
     }
 
     return mapping.findForward("addDeleteSuccess");

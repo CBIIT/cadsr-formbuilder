@@ -59,13 +59,13 @@ public class FormAlertAction extends FormBuilderSecureBaseDispatchAction {
       if (log.isErrorEnabled()) {
         log.error("Exception while setting alert for the form "+form , exp);
       }
-      saveError(ERROR_FORM_ALERT, request);
+      saveMessage(ERROR_FORM_ALERT, request);
 
       return mapping.findForward(FAILURE);
     }
     if(res!=DSRAlert.RC_CREATED&&res!=DSRAlert.RC_EXISTS)
     {
-        saveError(ERROR_FORM_ALERT, request);
+        saveMessage(ERROR_FORM_ALERT, request);
         return mapping.findForward(FAILURE);  
     }
     if (res==DSRAlert.RC_CREATED)

@@ -64,7 +64,7 @@ public class ManageClassificationsAction
         log.error("Exception on getClassifications ", exp);
       }
 
-      saveError(exp.getErrorCode(), request);
+      saveMessage(exp.getErrorCode(), request);
     }
 
     return mapping.findForward("success");
@@ -121,7 +121,7 @@ public class ManageClassificationsAction
               log.error("Exception on addClassification ", exp);
             }
 
-            saveError(exp.getErrorCode(), request);
+            saveMessage(exp.getErrorCode(), request);
 	    success = false;
        }// end of try-catch
 
@@ -135,8 +135,8 @@ public class ManageClassificationsAction
         log.error("Exception on addClassification ", exp);
       }
 
-      saveError(exp.getErrorCode(), request);
-      saveError("cadsr.formbuilder.classification.add.failure", request);
+      saveMessage(exp.getErrorCode(), request);
+      saveMessage("cadsr.formbuilder.classification.add.failure", request);
 
       return mapping.findForward("failure");
     }
@@ -189,7 +189,7 @@ public class ManageClassificationsAction
       if (log.isErrorEnabled()) {
         log.error("Exception on removeClassification ", exp);
       }
-      saveError(exp.getErrorCode(), request);
+      saveMessage(exp.getErrorCode(), request);
       return mapping.findForward("failure");
     }
 
@@ -230,7 +230,7 @@ public class ManageClassificationsAction
           if (log.isErrorEnabled()) {
             log.error("Exception on updateSkipPatternForCSI ", e);
           }
-          saveError("cadsr.formbuilder.classification.updateSkipPattern.failure", request);
+          saveMessage("cadsr.formbuilder.classification.updateSkipPattern.failure", request);
           removeSessionObject(request,CLASSIFICATION_ASSOCIATED_TRIGGERS);
           return mapping.findForward("failure");
       }

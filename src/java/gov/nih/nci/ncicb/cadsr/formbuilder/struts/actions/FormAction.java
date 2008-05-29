@@ -17,7 +17,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.apache.struts.Globals;
-import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -270,11 +269,11 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
      params.put(ActionMessages.GLOBAL_MESSAGE, strBuff.toString());
     }
     if ((errors != null) && !errors.isEmpty()) {
-      Iterator errorIt = errors.get(ActionErrors.GLOBAL_ERROR);
+      Iterator errorIt = errors.get(ActionErrors.GLOBAL_MESSAGE);
       StringBuffer strBuff = new StringBuffer();
 
       while (errorIt.hasNext()) {
-        ActionError error = (ActionError)errorIt.next();
+        ActionMessage error = (ActionMessage)errorIt.next();
         strBuff.append(error.getKey());
 
         if (errorIt.hasNext()) {
@@ -282,7 +281,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
         }
       }      
 
-      params.put(ActionErrors.GLOBAL_ERROR, strBuff.toString());
+      params.put(ActionErrors.GLOBAL_MESSAGE, strBuff.toString());
     }
     request.setAttribute("requestMap", params);
 
@@ -317,12 +316,12 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
       }
     }
 
-    String stringErrors = request.getParameter(ActionErrors.GLOBAL_ERROR);
+    String stringErrors = request.getParameter(ActionErrors.GLOBAL_MESSAGE);
     if ((stringErrors != null) && !stringErrors.equals("")) {
       String[] errorArr = StringUtils.tokenizeCSVList(stringErrors);
   
       for (int i = 0; i < errorArr.length; i++) {
-        this.saveError(errorArr[i], request);
+        this.saveMessage(errorArr[i], request);
       }
     }
 
@@ -361,8 +360,8 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
       if (log.isErrorEnabled()) {
         log.error("Exception getting CRF", exp);
       }      
-      saveError(ERROR_FORM_RETRIEVE, request);
-      saveError(ERROR_FORM_DOES_NOT_EXIST, request);
+      saveMessage(ERROR_FORM_RETRIEVE, request);
+      saveMessage(ERROR_FORM_DOES_NOT_EXIST, request);
       return mapping.findForward(FAILURE);
     }
 
@@ -395,8 +394,8 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
       }
     }
     catch (FormBuilderException exp) {
-      saveError(ERROR_FORM_RETRIEVE, request);
-      saveError(ERROR_FORM_DOES_NOT_EXIST, request);
+      saveMessage(ERROR_FORM_RETRIEVE, request);
+      saveMessage(ERROR_FORM_DOES_NOT_EXIST, request);
       if (log.isErrorEnabled()) {
         log.error("Exception on getFormForEdit ", exp);
       }

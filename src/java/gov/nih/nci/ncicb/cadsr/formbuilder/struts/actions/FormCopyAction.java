@@ -39,7 +39,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.ActionError;
+
 import org.apache.struts.action.ActionErrors;
 
 
@@ -96,8 +96,8 @@ public class FormCopyAction extends FormBuilderSecureBaseDispatchAction {
       if (log.isErrorEnabled()) {
         log.error("Exception on getFormToCopy for form "+form , exp);
       }
-      saveError(ERROR_FORM_DOES_NOT_EXIST, request);
-      saveError(exp.getErrorCode(), request);
+      saveMessage(ERROR_FORM_DOES_NOT_EXIST, request);
+      saveMessage(exp.getErrorCode(), request);
 
       return mapping.findForward("failure");
     }
@@ -175,7 +175,7 @@ public class FormCopyAction extends FormBuilderSecureBaseDispatchAction {
       if (log.isErrorEnabled()) {
         log.error("Exception on copying Form  " + crf, exp);
       }
-      saveError(exp.getErrorCode(), request);
+      saveMessage(exp.getErrorCode(), request);
 
       return mapping.findForward("failure");
     }
