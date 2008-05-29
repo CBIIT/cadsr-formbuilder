@@ -67,8 +67,7 @@
                     Name 
                   </td>
                   <td class="OraFieldText" nowrap>
-                    <html:text size="80" property="docName" maxlength="30">
-                       maxlength="<%= Integer.toString(FormConstants.LONG_NAME_MAX_LENGTH)%>">
+                    <html:text size="80" property="docName" maxlength="<%= Integer.toString(FormConstants.LONG_NAME_MAX_LENGTH)%>">
                     </html:text>
                   </td>
                </tr>    
@@ -78,7 +77,7 @@
                     Type 
                   </td>
                   <td class="OraFieldText" nowrap>
-                    <html:select styleClass="Dropdown" property="docType">               
+                    <html:select styleClass="Dropdown" property="docType" style="width:30%">               
                     <html:option value="<%=ReferenceDocument.REF_DOC_TYPE_IMAGE%>"/>
                     <html:options name="<%=FormConstants.ALL_REFDOC_TYPES%>" /> 
                     </html:select>
@@ -91,7 +90,7 @@
                     <bean:message key="cadsr.formbuilder.form.context"/> 
                   </td>
                   <td class="OraFieldText" nowrap>
-                    <html:select styleClass="Dropdown" property="contextIdSeq">               
+                    <html:select styleClass="Dropdown" property="contextIdSeq" style="width:20%">               
                       <html:options collection="<%=CaDSRConstants.USER_CONTEXTS%>" property="conteIdseq" labelProperty="name"/>
                     </html:select>
                   </td>
@@ -101,8 +100,7 @@
                     URL 
                   </td>
                   <td class="OraFieldText" nowrap>
-                    <html:text size="80" property="url">
-                       maxlength="<%= Integer.toString(FormConstants.LONG_NAME_MAX_LENGTH)%>">
+                    <html:text size="80" property="url" maxlength="<%= Integer.toString(FormConstants.LONG_NAME_MAX_LENGTH)%>">
                     </html:text>
                   </td>
                </tr>    
@@ -110,10 +108,9 @@
                   <td class="OraTableColumnHeader" width="20%" nowrap>
                     Description 
                   </td>
-                  <td  class="OraFieldText" size="80%" nowrap>
-                    <html:text size="80" property="docText">
-                       maxlength="<%= Integer.toString(FormConstants.LONG_NAME_MAX_LENGTH)%>">
-                   </html:text>
+                  <td  class="OraFieldText" size="80%">
+                    <html:textarea property="docText" cols="90%" rows="2">
+                   </html:textarea>
                   </td>
                </tr>                 
              </table>
