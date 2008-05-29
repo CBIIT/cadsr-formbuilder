@@ -115,8 +115,8 @@ public class CopyModuleAction extends FormBuilderSecureBaseDispatchAction {
            if (log.isErrorEnabled()) {
              log.error("Exception getting CRF", exp);
            }      
-           saveError(ERROR_FORM_RETRIEVE, request);
-           saveError(ERROR_FORM_DOES_NOT_EXIST, request);
+           saveMessage(ERROR_FORM_RETRIEVE, request);
+           saveMessage(ERROR_FORM_DOES_NOT_EXIST, request);
            return mapping.findForward(FAILURE);
          }
          //Set the form as skip source
@@ -163,7 +163,7 @@ public class CopyModuleAction extends FormBuilderSecureBaseDispatchAction {
           if (log.isErrorEnabled()) {
             log.error("Exception while colneing Module " + copiedModule,clexp);
           }
-         saveError("cadsr.formbuilder.module.copy.failure", request);
+         saveMessage("cadsr.formbuilder.module.copy.failure", request);
          return mapping.findForward("toFormEdit");
       } 
         
@@ -264,7 +264,7 @@ public class CopyModuleAction extends FormBuilderSecureBaseDispatchAction {
           if (log.isErrorEnabled()) {
             log.error("Exception while colneing Module " + copiedModule,clexp);
           }
-         saveError("cadsr.formbuilder.module.copy.moduleList.failure", request);
+         saveMessage("cadsr.formbuilder.module.copy.moduleList.failure", request);
           return mapping.findForward("framedSearchResultsPage");
       } 
         
@@ -513,7 +513,7 @@ public class CopyModuleAction extends FormBuilderSecureBaseDispatchAction {
           if (log.isErrorEnabled()) {
             log.error("Exception while colneing Module " ,clexp);
           }
-         saveError("cadsr.formbuilder.module.copy.failure", request);
+         saveMessage("cadsr.formbuilder.module.copy.failure", request);
          return mapping.findForward("viewModuleList");
       } 
 

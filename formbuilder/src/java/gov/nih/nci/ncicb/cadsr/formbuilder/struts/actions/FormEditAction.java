@@ -97,9 +97,9 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
       setSessionObject(request, CLONED_CRF, clonedCrf,true);
     }
     catch (FormBuilderException exp) {
-      saveError(ERROR_FORM_RETRIEVE, request);
-      saveError(ERROR_FORM_DOES_NOT_EXIST, request);    
-      saveError(exp.getErrorCode(),request);
+      saveMessage(ERROR_FORM_RETRIEVE, request);
+      saveMessage(ERROR_FORM_DOES_NOT_EXIST, request);    
+      saveMessage(exp.getErrorCode(),request);
       if (log.isErrorEnabled()) {
         log.error("Exception on getFormForEdit form " + crf,exp);
       }
@@ -109,7 +109,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
       if (log.isErrorEnabled()) {
         log.error("Exception while colneing crf " + crf,clexp);
       }
-      saveError(this.ERROR_FORM_RETRIEVE,request);
+      saveMessage(this.ERROR_FORM_RETRIEVE,request);
       return mapping.findForward(FAILURE);
     }
 
@@ -312,7 +312,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
        if (log.isErrorEnabled()) {
          log.error("Exception While checking skip patterns " + crf,exp);
        }
-       saveError(ERROR_SKIP_PATTERN_TARGET_CHECK, request);
+       saveMessage(ERROR_SKIP_PATTERN_TARGET_CHECK, request);
        return mapping.findForward(FORM_EDIT);
      }
     if(!hasSkipTarget)
@@ -339,7 +339,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
     }
     else
         {
-            saveError("cadsr.formbuilder.delete.module.skippattern.target",request);
+            saveMessage("cadsr.formbuilder.delete.module.skippattern.target",request);
         }
 
     return mapping.findForward(FORM_EDIT);
@@ -439,7 +439,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
     //check if this is locked
     if (isFormLocked(formIdSeq, request.getRemoteUser())){
         NCIUser nciUser = getFormLockedBy(formIdSeq, request);
-        saveError("cadsr.formbuilder.form.locked.cannot.delete", request, nciUser.getUsername(), nciUser.getEmailAddress());
+        saveMessage("cadsr.formbuilder.form.locked.cannot.delete", request, nciUser.getUsername(), nciUser.getEmailAddress());
         return mapping.findForward(FAILURE);
     }
     FormBuilderServiceDelegate service = getFormBuilderService();
@@ -452,8 +452,8 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
         if (log.isDebugEnabled()) {
           log.debug("Exception on delete  " + exp);
         }
-        saveError(ERROR_FORM_DELETE_FAILED, request);
-        saveError(exp.getErrorCode(), request);
+        saveMessage(ERROR_FORM_DELETE_FAILED, request);
+        saveMessage(exp.getErrorCode(), request);
         return mapping.findForward(FAILURE);
       }
     removeSessionObject(request, DELETED_MODULES);
@@ -504,7 +504,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
              /** 
               * if(header.getProtocol()==null)
                 {
-                   saveError("cadsr.formbuilder.form.edit.form.noProtocol", request);
+                   saveMessage("cadsr.formbuilder.form.edit.form.noProtocol", request);
                    return mapping.findForward(FAILURE);
                 }
                 **/
@@ -513,7 +513,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
             { 
               if(crf.getProtocols()!=null && !crf.getProtocols().isEmpty())
                 {
-                   saveError("cadsr.formbuilder.form.edit.form.template.protocol", request);
+                   saveMessage("cadsr.formbuilder.form.edit.form.template.protocol", request);
                    return mapping.findForward(FAILURE);
                 }              
             }
@@ -543,12 +543,12 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
           if (log.isErrorEnabled()) {
             log.error("Exception While saving the form " + crf,exp);
           }
-          saveError(ERROR_FORM_SAVE_FAILED, request);
-          saveError(exp.getErrorCode(), request);
+          saveMessage(ERROR_FORM_SAVE_FAILED, request);
+          saveMessage(exp.getErrorCode(), request);
           return mapping.findForward(FAILURE);
         }
         catch (CloneNotSupportedException exp) {
-          saveError(ERROR_FORM_SAVE_FAILED, request);
+          saveMessage(ERROR_FORM_SAVE_FAILED, request);
           if (log.isErrorEnabled()) {
             log.error("On save, Exception on cloneing crf " + crf,exp);
           }
@@ -660,7 +660,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
             {
              /** if(header.getProtocol()==null)
                 {
-                   saveError("cadsr.formbuilder.form.edit.form.noProtocol", request);
+                   saveMessage("cadsr.formbuilder.form.edit.form.noProtocol", request);
                    return mapping.findForward(FAILURE);
                 }
                 **/
@@ -669,7 +669,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
             {
               if(crf.getProtocols()!=null && !crf.getProtocols().isEmpty())
                 {
-                   saveError("cadsr.formbuilder.form.edit.form.template.protocol", request);
+                   saveMessage("cadsr.formbuilder.form.edit.form.template.protocol", request);
                    return mapping.findForward(FAILURE);
                 }              
             }
@@ -702,12 +702,12 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
           if (log.isErrorEnabled()) {
             log.error("Exception while saveing form =  " + crf,exp);
           }
-          saveError(ERROR_FORM_SAVE_FAILED, request);
-          saveError(exp.getErrorCode(), request);
+          saveMessage(ERROR_FORM_SAVE_FAILED, request);
+          saveMessage(exp.getErrorCode(), request);
           return mapping.findForward(FAILURE);
         }
         catch (CloneNotSupportedException exp) {
-          saveError(ERROR_FORM_SAVE_FAILED, request);
+          saveMessage(ERROR_FORM_SAVE_FAILED, request);
           if (log.isErrorEnabled()) {
             log.error("On save, Exception on cloneing crf " + crf,exp);
           }

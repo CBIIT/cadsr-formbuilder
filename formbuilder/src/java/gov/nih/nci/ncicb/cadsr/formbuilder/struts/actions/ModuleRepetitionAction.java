@@ -92,7 +92,7 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
 
         if (numberOfRepetitions < 1)
         {
-            saveError("cadsr.formbuilder.module.repetition.add.invalidCount",
+            saveMessage("cadsr.formbuilder.module.repetition.add.invalidCount",
                       request);
             return mapping.findForward("viewRepetitions");
         }
@@ -297,8 +297,8 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
             if (log.isDebugEnabled()) {
               log.debug("Exception saving question repitition  " + e);
             }
-            saveError(ERROR_SAVE_QUESTION_REPITITON, request);
-            saveError(e.getErrorCode(), request);
+            saveMessage(ERROR_SAVE_QUESTION_REPITITON, request);
+            saveMessage(e.getErrorCode(), request);
             return mapping.findForward(FAILURE);        
         }
         crf.getModules().remove(index.intValue());
@@ -309,7 +309,7 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
         orgCrf.getModules().add(index.intValue(),newClonedModule);
         }
         catch (CloneNotSupportedException clexp) {
-        saveError(ERROR_SAVE_QUESTION_REPITITON, request);
+        saveMessage(ERROR_SAVE_QUESTION_REPITITON, request);
          if (log.isErrorEnabled()) {
            log.error("Exception while cloning module  " + savedModeule,clexp);
          }

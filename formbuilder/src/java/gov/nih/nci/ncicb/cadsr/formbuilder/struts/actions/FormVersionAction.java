@@ -70,7 +70,7 @@ public class FormVersionAction
           log.error("Exception on getFormVersions ", ex);
         }
 
-        saveError(ex.getErrorCode(), request);
+        saveMessage(ex.getErrorCode(), request);
         ActionForward forward =  mapping.findForward("failure");
         return forward;
     }
@@ -150,7 +150,7 @@ public class FormVersionAction
             log.error("Exception on saveLatestVersion ", ex);
           }
 
-          saveError("cadsr.formbuilder.latest.version.change.fail", request);
+          saveMessage("cadsr.formbuilder.latest.version.change.fail", request);
           ActionForward forward =  mapping.findForward("failure");
           return forward;
       }
@@ -186,7 +186,7 @@ public class FormVersionAction
             if (log.isErrorEnabled()) {
               log.error("Could not get the maximum version by form public Id= " + crf.getPublicId(), fbe);
             }
-            saveError("cadsr.formbuilder.create.version.fail", request);
+            saveMessage("cadsr.formbuilder.create.version.fail", request);
             return mapping.findForward(FAILURE);
         }
       }
@@ -233,7 +233,7 @@ public class FormVersionAction
           log.error("Exception on saveNewVersion ", exp);
         }
 
-        saveError("cadsr.formbuilder.create.version.fail", request);
+        saveMessage("cadsr.formbuilder.create.version.fail", request);
         ActionForward forward =  mapping.findForward("failure");
         return forward;
       }
@@ -276,7 +276,7 @@ public class FormVersionAction
         if (newVersionNumber.compareTo(maxVersion)>0){
             return true;
         }else{
-            saveError("cadsr.formbuilder.create.version.validation_fail", request);
+            saveMessage("cadsr.formbuilder.create.version.validation_fail", request);
             return false;
         }
     }//end of validateVersion

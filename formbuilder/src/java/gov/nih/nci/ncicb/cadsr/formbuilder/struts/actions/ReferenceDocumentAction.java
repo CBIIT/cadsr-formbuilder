@@ -457,20 +457,20 @@ public class ReferenceDocumentAction
    }
   } catch (DMLException dmle) {
    if (dmle.getMessage().indexOf("Document name already exist") >= 0)
-    saveError("cadsr.formbuilder.refdoc.save.duplicate.error", request);
+    saveMessage("cadsr.formbuilder.refdoc.save.duplicate.error", request);
    else
-    saveError("cadsr.formbuilder.refdoc.save.error", request);
+    saveMessage("cadsr.formbuilder.refdoc.save.error", request);
 
    return mapping.findForward("success"); //simply reload the form
   } catch (FormBuilderException fe) {
    log.error("Error occurred trying to save reference documents", fe);
 
-   saveError(ERROR_REFERENCE_DOC_SAVE_FAILED, request);
-   saveError(fe.getErrorCode(), request);
+   saveMessage(ERROR_REFERENCE_DOC_SAVE_FAILED, request);
+   saveMessage(fe.getErrorCode(), request);
 
    //         return mapping.findForward(FAILURE);
 
-   saveError("cadsr.formbuilder.refdoc.save.error", request);
+   saveMessage("cadsr.formbuilder.refdoc.save.error", request);
    return mapping.findForward("success"); //simply reload the form
   }
 
