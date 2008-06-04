@@ -4,27 +4,25 @@ import gov.nih.nci.ncicb.cadsr.common.dto.AttachmentTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
-import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.ReferenceDocFormBean;
 import gov.nih.nci.ncicb.cadsr.common.resource.Attachment;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
 import gov.nih.nci.ncicb.cadsr.common.resource.ReferenceDocument;
+import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
+import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.ReferenceDocFormBean;
 import gov.nih.nci.ncicb.cadsr.common.util.DBUtil;
+import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
+import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -1044,11 +1042,17 @@ public class ReferenceDocumentAction
 
    //update blob
    Blob dbBlob = (Blob)rs.getBlob(1);
-   ps = conn.prepareStatement(sqlSetBlob);
-   ps.setString(2, attachment.getName());
-
-   dbBlob.setBytes(1, attFile.getFileData());
-   ps.setBlob(1, dbBlob);
+   
+   if (dbBlob != null) {
+	   ps = conn.prepareStatement(sqlSetBlob, 
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_UPDATABLE);
+		ps.setBytes(1, attFile.getFileData());
+		ps.setString(2, attachment.getName());
+		
+		ps.execute();
+   }
+   
    conn.commit();   
   } 
   catch (SQLException sqlE) {
