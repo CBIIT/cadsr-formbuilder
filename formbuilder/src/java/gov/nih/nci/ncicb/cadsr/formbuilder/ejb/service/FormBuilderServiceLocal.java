@@ -4,10 +4,9 @@ import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormInstructionChanges;
 import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
-import gov.nih.nci.ncicb.cadsr.common.resource.InstructionChanges;
+import gov.nih.nci.ncicb.cadsr.common.resource.Module;
 import gov.nih.nci.ncicb.cadsr.common.resource.ModuleChanges;
 import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
-import gov.nih.nci.ncicb.cadsr.common.resource.Module;
 
 import java.util.Collection;
 import java.util.Map;
