@@ -777,7 +777,7 @@
   </welcome-file-list>
   <error-page>
     <error-code>403</error-code>
-    <location>/logout?FirstTimer=0&amp;authorizationError=yes</location>
+    <location>/jsp/authorizationError.jsp</location>
   </error-page>
   <error-page>
    <error-code>500</error-code>
@@ -909,7 +909,7 @@
     <auth-method>FORM</auth-method>
     <form-login-config>
       <form-login-page>/jsp/LoginForm.jsp</form-login-page>
-      <form-error-page>/jsp/LoginError.jsp</form-error-page>
+      <form-error-page>/jsp/authenticationError.jsp</form-error-page>
     </form-login-config>
   </login-config>
   
