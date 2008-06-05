@@ -16,21 +16,34 @@
 */
 whenever sqlerror exit sql.sqlcode rollback;
 
-delete from sbrext.tool_options_view_ext where tool_name = 'FormBuilder';
-
 /*
   ==============================================================================
   Required Settings (do not comment or remove)
   ==============================================================================
 */
 /*
-   By placing this value in the database, the URL may be dynamically changed as needed 
-   without the need to build and deploy new WAR and JAR files.
+   Form builder url and download directory.
 */
 
-insert into sbrext.tool_options_view_ext (tool_name, property, value, description,locale)
-values ('FormBuilder', 'URL', 'http://formbuilder@TIER@.nci.nih.gov',
-'The URL for the Form Builder Tool connected this caDSR database.','US');
+MERGE INTO SBREXT.TOOL_OPTIONS_VIEW_EXT S
+USING (SELECT 'FormBuilder' AS TOOL_NAME, 'URL' AS PROPERTY, 'http://formbuilder@TIER@.nci.nih.gov' AS VALUE, 'The URL for the Form Builder Tool connected this caDSR database.' AS DESCRIPTION, 'US' AS LOCALE FROM DUAL
+UNION SELECT 'FormBuilder' AS TOOL_NAME, 'XML_DOWNLOAD_DIR' AS PROPERTY, '/local/content/formbuilder/output' AS VALUE, 'Download directory for the Form Builder Tool.' AS DESCRIPTION, 'US' AS LOCALE FROM DUAL
+) T
+ON (S.TOOL_NAME = T.TOOL_NAME AND S.PROPERTY = T.PROPERTY)
+WHEN MATCHED THEN UPDATE SET S.VALUE = S.VALUE, S.DESCRIPTION = T.DESCRIPTION, S.LOCALE = T.LOCALE
+WHEN NOT MATCHED THEN INSERT (TOOL_NAME, PROPERTY, VALUE, DESCRIPTION, LOCALE) VALUES (T.TOOL_NAME, T.PROPERTY, T.VALUE, T.DESCRIPTION, T.LOCALE);
+
+/*
+   EVS browser url and evs api url in case if it was not added before.
+*/
+
+MERGE INTO SBREXT.TOOL_OPTIONS_VIEW_EXT S
+USING (SELECT 'EVSBrowser' AS TOOL_NAME, 'URL' AS PROPERTY, 'http://bioportal.nci.nih.gov/ncbo/faces/pages/advanced_search.xhtml' AS VALUE, 'The URL for EVS Bioportal Browser.' AS DESCRIPTION, 'US' AS LOCALE FROM DUAL
+UNION SELECT 'EVSAPI' AS TOOL_NAME, 'URL' AS PROPERTY, 'http://evsapi@TIER@.nci.nih.gov:19080/evsapi41' AS VALUE, 'The URL for EVS API access used in cadsr tools.' AS DESCRIPTION, 'US' AS LOCALE FROM DUAL
+) T
+ON (S.TOOL_NAME = T.TOOL_NAME AND S.PROPERTY = T.PROPERTY)
+WHEN MATCHED THEN UPDATE SET S.VALUE = S.VALUE, S.DESCRIPTION = T.DESCRIPTION, S.LOCALE = T.LOCALE
+WHEN NOT MATCHED THEN INSERT (TOOL_NAME, PROPERTY, VALUE, DESCRIPTION, LOCALE) VALUES (T.TOOL_NAME, T.PROPERTY, T.VALUE, T.DESCRIPTION, T.LOCALE);
 
 
 /*
