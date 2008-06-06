@@ -18,6 +18,7 @@ import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Method;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -33,6 +34,8 @@ import java.util.Random;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import oracle.sql.BLOB;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -1043,15 +1046,14 @@ public class ReferenceDocumentAction
    //update blob
    Blob dbBlob = (Blob)rs.getBlob(1);
    
-   if (dbBlob != null) {
-	   ps = conn.prepareStatement(sqlSetBlob, 
-					ResultSet.TYPE_SCROLL_INSENSITIVE,
-					ResultSet.CONCUR_UPDATABLE);
-		ps.setBytes(1, attFile.getFileData());
-		ps.setString(2, attachment.getName());
-		
-		ps.execute();
-   }
+   Method m = dbBlob.getClass().getMethod("putBytes", long.class, byte[].class);
+   m.invoke(dbBlob, new Long(1), attFile.getFileData());
+   
+   ps = conn.prepareStatement(sqlSetBlob);
+   ps.setBlob(1, dbBlob);
+   ps.setString(2, attachment.getName());
+	
+	ps.execute();
    
    conn.commit();   
   } 
