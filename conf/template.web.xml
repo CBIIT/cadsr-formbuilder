@@ -742,6 +742,10 @@
       <param-name>LogoutHome</param-name>
       <param-value>formSearchAction.do</param-value>
     </init-param>
+    <init-param>
+      <param-name>LogoutJSP</param-name>
+      <param-value>/jsp/logout.jsp</param-value>
+    </init-param>
   </servlet>
   <servlet-mapping>
 	  <servlet-name>Faces Servlet</servlet-name>
