@@ -15,8 +15,8 @@ import gov.nih.nci.ncicb.cadsr.common.util.DTOTransformer;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormActionUtil;
-import gov.nih.nci.objectCart.client.ClientManager;
-import gov.nih.nci.objectCart.client.ObjectCartException;
+import gov.nih.nci.objectCart.client.ObjectCartClient;
+import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -279,23 +279,19 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
     try {
       NCIUser user =
         (NCIUser) this.getSessionObject(request, CaDSRConstants.USER_KEY);
-
+      CDEBrowserParams params = CDEBrowserParams.getInstance();
+      String ocURL = params.getObjectCartUrl();
       //Get the cart in the session
-      CDECart sessionCart =
-        (CDECart) this.getSessionObject(request, CaDSRConstants.CDE_CART);
-
-	 // if (sessionCart == null) {
-		  ClientManager clientManager = ClientManager.getInstance();
-		  String[] cdeCartSchemes = {CaDSRConstants.CDE_CARTSCHEME};
-		  try{
-			  if (!clientManager.isInitialized())
-				  clientManager.initClients(cdeCartSchemes);				    
-		  }catch(ObjectCartException oce){
-			  oce.printStackTrace();
-		  }
-		  sessionCart = new CDECartOCImpl(clientManager, user.getUsername(),CaDSRConstants.CDE_CART,CaDSRConstants.CDE_CARTSCHEME);
-	 // }	  
-      this.setSessionObject(request, CaDSRConstants.CDE_CART, sessionCart);
+      ObjectCartClient cartClient = null;
+      
+	  if (!ocURL.equals(""))
+		  cartClient = new ObjectCartClient(ocURL);
+	  else
+    	  cartClient = new ObjectCartClient();
+      
+      CDECart userCart = new CDECartOCImpl(cartClient, user.getUsername(),CaDSRConstants.CDE_CART);
+      
+      this.setSessionObject(request, CaDSRConstants.CDE_CART, userCart);
     }
     catch (Exception exp) {
       if (log.isErrorEnabled()) {
