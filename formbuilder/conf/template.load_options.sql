@@ -34,8 +34,8 @@ WHEN MATCHED THEN UPDATE SET S.VALUE = S.VALUE, S.DESCRIPTION = T.DESCRIPTION, S
 WHEN NOT MATCHED THEN INSERT (TOOL_NAME, PROPERTY, VALUE, DESCRIPTION, LOCALE) VALUES (T.TOOL_NAME, T.PROPERTY, T.VALUE, T.DESCRIPTION, T.LOCALE);
 
 /*
-   EVS browser url, evs api url and object cart api in case if it was not added before.
-*/
+   EVS browser url, evs api url and object cart api in case if it was not added before.  don't need to do this.
+
 
 MERGE INTO SBREXT.TOOL_OPTIONS_VIEW_EXT S
 USING (SELECT 'EVSBrowser' AS TOOL_NAME, 'URL' AS PROPERTY, 'http://bioportal.nci.nih.gov/ncbo/faces/pages/advanced_search.xhtml' AS VALUE, 'The URL for EVS Bioportal Browser.' AS DESCRIPTION, 'US' AS LOCALE FROM DUAL
@@ -46,7 +46,7 @@ ON (S.TOOL_NAME = T.TOOL_NAME AND S.PROPERTY = T.PROPERTY)
 WHEN MATCHED THEN UPDATE SET S.VALUE = S.VALUE, S.DESCRIPTION = T.DESCRIPTION, S.LOCALE = T.LOCALE
 WHEN NOT MATCHED THEN INSERT (TOOL_NAME, PROPERTY, VALUE, DESCRIPTION, LOCALE) VALUES (T.TOOL_NAME, T.PROPERTY, T.VALUE, T.DESCRIPTION, T.LOCALE);
 
-
+*/
 /*
    Commit Settings.
 */
