@@ -212,14 +212,18 @@ function retrieveSavedItems() {
  </table>
 </logic:present>
 
-<logic:notPresent name="<%=CaDSRConstants.CDE_CART%>">
-</logic:notPresent>
-
 <table width="10%" align="center" cellpadding="1" cellspacing="1" border="0" >
   <tr>
     <td>
       <a href='<%=params.getCdeBrowserUrl() %>/CDEBrowser/cdeBrowse.jsp?PageId=DataElementsGroup' target="_blank"><html:img src="i/add_more_data_elements.gif" border="0" alt="Add more data elements"/></a>
     </td>
+	<logic:notPresent name="<%=CaDSRConstants.CDE_CART%>">
+        <td>
+          <html:link href="<%=doneURL%>">				
+            <html:img src='<%="i/backButton.gif"%>' border="0" alt="Back"/>
+          </html:link>             
+        </td> 
+	</logic:notPresent>  
   </tr>
 </table>    
 

@@ -1,5 +1,5 @@
 <!-- Copyright ScenPro, Inc. 2005
-    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.11 2008-05-23 19:12:44 hegdes Exp $
+    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.12 2008-06-05 15:06:03 hegdes Exp $
     $Name: not supported by cvs2svn $
 -->
 <project name="Form Builder Tool" default="init" basedir=".">
@@ -286,10 +286,6 @@
               <include name="gov/nih/nci/ncicb/cadsr/common/persistence/jdbc/**"/> 
             </patternset>
           </fileset>
-          <manifest>
-	    	<attribute name="Built-By" value="${user.name}"/>
-	    	<attribute name="Class-Path" value="ojdbc14.jar spring-1.2.4.jar spring-jdbc-1.2.4.jar"/>
-          </manifest>           
         </jar>
     </target>  
 
@@ -314,10 +310,7 @@
              <attribute name="Built-By" value="${user.name}"/>
              <attribute name="Class-Path" 
                 value="persistence_form.jar common.jar
-                spring-1.2.4.jar spring-context-1.2.4.jar spring-core-1.2.4.jar 
-                spring-dao-1.2.4.jar spring-orm-1.2.4.jar spring-hibernate-1.2.4.jar
-                spring-beans-1.2.4.jar
-                commons-logging.jar log4j-1.2.8.jar properties/"/>
+                spring.jar commons-logging.jar log4j-1.2.8.jar properties/"/>
           </manifest>  	    
        </jar>         
     </target>
@@ -392,16 +385,9 @@
             <include name="*.jar"/>
           </patternset>
         </fileset>
-
-        <fileset dir="${lib.dir}">
+        <fileset dir="${wlib.dir}">
           <patternset>
-            <include name="spring-1.2.4.jar"/>
-            <include name="spring-context-1.2.4.jar"/>
-            <include name="spring-core-1.2.4.jar"/>
-            <include name="spring-dao-1.2.4.jar"/>
-            <include name="spring-orm-1.2.4.jar"/>
-            <include name="spring-hibernate-1.2.4.jar"/>
-            <include name="spring-beans-1.2.4.jar"/>
+            <include name="spring.jar"/>
           </patternset>
         </fileset>	        
       </ear>

@@ -29,8 +29,10 @@
 function populateDefaultValue(defaultValidValue,defaultValidValueId, index){
     var objForm0 = document.forms[0];
     var objQuestionDefaultValue = objForm0['questionDefaultValues[' + index + ']'];
+ 	objQuestionDefaultValue.readonly = "false";
     var objQuestionDefaultValidValueId = objForm0['questionDefaultValidValueIds[' + index + ']'];
-
+	objQuestionDefaultValidValueId.readonly = "false";
+	
     if (defaultValidValueId == '<%=FormConstants.UNKNOWN_VV_ID%>' || defaultValidValueId=='null'){
         alert("Please save the module before setting the question default value.");
         return;
@@ -61,13 +63,8 @@ function isValidValueQuestionDefault(questionIndexValue,validValueIndexValue){
     var objForm0 = document.forms[0];
     var objQuestionDefaultValidValueId = objForm0['questionDefaultValidValueIds[' + questionIndexValue+ ']'];
     
-    var objDeletedValidValueIds = objForm0['<%=FormConstants.SELECTED_ITEMS+"H"%>' + questionIndexValue];
-    
+    var objDeletedValidValueIds = objForm0['<%=FormConstants.SELECTED_ITEMS+"H"%>' + questionIndexValue];    
     var objDeletedValidValueId = objDeletedValidValueIds[validValueIndexValue];
-    
-    
-    //alert("objDeletedValidValueId.value=" + objDeletedValidValueId.value);
-    //alert("objQuestionDefaultValidValueId.value=" + objQuestionDefaultValidValueId.value);
     if (objDeletedValidValueId.value==objQuestionDefaultValidValueId.value){
         return true;
     }else{
@@ -295,7 +292,6 @@ function clearProtocol() {
     {
         var targetObj = document.getElementById(targetCompId);
         targetObj.value=newValue;
-       
      }  
      
   function submitChangeAsso(url, questionIndexValue){
@@ -353,21 +349,17 @@ function clearProtocol() {
         <jsp:param name="label" value="Edit&nbsp;Module"/>
         <jsp:param name="urlPrefix" value=""/>
       </jsp:include>
-  <table>
-    <tr>    
-      <td align="left" class="AbbreviatedText">
-        <bean:message key="cadsr.formbuilder.helpText.form.module.edit"/>
-      </td>
-    </tr>  
-  </table>       
+	  <table>
+	    <tr>    
+	      <td align="left" class="AbbreviatedText">
+	        <bean:message key="cadsr.formbuilder.helpText.form.module.edit"/>
+	      </td>
+	    </tr>  
+	  </table>       
       <%@ include file="moduleEditButton_inc.jsp"%>
         <%@ include file="showMessages.jsp" %>
     
       <logic:present name="<%=FormConstants.MODULE%>">
-      <table  width="80%">
-        <tr>
-           <td>&nbsp;</td>
-        </tr>
         <table width="80%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
           <tr class="OraTabledata">
             <td class="OraTableColumnHeader" width="20%" nowrap>
@@ -1169,8 +1161,7 @@ function clearProtocol() {
                    <logic:notEmpty name="module" property = "triggerActions">
                             <table width="84%" align="center" cellpadding="0" cellspacing="1" border="0" class="OraBGAccentVeryDark">
                               <logic:iterate id="currTriggerAction" name="module" type="gov.nih.nci.ncicb.cadsr.common.resource.TriggerAction" property="triggerActions" indexId="triggerIndex" >
-					<%@ include file="skipPatternDetailsEditModule_inc.jsp"%>
-                                             
+								<%@ include file="skipPatternDetailsEditModule_inc.jsp"%>                                             
                               </logic:iterate>
                             </table>
                     </logic:notEmpty>
@@ -1192,7 +1183,6 @@ function clearProtocol() {
       <%@ include file="moduleEditButton_inc.jsp"%>
     </html:form>
     <%@ include file="../common/common_bottom_border.jsp"%>
+  	<html:javascript formName="moduleEditForm"/>
   </BODY>
-  <html:javascript formName="moduleEditForm"/>
-
 </HTML>
