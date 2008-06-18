@@ -8,7 +8,6 @@ import javax.servlet.http.HttpSessionListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-
 public class CDEBrowserSessionListener implements HttpSessionListener{
 
     protected static Log log = LogFactory.getLog(CDEBrowserSessionListener.class.getName());
