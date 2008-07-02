@@ -75,8 +75,8 @@ function retrieveSavedItems() {
 <BODY topmargin=0 bgcolor="#ffffff" topmargin="0">
 
 <% 
-  String downloadXMLURL = "javascript:fileDownloadWin('" + browseURL + "/CDEBrowser/cdebrowser/downloadXMLPage.jsp?src=cdeCart','xmlWin',500,200)";
-  String downloadExcelURL = "javascript:fileDownloadWin('" + browseURL + "/CDEBrowser/cdebrowser/downloadExcelPage.jsp?src=cdeCart','excelWin',500,200)";
+  String downloadXMLURL = "formCDECartAction.do?method=downloadXML";
+  String downloadExcelURL = "formCDECartAction.do?method=downloadExcel";
   
   String doneURL = "";
   
