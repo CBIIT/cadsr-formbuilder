@@ -2,7 +2,8 @@
     <!-- Setup the formbuilder Appender -->
     <!-- ======================= -->
 
-    <appender name="FORMBUILDER_FILE" class="org.jboss.logging.appender.RollingFileAppender">
+    <appender name="FORMBUILDER_FILE" 
+    	class="org.jboss.logging.appender.RollingFileAppender">
         <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler" />
         <param name="File" value="@JBOSS.LOG.DIR@/formbuilder_log.txt" />
         <param name="Append" value="true" />
