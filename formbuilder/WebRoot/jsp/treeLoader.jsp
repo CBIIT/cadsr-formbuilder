@@ -21,6 +21,6 @@
   var now = new Date();
   var glob = now.getHours()+now.getSeconds()+now.getMilliseconds();
   window.document.write("Building tree, please wait...");  
-  var targetURL = "tree2.jsf?treeName=<%= request.getParameter("treeName") %>&treeParams=<%=treeParams%>&skin=<%=skin%>&treeDirective=<%=treeDirective%>&glob="+glob + "&treeName=<%=treeName%>";
+  var targetURL = "tree2.jsf?";
   window.location.href = targetURL;  
 </script>
