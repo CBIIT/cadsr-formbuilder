@@ -1,5 +1,5 @@
 <!-- Copyright ScenPro, Inc. 2005
-    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.14 2008-07-09 17:59:04 hegdes Exp $
+    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.15 2008-07-09 19:18:59 hegdes Exp $
     $Name: not supported by cvs2svn $
 -->
 <project name="Form Builder Tool" default="init" basedir=".">
@@ -589,7 +589,10 @@
         <echo>mkdir ${scpPath.dir}</echo>
         <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" failonerror="false" command="mkdir -p ${scpPath.dir}" />
 
-        <echo>Deploying binaries to remote file system "${SCP.USER}@${SCP.HOST}:${scpPath.dir}"</echo>
+        <echo>mkdir ${TOOL.ROOT.DIR}</echo>
+        <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" failonerror="false" command="mkdir -p ${TOOL.ROOT.DIR}" />
+
+    	<echo>Deploying binaries to remote file system "${SCP.USER}@${SCP.HOST}:${scpPath.dir}"</echo>
         <scp todir="${SCP.USER}@${SCP.HOST}:${scpPath.dir}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true">
             <fileset dir="${artifacts.dir}" includes="**/*" />
         </scp>
@@ -637,15 +640,15 @@
 
     <target name="-do-load-options" if="found.load_options.sql" depends="-check-sql-files" description="Execute load_options.sql">
        <echo>Deploying caDSR database changes ${CADSR.DS.USER}/${CADSR.DS.PSWD}@${CADSR.DS.TNS.ENTRY} @ ${artifacts.dir}/sql/load_options.sql</echo>
-  		<exec dir="." executable="${SQL.EXE}" failonerror="true">
-            <arg line="${CADSR.DS.USER}/${CADSR.DS.PSWD}@${CADSR.DS.TNS.ENTRY} @ ${artifacts.dir}/sql/load_options.sql" />
+        <exec dir="." executable="${SQL.EXE}" failonerror="true">
+            <arg line="-L ${CADSR.DS.USER}/${CADSR.DS.PSWD}@${CADSR.DS.TNS.ENTRY} @ ${artifacts.dir}/sql/load_options.sql" />
         </exec>
     </target>
 
     <target name="-do-update-options" if="found.update_options_url.sql" depends="-check-sql-files" description="Execute update_options_url.sql">
         <echo>Deploying caDSR database changes ${CADSR.DS.USER}/${CADSR.DS.PSWD}@${CADSR.DS.TNS.ENTRY} @ ${artifacts.dir}/sql/update_options_url.sql</echo>
         <exec dir="." executable="${SQL.EXE}" failonerror="true">
-            <arg line="${CADSR.DS.USER}/${CADSR.DS.PSWD}@${CADSR.DS.TNS.ENTRY} @ ${artifacts.dir}/sql/update_options_url.sql" />
+            <arg line="-L ${CADSR.DS.USER}/${CADSR.DS.PSWD}@${CADSR.DS.TNS.ENTRY} @ ${artifacts.dir}/sql/update_options_url.sql" />
         </exec>
     </target>
 
@@ -670,7 +673,6 @@
     </target>
 
     <target name="deploy" depends="-deploy-auto,-deploy-db,-deploy-gforge,-prop-check" description="Deploys the project artifacts.">
-		<mkdir dir="${TOOL.ROOT.DIR}"/>
     	<echo>    
 			Deployment is complete. Check the formal request for any special post deployment instructions.    
         </echo>
