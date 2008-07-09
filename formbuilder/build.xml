@@ -1,5 +1,5 @@
 <!-- Copyright ScenPro, Inc. 2005
-    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.13 2008-07-02 16:04:32 hegdes Exp $
+    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.14 2008-07-09 17:59:04 hegdes Exp $
     $Name: not supported by cvs2svn $
 -->
 <project name="Form Builder Tool" default="init" basedir=".">
@@ -94,6 +94,7 @@
 	<property name="dtd.dir" location="${basedir}/dtd" />
 	<property name="scpPath.dir" location="${SCP.PATH}/formbuilder" />
 	<property name="toolBin.dir" location="${TOOL.ROOT.DIR}bin" />
+	<property name="toolRoot.dir" location="${TOOL.ROOT.DIR}" />
 	<property name="toolDtd.dir" location="${TOOL.ROOT.DIR}htdocs/dtd" />
 	<property name="services.dir" location="${basedir}/services-config" />
 	<condition property="check.test">
@@ -113,6 +114,7 @@
 	<filter token="TIER.NAME" value="${TIER.NAME}" />
 	<filter token="TOOL.LOG.DIR" value="${TOOL.LOG.DIR}" />
 	<filter token="JBOSS.LOG.DIR" value="${JBOSS.LOG.DIR}" />
+	<filter token="TOOL.ROOT.DIR" value="${TOOL.ROOT.DIR}" />
 
 	<!-- these values that replaces some tags in the tool, are needed at the build time -->
 	<filter token="Tool.ds.jndi.Name" value="FormBuilderDS"/>
@@ -318,15 +320,6 @@
 	<target name="-build-war" depends="-cjsp,-prop-check" description="Builds the project WAR file.">
 		<echo>Building deployable WAR file ...</echo>
 		<delete file="${artifacts.dir}/jboss/formbuilder.war" />
-		<!-- copy only classes for the war from the temp direcotry
-	    <copy todir="${classes.dir}">      
-          <fileset dir="${temp.classes.dir}">
-            <patternset>
-             <include name="gov/nih/nci/ncicb/cadsr/common/persistence/**/*.xml"/>
-            </patternset>
-          </fileset>      
-	    </copy>    
-	     --> 
 	    <copy todir="${classes.dir}">
 	      <fileset dir="${temp.classes.dir}">
 	         <patternset>
@@ -677,7 +670,8 @@
     </target>
 
     <target name="deploy" depends="-deploy-auto,-deploy-db,-deploy-gforge,-prop-check" description="Deploys the project artifacts.">
-        <echo>    
+		<mkdir dir="${TOOL.ROOT.DIR}"/>
+    	<echo>    
 			Deployment is complete. Check the formal request for any special post deployment instructions.    
         </echo>
     </target>
