@@ -43,7 +43,7 @@ public class FormAlertAction extends FormBuilderSecureBaseDispatchAction {
     HttpServletResponse response) throws IOException, ServletException {
       DynaActionForm dynaForm = (DynaActionForm)form;
       CDEBrowserParams params = CDEBrowserParams.getInstance();
-      String url = params.getSentinalAPIUrl();
+      String url = params.getSentinelAPIUrl();
       String userName = request.getRemoteUser().toUpperCase();
       Form crf = (Form)getSessionObject(request,CRF);
       String formId = crf.getFormIdseq();
