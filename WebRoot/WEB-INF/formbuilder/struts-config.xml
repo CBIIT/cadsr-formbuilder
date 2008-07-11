@@ -344,6 +344,10 @@
       <forward name="success" path="/jsp/formbuilder/displayCDECart.jsp"/>
       <forward name="addDeleteSuccess" path="/formCDECartAction.do?method=displayCDECart"/>
     </action>
+    <action name="downloadCart" path="/formCDEDownload" scope="request"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.SecureCDECartDownloadAction"
+      validate="false">
+    </action>
     <action name="changeAssociationForm" path="/gotoChangeAssociation" parameter="method"
       scope="request"
       type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.SecureCDECartAction"
