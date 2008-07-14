@@ -237,7 +237,6 @@ ajaxAnywhere.bindById();
 	      func();
 	    }
 	  }
-	  alert("add load " + treeParams + treeName);
 	}
 
   // Fix autoscroll for frame
