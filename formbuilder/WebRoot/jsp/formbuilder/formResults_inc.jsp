@@ -1,5 +1,7 @@
 
-
+<%
+ 	String downloadURL = request.getContextPath() + "/jsp/formbuilder/downloadExcelPage.jsp?action=excelDownload&"+NavigationConstants.METHOD_PARAM+"=downloadFormInExcel&" + FormConstants.FORM_ID_SEQ + "=";
+ %>
  <script LANGUAGE="Javascript">
 <!---
 function actionConfirm(message, url){
@@ -123,15 +125,10 @@ if(confirm(message)) location.href = url;
                     <td width="100">
                     <table  >
                     <tr>               
-                    <td width="25" class="OraTabledata" align=center>
-                    
-                    <html:link action='<%="/excelDownload.do?"+NavigationConstants.METHOD_PARAM+"=downloadFormInExcel"%>' 
-                    paramId = "<%=FormConstants.FORM_ID_SEQ%>"
-                    paramName="form" paramProperty="formIdseq"
-                    target="_blank" >
-                    <html:img src='<%=urlPrefix+"i/excel-icon.jpg"%>' border="0" alt="Excel Download"/>
-                    </html:link>                 
-                    
+                    <td width="25" class="OraTabledata" align=center>                  
+                    <a href="javascript:fileDownloadWin('<%=downloadURL + form.getFormIdseq()%>','excelWin',500,200)">
+                    <img src='<%=urlPrefix+"i/excel-icon.jpg"%>' border="0" alt="Excel Download"/>
+                    </a>
                     </td>
                       <td width="25" class="OraTabledata" align=center>
                            <cde:secureIcon  formId="form" 
