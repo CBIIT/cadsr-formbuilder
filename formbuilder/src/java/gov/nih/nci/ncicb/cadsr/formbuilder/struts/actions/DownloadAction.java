@@ -361,7 +361,7 @@ log.info("started download action");
   //response.addHeader("Cache-Control", "no-cache");
   //response.addHeader("Expires", "0");
 
-  log.info("add header and content type");
+  log.info(f.getName() + " add header and content type " + ctype);
 
   try {
    // create buffer			
