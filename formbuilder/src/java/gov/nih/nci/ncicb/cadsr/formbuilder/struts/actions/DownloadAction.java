@@ -357,9 +357,9 @@ log.info("started download action");
   response.setContentType(ctype);
   response.setContentLength((int)f.length());
   response.addHeader("Content-Disposition", "attachment; filename=" + f.getName());
-  response.addHeader("Pragma", "No-cache");
-  response.addHeader("Cache-Control", "no-cache");
-  response.addHeader("Expires", "0");
+  //response.addHeader("Pragma", "No-cache");
+  //response.addHeader("Cache-Control", "no-cache");
+  //response.addHeader("Expires", "0");
 
   log.info("add header and content type");
 
