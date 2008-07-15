@@ -355,7 +355,7 @@ log.info("started download action");
   String ctype = ContentTypeHelper.getContentType(f.getName());
 
   response.setContentType(ctype);
-  response.setContentLength((int)f.length());
+  //response.setContentLength((int)f.length());
   response.addHeader("Content-Disposition", "attachment; filename=" + f.getName());
   //response.addHeader("Pragma", "No-cache");
   //response.addHeader("Cache-Control", "no-cache");
