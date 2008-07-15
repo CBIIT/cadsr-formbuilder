@@ -43,12 +43,14 @@ public class DownloadAction
  extends FormBuilderSecureBaseDispatchAction {
  public ActionForward downloadFormInExcel(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                           HttpServletResponse response) throws IOException, ServletException {
+log.info("started download action");
   DynaActionForm hrefCRFForm = (DynaActionForm)form;
 
   String formIdSeq = (String)hrefCRFForm.get(FORM_ID_SEQ);
   
   FormBuilderServiceDelegate service = getFormBuilderService();
   Form crf = null;
+  log.info("got form ideseq");
 
   try {
    crf = service.getFormDetails(formIdSeq);
@@ -61,6 +63,7 @@ public class DownloadAction
    saveMessage(ERROR_FORM_DOES_NOT_EXIST, request);
    return mapping.findForward(FAILURE);
   }
+  log.info("got crf ");
 
   // create a new excel workbook
   HSSFWorkbook wb = new HSSFWorkbook();
@@ -73,6 +76,8 @@ public class DownloadAction
   font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
   boldCellStyle.setFont(font);
   boldCellStyle.setAlignment(HSSFCellStyle.ALIGN_GENERAL);
+
+  log.info("created style sheet");
 
   // Create a row and put some cells in it. Rows are 0 based.
   HSSFRow row = sheet.createRow(rowNumber++);
@@ -148,6 +153,8 @@ public class DownloadAction
    cell.setCellStyle(boldCellStyle);
    row.createCell((short)1).setCellValue(crf.getFooterInstruction().getPreferredDefinition());
   }
+
+  log.info("added form rows");
 
   //export module related info
   List modules = crf.getModules();
@@ -329,16 +336,21 @@ public class DownloadAction
     }
    }
   }
+  log.info("end of excel sheets");
 
   CDEBrowserParams params = CDEBrowserParams.getInstance();
   String excelFilename ="Form"  + crf.getPublicId() + "_v" + crf.getVersion();
   excelFilename = excelFilename.replace('/', '_').replace('.', '_');
   excelFilename = params.getXMLDownloadDir() + excelFilename+ ".xls";
+
+  log.info("got excel file name " + excelFilename);
   
   FileOutputStream fileOut = new FileOutputStream(excelFilename);
   wb.write(fileOut);
   fileOut.close();
 
+  log.info("write file output stream");
+  
   File f = new File(excelFilename);
   String ctype = ContentTypeHelper.getContentType(f.getName());
 
@@ -348,6 +360,8 @@ public class DownloadAction
   response.addHeader("Pragma", "No-cache");
   response.addHeader("Cache-Control", "no-cache");
   response.addHeader("Expires", "0");
+
+  log.info("add header and content type");
 
   try {
    // create buffer			
@@ -361,6 +375,7 @@ public class DownloadAction
    while ((r = fin.read(buffer, 0, buffer.length)) != -1) {
     out.write(buffer, 0, r);
    }
+   log.info("write output stream to buffer");
 
    try {
     fin.close();
