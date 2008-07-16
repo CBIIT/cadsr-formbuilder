@@ -19,6 +19,7 @@
       type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.DownloadAction"
       validate="false" >     
       <forward name="failure" path="/formSearchFramedAction.do?method=getAllForms"/>
+      <forward name="downloadSuccess" path="/formCDEDownload.do?type=form"/>
     </action>
      
 

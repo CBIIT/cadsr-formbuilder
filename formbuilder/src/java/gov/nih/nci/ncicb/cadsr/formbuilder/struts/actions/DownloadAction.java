@@ -349,8 +349,9 @@ log.info("started download action");
   wb.write(fileOut);
   fileOut.close();
 
+  request.setAttribute("fileName", excelFilename);
   log.info("write file output stream");
-  
+  /*
   File f = new File(excelFilename);
   String ctype = ContentTypeHelper.getContentType(f.getName());
 
@@ -397,7 +398,7 @@ log.info("started download action");
    out.flush();
    out.close();
   }
-
-  return null;
+	*/
+  return mapping.findForward("downloadSuccess");
  }
 }
