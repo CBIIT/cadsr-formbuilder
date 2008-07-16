@@ -126,6 +126,12 @@ if(confirm(message)) location.href = url;
                     <table  >
                     <tr>               
                     	<td width="25" class="OraTabledata" align=center>                  
+                    		<html:link action='<%="/formCDEDownload.do?type=excel"%>' 
+			                    target="_parent" >
+                    			<html:img src='<%=urlPrefix+"i/copy.gif"%>' border="0" alt="Excel Download"/>
+                    		</html:link>                 
+                    	</td>
+                    	<td width="25" class="OraTabledata" align=center>                  
                     		<html:link action='<%="/excelDownload.do?"+NavigationConstants.METHOD_PARAM+"=downloadFormInExcel"%>' 
 			                    paramId = "<%=FormConstants.FORM_ID_SEQ%>"
 			                    paramName="form" paramProperty="formIdseq"
