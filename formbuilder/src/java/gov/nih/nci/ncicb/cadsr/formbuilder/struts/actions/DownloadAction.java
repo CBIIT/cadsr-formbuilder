@@ -78,13 +78,14 @@ log.info("started download action");
   boldCellStyle.setAlignment(HSSFCellStyle.ALIGN_GENERAL);
 
   log.info("created style sheet");
-
+  short cell0 = 0;
+  short cell1 = 1;
   // Create a row and put some cells in it. Rows are 0 based.
   HSSFRow row = sheet.createRow(rowNumber++);
-  HSSFCell cell = row.createCell((short)0);
+  HSSFCell cell = row.createCell(cell0);
   cell.setCellValue("Sumana Hegde");
   cell.setCellStyle(boldCellStyle);
-  row.createCell((short)1).setCellValue("not sure why is this");
+  row.createCell(cell1).setCellValue("not sure why is this");
   /*
   cell.setCellValue("Long Name");
   cell.setCellStyle(boldCellStyle);
