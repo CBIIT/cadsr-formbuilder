@@ -68,7 +68,7 @@ log.info("started download action");
   // create a new excel workbook
   HSSFWorkbook wb = new HSSFWorkbook();
   HSSFSheet sheet = wb.createSheet();
-  short rowNumber = 0;
+  int rowNumber = 0;
 
   //create bold cell style
   HSSFCellStyle boldCellStyle = wb.createCellStyle();
@@ -82,11 +82,7 @@ log.info("started download action");
   short cell1 = 1;
   // Create a row and put some cells in it. Rows are 0 based.
   HSSFRow row = sheet.createRow(rowNumber++);
-  HSSFCell cell = row.createCell(cell0);
-  cell.setCellValue("Sumana Hegde");
-  cell.setCellStyle(boldCellStyle);
-  row.createCell(cell1).setCellValue("not sure why is this");
-  /*
+  HSSFCell cell = row.createCell((short)0);
   cell.setCellValue("Long Name");
   cell.setCellStyle(boldCellStyle);
   row.createCell((short)1).setCellValue(crf.getLongName());
@@ -341,7 +337,7 @@ log.info("started download action");
     }
    }
   }
-  */
+  
   log.info("end of excel sheets");
 
   CDEBrowserParams params = CDEBrowserParams.getInstance();
@@ -354,10 +350,8 @@ log.info("started download action");
   wb.write(fileOut);
   fileOut.close();
 
-  excelFilename = params.getXMLDownloadDir() + "DataElements_30443.xls";
-  
   request.setAttribute("fileName", excelFilename);
-  log.info("write file output stream" + excelFilename);
+  log.info("write file output stream");
   /*
   File f = new File(excelFilename);
   String ctype = ContentTypeHelper.getContentType(f.getName());
