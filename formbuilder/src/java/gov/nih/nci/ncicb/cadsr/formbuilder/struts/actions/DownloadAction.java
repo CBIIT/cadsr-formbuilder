@@ -82,6 +82,10 @@ log.info("started download action");
   // Create a row and put some cells in it. Rows are 0 based.
   HSSFRow row = sheet.createRow(rowNumber++);
   HSSFCell cell = row.createCell((short)0);
+  cell.setCellValue("Sumana Hegde");
+  cell.setCellStyle(boldCellStyle);
+  row.createCell((short)1).setCellValue("not sure why is this");
+  /*
   cell.setCellValue("Long Name");
   cell.setCellStyle(boldCellStyle);
   row.createCell((short)1).setCellValue(crf.getLongName());
@@ -336,6 +340,7 @@ log.info("started download action");
     }
    }
   }
+  */
   log.info("end of excel sheets");
 
   CDEBrowserParams params = CDEBrowserParams.getInstance();
@@ -400,5 +405,6 @@ log.info("started download action");
   }
 	*/
   return mapping.findForward("downloadSuccess");
+  //return null;
  }
 }
