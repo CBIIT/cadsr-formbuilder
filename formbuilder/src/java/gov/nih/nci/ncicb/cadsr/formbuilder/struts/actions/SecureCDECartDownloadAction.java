@@ -80,7 +80,8 @@ public class SecureCDECartDownloadAction extends org.apache.struts.actions.Downl
 		
 		final String downFileName = fileName;
 	    response.setHeader("Content-Disposition", "attachment; filename="+fileName);
-	    
+System.out.println("downfilename " + fileName);
+
 		StreamInfo info = new StreamInfo() {
 			public String getContentType() {
 				return ContentTypeHelper.getContentType(downFileName);
