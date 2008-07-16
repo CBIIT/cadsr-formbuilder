@@ -74,6 +74,8 @@ public class SecureCDECartDownloadAction extends org.apache.struts.actions.Downl
 		      excelDown.generateExcelForCDECart(sessionCart, "cdeCart", null);
 		      fileName = excelDown.getFileName();
 		}
+		else if (type.equalsIgnoreCase("form"))
+			fileName = (String)request.getAttribute("fileName");
 		else return null;
 		
 		final String downFileName = fileName;

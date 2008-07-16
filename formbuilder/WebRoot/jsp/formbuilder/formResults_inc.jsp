@@ -122,14 +122,17 @@ if(confirm(message)) location.href = url;
                 length="<%=Integer.toString(pageBean.getPageSize())%>">
             <tr class="OraTabledata">  
             <logic:notPresent name="<%=FormConstants.IN_PROCESS%>"> 
-                    <td width="100">
+                <td width="100">
                     <table  >
                     <tr>               
-                    <td width="25" class="OraTabledata" align=center>                  
-                    <a href="javascript:fileDownloadWin('<%=downloadURL + form.getFormIdseq()%>','excelWin',500,200)">
-                    <img src='<%=urlPrefix+"i/excel-icon.jpg"%>' border="0" alt="Excel Download"/>
-                    </a>
-                    </td>
+                    	<td width="25" class="OraTabledata" align=center>                  
+                    		<html:link action='<%="/excelDownload.do?"+NavigationConstants.METHOD_PARAM+"=downloadFormInExcel"%>' 
+			                    paramId = "<%=FormConstants.FORM_ID_SEQ%>"
+			                    paramName="form" paramProperty="formIdseq"
+			                    target="_parent" >
+                    			<html:img src='<%=urlPrefix+"i/excel-icon.jpg"%>' border="0" alt="Excel Download"/>
+                    		</html:link>                 
+                    	</td>
                       <td width="25" class="OraTabledata" align=center>
                            <cde:secureIcon  formId="form" 
                     formScope="<%=CaDSRConstants.PAGE_SCOPE%>"
