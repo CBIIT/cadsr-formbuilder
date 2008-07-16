@@ -350,13 +350,14 @@ log.info("started download action");
   excelFilename = params.getXMLDownloadDir() + excelFilename+ ".xls";
 
   log.info("got excel file name " + excelFilename);
-  
   FileOutputStream fileOut = new FileOutputStream(excelFilename);
   wb.write(fileOut);
   fileOut.close();
 
+  excelFilename = params.getXMLDownloadDir() + "DataElements_30443.xls";
+  
   request.setAttribute("fileName", excelFilename);
-  log.info("write file output stream");
+  log.info("write file output stream" + excelFilename);
   /*
   File f = new File(excelFilename);
   String ctype = ContentTypeHelper.getContentType(f.getName());
