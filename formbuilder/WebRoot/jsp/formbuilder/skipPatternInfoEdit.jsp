@@ -19,11 +19,13 @@
     <SCRIPT LANGUAGE="JavaScript">
     
 	function submitForm(methodName) {
-     if(validateSkipForm(skipForm))
-     {   
      	document.forms[0].<%=NavigationConstants.METHOD_PARAM%>.value=methodName;
      	document.forms[0].submit();
-     }
+	}  
+	    
+	function validateSubmitForm(methodName) {	
+     if(validateSkipForm(skipForm))
+     	submitForm(methodName)
 	}      
     </SCRIPT>
     
