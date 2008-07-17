@@ -1,5 +1,4 @@
 
-
  <script LANGUAGE="Javascript">
 <!---
 function actionConfirm(message, url){
@@ -182,13 +181,14 @@ if(confirm(message)) location.href = url;
           
           <tr width="100%" align="right">
           <td colspan="9">
- 	       <html:link action='<%="/formPrinterAction?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GET_FORM_TO_PRINT%>' paramId = "<%=FormConstants.FORM_ID_SEQ%>"
+ 	       <html:link action='<%="/formPrinterAction?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GET_FORM_TO_PRINT%>' 
+ 	       		paramId = "<%=FormConstants.FORM_ID_SEQ%>"
  				paramName="<%=FormConstants.CRF%>" paramProperty="formIdseq"
  				target="_blank">
 		Printer Friendly Version
 	      </html:link>
 	      &nbsp;&nbsp;
-              <html:link action='<%="/excelDownload.do?"+NavigationConstants.METHOD_PARAM+"=downloadFormInExcel"%>' 
+             <html:link action='<%="/formExcelDownload.do?"%>' 
                 paramId = "<%=FormConstants.FORM_ID_SEQ%>"
                 paramName="<%=FormConstants.CRF%>" paramProperty="formIdseq"
                 target="_parent" >
@@ -202,5 +202,5 @@ if(confirm(message)) location.href = url;
 
         <tr></tr>
       </table>
-      </table>
+
       
