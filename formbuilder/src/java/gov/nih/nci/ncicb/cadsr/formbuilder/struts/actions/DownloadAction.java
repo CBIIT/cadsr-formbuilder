@@ -30,7 +30,7 @@ import org.apache.struts.action.ActionMapping;
  *
  */
 public class DownloadAction extends org.apache.struts.actions.DownloadAction {
-	private static Log log = LogFactory.getLog(GetExcelDownloadImpl.class.getName());
+	private static Log log = LogFactory.getLog(DownloadAction.class.getName());
 	@Override
 	protected StreamInfo getStreamInfo(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -56,7 +56,6 @@ public class DownloadAction extends org.apache.struts.actions.DownloadAction {
 		
 		final String downFileName = fileName;
 	    response.setHeader("Content-Disposition", "attachment; filename="+fileName);
-log.info("downfilename " + fileName);
 
 		StreamInfo info = new StreamInfo() {
 			public String getContentType() {
