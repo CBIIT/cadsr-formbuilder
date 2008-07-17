@@ -1,10 +1,6 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
 import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
-import gov.nih.nci.ncicb.cadsr.common.downloads.GetExcelDownload;
-import gov.nih.nci.ncicb.cadsr.common.downloads.GetXMLDownload;
-import gov.nih.nci.ncicb.cadsr.common.downloads.impl.GetExcelDownloadImpl;
-import gov.nih.nci.ncicb.cadsr.common.downloads.impl.GetXMLDownloadImpl;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.resource.DataElement;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
@@ -13,7 +9,6 @@ import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
 import gov.nih.nci.ncicb.cadsr.common.resource.Question;
 import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.CDECartFormBean;
 import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
-import gov.nih.nci.ncicb.cadsr.common.util.ContentTypeHelper;
 import gov.nih.nci.ncicb.cadsr.common.util.DTOTransformer;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
@@ -23,11 +18,7 @@ import gov.nih.nci.ncicb.cadsr.objectCart.CDECartItem;
 import gov.nih.nci.ncicb.cadsr.objectCart.impl.CDECartOCImpl;
 import gov.nih.nci.objectCart.client.ObjectCartClient;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -468,55 +459,6 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
     return mapping.findForward(CANCEL);
   }
   
-  public ActionForward downloadExcel(
-		    ActionMapping mapping,
-		    ActionForm form,
-		    HttpServletRequest request,
-		    HttpServletResponse response) throws IOException, ServletException 
-  {
-	try
-	{
-	//  DynaActionForm dynaForm = (DynaActionForm) form;
-      CDECart sessionCart =
-          (CDECart) this.getSessionObject(request, CaDSRConstants.CDE_CART);
-      GetExcelDownload excelDown = new GetExcelDownloadImpl();
-      excelDown.generateExcelForCDECart(sessionCart, "cdeCart", null);
-      String fileName = excelDown.getFileName();
-      this.displayExcel(request, response, fileName);
-	}
-	catch (Exception ex) {
-		log.error("Error generating excel file", ex);
-		return mapping.findForward(SUCCESS);
-	}
-	finally {
-	}
-	return mapping.findForward(SUCCESS);
-  }	
-  
-  public ActionForward downloadXML(
-		    ActionMapping mapping,
-		    ActionForm form,
-		    HttpServletRequest request,
-		    HttpServletResponse response) throws IOException, ServletException 
-  {
-	try
-	{
-	    CDECart sessionCart =
-	        (CDECart) this.getSessionObject(request, CaDSRConstants.CDE_CART);
-	    GetXMLDownload xmlDown = new GetXMLDownloadImpl();
-	    xmlDown.generateXMLForCDECart(sessionCart, "cdeCart", null);
-	    String fileName = xmlDown.getFileName("");
-	    this.displayXML(request, response, fileName);
-	}
-	catch (Exception ex) {
-		log.error("Error generating excel file", ex);
-		return mapping.findForward(SUCCESS);
-	}
-	finally {
-	}
-	return mapping.findForward(SUCCESS);
-  }	
-
   private boolean  isValidCDE(DataElement de){
     if (de.getLongCDEName()==null || de.getLongCDEName().length()==0){
          if (log.isDebugEnabled()) {
@@ -527,100 +469,4 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
     return true;
   }  
   
-  private void displayExcel(
-			HttpServletRequest request,
-		    HttpServletResponse response,
-		    String excelFilename) throws Exception
-	{
-		  File f = new File(excelFilename);
-		  String ctype = ContentTypeHelper.getContentType(f.getName());
-
-		  response.setContentType(ctype);
-		  response.setContentLength((int)f.length());
-		  response.addHeader("Content-Disposition", "attachment; filename=" + f.getName());
-		  response.addHeader("Pragma", "No-cache");
-		  response.addHeader("Cache-Control", "no-cache");
-		  response.addHeader("Expires", "0");
-
-		  try {
-			   // create buffer			
-			   byte [] buffer = new byte[1024];
-	
-			   int r = 0;
-			   // write out file			
-			   FileInputStream fin = new FileInputStream(f);
-			   OutputStream out = response.getOutputStream();
-	
-			   while ((r = fin.read(buffer, 0, buffer.length)) != -1) {
-			    out.write(buffer, 0, r);
-			   }
-	
-			   try {
-				    fin.close();		
-				    out.flush();
-				    out.close();
-			   } catch (Exception e) { }
-	
-			   buffer = null;
-		  } catch (Exception ex) {
-			   String msg = ex.getMessage();
-	
-			   response.setContentType("text/html");
-			   response.setContentLength(msg.length());
-			   PrintWriter out = response.getWriter();
-			   out.println("Unexpected error");
-			   out.flush();
-			   out.close();
-		  }
-		
-	}
- 
-  private void displayXML(
-			HttpServletRequest request,
-		    HttpServletResponse response,
-		    String fileName) throws Exception
-	{
-		  File f = new File(fileName);
-		  String ctype = ContentTypeHelper.getContentType(f.getName());
-
-		  response.setContentType(ctype);
-		  response.setContentLength((int)f.length());
-		  response.addHeader("Content-Disposition", "attachment; filename=" + f.getName());
-		  response.addHeader("Pragma", "No-cache");
-		  response.addHeader("Cache-Control", "no-cache");
-		  response.addHeader("Expires", "0");
-
-		  try {
-			   // create buffer			
-			   byte [] buffer = new byte[1024];
-	
-			   int r = 0;
-			   // write out file			
-			   FileInputStream fin = new FileInputStream(f);
-			   OutputStream out = response.getOutputStream();
-	
-			   while ((r = fin.read(buffer, 0, buffer.length)) != -1) {
-			    out.write(buffer, 0, r);
-			   }
-	
-			   try {
-				    //fin.close();		
-				    out.flush();
-				    out.close();
-			   } catch (Exception e) { }
-	
-			   buffer = null;
-		  } catch (Exception ex) {
-			   String msg = ex.getMessage();
-	
-			   response.setContentType("text/html");
-			   response.setContentLength(msg.length());
-			   PrintWriter out = response.getWriter();
-			   out.println("Unexpected error");
-			   out.flush();
-			   out.close();
-		  }
-		
-	}
-
 }
