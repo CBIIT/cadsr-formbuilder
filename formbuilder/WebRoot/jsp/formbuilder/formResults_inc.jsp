@@ -1,7 +1,5 @@
 
-<%
- 	String downloadURL = request.getContextPath() + "/jsp/formbuilder/downloadExcelPage.jsp?action=excelDownload&"+NavigationConstants.METHOD_PARAM+"=downloadFormInExcel&" + FormConstants.FORM_ID_SEQ + "=";
- %>
+
  <script LANGUAGE="Javascript">
 <!---
 function actionConfirm(message, url){

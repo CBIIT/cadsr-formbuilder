@@ -3,29 +3,12 @@
 
 <struts-config>
  <form-beans> 
- <!-- 
-    <form-bean name="downloadForm"
-      type="gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean"
-      dynamic="true">
-      <form-property name="formIdSeq" type="java.lang.String"/>
-       
-    </form-bean>
- -->
     <form-bean name="formDownload"
       type="gov.nih.nci.ncicb.cadsr.common.struts.formbeans.CDECartFormBean"/>
 
   </form-beans>  
 
   <action-mappings>
- <!-- 
-    <action name="downloadForm" path="/excelDownload" parameter="method"
-      scope="request"
-      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.DownloadAction"
-      validate="false" >     
-      <forward name="failure" path="/formSearchFramedAction.do?method=getAllForms"/>
-      <forward name="downloadSuccess" path="/formCDEDownload.do?type=form"/>
-    </action>
- -->      
     <action name="formDownload" path="/formExcelDownload" scope="request"
       type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormDownloadAction"
       validate="false">     
