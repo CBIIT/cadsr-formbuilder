@@ -10,14 +10,12 @@
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants"%>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.resource.NCIUser"%>
 <%
-String urlPrefix = "";
+	String urlPrefix = "";
   CDEBrowserParams params = CDEBrowserParams.getInstance();
   String browseURL = params.getCdeBrowserUrl();
- // browseURL = "http://localhost:8080";
-  NCIUser user = (NCIUser)session.getAttribute(CaDSRConstants.USER_KEY);  
-  String cartName = user.getUsername();
-  String formUrl= "formExcelDownload.do?"+ FormConstants.FORM_ID_SEQ + "=E74972BD-ECF1-48B2-E034-0003BA3F9857";
-  %>
+  //NCIUser user = (NCIUser)session.getAttribute(CaDSRConstants.USER_KEY);  
+  //String cartName = user.getUsername();
+%>
 <HTML>
 <HEAD>
 <TITLE>Display CDE Cart</TITLE>
@@ -80,13 +78,10 @@ function retrieveSavedItems() {
 <BODY topmargin=0 bgcolor="#ffffff" topmargin="0">
 
 <% 
-  //String downloadXMLURL = "formCDECartAction.do?method=downloadXML";
   //String downloadXMLURL = "javascript:fileDownloadWin('" + browseURL + "/CDEBrowser/cdebrowser/downloadXMLPage.jsp?src=formCdeCart&cartName=" + cartName + "','xmlWin',500,200)";
-  //String downloadExcelURL = "formCDECartAction.do?method=downloadExcel";
   //String downloadExcelURL = "javascript:fileDownloadWin('" + browseURL + "/CDEBrowser/cdebrowser/downloadExcelPage.jsp?src=formCdeCart&cartName=" + cartName + "','excelWin',500,200)";
   String downloadXMLURL = "formCDEDownload.do?type=xml";
   String downloadExcelURL = "formCDEDownload.do?type=excel";
-  System.out.println(downloadXMLURL + " excel url " + downloadExcelURL);
   String doneURL = "";
   
   String src = request.getParameter("src");
@@ -130,7 +125,6 @@ function retrieveSavedItems() {
         <td nowrap>
           <b><a href="<%=downloadExcelURL%>" >[Download Data Elements to Excel]</a></b> &nbsp;&nbsp;
           <b><a href="<%=downloadXMLURL%>" >[Download Data Elements as XML]</a></b> &nbsp;&nbsp;
-          <b><a href="<%=formUrl%>" >[Download form]</a></b> &nbsp;&nbsp;
         </td>
       </tr>
       <tr>
