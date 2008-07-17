@@ -18,10 +18,13 @@
     <LINK rel="stylesheet" TYPE="text/css" HREF="<html:rewrite page='/css/blaf.css' />">
     <SCRIPT LANGUAGE="JavaScript">
     
-function submitForm(methodName) {
-     document.forms[0].<%=NavigationConstants.METHOD_PARAM%>.value=methodName;
-     document.forms[0].submit();
-}      
+	function submitForm(methodName) {
+     if(validateSkipForm(skipForm))
+     {   
+     	document.forms[0].<%=NavigationConstants.METHOD_PARAM%>.value=methodName;
+     	document.forms[0].submit();
+     }
+	}      
     </SCRIPT>
     
 
@@ -324,7 +327,7 @@ function submitForm(methodName) {
         <table width="70%" align="center" cellpadding="0" cellspacing="1" border="0" class="OraBGAccentVeryDark">
            <tr class="OraTabledata">
               <td class="OraTableColumnHeader" width="20%" nowrap>
-                Skip insrtruction
+                <bean:message key="cadsr.formbuilder.skippattern.instruction"/>
               </td>
               <td  class="OraFieldText" width="80%" nowrap>
             	<html:textarea  styleClass="OraFieldTextInstruction" rows="2" cols="80" 
@@ -339,6 +342,6 @@ function submitForm(methodName) {
       </html:form>
 
 <%@ include file="../common/common_bottom_border.jsp"%>
-
+<html:javascript formName="skipForm"/>
 </BODY>
 </HTML>
