@@ -172,7 +172,18 @@
           <var-value>2000</var-value>
         </var>
       </field>
+    </form>
 
+    <form name="skipForm">
+      <field   property="skipInstruction"
+        depends="maxlength">
+        <arg0 key="cadsr.formbuilder.skippattern.instruction"/>
+        <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+        <var>
+          <var-name>maxlength</var-name>
+          <var-value>2000</var-value>
+        </var>
+      </field>
     </form>
 
     <form name="moduleEditForm">
