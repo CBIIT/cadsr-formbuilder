@@ -23,7 +23,7 @@
     <action name="skipForm" path="/formbuilder/skipAction" parameter="method"
       scope="session"
       type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.SkipPatternAction"
-      validate="false">
+      validate="true">
       
       <forward name="editSkipPattern" path="/jsp/formbuilder/skipPatternInfoEdit.jsp"/>    
       <forward name="createSkipPattern" path="/formbuilder/skipAction.do?method=setCurrentFormAsTargetForm"/>  
