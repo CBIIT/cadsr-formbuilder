@@ -10,6 +10,9 @@
        
     </form-bean>
 
+    <form-bean name="formDownload"
+      type="gov.nih.nci.ncicb.cadsr.common.struts.formbeans.CDECartFormBean"/>
+
   </form-beans>  
 
   <action-mappings>
@@ -22,6 +25,12 @@
       <forward name="downloadSuccess" path="/formCDEDownload.do?type=form"/>
     </action>
      
-
+    <action name="formDownload" path="/formExcelDownload" scope="request"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormDownloadAction"
+      validate="false">     
+      <forward name="failure" path="/formSearchFramedAction.do?method=getAllForms"/>
+      <forward name="downloadSuccess" path="/formCDEDownload.do?type=form"/>
+    </action>
+     
   </action-mappings>
 </struts-config>
