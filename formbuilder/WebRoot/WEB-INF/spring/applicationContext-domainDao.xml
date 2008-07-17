@@ -11,7 +11,7 @@
    </bean>
 
   <!-- Hibernate SessionFactory -->
-  <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+  <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean" lazy-init="true">
     <property name="dataSource"><ref local="dataSource"/></property>
     <property name="hibernateProperties">
       <props>
