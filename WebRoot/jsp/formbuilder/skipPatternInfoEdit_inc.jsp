@@ -1,7 +1,7 @@
       <table width="20%" align="center" cellpadding="0" cellspacing="0" border="0" >
         <tr >
           <td align="center">
-            <a href="javascript:submitForm('<%=NavigationConstants.SAVE_SKIP_PATTERN%>')">
+            <a href="javascript:validateSubmitForm('<%=NavigationConstants.SAVE_SKIP_PATTERN%>')">
 		<html:img page='/i/save.gif' border="0" alt="Save skip pattern"/>            
             </a>
           
