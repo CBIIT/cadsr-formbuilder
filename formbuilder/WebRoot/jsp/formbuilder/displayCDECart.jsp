@@ -16,7 +16,7 @@ String urlPrefix = "";
  // browseURL = "http://localhost:8080";
   NCIUser user = (NCIUser)session.getAttribute(CaDSRConstants.USER_KEY);  
   String cartName = user.getUsername();
-  String formUrl= "/excelDownload.do?" + NavigationConstants.METHOD_PARAM + "=downloadFormInExcel&" + FormConstants.FORM_ID_SEQ + "=E74972BD-ECF1-48B2-E034-0003BA3F9857";
+  String formUrl= "formExcelDownload.do?"+ FormConstants.FORM_ID_SEQ + "=E74972BD-ECF1-48B2-E034-0003BA3F9857";
   %>
 <HTML>
 <HEAD>
