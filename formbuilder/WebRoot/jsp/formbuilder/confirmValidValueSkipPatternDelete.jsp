@@ -24,12 +24,16 @@
 <!--
 
 
-function submitSkip(methodName) {
-  document.forms[0].<%=NavigationConstants.METHOD_PARAM%>.value=methodName;
-  document.forms[0].submit();
+	function submitSkip(methodName) {
+	  document.forms[0].<%=NavigationConstants.METHOD_PARAM%>.value=methodName;
+	  document.forms[0].submit();
+	}
 
-}
-
+    function submitCancelForm() {
+          document.forms[0].action= '<%=request.getContextPath()+"/cancelAction.do?" + NavigationConstants.METHOD_PARAM + "=" + NavigationConstants.CANCEL_SKIP_EDIT%>'
+          document.forms[0].submit();
+    }      
+      
 
 
 -->
@@ -67,7 +71,7 @@ function submitSkip(methodName) {
              </a> 
           </td>   
          <td align="center">
-            <a href="javascript:submitSkip('<%=NavigationConstants.CANCEL_SKIP_EDIT%>')">
+            <a href="javascript:submitCancelForm()">
                 <html:img page='/i/no.gif' border="0" alt="No"/>
              </a> 
           </td>            

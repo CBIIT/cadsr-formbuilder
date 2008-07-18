@@ -26,7 +26,13 @@
 	function validateSubmitForm(methodName) {	
      if(validateSkipForm(skipForm))
      	submitForm(methodName)
-	}      
+	}   
+	   
+    function submitCancelForm() {
+          document.forms[0].action= '<%=request.getContextPath()+"/cancelAction.do?" + NavigationConstants.METHOD_PARAM + "=" + NavigationConstants.CANCEL_SKIP_EDIT%>'
+          document.forms[0].submit();
+    }      
+      
     </SCRIPT>
     
 
