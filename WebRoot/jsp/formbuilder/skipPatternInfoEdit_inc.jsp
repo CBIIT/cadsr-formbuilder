@@ -8,7 +8,7 @@
           </td>   
           
           <td align="center">
-            <a href="javascript:submitForm('<%=NavigationConstants.CANCEL_SKIP_EDIT%>')">
+            <a href="javascript:submitCancelForm()">
 		<html:img page='/i/cancel.gif' border="0" alt="Back to module edit"/>  
                 
             </a>
