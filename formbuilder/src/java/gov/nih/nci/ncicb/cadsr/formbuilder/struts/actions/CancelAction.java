@@ -79,5 +79,29 @@ public class CancelAction extends FormBuilderSecureBaseDispatchAction {
 
         return mapping.findForward("gotoManageClassifications");
     }
+    /**
+    *
+    * @param mapping The ActionMapping used to select this instance.
+    * @param form The optional ActionForm bean for this request.
+    * @param request The HTTP Request we are processing.
+    * @param response The HTTP Response we are processing.
+    *
+    * @return
+    *
+    * @throws IOException
+    * @throws ServletException
+    */
+    public ActionForward cancelSkipEdit(
+     ActionMapping mapping,
+     ActionForm form,
+     HttpServletRequest request,
+     HttpServletResponse response) throws IOException, ServletException {
+
+       removeSessionObject(request,SKIP_PATTERN);
+       removeSessionObject(request,SKIP_PATTERN_CLONE);
+       removeSessionObject(request,SKIP_TARGET_FORM);
+     return mapping.findForward("backToModuleEdit");
+   }
+
 
 }
