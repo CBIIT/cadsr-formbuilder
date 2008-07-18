@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,9 +16,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import oracle.jdbc.OracleResultSet;
+//import oracle.jdbc.OracleResultSet;
 
-import oracle.sql.BLOB;
+//import oracle.sql.BLOB;
 
 import gov.nih.nci.ncicb.cadsr.common.util.logging.Log;
 import gov.nih.nci.ncicb.cadsr.common.util.logging.LogFactory;
@@ -58,7 +59,7 @@ public class DownloadTemplateServlet extends HttpServlet  {
                        "and ac.ac_idseq = ?";
       log.info(sqlStmt);
       PreparedStatement ps = conn.prepareStatement(sqlStmt);
-      BLOB theBlob = null;
+      Blob theBlob = null;
       ps.setString(1,refDocId);
       ResultSet rs = ps.executeQuery();
       boolean exists = false;
@@ -66,7 +67,7 @@ public class DownloadTemplateServlet extends HttpServlet  {
         exists = true;
         String mimeType = rs.getString(2);
         response.setContentType(mimeType);
-        theBlob = ((OracleResultSet)rs).getBLOB(3);
+        theBlob = rs.getBlob(3);
         is = theBlob.getBinaryStream();
 
         //Writing to the OutputStream

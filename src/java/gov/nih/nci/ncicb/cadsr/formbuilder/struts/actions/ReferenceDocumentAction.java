@@ -35,7 +35,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import oracle.sql.BLOB;
+//import oracle.sql.BLOB;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
