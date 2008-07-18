@@ -29,7 +29,7 @@
              </A><br><font color=brown face=verdana size=1>&nbsp;Form&nbsp;Builder&nbsp;</font>
            </TD>
           <TD valign="TOP" align="CENTER" width="1%" colspan=1>
-          <A HREF="javascript:newBrowserWin('<%=request.getContextPath()%>/html/common/help/cdeBrowserHelp.html','helpWin',1200,900)">
+          <A HREF="javascript:newBrowserWin('/help','helpWin',1200,900)">
             <html:img page="/i/icon_help.gif" alt="Help" border="0"  width="32" height="32" />
           </A><br><font color=brown face=verdana size=1>&nbsp;Help&nbsp;</font></TD>
         </TR>
