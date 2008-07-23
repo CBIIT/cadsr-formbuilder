@@ -352,7 +352,7 @@
                             <input type="checkbox" name="selectedItems" value="<%=attachmentIndex%>"/>
                           </td>                        
                           <td class="OraFieldText" align="left">
-			      <html:link action='<%="/viewReferenceDocAttchment.do?"+NavigationConstants.METHOD_PARAM+"=viewReferenceDocAttchment"%>' 
+			      <html:link action='<%="/viewReferenceDocAttchment.do?"%>' 
 				paramId = "<%=FormConstants.REFERENCE_DOC_ATTACHMENT_NAME%>"
 				paramName="attachment" paramProperty="name"
 				target="_blank" >

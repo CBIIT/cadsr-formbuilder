@@ -45,9 +45,9 @@
       <forward name="manageReferenceDoc" path="/jsp/formbuilder/manageReferenceDocs.jsp"/>
     </action>
     
-    <action name="refDocForm" path="/viewReferenceDocAttchment" parameter="method"
+    <action name="refDocForm" path="/viewReferenceDocAttchment"
       scope="request"
-      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.ReferenceDocumentAction"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.RefDocAttachmentAction"
       validate="false" >     
       <forward name="success" path="/jsp/formbuilder/viewReferenceDocs.jsp"/>
     </action>
