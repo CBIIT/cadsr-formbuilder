@@ -213,7 +213,7 @@
                       <logic:iterate id="attachment" indexId="attachmentIndex" name="refDoc" type="gov.nih.nci.ncicb.cadsr.common.resource.Attachment" property="attachments">
                         <tr class="OraTabledata">                       
                           <td class="OraFieldText" align="left">
-              <html:link action='<%="/viewReferenceDocAttchment.do?"+NavigationConstants.METHOD_PARAM+"=viewReferenceDocAttchment"%>' 
+              <html:link action='<%="/viewReferenceDocAttchment.do?"%>' 
                 paramId = "<%=FormConstants.REFERENCE_DOC_ATTACHMENT_NAME%>"
                 paramName="attachment" paramProperty="name"
                 target="_blank" >
