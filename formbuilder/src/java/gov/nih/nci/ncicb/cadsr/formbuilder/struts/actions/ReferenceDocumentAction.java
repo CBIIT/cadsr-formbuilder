@@ -135,13 +135,12 @@ public class ReferenceDocumentAction
 
   InputStream is = null;
   String attachmentName = request.getParameter(FormConstants.REFERENCE_DOC_ATTACHMENT_NAME);
-  response.addHeader("Content-Disposition", "inline;filename=\"" + attachmentName + "\"");
-//  response.addHeader("Pragma", "No-cache");
-//  response.addHeader("Cache-Control", "public");
-//  response.addHeader("Expires", "0");
+  response.setHeader("Content-Disposition", "attachment;filename=\"" + attachmentName + "\"");
+  response.setHeader("Pragma", "public");
+  response.setHeader("Expires", "0");
+  response.setHeader("Cache-Control", "max-age=0");
 
   // first find out if the attachment is new and saved in the session
-
   Map attMap = (Map)getSessionObject(request, REFDOC_ATTACHMENT_MAP);
   Attachment attachment = getAttachmentFromSession(attMap, attachmentName);
 
@@ -159,25 +158,18 @@ public class ReferenceDocumentAction
    try {
     DBUtil dbUtil = new DBUtil();
 
-    //String dsName = CDEBrowserParams.getInstance("cdebrowser").getSbrDSN();
-    dbUtil.getConnectionFromContainer();  // getOracleConnectionFromContainer();
-
+    dbUtil.getConnectionFromContainer();  
     String sqlStmt = "SELECT blob_content, mime_type, doc_size from sbr.reference_blobs_view where name = ?";
-    log.info(sqlStmt);
+    log.debug(sqlStmt);
     conn = dbUtil.getConnection();
     ps = conn.prepareStatement(sqlStmt);
     ps.setString(1, attachmentName);
     rs = ps.executeQuery();
-    boolean exists = false;
 
     if (rs.next()) {
-     exists = true;
-
      String mimeType = rs.getString(2);
- //    (mimeType);
      
      response.setContentType(mimeType);
-     //theBlob = ((OracleResultSet)rs).getBLOB(1);
      theBlob = rs.getBlob(1);
      is = theBlob.getBinaryStream();
      response.setContentLength(rs.getInt(3));
