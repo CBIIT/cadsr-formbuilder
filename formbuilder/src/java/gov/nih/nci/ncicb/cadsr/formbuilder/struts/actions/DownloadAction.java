@@ -9,6 +9,7 @@ import gov.nih.nci.ncicb.cadsr.common.util.ContentTypeHelper;
 import gov.nih.nci.ncicb.cadsr.common.util.logging.Log;
 import gov.nih.nci.ncicb.cadsr.common.util.logging.LogFactory;
 import gov.nih.nci.ncicb.cadsr.objectCart.CDECart;
+import gov.nih.nci.ncicb.cadsr.common.util.DBUtil;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -37,17 +38,20 @@ public class DownloadAction extends org.apache.struts.actions.DownloadAction {
 
 		String fileName = null;
 		String type = request.getParameter("type");
-		
+		DBUtil util = new DBUtil();
+		String jndiName = util.getJNDIProperty();
+		if (jndiName !=null && !jndiName.equals(""))
+			jndiName = "java:comp/env/jdbc/" + jndiName;
 		if (type.equalsIgnoreCase("xml")) {
 			CDECart sessionCart = (CDECart) this.getSessionObject(request, CaDSRConstants.CDE_CART);
 		    GetXMLDownload xmlDown = new GetXMLDownloadImpl();
-		    xmlDown.generateXMLForCDECart(sessionCart, "cdeCart", null);
+		    xmlDown.generateXMLForCDECart(sessionCart, "cdeCart", jndiName);
 		    fileName = xmlDown.getFileName("");
 		}
 		else if (type.equalsIgnoreCase("excel")) {
 			CDECart sessionCart = (CDECart) this.getSessionObject(request, CaDSRConstants.CDE_CART);
 		      GetExcelDownload excelDown = new GetExcelDownloadImpl();
-		      excelDown.generateExcelForCDECart(sessionCart, "cdeCart", null);
+		      excelDown.generateExcelForCDECart(sessionCart, "cdeCart", jndiName);
 		      fileName = excelDown.getFileName();
 		}
 		else if (type.equalsIgnoreCase("form"))
