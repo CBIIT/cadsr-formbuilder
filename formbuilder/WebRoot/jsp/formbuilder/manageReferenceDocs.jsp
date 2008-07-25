@@ -303,7 +303,7 @@
                     URL 
                   </td>
                   <td class="OraFieldText" nowrap>
-                  <a href="<bean:write name="refDoc" property="url"/>" target="AuxWindow"  >
+                  <a href="<bean:write name="refDoc" property="url"/>" target="_blank"  >
                     <bean:write name="refDoc" property="url"/>
                     </a>
                   </td>
@@ -352,7 +352,7 @@
                             <input type="checkbox" name="selectedItems" value="<%=attachmentIndex%>"/>
                           </td>                        
                           <td class="OraFieldText" align="left">
-			      <html:link action='<%="/viewReferenceDocAttchment.do?"%>' 
+			      <html:link action='<%="/viewReferenceDocAttchment.do?"+NavigationConstants.METHOD_PARAM+"=viewReferenceDocAttchment"%>' 
 				paramId = "<%=FormConstants.REFERENCE_DOC_ATTACHMENT_NAME%>"
 				paramName="attachment" paramProperty="name"
 				target="_blank" >

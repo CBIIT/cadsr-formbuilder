@@ -185,7 +185,7 @@
                     URL 
                   </td>
                   <td class="OraFieldText" nowrap>
-                    <a href="<bean:write name="refDoc" property="url"/>" target="AuxWindow"  >
+                    <a href="<bean:write name="refDoc" property="url"/>" target="_blank"  >
                     <bean:write name="refDoc" property="url"/>
                     </a>
                   </td>
@@ -194,13 +194,10 @@
                   <td class="OraTableColumnHeader" width="20%" nowrap>
                     Description 
                   </td
-                  <td class="OraFieldText" nowrap>
                   <td  class="OraFieldText" size="80%" nowrap>
                         <bean:write
                            name="refDoc"
-                           property="docText"
-                         />   
-                  </td>
+                           property="docText"/>   
                   </td>
                </tr>                  
                <tr class="OraTabledata">
@@ -213,7 +210,7 @@
                       <logic:iterate id="attachment" indexId="attachmentIndex" name="refDoc" type="gov.nih.nci.ncicb.cadsr.common.resource.Attachment" property="attachments">
                         <tr class="OraTabledata">                       
                           <td class="OraFieldText" align="left">
-              <html:link action='<%="/viewReferenceDocAttchment.do?"%>' 
+              <html:link action='<%="/viewReferenceDocAttchment.do?"+NavigationConstants.METHOD_PARAM+"=viewReferenceDocAttchment"%>' 
                 paramId = "<%=FormConstants.REFERENCE_DOC_ATTACHMENT_NAME%>"
                 paramName="attachment" paramProperty="name"
                 target="_blank" >
