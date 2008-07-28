@@ -39,7 +39,16 @@
       <jsp:param name="urlPrefix" value=""/>
     </jsp:include>
 
-
+      <table width="20%" align="center" cellpadding="1" cellspacing="1" border="0" >
+        <tr>
+          <td align="right">
+            <html:link action='<%="/cancelAction?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.CANCEL_SKIP_EDIT%>'>            
+              <html:img src='<%=urlPrefix+"i/cancel.gif"%>' border="0" alt="Cancel"/>
+	        </html:link>               
+          </td>          
+        </tr>                 
+      </table>
+      <br>
     <%@ include file="showMessages.jsp" %>
 
       <table width="80%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
@@ -146,6 +155,16 @@
       
      <%@ include file="skipToModuleDetails_inc.jsp"%>
      
+      <br>
+      <table width="20%" align="center" cellpadding="1" cellspacing="1" border="0" >
+        <tr>
+          <td align="right">
+            <html:link action='<%="/cancelAction?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.CANCEL_SKIP_EDIT%>'>            
+              <html:img src='<%=urlPrefix+"i/cancel.gif"%>' border="0" alt="Cancel"/>
+	        </html:link>               
+          </td>          
+        </tr>                 
+      </table>
     <%@ include file="../common/common_bottom_border.jsp"%>
   </BODY>
 </HTML>
