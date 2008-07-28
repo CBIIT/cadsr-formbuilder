@@ -6,7 +6,7 @@
 
 <SCRIPT LANGUAGE="JavaScript1.1" SRC='<html:rewrite page="/js/newWinJS.js"/>'></SCRIPT>
 
-<%@ include  file="../common/topHeader.jsp" %>
+<%@ include  file="topHeader.jsp" %>
 
 <TABLE width=100% Cellpadding=0 Cellspacing=0 border=0>
   <tr>
@@ -18,11 +18,6 @@
     <td align=right valign=top colspan=2 nowrap>
       <TABLE Cellpadding=0 Cellspacing=0 border=0 >
         <TR>
-         <TD valign="TOP" align="CENTER" width="1%" colspan=1>
-             <A HREF='<%=request.getContextPath()%>/formSearchAction.do' TARGET="_top">
-               <html:img page="/i/icon_home.gif" alt="Home" border="0"  width="32" height="32" />
-             </A><br><font color=brown face=verdana size=1>&nbsp;Home&nbsp;</font>
-          </TD>
           <TD valign="TOP" align="CENTER" width="1%" colspan=1>
              <A HREF='<%=request.getContextPath()%>/formSearchAction.do' TARGET="_top">
                <html:img page="/i/formicon.gif" alt="FormBuilder" border="0"  width="32" height="32" />
