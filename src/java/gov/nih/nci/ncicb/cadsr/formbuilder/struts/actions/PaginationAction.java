@@ -1,26 +1,17 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
-import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants;
-
 import gov.nih.nci.ncicb.cadsr.common.jsp.bean.PaginationBean;
-import java.util.List;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.DynaActionForm;
 
 import java.io.IOException;
-
 import java.util.ArrayList;
-import java.util.Collection;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.actions.DispatchAction;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 
 public class PaginationAction extends FormBuilderBaseDispatchAction
 {
