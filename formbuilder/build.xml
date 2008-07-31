@@ -1,5 +1,5 @@
 <!-- Copyright ScenPro, Inc. 2005
-    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.16 2008-07-28 22:20:06 hegdes Exp $
+    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.17 2008-07-31 14:40:00 hegdes Exp $
     $Name: not supported by cvs2svn $
 -->
 <project name="Form Builder Tool" default="init" basedir=".">
@@ -119,7 +119,7 @@
 	<!-- these values that replaces some tags in the tool, are needed at the build time -->
 	<filter token="Tool.ds.jndi.Name" value="FormBuilderDS"/>
 	<filter token="Tool.Version" value="4.0.0.0"/>
-	<filter token="Tool.Build" value="6"/>
+	<filter token="Tool.Build" value="7"/>
 	<filter token="Tool.Support" value="ncicb@pop.nci.nih.gov"/>
 	<filter token="Tool.Version.Suffix" value="4_0_0_0"/>
 	
