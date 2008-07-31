@@ -715,6 +715,9 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
         }
         saveMessage("cadsr.formbuilder.form.edit.save.success", request);
         removeSessionObject(request, DELETED_MODULES);
+        removeSessionObject(request,FORM_EDIT_ADDED_PROTOCOLS);
+        removeSessionObject(request,FORM_EDIT_REMOVED_PROTOCOLS);        
+        removeSessionObject(request,UPDATE_SKIP_PATTERN_TRIGGERS);        
                 
         return mapping.findForward(SUCCESS);
 
@@ -755,8 +758,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
     removeSessionObject(request,FORM_EDIT_ADDED_PROTOCOLS);
     removeSessionObject(request,FORM_EDIT_REMOVED_PROTOCOLS);        
     removeSessionObject(request,UPDATE_SKIP_PATTERN_TRIGGERS);        
-    editForm.clear();    
-            
+    editForm.clear();                
     
     return mapping.findForward(SUCCESS);
 
@@ -848,8 +850,14 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
     List deletedModules = (List) getSessionObject(request, DELETED_MODULES);
     Form header = new FormTransferObject();
 
-    //Add the header info into TransferObj after checking for update
     boolean headerUpdate = false;
+    if (clonedCrf == null)
+    {
+    	log.debug(" cloned crf is null, none to update ");
+    	return headerUpdate;
+    }
+    
+    //Add the header info into TransferObj after checking for update
     header.setFormIdseq((String) editForm.get(FORM_ID_SEQ));
     header.setPreferredName(clonedCrf.getPreferredName());
     String longName = (String) editForm.get(FORM_LONG_NAME);
