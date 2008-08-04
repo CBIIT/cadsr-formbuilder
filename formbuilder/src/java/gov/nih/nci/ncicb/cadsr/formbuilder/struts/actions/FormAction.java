@@ -77,21 +77,22 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
     ActionForm form,
     HttpServletRequest request,
     HttpServletResponse response) throws IOException, ServletException {
+	//this.logSessionData("getAllForms ", form.toString(), request.getSession());
     //Set the lookup values in the session
     setInitLookupValues(request);
 
     FormBuilderServiceDelegate service = getFormBuilderService();
     DynaActionForm searchForm = (DynaActionForm) form;
-    String formLongName = (String) searchForm.get(this.FORM_LONG_NAME);
-    String protocolIdSeq = (String) searchForm.get(this.PROTOCOL_ID_SEQ);
+    String formLongName = (String) searchForm.get(this.SEARCH_FORM_NAME);
+    String protocolIdSeq = (String) searchForm.get(this.SEARCH_PROTO_IDSEQ);
     String proptocolName = (String)searchForm.get(this.PROTOCOLS_LOV_NAME_FIELD);
-    String contextIdSeq = (String) searchForm.get(this.CONTEXT_ID_SEQ);
-    String workflow = (String) searchForm.get(this.WORKFLOW);
-    String categoryName = (String) searchForm.get(this.CATEGORY_NAME);
-    String type = (String) searchForm.get(this.FORM_TYPE);
+    String contextIdSeq = (String) searchForm.get(this.SEARCH_CONTEXT_IDSEQ);
+    String workflow = (String) searchForm.get(this.SEARCH_WORKFLOW);
+    String categoryName = (String) searchForm.get(this.SEARCH_CATEGORY_NAME);
+    String type = (String) searchForm.get(this.SEARCH_FORM_TYPE);
     String csCsiIdSeq = (String) searchForm.get(this.CS_CSI_ID);
     String csIdseq = (String) searchForm.get(this.CS_ID);
-    String publicId = (String)searchForm.get(this.PUBLIC_ID);
+    String publicId = (String)searchForm.get(this.SEARCH_FORM_PUBLICID);
     String version = (String)searchForm.get(this.LATEST_VERSION_INDICATOR);
     String moduleLongName = (String)searchForm.get(this.MODULE_LONG_NAME);
     String cdePublicId = (String)searchForm.get(this.CDE_PUBLIC_ID); 
@@ -101,7 +102,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
    List contexts = (List)this.getSessionObject(request,this.ALL_CONTEXTS);
    Context currContext = getContextForId(contexts,contextIdSeq);
    if(currContext!=null)
-    searchForm.set(this.CONTEXT_NAME,currContext.getName());
+    searchForm.set(this.SEARCH_CONTEXT_NAME,currContext.getName());
    
    Collection forms = null;
    String nodeType = request.getParameter("P_PARAM_TYPE");
@@ -147,7 +148,9 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
     }
       
     setSessionObject(request, FORM_SEARCH_RESULTS_PAGINATION, pb,true);
-    setSessionObject(request, ANCHOR, "results",true);  
+    setSessionObject(request, ANCHOR, "results",true); 
+    
+	//this.logSessionData("getAllForms ", form.toString(), request.getSession());   
     return mapping.findForward(SUCCESS);
   }
 
@@ -446,9 +449,9 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 
     GenericDynaFormBean searchForm = (GenericDynaFormBean) form;
     searchForm.clear();
-    searchForm.set(this.PROTOCOL_ID_SEQ, protocolIdSeq);
+    searchForm.set(this.SEARCH_PROTO_IDSEQ, protocolIdSeq);
     searchForm.set(this.PROTOCOLS_LOV_NAME_FIELD, protocolLongName);
-    searchForm.set(this.CONTEXT_ID_SEQ, contextIdSeq);
+    searchForm.set(this.SEARCH_CONTEXT_IDSEQ, contextIdSeq);
     searchForm.set(this.FORM_ID_SEQ,formIdSeq);
     searchForm.set("jspClassification",csCsiIdSeq);
     searchForm.set("txtClassSchemeItem",csiName);

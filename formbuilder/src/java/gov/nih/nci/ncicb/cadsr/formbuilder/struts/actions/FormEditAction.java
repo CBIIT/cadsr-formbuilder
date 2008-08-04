@@ -74,6 +74,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
     ActionForm formEditForm,
     HttpServletRequest request,
     HttpServletResponse response) throws IOException, ServletException {
+	//this.logSessionData("getFormToEdit ", formEditForm.toString(), request.getSession());
     Form crf = null;
     Form clonedCrf = null;
     setInitLookupValues(request);
@@ -159,7 +160,9 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
     //clear up
     removeSessionObject(request,FORM_EDIT_ADDED_PROTOCOLS);
     removeSessionObject(request,FORM_EDIT_REMOVED_PROTOCOLS);        
-    removeSessionObject(request,UPDATE_SKIP_PATTERN_TRIGGERS);        
+    removeSessionObject(request,UPDATE_SKIP_PATTERN_TRIGGERS);  
+    
+	//this.logSessionData("getFormToEdit ", formEditForm.toString(), request.getSession());
 
     //lock the form
     NCIUser user = getApplictionUser(request);
@@ -487,6 +490,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
     ActionForm form,
     HttpServletRequest request,
     HttpServletResponse response) throws IOException, ServletException {
+	//this.logSessionData("saveForm ", form.toString(), request.getSession());
     Form crf = (Form) getSessionObject(request, CRF);
     boolean hasUpdate  = setValuesForUpdate(mapping,form,request);
     if(hasUpdate)
@@ -559,6 +563,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
         removeSessionObject(request,FORM_EDIT_REMOVED_PROTOCOLS);        
         removeSessionObject(request,UPDATE_SKIP_PATTERN_TRIGGERS);        
         saveMessage("cadsr.formbuilder.form.edit.save.success", request);
+    	//this.logSessionData("saveForm ", form.toString(), request.getSession());
         return mapping.findForward(SUCCESS);
        }
     else
@@ -616,6 +621,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
     ActionForm form,
     HttpServletRequest request,
     HttpServletResponse response) throws IOException, ServletException {
+	//	this.logSessionData("checkChangesDone ", form.toString(), request.getSession());
         
     boolean hasUpdate  = setValuesForUpdate(mapping,form,request);
       if(hasUpdate)
@@ -626,6 +632,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
       {
         //unlock form 
         unlockCRFInSession(request);
+	//	this.logSessionData("checkChangesDone ", form.toString(), request.getSession());
         return mapping.findForward(SEARCH_RESULTS);
       }
     }
@@ -648,6 +655,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
     ActionForm form,
     HttpServletRequest request,
     HttpServletResponse response) throws IOException, ServletException {
+	//	this.logSessionData("saveFormChanges ", form.toString(), request.getSession());
     Form crf = (Form) getSessionObject(request, CRF);
 
         try {
@@ -719,6 +727,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
         removeSessionObject(request,FORM_EDIT_REMOVED_PROTOCOLS);        
         removeSessionObject(request,UPDATE_SKIP_PATTERN_TRIGGERS);        
                 
+	//	this.logSessionData("saveFormChanges ", form.toString(), request.getSession());
         return mapping.findForward(SUCCESS);
 
     }
@@ -741,6 +750,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
     HttpServletRequest request,
     HttpServletResponse response) throws IOException, ServletException {
 
+	//	this.logSessionData("cancelFormEdit ", form.toString(), request.getSession());
     //unlock form 
     Form crf = (Form) getSessionObject(request, CRF);
     if (crf!=null){
@@ -760,6 +770,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
     removeSessionObject(request,UPDATE_SKIP_PATTERN_TRIGGERS);        
     editForm.clear();                
     
+	//this.logSessionData("cancelFormEdit ", form.toString(), request.getSession());
     return mapping.findForward(SUCCESS);
 
     }

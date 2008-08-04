@@ -7,13 +7,13 @@
     <form-bean name="searchForm"
       type="gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean"
       dynamic="true">
-      <form-property name="formLongName" type="java.lang.String"/>
-      <form-property name="protocolIdSeq" type="java.lang.String"/>
-      <form-property name="contextIdSeq" type="java.lang.String"/>
-      <form-property name="contextName" type="java.lang.String"/>
-      <form-property name="workflow" type="java.lang.String"/>
-      <form-property name="categoryName" type="java.lang.String"/>
-      <form-property name="formType" type="java.lang.String"/>
+      <form-property name="searchFormName" type="java.lang.String"/>
+      <form-property name="searchProtoIdseq" type="java.lang.String"/>
+      <form-property name="searchContextIdseq" type="java.lang.String"/>
+      <form-property name="searchContextName" type="java.lang.String"/>
+      <form-property name="searchWorkflow" type="java.lang.String"/>
+      <form-property name="searchCategoryName" type="java.lang.String"/>
+      <form-property name="searchFormType" type="java.lang.String"/>
       <form-property name="txtClassSchemeItem" type="java.lang.String"/>
       <form-property name="jspClassification" type="java.lang.String"/>
       <form-property name="protocolLongName" type="java.lang.String"/>
@@ -21,7 +21,7 @@
       <form-property name="sortField" type="java.lang.String"/>
       <form-property name="sortOrder" type="java.lang.Integer"/>
       <form-property name="csIdseq" type="java.lang.String"/>   
-      <form-property name="publicId" type="java.lang.String"/>   
+      <form-property name="searchFormPublicID" type="java.lang.String"/>   
       <form-property name="latestVersionIndicator" type="java.lang.String"/>   
       <form-property name="moduleLongName" type="java.lang.String"/>   
       <form-property name="cdePublicId" type="java.lang.String"/>   
@@ -207,7 +207,7 @@
       <forward name="noChanges" path="/moduleToEditAction.do?method=getModuleToEdit" redirect="false"/>
       <forward name="saveConfirm" path="/jsp/formbuilder/formSaveConfirmModuleEdit.jsp" redirect="false"/>
       <forward name="saveConfirmDone" path="/jsp/formbuilder/formSaveConfirm.jsp" redirect="false"/>
-      <forward name="searchResults" path="/cancelFormEditAction.do?method=cancelFormEdit"
+      <forward name="searchResults" path="/formDoneAction.do"
         redirect="false"/>     
     </action>
 
@@ -219,7 +219,12 @@
       <forward name="failure" path="/jsp/formbuilder/formEdit.jsp"
         redirect="false"/>       
     </action>
-
+    
+ 	<action path="/formDoneAction" 
+ 		type="org.apache.struts.actions.ForwardAction" 
+		scope="session" 
+		parameter="/formSearchFramedAction.do?method=getAllForms"/>
+		
     <action name="formEditForm" path="/saveFormModuleEditAction" parameter="method"
       scope="session"
       type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormEditAction"
@@ -239,7 +244,7 @@
       type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormEditAction"
       validate="false">
       <forward name="success"
-        path="/formSearchFramedAction.do?method=getAllForms"
+      	path="/formDoneAction.do"
         redirect="false"/>
       <forward name="failure"
         path="/jsp/formbuilder/formEdit.jsp"
@@ -248,7 +253,7 @@
       <forward name="searchResults" path="/jsp/formbuilder/formbuilder.jsp"
         redirect="false"/>        
     </action>      
-    <action name="searchForm" path="/cancelFormEditAction" parameter="method"
+    <action name="formEditForm" path="/cancelFormEditAction" parameter="method"
       scope="session"
       type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormEditAction"
       validate="false">
