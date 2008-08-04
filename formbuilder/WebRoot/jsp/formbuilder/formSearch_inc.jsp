@@ -13,7 +13,7 @@ function clearClassSchemeItem() {
 }
 
 function clearProtocol() {
-  document.forms[0].protocolIdSeq.value = "";
+  document.forms[0].searchProtoIdseq.value = "";
   document.forms[0].protocolLongName.value = "";
 }
 function clearForm() {
