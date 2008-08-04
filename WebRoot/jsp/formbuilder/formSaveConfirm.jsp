@@ -63,7 +63,7 @@ function submitFormToSave(methodName) {
              </a> 
           </td>   
          <td align="center">
-            <a href="javascript:submitFormToSave('<%=NavigationConstants.CANCEL_FORM_EDIT%>')">
+            <a href='<%="cancelFormEditAction.do?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.CANCEL_FORM_EDIT%>'>
                 <html:img src='<%=urlPrefix+"i/no.gif"%>' border="0" alt="No"/>
              </a> 
           </td>            
