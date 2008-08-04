@@ -40,7 +40,7 @@ function gotoFormSearchPrefs() {
        "/classificationLOVAction.do?method=getClassificationsLOV&classificationsLOV=9&idVar=jspClassification&nameVar=txtClassSchemeItem" + pageUrl;
 
   String protoLOVUrl = contextPath +
-       "/formLOVAction.do?method=getProtocolsLOV&idVar=protocolIdSeq&nameVar=protocolLongName"+pageUrl;
+       "/formLOVAction.do?method=getProtocolsLOV&idVar=searchProtoIdseq&nameVar=protocolLongName"+pageUrl;
 
 %>
 
@@ -48,12 +48,12 @@ function gotoFormSearchPrefs() {
 <SCRIPT>
 <!--
 function gotoProtocolsLOV() {
-     var dest = '<%= protoLOVUrl %>' + '&contextIdSeq=' + document.forms[0].<%= FormConstants.CONTEXT_ID_SEQ %>.value;
+     var dest = '<%= protoLOVUrl %>' + '&contextIdSeq=' + document.forms[0].<%= FormConstants.SEARCH_CONTEXT_IDSEQ %>.value;
 ;
      newWin(dest, 'ProtocolsLOV', 1200, 900);
 }
 function gotoClassificationsLOV() {
-     var dest = '<%= csLOVUrl %>' + '&contextIdSeq=' + document.forms[0].<%= FormConstants.CONTEXT_ID_SEQ %>.value;
+     var dest = '<%= csLOVUrl %>' + '&contextIdSeq=' + document.forms[0].<%= FormConstants.SEARCH_CONTEXT_IDSEQ %>.value;
      newWin(dest, 'ClassificationLOV', 1200, 900);
 }
 -->
@@ -99,7 +99,7 @@ function gotoClassificationsLOV() {
             <tr>
               <td width="20%" class="OraTableColumnHeaderNoBG" nowrap><bean:message key="cadsr.formbuilder.form.name" /></td>
               <td class="OraTabledata" nowrap>
-                <html:text property="<%=FormConstants.FORM_LONG_NAME%>" size="60"
+                <html:text property="<%=FormConstants.SEARCH_FORM_NAME%>" size="60"
                 onkeypress="if(event.keyCode==13){submitForm('getAllForms');};"/>
               </td>
             </tr>
@@ -109,7 +109,7 @@ function gotoClassificationsLOV() {
                     <tr>
                         <td width="20%" class="OraTableColumnHeaderNoBG" nowrap>Public ID</td>
                         <td class="OraTabledata" nowrap>
-                        <html:text property="<%=FormConstants.PUBLIC_ID%>" size="20"
+                        <html:text property="<%=FormConstants.SEARCH_FORM_PUBLICID%>" size="20"
                             onkeypress="if(event.keyCode==13){submitForm('getAllForms');};"/>
                          </td>
                          <td width="50%" class="OraTableColumnHeaderNoBG" nowrap>
@@ -153,7 +153,7 @@ function gotoClassificationsLOV() {
                          onkeypress="if(window.event.keyCode==13){submitForm('getAllForms');};"/>
                   &nbsp;<a href="javascript:gotoProtocolsLOV()"><img src="<%=urlPrefix%>i/search_light.gif" border="0" alt="Search for Protocol Items"></a>&nbsp;
                   <a href="javascript:clearProtocol()"><i>Clear</i></a>
-                  <html:hidden  property="<%=FormConstants.PROTOCOL_ID_SEQ%>"/>
+                  <html:hidden  property="<%=FormConstants.SEARCH_PROTO_IDSEQ%>"/>
                 </td>
              </tr>
             <tr>            
@@ -192,7 +192,7 @@ function gotoClassificationsLOV() {
             <tr>            
               <td width="21%" class="OraTableColumnHeaderNoBG" nowrap><bean:message key="cadsr.formbuilder.form.workflow" /></td>
               <td width="70%" class="OraTabledata" nowrap>
-              <html:select styleClass = "FreeDropdown" property="<%=FormConstants.WORKFLOW%>"
+              <html:select styleClass = "FreeDropdown" property="<%=FormConstants.SEARCH_WORKFLOW%>"
               onkeypress="if(window.event.keyCode==13){submitForm('getAllForms');};">
                  <html:option key="cadsr.formbuilder.form.blank" value="<%=FormConstants.SEARCH_ALL%>" /> 
                  <html:options name="<%=FormConstants.ALL_WORKFLOWS%>"/>
@@ -202,7 +202,7 @@ function gotoClassificationsLOV() {
             <tr>    
               <td width="30%" class="OraTableColumnHeaderNoBG" nowrap><bean:message key="cadsr.formbuilder.form.context" /></td>
               <td width="70%" class="OraTabledata" nowrap>
-                <html:select styleClass = "Dropdown" property="<%=FormConstants.CONTEXT_ID_SEQ%>"
+                <html:select styleClass = "Dropdown" property="<%=FormConstants.SEARCH_CONTEXT_IDSEQ%>"
                 onkeypress="if(window.event.keyCode==13){submitForm('getAllForms');};">
                    <html:option key="cadsr.formbuilder.form.blank" value="<%=FormConstants.SEARCH_ALL%>" /> 
                    <html:options collection="<%=FormConstants.ALL_CONTEXTS%>" 
@@ -213,7 +213,7 @@ function gotoClassificationsLOV() {
             <tr>    
               <td width="30%" class="OraTableColumnHeaderNoBG" nowrap><bean:message key="cadsr.formbuilder.form.category" /></td>
               <td width="70%" class="OraTabledata" nowrap>
-              <html:select styleClass = "Dropdown" property="<%=FormConstants.CATEGORY_NAME%>"
+              <html:select styleClass = "Dropdown" property="<%=FormConstants.SEARCH_CATEGORY_NAME%>"
               onkeypress="if(window.event.keyCode==13){submitForm('getAllForms');};">
                 <html:option key="cadsr.formbuilder.form.blank" value="<%=FormConstants.SEARCH_ALL%>" /> 
                 <html:options name="<%=FormConstants.ALL_FORM_CATEGORIES%>" /> 
@@ -223,7 +223,7 @@ function gotoClassificationsLOV() {
             <tr>    
                 <td width="30%" class="OraTableColumnHeaderNoBG" nowrap><bean:message key="cadsr.formbuilder.form.type" /></td>  
                 <td width="70%" class="OraTabledata" nowrap>
-                <html:select styleClass = "Dropdown" property="<%=FormConstants.FORM_TYPE%>"
+                <html:select styleClass = "Dropdown" property="<%=FormConstants.SEARCH_FORM_TYPE%>"
                 onkeypress="if(window.event.keyCode==13){submitForm('getAllForms');};">
                   <html:option key="cadsr.formbuilder.form.blank" value="<%=FormConstants.SEARCH_ALL%>" /> 
                   <html:options name="<%=FormConstants.ALL_FORM_TYPES%>" /> 
