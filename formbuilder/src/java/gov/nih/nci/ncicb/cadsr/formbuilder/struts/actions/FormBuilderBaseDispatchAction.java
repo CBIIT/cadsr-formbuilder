@@ -19,7 +19,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -409,4 +411,11 @@ public class FormBuilderBaseDispatchAction extends BaseDispatchAction
 
   }
   
+  public void logSessionData(String action, String form, HttpSession session){
+	  log.info("============ action " + action + " form " + form);
+	  ArrayList<String> names = Collections.list(session.getAttributeNames());
+	  for (String name : names) 
+		  log.info(name);
+	  log.info("============ *** ======== " + form);	  
+  }
 }
