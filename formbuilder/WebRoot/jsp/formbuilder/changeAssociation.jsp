@@ -47,6 +47,18 @@
      if(validate(f) == true)
        f.submit();
   }
+  function submitUpdateForm(methodName) {
+     var f = document.forms[0];
+     if(validate(f) == true)
+     {
+       document.forms[0].<%=NavigationConstants.METHOD_PARAM%>.value=methodName;
+       f.submit();
+     }
+  }
+  function retrieveCDEs(methodName) {
+       document.forms[0].<%=NavigationConstants.METHOD_PARAM%>.value=methodName;
+       document.forms[0].submit();
+  }
   
 function details(linkParms ){
   var urlString="<%=browseURL%>" + "/CDEBrowser/search?dataElementDetails=9" + linkParms + "&PageId=DataElementsGroup"+"&queryDE=yes";
@@ -72,16 +84,15 @@ function details(linkParms ){
     </tr>  
 </table> 
 
-<html:form action='<%= "/changeAssociation?" + NavigationConstants.METHOD_PARAM + "=" + NavigationConstants.CHANGE_DE_ASSOCIATION %>' >
+<html:form action='<%= "/changeAssociation" %>' >
 
+<html:hidden value="" property="<%=NavigationConstants.METHOD_PARAM%>"/>
 <html:hidden property="<%= FormConstants.QUESTION_INDEX %>"/>
 <html:hidden property="<%=FormConstants.MODULE_INDEX%>"/>
 <bean:define id="moduleIndex" name="changeAssociationForm" property="<%=FormConstants.MODULE_INDEX%>"/>
 
 
-<logic:notEmpty name="<%=CaDSRConstants.CDE_CART%>" property = "dataElements">
   <%@ include file="changeAssociation_inc.jsp" %>
-</logic:notEmpty>
 
 <logic:present name="<%=CaDSRConstants.CDE_CART%>">
   <table width="80%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
@@ -156,23 +167,16 @@ function details(linkParms ){
       </tr>
       <% } %>
     </table>
+  </logic:notEmpty>
     <br>
   <%@ include file="changeAssociation_inc.jsp" %>
-  </logic:notEmpty>
 
-    <table width="20%" align="center" cellpadding="1" cellspacing="1" border="0" >
+    <table width="10%" align="center" cellpadding="1" cellspacing="1" border="0" >
       
       <tr >
         <td>
           <a target="_blank" href='<%= params.getCdeBrowserUrl()%>'><html:img src='<%=urlPrefix+"i/add_more_data_elements.gif"%>' border="0" alt="Add more data elements"/></a>
           </td>
-      <logic:empty name="<%=CaDSRConstants.CDE_CART%>" property = "dataElements">
-        <td>
-          <html:link action='<%= "/cancelAction?" + NavigationConstants.METHOD_PARAM + "=" + NavigationConstants.GET_MODULE_TO_EDIT %>'>
-            <html:img src='<%=urlPrefix+"i/cancel.gif"%>' border="0" alt="Cancel"/>
-          </html:link>             
-        </td>
-      </logic:empty>
         </tr>
       </table>    
 </logic:present>

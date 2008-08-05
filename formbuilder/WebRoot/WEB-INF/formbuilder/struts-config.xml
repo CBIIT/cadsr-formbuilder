@@ -365,6 +365,7 @@
       validate="false">
       <forward name="success" path="/moduleToEditAction.do?method=getModuleToEdit"/>
       <forward name="failure" path="/jsp/formbuilder/moduleEdit.jsp"/>
+      <forward name="retrieveCDEs" path="/jsp/formbuilder/changeAssociation.jsp"/>
     </action> 
 
     <action name="moduleEditForm" path="/showValueMeaningAlterNames" parameter="method"
