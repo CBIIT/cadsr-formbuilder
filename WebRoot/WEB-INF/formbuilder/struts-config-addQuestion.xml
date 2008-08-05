@@ -27,6 +27,7 @@
       <forward name="success" path="/moduleToEditAction.do?method=getModuleToEdit"/>
       <forward name="subsetVVs" path="/jsp/formbuilder/addQuestionSubsetValidValues.jsp"/>
       <forward name="failure" path="/jsp/formbuilder/moduleEdit.jsp"/>
+      <forward name="retrieveCDEs" path="/jsp/formbuilder/addQuestion.jsp"/>
     </action>
        
     <action name="addQuestionForm" path="/addQuestionSubsetted" parameter="method"

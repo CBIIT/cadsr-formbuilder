@@ -92,6 +92,11 @@
        }
   }
   
+  function retrieveCDEs(methodName) {
+       document.forms[0].<%=NavigationConstants.METHOD_PARAM%>.value=methodName;
+       document.forms[0].submit();
+  }
+  
 <bean:define id="qIndex" name="addQuestionForm" property="<%= FormConstants.QUESTION_INDEX %>"/> 
 <bean:define id="moduleIndex" name="addQuestionForm" property="<%=FormConstants.MODULE_INDEX%>"/>
 
@@ -131,9 +136,7 @@ function details(linkParms ){
 <html:hidden property="<%=FormConstants.MODULE_INDEX%>"/>
 
 
-<logic:notEmpty name="<%=CaDSRConstants.CDE_CART%>" property = "dataElements">
-  <%@ include file="addQuestion_inc.jsp" %>
-</logic:notEmpty>
+<%@ include file="addQuestion_inc.jsp" %>
 
 <%@ include file="showMessages.jsp" %>
 
@@ -201,22 +204,17 @@ function details(linkParms ){
       </td>
     </tr>
     </table>
+  </logic:notEmpty>
     <br>
 
-    <%@ include file="addQuestion_inc.jsp" %>
-  </logic:notEmpty>
+	<%@ include file="addQuestion_inc.jsp" %>
   
-  <table width="20%" align="center" cellpadding="1" cellspacing="1" border="0" >
+  <table width="10%" align="center" cellpadding="1" cellspacing="1" border="0" >
     
     <tr >
       <td>
         <a target="_blank" href='<%=params.getCdeBrowserUrl()%>'><html:img src='<%=urlPrefix+"i/add_more_data_elements.gif"%>' border="0" alt="Add more data elements"/></a>
       </td>
-      <logic:empty name="<%=CaDSRConstants.CDE_CART%>" property = "dataElements">
-          <td >
-            <a href="javascript:submitCancelForm()"><html:img src='<%=urlPrefix+"i/cancel.gif"%>' border="0" alt="cancel"/></a>
-          </td>           
-      </logic:empty>
     </tr>
   </table>    
 </logic:present>
