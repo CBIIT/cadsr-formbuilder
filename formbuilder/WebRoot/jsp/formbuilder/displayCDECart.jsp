@@ -197,7 +197,7 @@ function retrieveSavedItems() {
       <tr>
         <td>
           <a href="javascript:retrieveSavedItems()()">
-            <html:img src='<%=urlPrefix+"i/retrieve.gif"%>' border="0" alt="Retrieve Saved Data Elements"/> 
+            <html:img src='<%=urlPrefix+"i/refresh.gif"%>' border="0" alt="Refresh Saved Data Elements"/> 
           </a>
         </td>
 		<logic:notEmpty name="<%=CaDSRConstants.CDE_CART%>" property = "dataElements">
