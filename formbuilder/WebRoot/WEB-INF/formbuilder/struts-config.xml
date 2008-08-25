@@ -110,10 +110,10 @@
   <global-exceptions>
     <exception type="gov.nih.nci.ncicb.cadsr.common.exception.FatalException"
       scope="request" path="/jsp/common/systemError.jsp"
-      key="error.system.message"/>
+      key="FB911"/>
     <exception type="gov.nih.nci.ncicb.cadsr.common.exception.InvalidUserException"
       scope="request" path="/jsp/formbuilder/formbuilder.jsp"
-      key="error.system.message"/>      
+      key="FB911"/>      
   </global-exceptions>
   <global-forwards>
     <forward name="printerVersion" path="/jsp/formbuilder/printerVersion.jsp"

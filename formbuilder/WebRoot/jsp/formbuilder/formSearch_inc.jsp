@@ -49,7 +49,6 @@ function gotoFormSearchPrefs() {
 <!--
 function gotoProtocolsLOV() {
      var dest = '<%= protoLOVUrl %>' + '&contextIdSeq=' + document.forms[0].<%= FormConstants.SEARCH_CONTEXT_IDSEQ %>.value;
-;
      newWin(dest, 'ProtocolsLOV', 1200, 900);
 }
 function gotoClassificationsLOV() {
