@@ -777,12 +777,13 @@ function clearProtocol() {
                                    <td >&nbsp;</td>
                                     <td align="center">
                                        <!-- Adding from available vv list -->
-                                          <td align="right"   class="OraFieldText" nowrap width="90%">    
+                                          <td align="right"   class="OraFieldText" nowrap width="90%">  
+                                          <% String vvZeroSelectName = FormConstants.ADD_AVAILABLE_VALID_VALUE_INDEX+"Q"+questionIndex+"V"+0; %>  
                                             <cde:availableValidValues
                                               questionBeanId="question"
                                               availableValidValusMapId="<%=FormConstants.AVAILABLE_VALID_VALUES_MAP%>"
                                               selectClassName="FreeDropdown"
-                                              selectName="<%=FormConstants.ADD_AVAILABLE_VALID_VALUE_INDEX+questionIndex+0%>"/>
+                                              selectName="<%=vvZeroSelectName%>"/>
                                           </td>
                                           <logic:present name="<%=AvailableValidValue.AVAILABLE_VALID_VALUE_PRESENT%>">
                                            <td align="left" width="4%">
@@ -838,7 +839,8 @@ function clearProtocol() {
                                       </table>
                                     </td>                               
                                 <logic:iterate id="validValue" name="question" indexId="validValueIndex" type="gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue" property="validValues">
-                                <bean:size id="validValueSize" name="question" property="validValues"/>                                  
+                                <bean:size id="validValueSize" name="question" property="validValues"/>  
+                                	<% String vvIndSelectName = FormConstants.ADD_AVAILABLE_VALID_VALUE_INDEX+"Q"+questionIndex+"V"+validValueIndex; %>                                
                                   <tr class="OraTabledata">
                                     <td class="OraTabledata" >&nbsp;</td>
                                     <td class="OraTabledata" align="right" width="90%">                                                                        
@@ -855,7 +857,7 @@ function clearProtocol() {
                                                       questionBeanId="question"
                                                       availableValidValusMapId="<%=FormConstants.AVAILABLE_VALID_VALUES_MAP%>"
                                                       selectClassName="FreeDropdown"
-                                                      selectName="<%=FormConstants.ADD_AVAILABLE_VALID_VALUE_INDEX+questionIndex+validValueIndex%>"/>
+                                                      selectName="<%=vvIndSelectName%>"/>
                                                   </td>
                                                   <logic:present name="<%=AvailableValidValue.AVAILABLE_VALID_VALUE_PRESENT%>">
                                                     <td align="left" width="4%">
@@ -1060,12 +1062,13 @@ function clearProtocol() {
                                           <tr class="OraTabledata" >
                                            <td >&nbsp;</td>
                                                <!-- Adding from available vv list -->                            
+                                				<% String vvSizeSelectName = FormConstants.ADD_AVAILABLE_VALID_VALUE_INDEX+"Q"+questionIndex+"V"+validValueSize; %>                                
                                                   <td align="right"   class="OraFieldText" nowrap width="90%">    
                                                     <cde:availableValidValues
                                                       questionBeanId="question"
                                                       availableValidValusMapId="<%=FormConstants.AVAILABLE_VALID_VALUES_MAP%>"
                                                       selectClassName="FreeDropdown"
-                                                      selectName="<%=FormConstants.ADD_AVAILABLE_VALID_VALUE_INDEX+questionIndex+validValueSize%>"/>
+                                                      selectName="<%=vvSizeSelectName%>"/>
                                                   </td>
                                                   <logic:present name="<%=AvailableValidValue.AVAILABLE_VALID_VALUE_PRESENT%>">
                                                     <td align="left" width="4%">

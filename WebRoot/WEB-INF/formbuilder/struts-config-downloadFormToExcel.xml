@@ -1,11 +1,9 @@
 <?xml version = '1.0' encoding = 'windows-1252'?>
 <!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
-
 <struts-config>
  <form-beans> 
     <form-bean name="formDownload"
       type="gov.nih.nci.ncicb.cadsr.common.struts.formbeans.CDECartFormBean"/>
-
   </form-beans>  
 
   <action-mappings>
@@ -14,7 +12,6 @@
       validate="false">     
       <forward name="failure" path="/formSearchFramedAction.do?method=getAllForms"/>
       <forward name="downloadSuccess" path="/formCDEDownload.do?type=form"/>
-    </action>
-     
+    </action>     
   </action-mappings>
 </struts-config>
