@@ -650,7 +650,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
     int currQuestionIndex = questionIndex.intValue();
     int currValidValueIndex = validValueIndex.intValue();
     Module module = (Module) getSessionObject(request, MODULE);
-    String addAvailableValidValueIndexStr = request.getParameter(ADD_AVAILABLE_VALID_VALUE_INDEX+currQuestionIndex+validValueIndex);
+    String addAvailableValidValueIndexStr = request.getParameter(ADD_AVAILABLE_VALID_VALUE_INDEX+"Q"+currQuestionIndex+"V"+validValueIndex);
     int addAvailableValidValueIndex = 0;
     if(addAvailableValidValueIndexStr!=null)
       addAvailableValidValueIndex = Integer.parseInt(addAvailableValidValueIndexStr);
