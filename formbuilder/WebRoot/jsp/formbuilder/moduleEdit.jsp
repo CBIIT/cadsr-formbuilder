@@ -775,7 +775,6 @@ function clearProtocol() {
                                 <table width="79%" align="right" cellpadding="0" cellspacing="0" border="0" class="OraBGAccentVeryDark">
                                   <tr class="OraTabledata" >
                                    <td >&nbsp;</td>
-                                    <td align="center">
                                        <!-- Adding from available vv list -->
                                           <td align="right"   class="OraFieldText" nowrap width="90%">  
                                           <% String vvZeroSelectName = FormConstants.ADD_AVAILABLE_VALID_VALUE_INDEX+"Q"+questionIndex+"V"+0; %>  
@@ -797,7 +796,6 @@ function clearProtocol() {
                                            </logic:notPresent>                                            
                                           <td class="OraTabledata" width="10">&nbsp;</td>
                                           <!-- Adding from available vv list end -->                                         
-                                    </td>
                                   </tr>
 
                                 </table>                                                                                                            
@@ -814,7 +812,7 @@ function clearProtocol() {
                                     <td class="OraTabledata" >&nbsp;</td>
                                     <td class="OraTabledata" align="left" width="90%"> 
                                        <table width="60%" align="left" cellpadding="0" cellspacing="0" border="0" >
-                                         </tr >
+                                         <tr >
                                             <td width="16%" align="left" >
                                              <a href="javascript:CheckAll('<%= FormConstants.SELECTED_ITEMS+questionIndex %>')">Check All
                                              </a>
@@ -883,8 +881,7 @@ function clearProtocol() {
                                           <bean:write name="validValue" property="longName"/>
                                           <% String formattedValidValue = validValue.getLongName();
                                              if (formattedValidValue!=null){
-                                             	formattedValidValue = StringUtils.strReplace(formattedValidValue, "\"","&quot;");
-                                             	formattedValidValue = StringUtils.strReplace(formattedValidValue, "\'",  "&acute;");
+                                             	formattedValidValue = StringUtils.getValidJSString(formattedValidValue);
                                              }	
                                            %>  
                                           <a href="javascript:populateDefaultValue('<%=formattedValidValue%>', '<%=validValue.getValueIdseq()%>', '<%=questionIndex%>')">

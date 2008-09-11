@@ -171,8 +171,7 @@
                                         <td class="OraFieldText">
                                           <bean:write name="validValue" property="longName"/>
                                           <% String formattedValidValue = validValue.getLongName();
-                                             formattedValidValue = StringUtils.strReplace(formattedValidValue, "\"","&quot;");
-                                             formattedValidValue = StringUtils.strReplace(formattedValidValue, "\'",  "&acute;");
+                                             formattedValidValue = StringUtils.getValidJSString(formattedValidValue);
                                            %>  
                                           <a href="javascript:populateDefaultValue('<%=formattedValidValue%>','<%=validValue.getValueIdseq()%>','<%=defaultIndex%>')">
                                              Click here to set as default
