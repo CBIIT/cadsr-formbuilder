@@ -1,10 +1,9 @@
+
 <%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean"%>
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%@page import="java.util.*" %>
-<%@page import="javax.servlet.http.* " %>
-<%@page import="javax.servlet.* " %>
-<%@page import="gov.nih.nci.ncicb.cadsr.common.util.* " %>
+<%@page import="gov.nih.nci.ncicb.cadsr.common.util.StringUtils"%>
 <%@page import="gov.nih.nci.ncicb.cadsr.common.resource.* " %>
 <%@page import="gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.*"%>
 
@@ -101,8 +100,9 @@
 	<br>
         <% String longName = vm.getLongName();
            if (longName!=null){
-		longName = StringUtils.strReplace(longName, "\"","&quot;");
-	      	longName = StringUtils.strReplace(longName, "\'",  "&acute;");
+        	   longName = StringUtils.getValidJSString(longName);
+		//longName = StringUtils.strReplace(longName, "\"","&quot;");
+	      	//longName = StringUtils.strReplace(longName, "\'",  "&acute;");
 	   }   	
 	%>      		
         <logic:notPresent name="formbuilder">
@@ -121,8 +121,9 @@
 	<br>
         <% String desc = vm.getPreferredDefinition();
            if (desc!=null){
-		desc = StringUtils.strReplace(desc, "\"","&quot;");
-	      	desc = StringUtils.strReplace(desc, "\'",  "&acute;");
+        	   desc = StringUtils.getValidJSString(desc);
+		//desc = StringUtils.strReplace(desc, "\"","&quot;");
+	 //     	desc = StringUtils.strReplace(desc, "\'",  "&acute;");
 	   }   	
 	%>      		
         <logic:notPresent name="formbuilder">
@@ -196,8 +197,9 @@ while (csiIter.hasNext()) {
         <td class="OraFieldText"><%=des.getName()%>
         <% String altName = des.getName();
            if (altName!=null){
-		altName = StringUtils.strReplace(altName, "\"","&quot;");
-	      	altName = StringUtils.strReplace(altName, "\'",  "&acute;");
+        	   altName = StringUtils.getValidJSString(altName);
+		//altName = StringUtils.strReplace(altName, "\"","&quot;");
+	     // 	altName = StringUtils.strReplace(altName, "\'",  "&acute;");
 	   }   	
 	%>      		        
         <logic:notPresent name="formbuilder">        
@@ -249,8 +251,9 @@ while (csiIter.hasNext()) {
         <td class="OraFieldText"><%=def.getDefinition()%> 
         <% String altDef = def.getDefinition();
            if (altDef!=null){
-		altDef = StringUtils.strReplace(altDef, "\"","&quot;");
-	      	altDef = StringUtils.strReplace(altDef, "\'",  "&acute;");
+        	   altDef = StringUtils.getValidJSString(altDef);
+		//altDef = StringUtils.strReplace(altDef, "\"","&quot;");
+	     // 	altDef = StringUtils.strReplace(altDef, "\'",  "&acute;");
 	   }   	
 	%>  
        <logic:notPresent name="formbuilder">
