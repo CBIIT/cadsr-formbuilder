@@ -121,7 +121,7 @@ if(confirm(message)) location.href = url;
               <html:link action='<%="/formExcelDownload.do?"%>' 
                 paramId = "<%=FormConstants.FORM_ID_SEQ%>"
                 paramName="<%=FormConstants.CRF%>" paramProperty="formIdseq"
-                target="_parent" >
+                target="_blank" >
                 Excel Download
               </html:link> 
 	    </td>
