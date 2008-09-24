@@ -127,7 +127,7 @@ if(confirm(message)) location.href = url;
                     		<html:link action='<%="/formExcelDownload.do?"%>' 
 			                    paramId = "<%=FormConstants.FORM_ID_SEQ%>"
 			                    paramName="form" paramProperty="formIdseq"
-			                    target="_parent" >
+			                    target="_blank" >
                     			<html:img src='<%=urlPrefix+"i/excel-icon.jpg"%>' border="0" alt="Excel Download"/>
                     		</html:link>                 
                     	</td>
