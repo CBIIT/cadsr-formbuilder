@@ -1,3 +1,4 @@
+
 <%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean"%>
@@ -8,13 +9,10 @@
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.CaDSRConstants"%>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants"%>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants"%>
-<%@ page import="gov.nih.nci.ncicb.cadsr.common.resource.NCIUser"%>
 <%
 	String urlPrefix = "";
   CDEBrowserParams params = CDEBrowserParams.getInstance();
   String browseURL = params.getCdeBrowserUrl();
-  //NCIUser user = (NCIUser)session.getAttribute(CaDSRConstants.USER_KEY);  
-  //String cartName = user.getUsername();
 %>
 <HTML>
 <HEAD>
@@ -123,8 +121,8 @@ function retrieveSavedItems() {
     <table cellpadding="0" cellspacing="0" width="80%" align="center">
       <tr>
         <td nowrap>
-          <b><a href="<%=downloadExcelURL%>" >[Download Data Elements to Excel]</a></b> &nbsp;&nbsp;
-          <b><a href="<%=downloadXMLURL%>" >[Download Data Elements as XML]</a></b> &nbsp;&nbsp;
+          <b><a href="<%=downloadExcelURL%>" target="_blank">[Download Data Elements to Excel]</a></b> &nbsp;&nbsp;
+          <b><a href="<%=downloadXMLURL%>" target="_blank">[Download Data Elements as XML]</a></b> &nbsp;&nbsp;
         </td>
       </tr>
       <tr>
