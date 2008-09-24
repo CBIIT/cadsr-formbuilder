@@ -1,3 +1,4 @@
+
 <%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean"%>
@@ -14,11 +15,11 @@
   String pageName = "PageId";
   String pageId = "DataElementsGroup";
   String pageUrl = "&"+pageName+"="+pageId;
+  
 %>
 
 <HTML>
 <HEAD>
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=WINDOWS-1252">
 <LINK REL=STYLESHEET TYPE="text/css" HREF="<%=request.getContextPath()%>/css/blaf.css">
 <TITLE>
 List of Values - Classifications
@@ -55,7 +56,7 @@ function validate() {
 }
 
 function goPage(pageInfo) {
-  document.location.href = "/classificationLOVAction.do?method=getClassificationsLOV&classificationsLOV=9&"+pageInfo + "<%= pageUrl %>";
+  document.location.href = "classificationLOVAction.do?method=getClassificationsLOV&classificationsLOV=9&"+pageInfo + "<%= pageUrl %>";
 }
 
   
