@@ -111,7 +111,8 @@ public class ManageClassificationsAction
       
       if (csCDEIndicator) {
         List CDEList = crf.getCDEIdList();
-        acIdList.addAll(CDEList);
+        if (CDEList != null)
+        	acIdList.addAll(CDEList);
       }
     
       try {

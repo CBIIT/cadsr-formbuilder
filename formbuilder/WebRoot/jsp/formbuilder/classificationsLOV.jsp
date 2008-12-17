@@ -34,7 +34,7 @@ List of Values - Classifications
 //<!--
 function passback(P_ID, P_NAME) {
    opener.document.forms[0].<%=StringEscapeUtils.escapeHtml(clb.getJsName())%>.value = P_NAME;
-   opener.document.forms[0].<%=StringEscapeUtils.escapeHtml(clb.getJsId())%>.value = P_ID;
+   opener.document.forms[0]['<%=StringEscapeUtils.escapeHtml(clb.getJsId())%>'].value = P_ID;
    opener.document.forms[0].<%=StringEscapeUtils.escapeHtml(clb.getJsName())%>.focus();
    window.close();
 }
