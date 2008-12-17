@@ -31,7 +31,7 @@
            function clearClassSchemeItem(i) {
            var name = '<%= FormConstants.CSI_NAME %>' + i;
            document.forms[0][name].value = "";
-           name = '<%= FormConstants.CS_CSI_ID %>[' + i + ']';
+           name = '<%= FormConstants.CS_CSI_ID %>' + i;
            document.forms[0][name].value = "";
            }
            -->
@@ -48,7 +48,7 @@
       String contextId = ((gov.nih.nci.ncicb.cadsr.common.resource.Form)session.getAttribute(FormConstants.CRF)).getContext().getConteIdseq();
 
       for(int i=0; i<nbOfClassifications; i++) 
-      	csLOVUrl[i] = "javascript:newWin('"+contextPath+"/classificationLOVAction.do?method=getClassificationsLOV&chkContext=always&classificationsLOV=1&P_CONTE_IDSEQ=" + contextId +"&idVar=jspClassification[" + i + "]&nameVar=txtClassSchemeItem" + i + pageUrl + "','csLOV',1200,900)";
+      	csLOVUrl[i] = "javascript:newWin('"+contextPath+"/classificationLOVAction.do?method=getClassificationsLOV&chkContext=always&classificationsLOV=1&P_CONTE_IDSEQ=" + contextId +"&idVar=jspClassification" + i + "&nameVar=txtClassSchemeItem" + i + pageUrl + "','csLOV',1200,900)";
       //csLOVUrl[i] = "javascript:newWin('"+contextPath+"/search?chkContext=always&classificationsLOV=1&P_CONTE_IDSEQ=" + contextId +"&idVar=jspClassification[" + i + "]&nameVar=txtClassSchemeItem" + i + pageUrl + "','csLOV',1200,900)";
 
       %>
@@ -71,9 +71,8 @@
         />
         &nbsp;
         <a href="<%=csLOVUrl[i]%>"><img src="<%=urlPrefix%>i/search_light.gif" border="0" alt="Search for Classification Scheme Items"></a>&nbsp;
-        <a href="javascript:clearClassSchemeItem(<%= i %>)"><i>Clear</i></a>
-        
-        <html:hidden  property='<%=FormConstants.CS_CSI_ID + "[" + i + "]"%>'/>
+        <a href="javascript:clearClassSchemeItem(<%= i %>)"><i>Clear</i></a>  
+         <input type=hidden name="<%= FormConstants.CS_CSI_ID + i%>" />      
       </td>
     </tr>
     <% } %>
