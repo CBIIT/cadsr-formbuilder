@@ -1,4 +1,3 @@
-
 <%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean"%>
@@ -7,6 +6,7 @@
 <%@page import="oracle.clex.process.PageConstants " %>
 <%@page import="gov.nih.nci.ncicb.cadsr.common.ProcessConstants " %>
 <%@page import="gov.nih.nci.ncicb.cadsr.common.lov.ClassificationsLOVBean " %>
+<%@page import="org.apache.commons.lang.StringEscapeUtils" %>
 
 <%
   ClassificationsLOVBean cslb = (ClassificationsLOVBean)session.getAttribute(ProcessConstants.CS_LOV);
@@ -20,6 +20,7 @@
 
 <HTML>
 <HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=WINDOWS-1252">
 <LINK REL=STYLESHEET TYPE="text/css" HREF="<%=request.getContextPath()%>/css/blaf.css">
 <TITLE>
 List of Values - Classifications
@@ -31,10 +32,10 @@ List of Values - Classifications
 
 <SCRIPT LANGUAGE="JavaScript">
 //<!--
-function passback(P_ID, P_NAME, P_VERSION) {
-   opener.document.forms[0].<%= clb.getJsName() %>.value = P_NAME;
-   opener.document.forms[0]['<%= clb.getJsId() %>'].value = P_ID;
-   opener.document.forms[0].<%= clb.getJsName() %>.focus();
+function passback(P_ID, P_NAME) {
+   opener.document.forms[0].<%=StringEscapeUtils.escapeHtml(clb.getJsName())%>.value = P_NAME;
+   opener.document.forms[0].<%=StringEscapeUtils.escapeHtml(clb.getJsId())%>.value = P_ID;
+   opener.document.forms[0].<%=StringEscapeUtils.escapeHtml(clb.getJsName())%>.focus();
    window.close();
 }
 
@@ -55,9 +56,10 @@ function validate() {
   }
 }
 
-function goPage(pageInfo) {
-  document.location.href = "classificationLOVAction.do?method=getClassificationsLOV&classificationsLOV=9&"+pageInfo + "<%= pageUrl %>";
+function goPage(pageInfo) {  
+  document.location.href = "<%=StringEscapeUtils.escapeHtml("classificationLOVAction.do?method=getClassificationsLOV&classificationsLOV=9&")%>"+pageInfo+"<%=pageUrl%>";
 }
+
 
   
 //-->
@@ -71,12 +73,12 @@ function goPage(pageInfo) {
 <p class="OraHeaderSubSub">Classifications </p>
 </center>
 <form method="POST" onSubmit="return validate()" ENCTYPE="application/x-www-form-urlencoded" action="classificationLOVAction.do?method=getClassificationsLOV">
-<input type="HIDDEN" name="<%= PageConstants.PAGEID %>" value="<%= pageId%>"/>
-<INPUT TYPE="HIDDEN" NAME="NOT_FIRST_DISPLAY" VALUE="1">
-<INPUT TYPE="HIDDEN" NAME="idVar" VALUE="<%= clb.getJsId() %>">
-<INPUT TYPE="HIDDEN" NAME="nameVar" VALUE="<%= clb.getJsName() %>">
-<INPUT TYPE="HIDDEN" NAME="classificationsLOV" VALUE="9">
-<INPUT TYPE="HIDDEN" NAME="contextIdSeq" value="<%= request.getAttribute("contextIdSeq") %>">
+<input type="HIDDEN" name="<%= PageConstants.PAGEID %>" value="<%= StringEscapeUtils.escapeHtml(pageId)%>"/>
+<INPUT TYPE="HIDDEN" NAME="NOT_FIRST_DISPLAY" VALUE="<%=StringEscapeUtils.escapeHtml("1")%>"/>
+<INPUT TYPE="HIDDEN" NAME="idVar" VALUE="<%= StringEscapeUtils.escapeHtml(clb.getJsId()) %>"/>
+<INPUT TYPE="HIDDEN" NAME="nameVar" VALUE="<%= StringEscapeUtils.escapeHtml(clb.getJsName()) %>"/>
+<INPUT TYPE="HIDDEN" NAME="classificationsLOV" VALUE="<%=StringEscapeUtils.escapeHtml("9") %>"/>
+<INPUT TYPE="HIDDEN" NAME="contextIdSeq" value="<%=StringEscapeUtils.escapeHtml((String)request.getAttribute("contextIdSeq")) %>">
 <p align="left">
 <font face="Arial, Helvetica, sans-serif" size="-1" color="#336699">
   Please enter the search criteria. Wildcard character is *.
@@ -87,39 +89,38 @@ function goPage(pageInfo) {
 <%= clb.getSearchFields() %>
 <tr>
   <% 
-    String chkContext = (String)request.getAttribute("chkContext");
-    System.out.println(chkContext);
+    String chkContext = StringEscapeUtils.escapeJavaScript((String)request.getAttribute("chkContext"));    
     if((chkContext == null) || (!chkContext.equals("always"))) {
   %>
   <td class="fieldtitlebold">Restrict Search to Current Context</td>
 <%
   if (clb.isFirstDisplay()) {
 %>
-  <td class="OraFieldText"><input type="checkbox" name="chkContext" value="yes" CHECKED /></td>
+  <td class="OraFieldText"><input type="checkbox" name="chkContext" value="<%=StringEscapeUtils.escapeHtml("yes")%>" CHECKED /></td>
 <%
   }
   else {
     if (cslb.getIsContextSpecific()) {
 %>
-  <td class="OraFieldText"><input type="checkbox" name="chkContext" value="yes" CHECKED /></td>
+  <td class="OraFieldText"><input type="checkbox" name="chkContext" value="<%=StringEscapeUtils.escapeHtml("yes")%>" CHECKED /></td>
 <%
     }
     else if (!cslb.getIsContextSpecific()) {
 %>
-  <td class="OraFieldText"><input type="checkbox" name="chkContext" value="yes" /></td>
+  <td class="OraFieldText"><input type="checkbox" name="chkContext" value="<%=StringEscapeUtils.escapeHtml("yes")%>" /></td>
 <%
     }
   }
 } else {
 %>
-<INPUT type="HIDDEN" NAME="chkContext" value="always"/>
+<INPUT type="HIDDEN" NAME="chkContext" value="<%=StringEscapeUtils.escapeJavaScript("always")%>"/>
 <% } %>
 </tr>
 
 <TR>
   <TD></TD>
-  <TD><input type="submit" name="submit"  value="Find">&nbsp;
-  <INPUT type="button" value="Close" onclick="javascript:closeOnClick()"></TD>
+  <TD><input type="submit" name="submit"  value="<%=StringEscapeUtils.escapeJavaScript("Find")%>"/>&nbsp;
+  <INPUT type="button" value="Close" onclick="javascript:closeOnClick()"/></TD>
 </TR>
 </table>
 
