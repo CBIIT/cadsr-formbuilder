@@ -56,8 +56,8 @@ function validate() {
   }
 }
 
-function goPage(pageInfo) {  
-  document.location.href = "<%=StringEscapeUtils.escapeHtml("classificationLOVAction.do?method=getClassificationsLOV&classificationsLOV=9&")%>"+pageInfo+"<%=pageUrl%>";
+function goPage(pageInfo) {
+  document.location.href = "classificationLOVAction.do?method=getClassificationsLOV&classificationsLOV=9&"+pageInfo + "<%= pageUrl %>";
 }
 
 
