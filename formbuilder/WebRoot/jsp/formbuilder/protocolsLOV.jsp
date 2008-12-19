@@ -46,7 +46,7 @@ function closeOnClick() {
 }
 
 function goPage(pageInfo) {
-  document.location.href = "formLOVAction.do?method=getProtocolsLOV&"+pageInfo + "<%= StringEscapeUtils.escapeHtml(pageUrl) %>";
+  document.location.href = "formLOVAction.do?method=getProtocolsLOV&"+pageInfo + "<%= pageUrl%>";
     
 }
   
