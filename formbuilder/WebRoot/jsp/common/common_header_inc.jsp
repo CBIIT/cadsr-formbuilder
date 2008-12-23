@@ -25,7 +25,7 @@
 					</TD>
 					<TD valign="TOP" align="CENTER" width="1%" colspan=1>
 						<A
-							HREF="javascript:newBrowserWin('/help','helpWin',1200,900)"><html:img
+							HREF="<%=params.getFormBuilderHelpUrl()%>" target="_blank"><html:img
 								page="/i/icon_help.gif" alt="Task Help" border="0" width="32"
 								height="32" /> </A>
 						<br>
@@ -84,7 +84,7 @@
 		<td>|</td>
 		<td align="center" width="12%" height="10">
 			<span style="font-size: 10.0pt; font-family: Arial"> <A
-				HREF="javascript:newBrowserWin('/help','helpWin',1200,900)">
+				HREF="<%=params.getFormBuilderHelpUrl()%>" target="_blank">
 					What's new</a>&nbsp;&nbsp;</span>
 		</td>
 	</tr>
