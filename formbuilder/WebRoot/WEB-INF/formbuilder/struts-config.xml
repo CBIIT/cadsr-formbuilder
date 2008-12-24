@@ -346,6 +346,7 @@
       scope="request"
       type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.SecureCDECartAction"
       validate="false">
+      <forward name="failure" path="/jsp/formbuilder/displayCDECart.jsp"/>
       <forward name="success" path="/jsp/formbuilder/displayCDECart.jsp"/>
       <forward name="addDeleteSuccess" path="/formCDECartAction.do?method=displayCDECart"/>
     </action>
@@ -354,10 +355,11 @@
       validate="false">
     </action>
     <action name="changeAssociationForm" path="/gotoChangeAssociation" parameter="method"
-      scope="request"
+      scope="session"
       type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.SecureCDECartAction"
       validate="false">
       <forward name="success" path="/jsp/formbuilder/changeAssociation.jsp"/>
+      <forward name="failure" path="/moduleToEditAction.do?method=getModuleToEdit"/>   
     </action>
     <action name="changeAssociationForm" path="/changeAssociation" parameter="method"
       scope="request"
@@ -366,6 +368,15 @@
       <forward name="success" path="/moduleToEditAction.do?method=getModuleToEdit"/>
       <forward name="failure" path="/jsp/formbuilder/moduleEdit.jsp"/>
       <forward name="retrieveCDEs" path="/jsp/formbuilder/changeAssociation.jsp"/>
+    </action> 
+    <action name="moduleEditForm" path="/editModuleAssociateAction" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormModuleEditAction"
+      validate="true">
+      <forward name="noChanges" path="/gotoChangeAssociation.do?method=gotoChangeDEAssociation" redirect="false"/>    
+      <forward name="failure" path="/jsp/formbuilder/moduleEdit.jsp" redirect="false"/>   
+      <forward name="changes" path="/jsp/formbuilder/moduleSaveConfirmAssociate.jsp" redirect="false"/>
+      <forward name="success" path="/gotoChangeAssociation.do?method=gotoChangeDEAssociation" redirect="false"/>       
     </action> 
 
     <action name="moduleEditForm" path="/showValueMeaningAlterNames" parameter="method"
