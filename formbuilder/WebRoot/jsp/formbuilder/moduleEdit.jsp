@@ -188,6 +188,15 @@ function submitModuleForValidValueSkipEdit(methodName,questionIndex,validValueIn
   }  
 }
 
+function submitModuleToQuestion(methodName,questionIndex) {
+  if(validateModuleEditForm(moduleEditForm)) {
+    document.forms[0].action='<%=request.getContextPath()%>/editModuleQuestionAction.do';
+  	document.forms[0].<%=NavigationConstants.METHOD_PARAM%>.value=methodName;
+  	document.forms[0].<%=FormConstants.QUESTION_INDEX%>.value=questionIndex;
+  	document.forms[0].submit();
+  }
+}
+
 function submitForDeleteSkipModule(methodName,triggerIndex) {
 
   document.forms[0].action='<%=request.getContextPath()%>/formbuilder/skipAction.do'; 
@@ -294,14 +303,20 @@ function clearProtocol() {
         targetObj.value=newValue;
      }  
      
-  function submitChangeAsso(url, questionIndexValue){
+  function submitChangeAsso(methodName, moduleIndex, questionIndex){
     var objForm0 = document.forms[0];
-    var objQuestionDefaultValidValueId = objForm0['questionDefaultValidValueIds[' + questionIndexValue+ ']'];
+    var objQuestionDefaultValidValueId = objForm0['questionDefaultValidValueIds[' + questionIndex+ ']'];
     if (objQuestionDefaultValidValueId.value !=''){
     	alert('Please clear the default value of this question and save the module before change CDE association');
-    	return
+    	return;
     } 	
-   window.location = url;
+    if(validateModuleEditForm(moduleEditForm)) {
+    	document.forms[0].action='<%=request.getContextPath()%>/editModuleAssociateAction.do';
+  		document.forms[0].<%=NavigationConstants.METHOD_PARAM%>.value=methodName;
+  		document.forms[0].<%=FormConstants.MODULE_INDEX%>.value=moduleIndex;
+  		document.forms[0].<%=FormConstants.QUESTION_INDEX%>.value=questionIndex;
+  		document.forms[0].submit();
+    }
   }
 
 -->
@@ -445,15 +460,9 @@ function clearProtocol() {
              <table width="79%" align="center" cellpadding="0" cellspacing="0" border="0">     
               <tr align="right">                      
                 <td align="right" width="3%">
-                  <%
-                    paramMap.put(FormConstants.QUESTION_INDEX, new Integer(0));
-                    %>
-                  <html:link action='<%="/gotoAddQuestion?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GO_TO_ADD_QUESTION%>'
-                    name="params" 
-                    scope="page"
-                    >
-                    <html:img src='<%=urlPrefix+"i/new.gif"%>' border="0" alt="Add Question"/>
-                  </html:link>
+                      <a href="javascript:submitModuleToQuestion('<%=NavigationConstants.CHECK_MODULE_CHANGES%>','<%=new Integer(0)%>')">
+                         <img src='<%=urlPrefix+"i/new.gif"%>' border=0 alt="Add Question">
+                      </a>                          
                 </td>
               </tr>
               </table> 
@@ -489,15 +498,9 @@ function clearProtocol() {
                   </td>  
                 </logic:empty>                        
                 <td align="right" width="3%">
-                  <%
-                    paramMap.put(FormConstants.QUESTION_INDEX, questionIndex);
-                    %>
-                  <html:link action='<%="/gotoAddQuestion?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GO_TO_ADD_QUESTION%>'
-                    name="params" 
-                    scope="page"
-                    >
-                    <html:img src='<%=urlPrefix+"i/new.gif"%>' border="0" alt="Add Question"/>
-                  </html:link>&nbsp;
+      				<a href="javascript:submitModuleToQuestion('<%=NavigationConstants.CHECK_MODULE_CHANGES%>','<%=questionIndex%>')">
+                         <img src='<%=urlPrefix+"i/new.gif"%>' border=0 alt="Add Question">
+                    </a>                          
                 </td>
               </tr>              
               
@@ -531,18 +534,9 @@ function clearProtocol() {
                                     </logic:notEqual>
                                   </td>
                                   <td align="center">
-                                     <a href="javascript:submitChangeAsso('<%= "/FormBuilder/gotoChangeAssociation.do?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GO_TO_CHANGE_DE_ASSOCIATION + "&questionIndex=" + questionIndex + "&moduleIndex="+moduleIndex%>', '<%=questionIndex%>')">
+                                     <a href="javascript:submitChangeAsso('<%=NavigationConstants.CHECK_MODULE_CHANGES%>', '<%=moduleIndex%>', '<%=questionIndex%>')">
                                       <img src="<%=urlPrefix%>i/association.gif" border="0" alt="Change CDE Association"/>
                                       </a>
-<%--
-
-                                    <html:link action='<%= "/gotoChangeAssociation?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GO_TO_CHANGE_DE_ASSOCIATION%>'
-                                      name="params"
-                                      scope="page"
-                                      >
-                                      <img src="<%=urlPrefix%>i/association.gif" border="0" alt="Change CDE Association"/>
-                                    </html:link>
---%>                                    
                                   </td>                                  
                                   <td align="center">
                                     <a href="javascript:submitModuleEdit('<%=NavigationConstants.DELETE_QUESTION%>','<%=questionIndex%>')">
@@ -1119,7 +1113,7 @@ function clearProtocol() {
              <table width="79%" align="center" cellpadding="0" cellspacing="0" border="0">        
               <tr align="right">
                 <logic:notEmpty name="<%=FormConstants.DELETED_QUESTIONS%>">
-                  <td align="right"   class="OraFieldText" nowrap width="23%">    
+                  <td align="right"   class="OraFieldText" nowrap="nowrap" width="23%">    
                       <html:select styleClass="FreeDropdown" property="<%=FormConstants.ADD_DELETED_QUESTION_IDSEQ_ARR%>">
                         <html:options collection="<%=FormConstants.DELETED_QUESTIONS%>" 
                             property="quesIdseq" labelProperty="longName" />
@@ -1137,16 +1131,10 @@ function clearProtocol() {
                    </td>  
                   </logic:empty>               
                  <td align="right" width="1%">
-                  <%
-                    paramMap.put(FormConstants.QUESTION_INDEX, questionSize);
-                    %>
-                    <html:link action='<%="/gotoAddQuestion?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GO_TO_ADD_QUESTION%>'
-                      name="params" 
-                      scope="page"
-                      >
-                      
-                      <html:img src='<%=urlPrefix+"i/new.gif"%>' border="0" alt="Add Question"/>
-                  </html:link>&nbsp;
+                      <a href="javascript:submitModuleToQuestion('<%=NavigationConstants.CHECK_MODULE_CHANGES%>','<%=questionSize%>')">
+                         <img src='<%=urlPrefix+"i/new.gif"%>' border=0 alt="Add Question">
+                      </a>                          
+						&nbsp;
                 </td>           
               </tr>
               </table> 

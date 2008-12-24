@@ -1,5 +1,5 @@
 <!-- Copyright ScenPro, Inc. 2005
-    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.25 2008-12-23 18:35:57 hegdes Exp $
+    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.26 2008-12-24 21:59:12 hegdes Exp $
     $Name: not supported by cvs2svn $
 -->
 <project name="Form Builder Tool" default="init" basedir=".">
@@ -121,7 +121,7 @@
 	<filter token="Tool.Version" value="4.0.0.2"/>
 	<filter token="Tool.Build" value="1"/>
 	<filter token="Tool.Support" value="ncicb@pop.nci.nih.gov"/>
-	<filter token="Tool.Version.Suffix" value="4_0_0_1"/>
+	<filter token="Tool.Version.Suffix" value="4_0_0_2"/>
 	
 	<path id="libpath">
 		<fileset dir="${lib.dir}">

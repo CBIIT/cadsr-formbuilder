@@ -307,6 +307,7 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
 	        log.error("Exception on displayCDECart", exp);
 	      }
 	      saveMessage(exp.getMessage(), request);
+	      return FAILURE;
 	    }
 	    return SUCCESS;
   	}

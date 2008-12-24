@@ -14,9 +14,10 @@
 
   <action-mappings>
     <action name="addQuestionForm" path="/gotoAddQuestion" parameter="method"
-      scope="request"
+      scope="session"
       type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.SecureCDECartAction"
       validate="false">
+      <forward name="failure" path="/moduleToEditAction.do?method=getModuleToEdit"/>   
       <forward name="success" path="/jsp/formbuilder/addQuestion.jsp"/>
     </action>
 
@@ -38,6 +39,16 @@
       <forward name="cancel" path="/jsp/formbuilder/addQuestion.jsp"/>
       <forward name="failure" path="/jsp/formbuilder/addQuestionSubsetValidValues.jsp"/>
     </action>    
+   
+    <action name="moduleEditForm" path="/editModuleQuestionAction" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormModuleEditAction"
+      validate="true">
+      <forward name="noChanges" path="/gotoAddQuestion.do?method=displayCDECart" redirect="false"/>    
+      <forward name="failure" path="/jsp/formbuilder/moduleEdit.jsp" redirect="false"/>   
+      <forward name="changes" path="/jsp/formbuilder/moduleSaveConfirmQuestions.jsp" redirect="false"/>
+      <forward name="success" path="/gotoAddQuestion.do?method=displayCDECart" redirect="false"/>       
+    </action> 
    
    </action-mappings>
 
