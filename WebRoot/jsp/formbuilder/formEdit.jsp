@@ -25,6 +25,22 @@
 function submitForm() {
      document.forms[0].submit();
 }
+function submitChanges2(methodName,forward, displayOrder) {
+  if(validateFormEditForm(formEditForm)) {
+  document.forms[0].<%=NavigationConstants.METHOD_PARAM%>.value=methodName;
+  document.forms[0].<%=FormConstants.DISPLAY_ORDER%>.value=displayOrder;
+  document.forms[0].<%=FormConstants.FORM_FORWARD%>.value=forward;
+  document.forms[0].submit();
+  }
+}
+
+function submitChanges(methodName,forward) {
+  if(validateFormEditForm(formEditForm)) {
+  document.forms[0].<%=NavigationConstants.METHOD_PARAM%>.value=methodName;
+  document.forms[0].<%=FormConstants.FORM_FORWARD%>.value=forward;
+  document.forms[0].submit();
+  }
+}
 
 function submitFormEdit(methodName,moduleIndexValue) {
   if(validateFormEditForm(formEditForm)) {
@@ -45,10 +61,20 @@ function manageProtocols() {
   document.forms[0].submit();
 }
 
+function showRepetition(method) {
+  document.forms[0].action= '<%=request.getContextPath()+"/displayModuleRepeationAction.do?" + NavigationConstants.METHOD_PARAM + "=" + NavigationConstants.SHOW_REPETITIONS%>'
+  document.forms[0].submit();
+}
+function hideRepetition(method) {
+  document.forms[0].action= '<%=request.getContextPath()+"/displayModuleRepeationAction.do?" + NavigationConstants.METHOD_PARAM + "=" + NavigationConstants.HIDE_REPETITIONS%>'
+  document.forms[0].submit();
+}
+
 function submitModuleRepition(methodName,moduleIndexValue) {
   if(validateFormEditForm(formEditForm)) {
   document.forms[0].<%=NavigationConstants.METHOD_PARAM%>.value=methodName;
   document.forms[0].<%=FormConstants.MODULE_INDEX%>.value=moduleIndexValue;
+  document.forms[0].<%=FormConstants.FORM_FORWARD%>.value="<%=NavigationConstants.SUCCESS%>";
   document.forms[0].action='<%=request.getContextPath()%>/saveFormModuleRepeatAction.do'; 
   document.forms[0].submit();
   }
@@ -91,9 +117,11 @@ function repeatDisplay(methodName) {
 
 
       
-    <html:form action="/formSaveAction.do">
+    <html:form action="/formSaveAction.do?">
      <html:hidden value="" property="<%=NavigationConstants.METHOD_PARAM%>"/>
      <html:hidden value="" property="<%=FormConstants.MODULE_INDEX%>"/>
+     <html:hidden value="moduleEdit" property="forward"/>
+     <html:hidden value="" property="<%=FormConstants.DISPLAY_ORDER%>"/>
       <%@ include file="../common/in_process_common_header_inc.jsp"%>
       <jsp:include page="../common/tab_inc.jsp" flush="true">
         <jsp:param name="label" value="Edit&nbsp;Form"/>
@@ -130,7 +158,7 @@ function repeatDisplay(methodName) {
           <td class="OraHeaderSubSub" width="100%">Form Header</td>
         </tr>
         <tr>
-          <td><img height=1 src="i/beigedot.gif" width="99%" align=top border=0> </td>
+          <td><img height=1 src="<%=urlPrefix%>i/beigedot.gif" width="99%" align=top border=0> </td>
         </tr>
       </table>       
        
@@ -256,16 +284,14 @@ function repeatDisplay(methodName) {
           <% Form aForm = (Form)formObj;
             if(FormJspUtil.hasModuleRepetition(aForm)){ %>
              <logic:present name="<%=FormConstants.SHOW_MODULE_REPEATS%>">
-               <html:link action='<%="/displayModuleRepeationAction.do?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.HIDE_REPETITIONS%>'
-                 >
-               <html:img src='i/hideModuleRepetitions.gif' border="0" alt="Hide Module Repetitions"/>
-              </html:link>                
+                <a href="javascript:hideRepetition()">
+                   <img src="<%=urlPrefix%>i/hideModuleRepetitions.gif" border="0" alt="Hide Module Repetitions"/>
+                </a>                          
              </logic:present>
              <logic:notPresent name="<%=FormConstants.SHOW_MODULE_REPEATS%>">
-               <html:link action='<%="/displayModuleRepeationAction.do?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.SHOW_REPETITIONS%>'
-                 >
-               <html:img src='i/showModuleRepetitions.gif' border="0" alt="Show Module Repetitions"/>
-              </html:link>  
+                <a href="javascript:showRepetition()">
+                   <img src="<%=urlPrefix%>i/showModuleRepetitions.gif" border="0" alt="Show Module Repetitions"/>
+                </a>                          
               </logic:notPresent>  
          <% }else{%>
             &nbsp;
@@ -273,7 +299,7 @@ function repeatDisplay(methodName) {
           </td>          
         </tr>
         <tr>
-          <td colspan=2><img height=1 src="i/beigedot.gif" width="99%" align=top border=0> </td>
+          <td colspan=2><img height=1 src="<%=urlPrefix%>i/beigedot.gif" width="99%" align=top border=0> </td>
         </tr>
       </table>        
         <!-- If the Modules Collection is empty and deleted modules Exists -->
@@ -300,23 +326,19 @@ function repeatDisplay(methodName) {
                   </td>  
                 </logic:empty>                        
                 <td align="right" width="205"> 
-                  <html:link action='<%="/formbuilder/copyFromModuleList.do?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GOTO_COPY_FROM_MODULE_LIST%>'
-                       paramId="<%=FormConstants.DISPLAY_ORDER%>" paramName="startIndex" >      
-                     Copy Module from module cart
-                  </html:link>		  
+                      <a href="javascript:submitChanges2('<%=NavigationConstants.CHECK_CHANGES_MODULE_EDIT%>', 'gotoModuleList', '<%=startIndex%>')">
+                         Copy Module from module cart
+                      </a>                          
                 </td>   
                 <td align="right" width="160">
-                  <html:link action='<%="/formbuilder/moduleSearch.do?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GO_TO_MODULE_SEARCH%>'
-                       paramId="<%=FormConstants.DISPLAY_ORDER%>" paramName="startIndex" > 
-                     Copy module from a form
-                  </html:link>		   
+                      <a href="javascript:submitChanges2('<%=NavigationConstants.CHECK_CHANGES_MODULE_EDIT%>', 'gotoModuleSearch', '<%=startIndex%>')">
+                         Copy Module from a Form
+                      </a>                          
                 </td>  
                 <td align="right" width="80">
-                  <html:link action='<%="/gotoCreateModule?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GO_TO_CREATE_MODULE%>'
-                       paramId="<%=FormConstants.DISPLAY_ORDER%>" paramName="startIndex" >
-                    <!-- html:img src='<%=urlPrefix+"i/new.gif"%>' border="0" alt="Add New Module"/ -->         
-                     Create new
-                  </html:link>
+                      <a href="javascript:submitChanges2('<%=NavigationConstants.CHECK_CHANGES_MODULE_EDIT%>', 'gotoModuleCreate', '<%=startIndex%>')">
+                         Create New
+                      </a>                          
                 </td>                                        
               </tr>               
               </table> 
@@ -358,25 +380,20 @@ function repeatDisplay(methodName) {
                 </logic:empty> 
                 
                 <td align="right" width="205"> 
-                  <html:link action='<%="/formbuilder/copyFromModuleList.do?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GOTO_COPY_FROM_MODULE_LIST%>'
-                       paramId="<%=FormConstants.DISPLAY_ORDER%>" paramName="moduleIndex" >      
-                     Copy Module from module cart
-                  </html:link>		  
+                      <a href="javascript:submitChanges2('<%=NavigationConstants.CHECK_CHANGES_MODULE_EDIT%>', 'gotoModuleList', '<%=moduleIndex%>')">
+                         Copy Module from module cart
+                      </a>                          
                 </td>   
                 <td align="right" width="160">
-                  <html:link action='<%="/formbuilder/moduleSearch.do?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GO_TO_MODULE_SEARCH%>'
-                       paramId="<%=FormConstants.DISPLAY_ORDER%>" paramName="moduleIndex" > 
-                     Copy module from a form
-                  </html:link>		   
+                      <a href="javascript:submitChanges2('<%=NavigationConstants.CHECK_CHANGES_MODULE_EDIT%>', 'gotoModuleSearch', '<%=moduleIndex%>')">
+                         Copy Module from a Form
+                      </a>                          
                 </td>  
                 <td align="right" width="80">
-                  <html:link action='<%="/gotoCreateModule?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GO_TO_CREATE_MODULE%>'
-                       paramId="<%=FormConstants.DISPLAY_ORDER%>" paramName="moduleIndex" >
-                    <!-- html:img src='<%=urlPrefix+"i/new.gif"%>' border="0" alt="Add New Module"/ -->         
-                     Create new
-                  </html:link>
-                </td>                 
-                       
+                      <a href="javascript:submitChanges2('<%=NavigationConstants.CHECK_CHANGES_MODULE_EDIT%>', 'gotoModuleCreate', '<%=moduleIndex%>')">
+                         Create New
+                      </a>                          
+                </td>                                        
               </tr>
              
               </table> 
@@ -780,7 +797,7 @@ class="OraBGAccentVeryDark" >
                       </td>
                       <td align="left" width="25">
                           <a href="javascript:submitFormEdit('<%=NavigationConstants.ADD_FROM_DELETED_LIST%>','<%=moduleSize%>')">
-                             <img src=<%=urlPrefix%>i/add.gif border=0 alt="Add">
+                             <img src="<%=urlPrefix%>i/add.gif" border=0 alt="Add">
                           </a>                          
                       </td>   
                     </logic:notEmpty>
@@ -793,24 +810,20 @@ class="OraBGAccentVeryDark" >
                     </logic:empty>  
                     
                     <td align="right" width="205"> 
-                      <html:link action='<%="/formbuilder/copyFromModuleList.do?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GOTO_COPY_FROM_MODULE_LIST%>'
-                           paramId="<%=FormConstants.DISPLAY_ORDER%>" paramName="moduleSize" >     
+                      <a href="javascript:submitChanges2('<%=NavigationConstants.CHECK_CHANGES_MODULE_EDIT%>', 'gotoModuleList', '<%=moduleSize%>')">
                          Copy Module from module cart
-                      </html:link>		  
+                      </a>                          
                     </td>   
-                    <td align="right" width="160">
-                      <html:link action='<%="/formbuilder/moduleSearch.do?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GO_TO_MODULE_SEARCH%>'
-                           paramId="<%=FormConstants.DISPLAY_ORDER%>" paramName="moduleSize" > 
-                         Copy module from a form
-                      </html:link>		   
-                    </td>  
-                    <td align="right" width="80">
-                      <html:link action='<%="/gotoCreateModule?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GO_TO_CREATE_MODULE%>'
-                           paramId="<%=FormConstants.DISPLAY_ORDER%>" paramName="moduleSize" >
-                        <!-- html:img src='<%=urlPrefix+"i/new.gif"%>' border="0" alt="Add New Module"/ -->         
-                         Create new
-                      </html:link>
-                    </td>                               
+	                <td align="right" width="160">
+	                      <a href="javascript:submitChanges2('<%=NavigationConstants.CHECK_CHANGES_MODULE_EDIT%>', 'gotoModuleSearch', '<%=moduleSize%>')">
+	                         Copy Module from a Form
+	                      </a>                          
+	                </td>  
+	                <td align="right" width="80">
+	                      <a href="javascript:submitChanges2('<%=NavigationConstants.CHECK_CHANGES_MODULE_EDIT%>', 'gotoModuleCreate', '<%=moduleSize%>')">
+	                         Create New
+	                      </a>                          
+	                </td>                                        
                   </tr>
                   </table> 
                 <!-- Add for delete and new Module end -->  
@@ -818,7 +831,7 @@ class="OraBGAccentVeryDark" >
             </logic:notPresent>
             <logic:present name="<%=FormConstants.SHOW_MODULE_REPEATS%>">
       		<table width="80%" align="center" cellpadding="0" cellspacing="0" border="0" >
-        	   <tr class>
+        	   <tr>
           	      <td >
 			             &nbsp;
           	      </td>
@@ -839,37 +852,31 @@ class="OraBGAccentVeryDark" >
                           </td>
                           <td align="left" width="25">
                               <a href="javascript:submitFormEdit('<%=NavigationConstants.ADD_FROM_DELETED_LIST%>','<%=moduleSize%>')">
-                                 <img src=<%=urlPrefix%>i/add.gif border=0 alt="Add">
+                                 <img src="<%=urlPrefix%>i/add.gif" border="0" alt="Add">
                               </a>                          
                           </td>   
                         </logic:notEmpty>
         
-                        <logic:empty name="<%=FormConstants.DELETED_MODULES%>">
-        
+                        <logic:empty name="<%=FormConstants.DELETED_MODULES%>">      
                         <td >
                           &nbsp;
                         </td>  
                         </logic:empty>  
-                        
-                        <td align="right" width="205"> 
-                          <html:link action='<%="/formbuilder/copyFromModuleList.do?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GOTO_COPY_FROM_MODULE_LIST%>'
-                               paramId="<%=FormConstants.DISPLAY_ORDER%>" paramName="moduleSize" >     
-                             Copy Module from module cart
-                          </html:link>		  
-                        </td>   
-                        <td align="right" width="160">
-                          <html:link action='<%="/formbuilder/moduleSearch.do?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GO_TO_MODULE_SEARCH%>'
-                               paramId="<%=FormConstants.DISPLAY_ORDER%>" paramName="moduleSize" > 
-                             Copy module from a form
-                          </html:link>		   
-                        </td>  
-                        <td align="right" width="80">
-                          <html:link action='<%="/gotoCreateModule?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GO_TO_CREATE_MODULE%>'
-                               paramId="<%=FormConstants.DISPLAY_ORDER%>" paramName="moduleSize" >
-                            <!-- html:img src='<%=urlPrefix+"i/new.gif"%>' border="0" alt="Add New Module"/ -->         
-                             Create new
-                          </html:link>
-                        </td>                               
+	                    <td align="right" width="205"> 
+	                      <a href="javascript:submitChanges2('<%=NavigationConstants.CHECK_CHANGES_MODULE_EDIT%>', 'gotoModuleList', '<%=moduleSize%>')">
+	                         Copy Module from module cart
+	                      </a>                          
+	                    </td>   
+		                <td align="right" width="160">
+		                      <a href="javascript:submitChanges2('<%=NavigationConstants.CHECK_CHANGES_MODULE_EDIT%>', 'gotoModuleSearch', '<%=moduleSize%>')">
+		                         Copy Module from a Form
+		                      </a>                          
+		                </td>  
+		                <td align="right" width="80">
+		                      <a href="javascript:submitChanges2('<%=NavigationConstants.CHECK_CHANGES_MODULE_EDIT%>', 'gotoModuleCreate', '<%=moduleSize%>')">
+		                         Create New
+		                      </a>                          
+		                </td>                                        
                       </tr>
                       </table> 
                     <!-- Add for delete and new Module end -->  
