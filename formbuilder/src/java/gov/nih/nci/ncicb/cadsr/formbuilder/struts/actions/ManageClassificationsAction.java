@@ -43,11 +43,13 @@ public class ManageClassificationsAction
     HttpServletRequest request,
     HttpServletResponse response) throws IOException, ServletException {
     try {
-      DynaActionForm dynaForm = (DynaActionForm) form;
+     // DynaActionForm dynaForm = (DynaActionForm) form;
 
-      String formId = (String) dynaForm.get(FORM_ID_SEQ);
+      String formId = "";  //(String) dynaForm.get(FORM_ID_SEQ);
 
       Form crf = (Form) getSessionObject(request, CRF);
+      if (crf != null)
+    	  formId = crf.getFormIdseq();
 
       if ((crf == null) || !crf.getFormIdseq().equals(formId)) {
         setFormForAction(form, request);

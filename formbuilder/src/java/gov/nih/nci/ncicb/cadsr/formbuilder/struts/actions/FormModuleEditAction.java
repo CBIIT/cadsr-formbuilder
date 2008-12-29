@@ -833,17 +833,18 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
           return mapping.findForward(FAILURE);
         }
 
-        Form crf = (Form) getSessionObject(request, CRF);
-        Form orgCrf = (Form) getSessionObject(request, this.CLONED_CRF);
-
-        ModuleChanges moduleChanges = getModuleChanges(module,orgModule, crf, orgCrf,form,request);
-
-      if(moduleChanges.isEmpty())
-      {
-        return mapping.findForward(NO_CHANGES);
-      }
-
-      return mapping.findForward(CHANGES);
+	    Form crf = (Form) getSessionObject(request, CRF);
+	    Form orgCrf = (Form) getSessionObject(request, this.CLONED_CRF);
+	
+	    ModuleChanges moduleChanges = getModuleChanges(module,orgModule, crf, orgCrf,form,request);
+	    Integer questionIndex = (Integer) moduleEditForm.get(QUESTION_INDEX);
+	    this.setSessionObject(request, QUESTION_INDEX, questionIndex);
+	    if(moduleChanges.isEmpty())
+	    {
+	        return mapping.findForward(NO_CHANGES);
+	    }
+	
+	    return mapping.findForward(CHANGES);
     }
 
 

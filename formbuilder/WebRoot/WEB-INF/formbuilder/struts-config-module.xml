@@ -52,9 +52,7 @@
     <action name="copyModuleForm" path="/formbuilder/copyFromModuleList" parameter="method"
       scope="request"
       type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.CopyModuleAction"
-      validate="true"
-      >
-
+      validate="true">
       <forward name="viewModuleList" path="/jsp/formbuilder/copyFromModuleList.jsp"/>
       <forward name="doneDelete" path="/jsp/formbuilder/copyFromModuleList.jsp"/>
       <forward name="done" path="/jsp/formbuilder/formEdit.jsp"/>  
@@ -64,8 +62,7 @@
      <action name="copyModuleForm" path="/formViewAddToList" parameter="method"
       scope="request"
       type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.CopyModuleAction"
-      validate="true"
-      >
+      validate="true">
       <forward name="doneCopyToList" path="/jsp/formbuilder/formDetails.jsp"/>
     </action>    
     

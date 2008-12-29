@@ -88,7 +88,7 @@ public class ModuleCreateAction extends FormBuilderSecureBaseDispatchAction {
     Module newModule = new ModuleTransferObject();
     Form crf = (Form) getSessionObject(request, CRF);
     
-    int displayOrder = ((Integer)dynaForm.get(DISPLAY_ORDER)).intValue();
+    int displayOrder = ((Integer)getSessionObject(request,MODULE_DISPLAY_ORDER_TO_COPY)).intValue();  //((Integer)dynaForm.get(DISPLAY_ORDER)).intValue();
 
     Form f = (Form)getSessionObject(request, CRF);
 
@@ -114,8 +114,6 @@ public class ModuleCreateAction extends FormBuilderSecureBaseDispatchAction {
       newModule.setInstruction(newModHdrInst);
     }
     
-
-
     List modules = crf.getModules();
                                       
     if(modules == null) {

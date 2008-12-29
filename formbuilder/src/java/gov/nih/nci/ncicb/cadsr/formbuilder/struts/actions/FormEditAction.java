@@ -592,6 +592,16 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
     ActionForm form,
     HttpServletRequest request,
     HttpServletResponse response) throws IOException, ServletException {
+   // DynaActionForm dynaForm = (DynaActionForm)form;
+    String forAction = (String)request.getParameter(FORM_FORWARD);
+    if (forAction == null || forAction.equals(""))
+    	forAction = "moduleEdit";
+    setSessionObject(request, "ForwardAction", forAction);
+    String dispOrder = (String)request.getParameter(DISPLAY_ORDER);
+    if (dispOrder != null && !dispOrder.equals("")) {
+	    Integer displayOrder = Integer.valueOf(dispOrder);
+	    setSessionObject(request,MODULE_DISPLAY_ORDER_TO_COPY,displayOrder,true);   
+    }
     boolean hasUpdate  = setValuesForUpdate(mapping,form,request);
       if(hasUpdate)
       {
@@ -599,7 +609,8 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
       }
       else
       {
-        return mapping.findForward(NO_CHANGES);
+    	  return mapping.findForward(forAction);
+        //return mapping.findForward(NO_CHANGES);
       }
     }
     
@@ -728,7 +739,12 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
         removeSessionObject(request,UPDATE_SKIP_PATTERN_TRIGGERS);        
                 
 	//	this.logSessionData("saveFormChanges ", form.toString(), request.getSession());
-        return mapping.findForward(SUCCESS);
+        String forAction = (String)getSessionObject(request, "ForwardAction");
+        if (forAction == null || forAction.equals(""))
+        	forAction = SUCCESS;
+        removeSessionObject(request, "ForwardAction");
+        return mapping.findForward(forAction);
+        //return mapping.findForward(SUCCESS);
 
     }
   /**

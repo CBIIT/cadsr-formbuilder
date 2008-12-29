@@ -201,10 +201,15 @@
       validate="true"
       input="/jsp/formbuilder/formEdit.jsp">
       <forward name="formEdit" path="/jsp/formbuilder/formEdit.jsp" redirect="false"/>
-      <forward name="success" path="/formToEditAction.do?method=getFormToEdit"
-        redirect="false"/>
+      <forward name="success" path="/formToEditAction.do?method=getFormToEdit" redirect="false"/>
       <forward name="failure" path="/jsp/formbuilder/formEdit.jsp" redirect="false"/>
       <forward name="noChanges" path="/moduleToEditAction.do?method=getModuleToEdit" redirect="false"/>
+      <forward name="moduleEdit" path="/moduleToEditAction.do?method=getModuleToEdit" redirect="false"/>
+      <forward name="manageRefDoc" path="/manageReferenceDocs.do?method=manageReferenceDocs" redirect="false"/>
+      <forward name="manageCS" path="/gotoManageClassifications.do?method=getClassifications" redirect="false"/>
+      <forward name="gotoModuleList" path="/formbuilder/copyFromModuleList.do?method=gotoCopyFromModuleList" redirect="false"/>
+      <forward name="gotoModuleSearch" path="/formbuilder/moduleSearch.do?method=goToModuleSearch" redirect="false"/>
+      <forward name="gotoModuleCreate" path="/gotoCreateModule.do?method=goToCreateModule" redirect="false"/>
       <forward name="saveConfirm" path="/jsp/formbuilder/formSaveConfirmModuleEdit.jsp" redirect="false"/>
       <forward name="saveConfirmDone" path="/jsp/formbuilder/formSaveConfirm.jsp" redirect="false"/>
       <forward name="searchResults" path="/formDoneAction.do"
@@ -229,15 +234,16 @@
       scope="session"
       type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormEditAction"
       validate="false">
-      <forward name="success"
-        path="/moduleToEditAction.do?method=getModuleToEdit"
-        redirect="false"/>
-      <forward name="failure"
-        path="/jsp/formbuilder/formEdit.jsp"
-        redirect="false"/>  
+      <forward name="success" path="/moduleToEditAction.do?method=getModuleToEdit" redirect="false"/>
+      <forward name="moduleEdit" path="/moduleToEditAction.do?method=getModuleToEdit" redirect="false"/>
+      <forward name="manageRefDoc" path="/manageReferenceDocs.do?method=manageReferenceDocs" redirect="false"/>
+      <forward name="manageCS" path="/gotoManageClassifications.do?method=getClassifications" redirect="false"/>
+      <forward name="gotoModuleList" path="/formbuilder/copyFromModuleList.do?method=gotoCopyFromModuleList" redirect="false"/>
+      <forward name="gotoModuleSearch" path="/formbuilder/moduleSearch.do?method=goToModuleSearch" redirect="false"/>
+      <forward name="gotoModuleCreate" path="/gotoCreateModule.do?method=goToCreateModule" redirect="false"/>
+      <forward name="failure"  path="/jsp/formbuilder/formEdit.jsp" redirect="false"/>  
       <forward name="formEdit" path="/jsp/formbuilder/formEdit.jsp" redirect="false"/>
-      <forward name="searchResults" path="/jsp/formbuilder/formbuilder.jsp"
-        redirect="false"/>            
+      <forward name="searchResults" path="/jsp/formbuilder/formbuilder.jsp" redirect="false"/>            
     </action>     
     <action name="searchForm" path="/saveFormDoneAction" parameter="method"
       scope="session"
