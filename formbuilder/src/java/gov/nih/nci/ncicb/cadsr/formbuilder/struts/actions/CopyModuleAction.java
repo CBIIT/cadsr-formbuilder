@@ -63,10 +63,10 @@ public class CopyModuleAction extends FormBuilderSecureBaseDispatchAction {
     HttpServletRequest request,
     HttpServletResponse response) throws IOException, ServletException {
 
-    DynaActionForm dynaForm = (DynaActionForm)form;
-    Integer displayOrder = (Integer)dynaForm.get(DISPLAY_ORDER);
+   // DynaActionForm dynaForm = (DynaActionForm)form;
+   // Integer displayOrder = (Integer)dynaForm.get(DISPLAY_ORDER);
     setSessionObject(request,IN_PROCESS,"true",true);
-    setSessionObject(request,MODULE_DISPLAY_ORDER_TO_COPY,displayOrder,true);
+   // setSessionObject(request,MODULE_DISPLAY_ORDER_TO_COPY,displayOrder,true);
     return mapping.findForward("framedSearchResultsPage");
 
   }
@@ -303,9 +303,9 @@ public class CopyModuleAction extends FormBuilderSecureBaseDispatchAction {
       HttpServletRequest request,
       HttpServletResponse response) throws IOException, ServletException {
 
-      DynaActionForm dynaForm = (DynaActionForm)form;
-      Integer displayOrder = (Integer)dynaForm.get(DISPLAY_ORDER);
-      setSessionObject(request,MODULE_DISPLAY_ORDER_TO_COPY,displayOrder,true);      
+    //  DynaActionForm dynaForm = (DynaActionForm)form;
+    //  Integer displayOrder = (Integer)dynaForm.get(DISPLAY_ORDER);
+    //  setSessionObject(request,MODULE_DISPLAY_ORDER_TO_COPY,displayOrder,true);      
        return mapping.findForward("viewModuleList");
       }
     /**

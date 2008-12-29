@@ -193,7 +193,6 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
                                                HttpServletResponse response) throws IOException,
                                                                                                                 ServletException
     {
-
         setSessionObject(request, SHOW_MODULE_REPEATS,"True");
         
         return mapping.findForward(SUCCESS);
@@ -218,7 +217,6 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
                                                HttpServletResponse response) throws IOException,
                                                                                                                 ServletException
     {
-
         removeSessionObject(request, SHOW_MODULE_REPEATS);
         return mapping.findForward(SUCCESS);
     }     

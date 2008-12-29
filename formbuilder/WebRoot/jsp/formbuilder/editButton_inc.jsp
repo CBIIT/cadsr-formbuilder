@@ -13,20 +13,15 @@ if(confirm(message)) location.href = url;
              </a> 
           </td>          
          <td>
-           <html:link action='<%="/gotoManageClassifications.do?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GET_CLASSIFICATIONS%>'
-             paramId = "<%=FormConstants.FORM_ID_SEQ%>"
-             paramName="<%=FormConstants.CRF%>"
-             paramProperty="formIdseq"
-             >
-             <html:img src='<%=urlPrefix+"i/classifications.gif"%>' border="0" alt="Manage Classifications"/>
-           </html:link>           
+            <a href="javascript:submitChanges('<%=NavigationConstants.CHECK_CHANGES_MODULE_EDIT%>','manageCS')">
+               <img src="<%=urlPrefix%>i/classifications.gif" border=0 alt="Manage Classifications">
+            </a>              
            </td>
          <td>
-           <html:link action='<%="/manageReferenceDocs.do?"+NavigationConstants.METHOD_PARAM+"="+"manageReferenceDocs"%>'
-             >
-             <html:img src='<%=urlPrefix+"i/refdocs.gif"%>' border="0" alt="Manage Reference Documents"/>
-           </html:link>
-          </td>
+            <a href="javascript:submitChanges('<%=NavigationConstants.CHECK_CHANGES_MODULE_EDIT%>','manageRefDoc')">
+               <img src="<%=urlPrefix%>i/refdocs.gif" border=0 alt="Manage Reference Documents">
+            </a>              
+          </td>                                  
           <td > 
             <a href="javascript:submitFormToSave('<%=NavigationConstants.CHECK_CHANGES_DONE%>')">
                <img src=<%=urlPrefix%>i/backButton.gif border=0 alt="Done">
