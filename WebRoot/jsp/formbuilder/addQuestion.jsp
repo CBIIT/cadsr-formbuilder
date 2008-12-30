@@ -159,9 +159,8 @@ function details(linkParms ){
           CDE Cart is empty. 
         </td>
     </tr>
-  </table>
   </logic:empty>
-  <logic:notEmpty name="<%=CaDSRConstants.CDE_CART%>" property = "dataElements">
+   <logic:notEmpty name="<%=CaDSRConstants.CDE_CART%>" property = "dataElements">
     <logic:iterate id="de" name="<%=CaDSRConstants.CDE_CART%>" type="gov.nih.nci.ncicb.cadsr.objectCart.CDECartItem" property="dataElements" indexId="itemId">
 <%
       String deId = de.getId();
@@ -203,8 +202,8 @@ function details(linkParms ){
         <a href="javascript:CheckAll()">Check All</a>&nbsp;-&nbsp;<a href="javascript:ClearAll()">Clear All</a>
       </td>
     </tr>
-    </table>
   </logic:notEmpty>
+    </table>
     <br>
 
 	<%@ include file="addQuestion_inc.jsp" %>
