@@ -89,8 +89,6 @@ function details(linkParms ){
 <html:hidden value="" property="<%=NavigationConstants.METHOD_PARAM%>"/>
 <html:hidden property="<%= FormConstants.QUESTION_INDEX %>"/>
 <html:hidden property="<%=FormConstants.MODULE_INDEX%>"/>
-<bean:define id="moduleIndex" name="changeAssociationForm" property="<%=FormConstants.MODULE_INDEX%>"/>
-
 
   <%@ include file="changeAssociation_inc.jsp" %>
 
@@ -111,7 +109,6 @@ function details(linkParms ){
           CDE Cart is empty. 
         </td>
     </tr>
-  </table>
   </logic:empty>
   <logic:notEmpty name="<%=CaDSRConstants.CDE_CART%>" property = "dataElements">
     <logic:iterate id="de" name="<%=CaDSRConstants.CDE_CART%>" type="gov.nih.nci.ncicb.cadsr.objectCart.CDECartItem" property="dataElements" indexId="itemId">
@@ -166,8 +163,8 @@ function details(linkParms ){
         </td>
       </tr>
       <% } %>
-    </table>
   </logic:notEmpty>
+ </table>
     <br>
   <%@ include file="changeAssociation_inc.jsp" %>
 
