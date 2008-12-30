@@ -171,9 +171,10 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
     DataElement de = null;
     List newValidValues = null;
 
-    String qindex = (String) this.getSessionObject(request, QUESTION_INDEX);
-    int questionIndex =
-      Integer.parseInt(qindex);
+ //   String qindex = (String) this.getSessionObject(request, QUESTION_INDEX);
+ //   int questionIndex = Integer.parseInt(qindex);
+    Integer qindex = (Integer) this.getSessionObject(request, QUESTION_INDEX);
+    int questionIndex = qindex.intValue();	
 
     List questions =
       ((Module) getSessionObject(request, MODULE)).getQuestions();
