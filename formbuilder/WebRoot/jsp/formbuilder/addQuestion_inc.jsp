@@ -12,11 +12,6 @@
       </a>
     </td>     
 	</logic:notEmpty>
-    <!--td >
-      <a href="javascript:submitForm('<%=NavigationConstants.SUBSET_QUESTION_VALIDVALUES%>')">
-        <html:img src='<%=urlPrefix+"i/subset_validvalues.gif"%>' border="0" alt="Subset ValidValues and Add"/>
-      </a>
-    </td -->            
           <td >
             <a href="javascript:submitCancelForm()"><html:img src='<%=urlPrefix+"i/cancel.gif"%>' border="0" alt="cancel"/></a>
           </td>                 

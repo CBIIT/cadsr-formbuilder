@@ -72,12 +72,12 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
     List questions = module.getQuestions();   
     List newQuestions = new ArrayList(selectedItems.length);
 
+    //int display = Integer.parseInt((String) dynaForm.get(QUESTION_INDEX));    
+    Integer qindex = (Integer) this.getSessionObject(request, QUESTION_INDEX);
+    int displayOrder = 	qindex.intValue();	//Integer.parseInt(qindex);
+
     Collection col = sessionCart.getDataElements();
     ArrayList al = new ArrayList(col);
-
-  //  int displayOrder = Integer.parseInt((String) dynaForm.get(QUESTION_INDEX));
-    String qindex = (String) this.getSessionObject(request, QUESTION_INDEX);
-    int displayOrder = Integer.parseInt(qindex);
 
     //for getting reference docs
     FormBuilderServiceDelegate service = getFormBuilderService();
