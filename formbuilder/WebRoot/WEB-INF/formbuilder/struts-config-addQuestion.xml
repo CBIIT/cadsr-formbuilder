@@ -22,7 +22,7 @@
     </action>
 
     <action name="addQuestionForm" path="/addQuestion" parameter="method"
-      scope="request"
+      scope="session"
       type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.SecureCDECartAction"
       validate="false">
       <forward name="success" path="/moduleToEditAction.do?method=getModuleToEdit"/>
