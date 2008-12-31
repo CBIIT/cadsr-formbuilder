@@ -17,6 +17,8 @@
 <TITLE>Formbuilder: Add Question</TITLE>
 <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache"/>
 <LINK rel="stylesheet" TYPE="text/css" HREF="<html:rewrite page='/css/blaf.css' />">
+<bean:define id="qIndex" name="addQuestionForm" property="<%= FormConstants.QUESTION_INDEX %>"/> 
+<bean:define id="moduleIndex" name="addQuestionForm" property="<%=FormConstants.MODULE_INDEX%>"/>
 <SCRIPT LANGUAGE="JavaScript">
   function switchAll(e)
   {
@@ -97,9 +99,6 @@
        document.forms[0].submit();
   }
   
-<bean:define id="qIndex" name="addQuestionForm" property="<%= FormConstants.QUESTION_INDEX %>"/> 
-<bean:define id="moduleIndex" name="addQuestionForm" property="<%=FormConstants.MODULE_INDEX%>"/>
-
   function submitCancelForm() {
           document.location.href= '<%=request.getContextPath()+"/cancelAction.do?" + NavigationConstants.METHOD_PARAM + "=" + NavigationConstants.GET_MODULE_TO_EDIT+"&"+FormConstants.QUESTION_INDEX +"="+qIndex %>';
       }     
