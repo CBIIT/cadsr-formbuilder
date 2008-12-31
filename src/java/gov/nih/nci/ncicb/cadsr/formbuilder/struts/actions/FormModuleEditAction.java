@@ -737,7 +737,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
     Module orgModule = (Module) getSessionObject(request, CLONED_MODULE);
     Form crf = (Form) getSessionObject(request, CRF);
     Form orgCrf = (Form) getSessionObject(request, this.CLONED_CRF);
-
+ log.debug("save module index " + index);
     ModuleChanges moduleChanges = getModuleChanges(module, orgModule, crf, orgCrf,form,request);
 
 
@@ -791,6 +791,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
     removeSessionObject(request,CLONED_MODULE);
     removeSessionObject(request,MODULE);
     removeSessionObject(request,DELETED_QUESTIONS);
+    removeSessionObject(request,MODULE_INDEX);
       
     setSessionObject(request, MODULE, updatedModule,true);
     
@@ -892,6 +893,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
     removeSessionObject(request,CLONED_MODULE);
     removeSessionObject(request,MODULE);
     removeSessionObject(request,DELETED_QUESTIONS);
+    removeSessionObject(request,MODULE_INDEX);
     moduleEditForm.clear();
     return mapping.findForward(SUCCESS);
 
