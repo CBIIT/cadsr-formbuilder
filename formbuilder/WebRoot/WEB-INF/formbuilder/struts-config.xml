@@ -368,7 +368,7 @@
       <forward name="failure" path="/moduleToEditAction.do?method=getModuleToEdit"/>   
     </action>
     <action name="changeAssociationForm" path="/changeAssociation" parameter="method"
-      scope="request"
+      scope="session"
       type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.SecureCDECartAction"
       validate="false">
       <forward name="success" path="/moduleToEditAction.do?method=getModuleToEdit"/>
