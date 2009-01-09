@@ -33,7 +33,7 @@
      <forward name="backToFormEdit" path="/formToEditAction.do?method=getFormToEdit"
        redirect="false"/>
     
-     <forward name="backToModuleEdit" path="/moduleToEditAction.do?method=getModuleToEdit"
+     <forward name="backToModuleEdit" path="/moduleToEditAction.do?method=getModuleToEditAfterEdit"
       redirect="false"/> 
       <forward name="confirmDeleteModuleSkip" path="/jsp/formbuilder/confirmModuleSkipPatternDelete.jsp" 
       redirect="false"/>      

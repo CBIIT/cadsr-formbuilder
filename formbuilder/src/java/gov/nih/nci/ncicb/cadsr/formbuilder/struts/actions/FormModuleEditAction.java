@@ -134,6 +134,20 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
 
     return mapping.findForward(SUCCESS);
   }
+  
+  public ActionForward getModuleToEditAfterEdit (
+		    ActionMapping mapping,
+		    ActionForm editForm,
+		    HttpServletRequest request,
+		    HttpServletResponse response) throws IOException, ServletException {
+	  
+	  ActionForward fwd = getModuleToEdit(mapping, editForm, request, response);
+	  if (fwd.getName().equals(SUCCESS)) {
+		  fwd = mapping.findForward("success-after-update");
+	  }
+	  
+	  return fwd;
+  }
 
   /**
    * Swap the display order of the Question with the previous Question.
