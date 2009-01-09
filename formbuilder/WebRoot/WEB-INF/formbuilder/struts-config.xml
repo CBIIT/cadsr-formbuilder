@@ -270,6 +270,7 @@
     
     <action name="moduleEditForm" path="/moduleToEditAction" parameter="method" scope="session" type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormModuleEditAction" validate="false">
       <forward name="success" path="/jsp/formbuilder/moduleEdit.jsp" redirect="false"/>
+      <forward name="success-after-update" path="/jsp/formbuilder/moduleEdit.jsp?updated=true" redirect="false"/>
       <forward name="failure" path="/jsp/formbuilder/formEdit.jsp" redirect="false"/>
     </action>
     <action name="moduleEditForm" path="/moduleSaveAction" parameter="method" scope="session" type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormModuleEditAction" 
