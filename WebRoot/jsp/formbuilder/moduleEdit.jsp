@@ -371,7 +371,16 @@ function clearProtocol() {
 	      </td>
 	    </tr>  
 	  </table>       
-      <%@ include file="moduleEditButton_inc.jsp"%>
+
+		<logic:present parameter="updated" scope="request">
+			<%@ include file="moduleEditBackButton_inc.jsp"%>
+		</logic:present> 
+
+		<logic:notPresent parameter="updated" scope="request">
+			<%@ include file="moduleEditButton_inc.jsp"%>
+		</logic:notPresent>
+
+      
         <%@ include file="showMessages.jsp" %>
     
       <logic:present name="<%=FormConstants.MODULE%>">
@@ -1168,7 +1177,15 @@ function clearProtocol() {
               </table>
            <br>        
       </logic:present>
-      <%@ include file="moduleEditButton_inc.jsp"%>
+
+      <logic:present parameter="updated" scope="request">
+		<%@ include file="moduleEditBackButton_inc.jsp"%>
+	</logic:present> 
+
+	<logic:notPresent parameter="updated" scope="request">
+		<%@ include file="moduleEditButton_inc.jsp"%>
+	</logic:notPresent>
+
     </html:form>
     <%@ include file="../common/common_bottom_border.jsp"%>
   	<html:javascript formName="moduleEditForm"/>
