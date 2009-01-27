@@ -100,7 +100,10 @@
   }
   
   function submitCancelForm() {
-          document.location.href= '<%=request.getContextPath()+"/cancelAction.do?" + NavigationConstants.METHOD_PARAM + "=" + NavigationConstants.GET_MODULE_TO_EDIT+"&"+FormConstants.QUESTION_INDEX +"="+qIndex %>';
+          document.location.href= '<%=request.getContextPath()+"/cancelAction.do?" + NavigationConstants.METHOD_PARAM + "=" + NavigationConstants.GET_MODULE_TO_EDIT
+        		  																	+"&"+FormConstants.QUESTION_INDEX +"="+qIndex 
+        		  																	+"&"+FormConstants.MODULE_INDEX +"="+moduleIndex
+        		  																	%>';
       }     
   
 function details(linkParms ){
