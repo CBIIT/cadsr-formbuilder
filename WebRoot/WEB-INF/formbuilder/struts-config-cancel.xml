@@ -2,6 +2,16 @@
 <!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
 <struts-config>
 
+<form-beans>
+    <form-bean name="hrefForm"
+      type="gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean"
+      dynamic="true">
+      <form-property name="questionIndex" type="java.lang.String"/>
+      <form-property name="moduleIndex" type="java.lang.String"/>      
+    </form-bean>
+
+  </form-beans>
+  
   <action-mappings>
     <action name="hrefForm" path="/cancelAction" parameter="method"
       scope="request"

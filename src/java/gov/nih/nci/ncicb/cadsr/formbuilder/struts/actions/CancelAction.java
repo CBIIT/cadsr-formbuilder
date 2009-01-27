@@ -43,8 +43,13 @@ public class CancelAction extends FormBuilderSecureBaseDispatchAction {
         questionIndex = Integer.parseInt(questionIndexStr);
     // Jump to the update location on the screen
       request.setAttribute(CaDSRConstants.ANCHOR,"Q"+questionIndex);
-        
-        return mapping.findForward("gotoModuleEdit");
+      
+      String moduleIndexStr = (String)request.getParameter(QUESTION_INDEX);
+      
+      request.setAttribute("questionIndex", questionIndexStr);
+      request.setAttribute("moduleIndex", moduleIndexStr);
+      
+        return mapping.findForward("backToModuleEdit");
     }
 
     public ActionForward getFormToEdit(ActionMapping mapping, ActionForm form,
