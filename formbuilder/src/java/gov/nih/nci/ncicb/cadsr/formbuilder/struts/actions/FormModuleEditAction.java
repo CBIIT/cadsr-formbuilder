@@ -883,8 +883,6 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
     HttpServletResponse response) throws IOException, ServletException {
     GenericDynaFormBean moduleEditForm = (GenericDynaFormBean) form;
 
-    Integer moduleIndex = (Integer) moduleEditForm.get(MODULE_INDEX);
-
     Form crf = (Form)getSessionObject(request,CRF);
     Module module = (Module)getSessionObject(request,MODULE);
 
