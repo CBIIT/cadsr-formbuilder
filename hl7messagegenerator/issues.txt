@@ -1,8 +1,0 @@
-Range Check and related objects are  not currently populated in the DAO.
-
-Instrument author is not mapped from eDCI to caDSR. It is mandatory for caAdapter.
-
-GroupAlias is currently mapped to module->designation. However there is no way in form builder to enter module ->designation.
-
-
-Form footer instruction does not show as part of form instructions in the caDSR API. The instruction also do not show in the database view.
