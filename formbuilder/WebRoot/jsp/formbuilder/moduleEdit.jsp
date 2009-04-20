@@ -571,13 +571,13 @@ function clearProtocol() {
                                 <tr class="OraHeaderBlack">                                
                                 <logic:notPresent name="question" property="dataElement">
                                  <td >
-                                  <html:textarea  styleClass="OraFieldText" rows="2" cols="102" property='<%=FormConstants.MODULE_QUESTIONS+"["+questionIndex+"]"%>'>
+                                  <html:textarea  styleClass="OraFieldText" rows="2" cols="102" property='<%=FormConstants.MODULE_QUESTIONS+"["+questionIndex+"]"%>' styleId="<%=FormConstants.MODULE_QUESTIONS+questionIndex %>">
                                  </html:textarea>
                                  </td>        
                                 </logic:notPresent>
                                 <logic:present name="question" property="dataElement">
                                  <td >
-                                  <html:textarea  styleClass="OraFieldText" rows="2" cols="102" property='<%=FormConstants.MODULE_QUESTIONS+"["+questionIndex+"]"%>' readonly="true">
+                                  <html:textarea  styleClass="OraFieldText" rows="2" cols="102" property='<%=FormConstants.MODULE_QUESTIONS+"["+questionIndex+"]"%>' readonly="true" styleId="<%=FormConstants.MODULE_QUESTIONS+questionIndex %>">
                                  </html:textarea>
                                  </td>        
                                   <td class="OraHeaderBlack" align="center" width="70" >
@@ -642,7 +642,7 @@ function clearProtocol() {
                           </td>                      
                           <td class="OraFieldText">
                               <cde:RefDocAltQuestionTextDisplay questionBeanId= "question" 
-                                                  htmlObjectRef='<%=FormConstants.MODULE_QUESTIONS+"["+questionIndex+"]"%>'
+                                                  htmlObjectRef='<%=FormConstants.MODULE_QUESTIONS+questionIndex %>'
                                                   selectBoxClassName="AltQuestionField"
                                                   selectBoxSize="4"
                                                   refDocType="<%=ReferenceDocument.REF_DOC_TYPE_PREFERRED_QUESTION_TEXT%>"
@@ -658,7 +658,7 @@ function clearProtocol() {
                           </td>                      
                           <td class="OraFieldText">
                               <cde:RefDocAltQuestionTextDisplay questionBeanId= "question" 
-                                                  htmlObjectRef='<%=FormConstants.MODULE_QUESTIONS+"["+questionIndex+"]"%>'
+                                                  htmlObjectRef='<%=FormConstants.MODULE_QUESTIONS+questionIndex %>'
                                                   selectBoxClassName="AltQuestionField"
                                                   selectBoxSize="4"
                                                   refDocType="<%=ReferenceDocument.REF_DOC_TYPE_ALT_QUESTION_TEXT%>"
@@ -675,7 +675,7 @@ function clearProtocol() {
                           </td>                      
                           <td class="OraFieldText">
                               <cde:questionAltText questionBeanId= "question" 
-                                                  htmlObjectRef='<%=FormConstants.MODULE_QUESTIONS+"["+questionIndex+"]"%>'
+                                                  htmlObjectRef='<%=FormConstants.MODULE_QUESTIONS+questionIndex %>'
                                                   questionProperty = "longName"
                                                   deProperty = "longCDEName"
                                                   orgModuleBeanId= '<%=FormConstants.CLONED_MODULE%>'
