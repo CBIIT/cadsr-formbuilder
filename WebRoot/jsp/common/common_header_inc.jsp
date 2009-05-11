@@ -54,7 +54,7 @@
 		<td>|</td>
 		<td align="center" width="12%" height="10">
 			<span style="font-size: 9pt; font-family: Arial"> <a
-				href="http://cadsradmintool.nci.nih.gov" target="_blank">&nbsp;Admin Tool&nbsp;</a> </span>
+				href="http://cadsradmin.nci.nih.gov" target="_blank">&nbsp;Admin Tool&nbsp;</a> </span>
 		</td>
 		<td>|</td>
 		<td align="center" width="12%" height="10">
