@@ -12,8 +12,13 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 public class AppScanFilter implements Filter {
 
+	private static Log log = LogFactory.getLog(AppScanFilter.class);
+	
 	private static char[] escapeChars = {'|','&',';','$','%','@','\'','"','\'','\\','+',0x0d,0x0a,',', '<', '>', '(', ')'};
 		
 	@Override
@@ -31,6 +36,10 @@ public class AppScanFilter implements Filter {
 			for (String value: values) {
 				if (isInvalid(value)) {
 					invalid = true;
+					if (log.isInfoEnabled()) {
+						log.info("Request param value ["+value+"] supplied which contains an un-permissible character");
+					}
+					
 					break;
 				}
 			}
