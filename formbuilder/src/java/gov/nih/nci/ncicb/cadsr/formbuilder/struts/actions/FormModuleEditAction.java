@@ -43,6 +43,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -64,6 +66,10 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
 
 
   private static final String VALID_VALUE_CHANGES="validValueChanges";
+  
+  private static final int MAX_LONG_NAME_LENGTH = 255;
+  
+  private static Log log = LogFactory.getLog(FormModuleEditAction.class);
   /**
    * Sets Module given an Id for Edit.
    *
@@ -1565,8 +1571,22 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
         }
         else if((instrStr!=null)&&(!instrStr.equals("")))
         {
+        	String sizedUpInstr = instrStr;
+        	
+        	/*
+        	 * Truncate instruction string to fit in LONG_NAME field (255 characters)
+        	 * Refer to GF# 12379 for guidance on this
+        	 */
+        	
+        	if (sizedUpInstr.length() > MAX_LONG_NAME_LENGTH) { 
+        		sizedUpInstr = sizedUpInstr.substring(0, MAX_LONG_NAME_LENGTH);
+        		if (log.isInfoEnabled()) {
+        			log.info("Truncated question instruction ["+instrStr+"] to ["+sizedUpInstr+"]");
+        		}
+        	}
+        	
           Instruction instr = new InstructionTransferObject();
-          instr.setLongName(currQuestion.getLongName());
+          instr.setLongName(sizedUpInstr);
           instr.setDisplayOrder(0);
           instr.setVersion(new Float(1));
           instr.setAslName("DRAFT NEW");
