@@ -5,7 +5,7 @@
 <%@page import="gov.nih.nci.ncicb.cadsr.common.util.* " %>
 <%@page import="gov.nih.nci.ncicb.cadsr.common.lov.ProtocolsLOVBean " %>
 <%@page import="gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants" %>
-<%@page import="org.apache.commons.lang.StringEscapeUtils" %>
+<%@page import="org.owasp.esapi.ESAPI" %>
 
 <%
   TabInfoBean tib = 
@@ -16,7 +16,7 @@
     
   String pageName = "PageId";
   String pageId = "DataElementsGroup";
-  String pageUrl = StringEscapeUtils.escapeJavaScript("&"+pageName+"="+pageId);
+  String pageUrl = ESAPI.encoder().encodeForHTML("&"+pageName+"="+pageId);
 
 %>
 
@@ -35,9 +35,9 @@ List of Values - Protocols
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 function passback(P_ID, P_NAME) {
-   opener.document.forms[0].<%= StringEscapeUtils.escapeJavaScript(clb.getJsName()) %>.value = P_NAME;
-   opener.document.forms[0].<%= StringEscapeUtils.escapeJavaScript(clb.getJsId()) %>.value = P_ID;
-   opener.document.forms[0].<%= StringEscapeUtils.escapeJavaScript(clb.getJsName()) %>.focus();
+   opener.document.forms[0].<%= ESAPI.encoder().encodeForJavaScript(clb.getJsName()) %>.value = P_NAME;
+   opener.document.forms[0].<%= ESAPI.encoder().encodeForJavaScript(clb.getJsId()) %>.value = P_ID;
+   opener.document.forms[0].<%= ESAPI.encoder().encodeForJavaScript(clb.getJsName()) %>.focus();
    close();
 }
 
@@ -64,10 +64,10 @@ function goPage(pageInfo) {
 
 <form method="POST" action="formLOVAction.do">
 <INPUT TYPE="HIDDEN" NAME="NOT_FIRST_DISPLAY" VALUE="1">
-<INPUT TYPE="HIDDEN" NAME="idVar" VALUE="<%=StringEscapeUtils.escapeHtml(clb.getJsId())%>">
-<INPUT TYPE="HIDDEN" NAME="nameVar" VALUE="<%=StringEscapeUtils.escapeHtml(clb.getJsName())%>">
+<INPUT TYPE="HIDDEN" NAME="idVar" VALUE="<%=ESAPI.encoder().encodeForHTML(clb.getJsId())%>">
+<INPUT TYPE="HIDDEN" NAME="nameVar" VALUE="<%=ESAPI.encoder().encodeForHTML(clb.getJsName())%>">
 <INPUT TYPE="HIDDEN" NAME="method" VALUE="getProtocolsLOV">
-<INPUT TYPE="HIDDEN" NAME="contextIdSeq" value="<%= StringEscapeUtils.escapeHtml((String)request.getAttribute("contextIdSeq")) %>">
+<INPUT TYPE="HIDDEN" NAME="contextIdSeq" value="<%= ESAPI.encoder().encodeForHTML((String)request.getAttribute("contextIdSeq")) %>">
 
 <p align="left">
 <font face="Arial, Helvetica, sans-serif" size="-1" color="#336699">
@@ -81,7 +81,7 @@ function goPage(pageInfo) {
 <tr>
 
   <% 
-    String chkContext = StringEscapeUtils.escapeJavaScript((String)request.getAttribute("chkContext"));
+    String chkContext = (String)request.getAttribute("chkContext");
     if((chkContext == null) || (!chkContext.equals("true"))) {
   %>
   <td class="fieldtitlebold">Restrict Search to Current Context</td>
