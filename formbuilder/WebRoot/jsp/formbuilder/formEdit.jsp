@@ -117,7 +117,7 @@ function repeatDisplay(methodName) {
 
 
       
-    <html:form action="/formSaveAction.do?">
+    <html:form action="/formSaveAction.do">
      <html:hidden value="" property="<%=NavigationConstants.METHOD_PARAM%>"/>
      <html:hidden value="" property="<%=FormConstants.MODULE_INDEX%>"/>
      <html:hidden value="moduleEdit" property="forward"/>
