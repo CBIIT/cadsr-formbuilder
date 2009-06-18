@@ -88,8 +88,8 @@ public class FormCreateAction extends FormBuilderSecureBaseDispatchAction {
     }
     */
     newForm = new FormTransferObject();
-    newForm.setLongName((String)dynaForm.get(FORM_LONG_NAME));
-    newForm.setPreferredDefinition((String)dynaForm.get(PREFERRED_DEFINITION));
+    newForm.setLongName(getOracleValue((String)dynaForm.get(FORM_LONG_NAME)));
+    newForm.setPreferredDefinition(getOracleValue((String)dynaForm.get(PREFERRED_DEFINITION)));
 
     Context context = new ContextTransferObject();
     context.setConteIdseq((String)dynaForm.get(CONTEXT_ID_SEQ));
@@ -99,15 +99,15 @@ public class FormCreateAction extends FormBuilderSecureBaseDispatchAction {
     if (protocolId.length()>0){
         Protocol protocol =
           new ProtocolTransferObject((String)dynaForm.get(PROTOCOLS_LOV_NAME_FIELD));
-        protocol.setProtoIdseq((String)dynaForm.get(PROTOCOLS_LOV_ID_FIELD));
+        protocol.setProtoIdseq(getOracleValue((String)dynaForm.get(PROTOCOLS_LOV_ID_FIELD)));
         
         List protocols = new ArrayList();
         protocols.add(protocol);    
         newForm.setProtocols(protocols);
     }
     
-    newForm.setFormType((String)dynaForm.get(FORM_TYPE));
-    newForm.setFormCategory((String)dynaForm.get(FORM_CATEGORY));
+    newForm.setFormType(getOracleValue((String)dynaForm.get(FORM_TYPE)));
+    newForm.setFormCategory(getOracleValue((String)dynaForm.get(FORM_CATEGORY)));
     newForm.setAslName("DRAFT NEW");
     newForm.setVersion((Float)dynaForm.get(FORM_VERSION));
     newForm.setCreatedBy(request.getRemoteUser());

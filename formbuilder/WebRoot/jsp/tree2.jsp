@@ -7,10 +7,55 @@
 <%@ page import="java.util.*"%>
 <%@page import="gov.nih.nci.ncicb.cadsr.contexttree.TreeConstants " %>
 <%@ page import="net.sf.jsfcomp.aa.tree.AaTreeTag"%>
+<%@ page import="org.owasp.esapi.ESAPI"%>
+
+<%@page import="java.util.regex.Pattern"%>
+
+
+<%! 
+	private static final Pattern AUTOSCROLL_PATTERN = Pattern.compile("[0-9]*[,][0-9]*");
+	private static final Pattern NAVCMD_PATTERN = Pattern.compile("[0-9]*[:]?[0-9]*");
+	private static final Pattern INT_PATTERN = Pattern.compile("[0-9]*");
+	private static final Pattern LINK_HIDDEN_PATTERN = Pattern.compile("[cdeBrowserTree:]*([[0-9]*[:]]*t2g|_idJsp3)");
+	
+	private void filterHiddenVariables(HttpServletRequest request, HttpServletResponse response) throws java.io.IOException{
+		boolean valid = true;
+		
+		String autoScroll = request.getParameter("autoScroll");
+		String jsfSeq = request.getParameter("jsf_sequence");
+		String linkHidden = request.getParameter("cdeBrowserTree:_link_hidden_");
+		String navCmd = request.getParameter("cdeBrowserTree:org.apache.myfaces.tree.NAV_COMMAND");
+		String submit = request.getParameter("cdeBrowserTree_SUBMIT");
+		
+		if (autoScroll != null && !AUTOSCROLL_PATTERN.matcher(autoScroll).matches()) {
+    		valid = false;
+    	}
+		if (jsfSeq != null && valid && !INT_PATTERN.matcher(jsfSeq).matches()) {
+			valid = false;
+		}
+		if (linkHidden != null && valid && !LINK_HIDDEN_PATTERN.matcher(linkHidden).matches()) {
+			valid = false;
+		}
+		if (navCmd != null && valid && !NAVCMD_PATTERN.matcher(navCmd).matches()) {
+			valid = false;
+		}
+		if (submit != null && valid && !INT_PATTERN.matcher(submit).matches()) {
+			valid = false;
+		}
+		
+		if (!valid) {
+			response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
+		}
+	}
+%>
+
 <f:view>
     <t:document>
         <t:documentHead>
             <%
+            
+            filterHiddenVariables(request, response);
+            
 // get parameters
     String treeParams = request.getParameter("treeParams");
     if (treeParams == null || treeParams.equals(""))
@@ -245,7 +290,7 @@ ajaxAnywhere.bindById();
     if (autoScroll != null && !"".equals(autoScroll)) {
         %>
 	    addLoadEvent(function() {
-  			parent.frames['tree'].scrollTo(<%=autoScroll%>);
+  			parent.frames['tree'].scrollTo(<%=ESAPI.encoder().encodeForJavaScript(autoScroll) %>);
   		});
         <%
     }
