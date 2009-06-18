@@ -40,15 +40,6 @@
            </tr>        
        </table>
       </logic:messagesPresent>  
-  <!--
-   <%  
-    java.lang.Throwable exception = (java.lang.Throwable) 
-    request.getAttribute("org.apache.struts.action.EXCEPTION");
-    
-    if (exception !=null)
-	exception.printStackTrace(new java.io.PrintWriter(out));
-    %>
-  -->
         </td>
       </tr>
     </table>
