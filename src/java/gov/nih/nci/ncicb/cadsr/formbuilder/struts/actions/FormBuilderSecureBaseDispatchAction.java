@@ -18,6 +18,9 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.owasp.esapi.ESAPI;
+import org.owasp.esapi.codecs.Codec;
+import org.owasp.esapi.codecs.OracleCodec;
 
 
 /**
@@ -159,6 +162,13 @@ public class FormBuilderSecureBaseDispatchAction extends FormBuilderBaseDispatch
     public NCIUser getFormLockedBy(String formIdSeq, HttpServletRequest request){
         FormElementLocker locker = getApplicationServiceLocator().findLockingService().getFormLocker(formIdSeq);
         return locker.getNciUser();
+    }
+    
+    protected String getOracleValue(String value) {
+    	if (value == null) return null;
+    	
+    	Codec ORACLE_CODEC = new OracleCodec();
+    	return ESAPI.encoder().encodeForSQL(ORACLE_CODEC, value);
     }
     
 }
