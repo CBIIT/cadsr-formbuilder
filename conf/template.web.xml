@@ -904,7 +904,8 @@
       <url-pattern>/gotoAddQuestion.do</url-pattern>
       <url-pattern>/addQuestion.do</url-pattern>
       <!--not covered by FormBuilderSessionFilter-->
-      <url-pattern>/newFormSearchAction.do</url-pattern>      
+      <url-pattern>/newFormSearchAction.do</url-pattern>  
+     <url-pattern>/setMessagesForFrameAction.do</url-pattern>
     </web-resource-collection>
    <auth-constraint>
       <description>Authorized Users Group</description>
