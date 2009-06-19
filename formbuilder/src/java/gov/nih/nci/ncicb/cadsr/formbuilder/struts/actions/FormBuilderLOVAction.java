@@ -10,6 +10,7 @@ import gov.nih.nci.ncicb.cadsr.common.util.DBUtil;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -40,6 +41,11 @@ public class FormBuilderLOVAction extends FormBuilderBaseDispatchAction {
 				       ActionForm form,
     HttpServletRequest request,
     HttpServletResponse response) throws IOException, ServletException {
+	  
+	  if (!validate(form, request, response)) {
+		  throw new ServletException("Invalid Input");
+		  //response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid input");
+	  }
     //FormBuilderServiceDelegate service = getFormBuilderService();
     DynaActionForm searchForm = (DynaActionForm) form;
     String protocolLongName =
@@ -145,6 +151,12 @@ public class FormBuilderLOVAction extends FormBuilderBaseDispatchAction {
 				       ActionForm form,
     HttpServletRequest request,
     HttpServletResponse response) throws IOException, ServletException {
+	  
+	  if (!validate(form, request, response)) {
+		  throw new ServletException("Invalid Input");
+		  //response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid input");
+	  }
+	  
     //FormBuilderServiceDelegate service = getFormBuilderService();
     DynaActionForm searchForm = (DynaActionForm) form;
     DBUtil dbUtil = new DBUtil();
@@ -210,5 +222,26 @@ public class FormBuilderLOVAction extends FormBuilderBaseDispatchAction {
     HttpServletRequest request,
     HttpServletResponse response) throws IOException, ServletException {
     return mapping.findForward(DEFAULT_HOME);
+  }
+  
+  private boolean validate(ActionForm form,
+    HttpServletRequest request,
+    HttpServletResponse response) {
+	  String[] searchStrs = (String[])request.getParameterValues("SEARCH");
+	  boolean valid = true;
+	  
+	  if (searchStrs != null) { 
+		  for (String searchStr: searchStrs) {
+			  if (!searchStr.trim().equals("")) {
+				  valid = Pattern.matches("[*]*[a-zA-Z0-9]*[*]*", searchStr);
+			  }
+			  if (!valid) {
+				  break;
+			  }
+		  }
+		  
+	  }
+	  
+	  return valid;
   }
 }
