@@ -5,16 +5,16 @@ import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.InstructionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObject;
-import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
 import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
 import gov.nih.nci.ncicb.cadsr.common.resource.Protocol;
 import gov.nih.nci.ncicb.cadsr.common.util.StringUtils;
+import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
+import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,6 +72,11 @@ public class FormCreateAction extends FormBuilderSecureBaseDispatchAction {
     HttpServletRequest request,
     HttpServletResponse response) throws IOException, ServletException {
 
+	  if (!validate(form, request, response)) {
+		  saveMessage(ERROR_FORM_CREATE, request);
+			return mapping.findForward("failure");
+	  }
+	  
     DynaActionForm dynaForm = (DynaActionForm)form;
     Form newForm = null;
     Instruction newFormHdrInst = null;
@@ -95,10 +100,10 @@ public class FormCreateAction extends FormBuilderSecureBaseDispatchAction {
     context.setConteIdseq((String)dynaForm.get(CONTEXT_ID_SEQ));
     newForm.setContext(context);
 
-    String protocolId = (String)dynaForm.get(PROTOCOLS_LOV_NAME_FIELD);
+    String protocolId = getOracleValue((String)dynaForm.get(PROTOCOLS_LOV_NAME_FIELD));
     if (protocolId.length()>0){
         Protocol protocol =
-          new ProtocolTransferObject((String)dynaForm.get(PROTOCOLS_LOV_NAME_FIELD));
+          new ProtocolTransferObject(getOracleValue((String)dynaForm.get(PROTOCOLS_LOV_NAME_FIELD)));
         protocol.setProtoIdseq(getOracleValue((String)dynaForm.get(PROTOCOLS_LOV_ID_FIELD)));
         
         List protocols = new ArrayList();
@@ -114,7 +119,7 @@ public class FormCreateAction extends FormBuilderSecureBaseDispatchAction {
 
     // assemble a new form instruction for having form header.
     int dispOrder = 0;
-    String headerInstrStr = (String)dynaForm.get(FORM_HEADER_INSTRUCTION);
+    String headerInstrStr = getOracleValue((String)dynaForm.get(FORM_HEADER_INSTRUCTION));
     if (StringUtils.doesValueExist(headerInstrStr)){
       newFormHdrInst = new InstructionTransferObject();
       newFormHdrInst.setLongName(newForm.getLongName());
@@ -125,7 +130,7 @@ public class FormCreateAction extends FormBuilderSecureBaseDispatchAction {
       newFormHdrInst.setCreatedBy(request.getRemoteUser());
       newFormHdrInst.setDisplayOrder(++dispOrder);
     }
-    String footerInstrStr = (String)dynaForm.get(FORM_FOOTER_INSTRUCTION);
+    String footerInstrStr = getOracleValue((String)dynaForm.get(FORM_FOOTER_INSTRUCTION));
     if (StringUtils.doesValueExist(footerInstrStr)){
       newFormFtrInst = new InstructionTransferObject();
       newFormFtrInst.setLongName(newForm.getLongName());
@@ -158,6 +163,25 @@ public class FormCreateAction extends FormBuilderSecureBaseDispatchAction {
 
     return mapping.findForward("gotoEdit");
 
+  }
+  
+  private boolean validate(ActionForm form,
+		    HttpServletRequest request,
+		    HttpServletResponse response) {
+	  
+	  List<String> formTypes = (List<String>) request.getSession().getAttribute(FormConstants.ALL_FORM_TYPES);
+	  List<String> formCategories = (List<String>) request.getSession().getAttribute(FormConstants.ALL_FORM_CATEGORIES);
+	  formCategories.add("");
+	  
+	  DynaActionForm dynaForm = (DynaActionForm)form;
+	  String formType = (String)dynaForm.get(FORM_TYPE);
+	  String formCategory = (String)dynaForm.get(FORM_CATEGORY);
+	  
+	  if (!formTypes.contains(formType) || !formCategories.contains(formCategory)) {
+		  return false;
+	  }
+	  
+	  return true;
   }
 
 }
