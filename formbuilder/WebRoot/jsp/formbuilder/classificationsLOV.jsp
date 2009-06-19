@@ -73,7 +73,7 @@ function goPage(pageInfo) {
 <p class="OraHeaderSubSub">Classifications </p>
 </center>
 <form method="POST" onSubmit="return validate()" ENCTYPE="application/x-www-form-urlencoded" action="classificationLOVAction.do?method=getClassificationsLOV">
-<input type="HIDDEN" name="<%= PageConstants.PAGEID %>" value="<%= ESAPI.encoder().encodeForHTML(pageId)%>"/>
+
 <INPUT TYPE="HIDDEN" NAME="NOT_FIRST_DISPLAY" VALUE="<%=ESAPI.encoder().encodeForHTML("1")%>"/>
 <INPUT TYPE="HIDDEN" NAME="idVar" VALUE="<%= ESAPI.encoder().encodeForHTML(clb.getJsId()) %>"/>
 <INPUT TYPE="HIDDEN" NAME="nameVar" VALUE="<%= ESAPI.encoder().encodeForHTML(clb.getJsName()) %>"/>

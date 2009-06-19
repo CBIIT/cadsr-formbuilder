@@ -213,36 +213,7 @@
         size="19"
         styleClass="LOVField"
         />
-      <input type=hidden name="preferredName" 
-        readonly="true" 
-        size="19"
-        styleClass="LOVField"
-        />
-      <input type=hidden name="context" 
-        readonly="true" 
-        size="19"
-        styleClass="LOVField"
-        />
-      <input type=hidden name="aslName" 
-        readonly="true" 
-        size="19"
-        styleClass="LOVField"
-        />
-      <input type=hidden name="definition" 
-        readonly="true" 
-        size="19"
-        styleClass="LOVField"
-        />
-      <input type=hidden name="leadOrg" 
-        readonly="true" 
-        size="19"
-        styleClass="LOVField"
-        />
-      <input type=hidden name="protocolId" 
-        readonly="true" 
-        size="19"
-        styleClass="LOVField"
-        />
+      
         &nbsp;
          <a href="javascript:gotoProtocolsLOV('<%=((Form)session.getAttribute(FormConstants.CRF)).getConteIdseq()%>')">
             <img src="<%=urlPrefix%>i/search_light.gif" border="0" alt="Search for Protocol Items">
