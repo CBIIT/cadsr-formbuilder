@@ -26,12 +26,12 @@ function clearProtocol() {
 -->
 </SCRIPT>
 <%
-  String pageUrl = "&PageId=DataElementsGroup";
+  //String pageUrl = "&PageId=DataElementsGroup";
   // HSK
   String contextPath = request.getContextPath();
 
   String protoLOVUrl= 
-    "javascript:newWin('"+contextPath+"/formLOVAction.do?method=getProtocolsLOV&chkContext=true&idVar=protocolIdSeq&nameVar=protocolLongName"+pageUrl+"','protoLOV',1200,900)";
+    "javascript:newWin('"+contextPath+"/formLOVAction.do?method=getProtocolsLOV&chkContext=true&idVar=protocolIdSeq&nameVar=protocolLongName','protoLOV',1200,900)";
 
 %>
 <table>
