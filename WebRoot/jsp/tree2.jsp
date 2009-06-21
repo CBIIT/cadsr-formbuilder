@@ -17,7 +17,7 @@
 	private static final Pattern NAVCMD_PATTERN = Pattern.compile("[0-9]*[:]?[0-9]*");
 	private static final Pattern INT_PATTERN = Pattern.compile("[0-9]*");
 	private static final Pattern LINK_HIDDEN_PATTERN = Pattern.compile("[cdeBrowserTree:]*([[0-9]*[:]]*t2g|_idJsp3)");
-	private static final Pattern TREE_PARAMS_PATTERN = Pattern.compile("[[a-zA-Z0-9]*[;]?[a-zA-Z0-9]*]*");
+	private static final Pattern TREE_PARAMS_PATTERN = Pattern.compile("[[a-zA-Z0-9]*[;]?[:]?[a-zA-Z0-9]*]*");
 	
 	private void filterHiddenVariables(HttpServletRequest request, HttpServletResponse response) throws java.io.IOException{
 		boolean valid = true;
@@ -45,6 +45,7 @@
 			valid = false;
 		}
 		if (treeParams != null && valid && !TREE_PARAMS_PATTERN.matcher(treeParams).matches()) {
+			System.out.println(treeParams);
 			valid = false;
 		}
 		
