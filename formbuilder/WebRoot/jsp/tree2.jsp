@@ -14,7 +14,7 @@
 
 <%! 
 	private static final Pattern AUTOSCROLL_PATTERN = Pattern.compile("[0-9]*[,][0-9]*");
-	private static final Pattern NAVCMD_PATTERN = Pattern.compile("[0-9]*[:]?[0-9]*");
+	private static final Pattern NAVCMD_PATTERN = Pattern.compile("[0-9:]*");
 	private static final Pattern INT_PATTERN = Pattern.compile("[0-9]*");
 	private static final Pattern LINK_HIDDEN_PATTERN = Pattern.compile("[cdeBrowserTree:]*([[0-9]*[:]]*t2g|_idJsp3)");
 	private static final Pattern TREE_PARAMS_PATTERN = Pattern.compile("[[a-zA-Z0-9]*[;]?[:]?[a-zA-Z0-9]*]*");
@@ -30,22 +30,27 @@
 		String treeParams = request.getParameter("treeParams");
 		
 		if (autoScroll != null && !AUTOSCROLL_PATTERN.matcher(autoScroll).matches()) {
+			System.out.println("Auto Scroll:"+autoScroll);
     		valid = false;
     	}
 		if (jsfSeq != null && valid && !INT_PATTERN.matcher(jsfSeq).matches()) {
+			System.out.println("JSF Seq:"+jsfSeq);
 			valid = false;
 		}
 		if (linkHidden != null && valid && !LINK_HIDDEN_PATTERN.matcher(linkHidden).matches()) {
+			System.out.println("Link Hidden:"+linkHidden);
 			valid = false;
 		}
 		if (navCmd != null && valid && !NAVCMD_PATTERN.matcher(navCmd).matches()) {
+			System.out.println("Nav Cmd:"+navCmd);
 			valid = false;
 		}
 		if (submit != null && valid && !INT_PATTERN.matcher(submit).matches()) {
+			System.out.println("Submit:"+submit);
 			valid = false;
 		}
 		if (treeParams != null && valid && !TREE_PARAMS_PATTERN.matcher(treeParams).matches()) {
-			System.out.println(treeParams);
+			System.out.println("Tree params:"+treeParams);
 			valid = false;
 		}
 		

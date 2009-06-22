@@ -33,9 +33,9 @@ List of Values - Classifications
 <SCRIPT LANGUAGE="JavaScript">
 //<!--
 function passback(P_ID, P_NAME) {
-   opener.document.forms[0].<%=ESAPI.encoder().encodeForHTML(clb.getJsName())%>.value = P_NAME;
-   opener.document.forms[0]['<%=ESAPI.encoder().encodeForHTML(clb.getJsId())%>'].value = P_ID;
-   opener.document.forms[0].<%=ESAPI.encoder().encodeForHTML(clb.getJsName())%>.focus();
+   opener.document.forms[0].<%=ESAPI.encoder().encodeForJavaScript(clb.getJsName())%>.value = P_NAME;
+   opener.document.forms[0]['<%=ESAPI.encoder().encodeForJavaScript(clb.getJsId())%>'].value = P_ID;
+   opener.document.forms[0].<%=ESAPI.encoder().encodeForJavaScript(clb.getJsName())%>.focus();
    window.close();
 }
 
