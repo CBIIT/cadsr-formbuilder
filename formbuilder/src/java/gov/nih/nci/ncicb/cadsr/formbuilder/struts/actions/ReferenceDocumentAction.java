@@ -141,7 +141,7 @@ public class ReferenceDocumentAction
   response.setHeader("Cache-Control", "max-age=0");
 
   // first find out if the attachment is new and saved in the session
-  Map attMap = (Map)getSessionObject(request, REFDOC_ATTACHMENT_MAP);
+  Map attMap = (Map)getSessionObject(request, FormConstants.REFDOC_ATTACHMENT_MAP);
   Attachment attachment = getAttachmentFromSession(attMap, attachmentName);
 
   if (attachment != null) {
@@ -336,13 +336,13 @@ public class ReferenceDocumentAction
 
   attachments.add(attachment);
 
-  Map attMap = (Map)getSessionObject(request, REFDOC_ATTACHMENT_MAP);
+  Map attMap = (Map)getSessionObject(request, FormConstants.REFDOC_ATTACHMENT_MAP);
 
   if (attMap == null)
    attMap = new HashMap();
 
   attMap.put(attachment, file);
-  setSessionObject(request, REFDOC_ATTACHMENT_MAP, attMap);
+  setSessionObject(request, FormConstants.REFDOC_ATTACHMENT_MAP, attMap);
   saveMessage("cadsr.formbuilder.refdoc.attach.success", request);
   return mapping.findForward("success");
  }
@@ -368,7 +368,7 @@ public class ReferenceDocumentAction
 
   List refDocs = crf.getRefereceDocs();
   List originalDocs = (List)getSessionObject(request, REFDOCS_CLONED);
-  Map attachments = (Map)getSessionObject(request, REFDOC_ATTACHMENT_MAP);
+  Map attachments = (Map)getSessionObject(request, FormConstants.REFDOC_ATTACHMENT_MAP);
 
   Iterator iter = refDocs.iterator();
   boolean anythingChanged = false;
@@ -475,7 +475,7 @@ public class ReferenceDocumentAction
   }
 
   removeSessionObject(request, DELETED_REFDOCS);
-  removeSessionObject(request, REFDOC_ATTACHMENT_MAP);
+  removeSessionObject(request, FormConstants.REFDOC_ATTACHMENT_MAP);
   removeSessionObject(request, DELETED_ATTACHMENTS);
   removeSessionObject(request, REFDOCS_TEMPLATE_ATT_NAME);
 
@@ -513,7 +513,7 @@ public class ReferenceDocumentAction
   {
     return mapping.findForward("gotoConfirmCancel");
   } else {
-    removeSessionObject(request, REFDOC_ATTACHMENT_MAP);
+    removeSessionObject(request, FormConstants.REFDOC_ATTACHMENT_MAP);
     removeSessionObject(request, DELETED_REFDOCS);
   }
   return mapping.findForward("gotoEdit");
@@ -536,7 +536,7 @@ public class ReferenceDocumentAction
  public ActionForward cancelReferenceDocs(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                           HttpServletResponse response) throws IOException, ServletException {
 
-  removeSessionObject(request, REFDOC_ATTACHMENT_MAP);
+  removeSessionObject(request, FormConstants.REFDOC_ATTACHMENT_MAP);
 
   removeSessionObject(request, DELETED_REFDOCS);
   return mapping.findForward("gotoEdit");
@@ -1124,7 +1124,7 @@ public class ReferenceDocumentAction
 
   List refDocs = crf.getRefereceDocs();
   List originalDocs = (List)getSessionObject(request, REFDOCS_CLONED);
-  Map attachments = (Map)getSessionObject(request, REFDOC_ATTACHMENT_MAP);
+  Map attachments = (Map)getSessionObject(request, FormConstants.REFDOC_ATTACHMENT_MAP);
 
   Iterator iter = refDocs.iterator();
   int index = 0;
