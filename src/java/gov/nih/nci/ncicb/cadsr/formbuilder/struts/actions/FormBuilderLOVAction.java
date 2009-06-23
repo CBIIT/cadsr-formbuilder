@@ -2,6 +2,7 @@ package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
 //import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 import gov.nih.nci.ncicb.cadsr.common.ProcessConstants;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.common.FormBuilderConstants;
 import gov.nih.nci.ncicb.cadsr.common.lov.ClassificationsLOVBean;
 import gov.nih.nci.ncicb.cadsr.common.lov.ProtocolsLOVBean;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
@@ -23,6 +24,9 @@ import org.apache.struts.action.DynaActionForm;
 
 
 public class FormBuilderLOVAction extends FormBuilderBaseDispatchAction {
+	private static final Pattern ALPHA_PATTERN = Pattern.compile("[a-zA-Z]*");
+	private static final Pattern INT_PATTERN = Pattern.compile("[0-9]*");
+	private static final Pattern ID_PATTERN = Pattern.compile("[a-zA-Z0-9-]*");
   /**
    * Returns all forms for the given criteria.
    *
@@ -43,8 +47,7 @@ public class FormBuilderLOVAction extends FormBuilderBaseDispatchAction {
     HttpServletResponse response) throws IOException, ServletException {
 	  
 	  if (!validate(form, request, response)) {
-		  throw new ServletException("Invalid Input");
-		  //response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid input");
+		  response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid input");
 	  }
     //FormBuilderServiceDelegate service = getFormBuilderService();
     DynaActionForm searchForm = (DynaActionForm) form;
@@ -110,11 +113,11 @@ public class FormBuilderLOVAction extends FormBuilderBaseDispatchAction {
 
       if (performQuery == null) {
         plb = new ProtocolsLOVBean(request, dbUtil, additionalWhere);
-        setSessionObject(request, this.PROTOCOLS_LOV_BEAN, plb);
+        setSessionObject(request, FormBuilderConstants.PROTOCOLS_LOV_BEAN, plb);
       }
       else {
         plb =
-          (ProtocolsLOVBean) getSessionObject(request, this.PROTOCOLS_LOV_BEAN);
+          (ProtocolsLOVBean) getSessionObject(request, FormBuilderConstants.PROTOCOLS_LOV_BEAN);
         plb.getCommonLOVBean().resetRequest(request);
       }
     }
@@ -153,8 +156,7 @@ public class FormBuilderLOVAction extends FormBuilderBaseDispatchAction {
     HttpServletResponse response) throws IOException, ServletException {
 	  
 	  if (!validate(form, request, response)) {
-		  throw new ServletException("Invalid Input");
-		  //response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid input");
+		  response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid input");
 	  }
 	  
     //FormBuilderServiceDelegate service = getFormBuilderService();
@@ -228,18 +230,47 @@ public class FormBuilderLOVAction extends FormBuilderBaseDispatchAction {
     HttpServletRequest request,
     HttpServletResponse response) {
 	  String[] searchStrs = (String[])request.getParameterValues("SEARCH");
+	  String nameVar = request.getParameter("nameVar");
+	  String pageId = request.getParameter("PageId");
+	  String idVar = request.getParameter("idVar");
+	  String classificationsLOV = request.getParameter("classificationsLOV");
+	  String contextIdSeq = request.getParameter("contextIdSeq");
+	  String performQuery = request.getParameter("performQuery");
+	  String ckhContext = request.getParameter("ckhContext");
+	  
 	  boolean valid = true;
 	  
 	  if (searchStrs != null) { 
 		  for (String searchStr: searchStrs) {
 			  if (!searchStr.trim().equals("")) {
-				  valid = Pattern.matches("[a-zA-Z0-9.*]*", searchStr);
+				  valid = Pattern.matches("[a-zA-Z0-9.]*", searchStr);
 			  }
 			  if (!valid) {
 				  break;
 			  }
 		  }
 		  
+	  }
+	  if (nameVar != null && valid) {
+		  valid = ALPHA_PATTERN.matcher(nameVar).matches();
+	  }
+	  if (pageId != null && valid) {
+		  valid = ALPHA_PATTERN.matcher(pageId).matches();
+	  }
+	  if (idVar != null && valid) {
+		  valid = ALPHA_PATTERN.matcher(idVar).matches();
+	  }
+	  if (classificationsLOV != null && valid) {
+		  valid = INT_PATTERN.matcher(classificationsLOV).matches();
+	  }
+	  if (contextIdSeq != null && valid) {
+		  valid = ID_PATTERN.matcher(contextIdSeq).matches();
+	  }
+	  if (performQuery != null && valid) {
+		  valid = ALPHA_PATTERN.matcher(performQuery).matches();
+	  }
+	  if (ckhContext != null && valid) {
+		  valid = ALPHA_PATTERN.matcher(ckhContext).matches();
 	  }
 	  
 	  return valid;

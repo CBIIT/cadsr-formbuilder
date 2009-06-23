@@ -14,7 +14,8 @@
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams"%>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.jsp.util.CDEDetailsUtils"%>
 
-<HTML>
+
+<%@page import="java.util.regex.Pattern"%><HTML>
   <HEAD>
     <TITLE>Formbuilder: Edit Form </TITLE>
     <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache"/>
@@ -110,6 +111,26 @@ function repeatDisplay(methodName) {
   String protoLOVUrl= 
     "javascript:newWin('"+contextPath+"/formLOVAction.do?method=getProtocolsLOV&idVar=protocolIdSeq&chkContext=true&nameVar=protocolLongName"+pageUrl+"','protoLOV',1200,900)";
 
+  gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean formBean = (gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean)session.getAttribute("formEditForm");
+  String longName = (String)formBean.get(FormConstants.FORM_LONG_NAME);
+  String def = (String)formBean.get(FormConstants.PREFERRED_DEFINITION);
+  String header = (String)formBean.get(FormConstants.FORM_HEADER_INSTRUCTION);
+  String footer = (String)formBean.get(FormConstants.FORM_FOOTER_INSTRUCTION);
+  Pattern validTextPattern = Pattern.compile("[a-zA-Z0-9*-_ ]*");
+  boolean insertHiddenFld = false;
+  if (longName != null) {
+	  insertHiddenFld = !validTextPattern.matcher(longName).matches();  
+  }
+  if (def != null && !insertHiddenFld) {
+	  insertHiddenFld = !validTextPattern.matcher(def).matches();  
+  }
+  if (header != null && !insertHiddenFld) {
+	  insertHiddenFld = !validTextPattern.matcher(header).matches();  
+  }
+  if (footer != null && !insertHiddenFld) {
+	  insertHiddenFld = !validTextPattern.matcher(footer).matches();  
+  }
+  
 %>
 </SCRIPT>
   </HEAD>
@@ -118,6 +139,9 @@ function repeatDisplay(methodName) {
 
       
     <html:form action="/formSaveAction.do">
+		<logic:equal name="insertHiddenFld" value="true">
+			<html:hidden value="one of the input fields has a special char" property="xyz"/>
+		</logic:equal>
      <html:hidden value="" property="<%=NavigationConstants.METHOD_PARAM%>"/>
      <html:hidden value="" property="<%=FormConstants.MODULE_INDEX%>"/>
      <html:hidden value="moduleEdit" property="forward"/>

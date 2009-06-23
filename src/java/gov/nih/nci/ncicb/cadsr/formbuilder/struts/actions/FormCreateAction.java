@@ -93,33 +93,33 @@ public class FormCreateAction extends FormBuilderSecureBaseDispatchAction {
     }
     */
     newForm = new FormTransferObject();
-    newForm.setLongName(getOracleValue((String)dynaForm.get(FORM_LONG_NAME)));
-    newForm.setPreferredDefinition(getOracleValue((String)dynaForm.get(PREFERRED_DEFINITION)));
+    newForm.setLongName((String)dynaForm.get(FORM_LONG_NAME));
+    newForm.setPreferredDefinition((String)dynaForm.get(PREFERRED_DEFINITION));
 
     Context context = new ContextTransferObject();
     context.setConteIdseq((String)dynaForm.get(CONTEXT_ID_SEQ));
     newForm.setContext(context);
 
-    String protocolId = getOracleValue((String)dynaForm.get(PROTOCOLS_LOV_NAME_FIELD));
+    String protocolId = (String)dynaForm.get(PROTOCOLS_LOV_NAME_FIELD);
     if (protocolId.length()>0){
         Protocol protocol =
-          new ProtocolTransferObject(getOracleValue((String)dynaForm.get(PROTOCOLS_LOV_NAME_FIELD)));
-        protocol.setProtoIdseq(getOracleValue((String)dynaForm.get(PROTOCOLS_LOV_ID_FIELD)));
+          new ProtocolTransferObject((String)dynaForm.get(PROTOCOLS_LOV_NAME_FIELD));
+        protocol.setProtoIdseq((String)dynaForm.get(PROTOCOLS_LOV_ID_FIELD));
         
         List protocols = new ArrayList();
         protocols.add(protocol);    
         newForm.setProtocols(protocols);
     }
     
-    newForm.setFormType(getOracleValue((String)dynaForm.get(FORM_TYPE)));
-    newForm.setFormCategory(getOracleValue((String)dynaForm.get(FORM_CATEGORY)));
+    newForm.setFormType((String)dynaForm.get(FORM_TYPE));
+    newForm.setFormCategory((String)dynaForm.get(FORM_CATEGORY));
     newForm.setAslName("DRAFT NEW");
     newForm.setVersion((Float)dynaForm.get(FORM_VERSION));
     newForm.setCreatedBy(request.getRemoteUser());
 
     // assemble a new form instruction for having form header.
     int dispOrder = 0;
-    String headerInstrStr = getOracleValue((String)dynaForm.get(FORM_HEADER_INSTRUCTION));
+    String headerInstrStr = (String)dynaForm.get(FORM_HEADER_INSTRUCTION);
     if (StringUtils.doesValueExist(headerInstrStr)){
       newFormHdrInst = new InstructionTransferObject();
       newFormHdrInst.setLongName(newForm.getLongName());
@@ -130,7 +130,7 @@ public class FormCreateAction extends FormBuilderSecureBaseDispatchAction {
       newFormHdrInst.setCreatedBy(request.getRemoteUser());
       newFormHdrInst.setDisplayOrder(++dispOrder);
     }
-    String footerInstrStr = getOracleValue((String)dynaForm.get(FORM_FOOTER_INSTRUCTION));
+    String footerInstrStr = (String)dynaForm.get(FORM_FOOTER_INSTRUCTION);
     if (StringUtils.doesValueExist(footerInstrStr)){
       newFormFtrInst = new InstructionTransferObject();
       newFormFtrInst.setLongName(newForm.getLongName());
@@ -170,7 +170,8 @@ public class FormCreateAction extends FormBuilderSecureBaseDispatchAction {
 		    HttpServletResponse response) {
 	  
 	  List<String> formTypes = (List<String>) request.getSession().getAttribute(FormConstants.ALL_FORM_TYPES);
-	  List<String> formCategories = (List<String>) request.getSession().getAttribute(FormConstants.ALL_FORM_CATEGORIES);
+	  List<String> origFormCategories = (List<String>) request.getSession().getAttribute(FormConstants.ALL_FORM_CATEGORIES);
+	  List<String> formCategories = new ArrayList<String>(origFormCategories);
 	  formCategories.add("");
 	  
 	  DynaActionForm dynaForm = (DynaActionForm)form;
