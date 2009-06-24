@@ -15,7 +15,11 @@
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.jsp.util.CDEDetailsUtils"%>
 
 
-<%@page import="java.util.regex.Pattern"%><HTML>
+<%@page import="java.util.regex.Pattern"%>
+<%! 
+	boolean insertHiddenFld = false;
+%>
+<HTML>
   <HEAD>
     <TITLE>Formbuilder: Edit Form </TITLE>
     <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache"/>
@@ -117,7 +121,7 @@ function repeatDisplay(methodName) {
   String header = (String)formBean.get(FormConstants.FORM_HEADER_INSTRUCTION);
   String footer = (String)formBean.get(FormConstants.FORM_FOOTER_INSTRUCTION);
   Pattern validTextPattern = Pattern.compile("[a-zA-Z0-9*-_ ]*");
-  boolean insertHiddenFld = false;
+  
   if (longName != null) {
 	  insertHiddenFld = !validTextPattern.matcher(longName).matches();  
   }
@@ -130,7 +134,6 @@ function repeatDisplay(methodName) {
   if (footer != null && !insertHiddenFld) {
 	  insertHiddenFld = !validTextPattern.matcher(footer).matches();  
   }
-  
 %>
 </SCRIPT>
   </HEAD>
@@ -139,9 +142,13 @@ function repeatDisplay(methodName) {
 
       
     <html:form action="/formSaveAction.do">
-		<logic:equal name="insertHiddenFld" value="true">
-			<html:hidden value="one of the input fields has a special char" property="xyz"/>
-		</logic:equal>
+		<%
+			if (insertHiddenFld) {
+		%>
+		<input type="hidden" name="xyz" value="one of the fields has an invalid character" />
+		<% 
+			}
+		%>
      <html:hidden value="" property="<%=NavigationConstants.METHOD_PARAM%>"/>
      <html:hidden value="" property="<%=FormConstants.MODULE_INDEX%>"/>
      <html:hidden value="moduleEdit" property="forward"/>
