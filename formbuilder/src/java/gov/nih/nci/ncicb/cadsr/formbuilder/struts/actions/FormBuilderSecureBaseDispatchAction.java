@@ -1,8 +1,12 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import gov.nih.nci.ncicb.cadsr.common.exception.FatalException;
 import gov.nih.nci.ncicb.cadsr.common.exception.InvalidUserException;
 import gov.nih.nci.ncicb.cadsr.common.formbuilder.common.FormElementLocker;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.AbstractDAOFactory;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.UserManagerDAO;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
@@ -18,6 +22,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.DynaActionForm;
 import org.owasp.esapi.ESAPI;
 import org.owasp.esapi.codecs.Codec;
 import org.owasp.esapi.codecs.OracleCodec;
@@ -170,5 +175,52 @@ public class FormBuilderSecureBaseDispatchAction extends FormBuilderBaseDispatch
     	Codec ORACLE_CODEC = new OracleCodec();
     	return ESAPI.encoder().encodeForSQL(ORACLE_CODEC, value);
     }
+    
+    protected boolean validate(ActionForm form,
+		    HttpServletRequest request,
+		    HttpServletResponse response) {
+	  
+	  List<String> formTypes = (List<String>) request.getSession().getAttribute(FormConstants.ALL_FORM_TYPES);
+	  List<String> origFormCategories = (List<String>) request.getSession().getAttribute(FormConstants.ALL_FORM_CATEGORIES);
+	  List<String> formCategories = new ArrayList<String>(origFormCategories);
+	  formCategories.add("");
+	  
+	  DynaActionForm dynaForm = (DynaActionForm)form;
+	  String formType = (String)dynaForm.get(FORM_TYPE);
+	  String formCategory = "";
+	  
+	  try {
+		  formCategory = (String)dynaForm.get(FORM_CATEGORY);
+	  } catch (Exception e) {
+		  formCategory = (String)dynaForm.get(CATEGORY_NAME);
+	  }
+	  
+	  
+	  if (!formTypes.contains(formType) || !formCategories.contains(formCategory)) {
+		  return false;
+	  }
+	  
+	  StringBuffer sb = new StringBuffer();
+	  sb.append((String)dynaForm.get(FORM_LONG_NAME));
+	  sb.append((String)dynaForm.get(PREFERRED_DEFINITION));
+	  sb.append((String)dynaForm.get(CONTEXT_ID_SEQ));
+	  sb.append((String)dynaForm.get(PROTOCOLS_LOV_NAME_FIELD));
+	  sb.append((String)dynaForm.get(PROTOCOLS_LOV_ID_FIELD));
+	  sb.append((String)dynaForm.get(FORM_HEADER_INSTRUCTION));
+	  sb.append((String)dynaForm.get(FORM_FOOTER_INSTRUCTION));
+	  
+	  String toCheck = sb.toString();
+	  
+	  char[] restrictedChars = {'\'','\"',';','(',')'};
+	  
+	  if (toCheck != null) {
+		  for (char c: restrictedChars) {
+			  if (toCheck.indexOf(c) != -1) {
+				  return false;
+			  }
+		  }
+	  }
+	  return true;
+  }
     
 }

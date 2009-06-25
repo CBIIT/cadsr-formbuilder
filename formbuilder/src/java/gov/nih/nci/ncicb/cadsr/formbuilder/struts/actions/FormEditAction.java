@@ -495,6 +495,12 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
     boolean hasUpdate  = setValuesForUpdate(mapping,form,request);
     if(hasUpdate)
     {
+    	if (!validate(form, request, response)) {
+    		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+  		  saveMessage(ERROR_FORM_SAVE_FAILED, request);
+  			return mapping.findForward(FAILURE);
+  	  }
+    	
         try {
           FormBuilderServiceDelegate service = getFormBuilderService();
           Form header = (Form)getSessionObject(request,FORM_EDIT_HEADER);
