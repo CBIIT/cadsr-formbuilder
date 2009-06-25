@@ -17,6 +17,7 @@ import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -73,6 +74,7 @@ public class FormCreateAction extends FormBuilderSecureBaseDispatchAction {
     HttpServletResponse response) throws IOException, ServletException {
 
 	  if (!validate(form, request, response)) {
+		  response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		  saveMessage(ERROR_FORM_CREATE, request);
 			return mapping.findForward("failure");
 	  }
@@ -163,26 +165,6 @@ public class FormCreateAction extends FormBuilderSecureBaseDispatchAction {
 
     return mapping.findForward("gotoEdit");
 
-  }
-  
-  private boolean validate(ActionForm form,
-		    HttpServletRequest request,
-		    HttpServletResponse response) {
-	  
-	  List<String> formTypes = (List<String>) request.getSession().getAttribute(FormConstants.ALL_FORM_TYPES);
-	  List<String> origFormCategories = (List<String>) request.getSession().getAttribute(FormConstants.ALL_FORM_CATEGORIES);
-	  List<String> formCategories = new ArrayList<String>(origFormCategories);
-	  formCategories.add("");
-	  
-	  DynaActionForm dynaForm = (DynaActionForm)form;
-	  String formType = (String)dynaForm.get(FORM_TYPE);
-	  String formCategory = (String)dynaForm.get(FORM_CATEGORY);
-	  
-	  if (!formTypes.contains(formType) || !formCategories.contains(formCategory)) {
-		  return false;
-	  }
-	  
-	  return true;
   }
 
 }
