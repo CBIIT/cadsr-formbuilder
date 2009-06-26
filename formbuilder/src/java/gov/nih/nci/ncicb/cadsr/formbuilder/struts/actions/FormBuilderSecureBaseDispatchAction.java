@@ -211,7 +211,7 @@ public class FormBuilderSecureBaseDispatchAction extends FormBuilderBaseDispatch
 	  
 	  String toCheck = sb.toString();
 	  
-	  char[] restrictedChars = {'\'','\"',';','(',')'};
+	  char[] restrictedChars = {'\'','\"',';','(',')','*'};
 	  
 	  if (toCheck != null) {
 		  for (char c: restrictedChars) {
