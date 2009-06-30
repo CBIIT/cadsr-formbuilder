@@ -243,7 +243,7 @@ public class FormBuilderLOVAction extends FormBuilderBaseDispatchAction {
 	  if (searchStrs != null) { 
 		  for (String searchStr: searchStrs) {
 			  if (!searchStr.trim().equals("")) {
-				  valid = Pattern.matches("[a-zA-Z0-9.]*", searchStr);
+				  valid = Pattern.matches("[a-zA-Z0-9.*-_]*", searchStr);
 			  }
 			  if (!valid) {
 				  break;
