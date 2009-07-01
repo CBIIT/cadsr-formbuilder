@@ -25,8 +25,10 @@ import org.apache.struts.action.DynaActionForm;
 
 public class FormBuilderLOVAction extends FormBuilderBaseDispatchAction {
 	private static final Pattern ALPHA_PATTERN = Pattern.compile("[a-zA-Z]*");
+	private static final Pattern ALPHA_NUMERIC_PATTERN = Pattern.compile("[a-zA-Z0-9]*");
 	private static final Pattern INT_PATTERN = Pattern.compile("[0-9]*");
 	private static final Pattern ID_PATTERN = Pattern.compile("[a-zA-Z0-9-]*");
+	private static final Pattern ALPHA_NUMERIC_ARRAY_PATTERN = Pattern.compile("[a-zA-Z0-9\\[\\]]*");
   /**
    * Returns all forms for the given criteria.
    *
@@ -252,13 +254,13 @@ public class FormBuilderLOVAction extends FormBuilderBaseDispatchAction {
 		  
 	  }
 	  if (nameVar != null && valid) {
-		  valid = ALPHA_PATTERN.matcher(nameVar).matches();
+		  valid = ALPHA_NUMERIC_PATTERN.matcher(nameVar).matches();
 	  }
 	  if (pageId != null && valid) {
 		  valid = ALPHA_PATTERN.matcher(pageId).matches();
 	  }
 	  if (idVar != null && valid) {
-		  valid = ALPHA_PATTERN.matcher(idVar).matches();
+		  valid = ALPHA_NUMERIC_ARRAY_PATTERN.matcher(idVar).matches();
 	  }
 	  if (classificationsLOV != null && valid) {
 		  valid = INT_PATTERN.matcher(classificationsLOV).matches();
