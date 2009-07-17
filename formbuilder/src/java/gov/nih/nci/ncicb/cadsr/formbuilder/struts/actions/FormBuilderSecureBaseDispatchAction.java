@@ -200,14 +200,20 @@ public class FormBuilderSecureBaseDispatchAction extends FormBuilderBaseDispatch
 		  return false;
 	  }
 	  
+	  try {
+		  Float.parseFloat(request.getParameter(FORM_VERSION));
+	  } catch (Exception e) {
+		  return false;
+	  }
+	  
 	  StringBuffer sb = new StringBuffer();
-	  sb.append((String)dynaForm.get(FORM_LONG_NAME));
-	  sb.append((String)dynaForm.get(PREFERRED_DEFINITION));
+	  //sb.append((String)dynaForm.get(FORM_LONG_NAME));
+	  //sb.append((String)dynaForm.get(PREFERRED_DEFINITION));
 	  sb.append((String)dynaForm.get(CONTEXT_ID_SEQ));
-	  sb.append((String)dynaForm.get(PROTOCOLS_LOV_NAME_FIELD));
+	  //sb.append((String)dynaForm.get(PROTOCOLS_LOV_NAME_FIELD));
 	  sb.append((String)dynaForm.get(PROTOCOLS_LOV_ID_FIELD));
-	  sb.append((String)dynaForm.get(FORM_HEADER_INSTRUCTION));
-	  sb.append((String)dynaForm.get(FORM_FOOTER_INSTRUCTION));
+	  //sb.append((String)dynaForm.get(FORM_HEADER_INSTRUCTION));
+	  //sb.append((String)dynaForm.get(FORM_FOOTER_INSTRUCTION));
 	  
 	  String toCheck = sb.toString();
 	  
