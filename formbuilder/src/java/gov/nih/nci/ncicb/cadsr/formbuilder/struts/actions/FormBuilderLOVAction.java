@@ -50,6 +50,7 @@ public class FormBuilderLOVAction extends FormBuilderBaseDispatchAction {
 	  
 	  if (!validate(form, request, response)) {
 		  response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid input");
+		  return null;
 	  }
     //FormBuilderServiceDelegate service = getFormBuilderService();
     DynaActionForm searchForm = (DynaActionForm) form;
@@ -238,8 +239,10 @@ public class FormBuilderLOVAction extends FormBuilderBaseDispatchAction {
 	  String classificationsLOV = request.getParameter("classificationsLOV");
 	  String contextIdSeq = request.getParameter("contextIdSeq");
 	  String performQuery = request.getParameter("performQuery");
-	  String ckhContext = request.getParameter("ckhContext");
 	  
+	  DynaActionForm searchForm = (DynaActionForm) form;
+	  String ckhContext = (String)searchForm.get(PROTOCOLS_LOV_CONTEXT_CHECK);
+
 	  boolean valid = true;
 	  
 	  if (searchStrs != null) { 
