@@ -195,16 +195,26 @@ public class FormBuilderSecureBaseDispatchAction extends FormBuilderBaseDispatch
 		  formCategory = (String)dynaForm.get(CATEGORY_NAME);
 	  }
 	  
-	  
-	  if (!formTypes.contains(formType) || !formCategories.contains(formCategory)) {
+	  if (!formTypes.contains(formType)) {
+		  log.debug("The form type of the form ["+formType+"] is not one of the standard form types");
 		  return false;
 	  }
 	  
-	  try {
-		  Float.parseFloat(request.getParameter(FORM_VERSION));
-	  } catch (Exception e) {
+	  if (!formCategories.contains(formCategory)) {
+		  log.debug("The form category of the form ["+formCategory+"] is not one of the standard form types");
 		  return false;
 	  }
+	  
+	  String frmVer = request.getParameter(FORM_VERSION);
+	  if (frmVer != null) {
+		  try {
+		  Float.parseFloat(frmVer);
+		  } catch (Exception e) {
+			  log.debug("The version of the form ["+frmVer+"] is not numeric");
+			  return false;
+		  }
+	  }
+	  
 	  
 	  StringBuffer sb = new StringBuffer();
 	  //sb.append((String)dynaForm.get(FORM_LONG_NAME));
@@ -222,6 +232,7 @@ public class FormBuilderSecureBaseDispatchAction extends FormBuilderBaseDispatch
 	  if (toCheck != null) {
 		  for (char c: restrictedChars) {
 			  if (toCheck.indexOf(c) != -1) {
+				  log.debug("Either the context or the protocol id is invalid");
 				  return false;
 			  }
 		  }
