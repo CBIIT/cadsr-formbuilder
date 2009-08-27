@@ -497,6 +497,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
     {
     	if (!validate(form, request, response)) {
     		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+    		log.error("Validation failed while saving form ["+form+"]");
   		  saveMessage(ERROR_FORM_SAVE_FAILED, request);
   			return mapping.findForward(FAILURE);
   	  }
