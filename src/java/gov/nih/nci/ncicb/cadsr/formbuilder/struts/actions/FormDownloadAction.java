@@ -158,8 +158,26 @@ public class FormDownloadAction extends Action {
    row = sheet.createRow(rowNumber++);
    row = sheet.createRow(rowNumber++);
    cell = row.createCell(colNumber++);
-   cell.setCellValue("Module");
+   cell.setCellValue("Module Long Name");
    cell.setCellStyle(boldCellStyle);
+   
+   cell = row.createCell(colNumber++);
+   cell.setCellValue("Module Preferred Name");
+   cell.setCellStyle(boldCellStyle);
+   cell = row.createCell(colNumber++);
+   cell.setCellValue("Module Preferred Definition");
+   cell.setCellStyle(boldCellStyle);
+   cell = row.createCell(colNumber++);
+   cell.setCellValue("Module Public Id");
+   cell.setCellStyle(boldCellStyle);
+   cell = row.createCell(colNumber++);
+   cell.setCellValue("Module Version");
+   cell.setCellStyle(boldCellStyle);
+   cell = row.createCell(colNumber++);
+   cell.setCellValue("Module Display Order");
+   cell.setCellStyle(boldCellStyle);
+   
+   
    cell = row.createCell(colNumber++);
    cell.setCellValue("Module Instructions");
    cell.setCellStyle(boldCellStyle);
@@ -232,11 +250,17 @@ public class FormDownloadAction extends Action {
 
     row = sheet.createRow(rowNumber++);
     row.createCell((short)0).setCellValue(module.getLongName());
+    
+    row.createCell((short)1).setCellValue(module.getPreferredName());
+    row.createCell((short)2).setCellValue(module.getPreferredDefinition());
+    row.createCell((short)3).setCellValue(module.getPublicId());
+    row.createCell((short)4).setCellValue(module.getVersion());
+    row.createCell((short)5).setCellValue(module.getDisplayOrder());
 
     if (module.getInstruction() != null)
-     row.createCell((short)1).setCellValue(module.getInstruction().getPreferredDefinition());     
+     row.createCell((short)6).setCellValue(module.getInstruction().getPreferredDefinition());     
 
-    row.createCell((short)2).setCellValue(""+module.getNumberOfRepeats());
+    row.createCell((short)7).setCellValue(""+module.getNumberOfRepeats());
 
     //export question related info
     List questions = module.getQuestions();
@@ -247,7 +271,7 @@ public class FormDownloadAction extends Action {
      Question question = (Question)questions.get(iQues);
      DataElement cde = question.getDataElement();
 
-     colNumber = 3;
+     colNumber = 8;
      row.createCell(colNumber++).setCellValue(question.getLongName());
 
      if (cde != null) {
