@@ -19,6 +19,11 @@
   </logic:notPresent>
 </FONT>
 </td>
+
+<td width="10%" align="right">
+ <FONT color="white" size=-2 face=arial><a href="https://wiki.nci.nih.gov/x/qxEhAQ" target="_blank">Privacy Notice</a></FONT>
+</TD>
+
 <td width="30%" align="right">
  <FONT color="white" size=-2 face=arial>Version @Tool.Version@&nbsp;&nbsp;Build @Tool.Build@
  <%=CDEBrowserParams.mode%></FONT>
@@ -33,6 +38,6 @@
 </td>
 </TR>
 <TR>
-<TD colspan=3><html:img page="/i/bottom_middle.gif" height="6" width="100%" /></TD>
+<TD colspan=4><html:img page="/i/bottom_middle.gif" height="6" width="100%" /></TD>
 </TR>
 </TABLE>
