@@ -1,4 +1,4 @@
- 		<table width="80%" align="center" cellpadding="0" cellspacing="1" border="0" class="OraBGAccentVeryDark">  
+<table width="80%" align="center" cellpadding="0" cellspacing="1" border="0" class="OraBGAccentVeryDark">  
              
                  <tr>                 
                     <td class="OraHeaderBlack">
@@ -229,12 +229,9 @@
                             <logic:present name="question">
                             <logic:notEmpty name="question" property = "validValues">
                               <tr class="OraTabledata">
-                                <td class="OraFieldText" width="50">&nbsp;</td>
-                                <td colspan="2">
-                                  <table width="100%" align="center" cellpadding="0" cellspacing="0" border="0" class="OraBGAccentVeryDark">
-                                    <logic:iterate id="validValue" name="question" 
-type="gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue" property="validValues" indexId="vvIndex">
-                                      <tr   class="OraTabledata">
+                                <td class="OraFieldText" width="50">&nbsp;</td><td colspan="2"><table width="100%" align="center" cellpadding="0" cellspacing="0" border="0" class="OraBGAccentVeryDark" id="collapsible"><logic:iterate id="validValue" name="question" 
+type="gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue" property="validValues" indexId="vvIndex"><tr class="OraTabledata"><td colspan="2" class="OraFieldText"><table width="100%" cellpadding="1" cellspacing="1" border="0" class="OraTabledata">
+										<tr class="OraTabledata">
                                         <td COLSPAN="2" class="OraFieldText" >&nbsp;</td>
                                       </tr>
                                       <tr   class="OraTabledata">
@@ -245,29 +242,23 @@ type="gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue" property="validVal
                                       </tr>
                                       <tr   class="OraTabledata">
                                         <td class="OraFieldText" width="50">&nbsp;</td>
-                                        <td >
-                                        <%-- if(question.getDataElement()!=null|| validValue.getInstruction()!=null){--%>
-                                          <table align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark" >                          
+                                        <td><table align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark" >
                                                <tr class="OraTabledata">
                                                  <td  class="OraTableColumnHeader" width="10%" nowrap >
                                                    <bean:message key="cadsr.formbuilder.valueMeaning.text" /></td>
                                                  <td class="OraFieldText" >
                                                   <bean:write name="validValue" property="formValueMeaningText"/></td>                                          
-                                               </tr>  
-                                               <tr class="OraTabledata">
+                                               </tr><tr class="OraTabledata">
                                                  <td  class="OraTableColumnHeader" width="10%" nowrap >
                                                    <bean:message key="cadsr.formbuilder.valueMeaning.idversion" /></td>
                                                  <td class="OraFieldText" >
                                                   <bean:write name="validValue" property="formValueMeaningIdVersion"/></td>                                          
-                                               </tr>  
-                                               <tr class="OraTabledata">
+                                               </tr><tr class="OraTabledata">
                                                  <td  class="OraTableColumnHeader" width="10%" nowrap >
                                                    <bean:message key="cadsr.formbuilder.valueMeaning.description" /></td>
                                                  <td class="OraFieldText" >
                                                   <bean:write name="validValue" property="formValueMeaningDesc"/></td>                                          
-                                               </tr>  
-                                              <logic:present name="validValue" property="instruction">                
-                                                 <tr class="OraTabledata">
+                                               </tr><logic:present name="validValue" property="instruction"><tr class="OraTabledata">
                                                   <td class="OraTableColumnHeader" width="10%" nowrap>
                                                     <bean:message key="cadsr.formbuilder.form.instruction"/> 
                                                  </td>
@@ -301,12 +292,7 @@ type="gov.nih.nci.ncicb.cadsr.common.resource.TriggerAction" property="triggerAc
                                           <%--}--%>
                                         </td>                                        
                                       </tr>   
-                                                                                                                           
-                     
-                                    </logic:iterate><!-- valid Value-->
-                                  </table>
-                                </td>
-                              </tr>
+                                                </table></td></tr></logic:iterate><!-- valid Value--></table></td></tr>
                             </logic:notEmpty>
                             <logic:empty name="question" property = "validValues">
                               <tr class="OraTabledata">
@@ -339,8 +325,3 @@ type="gov.nih.nci.ncicb.cadsr.common.resource.TriggerAction" property="triggerAc
                     </tr>
                   </logic:notEmpty>
             </table>
-
-
-
-
-	
