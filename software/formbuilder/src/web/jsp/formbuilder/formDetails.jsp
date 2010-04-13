@@ -35,11 +35,105 @@
     <TITLE>Formbuilder: Form Details</TITLE>
     <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache"/>
     <LINK rel="stylesheet" TYPE="text/css" HREF="<html:rewrite page='/css/blaf.css' />">
-    <SCRIPT LANGUAGE="JavaScript">
 
-</SCRIPT>
+<script type="text/javascript">
+
+/* CLOSED_IMAGE - the image to be displayed when the sublists are closed
+ * OPEN_IMAGE   - the image to be displayed when the sublists are opened
+ */
+CLOSED_IMAGE='i/plus.png';
+OPEN_IMAGE='i/minus.png';
+
+/* makeCollapsible - makes a list have collapsible sublists
+ * 
+ * listElement - the element representing the list to make collapsible
+ */
+function makeCollapsible(listElements, idVal){
+var i=0;
+while (i<listElements.length) {
+
+	var listElement = listElements.item(i);
+	var attrs = listElement.attributes;
+	if (attrs.length > 0) {
+		if (attrs.getNamedItem('id') != null && attrs.getNamedItem('id').nodeValue==idVal) {
+
+		  // loop over all child elements of the list
+		  var fstChild=listElement.firstChild.firstChild;
+		  if (fstChild!=null){
+
+			// only process li elements (and not text elements)
+			if (fstChild.nodeType==1){
+
+				var sblng = fstChild.nextSibling;
+			  // build a list of child ol and ul elements and hide them
+			  var list=new Array();
+			  while (sblng!=null){
+				if (sblng.tagName=='TR'){
+				  sblng.style.display='none';
+				  list.push(sblng);
+				}
+				sblng=sblng.nextSibling;
+			  }
+
+			  // add toggle buttons
+			  var node=document.createElement('img');
+			  var row = document.createElement('tr');
+			  row.setAttribute('class','OraTabledata');
+				var col = document.createElement('td');
+				col.setAttribute('class','OraFieldText'); 
+				col.setAttribute('colspan','2');
+				
+			  node.setAttribute('src',CLOSED_IMAGE);
+			  node.setAttribute('class','collapsibleClosed');
+			  node.onclick=createToggleFunction(node,list);
+
+			  col.appendChild(node);
+			  row.appendChild(col);
+			 listElement.firstChild.insertBefore(row, listElement.firstChild.firstChild);
+			}
+			
+		  }
+		}
+	}
+	i++;
+}
+  
+
+}
+
+/* createToggleFunction - returns a function that toggles the sublist display
+ * 
+ * toggleElement  - the element representing the toggle gadget
+ * sublistElement - an array of elements representing the sublists that should
+ *                  be opened or closed when the toggle gadget is clicked
+ */
+function createToggleFunction(toggleElement,sublistElements){
+
+  return function(){
+
+    // toggle status of toggle gadget
+    if (toggleElement.getAttribute('class')=='collapsibleClosed'){
+      toggleElement.setAttribute('class','collapsibleOpen');
+      toggleElement.setAttribute('src',OPEN_IMAGE);
+    }else{
+      toggleElement.setAttribute('class','collapsibleClosed');
+      toggleElement.setAttribute('src',CLOSED_IMAGE);
+    }
+
+    // toggle display of sublists
+    for (var i=0;i<sublistElements.length;i++){
+      sublistElements[i].style.display=
+          (sublistElements[i].style.display=='block')?'none':'block';
+    }
+
+  }
+
+}
+
+</script>
+
   </HEAD>
-  <BODY topmargin=0 bgcolor="#ffffff">
+  <BODY topmargin=0 bgcolor="#ffffff" onLoad="makeCollapsible(document.getElementsByTagName('table'), 'collapsible');">
     <% String urlPrefix = "";
      int dummyInstructionDisplayCount = 3;
 
