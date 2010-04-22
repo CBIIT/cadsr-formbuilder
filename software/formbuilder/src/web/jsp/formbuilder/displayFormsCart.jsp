@@ -154,10 +154,11 @@ function retrieveSavedItems() {
           <bean:write name="form" property="formType"/>
         </td>
         <td class="OraFieldText">
+		<logic:notEmpty name="form" property="protocols">
 		<logic:iterate id="proto" name="form" type="gov.nih.nci.ncicb.cadsr.common.resource.Protocol" property="protocols">
 			<bean:write name="proto" property="longName"/><br/>
 		</logic:iterate>
-	  
+	  </logic:notEmpty>
         </td>
         <td class="OraFieldText">
           <bean:write name="form" property="aslName"/>
