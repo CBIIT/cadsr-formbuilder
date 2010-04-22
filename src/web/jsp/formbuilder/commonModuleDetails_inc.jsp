@@ -242,7 +242,7 @@ type="gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue" property="validVal
                                       </tr>
                                       <tr   class="OraTabledata">
                                         <td class="OraFieldText" width="50">&nbsp;</td>
-                                        <td><table align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark" >
+                                        <td><table width="100%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark" >
                                                <tr class="OraTabledata">
                                                  <td  class="OraTableColumnHeader" width="10%" nowrap >
                                                    <bean:message key="cadsr.formbuilder.valueMeaning.text" /></td>
