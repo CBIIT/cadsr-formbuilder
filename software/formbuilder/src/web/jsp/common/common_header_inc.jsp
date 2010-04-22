@@ -17,6 +17,13 @@
 			<TABLE Cellpadding=0 Cellspacing=0 border=0>
 				<TR>
 					<TD valign="TOP" align="CENTER" width="1%" colspan=1>
+						<A HREF="<%="formsCartAction.do?method=displayFormsCart"%>"
+							TARGET="_top"><IMG SRC="i/cde_cart.gif" alt="Form Cart"
+								border=0> </A>
+						<br>
+						<font color=brown face=verdana size=1>&nbsp;Form &nbsp;Cart</font>
+					</TD>
+					<TD valign="TOP" align="CENTER" width="1%" colspan=1>
 						<A HREF="<%="formCDECartAction.do?method=displayCDECart"%>"
 							TARGET="_top"><IMG SRC="i/cde_cart.gif" alt="CDE Cart"
 								border=0> </A>

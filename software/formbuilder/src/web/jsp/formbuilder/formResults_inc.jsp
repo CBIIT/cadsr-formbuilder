@@ -27,8 +27,12 @@ if(confirm(message)) location.href = url;
                  </td> 
            
                </tr>
-        </table>     
-        
+        </table>
+
+		<a href="javascript:document.forms[0].action=document.forms[0].action+'?method=addFormToCart';document.forms[0].submit()">
+            <html:img src='<%="i/addtoformcart.gif"%>' border="0" alt="Add to Form Cart"/> 
+          </a>
+
         <bean:define id="pageBean" name="<%=FormConstants.FORM_SEARCH_RESULTS_PAGINATION%>" 
         	type="gov.nih.nci.ncicb.cadsr.common.jsp.bean.PaginationBean"/>
         <cde:pagination name="top" textClassName="OraFieldText" selectClassName="LOVField" formIndex="0" pageSize="100" 
@@ -122,7 +126,12 @@ if(confirm(message)) location.href = url;
             <logic:notPresent name="<%=FormConstants.IN_PROCESS%>"> 
                 <td width="100">
                     <table  >
-                    <tr>               
+                    <tr>
+						<td width="20" class="OraTabledata" align=center>                  
+                    		<html:multibox name="searchForm" property="checkedFormIds">
+								<bean:write name="form" property="formIdseq" />
+                    		</html:multibox>                 
+                    	</td>               
                     	<td width="25" class="OraTabledata" align=center>                  
                     		<html:link action='<%="/formExcelDownload.do?"%>' 
 			                    paramId = "<%=FormConstants.FORM_ID_SEQ%>"
@@ -131,7 +140,7 @@ if(confirm(message)) location.href = url;
                     			<html:img src='<%=urlPrefix+"i/excel-icon.jpg"%>' border="0" alt="Excel Download"/>
                     		</html:link>                 
                     	</td>
-                      <td width="25" class="OraTabledata" align=center>
+                      <td width="20" class="OraTabledata" align=center>
                            <cde:secureIcon  formId="form" 
                     formScope="<%=CaDSRConstants.PAGE_SCOPE%>"
                     activeImageSource="i/copy.gif" 
@@ -146,7 +155,7 @@ if(confirm(message)) location.href = url;
                                     target="_parent"
                     />            
                      </td>                  
-                      <td width="25" class="OraTabledata" align=center>
+                      <td width="20" class="OraTabledata" align=center>
                            <cde:secureIcon  formId="form" 
                     formScope="<%=CaDSRConstants.PAGE_SCOPE%>" 
                     activeImageSource="i/edit.gif" 
@@ -160,7 +169,7 @@ if(confirm(message)) location.href = url;
                                     target="_parent"
                     />		            
                       </td>
-                     <td width="25"  class="OraTabledata" align=center>
+                     <td width="20"  class="OraTabledata" align=center>
                            <cde:secureIcon  formId="form" 
                     formScope="<%=CaDSRConstants.PAGE_SCOPE%>" 
                     activeImageSource="i/delete.gif" 

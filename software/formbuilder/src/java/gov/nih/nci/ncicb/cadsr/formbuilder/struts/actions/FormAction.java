@@ -1,16 +1,22 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
+import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
 import gov.nih.nci.ncicb.cadsr.common.cdebrowser.DataElementSearchBean;
+import gov.nih.nci.ncicb.cadsr.common.dto.jdbc.JDBCFormTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
 import gov.nih.nci.ncicb.cadsr.common.jsp.bean.PaginationBean;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
 import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
 import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
+import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
 import gov.nih.nci.ncicb.cadsr.common.util.StringPropertyComparator;
 import gov.nih.nci.ncicb.cadsr.common.util.StringUtils;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
+import gov.nih.nci.objectCart.client.ObjectCartClient;
+import gov.nih.nci.objectCart.client.ObjectCartException;
+import gov.nih.nci.objectCart.domain.Cart;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -494,6 +500,52 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
     removeSessionObject(request,FORM_SEARCH_RESULTS);
     return mapping.findForward(SUCCESS);
     }
+  
+  public ActionForward addFormToCart(
+		    ActionMapping mapping,
+		    ActionForm form,
+		    HttpServletRequest request,
+		    HttpServletResponse response) throws IOException, ServletException {
+	  
+	  Map<String, String> objectDisplayNames = new HashMap<String, String> ();
+	  Map<String, Object>  objects = new HashMap<String, Object>();
+	  
+	  FormBuilderServiceDelegate service = getFormBuilderService();
+	  try {
+		  
+		  DynaActionForm dynaBean = (DynaActionForm)form;
+		  String[] formIds = (String[])dynaBean.get("checkedFormIds");
+		  if (formIds != null) {
+			  for (String formId: formIds) {
+				  Form crf = service.getFormDetails(formId);
+				  objects.put(formId, crf);
+				  objectDisplayNames.put(formId, crf.getLongName());
+			  }
+		  }
+	  
+	  
+		NCIUser user = (NCIUser) this.getSessionObject(request, CaDSRConstants.USER_KEY);
+		CDEBrowserParams params = CDEBrowserParams.getInstance();
+		String ocURL = params.getObjectCartUrl();
+		//Get the cart in the session
+		ObjectCartClient cartClient = null;
+		      
+		if (!ocURL.equals(""))
+			cartClient = new ObjectCartClient(ocURL);
+		else
+			cartClient = new ObjectCartClient();
+		
+		Cart cart = cartClient.createCart(user.getUsername(), CaDSRConstants.FORMS_CART);
+		
+		cart = cartClient.storePOJOCollection(cart, JDBCFormTransferObject.class, objectDisplayNames, objects);
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	  return mapping.findForward("success");
+  }
+  
+  
   private Context getContextForId(List contexts,String contextIdSeq)
   {
     if(contexts==null||contextIdSeq==null)
