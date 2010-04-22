@@ -34,7 +34,7 @@ function saveItems() {
 }
 
 function deleteItems() {
-  if (validateSelection('selectedDeleteItems','Please select at least one data element to delete from your Form Cart.')) {
+  if (validateSelection('selectedDeleteItems','Please select at least one form to delete from your Form Cart.')) {
     document.forms[0].method.value = 'removeItems'
     submitForm();
   }
@@ -101,7 +101,7 @@ function retrieveSavedItems() {
 <table>
     <tr>    
       <td align="left" class="AbbreviatedText">
-        <bean:message key="cadsr.formbuilder.helpText.cart.secure"/>
+        <bean:message key="cadsr.formbuilder.helpText.forms.cart.secure"/>
       </td>
     </tr>  
 </table> 
@@ -136,7 +136,7 @@ function retrieveSavedItems() {
     <logic:iterate id="form" name="<%=CaDSRConstants.FORMS_CART%>" type="gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject" property="forms">
 <%
       String formId = form.getIdseq();
-      String detailsURL = "javascript:details(formId)";
+      String detailsURL = "javascript:details('"+formId+"')";
 %>
       <tr class="OraTabledata">
         <td>
@@ -199,20 +199,17 @@ function retrieveSavedItems() {
  </table>
 </logic:present>
 
+<logic:notPresent name="<%=CaDSRConstants.FORMS_CART%>">
 <table width="10%" align="center" cellpadding="1" cellspacing="1" border="0" >
   <tr>
-    <td>
-      <a href='#' target="_blank"><html:img src="i/add_more_data_elements.gif" border="0" alt="Add more forms"/></a>
-    </td>
-	<logic:notPresent name="<%=CaDSRConstants.FORMS_CART%>">
-        <td>
-          <html:link href="<%=doneURL%>">				
-            <html:img src='<%="i/backButton.gif"%>' border="0" alt="Back"/>
-          </html:link>             
-        </td> 
-	</logic:notPresent>  
+     <td>
+       <html:link href="<%=doneURL%>">				
+         <html:img src='<%="i/backButton.gif"%>' border="0" alt="Back"/>
+       </html:link>             
+     </td>
   </tr>
-</table>    
+</table>
+</logic:notPresent>    
 
 </html:form>
 <%@ include file="../common/common_bottom_border.jsp"%>

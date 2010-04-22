@@ -538,6 +538,10 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 		Cart cart = cartClient.createCart(user.getUsername(), CaDSRConstants.FORMS_CART);
 		
 		cart = cartClient.storePOJOCollection(cart, JDBCFormTransferObject.class, objectDisplayNames, objects);
+		
+		saveMessage("cadsr.common.formcart.save.success",request);
+		
+		dynaBean.set("checkedFormIds", new String[]{});
 	} catch (Exception e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
