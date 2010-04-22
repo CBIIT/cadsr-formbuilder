@@ -5,8 +5,18 @@
 function actionConfirm(message, url){
 if(confirm(message)) location.href = url;
 }
+
+function ToggleSelectAll(e){
+	if (e.checked) {
+	    setChecked(1,'checkedFormIds');
+	}
+	else {
+	    setChecked(0,'checkedFormIds');
+	}
+}
 // --->
 </SCRIPT>
+<SCRIPT LANGUAGE="JavaScript1.1" SRC="js/checkbox.js"></SCRIPT>
 <%@ include file="showMessages.jsp" %>
    
    <logic:notEmpty name="<%=FormConstants.FORM_SEARCH_RESULTS%>">
@@ -47,7 +57,10 @@ if(confirm(message)) location.href = url;
                 
         <table width="100%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
           <tr class="OraTableColumnHeader">
-            <logic:notPresent name="<%=FormConstants.IN_PROCESS%>"> 
+            <logic:notPresent name="<%=FormConstants.IN_PROCESS%>">
+				<th class="OraTableColumnHeader" nowrap>
+					<input type="checkbox" name="selectAllChk" value="yes" onClick="ToggleSelectAll(this)"/>
+				</th> 
                <th class="OraTableColumnHeader" nowrap>Action</th>
             </logic:notPresent>        
                
@@ -124,14 +137,14 @@ if(confirm(message)) location.href = url;
                 length="<%=Integer.toString(pageBean.getPageSize())%>">
             <tr class="OraTabledata">  
             <logic:notPresent name="<%=FormConstants.IN_PROCESS%>"> 
+				<td width="20" align="center"
+					<html:multibox name="searchForm" property="checkedFormIds">
+						<bean:write name="form" property="formIdseq" />
+                   	</html:multibox>
+				</td>
                 <td width="100">
                     <table  >
-                    <tr>
-						<td width="20" class="OraTabledata" align=center>                  
-                    		<html:multibox name="searchForm" property="checkedFormIds">
-								<bean:write name="form" property="formIdseq" />
-                    		</html:multibox>                 
-                    	</td>               
+                    <tr>               
                     	<td width="25" class="OraTabledata" align=center>                  
                     		<html:link action='<%="/formExcelDownload.do?"%>' 
 			                    paramId = "<%=FormConstants.FORM_ID_SEQ%>"
@@ -140,7 +153,7 @@ if(confirm(message)) location.href = url;
                     			<html:img src='<%=urlPrefix+"i/excel-icon.jpg"%>' border="0" alt="Excel Download"/>
                     		</html:link>                 
                     	</td>
-                      <td width="20" class="OraTabledata" align=center>
+                      <td width="25" class="OraTabledata" align=center>
                            <cde:secureIcon  formId="form" 
                     formScope="<%=CaDSRConstants.PAGE_SCOPE%>"
                     activeImageSource="i/copy.gif" 
@@ -155,7 +168,7 @@ if(confirm(message)) location.href = url;
                                     target="_parent"
                     />            
                      </td>                  
-                      <td width="20" class="OraTabledata" align=center>
+                      <td width="25" class="OraTabledata" align=center>
                            <cde:secureIcon  formId="form" 
                     formScope="<%=CaDSRConstants.PAGE_SCOPE%>" 
                     activeImageSource="i/edit.gif" 
@@ -169,7 +182,7 @@ if(confirm(message)) location.href = url;
                                     target="_parent"
                     />		            
                       </td>
-                     <td width="20"  class="OraTabledata" align=center>
+                     <td width="25"  class="OraTabledata" align=center>
                            <cde:secureIcon  formId="form" 
                     formScope="<%=CaDSRConstants.PAGE_SCOPE%>" 
                     activeImageSource="i/delete.gif" 
