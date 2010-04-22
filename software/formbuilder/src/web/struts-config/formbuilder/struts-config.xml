@@ -24,7 +24,8 @@
       <form-property name="searchFormPublicID" type="java.lang.String"/>   
       <form-property name="latestVersionIndicator" type="java.lang.String"/>   
       <form-property name="moduleLongName" type="java.lang.String"/>   
-      <form-property name="cdePublicId" type="java.lang.String"/>   
+      <form-property name="cdePublicId" type="java.lang.String"/>
+      <form-property name="checkedFormIds" type="java.lang.String[]"/>
     </form-bean>
     <form-bean name="hrefCRFForm"
       type="gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean"
@@ -356,6 +357,14 @@
       <forward name="failure" path="/jsp/formbuilder/displayCDECart.jsp"/>
       <forward name="success" path="/jsp/formbuilder/displayCDECart.jsp"/>
       <forward name="addDeleteSuccess" path="/formCDECartAction.do?method=displayCDECart"/>
+    </action>
+    <action name="displayCartForm" path="/formsCartAction" parameter="method"
+      scope="request"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.SecureFormsCartAction"
+      validate="false">
+      <forward name="failure" path="/jsp/formbuilder/displayFormsCart.jsp"/>
+      <forward name="success" path="/jsp/formbuilder/displayFormsCart.jsp"/>
+      <forward name="addDeleteSuccess" path="/formsCartAction.do?method=displayFormsCart"/>
     </action>
     <action name="downloadCart" path="/formCDEDownload" scope="request"
       type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.DownloadAction"
