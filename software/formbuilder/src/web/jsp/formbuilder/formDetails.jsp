@@ -64,7 +64,7 @@ while (i<listElements.length) {
 			// only process li elements (and not text elements)
 			if (fstChild.nodeType==1){
 
-				var sblng = fstChild.nextSibling;
+				var sblng = fstChild;
 			  // build a list of child ol and ul elements and hide them
 			  var list=new Array();
 			  while (sblng!=null){
@@ -76,22 +76,18 @@ while (i<listElements.length) {
 			  }
 
 			  // add toggle buttons
-			  var node=document.createElement('img');
-			  var row = document.createElement('tr');
-			  row.setAttribute('class','OraTabledata');
-				var col = document.createElement('td');
-				col.setAttribute('class','OraFieldText'); 
-				col.setAttribute('colspan','2');
-				
-			  node.setAttribute('src',CLOSED_IMAGE);
-			  node.setAttribute('class','collapsibleClosed');
-			  node.onclick=createToggleFunction(node,list);
+			  
+			var row = document.createElement('tr');
+			row.setAttribute('class','OraTabledata');
+			var col = document.createElement('td');
+			col.setAttribute('class','OraFieldText'); 
+			col.setAttribute('colspan','2');
 
-			  col.appendChild(node);
-			  row.appendChild(col);
-			 listElement.firstChild.insertBefore(row, listElement.firstChild.firstChild);
+			col.appendChild(getClosedNode(list));
+			  
+			row.appendChild(col);
+			listElement.firstChild.insertBefore(row, listElement.firstChild.firstChild);
 			}
-			
 		  }
 		}
 	}
@@ -99,6 +95,49 @@ while (i<listElements.length) {
 }
   
 
+}
+
+function getClosedNode(list) {
+
+	var node = createAnchorTag('collapsibleClosed');
+	node.appendChild(createImgTag(CLOSED_IMAGE));
+	node.appendChild(createVVTextTag());
+
+	node.onclick=createToggleFunction(node,list);
+	
+	return node;
+}
+
+function getOpenNode(list) {
+
+	var node = createAnchorTag('collapsibleOpen');
+	node.appendChild(createImgTag(OPEN_IMAGE));
+
+	node.onclick=createToggleFunction(node,list);
+	
+	return node;
+}
+
+function createAnchorTag(clazz) {
+	var aTag=document.createElement('div');
+	aTag.setAttribute('class',clazz);
+	aTag.onmouseover="javascript:this.style.cursor='pointer'";
+	
+	return aTag;
+}
+
+function createVVTextTag() {
+	var txtNode = document.createElement('a');
+	txtNode.appendChild(document.createTextNode("Valid Values..."));
+
+	return txtNode; 
+}
+
+function createImgTag(imgType) {
+	var imgTag=document.createElement('img');
+	imgTag.setAttribute('src',imgType);
+
+	return imgTag;
 }
 
 /* createToggleFunction - returns a function that toggles the sublist display
@@ -111,13 +150,12 @@ function createToggleFunction(toggleElement,sublistElements){
 
   return function(){
 
+	  var parent = toggleElement.parentNode;
     // toggle status of toggle gadget
     if (toggleElement.getAttribute('class')=='collapsibleClosed'){
-      toggleElement.setAttribute('class','collapsibleOpen');
-      toggleElement.setAttribute('src',OPEN_IMAGE);
+      parent.replaceChild(getOpenNode(sublistElements), toggleElement);
     }else{
-      toggleElement.setAttribute('class','collapsibleClosed');
-      toggleElement.setAttribute('src',CLOSED_IMAGE);
+    	parent.replaceChild(getClosedNode(sublistElements), toggleElement);
     }
 
     // toggle display of sublists
