@@ -70,7 +70,7 @@ function goPage(pageInfo) {
   <jsp:param name="urlPrefix" value=""/>
 </jsp:include>
 <center>
-<p class="OraHeaderSubSub">Classifications </p>
+<p class="OraHeaderSubSub">Search for CS/CSI </p>
 </center>
 <form method="POST" onSubmit="return validate()" ENCTYPE="application/x-www-form-urlencoded" action="classificationLOVAction.do?method=getClassificationsLOV">
 
