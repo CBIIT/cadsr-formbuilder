@@ -130,6 +130,8 @@
         <tr class="OraTableColumnHeader">
           <th scope="col">CS* Long Name</th>
           <th scope="col">CS* Public ID Version</th>
+          <th scope="col">CS* Context</th>
+          <th scope="col">CS* Type</th>
           <th scope="col">CS* Definition</th>
           <th scope="col">CSI* Name</th>
           <th scope="col">CSI* Public ID Version</th>
@@ -146,6 +148,12 @@
               </td>
               <td class="OraFieldText">
               	<bean:write name="classification" property="csID"/>v<bean:write name="classification" property="csVersion"/>
+              </td>
+              <td class="OraFieldText">
+              	<bean:write name="classification" property="csContext"/>
+              </td>
+              <td class="OraFieldText">
+              	<bean:write name="classification" property="classSchemeType"/>
               </td>              
               <td class="OraFieldText">
                 <bean:write name="classification" property="classSchemeDefinition"/>
