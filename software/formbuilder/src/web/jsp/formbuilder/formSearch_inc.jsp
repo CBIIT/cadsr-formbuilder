@@ -156,7 +156,7 @@ function gotoClassificationsLOV() {
                 </td>
              </tr>
             <tr>            
-              <td width="30%" class="OraTableColumnHeaderNoBG" nowrap><bean:message key="cadsr.formbuilder.form.classification"/></td>
+              <td width="30%" class="OraTableColumnHeaderNoBG" nowrap>CS/CSI</td>
               <td width="70%" class="OraTabledata" nowrap>
                 <html:text property="<%=FormConstants.CSI_NAME%>" 
                        readonly="true" 
