@@ -90,6 +90,14 @@
                                 	<html:checkbox name="question" property="mandatory" disabled="true"/>
                                      </td>
                                     </tr>
+									<tr class="OraTabledata">
+                                      <td class="OraTableColumnHeaderGrayBG" width="10%" nowrap>
+                                          <bean:message key="cadsr.formbuilder.form.question.editable"/> 
+                                     </td>
+                                     <td class="OraFieldText">
+                                	<html:checkbox name="question" property="editable" disabled="true"/>
+                                     </td>
+                                    </tr>
 
                                      <logic:notEmpty name="question" property = "validValues">
                                      <tr class="OraTabledata">

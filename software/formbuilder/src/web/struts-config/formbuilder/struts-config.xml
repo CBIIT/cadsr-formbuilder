@@ -81,7 +81,8 @@
       <form-property name="questionOption" type="java.lang.String"/>  
       <form-property name="moduleQuestions" type="java.lang.String[]"/>  
       <form-property name="questionInstructions" type="java.lang.String[]"/>
-      <form-property name="questionMandatories" type="java.lang.String[]"/>      
+      <form-property name="questionMandatories" type="java.lang.String[]"/>
+      <form-property name="questionEditables" type="java.lang.String[]"/>
       <form-property name="questionDefaultValues" type="java.lang.String[]"/>
       <form-property name="questionDefaultValidValueIds" type="java.lang.String[]"/>
       <form-property name="formsValidValueInstructions" type="java.lang.String[]"/>            
@@ -106,6 +107,13 @@
       <form-property name="questionIndex" type="java.lang.String"/>
       <form-property name="moduleIndex" type="java.lang.Integer"/>
       <form-property name="selectedText" type="java.lang.String"/>
+    </form-bean>
+    
+    <form-bean name="validValueSearchForm"
+      type="gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean"
+      dynamic="true">
+      <form-property name="publicId" type="java.lang.String"/>
+      <form-property name="version" type="java.lang.String"/>
     </form-bean>
   </form-beans>
   <global-exceptions>
@@ -402,6 +410,14 @@
       type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormModuleEditAction"
       validate="false">
       <forward name="success" path="/jsp/formbuilder/valueMeaningAlterNames.jsp" redirect="false"/>
+    </action>
+    
+    <action name="validValueSearchForm" path="/getVVs" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.ValidValuesDisplayAction"
+      validate="false">
+      <forward name="success" path="/jsp/formbuilder/validValuesView.jsp" redirect="false"/>
+      <forward name="error" path="/jsp/formbuilder/validValuesView.jsp" redirect="false"/>
     </action>
   </action-mappings>
  

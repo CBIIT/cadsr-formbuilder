@@ -7,8 +7,10 @@ import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
 import gov.nih.nci.ncicb.cadsr.common.persistence.ErrorCodeConstants;
 import gov.nih.nci.ncicb.cadsr.common.persistence.PersistenceConstants;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.AbstractDAOFactory;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.AdminComponentDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ConceptDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ContextDAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.DataElementDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.FormDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.FormInstructionDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.FormValidValueDAO;
@@ -23,6 +25,7 @@ import gov.nih.nci.ncicb.cadsr.common.persistence.dao.QuestionRepititionDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ReferenceDocumentDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.TriggerActionDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ValueDomainDAO;
+import gov.nih.nci.ncicb.cadsr.common.resource.AdminComponentType;
 import gov.nih.nci.ncicb.cadsr.common.resource.ClassSchemeItem;
 import gov.nih.nci.ncicb.cadsr.common.resource.ConceptDerivationRule;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
@@ -44,12 +47,14 @@ import gov.nih.nci.ncicb.cadsr.common.resource.QuestionRepitition;
 import gov.nih.nci.ncicb.cadsr.common.resource.ReferenceDocument;
 import gov.nih.nci.ncicb.cadsr.common.resource.TriggerAction;
 import gov.nih.nci.ncicb.cadsr.common.resource.TriggerActionChanges;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValidValue;
 import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomain;
 import gov.nih.nci.ncicb.cadsr.common.resource.Version;
 import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocator;
 import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocatorFactory;
 import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderServiceRemote;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -673,9 +678,37 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
     public Map getValidValues(Collection vdIdSeqs)
     {
         ValueDomainDAO myDAO = daoFactory.getValueDomainDAO();
-        Map valueMap = myDAO.getPermissibleValues(vdIdSeqs);
+        Map valueMap = myDAO.getValidValues(vdIdSeqs);
 
         return valueMap;
+    }
+    
+    public Map getVDPermissibleValues(Collection vdIdSeqs) throws RemoteException {
+    	ValueDomainDAO vdDAO = daoFactory.getValueDomainDAO();
+    	Map valueMap = vdDAO.getPermissibleValues(vdIdSeqs);
+    	
+    	return valueMap;
+    }
+    
+    public Map getCDEPermissibleValues(Collection cdeIdSeqs) throws RemoteException {
+    	DataElementDAO deDAO = daoFactory.getDataElementDAO();
+    	Map<String, ValidValue> valueMap = deDAO.getPermissibleValues(cdeIdSeqs);
+    	
+    	return valueMap;
+    }
+    
+    public Map getQuestionValidValues(Collection quesIdSeqs) throws RemoteException {
+    	Map<String, Collection<ValidValue>> quesVVs = new HashMap<String, Collection<ValidValue>>();
+    	
+    	if (quesIdSeqs != null && quesIdSeqs.size() > 0) {
+    		QuestionDAO quesDAO = daoFactory.getQuestionDAO();
+        	for (Object quesIdSeq: quesIdSeqs) {
+        		Collection vvs = quesDAO.getValidValues((String)quesIdSeq);
+        		quesVVs.put((String)quesIdSeq, vvs);
+        	}
+    	}
+    	
+    	return quesVVs;
     }
 
     /**
@@ -1646,6 +1679,11 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
     public List getRreferenceDocuments(String acId) {
         FormDAO mDAO = daoFactory.getFormDAO();
         return mDAO.getAllReferenceDocuments(acId, null);//docType is not in use
+    }
+    
+    public AdminComponentType getComponentType(String publicId, String version) {
+    	AdminComponentDAO adminCompDAO = daoFactory.getAdminComponentDAO();
+    	return adminCompDAO.getAdminComponentType(publicId, version);
     }
 
 }

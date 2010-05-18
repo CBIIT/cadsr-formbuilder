@@ -24,6 +24,7 @@
     <TITLE>Formbuilder: Edit Form </TITLE>
     <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache"/>
     <LINK rel="stylesheet" TYPE="text/css" HREF="<html:rewrite page='/css/blaf.css' />">
+	<script type="text/javascript" src='<html:rewrite page="/js/collapsible.js"/>' ></script>
     <SCRIPT LANGUAGE="JavaScript">
 <!--
 
@@ -137,7 +138,7 @@ function repeatDisplay(methodName) {
 %>
 </SCRIPT>
   </HEAD>
-  <BODY topmargin=0 bgcolor="#ffffff" <%=jumptoStr%>>
+  <BODY topmargin=0 bgcolor="#ffffff" <%=jumptoStr%> onLoad="makeCollapsible(document.getElementsByTagName('table'), 'collapsible');">
 
 
       
@@ -595,6 +596,14 @@ function repeatDisplay(methodName) {
 						<html:checkbox name="question" property="mandatory" disabled="true"/>
 					</td>
                                     </tr>
+									<tr class="OraTabledata">
+                                      <td class="OraTableColumnHeader" width="10%" nowrap>
+	                                  <bean:message key="cadsr.formbuilder.form.question.editable"/> 
+                                     </td>
+                                     <td class="OraFieldText">
+						<html:checkbox name="question" property="editable" disabled="true"/>
+					</td>
+                                    </tr>
                                    </table>                                                            
                                  </td>
                                </tr> 
@@ -708,9 +717,7 @@ class="OraBGAccentVeryDark" >
                               <tr class="OraTabledata">
                                 <td class="OraFieldText" width="50">&nbsp;</td>
                                 <td colspan="2">
-                                  <table width="100%" align="center" cellpadding="0" cellspacing="0" border="0" class="OraBGAccentVeryDark">
-                                    <logic:iterate id="validValue" name="question" type="gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue" property="validValues">
-                                      <tr   class="OraTabledata">
+                                  <table width="100%" align="center" cellpadding="0" cellspacing="0" border="0" class="OraBGAccentVeryDark" id="collapsible"><logic:iterate id="validValue" name="question" type="gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue" property="validValues"><tr   class="OraTabledata">
                                         <td COLSPAN="2" class="OraFieldText" >&nbsp;</td>
                                       </tr>
                                       <tr   class="OraTabledata">

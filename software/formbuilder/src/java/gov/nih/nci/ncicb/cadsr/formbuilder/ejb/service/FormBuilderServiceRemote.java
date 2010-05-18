@@ -1,24 +1,20 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service;
 
-import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
+import gov.nih.nci.ncicb.cadsr.common.resource.AdminComponentType;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormInstructionChanges;
 import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
-import gov.nih.nci.ncicb.cadsr.common.resource.InstructionChanges;
 import gov.nih.nci.ncicb.cadsr.common.resource.Module;
 import gov.nih.nci.ncicb.cadsr.common.resource.ModuleChanges;
 import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
 import gov.nih.nci.ncicb.cadsr.common.resource.Protocol;
 import gov.nih.nci.ncicb.cadsr.common.resource.QuestionRepitition;
-import gov.nih.nci.ncicb.cadsr.common.resource.TriggerAction;
 import gov.nih.nci.ncicb.cadsr.common.resource.ReferenceDocument;
+import gov.nih.nci.ncicb.cadsr.common.resource.TriggerAction;
 import gov.nih.nci.ncicb.cadsr.common.resource.TriggerActionChanges;
 import gov.nih.nci.ncicb.cadsr.common.resource.Version;
 
 import java.rmi.RemoteException;
-
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -107,6 +103,12 @@ public interface FormBuilderServiceRemote {
         String newLongName, String username) throws RemoteException;
 
     public Map getValidValues(Collection vdIdSeqs) throws RemoteException;
+    
+    public Map getVDPermissibleValues(Collection vdIdSeqs) throws RemoteException;
+    
+    public Map getCDEPermissibleValues(Collection cdeIdSeqs) throws RemoteException;
+    
+    public Map getQuestionValidValues(Collection quesIdSeqs) throws RemoteException;
 
     /**
      * Assigns the specified classification to an admin component
@@ -228,6 +230,8 @@ public interface FormBuilderServiceRemote {
 
     public List getRreferenceDocuments(String acId) 
                 throws RemoteException;
+    
+    public AdminComponentType getComponentType(String publicId, String version) throws RemoteException;
                 
     public Module saveQuestionRepititons(String moduleId,int repeatCount
             , Map<String,List<QuestionRepitition>> repititionMap,List<String> questionWithoutRepitions)
