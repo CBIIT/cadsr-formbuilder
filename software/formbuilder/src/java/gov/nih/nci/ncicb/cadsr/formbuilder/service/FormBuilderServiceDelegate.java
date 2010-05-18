@@ -1,5 +1,6 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.service;
 
+import gov.nih.nci.ncicb.cadsr.common.resource.AdminComponentType;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormInstructionChanges;
 import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
@@ -14,6 +15,7 @@ import gov.nih.nci.ncicb.cadsr.common.resource.TriggerActionChanges;
 import gov.nih.nci.ncicb.cadsr.common.resource.Version;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 
+import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -90,6 +92,12 @@ public interface FormBuilderServiceDelegate {
         String newLongName, String username) throws FormBuilderException;
 
     public Map getValidValues(Collection vdIdSeqs) throws FormBuilderException;
+    
+    public Map getVDPermissibleValues(Collection vdIdSeqs) throws RemoteException;
+    
+    public Map getCDEPermissibleValues(Collection cdeIdSeqs) throws RemoteException;
+    
+    public Map getQuestionValidValues(Collection quesIdSeqs) throws RemoteException;
 
     public int assignFormClassification(List acIdList, List csCsiIdList)
         throws FormBuilderException;
@@ -182,5 +190,7 @@ public interface FormBuilderServiceDelegate {
             , Map<String,List<QuestionRepitition>> repititionMap,
             List<String> questionWithoutRepitions)
                 throws FormBuilderException;              
+    
+    public AdminComponentType getComponentType(String publicId, String version);
 
 }

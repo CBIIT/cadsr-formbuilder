@@ -75,7 +75,7 @@ public class FormJspUtil
             return question.getDefaultValidValue().getLongName();
         if(question.getDefaultValue()!=null)
             return question.getDefaultValue();
-        return "&nbsp;";
+        return "No Default Value";
     }
 
     public static boolean hasModuleRepetition(Form form)

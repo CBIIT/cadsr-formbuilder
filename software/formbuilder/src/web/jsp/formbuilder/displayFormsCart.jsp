@@ -133,6 +133,7 @@ function retrieveSavedItems() {
     </tr>
   </logic:empty>
   <logic:notEmpty name="<%=CaDSRConstants.FORMS_CART%>" property = "forms">
+	<bean:size id="noOfItems" name="<%=CaDSRConstants.FORMS_CART%>" property="forms" />
     <logic:iterate id="form" name="<%=CaDSRConstants.FORMS_CART%>" type="gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject" property="forms">
 <%
       String formId = form.getIdseq();
@@ -171,6 +172,11 @@ function retrieveSavedItems() {
         </td>
       </tr>
     </logic:iterate>
+		<tr class="OraTabledata">
+			<td class="OraFieldText" colspan="8">
+	  			<br/>Total items in cart: <b><bean:write name="noOfItems" /></b>
+        	</td>
+		</tr>
   </logic:notEmpty>
    </table>
     <br>
@@ -179,11 +185,6 @@ function retrieveSavedItems() {
         <td>&nbsp;</td>
       </TR>
       <tr>
-        <td>
-          <a href="javascript:retrieveSavedItems()">
-            <html:img src='<%=urlPrefix+"i/refresh.gif"%>' border="0" alt="Refresh Saved Forms"/> 
-          </a>
-        </td>
 		<logic:notEmpty name="<%=CaDSRConstants.FORMS_CART%>" property = "forms">
         <td>
           <a href="javascript:deleteItems()">
