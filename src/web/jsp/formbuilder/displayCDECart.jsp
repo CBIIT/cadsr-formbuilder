@@ -151,6 +151,7 @@ function retrieveSavedItems() {
     </tr>
   </logic:empty>
   <logic:notEmpty name="<%=CaDSRConstants.CDE_CART%>" property = "dataElements">
+	<bean:size id="noOfItems" name="<%=CaDSRConstants.CDE_CART%>" property="dataElements" />
     <logic:iterate id="de" name="<%=CaDSRConstants.CDE_CART%>" type="gov.nih.nci.ncicb.cadsr.objectCart.CDECartItem" property="dataElements">
 <%
       String deId = de.getId();
@@ -185,6 +186,11 @@ function retrieveSavedItems() {
         </td>
       </tr>
     </logic:iterate>
+		<tr class="OraTabledata">
+			<td class="OraFieldText" colspan="8">
+	  			<br/>Total items in cart: <b><bean:write name="noOfItems" /></b>
+        	</td>
+		</tr>
   </logic:notEmpty>
    </table>
     <br>

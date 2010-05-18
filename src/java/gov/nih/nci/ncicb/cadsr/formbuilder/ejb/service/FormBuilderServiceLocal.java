@@ -1,6 +1,7 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service;
 
 import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
+import gov.nih.nci.ncicb.cadsr.common.resource.AdminComponentType;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormInstructionChanges;
 import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
@@ -8,6 +9,7 @@ import gov.nih.nci.ncicb.cadsr.common.resource.Module;
 import gov.nih.nci.ncicb.cadsr.common.resource.ModuleChanges;
 import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
 
+import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.Map;
 
@@ -101,6 +103,12 @@ public interface FormBuilderServiceLocal  {
     String username);
 
   public Map getValidValues(Collection vdIdSeqs);
+  
+  public Map getVDPermissibleValues(Collection vdIdSeqs) throws RemoteException;
+  
+  public Map getCDEPermissibleValues(Collection cdeIdSeqs) throws RemoteException;
+  
+  public Map getQuestionValidValues(Collection quesIdSeqs) throws RemoteException;
 
   public Form createForm(
     Form form,
@@ -126,4 +134,6 @@ public interface FormBuilderServiceLocal  {
       public void unpublishForm(String formIdSeq, String formType, String contextIdSe);    
       
       public Collection getAllDocumentTypes() throws DMLException;
+      
+      public AdminComponentType getComponentType(String publicId, String version);
 }

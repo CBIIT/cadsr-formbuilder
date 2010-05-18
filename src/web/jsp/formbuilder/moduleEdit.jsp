@@ -627,6 +627,16 @@ function clearProtocol() {
 				    <html:radio property='<%=FormConstants.QUESTION_MANDATORIES+"["+questionIndex+"]"%>' value="Yes" >Yes</html:radio>
                             </td>
                         </tr> 
+						
+						<tr class="OraTabledata">
+                            <td width="26%" class="OraTableColumnHeader" nowrap align="left">
+                              <bean:message key="cadsr.formbuilder.form.question.editable"/> 
+                            </td>                      
+                            <td class="OraFieldText">
+        			    <html:radio property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>' value="No" >No </html:radio>
+				    <html:radio property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>' value="Yes" >Yes</html:radio>
+                            </td>
+                        </tr> 
                       <logic:present name="question" property="dataElement">                       
                        <tr class="OraTabledata">
                           <td width="26%" class="OraTableColumnHeader" nowrap align="left">
