@@ -18,7 +18,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
 
 public class ValidValuesDisplayAction extends
-		FormBuilderSecureBaseDispatchAction {
+		FormBuilderBaseDispatchAction {
 
 	public ActionForward displayValidValues(
 		      ActionMapping mapping,
