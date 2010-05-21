@@ -128,7 +128,7 @@ function retrieveSavedItems() {
   <logic:empty name="<%=CaDSRConstants.FORMS_CART%>" property = "forms">
     <tr class="OraTabledata">
         <td class="OraFieldText" colspan="7">
-          Forms Cart is empty. 
+          Form Cart is empty. 
         </td>
     </tr>
   </logic:empty>

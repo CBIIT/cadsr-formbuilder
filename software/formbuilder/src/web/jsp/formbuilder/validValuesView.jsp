@@ -14,10 +14,12 @@
   <BODY topmargin=0 bgcolor="#ffffff" onLoad="makeCollapsible(document.getElementsByTagName('table'), 'collapsible');">
 
     <%@ include file="../common/in_process_common_header_inc.jsp"%>
-    <jsp:include page="../common/tab_inc.jsp" flush="true">
-      <jsp:param name="label" value="View&nbsp;Valid&nbsp;Values"/>
-      <jsp:param name="urlPrefix" value=""/>
-    </jsp:include>
+    <logic:present name="nciUser">
+	    <jsp:include page="../common/tab_inc.jsp" flush="true">
+	      <jsp:param name="label" value="View&nbsp;Valid&nbsp;Values"/>
+	      <jsp:param name="urlPrefix" value=""/>
+	    </jsp:include>
+    </logic:present>
 
 <table>
     <tr>    
