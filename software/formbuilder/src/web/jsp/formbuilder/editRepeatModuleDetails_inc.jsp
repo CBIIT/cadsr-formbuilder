@@ -1,7 +1,7 @@
  		<table width="80%" align="center" cellpadding="0" cellspacing="1" border="0" class="OraBGGrayVeryDark">               
                  <tr>                 
                     <td class="OraBGGrayLight">
-                      <bean:write name="module" property="longName"/>
+                      <bean:write name="module" property="longName"/>-<%= ((Integer)modIndex).intValue() + 1 %>
                     </td>
                   </tr>        
                    <logic:present name="module" property="instruction">                   
