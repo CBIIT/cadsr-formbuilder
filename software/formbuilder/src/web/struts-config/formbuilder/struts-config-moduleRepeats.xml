@@ -9,6 +9,7 @@
       <form-property name="numberOfModuleRepetitions" type="java.lang.Integer"/>      
       <form-property name="questionDefaults" type="java.lang.String[]"/>
       <form-property name="questionDefaultVVIds" type="java.lang.String[]"/>
+      <form-property name="questionEditables" type="java.lang.Boolean[]"/>
     </form-bean>
       
   </form-beans>
