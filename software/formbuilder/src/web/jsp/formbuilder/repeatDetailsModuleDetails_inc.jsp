@@ -95,6 +95,14 @@
 						<html:checkbox name="question" property="mandatory" disabled="true"/>
                                         </td>
                                     </tr>
+									<tr class="OraTabledata">
+                                        <td width="26%" class="OraTableColumnHeader" nowrap align="left">
+                                          <bean:message key="cadsr.formbuilder.form.question.editable"/> 
+                                        </td>                      
+                                        <td class="OraFieldText">
+											<html:checkbox name="question" property="editable" disabled="true"/>
+                                        </td>
+                                    </tr>
                                       <tr class="OraTabledata">
                                       <td class="OraTableColumnHeaderGrayBG" width="10%" nowrap>
                                         Default value
@@ -120,6 +128,14 @@
                                         </td>                      
                                         <td class="OraFieldText">
 						<html:checkbox name="question" property="mandatory" disabled="true"/>
+                                        </td>
+                                    </tr>
+									<tr class="OraTabledata">
+                                        <td width="26%" class="OraTableColumnHeader" nowrap align="left">
+                                          <bean:message key="cadsr.formbuilder.form.question.editable"/> 
+                                        </td>                      
+                                        <td class="OraFieldText">
+											<html:checkbox name="question" property="editable" disabled="true"/>
                                         </td>
                                     </tr>
                                      <tr class="OraTabledata">
