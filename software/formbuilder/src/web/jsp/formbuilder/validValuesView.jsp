@@ -123,5 +123,8 @@
 		</tr>
 		</table>
 	</logic:present>
+	<logic:notPresent name="pvMap" scope="request">
+		No Permissible Values or Valid Values are present for the requested Public ID and Version.
+	</logic:notPresent>
 </BODY>
 </HTML>
