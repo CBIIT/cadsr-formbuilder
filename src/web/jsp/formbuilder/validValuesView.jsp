@@ -32,7 +32,7 @@
     <logic:present name="pvMap" scope="request">
 		<table width="80%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
 		<tr class="OraTabledata">
-		<td class="OraFieldText" colspan="2">
+		<td class="OraFieldText">
 		<logic:iterate name="pvMap" id="pvs" >
 			<bean:define id="acType" name="pvs" property="key" />
 			<table width="100%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
@@ -74,41 +74,40 @@
 		<tr class="OraTabledata">
 			<td class="OraFieldText">
 				<table width="100%" align="center" cellpadding="0" cellspacing="0" border="0" class="OraTabledata">
+				<tr class="OraTabledata" height="10"/>
 					<tr class="OraTabledata">
 						<td class="OraFieldText" width="50">&nbsp;</td>
 						<td class="OraFieldText">
 							<logic:present name="pvs" property="value">
-							<table width="100%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraTabledata">
+							<table width="100%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
+								<tr class="OraTabledata">
+									<td class="OraTableColumnHeader" width="20%">
+										Value Value
+									</td>
+									<td class="OraTableColumnHeader" width="40%">
+										Value Meaning Long Name
+									</td>
+									<td class="OraTableColumnHeader" width="40%">
+										Value Meaning Definition
+									</td>
+								</tr>
 								<logic:iterate id="vv" name="pvs" property="value">
 									<bean:define id="vm" name="vv" property="valueMeaning" />
-									<tr class="OraTabledata"><td height="1" class="OraFieldText" colspan="2">&nbsp;</td></tr>
-									<tr class="OraTabledata">
-										<td class="OraFieldText" colspan="2">
-							            	<bean:write name="vv" property="shortMeaning" />
-							          	</td>                
-									</tr>
+							
 									<tr class="OraTabledata">
 										<td class="OraFieldText">
-											<table width="100%" align="right" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
-												<tr class="OraTabledata">
-													<td class="OraTableColumnHeader" width="20%">
-														Value Meaning Long Name
-													</td>
-													<td class="OraFieldText" >
-										            	<bean:write name="vm" property="longName" />
-										          	</td> 
-												</tr>
-												<tr class="OraTabledata">
-													<td class="OraTableColumnHeader" width="20%">
-														Value Meaning Definition
-													</td>
-													<td class="OraFieldText" >
-										            	<bean:write name="vm" property="preferredDefinition" />
-										          	</td>  
-												</tr>
-											</table>
-										</td>
+							            	<bean:write name="vv" property="shortMeaning" />
+							          	</td>                
+										
+										<td class="OraFieldText" >
+							            	<bean:write name="vm" property="longName" />
+							          	</td> 
+																
+										<td class="OraFieldText" >
+							            	<bean:write name="vm" property="preferredDefinition" />
+							          	</td>  
 									</tr>
+											
 									
 								</logic:iterate>
 							</table>
@@ -117,7 +116,9 @@
 								No PVs/VVs are present for this administered component
 							</logic:notPresent>
 							</td>
+							<td class="OraFieldText" width="50">&nbsp;</td>
 					</tr>
+					<tr class="OraTabledata" height="10"/>
 				</table>
 			</td>
 		</tr>
