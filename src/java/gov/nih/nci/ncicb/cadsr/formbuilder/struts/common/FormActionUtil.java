@@ -397,11 +397,12 @@ public class FormActionUtil
             {
                 q.setDefaultValue(qRep.getDefaultValue());
                 q.setDefaultValidValue(qRep.getDefaultValidValue());
+                q.setEditable(qRep.isEditable());
             }
         }
     }
 
-        /** return possible trigger action target
+		/** return possible trigger action target
 	     */
 	   public static Map<String,FormElement> getTriggerActionPossibleTargetMap(Form form){
 		   if (form == null){

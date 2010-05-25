@@ -67,10 +67,26 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
 
         setSessionObject(request, MODULE, selectedModule, true);
         setSessionObject(request, MODULE_REPETITIONS, modRepetitions, true);
+        dynaForm.set(QUESTION_EDITABLES, getQuesEditables(modRepetitions));
         dynaForm.set(NUMBER_OF_MODULE_REPETITIONS,new Integer(0)); 
 
         return mapping.findForward("viewRepetitions");
     }
+    
+    private Boolean[] getQuesEditables(List<Module> repeats) {
+ 	   List<Boolean> editableList = new ArrayList<Boolean>();
+ 	   if (repeats != null && repeats.size()>0) {
+ 		   for (Module repeat: repeats) {
+ 			   List<Question> questions = repeat.getQuestions();
+ 			   if (questions != null && questions.size() > 0) {
+ 				   for (Question ques: questions) {
+ 					  editableList.add(new Boolean(ques.isEditable()));
+ 				   }
+ 			   }
+ 		   }
+ 	   }
+ 	   return editableList.toArray(new Boolean[]{});
+ 	}
 
     public ActionForward addRepetitions(ActionMapping mapping,
                                         ActionForm editForm,
@@ -249,6 +265,7 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
         String[] defaultValueArr = (String[])dynaForm.get(QUESTION_DEFAULTS);
         String[] defaultValueIds =
             (String[])dynaForm.get(QUESTION_DEFAULT_VV_IDS);
+        Boolean[] editables = (Boolean[])dynaForm.get(QUESTION_EDITABLES);
         List<Module> repeats =
             (List<Module>)getSessionObject(request, MODULE_REPETITIONS);
         Module module = (Module)getSessionObject(request, MODULE);
@@ -265,6 +282,7 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
             return mapping.findForward(SUCCESS);             
         }
         int numberOfRepeats = 0;
+        List<Boolean[]> defaultArrEditableList = null;
         if(!haveQuestions(module))
         {
             numberOfRepeats = repeats.size();
@@ -278,8 +296,9 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
         {
             List<String[]> defaultArrList = getArrayByRepitition(defaultValueArr,module.getQuestions().size());
             List<String[]> defaultArrIdList = getArrayByRepitition(defaultValueIds,module.getQuestions().size());
+            defaultArrEditableList = getEditableList(editables, module.getQuestions().size());
             numberOfRepeats = repeats.size();
-            questionRepeatMap = getQuestionRepeatMap(module,defaultArrList,defaultArrIdList,noRepQIdList);
+            questionRepeatMap = getQuestionRepeatMap(module,defaultArrList,defaultArrIdList,defaultArrEditableList, noRepQIdList);
         }
         FormBuilderServiceDelegate service = getFormBuilderService();
         Module savedModeule = null;
@@ -289,6 +308,8 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
             //put the triggeractions' target. 
             //Only the idseq is put in the triggeraction target by the EJB, not the target object.
             FormActionUtil.setTargetsForTriggerActions(FormActionUtil.getTriggerActionPossibleTargetMap(crf),FormActionUtil.getModuleAllTriggerActions(savedModeule));
+            Form updatedForm = service.getFormDetails(crf.getIdseq());
+            setSessionObject(request, CRF, updatedForm);
         }
         catch (FormBuilderException e)
         {
@@ -322,8 +343,41 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
         return mapping.findForward(SUCCESS); 
     }
     
-   private Map<String,List<QuestionRepitition>> getQuestionRepeatMap(Module module,List<String[]> defaultArrList,List<String[]> defaultArrIdList,
-                List<String> noRepQIdList)
+   
+
+    private void updateEditables(List<Boolean[]> defaultArrEditableList, List<Module> repeats) {
+		for (int i=0;i<repeats.size();i++) {
+			Module module = repeats.get(i);
+			List<Question> questions = module.getQuestions();
+			for (int j=0;j<questions.size();j++) {
+				Question question = questions.get(j);
+				if (defaultArrEditableList.size()<i && defaultArrEditableList.get(i) != null) {
+					if (defaultArrEditableList.get(i).length < j) {
+						question.setEditable(defaultArrEditableList.get(i)[j]);
+					}
+				}
+			}
+		}
+	}
+
+	private List<Boolean[]> getEditableList(Boolean[] editables, int itemsInaSet) {
+    	List<Boolean[]> list = new ArrayList<Boolean[]>();
+        for(int j=0;j<editables.length;++j)
+        {
+        Boolean[] tempArr = new Boolean[itemsInaSet];
+         for(int i=0;(i<itemsInaSet&&j<editables.length);++i)
+         {
+             tempArr[i]=editables[j];
+             if(i<(itemsInaSet-1))
+                 ++j;
+         }
+         list.add(tempArr);
+        }
+        return list;
+	}
+
+	private Map<String,List<QuestionRepitition>> getQuestionRepeatMap(Module module,List<String[]> defaultArrList,List<String[]> defaultArrIdList,
+                List<Boolean[]> defaultArrEditableList, List<String> noRepQIdList)
    {
        Map<String,List<QuestionRepitition>> map = new HashMap<String,List<QuestionRepitition>>();
 
@@ -336,6 +390,7 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
        {
           String[] defautArr = defaultArrList.get(j);
           String[] defautIdArr = defaultArrIdList.get(j);
+          Boolean[] defaultEditableArr = defaultArrEditableList.get(j);
           Iterator it = module.getQuestions().iterator();
            int i=0;
            while(it.hasNext())
@@ -344,6 +399,8 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
 
                String vvId = defautIdArr[i];
                String value = defautArr[i];
+               Boolean editable = defaultEditableArr[i];
+               
                if(vvId==null) continue;
                QuestionRepitition qr = null;
                if(!vvId.equalsIgnoreCase(""))
@@ -360,10 +417,15 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
                    qr.setDefaultValue(value);
                    qr.setRepeatSequence(j+1);
                }
+               else {
+            	   qr = new QuestionRepititionTransferObject();
+                   qr.setRepeatSequence(j+1);
+               }
 
                i++;
                if(qr!=null)
                {
+            	   qr.setEditable(editable);
                    List<QuestionRepitition> qrList = map.get(q.getQuesIdseq());
                    if(qrList==null)
                        qrList = new ArrayList<QuestionRepitition>();
@@ -545,12 +607,14 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
             return;
 
         String[] defaults = (String[])dynaForm.get(QUESTION_DEFAULTS);
+        Boolean[] editables = (Boolean[])dynaForm.get(QUESTION_EDITABLES);
         String[] defaultvvids =
             (String[])dynaForm.get(QUESTION_DEFAULT_VV_IDS);
         int totalSize =
             defaults.length + (numberOfRepeats * module.getQuestions().size());
         String[] newDefaults = new String[totalSize];
         String[] newDefaultvvids = new String[totalSize];
+        Boolean[] newEditables = new Boolean[totalSize];
 
         for (int i = 0; i < totalSize; ++i)
         {
@@ -558,16 +622,18 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
             {
                 newDefaults[i] = defaults[i];
                 newDefaultvvids[i] = defaultvvids[i];
+                newEditables[i] = editables[i];
             } else
             {
                 newDefaults[i] = "";
                 newDefaultvvids[i] = "";
+                newEditables[i] = new Boolean(true);
             }
 
         }
         dynaForm.set(QUESTION_DEFAULTS, newDefaults);
         dynaForm.set(QUESTION_DEFAULT_VV_IDS, newDefaultvvids);
-
+        dynaForm.set(QUESTION_EDITABLES, newEditables);
 
     }
 
