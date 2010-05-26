@@ -67,27 +67,11 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
 
         setSessionObject(request, MODULE, selectedModule, true);
         setSessionObject(request, MODULE_REPETITIONS, modRepetitions, true);
-        dynaForm.set(QUESTION_EDITABLES, getQuesEditables(modRepetitions));
         dynaForm.set(NUMBER_OF_MODULE_REPETITIONS,new Integer(0)); 
 
         return mapping.findForward("viewRepetitions");
     }
     
-    private Boolean[] getQuesEditables(List<Module> repeats) {
- 	   List<Boolean> editableList = new ArrayList<Boolean>();
- 	   if (repeats != null && repeats.size()>0) {
- 		   for (Module repeat: repeats) {
- 			   List<Question> questions = repeat.getQuestions();
- 			   if (questions != null && questions.size() > 0) {
- 				   for (Question ques: questions) {
- 					  editableList.add(new Boolean(ques.isEditable()));
- 				   }
- 			   }
- 		   }
- 	   }
- 	   return editableList.toArray(new Boolean[]{});
- 	}
-
     public ActionForward addRepetitions(ActionMapping mapping,
                                         ActionForm editForm,
                                         HttpServletRequest request,
@@ -564,6 +548,7 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
         int arrSize = modRepetitions.size() * qList.size();
         String[] defaults = new String[arrSize];
         String[] defaultVVIds = new String[arrSize];
+        Boolean[] editables = new Boolean[arrSize];
 
         int index = 0;
         for (Module repitition : modRepetitions)
@@ -588,12 +573,14 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
                         defaults[index] = question.getDefaultValue();
                         defaultVVIds[index] = "";
                     }
+                    editables[index] = question.isEditable();
                     index++;
                 }
             }
         }
         dynaForm.set(QUESTION_DEFAULTS, defaults);
         dynaForm.set(QUESTION_DEFAULT_VV_IDS, defaultVVIds);
+        dynaForm.set(QUESTION_EDITABLES, editables);
 
     }
 
