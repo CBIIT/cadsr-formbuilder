@@ -1,7 +1,6 @@
 <%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean"%>
-<%@ taglib uri="/WEB-INF/tld/c.tld" prefix="c"%>
 <%@ taglib uri="/WEB-INF/tld/cdebrowser.tld" prefix="cde"%>
 <%@ page import="java.util.*" %>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.resource.ValidValue" %>
@@ -42,7 +41,14 @@
 		            Component Type
 		          </td>
 					<td class="OraFieldText" >
-		            	<bean:write name="acType" property="componentType" />
+						
+						<logic:equal name="acType" property="componentType" value="FORMELEMENT">
+						        QUESTION
+						</logic:equal>
+						<logic:notEqual name="acType" property="componentType" value="FORMELEMENT">
+				    		<bean:write name="acType" property="componentType" />
+						 </logic:notEqual>
+		            	
 		          	</td>  
 				</tr>
 				<tr class="OraTabledata">
@@ -83,15 +89,12 @@
 							<table width="100%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
 								<tr class="OraTabledata">
 									<td class="OraTableColumnHeader" width="20%"> 
-										<c:choose>
-										    <c:when test='${acType.componentType == "CDE"}'>
+										<logic:notEqual name="acType" property="componentType" value="FORMELEMENT">
 										        Permissible Value
-										    </c:when>
-										    <c:otherwise>
+										</logic:notEqual>
+										<logic:equal name="acType" property="componentType" value="FORMELEMENT">
 										        Valid Value
-										    </c:otherwise>
-										</c:choose>
-										
+										</logic:equal>
 									</td>
 									<td class="OraTableColumnHeader" width="40%">
 
