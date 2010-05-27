@@ -137,7 +137,7 @@ function ToggleSelectAll(e){
                 length="<%=Integer.toString(pageBean.getPageSize())%>">
             <tr class="OraTabledata">  
             <logic:notPresent name="<%=FormConstants.IN_PROCESS%>"> 
-				<td width="20" align="center"
+				<td width="20" align="center">
 					<html:multibox name="searchForm" property="checkedFormIds">
 						<bean:write name="form" property="formIdseq" />
                    	</html:multibox>
