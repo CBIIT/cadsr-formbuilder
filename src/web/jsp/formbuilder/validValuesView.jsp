@@ -1,6 +1,7 @@
 <%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean"%>
+<%@ taglib uri="/WEB-INF/tld/c.tld" prefix="c"%>
 <%@ taglib uri="/WEB-INF/tld/cdebrowser.tld" prefix="cde"%>
 <%@ page import="java.util.*" %>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.resource.ValidValue" %>
@@ -81,10 +82,19 @@
 							<logic:present name="pvs" property="value">
 							<table width="100%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
 								<tr class="OraTabledata">
-									<td class="OraTableColumnHeader" width="20%">
-										Value Value
+									<td class="OraTableColumnHeader" width="20%"> 
+										<c:choose>
+										    <c:when test='${acType.componentType == "CDE"}'>
+										        Permissible Value
+										    </c:when>
+										    <c:otherwise>
+										        Valid Value
+										    </c:otherwise>
+										</c:choose>
+										
 									</td>
 									<td class="OraTableColumnHeader" width="40%">
+
 										Value Meaning Long Name
 									</td>
 									<td class="OraTableColumnHeader" width="40%">
@@ -103,7 +113,7 @@
 							            	<bean:write name="vm" property="longName" />
 							          	</td> 
 																
-										<td class="OraFieldText" >
+										<td class="OraFieldText" >&nbsp;
 							            	<bean:write name="vm" property="preferredDefinition" />
 							          	</td>  
 									</tr>
