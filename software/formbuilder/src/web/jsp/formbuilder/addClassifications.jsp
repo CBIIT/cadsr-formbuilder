@@ -63,7 +63,7 @@
     	String jspName = FormConstants.CS_CSI_ID + "["+ i + "]";
     %>		
     <tr>
-      <td class="OraFieldtitlebold" nowrap><bean:message key="cadsr.formbuilder.form.classification"/>:</td>
+      <td class="OraFieldtitlebold" nowrap>CS Long Name:</td>
       <td class="OraFieldText" nowrap>
       <input type=text name="<%= FormConstants.CSI_NAME + i%>" 
         readonly="true" 
