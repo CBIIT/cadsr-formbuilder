@@ -38,13 +38,15 @@ function ToggleSelectAll(e){
            
                </tr>
         </table>
-
+		<table width="100%" align="center" cellpadding="1" cellspacing="1" border="0">
+		<tr><td align="left">
 		<a href="javascript:document.forms[0].action=document.forms[0].action+'?method=addFormToCart';document.forms[0].submit()">
             <html:img src='<%="i/addtoformcart.gif"%>' border="0" alt="Add to Form Cart"/> 
           </a>
-
+		</td>
         <bean:define id="pageBean" name="<%=FormConstants.FORM_SEARCH_RESULTS_PAGINATION%>" 
         	type="gov.nih.nci.ncicb.cadsr.common.jsp.bean.PaginationBean"/>
+        <td align="right">
         <cde:pagination name="top" textClassName="OraFieldText" selectClassName="LOVField" formIndex="0" pageSize="100" 
                      beanId = "<%=FormConstants.FORM_SEARCH_RESULTS_PAGINATION%>" 
                      actionURL="pageAction.do"
@@ -53,8 +55,9 @@ function ToggleSelectAll(e){
         	     nextOnImage="i/next_on.gif"
         	     nextOffImage="i/next_off.gif"
         	     urlPrefix="<%=urlPrefix%>"
-        	     /> 
-                
+        	     />
+       		</td></tr> 
+         </table>    
         <table width="100%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
           <tr class="OraTableColumnHeader">
             <logic:notPresent name="<%=FormConstants.IN_PROCESS%>">
