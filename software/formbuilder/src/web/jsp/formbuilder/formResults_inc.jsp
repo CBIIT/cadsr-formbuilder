@@ -258,7 +258,7 @@ function ToggleSelectAll(e){
             </tr>
           </logic:iterate>
         </table>
-        <cde:pagination name="bottom" textClassName="OraFieldText" selectClassName="LOVField" formIndex="0" pageSize="40" 
+        <cde:pagination name="bottom" textClassName="OraFieldText" selectClassName="LOVField" formIndex="0" pageSize="100" 
                      beanId = "<%=FormConstants.FORM_SEARCH_RESULTS_PAGINATION%>" 
                      actionURL="pageAction.do"
         	     previousOnImage="i/prev_on.gif"
