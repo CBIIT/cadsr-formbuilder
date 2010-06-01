@@ -2,6 +2,7 @@ package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
 import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
 import gov.nih.nci.ncicb.cadsr.common.cdebrowser.DataElementSearchBean;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.jdbc.JDBCFormTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
 import gov.nih.nci.ncicb.cadsr.common.jsp.bean.PaginationBean;
@@ -17,12 +18,15 @@ import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 import gov.nih.nci.objectCart.client.ObjectCartClient;
 import gov.nih.nci.objectCart.client.ObjectCartException;
 import gov.nih.nci.objectCart.domain.Cart;
+import gov.nih.nci.objectCart.domain.CartObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -512,18 +516,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 	  
 	  FormBuilderServiceDelegate service = getFormBuilderService();
 	  try {
-		  
-		  DynaActionForm dynaBean = (DynaActionForm)form;
-		  String[] formIds = (String[])dynaBean.get("checkedFormIds");
-		  if (formIds != null) {
-			  for (String formId: formIds) {
-				  Form crf = service.getFormDetails(formId);
-				  objects.put(formId, crf);
-				  objectDisplayNames.put(formId, crf.getLongName());
-			  }
-		  }
-	  
-	  
+		  	  
 		NCIUser user = (NCIUser) this.getSessionObject(request, CaDSRConstants.USER_KEY);
 		CDEBrowserParams params = CDEBrowserParams.getInstance();
 		String ocURL = params.getObjectCartUrl();
@@ -536,9 +529,28 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 			cartClient = new ObjectCartClient();
 		
 		Cart cart = cartClient.createCart(user.getUsername(), CaDSRConstants.FORMS_CART);
+		HashSet<CartObject> storedForms = (HashSet<CartObject>) cart.getCartObjectCollection();
 		
+		HashSet<CartObject> forRemoval = new HashSet<CartObject>();
+		
+		DynaActionForm dynaBean = (DynaActionForm)form;
+		String[] formIds = (String[])dynaBean.get("checkedFormIds");
+		if (formIds != null) {
+			for (String formId: formIds) {
+				
+				Form crf = service.getFormDetails(formId);
+				CartObject co = getNativeObject(storedForms, formId);
+				objects.put(formId, crf);
+				objectDisplayNames.put(formId, crf.getLongName());
+				
+				if(co != null)
+					forRemoval.add(co);
+			  }
+		}
+		
+		cart = cartClient.removeObjectCollection(cart, forRemoval);
 		cart = cartClient.storePOJOCollection(cart, JDBCFormTransferObject.class, objectDisplayNames, objects);
-		
+	
 		saveMessage("cadsr.common.formcart.save.success",request);
 		
 		dynaBean.set("checkedFormIds", new String[]{});
@@ -549,6 +561,14 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 	  return mapping.findForward("success");
   }
   
+  private CartObject getNativeObject(HashSet<CartObject> items, String id) {
+	  for(CartObject co: items){
+			if (co.getNativeId().equals(id))
+				return co;
+	  }
+	  return null;
+	  
+  }
   
   private Context getContextForId(List contexts,String contextIdSeq)
   {
