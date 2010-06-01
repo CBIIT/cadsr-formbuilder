@@ -27,6 +27,7 @@
                         <table width="100%" align="center" cellpadding="0" cellspacing="0" border="0" class="OraTabledata">      
                           <logic:iterate id="question" name="module" type="gov.nih.nci.ncicb.cadsr.common.resource.Question" property="questions" indexId="questionIndex" >                           
                             <bean:size id="questionSize" name="module" property="questions" />
+							
                             <tr class="OraTabledata">
                               <td class="OraFieldText" width="50">&nbsp;</td>
                               <td height="1"  class="OraFieldText">                               
@@ -97,6 +98,13 @@
                                      <td class="OraFieldText">
                                 		<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" />
 										<html:hidden property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" value="false" />
+
+										<logic:equal name="question" property="deDerived" value="true">
+											(DE <b>IS</b> derived)
+										</logic:equal>
+										<logic:notEqual name="question" property="deDerived" value="true">
+											(DE <b>IS NOT</b> derived)
+										</logic:notEqual>
                                      </td>
                                     </tr>
 
@@ -147,6 +155,13 @@
                                      <td class="OraFieldText">
 									<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" />
 									<html:hidden property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" value="false" />
+
+									<logic:equal name="question" property="deDerived" value="true">
+										(DE <b>IS</b> derived)
+									</logic:equal>
+									<logic:notEqual name="question" property="deDerived" value="true">
+										(DE <b>IS NOT</b> derived)
+									</logic:notEqual>
                                      </td>
                                     </tr>
                                      <tr class="OraTabledata">

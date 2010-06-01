@@ -635,6 +635,12 @@ function clearProtocol() {
                             <td class="OraFieldText">
         			    <html:radio property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>' value="No" >No </html:radio>
 				    <html:radio property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>' value="Yes" >Yes</html:radio>
+							<logic:equal name="question" property="deDerived" value="true">
+								(DE <b>IS</b> derived)
+							</logic:equal>
+							<logic:notEqual name="question" property="deDerived" value="true">
+								(DE <b>IS NOT</b> derived)
+							</logic:notEqual>
                             </td>
                         </tr> 
                       <logic:present name="question" property="dataElement">                       
