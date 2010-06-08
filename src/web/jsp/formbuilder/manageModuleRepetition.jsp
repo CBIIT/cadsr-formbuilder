@@ -24,6 +24,7 @@
     <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache"/>
     <LINK rel="stylesheet" TYPE="text/css" HREF="<html:rewrite page='/css/blaf.css' />">
     <SCRIPT LANGUAGE="JavaScript1.1" SRC="<%=request.getContextPath()%>/js/checkbox.js"></SCRIPT>
+	<script type="text/javascript" src='<html:rewrite page="/js/collapsible.js"/>' ></script>
     <SCRIPT LANGUAGE="JavaScript">
     
     
@@ -137,7 +138,7 @@ function populateDefaultValue(defaultValidValue,defaultValidValueId, index){
 }
 </SCRIPT>
   </HEAD>
-  <BODY topmargin=0 bgcolor="#ffffff">
+  <BODY topmargin=0 bgcolor="#ffffff" onLoad="makeCollapsible(document.getElementsByTagName('table'), 'collapsible');">
     <% String urlPrefix = request.getContextPath();
      int dummyInstructionDisplayCount = 3;
 
