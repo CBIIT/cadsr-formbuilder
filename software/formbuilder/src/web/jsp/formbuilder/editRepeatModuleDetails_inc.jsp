@@ -194,9 +194,7 @@
                               <tr class="OraTabledata">
                                 <td class="OraFieldText" width="50">&nbsp;</td>
                                 <td colspan="2">
-                                  <table width="100%" align="center" cellpadding="0" cellspacing="0" border="0" class="OraBGAccentVeryDark">
-                                    <logic:iterate id="validValue" name="question" type="gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue" property="validValues" indexId="vvIndex">
-                                      <tr   class="OraTabledata">
+                                  <table width="100%" align="center" cellpadding="0" cellspacing="0" border="0" class="OraBGAccentVeryDark" id="collapsible"><logic:iterate id="validValue" name="question" type="gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue" property="validValues" indexId="vvIndex"><tr   class="OraTabledata">
                                         <td COLSPAN="2" class="OraFieldText" >&nbsp;</td>
                                       </tr>
                                       <tr   class="OraTabledata">
