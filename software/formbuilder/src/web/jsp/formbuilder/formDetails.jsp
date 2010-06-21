@@ -39,7 +39,7 @@
 <script type="text/javascript" src='<html:rewrite page="/js/collapsible.js"/>' ></script>
 
   </HEAD>
-  <BODY topmargin=0 bgcolor="#ffffff" onLoad="makeCollapsible(document.getElementsByTagName('table'), 'collapsible');">
+  <BODY topmargin=0 bgcolor="#ffffff" onLoad="makeCollapsible(document.getElementsByTagName('table'), 'collapsible');getToggleDisplay(document.getElementById('toggle_display'));">
     <% String urlPrefix = "";
      int dummyInstructionDisplayCount = 3;
 
@@ -170,6 +170,7 @@
         </tr>         
         <tr>
           <td class="OraHeaderSubSub" width="100%">Form Details</td>
+		<td align="right"><a href="javascript:getToggleDisplay(document.getElementById('toggle_display'));" id="toggle_display"></a></td>
           <td align="right">
           <bean:define id="formObj" name="<%=FormConstants.CRF%>" />
           <% Form aForm = (Form)formObj;
@@ -192,7 +193,7 @@
           </td>          
         </tr>
         <tr>
-          <td colspan=2><img height=1 src="i/beigedot.gif" width="99%" align=top border=0> </td>
+          <td colspan=3><img height=1 src="i/beigedot.gif" width="99%" align=top border=0> </td>
         </tr>
       </table>       
       
