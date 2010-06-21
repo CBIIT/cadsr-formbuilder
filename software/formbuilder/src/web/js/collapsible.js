@@ -4,12 +4,22 @@
 CLOSED_IMAGE='i/plus.png';
 OPEN_IMAGE='i/minus.png';
 
+CLOSED_VVs='i/closeAllVVs.gif';
+OPEN_VVs='i/openAllVVs.gif';
+
+CLOSED_STATUS='collapsibleClosed';
+OPEN_STATUS='collapsibleOpen';
+
+var collapsibleNodes = new Array();
+var collapsedStatus = OPEN_STATUS;
+
 /* makeCollapsible - makes a list have collapsible sublists
  * 
  * listElement - the element representing the list to make collapsible
  */
 function makeCollapsible(listElements, idVal){
 var i=0;
+collapsibleNodes = new Array();
 while (i<listElements.length) {
 
 	var listElement = listElements.item(i);
@@ -43,7 +53,9 @@ while (i<listElements.length) {
 			col.setAttribute('class','OraFieldText'); 
 			col.setAttribute('colspan','2');
 
-			col.appendChild(getClosedNode(list));
+			var clsdNode = getClosedNode(list);
+			col.appendChild(clsdNode);
+			collapsibleNodes.push(clsdNode);
 			  
 			row.appendChild(col);
 			listElement.firstChild.insertBefore(row, listElement.firstChild.firstChild);
@@ -59,7 +71,7 @@ while (i<listElements.length) {
 
 function getClosedNode(list) {
 
-	var node = createAnchorTag('collapsibleClosed');
+	var node = createAnchorTag(CLOSED_STATUS);
 	node.appendChild(createImgTag(CLOSED_IMAGE));
 	node.appendChild(createVVTextTag());
 
@@ -70,7 +82,7 @@ function getClosedNode(list) {
 
 function getOpenNode(list) {
 
-	var node = createAnchorTag('collapsibleOpen');
+	var node = createAnchorTag(OPEN_STATUS);
 	node.appendChild(createImgTag(OPEN_IMAGE));
 
 	node.onclick=createToggleFunction(node,list);
@@ -111,19 +123,89 @@ function createToggleFunction(toggleElement,sublistElements){
   return function(){
 
 	  var parent = toggleElement.parentNode;
+	  var newNode = null;
     // toggle status of toggle gadget
-    if (toggleElement.getAttribute('class')=='collapsibleClosed'){
-      parent.replaceChild(getOpenNode(sublistElements), toggleElement);
+    if (toggleElement.getAttribute('class')==CLOSED_STATUS){
+		newNode = getOpenNode(sublistElements);
     }else{
-    	parent.replaceChild(getClosedNode(sublistElements), toggleElement);
+		newNode = getClosedNode(sublistElements);
     }
+
+	parent.replaceChild(newNode, toggleElement);
+	swapCollapsibleNodes(toggleElement, newNode);
 
     // toggle display of sublists
     for (var i=0;i<sublistElements.length;i++){
       sublistElements[i].style.display=
           (sublistElements[i].style.display=='block')?'none':'block';
     }
-
   }
+}
 
+function swapCollapsibleNodes(existingNode, newNode) {
+	for (i=0;i<collapsibleNodes.length;i++) {
+		if (collapsibleNodes[i] == existingNode) {
+			collapsibleNodes[i] = newNode;
+			return;
+		}
+	}
+	collapsibleNodes.push(newNode);
+}
+
+function toggleAllCollapsible() {
+	if (document.createEventObject){ 
+		toggleInIE();
+	}
+	else {
+		toggleInMozilla();
+	}
+	return swapStatus();
+}
+
+function toggleInIE() {
+	for (i=0;i<collapsibleNodes.length;i++) {
+		if (collapsibleNodes[i].parentNode != null && collapsibleNodes[i].getAttribute('class') == collapsedStatus) {
+			var clickevent=document.createEventObject();
+			collapsibleNodes[i].fireEvent('onClick', clickevent);
+		}
+	}
+}
+
+function toggleInMozilla() {
+	for (i=0;i<collapsibleNodes.length;i++) {
+		if (collapsibleNodes[i].parentNode != null && collapsibleNodes[i].getAttribute('class') == collapsedStatus) {
+			var clickevent=document.createEvent("MouseEvents");
+			clickevent.initEvent("click", true, true);
+			collapsibleNodes[i].dispatchEvent(clickevent);
+		}
+	}
+}
+
+function swapStatus() {
+	if (collapsedStatus == CLOSED_STATUS){
+	  collapsedStatus = OPEN_STATUS;
+	  return "Close All";
+	}
+	else {
+		collapsedStatus = CLOSED_STATUS;
+		return "open All";
+	}
+}
+
+function getToggleDisplay(elem) {
+	toggleAllCollapsible();
+	var imgNode = null;
+	if (collapsedStatus == CLOSED_STATUS) {
+		imgNode = createImgTag(OPEN_VVs);
+	}
+	else {
+		imgNode = createImgTag(CLOSED_VVs);
+	}
+	imgNode.setAttribute('border', '0');
+	if (elem.hasChildNodes()) {
+		elem.replaceChild(imgNode, elem.firstChild);
+	}
+	else {
+		elem.appendChild(imgNode);
+	}
 }
