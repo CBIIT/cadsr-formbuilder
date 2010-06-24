@@ -138,7 +138,7 @@ function repeatDisplay(methodName) {
 %>
 </SCRIPT>
   </HEAD>
-  <BODY topmargin=0 bgcolor="#ffffff" <%=jumptoStr%> onLoad="makeCollapsible(document.getElementsByTagName('table'), 'collapsible');">
+  <BODY topmargin=0 bgcolor="#ffffff" <%=jumptoStr%> onLoad="makeCollapsible(document.getElementsByTagName('table'), 'collapsible');getToggleDisplay(document.getElementById('toggle_display'));">
 
 
       
@@ -311,6 +311,7 @@ function repeatDisplay(methodName) {
         </tr>         
         <tr>
           <td class="OraHeaderSubSub" width="100%">Form Details</td>
+			<td align="right"><a href="javascript:getToggleDisplay(document.getElementById('toggle_display'));" id="toggle_display"></a></td>
           <td align="right">
           <bean:define id="formObj" name="<%=FormConstants.CRF%>" />
           <% Form aForm = (Form)formObj;
@@ -331,7 +332,7 @@ function repeatDisplay(methodName) {
           </td>          
         </tr>
         <tr>
-          <td colspan=2><img height=1 src="<%=urlPrefix%>i/beigedot.gif" width="99%" align=top border=0> </td>
+          <td colspan=3><img height=1 src="<%=urlPrefix%>i/beigedot.gif" width="99%" align=top border=0> </td>
         </tr>
       </table>        
         <!-- If the Modules Collection is empty and deleted modules Exists -->
