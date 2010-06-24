@@ -138,7 +138,7 @@ function populateDefaultValue(defaultValidValue,defaultValidValueId, index){
 }
 </SCRIPT>
   </HEAD>
-  <BODY topmargin=0 bgcolor="#ffffff" onLoad="makeCollapsible(document.getElementsByTagName('table'), 'collapsible');">
+  <BODY topmargin=0 bgcolor="#ffffff" onLoad="makeCollapsible(document.getElementsByTagName('table'), 'collapsible');getToggleDisplay(document.getElementById('toggle_display'));">
     <% String urlPrefix = request.getContextPath();
      int dummyInstructionDisplayCount = 3;
 
@@ -165,9 +165,10 @@ function populateDefaultValue(defaultValidValue,defaultValidValueId, index){
         </tr>         
         <tr>
           <td class="OraHeaderSubSub" width="100%">Selected Module</td>
+			<td align="right"><a href="javascript:getToggleDisplay(document.getElementById('toggle_display'));" id="toggle_display"></a></td>
         </tr>
         <tr>
-          <td><img height=1 src="i/beigedot.gif" width="99%" align=top border=0> </td>
+          <td colspan="2"><img height=1 src="i/beigedot.gif" width="99%" align=top border=0> </td>
         </tr>
       </table>
         <logic:present name="<%=FormConstants.MODULE%>"> 
