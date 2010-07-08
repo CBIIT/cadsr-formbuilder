@@ -1346,7 +1346,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
             questionDefaultValidValueIdArr[index] = fvv==null? null: fvv.getValueIdseq();
         }    
           questionMandatoryArr[index] = question.isMandatory()? "Yes":"No";
-          questionEditableArr[index] = question.isEditable()? "Yes":"No";
+          questionEditableArr[index] = question.isNotEditable()? "Yes":"No";
           
       }//end of while         
         List ret = new ArrayList(2);
@@ -1631,7 +1631,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
         return;
     }
     private void setQuestionEditable(Question currQuestion, String editable){
-        currQuestion.setEditable("Yes".equalsIgnoreCase(editable));
+        currQuestion.setNotEditable("Yes".equalsIgnoreCase(editable));
         return;
     }
   private void initNullValues(Instruction instr, Module module)
@@ -1910,7 +1910,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
             questionChange.setDefaultValidValue(currQuestion.getDefaultValidValue());
             questionChange.setDefaultValue(currQuestion.getDefaultValue()); 
             questionChange.setMandatory(currQuestion.isMandatory());
-            questionChange.setEditable(currQuestion.isEditable());
+            questionChange.setNotEditable(currQuestion.isNotEditable());
         }
         return questionChange;
     }
@@ -1920,7 +1920,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
         if (orgQuestion.isMandatory()!= currQuestion.isMandatory()){
             return true;
         }
-        if (orgQuestion.isEditable()!= currQuestion.isEditable()){
+        if (orgQuestion.isNotEditable()!= currQuestion.isNotEditable()){
             return true;
         }
         //check default value

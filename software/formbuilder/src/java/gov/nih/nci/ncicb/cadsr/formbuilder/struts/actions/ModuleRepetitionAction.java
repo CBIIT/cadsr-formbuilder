@@ -337,7 +337,7 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
 				Question question = questions.get(j);
 				if (defaultArrEditableList.size()<i && defaultArrEditableList.get(i) != null) {
 					if (defaultArrEditableList.get(i).length < j) {
-						question.setEditable(defaultArrEditableList.get(i)[j]);
+						question.setNotEditable(defaultArrEditableList.get(i)[j]);
 					}
 				}
 			}
@@ -409,7 +409,7 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
                i++;
                if(qr!=null)
                {
-            	   qr.setEditable(editable);
+            	   qr.setNotEditable(editable);
                    List<QuestionRepitition> qrList = map.get(q.getQuesIdseq());
                    if(qrList==null)
                        qrList = new ArrayList<QuestionRepitition>();
@@ -573,7 +573,7 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
                         defaults[index] = question.getDefaultValue();
                         defaultVVIds[index] = "";
                     }
-                    editables[index] = question.isEditable();
+                    editables[index] = question.isNotEditable();
                     index++;
                 }
             }

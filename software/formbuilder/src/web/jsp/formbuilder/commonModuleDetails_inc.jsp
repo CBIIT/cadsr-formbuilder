@@ -133,7 +133,7 @@
                                       <td class="OraTableColumnHeader" width="10%" nowrap>
                                       <bean:message key="cadsr.formbuilder.form.question.editable"/> 
                                      </td>
-                                     <td class="OraFieldTextInstruction"><html:checkbox name="question" property="editable" disabled="true"/> </td>
+                                     <td class="OraFieldTextInstruction"><html:checkbox name="question" property="notEditable" disabled="true"/> </td>
                                     </tr>
                                    </table>                                                            
                                  </td>
