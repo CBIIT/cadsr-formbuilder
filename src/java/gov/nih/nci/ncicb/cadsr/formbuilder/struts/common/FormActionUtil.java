@@ -397,7 +397,7 @@ public class FormActionUtil
             {
                 q.setDefaultValue(qRep.getDefaultValue());
                 q.setDefaultValidValue(qRep.getDefaultValidValue());
-                q.setEditable(qRep.isEditable());
+                q.setNotEditable(qRep.isNotEditable());
             }
         }
     }
