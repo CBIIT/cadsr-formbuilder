@@ -614,7 +614,7 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
             {
                 newDefaults[i] = "";
                 newDefaultvvids[i] = "";
-                newEditables[i] = new Boolean(true);
+                newEditables[i] = new Boolean(false);
             }
 
         }
