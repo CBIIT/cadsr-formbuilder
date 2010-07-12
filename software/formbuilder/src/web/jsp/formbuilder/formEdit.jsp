@@ -602,7 +602,7 @@ function repeatDisplay(methodName) {
 	                                  <bean:message key="cadsr.formbuilder.form.question.editable"/> 
                                      </td>
                                      <td class="OraFieldText">
-						<html:checkbox name="question" property="editable" disabled="true"/>
+						<html:checkbox name="question" property="notEditable" disabled="true"/>
 					</td>
                                     </tr>
                                    </table>                                                            
