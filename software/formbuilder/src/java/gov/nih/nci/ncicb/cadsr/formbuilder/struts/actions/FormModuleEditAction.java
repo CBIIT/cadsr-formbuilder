@@ -1631,7 +1631,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
         return;
     }
     private void setQuestionEditable(Question currQuestion, String editable){
-        currQuestion.setNotEditable("No".equalsIgnoreCase(editable));
+        currQuestion.setNotEditable("Yes".equalsIgnoreCase(editable));
         return;
     }
   private void initNullValues(Instruction instr, Module module)
