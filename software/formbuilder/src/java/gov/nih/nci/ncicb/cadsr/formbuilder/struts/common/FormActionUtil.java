@@ -399,6 +399,9 @@ public class FormActionUtil
                 q.setDefaultValidValue(qRep.getDefaultValidValue());
                 q.setNotEditable(qRep.isNotEditable());
             }
+            else {
+            	q.setNotEditable(false);
+            }
         }
     }
 
