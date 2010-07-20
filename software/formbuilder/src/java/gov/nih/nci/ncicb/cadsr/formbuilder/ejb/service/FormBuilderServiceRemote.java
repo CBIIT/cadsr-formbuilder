@@ -236,5 +236,7 @@ public interface FormBuilderServiceRemote {
     public Module saveQuestionRepititons(String moduleId,int repeatCount
             , Map<String,List<QuestionRepitition>> repititionMap,List<String> questionWithoutRepitions)
             throws RemoteException;
+    
+    public boolean isDEDerived(String deIdSeq) throws RemoteException;
                 
     }

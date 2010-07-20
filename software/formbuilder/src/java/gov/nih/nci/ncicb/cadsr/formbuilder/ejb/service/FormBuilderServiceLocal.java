@@ -136,4 +136,6 @@ public interface FormBuilderServiceLocal  {
       public Collection getAllDocumentTypes() throws DMLException;
       
       public AdminComponentType getComponentType(String publicId, String version);
+      
+      public boolean isDEDerived(String deIdSeq);
 }
