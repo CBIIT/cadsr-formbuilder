@@ -192,5 +192,7 @@ public interface FormBuilderServiceDelegate {
                 throws FormBuilderException;              
     
     public AdminComponentType getComponentType(String publicId, String version);
+    
+    public boolean isDEDerived(String deIdSeq);
 
 }

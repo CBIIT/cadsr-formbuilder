@@ -1685,5 +1685,10 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
     	AdminComponentDAO adminCompDAO = daoFactory.getAdminComponentDAO();
     	return adminCompDAO.getAdminComponentType(publicId, version);
     }
+    
+    public boolean isDEDerived(String deIdSeq) {
+    	DataElementDAO deDAO = daoFactory.getDataElementDAO();
+    	return deDAO.isDEDerived(deIdSeq);
+    }
 
 }
