@@ -112,6 +112,7 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
          //return mapping.findForward(FAILURE);
       }
     
+      boolean isDEDerived = service.isDEDerived(de.getIdseq());
       Question q = new QuestionTransferObject();
       module.setForm(crf);
       q.setModule(module);
@@ -131,6 +132,7 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
       q.setContext(crf.getContext());
 
       q.setDisplayOrder(displayOrder);
+      q.setDeDerived(isDEDerived);
 
       newQuestions.add(q);        
     }//end of for
