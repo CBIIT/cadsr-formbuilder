@@ -39,6 +39,8 @@ function populateDefaultValue(defaultValidValue,defaultValidValueId, index){
     }
     objQuestionDefaultValue.value = defaultValidValue;
     objQuestionDefaultValidValueId.value = defaultValidValueId;
+
+    setEditable(objQuestionDefaultValue, '<%= FormConstants.QUESTION_EDITABLES+"['+index+']"%>');
 }
 
 
@@ -317,6 +319,20 @@ function clearProtocol() {
   		document.forms[0].<%=FormConstants.QUESTION_INDEX%>.value=questionIndex;
   		document.forms[0].submit();
     }
+  }
+
+  function setEditable(defValElem, editableFld) {
+	  var editFld = document.forms[0][editableFld][0];
+	  if (defValElem != null && editFld != null) {
+		  if (defValElem.value != null && defValElem.value != '') {
+			  editFld.checked = false;
+			  editFld.disabled = false;
+			}
+			else {
+				editFld.checked = true;
+				editFld.disabled = true;
+			}
+		}
   }
 
 -->
@@ -633,14 +649,21 @@ function clearProtocol() {
                               <bean:message key="cadsr.formbuilder.form.question.editable"/> 
                             </td>                      
                             <td class="OraFieldText">
-        			    <html:radio property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>' value="No" >No </html:radio>
-				    <html:radio property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>' value="Yes" >Yes</html:radio>
+        			    
 							<logic:equal name="question" property="deDerived" value="true">
-								(DE <b>IS</b> derived)
+								<html:checkbox property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>' disabled="true" />
+								&nbsp;&nbsp;<font color="gray" size="2"><i>Data Element is derived</i></font>
 							</logic:equal>
+
 							<logic:notEqual name="question" property="deDerived" value="true">
-								(DE <b>IS NOT</b> derived)
+								<logic:empty name='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>'>
+									<html:checkbox property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>' disabled="true" />
+								</logic:empty>
+								<logic:notEmpty name='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>'>
+									<html:checkbox property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>'/>
+								</logic:notEmpty>
 							</logic:notEqual>
+								<html:hidden property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>' value="false" />
                             </td>
                         </tr> 
                       <logic:present name="question" property="dataElement">                       
@@ -713,8 +736,14 @@ function clearProtocol() {
                             <html:hidden property='<%=FormConstants.QUESTION_DEFAULT_VALIDVALUE_IDS+"["+questionIndex+"]"%>'/>
                             </logic:notEmpty>    
                             <logic:empty name="question" property="validValues">                                    
-                              <html:hidden property='<%=FormConstants.QUESTION_DEFAULT_VALIDVALUE_IDS+"["+questionIndex+"]"%>' />
-                              <html:text property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>' size="70"/>
+								<logic:equal name="question" property="deDerived" value="true">
+		                            <html:text property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>' readonly="true" size="70"/>
+		                            <a href="javascript:populateDefaultValue('','', '<%=questionIndex%>')">Clear</a>                          
+								</logic:equal>
+								<logic:notEqual name="question" property="deDerived" value="true">
+									<html:hidden property='<%=FormConstants.QUESTION_DEFAULT_VALIDVALUE_IDS+"["+questionIndex+"]"%>' />
+                              		<html:text property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>' size="70" onkeyup='<%= "setEditable(this, '"+ FormConstants.QUESTION_EDITABLES+"["+questionIndex +"]')" %>' />
+								</logic:notEqual>
                             </logic:empty>    
                             </td>
                         </tr>                       
@@ -722,6 +751,7 @@ function clearProtocol() {
 
 
 <%--  value domain details--%>
+				
 			   <logic:present name="question" property="dataElement">
                             <logic:present name="question" property="dataElement.valueDomain">
                          	<tr class="OraTabledata">
@@ -779,6 +809,7 @@ function clearProtocol() {
                                     </tr>
                             </logic:present>
                            </logic:present>
+						
 <%-- end of value domain details--%>
 
 
@@ -787,7 +818,8 @@ function clearProtocol() {
                       
                       <logic:present name="question">
                       <!-- Empty ValidValues -->
-                      <logic:empty name="question" property="validValues">                           
+                      <logic:empty name="question" property="validValues">
+						                         
                           <tr class="OraTabledata">
                             <td class="OraTabledata" width="50">&nbsp;</td>
                             <td class="OraTabledata" align="right" width="90%">                                                                        
@@ -820,9 +852,11 @@ function clearProtocol() {
                                 </table>                                                                                                            
                             </td>
                           </tr> 
+							
                         </logic:empty>
                       <!-- ValidValues not Empty -->
                       <logic:notEmpty name="question" property="validValues">                           
+						
                           <tr class="OraTabledata">
                             
                             <td  colspan="2" width="90%">
@@ -903,9 +937,11 @@ function clearProtocol() {
                                              	formattedValidValue = StringUtils.getValidJSString(formattedValidValue);
                                              }	
                                            %>  
+										<logic:notEqual name="question" property="deDerived" value="true">
                                           <a href="javascript:populateDefaultValue('<%=formattedValidValue%>', '<%=validValue.getValueIdseq()%>', '<%=questionIndex%>')">
                                              Set as Question Default Value
                                           </a>                          
+										</logic:notEqual>
                                            </td>
                                             <td align="center">
                                               <logic:notEqual value="<%= String.valueOf(validValueSize.intValue()-1) %>" name="validValueIndex">
@@ -1127,6 +1163,7 @@ function clearProtocol() {
                               </table>
                             </td>
                           </tr>
+							
                         </logic:notEmpty>                                                                   
                       </logic:present>                  
                   </table>

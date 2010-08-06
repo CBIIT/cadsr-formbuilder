@@ -919,6 +919,11 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
                         questionDao.updateQuestAttr(currQuestionChange, getUserName().toUpperCase());
                     }
                     
+                    // if the DE is derived, default value cannot be set for the question
+                    if (currQuestionChange.isDeDerived()) {
+                    	currQuestionChange.setDefaultValue("");
+                    }
+                    
                     
                     InstructionChanges qInstrChanges =
                         currQuestionChange.getInstrctionChanges();

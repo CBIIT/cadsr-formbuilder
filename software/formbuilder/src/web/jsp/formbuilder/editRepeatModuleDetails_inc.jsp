@@ -96,15 +96,21 @@
                                           <bean:message key="cadsr.formbuilder.form.question.editable"/> 
                                      </td>
                                      <td class="OraFieldText">
-                                		<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" />
-										<html:hidden property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" value="false" />
-
 										<logic:equal name="question" property="deDerived" value="true">
-											(DE <b>IS</b> derived)
+											<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" disabled="true"/>
+											<font color="gray" size="2"><i>Data Element is derived</i></font>
 										</logic:equal>
+
 										<logic:notEqual name="question" property="deDerived" value="true">
-											(DE <b>IS NOT</b> derived)
+											<logic:empty name='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>'>
+												<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" disabled="true"/>
+											</logic:empty>
+											<logic:notEmpty name='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>'>
+												<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>"/>
+											</logic:notEmpty>
 										</logic:notEqual>
+
+										<html:hidden property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" value="false" />
                                      </td>
                                     </tr>
 
@@ -126,7 +132,7 @@
                                         </td>
                                         <td class="OraFieldText">
                                          <html:hidden property="<%=FormConstants.QUESTION_DEFAULT_VV_IDS+"["+defaultIndex+"]"%>" value="" />
-                                         <html:text  styleClass="OraFieldText"  property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>' size="70" />         
+                                         <html:text  styleClass="OraFieldText"  property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>' size="70" onkeyup='<%= "setEditable(this, '"+ FormConstants.QUESTION_EDITABLES+"["+defaultIndex +"]')" %>' />         
                                         </td> 
                                       </tr>
                                        </logic:empty>
@@ -153,15 +159,21 @@
                                           <bean:message key="cadsr.formbuilder.form.question.editable"/> 
                                      </td>
                                      <td class="OraFieldText">
-									<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" />
-									<html:hidden property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" value="false" />
-
 									<logic:equal name="question" property="deDerived" value="true">
-										(DE <b>IS</b> derived)
+										<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" disabled="true"/>
+										<font color="gray" size="2"><i>Data Element is derived</i></font>
 									</logic:equal>
+
 									<logic:notEqual name="question" property="deDerived" value="true">
-										(DE <b>IS NOT</b> derived)
+										<logic:empty name="<%=FormConstants.QUESTION_DEFAULT_VV_IDS+"["+defaultIndex+"]"%>">
+											<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" disabled="true" />
+										</logic:empty>
+										<logic:notEmpty name="<%=FormConstants.QUESTION_DEFAULT_VV_IDS+"["+defaultIndex+"]"%>">
+											<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" />
+										</logic:notEmpty>
 									</logic:notEqual>
+
+									<html:hidden property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" value="false" />
                                      </td>
                                     </tr>
                                      <tr class="OraTabledata">
@@ -179,8 +191,15 @@
                                            Default value
                                         </td>
                                         <td class="OraFieldText">
-                                         <html:hidden property="<%=FormConstants.QUESTION_DEFAULT_VV_IDS+"["+defaultIndex+"]"%>" value="" />
-                                         <html:text  styleClass="OraFieldText"  property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>' size="70" />         
+											<logic:equal name="question" property="deDerived" value="true">
+												<html:hidden property="<%=FormConstants.QUESTION_DEFAULT_VV_IDS+"["+defaultIndex+"]"%>" value="" />
+                                         		<html:text  styleClass="OraFieldText"  property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>' size="70" readonly="true" />
+											</logic:equal>
+		
+                                         <logic:notEqual name="question" property="deDerived" value="true">
+											<html:hidden property="<%=FormConstants.QUESTION_DEFAULT_VV_IDS+"["+defaultIndex+"]"%>" value="" />
+                                        	<html:text  styleClass="OraFieldText"  property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>' size="70" onkeyup='<%= "setEditable(this, '"+ FormConstants.QUESTION_EDITABLES+"["+defaultIndex +"]')" %>'/>
+										</logic:notEqual>         
                                         </td>                                   
                                        </logic:empty>
                                     </tr>                                    
@@ -204,9 +223,11 @@
                                           <% String formattedValidValue = validValue.getLongName();
                                              formattedValidValue = StringUtils.getValidJSString(formattedValidValue);
                                            %>  
+											<logic:notEqual name="question" property="deDerived" value="true">
                                           <a href="javascript:populateDefaultValue('<%=formattedValidValue%>','<%=validValue.getValueIdseq()%>','<%=defaultIndex%>')">
                                              Click here to set as default
                                           </a>                                           
+											</logic:notEqual>
                                         </td>
                                       </tr>
                                       <tr   class="OraTabledata">
