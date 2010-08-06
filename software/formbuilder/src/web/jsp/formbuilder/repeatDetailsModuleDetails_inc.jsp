@@ -100,7 +100,10 @@
                                           <bean:message key="cadsr.formbuilder.form.question.editable"/> 
                                         </td>                      
                                         <td class="OraFieldText">
-											<html:checkbox name="question" property="notEditable" disabled="true"/>
+											<html:checkbox name="question" property="editable" disabled="true"/>
+											<logic:equal name="question" property="deDerived" value="true">
+												<font color="gray" size="2"><i>Data Element is derived</i></font>
+											</logic:equal>
                                         </td>
                                     </tr>
                                       <tr class="OraTabledata">
@@ -135,7 +138,10 @@
                                           <bean:message key="cadsr.formbuilder.form.question.editable"/> 
                                         </td>                      
                                         <td class="OraFieldText">
-											<html:checkbox name="question" property="notEditable" disabled="true"/>
+											<html:checkbox name="question" property="editable" disabled="true"/>
+											<logic:equal name="question" property="deDerived" value="true">
+												<font color="gray" size="2"><i>Data Element is derived</i></font>
+											</logic:equal>
                                         </td>
                                     </tr>
                                      <tr class="OraTabledata">
