@@ -115,8 +115,7 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
     public ActionForward deleteRepetitions(ActionMapping mapping,
                                            ActionForm deleteForm,
                                            HttpServletRequest request,
-                                           HttpServletResponse response) throws IOException,
-                                                                                                            ServletException
+                                           HttpServletResponse response) throws IOException, ServletException
     {
         DynaActionForm dynaForm = (DynaActionForm)deleteForm;
         List<Module> moduleList =
@@ -337,7 +336,7 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
 				Question question = questions.get(j);
 				if (defaultArrEditableList.size()<i && defaultArrEditableList.get(i) != null) {
 					if (defaultArrEditableList.get(i).length < j) {
-						question.setNotEditable(defaultArrEditableList.get(i)[j]);
+						question.setEditable(defaultArrEditableList.get(i)[j]);
 					}
 				}
 			}
@@ -390,15 +389,25 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
                if(!vvId.equalsIgnoreCase(""))
                {
                    qr = new QuestionRepititionTransferObject();
-                   FormValidValue vv = new FormValidValueTransferObject();
-                   vv.setValueIdseq(vvId);
-                   qr.setDefaultValidValue(vv);
+                   
+                   // set default value only if the DE is not derived
+                   if (!q.isDeDerived()) {
+                	   FormValidValue vv = new FormValidValueTransferObject();
+                       vv.setValueIdseq(vvId);
+                       qr.setDefaultValidValue(vv);
+                   }
+                   
                    qr.setRepeatSequence(j+1);
                }
                else if(!value.equalsIgnoreCase(""))
                {
                    qr = new QuestionRepititionTransferObject();
-                   qr.setDefaultValue(value);
+                   
+                // set default value only if the DE is not derived
+                   if (!q.isDeDerived()) {
+                	   qr.setDefaultValue(value);
+                   }
+                   
                    qr.setRepeatSequence(j+1);
                }
                else {
@@ -409,7 +418,7 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
                i++;
                if(qr!=null)
                {
-            	   qr.setNotEditable(editable);
+            	   qr.setEditable(editable);
                    List<QuestionRepitition> qrList = map.get(q.getQuesIdseq());
                    if(qrList==null)
                        qrList = new ArrayList<QuestionRepitition>();
@@ -573,7 +582,7 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
                         defaults[index] = question.getDefaultValue();
                         defaultVVIds[index] = "";
                     }
-                    editables[index] = question.isNotEditable();
+                    editables[index] = question.isEditable();
                     index++;
                 }
             }
@@ -597,6 +606,7 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
         Boolean[] editables = (Boolean[])dynaForm.get(QUESTION_EDITABLES);
         String[] defaultvvids =
             (String[])dynaForm.get(QUESTION_DEFAULT_VV_IDS);
+        int noOfQuestions = module.getQuestions().size();
         int totalSize =
             defaults.length + (numberOfRepeats * module.getQuestions().size());
         String[] newDefaults = new String[totalSize];
@@ -612,9 +622,16 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
                 newEditables[i] = editables[i];
             } else
             {
+            	Question newQues = module.getQuestions().get(i % noOfQuestions);
+            	
                 newDefaults[i] = "";
                 newDefaultvvids[i] = "";
-                newEditables[i] = new Boolean(false);
+                if (newQues.isDeDerived()) {
+                	newEditables[i] = new Boolean(false);
+                }
+                else {
+                	newEditables[i] = new Boolean(true);
+                }
             }
 
         }

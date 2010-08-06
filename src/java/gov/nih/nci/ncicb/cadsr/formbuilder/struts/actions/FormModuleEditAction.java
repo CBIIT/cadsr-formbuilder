@@ -1068,6 +1068,8 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
        QuestionChange questionChange = new QuestionChangeTransferObject();
        questionChange.setQuestionId(currQuestion.getQuesIdseq());
 
+       questionChange.setDeDerived(currQuestion.isDeDerived());
+       
        //  if the LongName or DE Association or
        // DisplayOrder has been updated add the Question to Edited List.
        if(!orgQuestion.getLongName().equals(currQuestion.getLongName())||
@@ -1323,7 +1325,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
     return questionArr;
   }
 
-    private List<String[]> getQuestionAttrAsArray(List questions) {
+    private List<Object[]> getQuestionAttrAsArray(List questions) {
       if (questions == null) {
         return null;
       }
@@ -1332,7 +1334,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
       String[] questionDefaultValueArr = new String[questions.size()];
       String[] questionDefaultValidValueIdArr = new String[questions.size()];
       String[] questionMandatoryArr = new String[questions.size()];
-      String[] questionEditableArr = new String[questions.size()];
+      Boolean[] questionEditableArr = new Boolean[questions.size()];
 
       while (iterate.hasNext()) {
         int index = iterate.nextIndex();
@@ -1346,7 +1348,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
             questionDefaultValidValueIdArr[index] = fvv==null? null: fvv.getValueIdseq();
         }    
           questionMandatoryArr[index] = question.isMandatory()? "Yes":"No";
-          questionEditableArr[index] = question.isNotEditable()? "Yes":"No";
+          questionEditableArr[index] = question.isEditable();
           
       }//end of while         
         List ret = new ArrayList(2);
@@ -1534,7 +1536,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
   
     private void  setQuestionFromAllArray(Module module, String[] questionArr, String[] questionInstructionsArr, 
             String[] questionDefaultValuesArr, String[] questionDefaultValidValueIDsArr, String[] questionMandatory,
-            String[] questionEditable, String[]  validValueInstructionArr, String[] valueMeaningText, String[] valueMeaningDesc){
+            Boolean[] questionEditable, String[]  validValueInstructionArr, String[] valueMeaningText, String[] valueMeaningDesc){
         List questions = module.getQuestions();
         if(questions==null)
         {
@@ -1630,8 +1632,8 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
         currQuestion.setMandatory("Yes".equalsIgnoreCase(mandatory));
         return;
     }
-    private void setQuestionEditable(Question currQuestion, String editable){
-        currQuestion.setNotEditable("Yes".equalsIgnoreCase(editable));
+    private void setQuestionEditable(Question currQuestion, Boolean editable){
+        currQuestion.setEditable(editable);
         return;
     }
   private void initNullValues(Instruction instr, Module module)
@@ -1910,7 +1912,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
             questionChange.setDefaultValidValue(currQuestion.getDefaultValidValue());
             questionChange.setDefaultValue(currQuestion.getDefaultValue()); 
             questionChange.setMandatory(currQuestion.isMandatory());
-            questionChange.setNotEditable(currQuestion.isNotEditable());
+            questionChange.setEditable(currQuestion.isEditable());
         }
         return questionChange;
     }
@@ -1920,7 +1922,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
         if (orgQuestion.isMandatory()!= currQuestion.isMandatory()){
             return true;
         }
-        if (orgQuestion.isNotEditable()!= currQuestion.isNotEditable()){
+        if (orgQuestion.isEditable()!= currQuestion.isEditable()){
             return true;
         }
         //check default value
@@ -1971,11 +1973,11 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
         moduleEditForm.set(FORM_VALID_VALUE_INSTRUCTIONS, (String[])valueMeaningAttr.get(3));
 
         //update default values, mandatory.
-         List<String[]> defaults = getQuestionAttrAsArray(questions);
+         List<Object[]> defaults = getQuestionAttrAsArray(questions);
          moduleEditForm.set(QUESTION_DEFAULTVALUES, (String[])defaults.get(0));
          moduleEditForm.set(QUESTION_DEFAULT_VALIDVALUE_IDS, (String[])defaults.get(1));
          moduleEditForm.set(QUESTION_MANDATORIES, (String[])defaults.get(2));
-         moduleEditForm.set(QUESTION_EDITABLES, (String[])defaults.get(3));
+         moduleEditForm.set(QUESTION_EDITABLES, (Boolean[])defaults.get(3));
 
         return;
     }
@@ -1996,7 +1998,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
         String[] questionDefaultValidValueIdArr = (String[]) moduleEditForm.get(QUESTION_DEFAULT_VALIDVALUE_IDS);
         //question mandatory
         String[] questionMandatoryArr = (String[]) moduleEditForm.get(QUESTION_MANDATORIES);
-        String[] questionEditableArr = (String[]) moduleEditForm.get(QUESTION_EDITABLES);
+        Boolean[] questionEditableArr = (Boolean[]) moduleEditForm.get(QUESTION_EDITABLES);
         setQuestionFromAllArray(module,questionArr, 
                                 questionInstructionsArr, 
                                 questionDefaultValueArr,  

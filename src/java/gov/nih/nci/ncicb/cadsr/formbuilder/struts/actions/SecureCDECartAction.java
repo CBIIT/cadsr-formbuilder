@@ -133,6 +133,10 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
 
       q.setDisplayOrder(displayOrder);
       q.setDeDerived(isDEDerived);
+      
+      if (!isDEDerived) {
+    	  q.setEditable(true);
+      }
 
       newQuestions.add(q);        
     }//end of for

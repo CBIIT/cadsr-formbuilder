@@ -135,6 +135,22 @@ function populateDefaultValue(defaultValidValue,defaultValidValueId, index){
     var objQuestionDefaultValidValueId = objForm0['<%=FormConstants.QUESTION_DEFAULT_VV_IDS%>[' + index + ']'];
     objQuestionDefaultValue.value = defaultValidValue;
     objQuestionDefaultValidValueId.value = defaultValidValueId;
+
+    setEditable(objQuestionDefaultValue, '<%= FormConstants.QUESTION_EDITABLES+"['+index+']"%>');
+}
+
+function setEditable(defValElem, editableFld) {
+	  var editFld = document.forms[0][editableFld][0];
+	  if (defValElem != null && editFld != null) {
+		  if (defValElem.value != null && defValElem.value != '') {
+			  editFld.checked = false;
+			  editFld.disabled = false;
+			}
+			else {
+				editFld.checked = true;
+				editFld.disabled = true;
+			}
+		}
 }
 </SCRIPT>
   </HEAD>

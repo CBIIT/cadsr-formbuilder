@@ -397,10 +397,15 @@ public class FormActionUtil
             {
                 q.setDefaultValue(qRep.getDefaultValue());
                 q.setDefaultValidValue(qRep.getDefaultValidValue());
-                q.setNotEditable(qRep.isNotEditable());
+                q.setEditable(qRep.isEditable());
             }
             else {
-            	q.setNotEditable(false);
+            	if (q.isDeDerived()) {
+            		q.setEditable(false);
+            	}
+            	else {
+            		q.setEditable(true);
+            	}
             }
         }
     }
