@@ -102,7 +102,7 @@
                                         <td class="OraFieldText">
 											<html:checkbox name="question" property="editable" disabled="true"/>
 											<logic:equal name="question" property="deDerived" value="true">
-												<font color="gray" size="2"><i>Data Element is derived</i></font>
+												<font color="gray" size="2"><i>Cannot be changed because Data Element is derived</i></font>
 											</logic:equal>
                                         </td>
                                     </tr>
@@ -140,7 +140,7 @@
                                         <td class="OraFieldText">
 											<html:checkbox name="question" property="editable" disabled="true"/>
 											<logic:equal name="question" property="deDerived" value="true">
-												<font color="gray" size="2"><i>Data Element is derived</i></font>
+												<font color="gray" size="2"><i>Cannot be changed because Data Element is derived</i></font>
 											</logic:equal>
                                         </td>
                                     </tr>
