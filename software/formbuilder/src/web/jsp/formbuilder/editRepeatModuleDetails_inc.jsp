@@ -98,14 +98,14 @@
                                      <td class="OraFieldText">
 										<logic:equal name="question" property="deDerived" value="true">
 											<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" disabled="true"/>
-											<font color="gray" size="2"><i>Data Element is derived</i></font>
+											<font color="gray" size="2"><i>Cannot be changed because Data Element is derived</i></font>
 										</logic:equal>
 
 										<logic:notEqual name="question" property="deDerived" value="true">
-											<logic:empty name='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>'>
+											<logic:empty name="moduleEditForm" property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>'>
 												<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" disabled="true"/>
 											</logic:empty>
-											<logic:notEmpty name='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>'>
+											<logic:notEmpty name="moduleEditForm" property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>'>
 												<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>"/>
 											</logic:notEmpty>
 										</logic:notEqual>
@@ -161,7 +161,7 @@
                                      <td class="OraFieldText">
 									<logic:equal name="question" property="deDerived" value="true">
 										<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" disabled="true"/>
-										<font color="gray" size="2"><i>Data Element is derived</i></font>
+										<font color="gray" size="2"><i>Cannot be changed because Data Element is derived</i></font>
 									</logic:equal>
 
 									<logic:notEqual name="question" property="deDerived" value="true">

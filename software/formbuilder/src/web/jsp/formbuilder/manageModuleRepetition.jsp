@@ -141,14 +141,17 @@ function populateDefaultValue(defaultValidValue,defaultValidValueId, index){
 
 function setEditable(defValElem, editableFld) {
 	  var editFld = document.forms[0][editableFld][0];
+	  var hiddenFld = document.forms[0][editableFld][1];
 	  if (defValElem != null && editFld != null) {
-		  if (defValElem.value != null && defValElem.value != '') {
-			  editFld.checked = false;
-			  editFld.disabled = false;
-			}
-			else {
+		  if (defValElem.value == null || defValElem.value == '') {
 				editFld.checked = true;
 				editFld.disabled = true;
+				hiddenFld.value=true;
+			}
+			else {
+				editFld.checked = false;
+				editFld.disabled = false;
+				hiddenFld.value=false;
 			}
 		}
 }
