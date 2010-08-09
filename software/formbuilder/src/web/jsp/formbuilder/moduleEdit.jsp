@@ -323,17 +323,20 @@ function clearProtocol() {
 
   function setEditable(defValElem, editableFld) {
 	  var editFld = document.forms[0][editableFld][0];
+	  var hiddenFld = document.forms[0][editableFld][1];
 	  if (defValElem != null && editFld != null) {
-		  if (defValElem.value != null && defValElem.value != '') {
-			  editFld.checked = false;
-			  editFld.disabled = false;
-			}
-			else {
+		  if (defValElem.value == null || defValElem.value == '') {
 				editFld.checked = true;
 				editFld.disabled = true;
+				hiddenFld.value=true;
+			}
+			else {
+				editFld.checked = false;
+				editFld.disabled = false;
+				hiddenFld.value=false;
 			}
 		}
-  }
+	}
 
 -->
 <%
@@ -652,14 +655,14 @@ function clearProtocol() {
         			    
 							<logic:equal name="question" property="deDerived" value="true">
 								<html:checkbox property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>' disabled="true" />
-								&nbsp;&nbsp;<font color="gray" size="2"><i>Data Element is derived</i></font>
+								&nbsp;&nbsp;<font color="gray" size="2"><i>Cannot be changed because Data Element is derived</i></font>
 							</logic:equal>
 
 							<logic:notEqual name="question" property="deDerived" value="true">
-								<logic:empty name='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>'>
+								<logic:empty name="moduleEditForm" property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>'>
 									<html:checkbox property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>' disabled="true" />
 								</logic:empty>
-								<logic:notEmpty name='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>'>
+								<logic:notEmpty name="moduleEditForm" property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>'>
 									<html:checkbox property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>'/>
 								</logic:notEmpty>
 							</logic:notEqual>
