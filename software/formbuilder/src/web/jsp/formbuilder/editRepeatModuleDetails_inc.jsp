@@ -102,15 +102,15 @@
 										</logic:equal>
 
 										<logic:notEqual name="question" property="deDerived" value="true">
-											<logic:empty name="moduleEditForm" property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>'>
+											<logic:empty name="moduleRepeatForm" property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>'>
 												<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" disabled="true"/>
 											</logic:empty>
-											<logic:notEmpty name="moduleEditForm" property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>'>
+											<logic:notEmpty name="moduleRepeatForm" property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>'>
 												<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>"/>
 											</logic:notEmpty>
 										</logic:notEqual>
 
-										<html:hidden property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" value="false" />
+										<html:hidden property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" value="<%= String.valueOf(((Boolean[])((org.apache.struts.action.DynaActionForm)session.getAttribute("moduleRepeatForm")).get(FormConstants.QUESTION_EDITABLES))[defaultIndex]) %>" />
                                      </td>
                                     </tr>
 
@@ -165,15 +165,16 @@
 									</logic:equal>
 
 									<logic:notEqual name="question" property="deDerived" value="true">
-										<logic:empty name="<%=FormConstants.QUESTION_DEFAULT_VV_IDS+"["+defaultIndex+"]"%>">
+										<logic:empty name="moduleRepeatForm" property="<%=FormConstants.QUESTION_DEFAULT_VV_IDS+"["+defaultIndex+"]"%>">
 											<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" disabled="true" />
 										</logic:empty>
-										<logic:notEmpty name="<%=FormConstants.QUESTION_DEFAULT_VV_IDS+"["+defaultIndex+"]"%>">
+										<logic:notEmpty name="moduleRepeatForm" property="<%=FormConstants.QUESTION_DEFAULT_VV_IDS+"["+defaultIndex+"]"%>">
 											<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" />
 										</logic:notEmpty>
 									</logic:notEqual>
 
-									<html:hidden property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" value="false" />
+									<html:hidden property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" value="<%= String.valueOf(((Boolean[])((org.apache.struts.action.DynaActionForm)session.getAttribute("moduleRepeatForm")).get(FormConstants.QUESTION_EDITABLES))[defaultIndex]) %>" />
+									
                                      </td>
                                     </tr>
                                      <tr class="OraTabledata">
