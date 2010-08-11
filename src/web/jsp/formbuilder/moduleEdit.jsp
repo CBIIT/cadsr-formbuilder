@@ -666,7 +666,7 @@ function clearProtocol() {
 									<html:checkbox property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>'/>
 								</logic:notEmpty>
 							</logic:notEqual>
-								<html:hidden property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>' value="false" />
+								<html:hidden property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>' value="<%= String.valueOf(((Boolean[])((org.apache.struts.action.DynaActionForm)session.getAttribute("moduleEditForm")).get(FormConstants.QUESTION_EDITABLES))[questionIndex.intValue()]) %>" />
                             </td>
                         </tr> 
                       <logic:present name="question" property="dataElement">                       
