@@ -401,6 +401,7 @@ public class FormActionUtil
             }
             else {
             	q.setDefaultValue(null);
+            	q.setDefaultValidValue(null);
             	if (q.isDeDerived()) {
             		q.setEditable(false);
             	}
