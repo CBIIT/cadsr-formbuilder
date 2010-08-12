@@ -400,6 +400,7 @@ public class FormActionUtil
                 q.setEditable(qRep.isEditable());
             }
             else {
+            	q.setDefaultValue(null);
             	if (q.isDeDerived()) {
             		q.setEditable(false);
             	}
