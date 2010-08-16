@@ -103,10 +103,10 @@
 
 										<logic:notEqual name="question" property="deDerived" value="true">
 											<logic:empty name="moduleRepeatForm" property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>'>
-												<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" disabled="true"/>
+												<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" disabled="true" onclick='<%= "checkHidden('"+ FormConstants.QUESTION_EDITABLES+"["+defaultIndex +"]')" %>'/>
 											</logic:empty>
 											<logic:notEmpty name="moduleRepeatForm" property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>'>
-												<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>"/>
+												<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" onclick='<%= "checkHidden('"+ FormConstants.QUESTION_EDITABLES+"["+defaultIndex +"]')" %>'/>
 											</logic:notEmpty>
 										</logic:notEqual>
 
@@ -160,16 +160,16 @@
                                      </td>
                                      <td class="OraFieldText">
 									<logic:equal name="question" property="deDerived" value="true">
-										<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" disabled="true"/>
+										<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" disabled="true" />
 										<font color="gray" size="2"><i>Cannot be changed because Data Element is derived</i></font>
 									</logic:equal>
 
 									<logic:notEqual name="question" property="deDerived" value="true">
 										<logic:empty name="moduleRepeatForm" property="<%=FormConstants.QUESTION_DEFAULT_VV_IDS+"["+defaultIndex+"]"%>">
-											<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" disabled="true" />
+											<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" disabled="true" onclick='<%= "checkHidden('"+ FormConstants.QUESTION_EDITABLES+"["+defaultIndex +"]')" %>'/>
 										</logic:empty>
 										<logic:notEmpty name="moduleRepeatForm" property="<%=FormConstants.QUESTION_DEFAULT_VV_IDS+"["+defaultIndex+"]"%>">
-											<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" />
+											<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" onclick='<%= "checkHidden('"+ FormConstants.QUESTION_EDITABLES+"["+defaultIndex +"]')" %>'/>
 										</logic:notEmpty>
 									</logic:notEqual>
 

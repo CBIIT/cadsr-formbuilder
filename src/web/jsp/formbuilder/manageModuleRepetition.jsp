@@ -155,6 +155,19 @@ function setEditable(defValElem, editableFld) {
 			}
 		}
 }
+
+function checkHidden(fld) {
+	var cbxFld = document.forms[0][fld][0];
+	var hdnFld = document.forms[0][fld][1];
+	
+	if (cbxFld.checked == true) {
+		hdnFld.value = 'true';
+	}
+	else {
+		hdnFld.value = 'false';
+	}
+}
+
 </SCRIPT>
   </HEAD>
   <BODY topmargin=0 bgcolor="#ffffff" onLoad="makeCollapsible(document.getElementsByTagName('table'), 'collapsible');getToggleDisplay(document.getElementById('toggle_display'));">
