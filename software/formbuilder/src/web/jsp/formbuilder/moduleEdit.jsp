@@ -338,6 +338,18 @@ function clearProtocol() {
 		}
 	}
 
+	function checkHidden(fld) {
+		var cbxFld = document.forms[0][fld][0];
+		var hdnFld = document.forms[0][fld][1];
+		
+		if (cbxFld.checked == true) {
+			hdnFld.value = 'true';
+		}
+		else {
+			hdnFld.value = 'false';
+		}
+	}
+
 -->
 <%
   CDEBrowserParams params = CDEBrowserParams.getInstance();
@@ -660,10 +672,10 @@ function clearProtocol() {
 
 							<logic:notEqual name="question" property="deDerived" value="true">
 								<logic:empty name="moduleEditForm" property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>'>
-									<html:checkbox property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>' disabled="true" />
+									<html:checkbox property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>' disabled="true" onclick='<%= "checkHidden('"+ FormConstants.QUESTION_EDITABLES+"["+questionIndex +"]')" %>'/>
 								</logic:empty>
 								<logic:notEmpty name="moduleEditForm" property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>'>
-									<html:checkbox property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>'/>
+									<html:checkbox property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>' onclick='<%= "checkHidden('"+ FormConstants.QUESTION_EDITABLES+"["+questionIndex +"]')" %>'/>
 								</logic:notEmpty>
 							</logic:notEqual>
 								<html:hidden property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>' value="<%= String.valueOf(((Boolean[])((org.apache.struts.action.DynaActionForm)session.getAttribute("moduleEditForm")).get(FormConstants.QUESTION_EDITABLES))[questionIndex.intValue()]) %>" />
