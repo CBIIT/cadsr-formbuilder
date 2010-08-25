@@ -667,7 +667,7 @@
     <target name="-do-load-options" if="found.load_options.sql" depends="-check-sql-files" description="Execute load_options.sql">
        <echo>Deploying caDSR database changes ${CADSR.DS.USER}/${CADSR.DS.PSWD}@${CADSR.DS.TNS.ENTRY} @ ${artifacts.dir}/sql/load_options.sql</echo>
         <exec dir="." executable="${SQL.EXE}" failonerror="true">
-            <arg line="-L ${CADSR.DS.USER}/${CADSR.DS.PSWD}@(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=${CADSR.DS.HOST})(PORT=${CADSR.DS.PORT})))(CONNECT_DATA=(SID=${CADSR.DS.TNS.ENTRY})))) @ ${artifacts.dir}/sql/load_options.sql" />
+            <arg line="-L ${CADSR.DS.USER}/${CADSR.DS.PSWD}@(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=${CADSR.DS.HOST})(PORT=${CADSR.DS.PORT})))(CONNECT_DATA=(SID=${CADSR.DS.TNS.ENTRY} @ ${artifacts.dir}/sql/load_options.sql" />
         </exec>
     </target>
 
