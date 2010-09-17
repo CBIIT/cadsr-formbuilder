@@ -535,9 +535,9 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 		
 		DynaActionForm dynaBean = (DynaActionForm)form;
 		String[] formIds = (String[])dynaBean.get("checkedFormIds");
+		
 		if (formIds != null) {
 			for (String formId: formIds) {
-				
 				Form crf = service.getFormDetails(formId);
 				CartObject co = getNativeObject(storedForms, formId);
 				objects.put(formId, crf);
@@ -553,6 +553,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 	
 		saveMessage("cadsr.common.formcart.save.success",request);
 		
+		dynaBean.set("cartAddFormId", "");
 		dynaBean.set("checkedFormIds", new String[]{});
 	} catch (Exception e) {
 		// TODO Auto-generated catch block

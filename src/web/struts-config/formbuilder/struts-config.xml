@@ -26,6 +26,7 @@
       <form-property name="moduleLongName" type="java.lang.String"/>   
       <form-property name="cdePublicId" type="java.lang.String"/>
       <form-property name="checkedFormIds" type="java.lang.String[]"/>
+      <form-property name="cartAddFormId" type="java.lang.String"/>
     </form-bean>
     <form-bean name="hrefCRFForm"
       type="gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean"
@@ -137,6 +138,20 @@
       type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormAction"
       validate="false">
       <forward name="success" path="/jsp/formbuilder/formResults.jsp"
+        redirect="false"/>
+    </action>
+    <action name="searchForm" path="/addFormToCartFromView" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormAction"
+      validate="false">
+      <forward name="success" path="/formDetailsAction.do?method=getFormDetails"
+        redirect="false"/>
+    </action>
+    <action name="searchForm" path="/addFormToCartFromEdit" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormAction"
+      validate="false">
+      <forward name="success" path="/formToEditAction.do?method=getFormToEdit"
         redirect="false"/>
     </action>
     <action name="searchForm" path="/formSearchFramedAction" parameter="method"
