@@ -5,8 +5,17 @@ if(confirm(message)) location.href = url;
 }
 // --->
 </SCRIPT>
-      <table width="25%" align="center" cellpadding="1" cellspacing="1" border="0" >
+      <table width="40%" align="center" cellpadding="1" cellspacing="1" border="0" >
         <tr >
+		<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
          <td>
             <a href="javascript:submitFormToSave('<%=NavigationConstants.SAVE_FORM%>')">
                 <html:img src='<%=urlPrefix+"i/save.gif"%>' border="0" alt="Save"/>
@@ -47,6 +56,23 @@ if(confirm(message)) location.href = url;
               <html:img src='<%=urlPrefix+"i/cancel.gif"%>' border="0" alt="Cancel"/>
 	          </html:link>               
           </td>               
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>
+				<html:link action='<%= "/addFormToCartFromEdit?method=addFormToCart" %>'
+ 	       		paramId = '<%= "checkedFormIds" %>'
+ 				paramName="<%=FormConstants.CRF%>" paramProperty="formIdseq"
+ 				>
+					Add&nbsp;Form&nbsp;to&nbsp;Cart
+		      </html:link>
+			</td>
         </tr> 
                 
       </table>
