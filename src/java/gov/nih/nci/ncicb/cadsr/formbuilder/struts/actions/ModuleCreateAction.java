@@ -133,6 +133,10 @@ public class ModuleCreateAction extends FormBuilderSecureBaseDispatchAction {
     request.setAttribute(CaDSRConstants.ANCHOR,"M"+displayOrder);
         
     saveMessage("cadsr.formbuilder.module.add.success", request);
+    
+    removeSessionObject(request, MODULE_DISPLAY_ORDER_TO_COPY);
+    removeSessionObject(request,IN_PROCESS);
+    
     return mapping.findForward("toFormEdit");
 
   }
