@@ -115,7 +115,8 @@ function retrieveSavedItems() {
   <table width="80%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
     <tr class="OraTableColumnHeader">
     <logic:notEmpty name="<%=CaDSRConstants.FORMS_CART%>" property = "forms">
-      <th>Delete<input type="checkbox" name="deleteAllChk" value="yes" onClick="ToggleDeleteAll(this)"/></th>
+      <th><center>Delete<br/><input type="checkbox" name="deleteAllChk" value="yes" onClick="ToggleDeleteAll(this)"/></center></th>
+	<th><center>Action</center></th>
     </logic:notEmpty>
       <th>Long Name</th>
       <th>Context</th>
@@ -140,9 +141,17 @@ function retrieveSavedItems() {
       String detailsURL = "javascript:details('"+formId+"')";
 %>
       <tr class="OraTabledata">
-        <td>
-          <input type="checkbox" name="selectedDeleteItems" value="<%= formId %>"/>
+        <td><center>
+          <input type="checkbox" name="selectedDeleteItems" value="<%= formId %>"/></center>
         </td>
+		<td><center>
+			<html:link action='<%="/formExcelDownload.do?"%>' 
+                  paramId = "<%=FormConstants.FORM_ID_SEQ%>"
+                  paramName="form" paramProperty="idseq"
+                  target="_blank" >
+               			<html:img src='<%=urlPrefix+"i/excel-icon.jpg"%>' border="0" alt="Excel Download"/>
+            </html:link></center> 
+		</td>
         <td class="OraFieldText">
           <a href="<%=detailsURL%>">
             <bean:write name="form" property="longName"/>
@@ -173,7 +182,7 @@ function retrieveSavedItems() {
       </tr>
     </logic:iterate>
 		<tr class="OraTabledata">
-			<td class="OraFieldText" colspan="8">
+			<td class="OraFieldText" colspan="9">
 	  			<br/>Total items in cart: <b><bean:write name="noOfItems" /></b>
         	</td>
 		</tr>
