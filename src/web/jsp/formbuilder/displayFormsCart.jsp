@@ -11,6 +11,7 @@
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants"%>
 <%
 	String urlPrefix = "";
+	CDEBrowserParams params = CDEBrowserParams.getInstance();
 %>
 <HTML>
 <HEAD>
@@ -196,15 +197,15 @@ function retrieveSavedItems() {
       <tr>
 		<logic:notEmpty name="<%=CaDSRConstants.FORMS_CART%>" property = "forms">
         <td>
-          <a href="javascript:deleteItems()">
+          <center><a href="javascript:deleteItems()">
             <html:img src='<%="i/deleteButton.gif"%>' border="0" alt="Delete"/> 
-          </a>
+          </a></center>
         </td> 
 		</logic:notEmpty>        
         <td>
-          <html:link href="<%=doneURL%>">				
+          <CENTER><html:link href="<%=doneURL%>">				
             <html:img src='<%="i/backButton.gif"%>' border="0" alt="Back"/>
-          </html:link>             
+          </html:link></CENTER>             
         </td> 
       </tr>
  </table>
@@ -213,14 +214,22 @@ function retrieveSavedItems() {
 <logic:notPresent name="<%=CaDSRConstants.FORMS_CART%>">
 <table width="10%" align="center" cellpadding="1" cellspacing="1" border="0" >
   <tr>
-     <td>
+     <td><center>
        <html:link href="<%=doneURL%>">				
          <html:img src='<%="i/backButton.gif"%>' border="0" alt="Back"/>
-       </html:link>             
+       </html:link></center>             
      </td>
   </tr>
 </table>
 </logic:notPresent>    
+
+<table width="10%" align="center" cellpadding="1" cellspacing="1" border="0" >
+  <tr>
+    <td>
+      <a href='<%=params.getFormBuilderUrl() %>' target="_blank"><html:img src="i/add_more_forms.gif" border="0" alt="Add more forms"/></a>
+    </td>
+  </tr>
+</table> 
 
 </html:form>
 <%@ include file="../common/common_bottom_border.jsp"%>
