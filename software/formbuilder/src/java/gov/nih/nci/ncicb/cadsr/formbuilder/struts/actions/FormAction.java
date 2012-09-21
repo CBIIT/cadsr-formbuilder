@@ -44,6 +44,12 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.DynaActionForm;
 
+import java.util.LinkedList;
+import java.io.StringWriter;
+import org.exolab.castor.xml.Marshaller;
+import org.exolab.castor.xml.MarshalException;
+import org.exolab.castor.xml.ValidationException;
+
 
 public class FormAction extends FormBuilderSecureBaseDispatchAction {
 
@@ -547,10 +553,25 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 					forRemoval.add(co);
 			  }
 		}
+
 		
-		cart = cartClient.removeObjectCollection(cart, forRemoval);
-		cart = cartClient.storePOJOCollection(cart, JDBCFormTransferObject.class, objectDisplayNames, objects);
-	
+		// doing all translation here to minimize changes to existing code, might redo it all later
+ if (log.isDebugEnabled()) {log.debug("Starting new add-to-cart - removing re-used objects");}
+		cart = cartClient.removeObjectCollection(cart, forRemoval);  // these were just pulled from the cart, so they are in the new format
+ if (log.isDebugEnabled()) {log.debug("Starting cart object translation");}
+		Collection<CartObject> cartObjects = new LinkedList<CartObject>();
+		Collection<Object> forms = objects.values();
+		for (Object f: forms)
+			cartObjects.add(translateCartObject((Form)f));
+ if (log.isDebugEnabled()) {log.debug("Adding cart objects");}
+
+		cart = cartClient.storeObjectCollection(cart, cartObjects);
+ if (log.isDebugEnabled()) {log.debug("Finished add-to-cart");}
+		
+		
+//		cart = cartClient.removeObjectCollection(cart, forRemoval);
+//		cart = cartClient.storePOJOCollection(cart, JDBCFormTransferObject.class, objectDisplayNames, objects);
+		
 		saveMessage("cadsr.common.formcart.save.success",request);
 		
 		dynaBean.set("cartAddFormId", "");
@@ -561,6 +582,25 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 	}
 	  return mapping.findForward("success");
   }
+
+  private CartObject translateCartObject(Form crf) {
+		CartObject ob = new CartObject();
+//		ob.setType("my new type"));
+//keep the same until we actually start translating
+		ob.setType(":Serialized:" + crf.getClass());
+		ob.setDisplayText(crf.getLongName());
+		ob.setNativeId(crf.getFormIdseq());
+		StringWriter writer = new StringWriter();
+// need exception handling		
+		try {
+			Marshaller.marshal(crf, writer);
+		} catch (MarshalException ex) {} catch (ValidationException ex) {}
+		// the contents of writer should be translated to the new format here via xslt
+		ob.setData(writer.toString());
+		return ob;	  
+  }
+  
+  
   
   private CartObject getNativeObject(HashSet<CartObject> items, String id) {
 	  for(CartObject co: items){
