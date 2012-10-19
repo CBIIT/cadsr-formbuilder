@@ -49,6 +49,14 @@ import java.io.StringWriter;
 import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.ValidationException;
+import javax.xml.transform.*;
+import javax.xml.transform.stream.*;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.StringReader;
+import javax.servlet.ServletContext; 
+
+import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormCartHandlingOptionsUtil;
 
 
 public class FormAction extends FormBuilderSecureBaseDispatchAction {
@@ -534,48 +542,108 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 		else
 			cartClient = new ObjectCartClient();
 		
-		Cart cart = cartClient.createCart(user.getUsername(), CaDSRConstants.FORMS_CART);
-		HashSet<CartObject> storedForms = (HashSet<CartObject>) cart.getCartObjectCollection();
-		
-		HashSet<CartObject> forRemoval = new HashSet<CartObject>();
-		
 		DynaActionForm dynaBean = (DynaActionForm)form;
-		String[] formIds = (String[])dynaBean.get("checkedFormIds");
+		boolean clearCheckedFormIds = false;
+
 		
-		if (formIds != null) {
-			for (String formId: formIds) {
-				Form crf = service.getFormDetails(formId);
-				CartObject co = getNativeObject(storedForms, formId);
-				objects.put(formId, crf);
-				objectDisplayNames.put(formId, crf.getLongName());
-				
-				if(co != null)
-					forRemoval.add(co);
-			  }
+		if (FormCartHandlingOptionsUtil.instance().writeInV1Format()){
+			Cart cart = cartClient.createCart(user.getUsername(), CaDSRConstants.FORMS_CART);
+			HashSet<CartObject> storedForms = (HashSet<CartObject>) cart.getCartObjectCollection();
+			
+			HashSet<CartObject> forRemoval = new HashSet<CartObject>();
+			
+			String[] formIds = (String[])dynaBean.get("checkedFormIds");
+			
+			if (formIds != null) {
+				for (String formId: formIds) {
+					Form crf = service.getFormDetails(formId);
+					CartObject co = getNativeObject(storedForms, formId);
+					objects.put(formId, crf);
+					objectDisplayNames.put(formId, crf.getLongName());
+					
+					if(co != null)
+						forRemoval.add(co);
+				  }
+			}
+			
+			cart = cartClient.removeObjectCollection(cart, forRemoval);
+			cart = cartClient.storePOJOCollection(cart, JDBCFormTransferObject.class, objectDisplayNames, objects);
+			
+			clearCheckedFormIds = true;
 		}
 
-		
-		// doing all translation here to minimize changes to existing code, might redo it all later
- if (log.isDebugEnabled()) {log.debug("Starting new add-to-cart - removing re-used objects");}
-		cart = cartClient.removeObjectCollection(cart, forRemoval);  // these were just pulled from the cart, so they are in the new format
- if (log.isDebugEnabled()) {log.debug("Starting cart object translation");}
-		Collection<CartObject> cartObjects = new LinkedList<CartObject>();
-		Collection<Object> forms = objects.values();
-		for (Object f: forms)
-			cartObjects.add(translateCartObject((Form)f));
- if (log.isDebugEnabled()) {log.debug("Adding cart objects");}
+		if (FormCartHandlingOptionsUtil.instance().writeInV2Format()){
+			Cart cart = cartClient.createCart(user.getUsername(), CaDSRConstants.FORMS_CART_V2);
+			HashSet<CartObject> storedForms = (HashSet<CartObject>) cart.getCartObjectCollection();
+			
+			HashSet<CartObject> forRemoval = new HashSet<CartObject>();
+	
+			String[] formIds = (String[])dynaBean.get("checkedFormIds");
+			
+			if (formIds != null) {
+				for (String formId: formIds) {
+					Form crf = service.getFormDetails(formId);
+					CartObject co = getNativeObject(storedForms, formId);
+					objects.put(formId, crf);
+					objectDisplayNames.put(formId, crf.getLongName());
+					
+					if(co != null)
+						forRemoval.add(co);
+				  }
+			}
 
-		cart = cartClient.storeObjectCollection(cart, cartObjects);
- if (log.isDebugEnabled()) {log.debug("Finished add-to-cart");}
+			
+			// doing all translation here to minimize changes to existing code, might redo it all later
+//			ServletContext sc = request.getSession(false).getServletContext();
+//	if (log.isDebugEnabled()) {if (sc == null) log.debug("servletContext is null"); else log.debug("servletContext: " + sc.toString());}			    
+
+	{		
+		InputStream xslStream2 = this.getClass().getResourceAsStream("/transforms/FinalFormCartTransformv14.xsl");  // we need to change to a non-versioned name
+//		InputStream xslStream2 = sc.getResourceAsStream("/transforms/FinalFormCartTransformv14.xsl");  // we need to change to a non-versioned name
+	if (log.isDebugEnabled()) {if (xslStream2 == null) log.debug("xslStream2 is null"); else log.debug("xsl: " + xslStream2.toString());}
+	xslStream2.close();
+	}
+
+		InputStream xslStream = this.getClass().getResourceAsStream("/transforms/FinalFormCartTransformv14.xsl");  // we need to change to a non-versioned name
+//		InputStream xslStream = sc.getResourceAsStream("/transforms/FinalFormCartTransformv14.xsl");  // we need to change to a non-versioned name
+		StreamSource xslSource = new StreamSource(xslStream);
+			Transformer transformer = null;
+			try {
+	if (log.isDebugEnabled()) {log.debug("creating transfomer");}			
+			    transformer = TransformerFactory.newInstance().newTransformer(xslSource);
+	if (log.isDebugEnabled()) {if (transformer == null) log.debug("transfomer is null"); else log.debug("transfomer: " + transformer.toString());}			    
+			} catch (TransformerException e) {
+	// Handle.
+	if (log.isDebugEnabled()) {log.debug("transfomer exception: " + e.toString());}
+	if (log.isDebugEnabled()) {log.debug("transfomer exception: " + e.getMessage());}
+			}	
+			
+	 if (log.isDebugEnabled()) {log.debug("Starting new add-to-cart - removing re-used objects");}
+			cart = cartClient.removeObjectCollection(cart, forRemoval);  // these were just pulled from the cart, so they are in the new format
+	 if (log.isDebugEnabled()) {log.debug("Starting cart object translation");}
+			Collection<CartObject> cartObjects = new LinkedList<CartObject>();
+			Collection<Object> forms = objects.values();
+			for (Object f: forms)
+				cartObjects.add(translateCartObject((Form)f, transformer));
+			
+	 if (log.isDebugEnabled()) {log.debug("Adding cart objects");}
+			cart = cartClient.storeObjectCollection(cart, cartObjects);
+	 if (log.isDebugEnabled()) {log.debug("Finished add-to-cart");}
+			
+			
+	 clearCheckedFormIds = true;
+	 
+//			cart = cartClient.removeObjectCollection(cart, forRemoval);
+//			cart = cartClient.storePOJOCollection(cart, JDBCFormTransferObject.class, objectDisplayNames, objects);
+						
+		}		
 		
-		
-//		cart = cartClient.removeObjectCollection(cart, forRemoval);
-//		cart = cartClient.storePOJOCollection(cart, JDBCFormTransferObject.class, objectDisplayNames, objects);
-		
+
 		saveMessage("cadsr.common.formcart.save.success",request);
 		
 		dynaBean.set("cartAddFormId", "");
-		dynaBean.set("checkedFormIds", new String[]{});
+		if (clearCheckedFormIds)
+			dynaBean.set("checkedFormIds", new String[]{});
 	} catch (Exception e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -583,20 +651,33 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 	  return mapping.findForward("success");
   }
 
-  private CartObject translateCartObject(Form crf) {
+  private CartObject translateCartObject(Form crf, Transformer transformer) {
 		CartObject ob = new CartObject();
-//		ob.setType("my new type"));
+		ob.setType(":Test:my new type");
 //keep the same until we actually start translating
-		ob.setType(":Serialized:" + crf.getClass());
+//		ob.setType(":Serialized:" + crf.getClass());
 		ob.setDisplayText(crf.getLongName());
 		ob.setNativeId(crf.getFormIdseq());
+		
 		StringWriter writer = new StringWriter();
 // need exception handling		
 		try {
 			Marshaller.marshal(crf, writer);
 		} catch (MarshalException ex) {} catch (ValidationException ex) {}
+		
 		// the contents of writer should be translated to the new format here via xslt
-		ob.setData(writer.toString());
+		
+		Source xmlInput = new StreamSource(new StringReader(writer.toString()));	
+		ByteArrayOutputStream xmlOutputStream = new ByteArrayOutputStream();  
+		Result xmlOutput = new StreamResult(xmlOutputStream);
+
+		try {
+		    transformer.transform(xmlInput, xmlOutput);
+		} catch (TransformerException e) {
+// Handle.
+		}	
+		
+		ob.setData(xmlOutputStream.toString());
 		return ob;	  
   }
   
