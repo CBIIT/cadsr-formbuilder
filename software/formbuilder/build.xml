@@ -272,7 +272,12 @@
 		<copy tofile="${root.dir}/formSearchAction.do" >
 		    <fileset file="${basedir}/src/web/formSearchAction.do" />
 		</copy>
-		
+		<copy todir="${classes.dir}/transforms" >
+			<fileset dir="${basedir}/src/resources/transforms" />
+		</copy>		
+		<copy tofile="${classes.dir}/FormCartHandling.properties" >
+			<fileset file="${basedir}/src/resources/FormCartHandling.properties" />
+		</copy>		
 		<fixcrlf srcdir="${artifacts.dir}" eol="lf" includes="**/*.sh, **/*.xml, **/*.properties, **/*.dtd" />
 	</target>
 
@@ -704,7 +709,8 @@
         </echo>
     </target>
 
-    <target name="build-all" depends="build-product,javadoc,package-download,-prop-check" description="Builds all project deliverables.">
+<!--    <target name="build-all" depends="build-product,javadoc,package-download,-prop-check" description="Builds all project deliverables.">  -->
+    <target name="build-all" depends="build-product,-prop-check" description="Builds all project deliverables for BDA lite.">
         <echo>Built artifacts for ${TIER.NAME}</echo>
     </target>
 
