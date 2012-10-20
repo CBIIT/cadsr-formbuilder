@@ -709,8 +709,7 @@
         </echo>
     </target>
 
-<!--    <target name="build-all" depends="build-product,javadoc,package-download,-prop-check" description="Builds all project deliverables.">  -->
-    <target name="build-all" depends="build-product,-prop-check" description="Builds all project deliverables for BDA lite.">
+    <target name="build-all" depends="build-product,javadoc,package-download,-prop-check" description="Builds all project deliverables.">
         <echo>Built artifacts for ${TIER.NAME}</echo>
     </target>
 
