@@ -21,6 +21,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormCartHandlingOptionsUtil;
+
 
 public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchAction {
 
@@ -64,10 +66,16 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchAction {
 			  cartClient = new ObjectCartClient(ocURL);
 		  else
 	    	  cartClient = new ObjectCartClient();
-	      
-	      CDECart userCart = new CDECartOCImpl(cartClient, user.getUsername(),CaDSRConstants.FORMS_CART);
-	      
-	      this.setSessionObject(request, CaDSRConstants.FORMS_CART, userCart);
+
+	      if (FormCartHandlingOptionsUtil.instance().writeInV1Format() || FormCartHandlingOptionsUtil.instance().readInV1Format()){		  
+	    	  CDECart userCart = new CDECartOCImpl(cartClient, user.getUsername(),CaDSRConstants.FORMS_CART);
+    	      this.setSessionObject(request, CaDSRConstants.FORMS_CART, userCart);
+	      }      
+
+	      if (FormCartHandlingOptionsUtil.instance().writeInV2Format() || FormCartHandlingOptionsUtil.instance().readInV2Format()){		  
+	    	  CDECart userCartV2 = new CDECartOCImpl(cartClient, user.getUsername(),CaDSRConstants.FORMS_CART_V2);     
+	    	  this.setSessionObject(request, CaDSRConstants.FORMS_CART_V2, userCartV2);
+	      }
 	    }
 	    catch (Exception exp) {
 	      if (log.isErrorEnabled()) {
@@ -135,18 +143,36 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchAction {
       Collection savedItems = new ArrayList();
 
       //Collection unsavedItems = new ArrayList();
-      Collection items = new ArrayList();
-
-      //Get the cart in the session
-      CDECart sessionCart =
-        (CDECart) this.getSessionObject(request, CaDSRConstants.FORMS_CART);
-      CDECartItem item = null;
-
-      for (int i = 0; i < selectedDeleteItems.length; i++) {
-        items.add(selectedDeleteItems[i]);
-      }
+ 
       
-      sessionCart.removeDataElements(items);
+      if (FormCartHandlingOptionsUtil.instance().writeInV1Format()){
+    	  Collection items = new ArrayList();
+
+    	  //Get the cart in the session
+	      CDECart sessionCart =
+	        (CDECart) this.getSessionObject(request, CaDSRConstants.FORMS_CART);
+	      CDECartItem item = null;
+
+	      for (int i = 0; i < selectedDeleteItems.length; i++) {
+	        items.add(selectedDeleteItems[i]);
+	      }
+	      sessionCart.removeDataElements(items);	      
+      }      
+      
+      if (FormCartHandlingOptionsUtil.instance().writeInV2Format()){
+    	  Collection items = new ArrayList();
+
+    	  //Get the cart in the session
+	      CDECart sessionCart =
+	        (CDECart) this.getSessionObject(request, CaDSRConstants.FORMS_CART_V2);
+	      CDECartItem item = null;
+
+	      for (int i = 0; i < selectedDeleteItems.length; i++) {
+	        items.add(selectedDeleteItems[i]);
+	      }
+	      sessionCart.removeDataElements(items);	      
+      }      
+
       saveMessage("cadsr.common.formcart.delete.success",request);
     }
     catch (Exception exp) {
