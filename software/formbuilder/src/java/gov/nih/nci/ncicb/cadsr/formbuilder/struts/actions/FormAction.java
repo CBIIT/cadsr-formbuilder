@@ -594,18 +594,8 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 
 			
 			// doing all translation here to minimize changes to existing code, might redo it all later
-//			ServletContext sc = request.getSession(false).getServletContext();
-//	if (log.isDebugEnabled()) {if (sc == null) log.debug("servletContext is null"); else log.debug("servletContext: " + sc.toString());}			    
 
-	{		
-		InputStream xslStream2 = this.getClass().getResourceAsStream("/transforms/FinalFormCartTransformv14.xsl");  // we need to change to a non-versioned name
-//		InputStream xslStream2 = sc.getResourceAsStream("/transforms/FinalFormCartTransformv14.xsl");  // we need to change to a non-versioned name
-	if (log.isDebugEnabled()) {if (xslStream2 == null) log.debug("xslStream2 is null"); else log.debug("xsl: " + xslStream2.toString());}
-	xslStream2.close();
-	}
-
-		InputStream xslStream = this.getClass().getResourceAsStream("/transforms/FinalFormCartTransformv14.xsl");  // we need to change to a non-versioned name
-//		InputStream xslStream = sc.getResourceAsStream("/transforms/FinalFormCartTransformv14.xsl");  // we need to change to a non-versioned name
+		InputStream xslStream = this.getClass().getResourceAsStream("/transforms/ConvertFormCartV1ToV2.xsl");  // we need to change to a non-versioned name
 		StreamSource xslSource = new StreamSource(xslStream);
 			Transformer transformer = null;
 			try {
@@ -656,7 +646,8 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 		ob.setType(":Test:my new type");
 //keep the same until we actually start translating
 //		ob.setType(":Serialized:" + crf.getClass());
-		ob.setDisplayText(crf.getLongName());
+		ob.setDisplayText(Integer.toString(crf.getPublicId()) + "v" + Float.toString(crf.getVersion()));  // Denise asked to use this public id & version now
+//		ob.setDisplayText(crf.getLongName());
 		ob.setNativeId(crf.getFormIdseq());
 		
 		StringWriter writer = new StringWriter();
