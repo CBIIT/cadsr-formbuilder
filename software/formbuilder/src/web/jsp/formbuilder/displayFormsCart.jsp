@@ -112,10 +112,10 @@ function retrieveSavedItems() {
 <html:hidden property="<%= FormConstants.QUESTION_INDEX %>"/>
 <html:hidden property="<%= FormConstants.MODULE_INDEX %>"/>
 <html:hidden property="<%= FormConstants.DE_SEARCH_SRC %>"/>
-<logic:present name="<%=CaDSRConstants.FORMS_CART%>">
+<logic:present name="<%=CaDSRConstants.FORMS_CART_V2%>">
   <table width="80%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
     <tr class="OraTableColumnHeader">
-    <logic:notEmpty name="<%=CaDSRConstants.FORMS_CART%>" property = "forms">
+    <logic:notEmpty name="<%=CaDSRConstants.FORMS_CART_V2%>" property = "forms">
       <th><center>Delete<br/><input type="checkbox" name="deleteAllChk" value="yes" onClick="ToggleDeleteAll(this)"/></center></th>
 	<th><center>Action</center></th>
     </logic:notEmpty>
@@ -127,16 +127,16 @@ function retrieveSavedItems() {
       <th>Public Id</th>
       <th>Version</th>
     </tr>
-  <logic:empty name="<%=CaDSRConstants.FORMS_CART%>" property = "forms">
+  <logic:empty name="<%=CaDSRConstants.FORMS_CART_V2%>" property = "forms">
     <tr class="OraTabledata">
         <td class="OraFieldText" colspan="7">
           Form Cart is empty. 
         </td>
     </tr>
   </logic:empty>
-  <logic:notEmpty name="<%=CaDSRConstants.FORMS_CART%>" property = "forms">
-	<bean:size id="noOfItems" name="<%=CaDSRConstants.FORMS_CART%>" property="forms" />
-    <logic:iterate id="form" name="<%=CaDSRConstants.FORMS_CART%>" type="gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject" property="forms">
+  <logic:notEmpty name="<%=CaDSRConstants.FORMS_CART_V2%>" property = "forms">
+	<bean:size id="noOfItems" name="<%=CaDSRConstants.FORMS_CART_V2%>" property="forms" />
+    <logic:iterate id="form" name="<%=CaDSRConstants.FORMS_CART_V2%>" type="gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject" property="forms">
 <%
       String formId = form.getIdseq();
       String detailsURL = "javascript:details('"+formId+"')";
@@ -159,7 +159,8 @@ function retrieveSavedItems() {
           </a>
         </td>
         <td class="OraFieldText">
-          <bean:write name="form" property="context.name"/>
+          <bean:write name="form" property="context-name"/>
+<!--           <bean:write name="form" property="context.name"/>  -->
         </td>
         <td class="OraFieldText">
           <bean:write name="form" property="formType"/>
@@ -195,7 +196,7 @@ function retrieveSavedItems() {
         <td>&nbsp;</td>
       </TR>
       <tr>
-		<logic:notEmpty name="<%=CaDSRConstants.FORMS_CART%>" property = "forms">
+		<logic:notEmpty name="<%=CaDSRConstants.FORMS_CART_V2%>" property = "forms">
         <td>
           <center><a href="javascript:deleteItems()">
             <html:img src='<%="i/deleteButton.gif"%>' border="0" alt="Delete"/> 
@@ -211,7 +212,7 @@ function retrieveSavedItems() {
  </table>
 </logic:present>
 
-<logic:notPresent name="<%=CaDSRConstants.FORMS_CART%>">
+<logic:notPresent name="<%=CaDSRConstants.FORMS_CART_V2%>">
 <table width="10%" align="center" cellpadding="1" cellspacing="1" border="0" >
   <tr>
      <td><center>
