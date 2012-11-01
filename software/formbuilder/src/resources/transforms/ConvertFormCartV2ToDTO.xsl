@@ -17,8 +17,8 @@
                 <xsl:value-of select="./longName"/>
             </xsl:element>
             <xsl:element name="context">
-	            <xsl:attribute name="xmlns:xsi">http://www.w3.org/2001/XMLSchema-instance</xsl:attribute>
-	            <xsl:attribute name="xsi:type">java:gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject</xsl:attribute>
+			<xsl:attribute name="xmlnsxsi">http://www.w3.org/2001/XMLSchema-instance</xsl:attribute>
+			<xsl:attribute name="xsitype">java:gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject</xsl:attribute>
 	            <xsl:element name="name">
       	          <xsl:value-of select="./context"/>
 	            </xsl:element>
