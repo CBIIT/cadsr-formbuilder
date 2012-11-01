@@ -159,8 +159,7 @@ function retrieveSavedItems() {
           </a>
         </td>
         <td class="OraFieldText">
-          <bean:write name="form" property="context-name"/>
-<!--           <bean:write name="form" property="context.name"/>  -->
+           <bean:write name="form" property="context.name"/>
         </td>
         <td class="OraFieldText">
           <bean:write name="form" property="formType"/>
