@@ -10,7 +10,7 @@
 <datasources>
     <local-tx-datasource>
 		<jndi-name>jdbc/@Tool.ds.jndi.Name@</jndi-name>
-		<connection-url>@CADSR.DS.URL@</connection-url>
+		<connection-url>jdbc:oracle:thin:@@CADSR.DS.URL@</connection-url>
 		<driver-class>oracle.jdbc.driver.OracleDriver</driver-class>
 		<user-name>@CADSR.DS.USER@</user-name>
 		<password>@CADSR.DS.PSWD@</password>
