@@ -2,6 +2,8 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0">
 
+<!-- This is an incomplete transformation from the new object cart format to a FormTransferObject. Only the data needed for the Form Cart display (displayFormsCart.jsp) is included in the transformation.  -->
+
     <xsl:output indent="yes" exclude-result-prefixes="xsi"/>
 
     <xsl:template match="/">
@@ -31,9 +33,25 @@
             <xsl:element name="version">
                 <xsl:value-of select="./version"/>
             </xsl:element>
-<!--  protocols left out for now   -->
+
+            <xsl:apply-templates select="*"/>
+
         </xsl:element>
     </xsl:template>
 
+    <xsl:template match="protocol">
+            <xsl:element name="protocols">
+			<xsl:attribute name="xsi:type">java:gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObject</xsl:attribute>
+	            <xsl:attribute name="public-id">0</xsl:attribute>
+	            <xsl:attribute name="is-published">false</xsl:attribute>
+	            <xsl:element name="long-name">
+      	          <xsl:value-of select="longName"/>
+	            </xsl:element>
+            </xsl:element>
+    </xsl:template>
 
 </xsl:stylesheet>
+
+
+
+
