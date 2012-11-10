@@ -67,14 +67,16 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchAction {
 		  else
 	    	  cartClient = new ObjectCartClient();
 
-	      if (FormCartHandlingOptionsUtil.instance().writeInV1Format() || FormCartHandlingOptionsUtil.instance().readInV1Format()){		  
-	    	  CDECart userCart = new CDECartOCImpl(cartClient, user.getUsername(),CaDSRConstants.FORMS_CART);
-    	      this.setSessionObject(request, CaDSRConstants.FORMS_CART, userCart);
-	      }      
+//	      if (FormCartHandlingOptionsUtil.instance().writeInV1Format() || FormCartHandlingOptionsUtil.instance().readInV1Format()){		  
+//	    	  CDECart userCart = new CDECartOCImpl(cartClient, user.getUsername(),CaDSRConstants.FORMS_CART);
+//    	      this.setSessionObject(request, CaDSRConstants.FORMS_CART, userCart);
+//    	      log.debug("setSessionObject " + CaDSRConstants.FORMS_CART + " " + userCart);
+//	      }      
 
 	      if (FormCartHandlingOptionsUtil.instance().writeInV2Format() || FormCartHandlingOptionsUtil.instance().readInV2Format()){		  
 	    	  CDECart userCartV2 = new CDECartOCImpl(cartClient, user.getUsername(),CaDSRConstants.FORMS_CART_V2);     
 	    	  this.setSessionObject(request, CaDSRConstants.FORMS_CART_V2, userCartV2);
+    	      log.debug("setSessionObject " + CaDSRConstants.FORMS_CART_V2 + " " + userCartV2);
 	      }
 	    }
 	    catch (Exception exp) {
