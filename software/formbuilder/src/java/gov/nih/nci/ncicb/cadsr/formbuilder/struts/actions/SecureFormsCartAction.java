@@ -1,5 +1,7 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext.CDECartOCImplExtension;
+
 import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
 import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
 import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.CDECartFormBean;
@@ -74,7 +76,8 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchAction {
 //	      }      
 
 	      if (FormCartHandlingOptionsUtil.instance().writeInV2Format() || FormCartHandlingOptionsUtil.instance().readInV2Format()){		  
-	    	  CDECart userCartV2 = new CDECartOCImpl(cartClient, user.getUsername(),CaDSRConstants.FORMS_CART_V2);     
+//	    	  CDECart userCartV2 = new CDECartOCImpl(cartClient, user.getUsername(),CaDSRConstants.FORMS_CART_V2);     
+	    	  CDECart userCartV2 = new CDECartOCImplExtension(cartClient, user.getUsername(),CaDSRConstants.FORMS_CART_V2);     
 	    	  this.setSessionObject(request, CaDSRConstants.FORMS_CART_V2, userCartV2);
     	      log.debug("setSessionObject " + CaDSRConstants.FORMS_CART_V2 + " " + userCartV2);
 	      }
