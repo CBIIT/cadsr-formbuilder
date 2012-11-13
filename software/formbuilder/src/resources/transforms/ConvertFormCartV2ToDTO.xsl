@@ -34,7 +34,7 @@
                 <xsl:value-of select="./version"/>
             </xsl:element>
 
-            <xsl:apply-templates select="*"/>
+<!--            <xsl:apply-templates select="protocol"/>  -->
 
         </xsl:element>
     </xsl:template>
