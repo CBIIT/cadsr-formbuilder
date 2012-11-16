@@ -154,6 +154,14 @@ function ToggleSelectAll(e){
                     			<html:img src='<%=urlPrefix+"i/excel-icon.jpg"%>' border="0" alt="Excel Download"/>
                     		</html:link>                 
                     	</td>
+                    	<td width="25" class="OraTabledata" align=center>                  
+                    		<html:link action='<%="/formXMLV2Download.do?"%>' 
+			                    paramId = "<%=FormConstants.FORM_ID_SEQ%>"
+			                    paramName="form" paramProperty="formIdseq"
+			                    target="_blank" >
+                    			<html:img src='<%=urlPrefix+"i/down.gif"%>' border="0" alt="XML V2 Download"/>
+                    		</html:link>                 
+                    	</td>
                       <td width="25" class="OraTabledata" align=center>
                            <cde:secureIcon  formId="form" 
                     formScope="<%=CaDSRConstants.PAGE_SCOPE%>"
