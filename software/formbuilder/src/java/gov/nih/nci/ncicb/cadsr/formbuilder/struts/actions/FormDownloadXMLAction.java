@@ -39,8 +39,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-public class FormDownloadXMLV2Action extends Action {
-	private static Log log = LogFactory.getLog(FormDownloadXMLV2Action.class.getName());
+public class FormDownloadXMLAction extends Action {
+	private static Log log = LogFactory.getLog(FormDownloadXMLAction.class.getName());
 
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
