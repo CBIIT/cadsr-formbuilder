@@ -155,7 +155,7 @@ function ToggleSelectAll(e){
                     		</html:link>                 
                     	</td>
                     	<td width="25" class="OraTabledata" align=center>                  
-                    		<html:link action='<%="/formXMLV2Download.do?"%>' 
+                    		<html:link action='<%="/formXMLDownload.do?"%>' 
 			                    paramId = "<%=FormConstants.FORM_ID_SEQ%>"
 			                    paramName="form" paramProperty="formIdseq"
 			                    target="_blank" >

@@ -319,6 +319,10 @@
 </filter-mapping> 
  <filter-mapping> 
          <filter-name>FormBuilderSessionFilter</filter-name>
+      <url-pattern>/xmlDownload.do</url-pattern>
+</filter-mapping> 
+ <filter-mapping> 
+         <filter-name>FormBuilderSessionFilter</filter-name>
       <url-pattern>/formPrinterAction.do</url-pattern>
 </filter-mapping> 
  <filter-mapping> 
@@ -642,6 +646,10 @@
 </filter-mapping>
 <filter-mapping> 
          <filter-name>EditFormFilter</filter-name>
+      <url-pattern>/xmlDownload.do</url-pattern>
+</filter-mapping>
+<filter-mapping> 
+         <filter-name>EditFormFilter</filter-name>
       <url-pattern>/formViewAddToList.do</url-pattern>
 </filter-mapping>
 <filter-mapping> 
@@ -706,7 +714,7 @@
            /WEB-INF/formbuilder/struts-config-publish.xml,
            /WEB-INF/admin/struts-config-admin.xml,/WEB-INF/formbuilder/struts-config-skippattern.xml,
            /WEB-INF/formbuilder/struts-config-moduleRepeats.xml,/WEB-INF/formbuilder/struts-config-setAlert.xml,
-           /WEB-INF/formbuilder/struts-config-formSearchPreferences.xml,/WEB-INF/formbuilder/struts-config-downloadFormToXMLV2.xml
+           /WEB-INF/formbuilder/struts-config-formSearchPreferences.xml,/WEB-INF/formbuilder/struts-config-downloadFormToXML.xml
        </param-value>
     </init-param>
     <init-param>
@@ -853,6 +861,7 @@
       <url-pattern>/gotoCreateNewVersion.do</url-pattern>
       <url-pattern>/formViewDeleteAction.do</url-pattern>
       <url-pattern>/excelDownload.do</url-pattern>
+      <url-pattern>/xmlDownload.do</url-pattern>
       <url-pattern>/formPrinterAction.do</url-pattern>
       <url-pattern>/formViewAddToList.do</url-pattern>
       <url-pattern>/createValidValueSkipAction.do</url-pattern>
