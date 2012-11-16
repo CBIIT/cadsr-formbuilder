@@ -146,7 +146,7 @@ function ToggleSelectAll(e){
                 <td width="100">
                     <table  >
                     <tr>               
-                    	<td width="25" class="OraTabledata" align=center>                  
+                    	<td width="20" class="OraTabledata" align=center>                  
                     		<html:link action='<%="/formExcelDownload.do?"%>' 
 			                    paramId = "<%=FormConstants.FORM_ID_SEQ%>"
 			                    paramName="form" paramProperty="formIdseq"
@@ -154,15 +154,15 @@ function ToggleSelectAll(e){
                     			<html:img src='<%=urlPrefix+"i/excel-icon.jpg"%>' border="0" alt="Excel Download"/>
                     		</html:link>                 
                     	</td>
-                    	<td width="25" class="OraTabledata" align=center>                  
+                    	<td width="20" class="OraTabledata" align=center>                  
                     		<html:link action='<%="/formXMLDownload.do?"%>' 
 			                    paramId = "<%=FormConstants.FORM_ID_SEQ%>"
 			                    paramName="form" paramProperty="formIdseq"
 			                    target="_blank" >
-                    			<html:img src='<%=urlPrefix+"i/down.gif"%>' border="0" alt="XML V2 Download"/>
+                    			<html:img src='<%=urlPrefix+"i/xml-icon.gif"%>' border="0" alt="XML Download"/>
                     		</html:link>                 
                     	</td>
-                      <td width="25" class="OraTabledata" align=center>
+                      <td width="20" class="OraTabledata" align=center>
                            <cde:secureIcon  formId="form" 
                     formScope="<%=CaDSRConstants.PAGE_SCOPE%>"
                     activeImageSource="i/copy.gif" 
@@ -177,7 +177,7 @@ function ToggleSelectAll(e){
                                     target="_parent"
                     />            
                      </td>                  
-                      <td width="25" class="OraTabledata" align=center>
+                      <td width="20" class="OraTabledata" align=center>
                            <cde:secureIcon  formId="form" 
                     formScope="<%=CaDSRConstants.PAGE_SCOPE%>" 
                     activeImageSource="i/edit.gif" 
@@ -191,7 +191,7 @@ function ToggleSelectAll(e){
                                     target="_parent"
                     />		            
                       </td>
-                     <td width="25"  class="OraTabledata" align=center>
+                     <td width="20"  class="OraTabledata" align=center>
                            <cde:secureIcon  formId="form" 
                     formScope="<%=CaDSRConstants.PAGE_SCOPE%>" 
                     activeImageSource="i/delete.gif" 
