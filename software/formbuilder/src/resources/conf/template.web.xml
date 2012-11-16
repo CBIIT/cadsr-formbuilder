@@ -706,7 +706,7 @@
            /WEB-INF/formbuilder/struts-config-publish.xml,
            /WEB-INF/admin/struts-config-admin.xml,/WEB-INF/formbuilder/struts-config-skippattern.xml,
            /WEB-INF/formbuilder/struts-config-moduleRepeats.xml,/WEB-INF/formbuilder/struts-config-setAlert.xml,
-           /WEB-INF/formbuilder/struts-config-formSearchPreferences.xml
+           /WEB-INF/formbuilder/struts-config-formSearchPreferences.xml,/WEB-INF/formbuilder/struts-config-downloadFormToXMLV2.xml
        </param-value>
     </init-param>
     <init-param>
