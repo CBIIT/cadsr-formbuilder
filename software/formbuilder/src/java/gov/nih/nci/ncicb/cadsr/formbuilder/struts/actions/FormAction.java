@@ -1,5 +1,6 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConverterUtil;
 import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
 import gov.nih.nci.ncicb.cadsr.common.cdebrowser.DataElementSearchBean;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
@@ -595,18 +596,6 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 			
 			// doing all translation here to minimize changes to existing code, might redo it all later
 
-		InputStream xslStream = this.getClass().getResourceAsStream("/transforms/ConvertFormCartV1ToV2.xsl");  // we need to change to a non-versioned name
-		StreamSource xslSource = new StreamSource(xslStream);
-			Transformer transformer = null;
-			try {
-	if (log.isDebugEnabled()) {log.debug("creating transfomer");}			
-			    transformer = TransformerFactory.newInstance().newTransformer(xslSource);
-	if (log.isDebugEnabled()) {if (transformer == null) log.debug("transfomer is null"); else log.debug("transfomer: " + transformer.toString());}			    
-			} catch (TransformerException e) {
-	// Handle.
-	if (log.isDebugEnabled()) {log.debug("transfomer exception: " + e.toString());}
-	if (log.isDebugEnabled()) {log.debug("transfomer exception: " + e.getMessage());}
-			}	
 			
 	 if (log.isDebugEnabled()) {log.debug("Starting new add-to-cart - removing re-used objects");}
 			cart = cartClient.removeObjectCollection(cart, forRemoval);  // these were just pulled from the cart, so they are in the new format
@@ -614,7 +603,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 			Collection<CartObject> cartObjects = new LinkedList<CartObject>();
 			Collection<Object> forms = objects.values();
 			for (Object f: forms)
-				cartObjects.add(translateCartObject((Form)f, transformer));
+				cartObjects.add(translateCartObject((Form)f));
 			
 	 if (log.isDebugEnabled()) {log.debug("Adding cart objects");}
 			cart = cartClient.storeObjectCollection(cart, cartObjects);
@@ -641,7 +630,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 	  return mapping.findForward("success");
   }
 
-  private CartObject translateCartObject(Form crf, Transformer transformer) {
+  private CartObject translateCartObject(Form crf) {
 		CartObject ob = new CartObject();
 		ob.setType(":Test:my new type");
 //keep the same until we actually start translating
@@ -650,25 +639,9 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 //		ob.setDisplayText(crf.getLongName());
 		ob.setNativeId(crf.getFormIdseq());
 		
-		StringWriter writer = new StringWriter();
-// need exception handling		
-		try {
-			Marshaller.marshal(crf, writer);
-		} catch (MarshalException ex) {} catch (ValidationException ex) {}
+		String convertedForm = FormConverterUtil.instance().convertFormToV2(crf);		
 		
-		// the contents of writer should be translated to the new format here via xslt
-		
-		Source xmlInput = new StreamSource(new StringReader(writer.toString()));	
-		ByteArrayOutputStream xmlOutputStream = new ByteArrayOutputStream();  
-		Result xmlOutput = new StreamResult(xmlOutputStream);
-
-		try {
-		    transformer.transform(xmlInput, xmlOutput);
-		} catch (TransformerException e) {
-// Handle.
-		}	
-		
-		ob.setData(xmlOutputStream.toString());
+		ob.setData(convertedForm);
 		return ob;	  
   }
   
