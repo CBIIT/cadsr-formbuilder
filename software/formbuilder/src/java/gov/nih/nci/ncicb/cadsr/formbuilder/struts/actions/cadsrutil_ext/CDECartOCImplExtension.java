@@ -2,6 +2,11 @@ package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext;
 
 import gov.nih.nci.ncicb.cadsr.objectCart.impl.CDECartOCImpl;
 
+import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
+import gov.nih.nci.ncicb.cadsr.formbuilder.service.ServiceDelegateFactory;
+import gov.nih.nci.ncicb.cadsr.formbuilder.service.ServiceStartupException;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.common.FormBuilderConstants;
+
 import gov.nih.nci.cadsr.domain.Form;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
 import gov.nih.nci.ncicb.cadsr.objectCart.CDECart;
@@ -43,8 +48,11 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 
 	private static Log log = LogFactory.getLog(CDECartOCImplExtension.class.getName());
 	
-	public CDECartOCImplExtension(ObjectCartClient client, String uid, String cName) {
+	protected FormBuilderServiceDelegate formBuilderService;
+	
+	public CDECartOCImplExtension(ObjectCartClient client, String uid, String cName, FormBuilderServiceDelegate formBuilderServiceDelegate) {
 		super(client, uid, cName);
+		formBuilderService = formBuilderServiceDelegate;
 	}
 	
 	public Collection getForms() {
@@ -129,8 +137,10 @@ FormTransferObject FTO2 = (FormTransferObject)pOb;
 if (log.isDebugEnabled()) {log.debug("FormTransferObject " + FTO2.toString());}
 
 // set idseq here
+String idseq = formBuilderService.getIdseq(FTO2.getPublicId(), FTO2.getVersion());
+FTO2.setIdseq(idseq);
 
-		itemList.add(pOb);
+		itemList.add(FTO2);
 
 	}
 	return itemList;	
@@ -143,4 +153,6 @@ return itemList;
 		}
 	}	
 	
+	
+
 }
