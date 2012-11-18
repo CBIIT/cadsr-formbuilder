@@ -112,14 +112,14 @@ if (log.isDebugEnabled()) {log.debug("created transformer");}
 		ByteArrayOutputStream xmlOutputStream = new ByteArrayOutputStream();  
 		Result xmlOutput = new StreamResult(xmlOutputStream);
 
-if (log.isDebugEnabled()) {log.debug("xml from cart: " + f.getData());}		
+//if (log.isDebugEnabled()) {log.debug("xml from cart: " + f.getData());}		
 		try {
 		    transformer.transform(xmlInput, xmlOutput);
 		} catch (TransformerException e) {
 // Handle.
 		}	
 
-if (log.isDebugEnabled()) {log.debug("transformed xml from cart: " + xmlOutputStream.toString());}		
+//if (log.isDebugEnabled()) {log.debug("transformed xml from cart: " + xmlOutputStream.toString());}		
 		
 		Object pOb = new Object();
 		// need exception handling		
