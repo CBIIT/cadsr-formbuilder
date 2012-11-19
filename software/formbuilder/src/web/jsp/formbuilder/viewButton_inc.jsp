@@ -180,7 +180,7 @@ if(confirm(message)) location.href = url;
           </tr>
           
           <tr width="100%" align="right">
-          <td colspan="9">
+          <td colspan="12">
 			<html:link action='<%= "/addFormToCartFromView?method=addFormToCart" %>'
  	       		paramId = '<%= "checkedFormIds" %>'
  				paramName="<%=FormConstants.CRF%>" paramProperty="formIdseq"
@@ -200,6 +200,13 @@ if(confirm(message)) location.href = url;
                 paramName="<%=FormConstants.CRF%>" paramProperty="formIdseq"
                 target="_blank" >
                 Excel Download
+              </html:link> 
+	      &nbsp;&nbsp;
+             <html:link action='<%="/formXMLDownload.do?"%>' 
+                paramId = "<%=FormConstants.FORM_ID_SEQ%>"
+                paramName="<%=FormConstants.CRF%>" paramProperty="formIdseq"
+                target="_blank" >
+                XML Download
               </html:link> 
         </td>
 
