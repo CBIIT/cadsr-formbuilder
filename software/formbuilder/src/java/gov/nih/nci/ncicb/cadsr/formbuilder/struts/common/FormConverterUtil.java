@@ -19,7 +19,7 @@ import javax.servlet.ServletContext;
 import gov.nih.nci.ncicb.cadsr.common.util.logging.Log;
 import gov.nih.nci.ncicb.cadsr.common.util.logging.LogFactory;
 
-
+import net.sf.saxon.TransformerFactoryImpl;
 
 
 public class FormConverterUtil {
@@ -69,7 +69,7 @@ public class FormConverterUtil {
 		
 		try {
 	log.debug("creating transformerV1ToV2");			
-			transformerV1ToV2 = TransformerFactory.newInstance().newTransformer(xslSource);
+			transformerV1ToV2 = net.sf.saxon.TransformerFactoryImpl.newInstance().newTransformer(xslSource);
 	if (transformerV1ToV2 == null) log.debug("transformerV1ToV2 is null"); else log.debug("transformerV1ToV2: " + transformerV1ToV2.toString());
 		} catch (TransformerException e) {
 		// Handle.
