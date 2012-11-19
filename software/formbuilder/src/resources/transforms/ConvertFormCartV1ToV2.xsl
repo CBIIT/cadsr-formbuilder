@@ -6,26 +6,45 @@
     <!-- Version 7 added 
         adminstrative information to all objects that require it in caDSR -->
     <!-- Version 8 added 
-        generate a question.checkAllThatApply (deprecated) element based on text in question.instruction.preferred-definition-->
+        generate a question/checkAllThatApply (deprecated) element based on text in question/instruction/preferred-definition-->
     <!-- Version 9 added  
-        generate a question.usageCategory element based on the text in the module.long-name field
-        generate a dataElement.shortName EMPTY tag
-        generate a form.disease EMPTY tag 
-        generate a valueDomain.shortName EMPTY tag
+        generate a question/usageCategory element based on the text in the modules/long-name field
+        generate a dataElement/shortName EMPTY tag
+        generate a form/disease EMPTY tag 
+        generate a valueDomain/shortName EMPTY tag
         changed mapping of module.longName
         fixes spelling of current cart questionRepititions -> questionRepetitions in transformed cart -->
     <!-- Version 10 add remaining fields that are planned for 4.1  
-        generate a question.dataElement.dataElementDerivation (see dataElement template)
-        generate a dataElement.designations 
-        add module.preferredDefinition-->
-    <!-- Version 11 change tag from question.checkAllThatApply to question.multiValue 
+        generate a question/dataElement/dataElementDerivation (see dataElement template)
+        generate a dataElement/designation 
+        add module/preferredDefinition-->
+    <!-- Version 11 change tag from question/checkAllThatApply to question/multiValue 
         add "choose all" to the list of text that could inidcate "yes" for this attribute 
-        add default value for question.usageCategory.usageType = "None" -->
+        add default value for question/usageCategory/usageType = "None" -->
     <!-- Version 12 add extraction of isEditable for Question repetitions -->
     <!-- Version 13 
-         add creation of valueDomain.type, values are Enumerated or NonEnumerated -->
+         add creation of valueDomain/type, values are Enumerated or NonEnumerated -->
+    <!-- Version 14
+        add dataElement/cdeBrowserLink, generate from hueristic -->
+    <!-- Version 15 
+         fix to valueDomain/formatName, changed from value-domain/format-name to value-domain/display-format 
+         add valueDomain/valueDomainConcept for the Primary Concept of the Value domain
+         add valueDomain/nciTermBrowserLink, for the primary conncept of the Value Domain, gnerated by hueristic (still working on best format)
+         add valueMeaning/designation 
+         add designation/classification -->
+    <!-- Version 16
+         make usageCategory a module attribute instead of a question attribute.  changed question/usgaeCategory to module/usageCategory based on walk through 
+         added componentDataElement/displayOrder 
+         added module/publicID and module/version-->
+    <!-- Version 17
+         transform cart dates into xs:dateTime datatype format -->
+    <!-- Version 18 
+         change test for instructions when multiValue from Uppercase "Report all" to "report all",and "Include all" to "include all" 
+         fix usageCategory/usageType xPath expression
+         add transformation to set usageCategory/rule based on Module instruction -->
+    <!-- Version 19
+         change order of protocol elements, moving leadOrganization to the top, to match xsdV16 -->
     <xsl:output indent="yes" exclude-result-prefixes="xsi"/>
-
     <xsl:template match="/">
         <xsl:apply-templates select="*"/>
     </xsl:template>
@@ -38,8 +57,8 @@
             <xsl:element name="createdBy">
                 <xsl:value-of select="created-by"/>
             </xsl:element>
-            <xsl:element name="dateModified">
-                <xsl:value-of select="date-modified"/>
+            <xsl:element name="dateModified"><!--  e.g. 2012-08-17 10:59:57.0 trabsform to xs:dateTime format 2001-10-26T21:32:52.12679-->
+                <xsl:value-of select="concat(substring(date-modified, 1, 10), 'T', substring(date-modified, 12, 10))"/>  
             </xsl:element>
             <xsl:element name="longName">
                 <xsl:value-of select="./long-name"/>
@@ -110,6 +129,35 @@
             <xsl:element name="preferredDefinition">
                 <xsl:value-of select="preferred-definition"/>
             </xsl:element>
+            <xsl:element name="publicID">
+                <xsl:value-of select="./@public-id"/>
+            </xsl:element>
+            <xsl:element name="version">
+                <xsl:value-of select="version"/>
+            </xsl:element>
+            <!-- move usageCategory to MODULE level based on walk-through 10/01/2012 -->
+            <!-- set usageCategory.rule to module instruction -->
+            <xsl:element name="usageCategory">
+                <xsl:element name="usageType">
+                    <xsl:choose>
+                        <xsl:when test="contains(lower-case(long-name), 'mandatory')">
+                            <xsl:text>Mandatory</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="contains(lower-case(long-name), 'optional')">
+                            <xsl:text>Optional</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="contains(lower-case(long-name), 'conditional')">
+                            <xsl:text>Conditional</xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>None</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:element>
+                <xsl:element name="rule">
+                    <xsl:value-of select="/instruction/preferred-definition"/>
+                </xsl:element>
+            </xsl:element>
             <xsl:apply-templates select="questions"/>
             <xsl:apply-templates select="trigger-actions"/>
         </xsl:element>
@@ -174,41 +222,22 @@
                         test="contains(lower-case(instruction/preferred-definition), 'all that')">
                         <xsl:text>Yes</xsl:text>
                     </xsl:when>
-                   <xsl:when
+                    <xsl:when
                         test="contains(lower-case(instruction/preferred-definition), 'enter all')">
                         <xsl:text>Yes</xsl:text>
-                        </xsl:when>
-                    <xsl:when
-                        test="contains(lower-case(instruction/preferred-definition), 'Report all')">
-                        <xsl:text>Yes</xsl:text>  
                     </xsl:when>
                     <xsl:when
-                        test="contains(lower-case(instruction/preferred-definition), 'Include all')">
-                        <xsl:text>Yes</xsl:text>  
-                    </xsl:when> 
+                        test="contains(lower-case(instruction/preferred-definition), 'report all')">
+                        <xsl:text>Yes</xsl:text>
+                    </xsl:when>
+                    <xsl:when
+                        test="contains(lower-case(instruction/preferred-definition), 'include all')">
+                        <xsl:text>Yes</xsl:text>
+                    </xsl:when>
                     <xsl:otherwise>
                         <xsl:text>No</xsl:text>
                     </xsl:otherwise>
                 </xsl:choose>
-            </xsl:element>
-            <xsl:element name="usageCategory">
-                <xsl:element name="usageType">
-                    <xsl:choose>
-                        <xsl:when test="contains(lower-case(../long-name), 'mandatory')">
-                            <xsl:text>Mandatory</xsl:text>
-                        </xsl:when>
-                        <xsl:when test="contains(lower-case(../long-name), 'optional')">
-                            <xsl:text>Optional</xsl:text>
-                        </xsl:when>
-                        <xsl:when test="contains(lower-case(../long-name), 'conditional')">
-                            <xsl:text>Conditional</xsl:text>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:text>None</xsl:text>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:element> 
-                <xsl:element name="rule"/>
             </xsl:element>
             <xsl:apply-templates select="data-element"/>
             <xsl:apply-templates select="valid-values"/>
@@ -243,6 +272,7 @@
                         <xsl:element name="methods"/>
                         <xsl:element name="componentDataElement">
                             <xsl:element name="usageCategory"/>
+                            <xsl:element name="displayOrder">0</xsl:element>
                             <xsl:element name="dataElement">
                                 <xsl:element name="publicID">0</xsl:element>
                                 <xsl:element name="version">0</xsl:element>
@@ -253,6 +283,16 @@
                 <xsl:otherwise/>
             </xsl:choose>
             <xsl:apply-templates select="referece-docs"/>
+            <!-- generate url to link to CDE Browser for the data element -->
+            <xsl:element name="cdeBrowserLink">
+                <xsl:variable name="baseURL">https://cdebrowser.nci.nih.gov/CDEBrowser/search?elementDetails=9%26FirstTimer=0%26PageId=ElementDetailsGroup&amp;publicId=</xsl:variable>
+                <xsl:variable name="publicIdValue" select="CDEId"/>
+                <xsl:variable name="attributeName">&amp;version=</xsl:variable>
+                <xsl:variable name="value" select="version"/>
+                
+                <xsl:value-of select="concat($baseURL, $publicIdValue, $attributeName, $value)"/>
+               
+            </xsl:element>
         </xsl:element>
     </xsl:template>
 
@@ -292,7 +332,7 @@
                 <xsl:value-of select="decimal-place"/>
             </xsl:element>
             <xsl:element name="formatName">
-                <xsl:value-of select="format-name"/>
+                <xsl:value-of select="display-format"/>
             </xsl:element>
             <xsl:element name="highValueNumber">
                 <xsl:value-of select="high-value"/>
@@ -309,9 +349,7 @@
             <xsl:element name="UOMName">
                 <xsl:value-of select="unit-of-measure"/>
             </xsl:element>
-            <xsl:element name="valueDomainConcept">
-                <xsl:value-of select="/concept-derivation-rule/name"/>
-            </xsl:element>
+            <xsl:apply-templates select="concept-derivation-rule/component-concepts"/>
         </xsl:element>
     </xsl:template>
 
@@ -336,8 +374,29 @@
             <xsl:element name="description">
                 <xsl:value-of select="./form-value-meaning-desc"/>
             </xsl:element>
+            <xsl:element name="instruction">
+                <xsl:element name="text">
+                    <xsl:value-of select="./instruction/preferred-definition"/>
+                </xsl:element>
+            </xsl:element>
             <xsl:apply-templates select="value-meaning"/>
             <xsl:apply-templates select="trigger-actions"/>
+        </xsl:element>
+    </xsl:template>
+
+    <xsl:template match="concept-derivation-rule/component-concepts">
+        <!-- generate link to open the concept in NCI Browser -->
+        <xsl:variable name="baseURL">http://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=</xsl:variable>
+        <xsl:variable name="dictionary" select="replace(concept/origin, ' ', '%20')"/>
+        <xsl:variable name="identifier">&amp;code=</xsl:variable>
+        <xsl:variable name="code" select=".[./@is-primary = 'true']/concept/code"/>
+        
+        <xsl:element name="valueDomainConcept">
+            <xsl:value-of select=".[./@is-primary = 'true']/concept/code"/>
+        </xsl:element>
+        <xsl:element name="nciTermBrowserLink">
+            <xsl:value-of
+                select="concat($baseURL,$dictionary, $identifier, $code)"/>
         </xsl:element>
     </xsl:template>
 
@@ -348,6 +407,63 @@
             </xsl:element>
             <xsl:element name="version">
                 <xsl:value-of select="./version"/>
+            </xsl:element>
+            <xsl:apply-templates select="designations"/>
+        </xsl:element>
+    </xsl:template>
+    
+    <xsl:template match="designations">
+        <xsl:element name="designation">
+            <xsl:element name="createdBy"/>
+            <xsl:element name="dateCreated">2012-01-01T00:00:00.0</xsl:element>
+            <xsl:element name="dateModified">2012-01-01T00:00:00.0</xsl:element>
+            <xsl:element name="modifiedBy"/>
+            <xsl:element name="languageName">
+                <xsl:value-of select="language"/>
+            </xsl:element>
+            <xsl:element name="name">
+                <xsl:value-of select="name"/>
+            </xsl:element>
+            <xsl:element name="type">
+                <xsl:value-of select="type"/>
+            </xsl:element> 
+            <xsl:element name="context">
+                <xsl:value-of select="context/name"/>
+            </xsl:element>
+            <xsl:apply-templates select="cs-csis"/>
+        </xsl:element>
+    </xsl:template>
+    
+    <xsl:template match="cs-csis">
+        <xsl:element name="classification">
+            <xsl:element name="name">
+                <xsl:value-of select="class-scheme-long-name"/>
+            </xsl:element>
+            <xsl:element name="publicID">
+                <xsl:value-of select="cs-iD"/>
+            </xsl:element>
+            <xsl:element name="version">
+                <xsl:value-of select="cs-version"/>
+            </xsl:element>
+            <xsl:element name="preferredDefinition">
+                <xsl:value-of select="class-scheme-definition"/>
+            </xsl:element>
+            <xsl:element name="classificationSchemeItem">
+                <xsl:element name="name">
+                    <xsl:value-of select="class-scheme-item-name"></xsl:value-of>
+                </xsl:element>
+            <xsl:element name="publicID">
+                <xsl:value-of select="csi-id"/>
+            </xsl:element>
+                <xsl:element name="version">
+                    <xsl:value-of select="csi-version"/>
+                </xsl:element>
+            <xsl:element name="type">
+                <xsl:value-of select="class-scheme-item-type"/>
+            </xsl:element>
+                <xsl:element name="preferredDefinition">
+                    <xsl:value-of select="csi-description"/>
+                </xsl:element>
             </xsl:element>
         </xsl:element>
     </xsl:template>
@@ -411,9 +527,9 @@
 
     <xsl:template match="protocols">
         <xsl:element name="protocol">
+            <xsl:apply-templates select="lead-org"/>
             <xsl:apply-templates select="phase"/>
             <xsl:apply-templates select="type"/>
-            <xsl:apply-templates select="lead-org"/>
             <xsl:apply-templates select="protocol-id"/>
             <xsl:element name="longName">
                 <xsl:value-of select="normalize-space(long-name)"/>
