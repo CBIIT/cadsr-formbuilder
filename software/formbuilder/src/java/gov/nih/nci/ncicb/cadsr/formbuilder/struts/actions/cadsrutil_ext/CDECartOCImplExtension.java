@@ -43,6 +43,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.StringReader;
 
+import net.sf.saxon.TransformerFactoryImpl;
+
 
 public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.impl.CDECartOCImpl implements CDECart, Serializable  {
 
@@ -98,7 +100,7 @@ if (type == FormTransferObject.class ) {
 	StreamSource xslSource = new StreamSource(xslStream);
 		Transformer transformer = null;
 		try {
-		    transformer = TransformerFactory.newInstance().newTransformer(xslSource);
+		    transformer = net.sf.saxon.TransformerFactoryImpl.newInstance().newTransformer(xslSource);
 		} catch (TransformerException e) {
 // Handle.
 if (log.isDebugEnabled()) {log.debug("Tranformer exception");}
