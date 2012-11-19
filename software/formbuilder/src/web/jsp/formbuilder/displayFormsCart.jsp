@@ -145,13 +145,27 @@ function retrieveSavedItems() {
         <td><center>
           <input type="checkbox" name="selectedDeleteItems" value="<%= formId %>"/></center>
         </td>
-		<td><center>
-			<html:link action='<%="/formExcelDownload.do?"%>' 
-                  paramId = "<%=FormConstants.FORM_ID_SEQ%>"
-                  paramName="form" paramProperty="idseq"
-                  target="_blank" >
-               			<html:img src='<%=urlPrefix+"i/excel-icon.jpg"%>' border="0" alt="Excel Download"/>
-            </html:link></center> 
+		<td>
+			<table>
+                    <tr>               
+                    	<td width="20" class="OraTabledata" align=center>                  
+					<html:link action='<%="/formExcelDownload.do?"%>' 
+      			            paramId = "<%=FormConstants.FORM_ID_SEQ%>"
+            	      		paramName="form" paramProperty="idseq"
+		      	            target="_blank" >
+	             			<html:img src='<%=urlPrefix+"i/excel-icon.jpg"%>' border="0" alt="Excel Download"/>
+	      		      </html:link>
+				</td>
+                    	<td width="20" class="OraTabledata" align=center>                  
+					<html:link action='<%="/formXMLDownload.do?"%>' 
+            			      paramId = "<%=FormConstants.FORM_ID_SEQ%>"
+			                  paramName="form" paramProperty="idseq"
+			                  target="_blank" >
+               				<html:img src='<%=urlPrefix+"i/xml-icon.gif"%>' border="0" alt="XML Download"/>
+			            </html:link>
+	                    </td> 
+                    </tr>
+                    </table>
 		</td>
         <td class="OraFieldText">
           <a href="<%=detailsURL%>">
