@@ -23,28 +23,41 @@
         add default value for question/usageCategory/usageType = "None" -->
     <!-- Version 12 add extraction of isEditable for Question repetitions -->
     <!-- Version 13 
-         add creation of valueDomain/type, values are Enumerated or NonEnumerated -->
+         add creation of form/module/question/dataElement/valueDomain/type, values are Enumerated or NonEnumerated -->
     <!-- Version 14
-        add dataElement/cdeBrowserLink, generate from hueristic -->
+        add form/module/question/dataElement/cdeBrowserLink, generate from hueristic -->
     <!-- Version 15 
-         fix to valueDomain/formatName, changed from value-domain/format-name to value-domain/display-format 
-         add valueDomain/valueDomainConcept for the Primary Concept of the Value domain
-         add valueDomain/nciTermBrowserLink, for the primary conncept of the Value Domain, gnerated by hueristic (still working on best format)
-         add valueMeaning/designation 
+         fix to form/module/question/dataElement/valueDomain/formatName, changed from value-domain/format-name to value-domain/display-format 
+         add form/module/question/dataElement/ valueDomain/valueDomainConcept for the Primary Concept of the Value domain
+         add form/module/question/dataElement/ valueDomain/nciTermBrowserLink, for the primary conncept of the Value Domain, gnerated by hueristic (still working on best format)
+         add form/module/question/validValue/valueMeaning/designation 
          add designation/classification -->
     <!-- Version 16
-         make usageCategory a module attribute instead of a question attribute.  changed question/usgaeCategory to module/usageCategory based on walk through 
-         added componentDataElement/displayOrder 
-         added module/publicID and module/version-->
+         make usageCategory a module attribute instead of a question attribute.  changed form/module/question/usgaeCategory to form/module/usageCategory based on walk through 
+         added form/module/dataElement/dataElementDerivation/componentDataElement/displayOrder 
+         added form/module/publicID and form/module/version-->
     <!-- Version 17
          transform cart dates into xs:dateTime datatype format -->
+    <!-- FROZEN EXCEPT FOR BUG FIXES -->
     <!-- Version 18 
-         change test for instructions when multiValue from Uppercase "Report all" to "report all",and "Include all" to "include all" 
-         fix usageCategory/usageType xPath expression
-         add transformation to set usageCategory/rule based on Module instruction -->
+         BUG FIX change test for instructions when form/module/question/multiValue from Uppercase "Report all" to "report all",and "Include all" to "include all" 
+         BUG FIX usageCategory/usageType xPath expression
+         FIX add transformation to set usageCategory/rule based on Module instruction -->
     <!-- Version 19
-         change order of protocol elements, moving leadOrganization to the top, to match xsdV16 -->
+         BUG FIX change order of protocol elements, moving leadOrganization to the top, to match xsdV16 -->
+    <!-- Version 20 
+         add empty nodes (including sub-element in complexType elements)  
+            form/dateCreated, form/modifiedBy, form/changeNote, form/definition (alternate definitons), form/contactCommunication
+            form/module/question/triggerAction
+            form/protocol generate all sub-elements whether present or not
+         add explicit apply-templates for form/modules, form/protocols, form/ref-docs, referenceDocuments/URL 
+         Major change add permissibleValue to valueDomain -->
+   
     <xsl:output indent="yes" exclude-result-prefixes="xsi"/>
+    <xsl:variable name="FILLDATE">0001-01-01T00:00:01</xsl:variable>
+    <xsl:variable name="FILLPUBLICID">0000000</xsl:variable>
+    <xsl:variable name="FILLVERSION">1.0</xsl:variable>
+
     <xsl:template match="/">
         <xsl:apply-templates select="*"/>
     </xsl:template>
@@ -57,12 +70,20 @@
             <xsl:element name="createdBy">
                 <xsl:value-of select="created-by"/>
             </xsl:element>
-            <xsl:element name="dateModified"><!--  e.g. 2012-08-17 10:59:57.0 trabsform to xs:dateTime format 2001-10-26T21:32:52.12679-->
-                <xsl:value-of select="concat(substring(date-modified, 1, 10), 'T', substring(date-modified, 12, 10))"/>  
+            <xsl:element name="dateCreated"> <!-- new in formCartV2 -->
+                <xsl:value-of select="$FILLDATE"/>
             </xsl:element>
+            <xsl:element name="dateModified">
+                <!--  e.g. 2012-08-17 10:59:57.0 trabsform to xs:dateTime format 2001-10-26T21:32:52.12679-->
+                <xsl:value-of
+                    select="concat(substring(date-modified, 1, 10), 'T', substring(date-modified, 12, 10))"
+                />
+            </xsl:element>
+            <xsl:element name="modifiedBy"/> <!-- new in formCartV2 -->
             <xsl:element name="longName">
                 <xsl:value-of select="./long-name"/>
             </xsl:element>
+            <xsl:element name="changeNote"/> <!-- new in formCartV2 -->
             <xsl:element name="preferredDefinition">
                 <xsl:value-of select="./preferred-definition"/>
             </xsl:element>
@@ -72,18 +93,19 @@
             <xsl:element name="version">
                 <xsl:value-of select="./version"/>
             </xsl:element>
-            <xsl:apply-templates select="registrationStatus"/>
+            <xsl:apply-templates select="registrationStatus"/> <!-- new in formCartV2  -->
             <xsl:element name="workflowStatusName">
                 <xsl:value-of select="./asl-name"/>
             </xsl:element>
             <xsl:element name="categoryName">
                 <xsl:value-of select="./form-category"/>
             </xsl:element>
-            <xsl:element name="disease"/>
+            <xsl:element name="disease"/> <!-- new in formCartV2 (new database field) -->
             <xsl:element name="type">
                 <xsl:value-of select="./form-type"/>
             </xsl:element>
-            <xsl:element name="designation"/>
+            <xsl:call-template name="Designation"/> <!-- new in formCartV2 (complexType element) -->
+            <xsl:element name="definition"/> <!-- new in formCartV2 (complexType element) -->
             <xsl:element name="headerInstruction">
                 <xsl:element name="text">
                     <xsl:value-of select="normalize-space(instruction/preferred-definition)"/>
@@ -95,7 +117,10 @@
                         select="normalize-space(./footer-instructions/preferred-definition)"/>
                 </xsl:element>
             </xsl:element>
-            <xsl:apply-templates select="*"/>
+            <xsl:apply-templates select="modules"/>
+            <xsl:apply-templates select="protocols"/>
+            <xsl:apply-templates select="ref-docs"/>
+            <xsl:element name="contactCommunication"/>
         </xsl:element>
     </xsl:template>
 
@@ -118,6 +143,16 @@
             <xsl:element name="maximumModuleRepeat">
                 <xsl:value-of select="./@number-of-repeats"/>
             </xsl:element>
+            <xsl:element name="createdBy"/>  <!-- New in formCartV2 -->
+            <xsl:element name="dateCreated"> <!-- New in formCartV2 -->
+                <xsl:value-of select="$FILLDATE"/>
+            </xsl:element>
+            <xsl:element name="dateModified">
+                <!-- New in formCartV2 -->
+                <xsl:value-of select="$FILLDATE"/>
+            </xsl:element>
+            <xsl:element name="modifiedBy"/>
+            <!-- New in formCartV2 -->
             <xsl:element name="longName">
                 <xsl:value-of select="long-name"/>
             </xsl:element>
@@ -137,7 +172,7 @@
             </xsl:element>
             <!-- move usageCategory to MODULE level based on walk-through 10/01/2012 -->
             <!-- set usageCategory.rule to module instruction -->
-            <xsl:element name="usageCategory">
+            <xsl:element name="usageCategory"> <!-- New in formCartV2 - generated by Form Builder 4.0.4 - new database field in Form Builder 4.1 -->
                 <xsl:element name="usageType">
                     <xsl:choose>
                         <xsl:when test="contains(lower-case(long-name), 'mandatory')">
@@ -159,7 +194,7 @@
                 </xsl:element>
             </xsl:element>
             <xsl:apply-templates select="questions"/>
-            <xsl:apply-templates select="trigger-actions"/>
+            <xsl:apply-templates select="trigger-actions"/> <!-- New in formCartV2 -->
         </xsl:element>
     </xsl:template>
 
@@ -171,6 +206,18 @@
             <xsl:element name="displayOrder">
                 <xsl:value-of select="@display-order"/>
             </xsl:element>
+            <xsl:element name="createdBy"/>
+            <!-- Added in formCartV2 - empty in Form Builder 4.0.4 -->
+            <xsl:element name="dateCreated">
+                <!-- Added in formCartV2 - filled with meaningless date in Form Builder 4.0.4 -->
+                <xsl:value-of select="$FILLDATE"/>
+            </xsl:element>
+            <xsl:element name="dateModified">
+                <!-- Added in formCartV2 - filled with meaningless date in Form Builder 4.0.4 -->
+                <xsl:value-of select="$FILLDATE"/>
+            </xsl:element>
+            <xsl:element name="modifiedBy"/>
+            <!-- Added in formCartV2 - empty in Form Builder 4.0.4 -->
             <xsl:element name="questionText">
                 <xsl:value-of select="normalize-space(long-name)"/>
             </xsl:element>
@@ -200,7 +247,7 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:element>
-            <xsl:element name="multiValue">
+            <xsl:element name="multiValue"> <!-- New in formCartV2 - generated field in Form Builder 4.0.4 - not a database field -->
                 <xsl:choose>
                     <xsl:when
                         test="contains(lower-case(instruction/preferred-definition), 'check all')">
@@ -241,6 +288,8 @@
             </xsl:element>
             <xsl:apply-templates select="data-element"/>
             <xsl:apply-templates select="valid-values"/>
+            <xsl:element name="triggerAction"/>
+            <!-- This is a QUESTION level skip. Added in formCartV2 -->
             <xsl:apply-templates select="question-repititions"/>
         </xsl:element>
     </xsl:template>
@@ -250,7 +299,7 @@
             <xsl:element name="longName">
                 <xsl:value-of select="long-name"/>
             </xsl:element>
-            <xsl:element name="shortName"/>
+            <xsl:element name="shortName"/> <!-- Added in formCartV2 filled in by Form Builder 4.0.4 -->
             <xsl:element name="publicID">
                 <xsl:value-of select="CDEId"/>
             </xsl:element>
@@ -263,19 +312,20 @@
             <xsl:element name="preferredDefinition">
                 <xsl:value-of select="normalize-space(../preferred-definition)"/>
             </xsl:element>
-            <xsl:element name="designation"/>
+            <xsl:call-template name="Designation"/> <!-- Added in formCartV2  -->
             <xsl:apply-templates select="value-domain"/>
             <xsl:choose>
                 <xsl:when test="parent::questions/@de-derived = 'true'">
-                    <xsl:element name="dataElementDerivation">
+                    <xsl:element name="dataElementDerivation"> <!-- Added in formCartV2 -->
                         <xsl:element name="type"/>
                         <xsl:element name="methods"/>
                         <xsl:element name="componentDataElement">
-                            <xsl:element name="usageCategory"/>
+                            <xsl:element name="usageCategory"/> <!-- not a database field -->
                             <xsl:element name="displayOrder">0</xsl:element>
                             <xsl:element name="dataElement">
                                 <xsl:element name="publicID">0</xsl:element>
                                 <xsl:element name="version">0</xsl:element>
+                                <xsl:call-template name="ValueDomain"/> <!-- added in V20 complexType--> 
                             </xsl:element>
                         </xsl:element>
                     </xsl:element>
@@ -284,14 +334,15 @@
             </xsl:choose>
             <xsl:apply-templates select="referece-docs"/>
             <!-- generate url to link to CDE Browser for the data element -->
-            <xsl:element name="cdeBrowserLink">
-                <xsl:variable name="baseURL">https://cdebrowser.nci.nih.gov/CDEBrowser/search?elementDetails=9%26FirstTimer=0%26PageId=ElementDetailsGroup&amp;publicId=</xsl:variable>
+            <xsl:element name="cdeBrowserLink"> <!-- Added in formCartV2 - generated in Form Builder 4.0.4 - not a database field -->
+                <xsl:variable name="baseURL"
+                    >https://cdebrowser.nci.nih.gov/CDEBrowser/search?elementDetails=9%26FirstTimer=0%26PageId=ElementDetailsGroup&amp;publicId=</xsl:variable>
                 <xsl:variable name="publicIdValue" select="CDEId"/>
                 <xsl:variable name="attributeName">&amp;version=</xsl:variable>
                 <xsl:variable name="value" select="version"/>
-                
+
                 <xsl:value-of select="concat($baseURL, $publicIdValue, $attributeName, $value)"/>
-               
+
             </xsl:element>
         </xsl:element>
     </xsl:template>
@@ -308,20 +359,20 @@
             <xsl:element name="longName">
                 <xsl:value-of select="long-name"/>
             </xsl:element>
-            <xsl:element name="shortName"/>
+            <xsl:element name="shortName"/> <!-- New in formCartV2  -->
             <xsl:element name="publicID">
                 <xsl:value-of select="@public-id"/>
             </xsl:element>
             <xsl:element name="version">
                 <xsl:value-of select="version"/>
             </xsl:element>
-            <xsl:element name="type">
+            <xsl:element name="type"> <!-- New in formCartV2  - not a database field - derived from the presence of permissible values -->
                 <xsl:choose>
                     <xsl:when test="ancestor::questions/valid-values">Enumerated</xsl:when>
                     <xsl:otherwise>NonEnumerated</xsl:otherwise>
                 </xsl:choose>
             </xsl:element>
-            <xsl:apply-templates select="context"/>
+            <xsl:apply-templates select="context"/> <!-- New in formCartV2 -->
             <xsl:element name="workflowStatusName">
                 <xsl:value-of select="asl-name"/>
             </xsl:element>
@@ -349,7 +400,8 @@
             <xsl:element name="UOMName">
                 <xsl:value-of select="unit-of-measure"/>
             </xsl:element>
-            <xsl:apply-templates select="concept-derivation-rule/component-concepts"/>
+            <xsl:apply-templates select="concept-derivation-rule/component-concepts"/> <!-- new in formCartV2 - complex element -->
+        <xsl:call-template name="PermissibleValue"/> <!-- new in formCartV2 - complex element -->
         </xsl:element>
     </xsl:template>
 
@@ -386,17 +438,17 @@
 
     <xsl:template match="concept-derivation-rule/component-concepts">
         <!-- generate link to open the concept in NCI Browser -->
-        <xsl:variable name="baseURL">http://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=</xsl:variable>
+        <xsl:variable name="baseURL"
+            >http://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=</xsl:variable>
         <xsl:variable name="dictionary" select="replace(concept/origin, ' ', '%20')"/>
         <xsl:variable name="identifier">&amp;code=</xsl:variable>
         <xsl:variable name="code" select=".[./@is-primary = 'true']/concept/code"/>
-        
+
         <xsl:element name="valueDomainConcept">
             <xsl:value-of select=".[./@is-primary = 'true']/concept/code"/>
         </xsl:element>
-        <xsl:element name="nciTermBrowserLink">
-            <xsl:value-of
-                select="concat($baseURL,$dictionary, $identifier, $code)"/>
+        <xsl:element name="nciTermBrowserLink"> <!-- not a database field, generated by this template -->
+            <xsl:value-of select="concat($baseURL,$dictionary, $identifier, $code)"/>
         </xsl:element>
     </xsl:template>
 
@@ -411,14 +463,18 @@
             <xsl:apply-templates select="designations"/>
         </xsl:element>
     </xsl:template>
-    
-    <xsl:template match="designations">
+
+    <xsl:template match="designations"> 
         <xsl:element name="designation">
-            <xsl:element name="createdBy"/>
-            <xsl:element name="dateCreated">2012-01-01T00:00:00.0</xsl:element>
-            <xsl:element name="dateModified">2012-01-01T00:00:00.0</xsl:element>
-            <xsl:element name="modifiedBy"/>
-            <xsl:element name="languageName">
+            <xsl:element name="createdBy"/> <!-- Added in formCartV2  -->
+            <xsl:element name="dateCreated"> <!-- Added in formCartV2  -->
+                <xsl:value-of select="$FILLDATE"/>
+            </xsl:element>
+            <xsl:element name="dateModified"> <!-- Added in formCartV2  -->
+                <xsl:value-of select="$FILLDATE"/>
+            </xsl:element>
+            <xsl:element name="modifiedBy"/> <!-- Added in formCartV2 -->
+            <xsl:element name="languageName"> 
                 <xsl:value-of select="language"/>
             </xsl:element>
             <xsl:element name="name">
@@ -426,14 +482,14 @@
             </xsl:element>
             <xsl:element name="type">
                 <xsl:value-of select="type"/>
-            </xsl:element> 
+            </xsl:element>
             <xsl:element name="context">
                 <xsl:value-of select="context/name"/>
             </xsl:element>
-            <xsl:apply-templates select="cs-csis"/>
+            <xsl:apply-templates select="cs-csis"/> 
         </xsl:element>
     </xsl:template>
-    
+
     <xsl:template match="cs-csis">
         <xsl:element name="classification">
             <xsl:element name="name">
@@ -450,17 +506,17 @@
             </xsl:element>
             <xsl:element name="classificationSchemeItem">
                 <xsl:element name="name">
-                    <xsl:value-of select="class-scheme-item-name"></xsl:value-of>
+                    <xsl:value-of select="class-scheme-item-name"/>
                 </xsl:element>
-            <xsl:element name="publicID">
-                <xsl:value-of select="csi-id"/>
-            </xsl:element>
+                <xsl:element name="publicID">
+                    <xsl:value-of select="csi-id"/>
+                </xsl:element>
                 <xsl:element name="version">
                     <xsl:value-of select="csi-version"/>
                 </xsl:element>
-            <xsl:element name="type">
-                <xsl:value-of select="class-scheme-item-type"/>
-            </xsl:element>
+                <xsl:element name="type">
+                    <xsl:value-of select="class-scheme-item-type"/>
+                </xsl:element>
                 <xsl:element name="preferredDefinition">
                     <xsl:value-of select="csi-description"/>
                 </xsl:element>
@@ -527,10 +583,17 @@
 
     <xsl:template match="protocols">
         <xsl:element name="protocol">
-            <xsl:apply-templates select="lead-org"/>
-            <xsl:apply-templates select="phase"/>
-            <xsl:apply-templates select="type"/>
-            <xsl:apply-templates select="protocol-id"/>
+            <xsl:element name="leadOrganization">
+                <xsl:value-of select="lead-org"/>
+            </xsl:element><xsl:element name="phase">
+                <xsl:value-of select="phase"/>
+            </xsl:element>
+            <xsl:element name="type">
+                <xsl:value-of select="type"/>
+            </xsl:element>
+            <xsl:element name="protocolID">
+                <xsl:value-of select="protocol-id"/>
+            </xsl:element>
             <xsl:element name="longName">
                 <xsl:value-of select="normalize-space(long-name)"/>
             </xsl:element>
@@ -541,30 +604,6 @@
             <xsl:element name="preferredDefinition">
                 <xsl:value-of select="normalize-space(preferred-definition)"/>
             </xsl:element>
-        </xsl:element>
-    </xsl:template>
-
-    <xsl:template match="lead-org">
-        <xsl:element name="leadOrganization">
-            <xsl:value-of select="."/>
-        </xsl:element>
-    </xsl:template>
-
-    <xsl:template match="protocol-id">
-        <xsl:element name="protocolID">
-            <xsl:value-of select="."/>
-        </xsl:element>
-    </xsl:template>
-
-    <xsl:template match="phase">
-        <xsl:element name="phase">
-            <xsl:value-of select="."/>
-        </xsl:element>
-    </xsl:template>
-
-    <xsl:template match="type">
-        <xsl:element name="type">
-            <xsl:value-of select="."/>
         </xsl:element>
     </xsl:template>
 
@@ -580,14 +619,10 @@
             <xsl:element name="doctext">
                 <xsl:value-of select="doc-text"/>
             </xsl:element>
-            <xsl:apply-templates select="url"/>
+            <xsl:element name="URL">
+                <xsl:value-of select="url"/>
+            </xsl:element>
             <xsl:apply-templates select="attachments"/>
-        </xsl:element>
-    </xsl:template>
-
-    <xsl:template match="url">
-        <xsl:element name="URL">
-            <xsl:value-of select="."/>
         </xsl:element>
     </xsl:template>
 
@@ -607,7 +642,97 @@
     <xsl:template match="registrationStatus">
         <xsl:value-of select="."/>
     </xsl:template>
+    
     <xsl:template match="*"/>
     <xsl:template match="@*"/>
+    
+    <xsl:template name="Designation"> <!-- added v20 to support dataElementDerivation/componentDataElement details --> 
+        <xsl:element name="designation">
+            <xsl:element name="createdBy"/>
+            <xsl:element name="dateCreated">
+                <xsl:value-of select="$FILLDATE"/>
+            </xsl:element>
+            <xsl:element name="dateModified">
+                <xsl:value-of select="$FILLDATE"/>
+            </xsl:element>
+            <xsl:element name="modifiedBy"/>
+            <xsl:element name="languageName">ENGLISH</xsl:element>
+            <xsl:element name="name"/>
+            <xsl:element name="type">ABBREVIATION</xsl:element>
+            <xsl:element name="context">caBIG</xsl:element>
+            <xsl:call-template name="Classification"/> <!-- complexType -->
+        </xsl:element>
+    </xsl:template>
+    
+    <xsl:template name="ValueDomain"> <!-- added v20 to support dataElementDerivation/componentDataElement details --> 
+        <xsl:element name="valueDomain">
+            <xsl:element name="longName"/>
+            <xsl:element name="shortName"/>
+            <xsl:element name="publicID">
+                <xsl:value-of select="$FILLPUBLICID"/>
+            </xsl:element>
+            <xsl:element name="version">
+                <xsl:value-of select="$FILLVERSION"/>
+            </xsl:element>
+            <xsl:element name="type">Enumerated</xsl:element>
+            <xsl:element name="context">TEST</xsl:element>
+            <xsl:element name="workflowStatusName">DRAFT NEW</xsl:element>
+            <xsl:element name="datatypeName">CHARACTER</xsl:element>
+            <xsl:element name="decimalPlace"/>
+            <xsl:element name="formatName"/>
+            <xsl:element name="highValueNumber"/>
+            <xsl:element name="lowValueNumber"/>
+            <xsl:element name="maximumLengthNumber"/>
+            <xsl:element name="minimumLengthNumber"/>
+            <xsl:element name="UOMName"/>
+            <xsl:element name="valueDomainConcept"/> 
+            <xsl:element name="nciTermBrowserLink"/> 
+            <xsl:call-template name="PermissibleValue"/> 
+        </xsl:element>
+    </xsl:template>
 
+    <xsl:template name="PermissibleValue"> <!-- added v20 to support dataElementDerivation/componentDataElement details --> 
+        <xsl:element name="permissibleValue">
+            <xsl:element name="value"/>
+            <xsl:call-template name="ValueMeaning"/> 
+            <xsl:element name="beginDate"/>
+            <xsl:element name="endDate"/>
+        </xsl:element>
+    </xsl:template>
+    
+    <xsl:template name="ValueMeaning"> <!-- added v20 to support dataElementDerivation/componentDataElement details --> 
+        <xsl:element name="valueMeaning">
+            <xsl:element name="publicID">
+                <xsl:value-of select="$FILLPUBLICID"/>
+            </xsl:element>
+            <xsl:element name="version">
+                <xsl:value-of select="$FILLVERSION"/>
+            </xsl:element>
+            <xsl:call-template name="Designation"/>
+        </xsl:element>
+    </xsl:template>
+    
+    <xsl:template name="Classification"> <!-- added v20 to support dataElementDerivation/componentDataElement details --> 
+        <xsl:element name="classification">
+        <xsl:element name="name"/>
+        <xsl:element name="publicID">
+            <xsl:value-of select="$FILLPUBLICID"/>
+        </xsl:element>
+        <xsl:element name="version">
+            <xsl:value-of select="$FILLVERSION"/>
+        </xsl:element>
+        <xsl:element name="preferredDefinition"/>
+        <xsl:element name="classificationSchemeItem">
+            <xsl:element name="name"/>
+            <xsl:element name="publicID">
+                <xsl:value-of select="$FILLPUBLICID"/>
+            </xsl:element>
+            <xsl:element name="version">
+                <xsl:value-of select="$FILLVERSION"/>
+            </xsl:element>
+            <xsl:element name="type">TEST</xsl:element>
+            <xsl:element name="preferredDefinition"/>
+        </xsl:element>
+        </xsl:element>
+    </xsl:template>
 </xsl:stylesheet>
