@@ -3,9 +3,9 @@ package gov.nih.nci.ncicb.cadsr.formbuilder.common;
 import java.io.*;
 import java.util.Properties;
 
-public class FormCartHandlingOptionsUtil
+public class FormCartOptionsUtil
 {
-	static private FormCartHandlingOptionsUtil _instance = null;
+	static private FormCartOptionsUtil _instance = null;
 
 	// note: write formats are not mutually exclusive
 	private boolean writeV1Format = false;
@@ -36,9 +36,9 @@ public class FormCartHandlingOptionsUtil
 		return readV2Format;
 	}
 
-	protected FormCartHandlingOptionsUtil(){
+	protected FormCartOptionsUtil(){
 		try{
-			InputStream propertyFileStream = this.getClass().getResourceAsStream("/FormCartHandling.properties") ;
+			InputStream propertyFileStream = this.getClass().getResourceAsStream("/FormCart.properties") ;
 			Properties props = new Properties();
 			props.load(propertyFileStream);
 			String value1 = props.getProperty("writeV1Format");
@@ -50,13 +50,13 @@ public class FormCartHandlingOptionsUtil
 			readV2Format = Boolean.valueOf(value3);
 		} 
 		catch(Exception e){
-			System.out.println("FormCartHandlingOptionsUtil error loading properties: " + e);
+			System.out.println("FormCartOptionsUtil error loading properties: " + e);
 		}	 
 	}
 	 
-	static public FormCartHandlingOptionsUtil instance(){
+	static public FormCartOptionsUtil instance(){
 		if (_instance == null) {
-			_instance = new FormCartHandlingOptionsUtil();
+			_instance = new FormCartOptionsUtil();
 		}
 
 		return _instance;

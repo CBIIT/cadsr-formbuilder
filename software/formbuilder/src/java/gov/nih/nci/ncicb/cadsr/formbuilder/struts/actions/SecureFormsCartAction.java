@@ -23,7 +23,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormCartHandlingOptionsUtil;
+import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormCartOptionsUtil;
 
 
 public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchAction {
@@ -69,13 +69,13 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchAction {
 		  else
 	    	  cartClient = new ObjectCartClient();
 
-	      if (FormCartHandlingOptionsUtil.instance().writeInV1Format() || FormCartHandlingOptionsUtil.instance().readInV1Format()){		  
+	      if (FormCartOptionsUtil.instance().writeInV1Format() || FormCartOptionsUtil.instance().readInV1Format()){		  
 	    	  CDECart userCart = new CDECartOCImpl(cartClient, user.getUsername(),CaDSRConstants.FORMS_CART);
     	      this.setSessionObject(request, CaDSRConstants.FORMS_CART, userCart);
     	      log.debug("setSessionObject " + CaDSRConstants.FORMS_CART + " " + userCart);
 	      }      
 
-	      if (FormCartHandlingOptionsUtil.instance().writeInV2Format() || FormCartHandlingOptionsUtil.instance().readInV2Format()){		  
+	      if (FormCartOptionsUtil.instance().writeInV2Format() || FormCartOptionsUtil.instance().readInV2Format()){		  
 //	    	  CDECart userCartV2 = new CDECartOCImpl(cartClient, user.getUsername(),CaDSRConstants.FORMS_CART_V2);     
 	    	  CDECart userCartV2 = new CDECartOCImplExtension(cartClient, user.getUsername(),CaDSRConstants.FORMS_CART_V2, getFormBuilderService() );     
 	    	  this.setSessionObject(request, CaDSRConstants.FORMS_CART_V2, userCartV2);
@@ -150,7 +150,7 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchAction {
       //Collection unsavedItems = new ArrayList();
  
       
-      if (FormCartHandlingOptionsUtil.instance().writeInV1Format()){
+      if (FormCartOptionsUtil.instance().writeInV1Format()){
     	  try {
     		  Collection items = new ArrayList();
 
@@ -169,7 +169,7 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchAction {
     	  }
       }      
       
-      if (FormCartHandlingOptionsUtil.instance().writeInV2Format()){
+      if (FormCartOptionsUtil.instance().writeInV2Format()){
     	  try {
     		  Collection items = new ArrayList();
 

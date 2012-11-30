@@ -57,7 +57,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import javax.servlet.ServletContext; 
 
-import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormCartHandlingOptionsUtil;
+import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormCartOptionsUtil;
 
 
 public class FormAction extends FormBuilderSecureBaseDispatchAction {
@@ -547,7 +547,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 		boolean clearCheckedFormIds = false;
 
 		
-		if (FormCartHandlingOptionsUtil.instance().writeInV1Format()){
+		if (FormCartOptionsUtil.instance().writeInV1Format()){
 			Cart cart = cartClient.createCart(user.getUsername(), CaDSRConstants.FORMS_CART);
 			HashSet<CartObject> storedForms = (HashSet<CartObject>) cart.getCartObjectCollection();
 			
@@ -573,7 +573,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 			clearCheckedFormIds = true;
 		}
 
-		if (FormCartHandlingOptionsUtil.instance().writeInV2Format()){
+		if (FormCartOptionsUtil.instance().writeInV2Format()){
 			Cart cart = cartClient.createCart(user.getUsername(), CaDSRConstants.FORMS_CART_V2);
 			HashSet<CartObject> storedForms = (HashSet<CartObject>) cart.getCartObjectCollection();
 			
