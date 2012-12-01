@@ -21,6 +21,8 @@ import gov.nih.nci.ncicb.cadsr.common.util.logging.LogFactory;
 
 import net.sf.saxon.TransformerFactoryImpl;
 
+import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormCartOptionsUtil;
+
 
 public class FormConverterUtil {
 	private static Log log = LogFactory.getLog(FormConverterUtil.class.getName());
@@ -29,6 +31,11 @@ public class FormConverterUtil {
 	public static final String V1ToV2XSL = "/transforms/ConvertFormCartV1ToV2.xsl";
 	protected Transformer transformerV1ToV2 = null;
 	
+
+	public String getCartObjectType() {
+		return FormCartOptionsUtil.instance().xsdLocation();
+	}
+
 	public String convertFormToV2(Form crf) {
 
 		// Start with our standard conversion to xml (in V1 format)

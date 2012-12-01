@@ -1,5 +1,6 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
+
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConverterUtil;
 import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
 import gov.nih.nci.ncicb.cadsr.common.cdebrowser.DataElementSearchBean;
@@ -632,11 +633,8 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 
   private CartObject translateCartObject(Form crf) {
 		CartObject ob = new CartObject();
-		ob.setType(":Test:my new type");
-//keep the same until we actually start translating
-//		ob.setType(":Serialized:" + crf.getClass());
-		ob.setDisplayText(Integer.toString(crf.getPublicId()) + "v" + Float.toString(crf.getVersion()));  // Denise asked to use this public id & version now
-//		ob.setDisplayText(crf.getLongName());
+		ob.setType(FormConverterUtil.instance().getCartObjectType());
+		ob.setDisplayText(Integer.toString(crf.getPublicId()) + "v" + Float.toString(crf.getVersion()));
 		ob.setNativeId(crf.getFormIdseq());
 		
 		String convertedForm = FormConverterUtil.instance().convertFormToV2(crf);		

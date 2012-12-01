@@ -45,6 +45,8 @@ import java.io.StringReader;
 
 import net.sf.saxon.TransformerFactoryImpl;
 
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConverterUtil;
+
 
 public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.impl.CDECartOCImpl implements CDECart, Serializable  {
 
@@ -91,7 +93,7 @@ if (log.isDebugEnabled()) {log.debug("Trying new objects, passed in class is " +
 if (type == FormTransferObject.class ) {
 	log.debug("cartClient " + cartClient + " oCart " + oCart);
 	log.debug("cart id " + oCart.getId());	
-	Collection<CartObject> newFormCartElements = cartClient.getObjectsByType(oCart, ":Test:my new type");
+	Collection<CartObject> newFormCartElements = cartClient.getObjectsByType(oCart, FormConverterUtil.instance().getCartObjectType());
 	if (log.isDebugEnabled()) {log.debug("newFormCartElements has " + newFormCartElements.size() + " elements");}
 
 	itemList = new ArrayList();

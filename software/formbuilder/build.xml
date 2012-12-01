@@ -276,8 +276,8 @@
 		<copy todir="${classes.dir}/transforms" >
 			<fileset dir="${basedir}/src/resources/transforms" />
 		</copy>		
-		<copy tofile="${classes.dir}/FormCartHandling.properties" >
-			<fileset file="${basedir}/src/resources/FormCartHandling.properties" />
+		<copy tofile="${classes.dir}/FormCart.properties" >
+			<fileset file="${basedir}/src/resources/FormCart.properties" />
 		</copy>		
 		<fixcrlf srcdir="${artifacts.dir}" eol="lf" includes="**/*.sh, **/*.xml, **/*.properties, **/*.dtd" />
 	</target>
