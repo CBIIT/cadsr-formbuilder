@@ -71,7 +71,7 @@
     <xsl:template match="form-transfer-object">
    <xsl:text>
 </xsl:text>
-<xsl:text>&lt;!-- Transformed with FinalFormCartTransformv21.xsl and validated with FormCartv18.xsd --&gt;</xsl:text>
+<xsl:comment>Transformed with FinalFormCartTransformv21.xsl and validated with FormCartv18.xsd</xsl:comment>
         <xsl:text>
 </xsl:text>
         <xsl:element name="form">
