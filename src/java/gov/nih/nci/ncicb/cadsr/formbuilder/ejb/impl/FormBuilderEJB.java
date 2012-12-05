@@ -1696,4 +1696,9 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
     	return deDAO.isDEDerived(deIdSeq);
     }
 
+    public String getIdseq(int publicId, Float version) {
+        FormDAO formDAO = daoFactory.getFormDAO();
+    	return formDAO.getIdseq(publicId, version);
+    }
+    
 }

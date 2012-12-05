@@ -1,5 +1,7 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
+
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConverterUtil;
 import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
 import gov.nih.nci.ncicb.cadsr.common.cdebrowser.DataElementSearchBean;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
@@ -43,6 +45,20 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.DynaActionForm;
+
+import java.util.LinkedList;
+import java.io.StringWriter;
+import org.exolab.castor.xml.Marshaller;
+import org.exolab.castor.xml.MarshalException;
+import org.exolab.castor.xml.ValidationException;
+import javax.xml.transform.*;
+import javax.xml.transform.stream.*;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.StringReader;
+import javax.servlet.ServletContext; 
+
+import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormCartOptionsUtil;
 
 
 public class FormAction extends FormBuilderSecureBaseDispatchAction {
@@ -528,39 +544,95 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 		else
 			cartClient = new ObjectCartClient();
 		
-		Cart cart = cartClient.createCart(user.getUsername(), CaDSRConstants.FORMS_CART);
-		HashSet<CartObject> storedForms = (HashSet<CartObject>) cart.getCartObjectCollection();
-		
-		HashSet<CartObject> forRemoval = new HashSet<CartObject>();
-		
 		DynaActionForm dynaBean = (DynaActionForm)form;
-		String[] formIds = (String[])dynaBean.get("checkedFormIds");
+		boolean clearCheckedFormIds = false;
+
 		
-		if (formIds != null) {
-			for (String formId: formIds) {
-				Form crf = service.getFormDetails(formId);
-				CartObject co = getNativeObject(storedForms, formId);
-				objects.put(formId, crf);
-				objectDisplayNames.put(formId, crf.getLongName());
-				
-				if(co != null)
-					forRemoval.add(co);
-			  }
+		if (FormCartOptionsUtil.instance().writeInV1Format()){
+			Cart cart = cartClient.createCart(user.getUsername(), CaDSRConstants.FORMS_CART);
+			HashSet<CartObject> storedForms = (HashSet<CartObject>) cart.getCartObjectCollection();
+			
+			HashSet<CartObject> forRemoval = new HashSet<CartObject>();
+			
+			String[] formIds = (String[])dynaBean.get("checkedFormIds");
+			
+			if (formIds != null) {
+				for (String formId: formIds) {
+					Form crf = service.getFormDetails(formId);
+					CartObject co = getNativeObject(storedForms, formId);
+					objects.put(formId, crf);
+					objectDisplayNames.put(formId, crf.getLongName());
+					
+					if(co != null)
+						forRemoval.add(co);
+				  }
+			}
+			
+			cart = cartClient.removeObjectCollection(cart, forRemoval);
+			cart = cartClient.storePOJOCollection(cart, JDBCFormTransferObject.class, objectDisplayNames, objects);
+			
+			clearCheckedFormIds = true;
 		}
-		
-		cart = cartClient.removeObjectCollection(cart, forRemoval);
-		cart = cartClient.storePOJOCollection(cart, JDBCFormTransferObject.class, objectDisplayNames, objects);
+
+		if (FormCartOptionsUtil.instance().writeInV2Format()){
+			Cart cart = cartClient.createCart(user.getUsername(), CaDSRConstants.FORMS_CART_V2);
+			HashSet<CartObject> storedForms = (HashSet<CartObject>) cart.getCartObjectCollection();
+			
+			HashSet<CartObject> forRemoval = new HashSet<CartObject>();
 	
+			String[] formIds = (String[])dynaBean.get("checkedFormIds");
+			
+			if (formIds != null) {
+				for (String formId: formIds) {
+					Form crf = service.getFormDetails(formId);
+					CartObject co = getNativeObject(storedForms, formId);
+					objects.put(formId, crf);
+					objectDisplayNames.put(formId, crf.getLongName());
+					
+					if(co != null)
+						forRemoval.add(co);
+				  }
+			}
+	
+			log.debug("Starting new add-to-cart - removing re-used objects");
+			cart = cartClient.removeObjectCollection(cart, forRemoval);  // these were just pulled from the cart, so they are in the new format
+			log.debug("Starting cart object translation");
+			Collection<CartObject> cartObjects = new LinkedList<CartObject>();
+			Collection<Object> forms = objects.values();
+			for (Object f: forms)
+				cartObjects.add(translateCartObject((Form)f));
+			
+			log.debug("Adding cart objects");
+			cart = cartClient.storeObjectCollection(cart, cartObjects);
+			log.debug("Finished add-to-cart");
+			clearCheckedFormIds = true;
+		}		
+		
+
 		saveMessage("cadsr.common.formcart.save.success",request);
 		
 		dynaBean.set("cartAddFormId", "");
-		dynaBean.set("checkedFormIds", new String[]{});
+		if (clearCheckedFormIds)
+			dynaBean.set("checkedFormIds", new String[]{});
 	} catch (Exception e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
 	  return mapping.findForward("success");
   }
+
+  private CartObject translateCartObject(Form crf) {
+		CartObject ob = new CartObject();
+		ob.setType(FormConverterUtil.instance().getCartObjectType());
+		ob.setDisplayText(Integer.toString(crf.getPublicId()) + "v" + Float.toString(crf.getVersion()));
+		ob.setNativeId(crf.getFormIdseq());
+		
+		String convertedForm = FormConverterUtil.instance().convertFormToV2(crf);		
+		ob.setData(convertedForm);
+		return ob;	  
+  }
+
+
   
   private CartObject getNativeObject(HashSet<CartObject> items, String id) {
 	  for(CartObject co: items){

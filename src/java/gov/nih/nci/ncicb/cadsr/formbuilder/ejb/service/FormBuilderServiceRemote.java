@@ -238,5 +238,6 @@ public interface FormBuilderServiceRemote {
             throws RemoteException;
     
     public boolean isDEDerived(String deIdSeq) throws RemoteException;
-                
+
+    public String getIdseq(int publicId, Float version) throws RemoteException;                
     }
