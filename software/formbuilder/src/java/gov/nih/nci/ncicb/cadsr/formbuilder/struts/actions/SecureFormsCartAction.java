@@ -76,7 +76,6 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchAction {
 	      }      
 
 	      if (FormCartOptionsUtil.instance().writeInV2Format() || FormCartOptionsUtil.instance().readInV2Format()){		  
-//	    	  CDECart userCartV2 = new CDECartOCImpl(cartClient, user.getUsername(),CaDSRConstants.FORMS_CART_V2);     
 	    	  CDECart userCartV2 = new CDECartOCImplExtension(cartClient, user.getUsername(),CaDSRConstants.FORMS_CART_V2, getFormBuilderService() );     
 	    	  this.setSessionObject(request, CaDSRConstants.FORMS_CART_V2, userCartV2);
     	      log.debug("setSessionObject " + CaDSRConstants.FORMS_CART_V2 + " " + userCartV2);
