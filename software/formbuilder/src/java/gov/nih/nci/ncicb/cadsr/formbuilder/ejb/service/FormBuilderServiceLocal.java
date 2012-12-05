@@ -138,4 +138,6 @@ public interface FormBuilderServiceLocal  {
       public AdminComponentType getComponentType(String publicId, String version);
       
       public boolean isDEDerived(String deIdSeq);
+
+    public String getIdseq(int publicId, Float version);
 }

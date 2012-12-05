@@ -195,4 +195,5 @@ public interface FormBuilderServiceDelegate {
     
     public boolean isDEDerived(String deIdSeq);
 
+    public String getIdseq(int publicId, Float version);
 }
