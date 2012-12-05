@@ -51,7 +51,13 @@
             form/module/question/triggerAction
             form/protocol generate all sub-elements whether present or not
          add explicit apply-templates for form/modules, form/protocols, form/ref-docs, referenceDocuments/URL 
-         Major change add permissibleValue to valueDomain -->
+         add permissibleValue to valueDomain -->
+    <!-- Version 21
+         add change valueDomainConcept to complex type, include:
+             add primaryConceptCode and primaryConceptName
+             make nciTermBrowserLink sub-elements
+         add normalize-space to doc-text, form-transfer-object/preferred-definition, valid-value/description cs-csi/class-scheme-definition, 
+             csi/description text fields that contain sentences -->
    
     <xsl:output indent="yes" exclude-result-prefixes="xsi"/>
     <xsl:variable name="FILLDATE">0001-01-01T00:00:01</xsl:variable>
@@ -63,6 +69,11 @@
     </xsl:template>
 
     <xsl:template match="form-transfer-object">
+   <xsl:text>
+</xsl:text>
+<xsl:text>&lt;!-- Transformed with FinalFormCartTransformv21.xsl and validated with FormCartv18.xsd --&gt;</xsl:text>
+        <xsl:text>
+</xsl:text>
         <xsl:element name="form">
             <xsl:element name="context">
                 <xsl:value-of select="./context-name"/>
@@ -85,7 +96,7 @@
             </xsl:element>
             <xsl:element name="changeNote"/> <!-- new in formCartV2 -->
             <xsl:element name="preferredDefinition">
-                <xsl:value-of select="./preferred-definition"/>
+                <xsl:value-of select="normalize-space(./preferred-definition)"/>
             </xsl:element>
             <xsl:element name="publicID">
                 <xsl:value-of select="./@public-id"/>
@@ -105,7 +116,7 @@
                 <xsl:value-of select="./form-type"/>
             </xsl:element>
             <xsl:call-template name="Designation"/> <!-- new in formCartV2 (complexType element) -->
-            <xsl:element name="definition"/> <!-- new in formCartV2 (complexType element) -->
+            <xsl:call-template name="Definition"/> <!-- new in formCartV2 (complexType element) -->
             <xsl:element name="headerInstruction">
                 <xsl:element name="text">
                     <xsl:value-of select="normalize-space(instruction/preferred-definition)"/>
@@ -120,7 +131,7 @@
             <xsl:apply-templates select="modules"/>
             <xsl:apply-templates select="protocols"/>
             <xsl:apply-templates select="ref-docs"/>
-            <xsl:element name="contactCommunication"/>
+            <xsl:call-template name="ContactCommunication"/>
         </xsl:element>
     </xsl:template>
 
@@ -194,7 +205,7 @@
                 </xsl:element>
             </xsl:element>
             <xsl:apply-templates select="questions"/>
-            <xsl:apply-templates select="trigger-actions"/> <!-- New in formCartV2 -->
+            <xsl:apply-templates select="trigger-actions"/> 
         </xsl:element>
     </xsl:template>
 
@@ -207,17 +218,17 @@
                 <xsl:value-of select="@display-order"/>
             </xsl:element>
             <xsl:element name="createdBy"/>
-            <!-- Added in formCartV2 - empty in Form Builder 4.0.4 -->
+            <!-- Added in formCartV2 -->
             <xsl:element name="dateCreated">
-                <!-- Added in formCartV2 - filled with meaningless date in Form Builder 4.0.4 -->
+                <!-- Added in formCartV2 -->
                 <xsl:value-of select="$FILLDATE"/>
             </xsl:element>
             <xsl:element name="dateModified">
-                <!-- Added in formCartV2 - filled with meaningless date in Form Builder 4.0.4 -->
+                <!-- Added in formCartV2 -->
                 <xsl:value-of select="$FILLDATE"/>
             </xsl:element>
             <xsl:element name="modifiedBy"/>
-            <!-- Added in formCartV2 - empty in Form Builder 4.0.4 -->
+            <!-- Added in formCartV2 -->
             <xsl:element name="questionText">
                 <xsl:value-of select="normalize-space(long-name)"/>
             </xsl:element>
@@ -372,7 +383,7 @@
                     <xsl:otherwise>NonEnumerated</xsl:otherwise>
                 </xsl:choose>
             </xsl:element>
-            <xsl:apply-templates select="context"/> <!-- New in formCartV2 -->
+            <xsl:element name="context">TEST</xsl:element> <!-- New in formCartV2 -->
             <xsl:element name="workflowStatusName">
                 <xsl:value-of select="asl-name"/>
             </xsl:element>
@@ -421,14 +432,14 @@
                 <xsl:value-of select="./long-name"/>
             </xsl:element>
             <xsl:element name="meaningText">
-                <xsl:value-of select="./form-value-meaning-text"/>
+                <xsl:value-of select="normalize-space(./form-value-meaning-text)"/>
             </xsl:element>
             <xsl:element name="description">
-                <xsl:value-of select="./form-value-meaning-desc"/>
+                <xsl:value-of select="normalize-space(./form-value-meaning-desc)"/>
             </xsl:element>
             <xsl:element name="instruction">
                 <xsl:element name="text">
-                    <xsl:value-of select="./instruction/preferred-definition"/>
+                    <xsl:value-of select="normalize-space(./instruction/preferred-definition)"/>
                 </xsl:element>
             </xsl:element>
             <xsl:apply-templates select="value-meaning"/>
@@ -445,10 +456,15 @@
         <xsl:variable name="code" select=".[./@is-primary = 'true']/concept/code"/>
 
         <xsl:element name="valueDomainConcept">
-            <xsl:value-of select=".[./@is-primary = 'true']/concept/code"/>
-        </xsl:element>
-        <xsl:element name="nciTermBrowserLink"> <!-- not a database field, generated by this template -->
-            <xsl:value-of select="concat($baseURL,$dictionary, $identifier, $code)"/>
+            <xsl:element name="primaryConceptName">
+                <xsl:value-of select=".[./@is-primary = 'true']/concept/long-name"/>
+            </xsl:element>
+             <xsl:element name="primaryConceptCode">
+                <xsl:value-of select=".[./@is-primary = 'true']/concept/code"/>
+             </xsl:element>
+            <xsl:element name="nciTermBrowserLink"> <!-- not a database field, generated by this template -->
+              <xsl:value-of select="concat($baseURL,$dictionary, $identifier, $code)"/>
+            </xsl:element>
         </xsl:element>
     </xsl:template>
 
@@ -483,9 +499,7 @@
             <xsl:element name="type">
                 <xsl:value-of select="type"/>
             </xsl:element>
-            <xsl:element name="context">
-                <xsl:value-of select="context/name"/>
-            </xsl:element>
+            <xsl:apply-templates select="context"/>
             <xsl:apply-templates select="cs-csis"/> 
         </xsl:element>
     </xsl:template>
@@ -502,7 +516,7 @@
                 <xsl:value-of select="cs-version"/>
             </xsl:element>
             <xsl:element name="preferredDefinition">
-                <xsl:value-of select="class-scheme-definition"/>
+                <xsl:value-of select="normalize-space(class-scheme-definition)"/>
             </xsl:element>
             <xsl:element name="classificationSchemeItem">
                 <xsl:element name="name">
@@ -518,7 +532,7 @@
                     <xsl:value-of select="class-scheme-item-type"/>
                 </xsl:element>
                 <xsl:element name="preferredDefinition">
-                    <xsl:value-of select="csi-description"/>
+                    <xsl:value-of select="normalize-space(csi-description)"/>
                 </xsl:element>
             </xsl:element>
         </xsl:element>
@@ -585,7 +599,8 @@
         <xsl:element name="protocol">
             <xsl:element name="leadOrganization">
                 <xsl:value-of select="lead-org"/>
-            </xsl:element><xsl:element name="phase">
+            </xsl:element>
+            <xsl:element name="phase">
                 <xsl:value-of select="phase"/>
             </xsl:element>
             <xsl:element name="type">
@@ -617,7 +632,7 @@
             </xsl:element>
             <xsl:apply-templates select="context"/>
             <xsl:element name="doctext">
-                <xsl:value-of select="doc-text"/>
+                <xsl:value-of select="normalize-space(doc-text)"/>
             </xsl:element>
             <xsl:element name="URL">
                 <xsl:value-of select="url"/>
@@ -646,7 +661,7 @@
     <xsl:template match="*"/>
     <xsl:template match="@*"/>
     
-    <xsl:template name="Designation"> <!-- added v20 to support dataElementDerivation/componentDataElement details --> 
+    <xsl:template name="Designation"> <!-- added v20 to support generating dataElementDerivation/componentDataElement details --> 
         <xsl:element name="designation">
             <xsl:element name="createdBy"/>
             <xsl:element name="dateCreated">
@@ -685,8 +700,11 @@
             <xsl:element name="maximumLengthNumber"/>
             <xsl:element name="minimumLengthNumber"/>
             <xsl:element name="UOMName"/>
-            <xsl:element name="valueDomainConcept"/> 
-            <xsl:element name="nciTermBrowserLink"/> 
+            <xsl:element name="valueDomainConcept">
+                <xsl:element name="primaryConceptName"/>
+                <xsl:element name="primaryConceptCode"/>
+                <xsl:element name="nciTermBrowserLink">http://blankNode</xsl:element>
+            </xsl:element>
             <xsl:call-template name="PermissibleValue"/> 
         </xsl:element>
     </xsl:template>
@@ -735,4 +753,55 @@
         </xsl:element>
         </xsl:element>
     </xsl:template>
+    
+    <xsl:template name="Definition"> <!-- Added v20 to support generating multiple definitions for forms -->
+        <xsl:element name="definition">
+            <xsl:element name="createdBy"/>
+            <xsl:element name="dateCreated">
+                <xsl:value-of select="$FILLDATE"/>
+            </xsl:element>
+            <xsl:element name="dateModified">
+                <xsl:value-of select="$FILLDATE"/>
+            </xsl:element>
+            <xsl:element name="modifiedBy"/>
+            <xsl:element name="languageName">ENGLISH</xsl:element>
+            <xsl:element name="text"/>
+            <xsl:element name="type">NCI</xsl:element>
+            <xsl:call-template name="Classification"/> <!-- complexType -->
+        </xsl:element>
+    </xsl:template>
+    
+    <xsl:template name="ContactCommunication"> <!-- Added v20 for completeness -->
+        <xsl:element name="contactCommunication">
+            <xsl:element name="rank"/>
+            <xsl:element name="type">PHONE</xsl:element>
+            <xsl:element name="value"/>
+            <xsl:element name="organizationName"/>
+            <xsl:element name="organizationRAI"/>
+            <xsl:element name="person">
+                <xsl:element name="firstName"/>
+                <xsl:element name="lastName"/>
+                <xsl:element name="position"/>
+                <xsl:element name="address">
+                    <xsl:element name="addressLine1"/>
+                    <xsl:element name="addressLine2"/>
+                    <xsl:element name="city"/>
+                    <xsl:element name="state"/>
+                    <xsl:element name="country"/>
+                    <xsl:element name="postalCode"/>
+                    <xsl:element name="rank"/>
+                    <xsl:element name="type">MAILING</xsl:element>
+                </xsl:element>
+            </xsl:element>
+            <xsl:element name="createdBy"/>
+            <xsl:element name="dateCreated">
+                <xsl:value-of select="$FILLDATE"/>
+            </xsl:element>
+            <xsl:element name="dateModified">
+                <xsl:value-of select="$FILLDATE"/>
+            </xsl:element>
+            <xsl:element name="modifiedBy"/>
+        </xsl:element>
+    </xsl:template>
 </xsl:stylesheet>
+
