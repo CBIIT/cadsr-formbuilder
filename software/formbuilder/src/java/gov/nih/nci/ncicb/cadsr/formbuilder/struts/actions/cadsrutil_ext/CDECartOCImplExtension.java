@@ -1,5 +1,7 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext;
 
+// This class extends the previous objectCart code from cadsrutil and allows it to retrieve forms that are in the new forCartV2 format 
+
 import gov.nih.nci.ncicb.cadsr.objectCart.impl.CDECartOCImpl;
 
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
@@ -22,13 +24,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-
 
 import gov.nih.nci.ncicb.cadsr.common.util.logging.Log;
 import gov.nih.nci.ncicb.cadsr.common.util.logging.LogFactory;
@@ -46,117 +42,91 @@ import java.io.StringReader;
 import net.sf.saxon.TransformerFactoryImpl;
 
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConverterUtil;
-
+import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormCartOptionsUtil;
 
 public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.impl.CDECartOCImpl implements CDECart, Serializable  {
 
 	private static Log log = LogFactory.getLog(CDECartOCImplExtension.class.getName());
-	
+
+	public static final String transformToConvertCartToDTO = "/transforms/ConvertFormCartV2ToDTO.xsl";  // consider changing to a non-versioned name
+
 	protected FormBuilderServiceDelegate formBuilderService;
-	
+
 	public CDECartOCImplExtension(ObjectCartClient client, String uid, String cName, FormBuilderServiceDelegate formBuilderServiceDelegate) {
 		super(client, uid, cName);
 		formBuilderService = formBuilderServiceDelegate;
 	}
-	
+
 	public Collection getForms() {
-		log.debug("CDECartOCImplExtension getForms this = " + this);		
-		return getElementsV2(FormTransferObject.class);
-	}
 
+		log.debug("cartClient " + cartClient + " oCart " + oCart);
+		log.debug("cart id " + oCart.getId());
 
-	private Collection getElementsV2(Class type) {
 		try {
-			List itemList = null;
-///can't use FormBuilder code here	
-//			if (type != FormTransferObject.class || FormCartHandlingOptionsUtil.instance().readInV1Format()) {
-			if (type != FormTransferObject.class) {						
+			Collection<CartObject> newFormCartElements = cartClient.getObjectsByType(oCart, FormConverterUtil.instance().getCartObjectType());
+			log.debug("newFormCartElements has " + newFormCartElements.size() + " elements");
 
-				Collection cartElements = cartClient.getObjectsByType(oCart, type);
-				if (cartElements != null){
-					Collection items = ObjectCartClient.getPOJOCollection(type, cartElements);
-					itemList = new ArrayList(items);
-					Collections.sort(itemList,getComparator(type));
-				return itemList;
-				} else {
-					itemList = new ArrayList();
-					return itemList;
+			List itemList = new ArrayList();
+
+			// create the transformer 
+			InputStream xslStream = this.getClass().getResourceAsStream(transformToConvertCartToDTO);
+			StreamSource xslSource = new StreamSource(xslStream);
+			Transformer transformer = null;
+			try {
+				transformer = net.sf.saxon.TransformerFactoryImpl.newInstance().newTransformer(xslSource);
+			} catch (TransformerException e) {
+				log.error("TransformerException creating transformer", e);
+			}	
+			log.debug("created transformer");
+
+			for (CartObject f: newFormCartElements) {
+
+				// read the new format XML from the cart object and convert to (partial) old cart XML (i.e. serialized FormTransferObject)
+				if (FormCartOptionsUtil.instance().dumpXMLDuringDebug())
+					log.debug("XML from cart: " + f.getData());
+				Source xmlInput = new StreamSource(new StringReader(f.getData()));	
+				ByteArrayOutputStream xmlOutputStream = new ByteArrayOutputStream();  
+				Result xmlOutput = new StreamResult(xmlOutputStream);
+				try {
+					transformer.transform(xmlInput, xmlOutput);
+				} catch (TransformerException e) {
+					log.error("TransformerException loading forms", e);
+				}	
+				if (FormCartOptionsUtil.instance().dumpXMLDuringDebug())
+					log.debug("Converted XML: " + xmlOutputStream.toString());
+
+
+				// convert the serialized FormTransferObject back into an actual FormTransferObject
+				Object pOb = new Object();
+				try {		
+					StringReader reader = new StringReader(xmlOutputStream.toString());
+					pOb = Unmarshaller.unmarshal(FormTransferObject.class, reader);		
+
+				} catch (MarshalException ex) {
+					log.error("MarshalException loading forms", ex);	
+				} catch (ValidationException ex) {
+					log.error("ValidationException loading forms", ex);	
 				}
+				log.debug("Trying to convert object pointer to FormTransferObject...");		
+				FormTransferObject FTO = (FormTransferObject)pOb;
+				if (FormCartOptionsUtil.instance().dumpXMLDuringDebug())
+					log.debug("FormTransferObject: " + FTO.toString());
+
+
+				// new format doesn't include idseq so it's empty, we need it for the UI so set it here
+				String idseq = formBuilderService.getIdseq(FTO.getPublicId(), FTO.getVersion());
+				FTO.setIdseq(idseq);
+
+				itemList.add(FTO);
+				log.debug("Loaded " + FTO.getIdseq());			
 			}
-			
-// hacking away to test things out...			
-// now lets add in our new forms
-			
-if (log.isDebugEnabled()) {log.debug("Trying new objects, passed in class is " + FormTransferObject.class + " in CDECartOCImpl " + this);}
-///can't use FormBuilder code here	
-//if (type == FormTransferObject.class && FormCartHandlingOptionsUtil.instance().readInV2Format())
-if (type == FormTransferObject.class ) {
-	log.debug("cartClient " + cartClient + " oCart " + oCart);
-	log.debug("cart id " + oCart.getId());	
-	Collection<CartObject> newFormCartElements = cartClient.getObjectsByType(oCart, FormConverterUtil.instance().getCartObjectType());
-	if (log.isDebugEnabled()) {log.debug("newFormCartElements has " + newFormCartElements.size() + " elements");}
 
-	itemList = new ArrayList();
-	
-	InputStream xslStream = this.getClass().getResourceAsStream("/transforms/ConvertFormCartV2ToDTO.xsl");  // we need to change to a non-versioned name
-	StreamSource xslSource = new StreamSource(xslStream);
-		Transformer transformer = null;
-		try {
-		    transformer = net.sf.saxon.TransformerFactoryImpl.newInstance().newTransformer(xslSource);
-		} catch (TransformerException e) {
-// Handle.
-if (log.isDebugEnabled()) {log.debug("Tranformer exception");}
-		}	
-if (log.isDebugEnabled()) {log.debug("created transformer");}
-		
-	for (CartObject f: newFormCartElements) {
-		
-		
-		Source xmlInput = new StreamSource(new StringReader(f.getData()));	
-		ByteArrayOutputStream xmlOutputStream = new ByteArrayOutputStream();  
-		Result xmlOutput = new StreamResult(xmlOutputStream);
-
-//if (log.isDebugEnabled()) {log.debug("xml from cart: " + f.getData());}		
-		try {
-		    transformer.transform(xmlInput, xmlOutput);
-		} catch (TransformerException e) {
-// Handle.
-		}	
-
-//if (log.isDebugEnabled()) {log.debug("transformed xml from cart: " + xmlOutputStream.toString());}		
-		
-		Object pOb = new Object();
-		// need exception handling		
-		try {		
-			StringReader reader = new StringReader(xmlOutputStream.toString());
-			pOb = Unmarshaller.unmarshal(FormTransferObject.class, reader);		
-			
-		} catch (MarshalException ex) {
-if (log.isDebugEnabled()) log.debug("MarshalException: " + ex.getMessage());			
-		} catch (ValidationException ex) {
-if (log.isDebugEnabled()) log.debug("ValidationException");			
-		}
-if (log.isDebugEnabled()) {log.debug("Trying to convert object pointer to FormTransferObject...");}		
-FormTransferObject FTO2 = (FormTransferObject)pOb;
-if (log.isDebugEnabled()) {log.debug("FormTransferObject " + FTO2.toString());}
-
-// set idseq here
-String idseq = formBuilderService.getIdseq(FTO2.getPublicId(), FTO2.getVersion());
-FTO2.setIdseq(idseq);
-
-		itemList.add(FTO2);
-
-	}
-	return itemList;	
-}
-return itemList;		
+			return itemList;		
 
 		} catch (ObjectCartException oce) {
 			oce.printStackTrace();
-			throw new RuntimeException("getElements: Error restoring the POJO Collection", oce);
+			throw new RuntimeException("getForms: Error loading forms", oce);
 		}
 	}	
-	
-	
 
 }

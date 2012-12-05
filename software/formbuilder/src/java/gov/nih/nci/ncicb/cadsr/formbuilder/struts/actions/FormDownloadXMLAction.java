@@ -29,60 +29,57 @@ import org.apache.struts.action.ActionMapping;
 public class FormDownloadXMLAction extends Action {
 	private static Log log = LogFactory.getLog(FormDownloadXMLAction.class.getName());
 
-	
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-                                          HttpServletResponse response) throws IOException, ServletException {
+			HttpServletResponse response) throws IOException, ServletException {
 
-  String formIdSeq = (String)request.getParameter(FormConstants.FORM_ID_SEQ);
-  
-  FormBuilderServiceDelegate service = getFormBuilderService();
-  Form crf = null;
+		String formIdSeq = (String)request.getParameter(FormConstants.FORM_ID_SEQ);
 
-  try {
-   crf = service.getFormDetails(formIdSeq);
-  } catch (FormBuilderException exp) {
-    log.error("Exception getting CRF", exp);
+		FormBuilderServiceDelegate service = getFormBuilderService();
+		Form crf = null;
 
-   return mapping.findForward(CommonNavigationConstants.FAILURE);
-  }
+		try {
+			crf = service.getFormDetails(formIdSeq);
+		} catch (FormBuilderException exp) {
+			log.error("Exception getting CRF", exp);
+			return mapping.findForward(CommonNavigationConstants.FAILURE);
+		}
 
-  
-  String convertedForm = FormConverterUtil.instance().convertFormToV2(crf);  
+		String convertedForm = FormConverterUtil.instance().convertFormToV2(crf);  
 
-  
-  CDEBrowserParams params = CDEBrowserParams.getInstance();
-  String xmlFilename ="Form"  + crf.getPublicId() + "_v" + crf.getVersion();
-  xmlFilename = xmlFilename.replace('/', '_').replace('.', '_');
-  xmlFilename = params.getXMLDownloadDir() + xmlFilename + ".xml";
+		CDEBrowserParams params = CDEBrowserParams.getInstance();
+		String xmlFilename ="Form"  + crf.getPublicId() + "_v" + crf.getVersion();
+		xmlFilename = xmlFilename.replace('/', '_').replace('.', '_');
+		xmlFilename = params.getXMLDownloadDir() + xmlFilename + ".xml";
 
-  FileOutputStream fileOut = new FileOutputStream(xmlFilename);
-  byte[] xmlBytes = convertedForm.getBytes();
-  fileOut.write(xmlBytes);
-  fileOut.flush();
-  fileOut.close();
+		FileOutputStream fileOut = new FileOutputStream(xmlFilename);
+		byte[] xmlBytes = convertedForm.getBytes();
+		fileOut.write(xmlBytes);
+		fileOut.flush();
+		fileOut.close();
 
-  request.setAttribute("fileName", xmlFilename);
-  return mapping.findForward("downloadSuccess");
- }
+		request.setAttribute("fileName", xmlFilename);
+		return mapping.findForward("downloadSuccess");
+	}
 
-	  /**
-	   * Gets the ServiceDelegateFactory form the application scope and
-	   * instantiates a FormBuilderServiceDelegate from the factory
-	   *
-	   * @return FormBuilderServiceDelegate
-	   *
-	   * @throws ServiceStartupException
-	   */
-	  protected FormBuilderServiceDelegate getFormBuilderService()
-	    throws ServiceStartupException {
-	    FormBuilderServiceDelegate svcDelegate = null;
-	    ServiceDelegateFactory svcFactory =
-	      (ServiceDelegateFactory) servlet.getServletContext().getAttribute(
-	        FormBuilderConstants.SERVICE_DELEGATE_FACTORY_KEY);
-	    //svcDelegate = svcFactory.createService();
-	    svcDelegate = svcFactory.findService();
+	/**
+	 * Gets the ServiceDelegateFactory form the application scope and
+	 * instantiates a FormBuilderServiceDelegate from the factory
+	 *
+	 * @return FormBuilderServiceDelegate
+	 *
+	 * @throws ServiceStartupException
+	 */
+	protected FormBuilderServiceDelegate getFormBuilderService()
+	throws ServiceStartupException {
+		FormBuilderServiceDelegate svcDelegate = null;
+		ServiceDelegateFactory svcFactory =
+			(ServiceDelegateFactory) servlet.getServletContext().getAttribute(
+					FormBuilderConstants.SERVICE_DELEGATE_FACTORY_KEY);
+		//svcDelegate = svcFactory.createService();
+		svcDelegate = svcFactory.findService();
 
-	    return svcDelegate;
-	  }
-	
+		return svcDelegate;
+	}
+
 }

@@ -593,29 +593,19 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 						forRemoval.add(co);
 				  }
 			}
-
-			
-			// doing all translation here to minimize changes to existing code, might redo it all later
-
-			
-	 if (log.isDebugEnabled()) {log.debug("Starting new add-to-cart - removing re-used objects");}
+	
+			log.debug("Starting new add-to-cart - removing re-used objects");
 			cart = cartClient.removeObjectCollection(cart, forRemoval);  // these were just pulled from the cart, so they are in the new format
-	 if (log.isDebugEnabled()) {log.debug("Starting cart object translation");}
+			log.debug("Starting cart object translation");
 			Collection<CartObject> cartObjects = new LinkedList<CartObject>();
 			Collection<Object> forms = objects.values();
 			for (Object f: forms)
 				cartObjects.add(translateCartObject((Form)f));
 			
-	 if (log.isDebugEnabled()) {log.debug("Adding cart objects");}
+			log.debug("Adding cart objects");
 			cart = cartClient.storeObjectCollection(cart, cartObjects);
-	 if (log.isDebugEnabled()) {log.debug("Finished add-to-cart");}
-			
-			
-	 clearCheckedFormIds = true;
-	 
-//			cart = cartClient.removeObjectCollection(cart, forRemoval);
-//			cart = cartClient.storePOJOCollection(cart, JDBCFormTransferObject.class, objectDisplayNames, objects);
-						
+			log.debug("Finished add-to-cart");
+			clearCheckedFormIds = true;
 		}		
 		
 
@@ -638,12 +628,11 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 		ob.setNativeId(crf.getFormIdseq());
 		
 		String convertedForm = FormConverterUtil.instance().convertFormToV2(crf);		
-		
 		ob.setData(convertedForm);
 		return ob;	  
   }
-  
-  
+
+
   
   private CartObject getNativeObject(HashSet<CartObject> items, String id) {
 	  for(CartObject co: items){

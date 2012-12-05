@@ -75,13 +75,12 @@ public class FormConverterUtil {
 		}
 		
 		try {
-	log.debug("creating transformerV1ToV2");			
+			log.debug("creating transformerV1ToV2");			
 			transformerV1ToV2 = net.sf.saxon.TransformerFactoryImpl.newInstance().newTransformer(xslSource);
-	if (transformerV1ToV2 == null) log.debug("transformerV1ToV2 is null"); else log.debug("transformerV1ToV2: " + transformerV1ToV2.toString());
 		} catch (TransformerException e) {
-		// Handle.
-	log.debug("transformerV1ToV2 exception: " + e.toString());
-	log.debug("transformerV1ToV2 exception: " + e.getMessage());
+		// need exception handling.
+			log.debug("transformerV1ToV2 exception: " + e.toString());
+			log.debug("transformerV1ToV2 exception: " + e.getMessage());
 		}	
 	} 
 	 
