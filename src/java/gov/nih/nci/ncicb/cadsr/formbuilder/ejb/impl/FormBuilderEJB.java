@@ -1697,8 +1697,16 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
     }
 
     public String getIdseq(int publicId, Float version) {
-        FormDAO formDAO = daoFactory.getFormDAO();
-    	return formDAO.getIdseq(publicId, version);
+    	// returns empty string if form search fails (in partially expected way)
+    	String idseq;
+    	try {
+    		FormDAO formDAO = daoFactory.getFormDAO();
+    		idseq = formDAO.getIdseq(publicId, version);
+    	} catch (DMLException e) {
+    		// eat exception and default to empty string
+    		idseq = "";
+    	}   	
+    	return idseq;
     }
     
 }
