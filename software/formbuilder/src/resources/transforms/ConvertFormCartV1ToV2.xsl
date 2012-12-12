@@ -68,6 +68,8 @@
                  valueDomain/valueMeaning/preferredDefinition 
        add form/module/question/publicID (added to XSD v19) 
        add form/module/question/version (added to XSD v19) -->
+    <!-- Version 23 Dec-11-2012
+        Fix dateModified when empty, generate valid empty date -->
     <xsl:output indent="yes" exclude-result-prefixes="xsi"/>
     <xsl:variable name="FILLDATE">0001-01-01T00:00:01</xsl:variable>
     <xsl:variable name="FILLPUBLICID">0000000</xsl:variable>
@@ -80,7 +82,7 @@
     <xsl:template match="form-transfer-object">
         <xsl:text>
 </xsl:text>
-        <xsl:comment>Transformed with FinalFormCartTransformv22.xsl and validated with FormCartv19.xsd </xsl:comment>
+        <xsl:comment>Transformed with FinalFormCartTransformv23.xsl and validated with FormCartv19.xsd </xsl:comment>
         <xsl:text>
 </xsl:text>
         <xsl:element name="form">
@@ -96,9 +98,16 @@
             </xsl:element>
             <xsl:element name="dateModified">
                 <!--  e.g. 2012-08-17 10:59:57.0 trabsform to xs:dateTime format 2001-10-26T21:32:52.12679-->
+                <xsl:choose>
+                    <xsl:when test="date-modified != ''">
                 <xsl:value-of
                     select="concat(substring(date-modified, 1, 10), 'T', substring(date-modified, 12, 10))"
                 />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$FILLDATE"/>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:element>
             <xsl:element name="modifiedBy"/>
             <!-- new in formCartV2 -->
