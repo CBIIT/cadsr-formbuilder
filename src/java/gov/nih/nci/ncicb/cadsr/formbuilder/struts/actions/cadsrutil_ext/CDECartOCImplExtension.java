@@ -112,7 +112,7 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 					// We work off idseq for form operations, so we can't do much if the idseq wasn't found.
 					// We'll show the form with a prefix to let the user know something is wrong.
 					if (idseq.length() == 0) {
-			    		log.info("Form " + FTO.getPublicId() + FTO.getVersion() + " in cart not found in database");
+			    		log.info("Form " + FTO.getPublicId() + " " + FTO.getVersion() + " in cart not found in database");
 			    		FTO.setLongName(formNotInDatabaseLongNamePrefix + FTO.getLongName());
 					}
 	
