@@ -446,6 +446,8 @@
                 <include name="cvsdeploy.txt" />
                 <include name="gov/nih/nci/ncicb/**/*.class" />
                 <include name="gov/nih/nci/ncicb/**/*.properties" />
+                <include name="FormCart.properties" />
+                <include name="transforms/**/*.xsl" />
             </fileset>
         </jar>
         <delete file="${classes.dir}/cvsdeploy.txt" />
