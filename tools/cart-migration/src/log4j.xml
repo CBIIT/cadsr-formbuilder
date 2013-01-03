@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<!--
+				<param name="ConversionPattern" value="%d %-5p [%t] %C{2} (%F:%L) -
+				%m%n"/>
+			-->
+			<param name="ConversionPattern" value="[%d %-5p] %m%n" />
+		</layout>
+	</appender>
+
+
+	<appender name="CONVERTER_FILE" class="org.apache.log4j.RollingFileAppender">
+		<errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler" />
+		<param name="File" value="formcartconverter_log.txt" />
+		<param name="Append" value="true" />
+		<param name="MaxFileSize" value="1000KB" />
+		<param name="MaxBackupIndex" value="99" />
+		<param name="Threshold" value="TRACE" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%c : %L] %m%n" />
+		</layout>
+	</appender>
+
+	<category name="converter" additivity="false">
+		<priority value="DEBUG" />
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="CONVERTER_FILE" />
+	</category>
+
+	<category name="gov" additivity="false">
+		<priority value="DEBUG" />
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="CONVERTER_FILE" />
+	</category>
+
+	<category name="org.apache" additivity="true">
+		<priority value="INFO" />
+	</category>
+
+
+
+	<root>
+		<priority value="info" />
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="CONVERTER_FILE" />
+	</root>
+
+</log4j:configuration>
+
