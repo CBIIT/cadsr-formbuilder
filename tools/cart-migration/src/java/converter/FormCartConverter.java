@@ -136,8 +136,7 @@ public class FormCartConverter {
 					_logger.debug("cart " + cart.getId() + " " + cart.getUserId() + " " + cart.getName());
 
 					// get the current formCartV2 elements
-					String type = FormConverterUtil.instance().getCartObjectType();
-					Collection<CartObject> cartElements = cartClient.getObjectsByType(cart, type);
+					Collection<CartObject> cartElements = cart.getCartObjectCollection();
 					_logger.debug("  " + cartElements.size() + " forms");
 
 					// log the existing elements
@@ -151,7 +150,7 @@ public class FormCartConverter {
 						_logger.debug("emptying cart");
 						if (!noChanges && (!limitToGuest || cart.getUserId().equalsIgnoreCase("guest")))
 							cartClient.removeObjectCollection(cart, cartElements);
-						cartElements = cartClient.getObjectsByType(cart, type);
+						cartElements = cart.getCartObjectCollection();
 						_logger.debug("checking size of cart " + cart.getUserId() + " after emptying..." + cartElements.size());
 					}
 				} catch (Exception e) {
