@@ -107,13 +107,16 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 					if (FormCartOptionsUtil.instance().dumpXMLDuringDebug())
 						log.debug("FormTransferObject: " + FTO.toString());
 	
-					String idseq = formBuilderService.getIdseq(FTO.getPublicId(), FTO.getVersion());
+					// new form cart data doesn't include idseq, get it from the cart native id
+					String idseq = f.getNativeId();
 					FTO.setIdseq(idseq);
-					// We work off idseq for form operations, so we can't do much if the idseq wasn't found.
-					// We'll show the form with a prefix to let the user know something is wrong.
-					if (idseq.length() == 0) {
+					
+					// check whether the form exists in database and show a warning prefix on the name if it doesn't 
+					String databaseidseq = formBuilderService.getIdseq(FTO.getPublicId(), FTO.getVersion());
+
+					if (databaseidseq.length() == 0) {
 			    		log.info("Form " + FTO.getPublicId() + " " + FTO.getVersion() + " in cart not found in database");
-			    		FTO.setLongName(formNotInDatabaseLongNamePrefix + FTO.getLongName());
+			    		FTO.setLongName(formNotInDatabaseLongNamePrefix + FTO.getLongName());   		
 					}
 	
 					itemList.add(FTO);
