@@ -12,6 +12,7 @@ import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ConceptDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ContextDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.DataElementDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.FormDAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.FormV2DAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.FormInstructionDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.FormValidValueDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.FormValidValueInstructionDAO;
@@ -30,6 +31,7 @@ import gov.nih.nci.ncicb.cadsr.common.resource.ClassSchemeItem;
 import gov.nih.nci.ncicb.cadsr.common.resource.ConceptDerivationRule;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormElement;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormInstructionChanges;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue;
@@ -208,6 +210,144 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
         ContextDAO cdao = daoFactory.getContextDAO();
 
         myForm = getFormRow(formPK);
+        List refDocs =
+            fdao.getAllReferenceDocuments(formPK, ReferenceDocument.REF_DOC_TYPE_IMAGE);
+        myForm.setReferenceDocs(refDocs);
+
+        List instructions = fInstrdao.getInstructions(formPK);
+        myForm.setInstructions(instructions);
+
+        List footerInstructions = fInstrdao.getFooterInstructions(formPK);
+        myForm.setFooterInstructions(footerInstructions);
+
+        List modules = (List)fdao.getModulesInAForm(formPK);
+        Iterator mIter = modules.iterator();
+        List questions;
+        Iterator qIter;
+        List values;
+        Iterator vIter;
+        Module block;
+        Question term;
+        FormValidValue value;
+
+        Map<String,FormElement> possibleTargets = new HashMap<String,FormElement>();
+        List<TriggerAction>  allActions = new ArrayList<TriggerAction>();
+
+        while (mIter.hasNext())
+        {
+            block = (Module)mIter.next();
+            block.setForm(myForm);
+
+            String moduleId = block.getModuleIdseq();
+
+            List mInstructions = mInstrdao.getInstructions(moduleId);
+            block.setInstructions(mInstructions);
+
+            questions = (List)mdao.getQuestionsInAModule(moduleId);
+            qIter = questions.iterator();
+
+            while (qIter.hasNext())
+            {
+                term = (Question)qIter.next();
+                term.setModule(block);
+                String termId = term.getQuesIdseq();
+                 possibleTargets.put(termId,term); //one of the possible targets
+
+                if (term.getDataElement() != null){
+                    List<ReferenceDocument> deRefDocs =
+                    getReferenceDocuments(term.getDataElement().getDeIdseq());
+                    term.getDataElement().setReferenceDocs(deRefDocs);
+                    
+                    
+                    //set the value domain 
+                    ValueDomain currentVd = term.getDataElement().getValueDomain();                    
+                    if (currentVd!=null && currentVd.getVdIdseq()!=null){
+                        ValueDomainDAO vdDAO = daoFactory.getValueDomainDAO();                        
+                        ValueDomain vd = vdDAO.getValueDomainById(currentVd.getVdIdseq());
+                        
+                        //set concept to the value domain.
+                        String cdrId = vd.getConceptDerivationRule().getIdseq();
+                        if (cdrId!=null){
+                            ConceptDAO conceptDAO = daoFactory.getConceptDAO();
+                            ConceptDerivationRule cdr =  
+                                conceptDAO.findConceptDerivationRule(vd.getConceptDerivationRule().getIdseq());
+                            vd.setConceptDerivationRule(cdr);
+                        }                        
+                        term.getDataElement().setValueDomain(vd);
+                    }//end of if   
+                }
+                List qInstructions = qInstrdao.getInstructions(termId);
+                term.setInstructions(qInstructions);
+                                
+                
+                values = (List)qdao.getValidValues(termId);
+                term.setValidValues(values);
+
+                vIter = values.iterator();
+                while (vIter.hasNext())
+                {
+                    FormValidValue vv = (FormValidValue)vIter.next();
+                    vv.setQuestion(term);
+                    String vvId = vv.getValueIdseq();
+                    List vvInstructions = vvInstrdao.getInstructions(vvId);
+                    vv.setInstructions(vvInstructions);
+                    //Set Skip Patterns
+                    List<TriggerAction> actions= getAllTriggerActionsForSource(vvId);
+                    allActions.addAll(actions);
+                    setSourceForTriggerActions(vv,actions);
+                    vv.setTriggerActions(actions);
+                }
+                
+                //set question default 
+                term = setQuestionDefaultValue(term);
+                List<QuestionRepitition> qReps = qrdao.getQuestionRepititions(term.getQuesIdseq());
+                setQuestionRepititionDefaults(qReps,values);
+                term.setQuestionRepitition(qReps);                
+            }
+
+            block.setQuestions(questions);
+            //Set Skip Patterns
+             possibleTargets.put(moduleId,block); //one of the possible targets
+            List<TriggerAction> actions= getAllTriggerActionsForSource(moduleId);
+            allActions.addAll(actions);
+            setSourceForTriggerActions(block,actions);
+            block.setTriggerActions(actions);
+        }
+
+        myForm.setModules(modules);
+        Context caBIG = cdao.getContextByName(CaDSRConstants.CONTEXT_CABIG);
+        myForm
+        .setPublished(fdao.isFormPublished(myForm.getIdseq(), caBIG.getConteIdseq()));
+
+        //Collection formCSIs = fdao.retrieveClassifications(formPK);
+        //myForm.setClassifications(formCSIs);
+        setTargetsForTriggerActions(possibleTargets,allActions);
+
+        return myForm;
+    }
+
+    public FormV2 getFormDetailsV2(String formPK)
+    {
+        FormV2 myForm = null;
+        FormDAO fdao = daoFactory.getFormDAO();
+        QuestionRepititionDAO qrdao = daoFactory.getQuestionRepititionDAO();
+        FormInstructionDAO fInstrdao = daoFactory.getFormInstructionDAO();
+
+        ModuleDAO mdao = daoFactory.getModuleDAO();
+        ModuleInstructionDAO mInstrdao = daoFactory.getModuleInstructionDAO();
+
+        QuestionDAO qdao = daoFactory.getQuestionDAO();
+        QuestionInstructionDAO qInstrdao =
+            daoFactory.getQuestionInstructionDAO();
+
+        FormValidValueDAO vdao = daoFactory.getFormValidValueDAO();
+        FormValidValueInstructionDAO vvInstrdao =
+            daoFactory.getFormValidValueInstructionDAO();
+        ContextDAO cdao = daoFactory.getContextDAO();
+
+	  FormV2DAO fV2dao = daoFactory.getFormV2DAO();
+        myForm = fV2dao.findFormV2ByPrimaryKey(formPK);
+
         List refDocs =
             fdao.getAllReferenceDocuments(formPK, ReferenceDocument.REF_DOC_TYPE_IMAGE);
         myForm.setReferenceDocs(refDocs);

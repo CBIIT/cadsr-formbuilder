@@ -5,7 +5,7 @@ import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConverterUtil;
 import gov.nih.nci.ncicb.cadsr.common.CommonNavigationConstants;
 import gov.nih.nci.ncicb.cadsr.common.formbuilder.common.FormBuilderConstants;
 import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
 import gov.nih.nci.ncicb.cadsr.common.util.logging.Log;
 import gov.nih.nci.ncicb.cadsr.common.util.logging.LogFactory;
@@ -36,10 +36,10 @@ public class FormDownloadXMLAction extends Action {
 		String formIdSeq = (String)request.getParameter(FormConstants.FORM_ID_SEQ);
 
 		FormBuilderServiceDelegate service = getFormBuilderService();
-		Form crf = null;
+		FormV2 crf = null;
 
 		try {
-			crf = service.getFormDetails(formIdSeq);
+			crf = service.getFormDetailsV2(formIdSeq);
 		} catch (FormBuilderException exp) {
 			log.error("Exception getting CRF", exp);
 			return mapping.findForward(CommonNavigationConstants.FAILURE);

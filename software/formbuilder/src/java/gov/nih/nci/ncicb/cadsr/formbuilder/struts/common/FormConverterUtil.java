@@ -2,7 +2,7 @@
 
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.common;
 
-import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 
 import java.util.LinkedList;
 import java.io.StringWriter;
@@ -28,7 +28,7 @@ public class FormConverterUtil {
 	private static Log log = LogFactory.getLog(FormConverterUtil.class.getName());
 	
 	static private FormConverterUtil _instance = null;
-	public static final String V1ToV2XSL = "/transforms/ConvertFormCartV1ToV2.xsl";
+	public static final String V1ExtendedToV2XSL = "/transforms/ConvertFormCartV1ExtendedToV2.xsl";
 	protected Transformer transformerV1ToV2 = null;
 	
 
@@ -36,7 +36,8 @@ public class FormConverterUtil {
 		return FormCartOptionsUtil.instance().xsdLocation();
 	}
 
-	public String convertFormToV2(Form crf) {
+	
+	public String convertFormToV2(FormV2 crf) {
 
 		// Start with our standard conversion to xml (in V1 format)
 		StringWriter writer = new StringWriter();
@@ -49,7 +50,8 @@ public class FormConverterUtil {
 		}
 
 		// Now use our transformer to create V2 format
-		Source xmlInput = new StreamSource(new StringReader(writer.toString()));	
+		Source xmlInput = new StreamSource(new StringReader(writer.toString()));
+//log.debug(writer.toString());		
 		ByteArrayOutputStream xmlOutputStream = new ByteArrayOutputStream();  
 		Result xmlOutput = new StreamResult(xmlOutputStream);
 		try {
@@ -61,17 +63,16 @@ public class FormConverterUtil {
 		String V2XML = xmlOutputStream.toString();
 		return V2XML;
 	}
-	
-	
+		
 	protected FormConverterUtil() {
 		
 		StreamSource xslSource = null;
 		try {
-			InputStream xslStream = this.getClass().getResourceAsStream(V1ToV2XSL);  
+			InputStream xslStream = this.getClass().getResourceAsStream(V1ExtendedToV2XSL);  
 			xslSource = new StreamSource(xslStream);
 		}
 		catch(Exception e) {
-			System.out.println("FormConverterUtil error loading conversion xsl: " + V1ToV2XSL + " exc: "+ e);
+			System.out.println("FormConverterUtil error loading conversion xsl: " + V1ExtendedToV2XSL + " exc: "+ e);
 		}
 		
 		try {
