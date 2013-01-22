@@ -10,6 +10,7 @@ import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
 import gov.nih.nci.ncicb.cadsr.common.jsp.bean.PaginationBean;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
 import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
 import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
@@ -527,8 +528,6 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 		    HttpServletRequest request,
 		    HttpServletResponse response) throws IOException, ServletException {
 	  
-	  Map<String, String> objectDisplayNames = new HashMap<String, String> ();
-	  Map<String, Object>  objects = new HashMap<String, Object>();
 	  
 	  FormBuilderServiceDelegate service = getFormBuilderService();
 	  try {
@@ -549,6 +548,9 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 
 		
 		if (FormCartOptionsUtil.instance().writeInV1Format()){
+			Map<String, String> objectDisplayNames = new HashMap<String, String> ();
+			Map<String, Object>  objects = new HashMap<String, Object>();
+
 			Cart cart = cartClient.createCart(user.getUsername(), CaDSRConstants.FORMS_CART);
 			HashSet<CartObject> storedForms = (HashSet<CartObject>) cart.getCartObjectCollection();
 			
@@ -575,6 +577,9 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 		}
 
 		if (FormCartOptionsUtil.instance().writeInV2Format()){
+			Map<String, String> objectDisplayNames = new HashMap<String, String> ();
+			Map<String, Object>  objects = new HashMap<String, Object>();
+
 			Cart cart = cartClient.createCart(user.getUsername(), CaDSRConstants.FORMS_CART_V2);
 			HashSet<CartObject> storedForms = (HashSet<CartObject>) cart.getCartObjectCollection();
 			
@@ -584,7 +589,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 			
 			if (formIds != null) {
 				for (String formId: formIds) {
-					Form crf = service.getFormDetails(formId);
+					FormV2 crf = service.getFormDetailsV2(formId);
 					CartObject co = getNativeObject(storedForms, formId);
 					objects.put(formId, crf);
 					objectDisplayNames.put(formId, crf.getLongName());
@@ -600,7 +605,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 			Collection<CartObject> cartObjects = new LinkedList<CartObject>();
 			Collection<Object> forms = objects.values();
 			for (Object f: forms)
-				cartObjects.add(translateCartObject((Form)f));
+				cartObjects.add(translateCartObject((FormV2)f));
 			
 			log.debug("Adding cart objects");
 			cart = cartClient.storeObjectCollection(cart, cartObjects);
@@ -621,7 +626,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 	  return mapping.findForward("success");
   }
 
-  private CartObject translateCartObject(Form crf) {
+  private CartObject translateCartObject(FormV2 crf) {
 		CartObject ob = new CartObject();
 		ob.setType(FormConverterUtil.instance().getCartObjectType());
 		ob.setDisplayText(Integer.toString(crf.getPublicId()) + "v" + Float.toString(crf.getVersion()));

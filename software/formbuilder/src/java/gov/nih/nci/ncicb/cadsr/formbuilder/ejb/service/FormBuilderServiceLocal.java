@@ -3,6 +3,7 @@ package gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service;
 import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
 import gov.nih.nci.ncicb.cadsr.common.resource.AdminComponentType;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormInstructionChanges;
 import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
 import gov.nih.nci.ncicb.cadsr.common.resource.Module;
@@ -26,6 +27,8 @@ public interface FormBuilderServiceLocal  {
     NCIUser user) throws DMLException;
 
   public Form getFormDetails(String formPK) throws DMLException;
+
+  public FormV2 getFormDetailsV2(String formPK) throws DMLException;
 
   public Form getFormRow(String formPK) ;
 

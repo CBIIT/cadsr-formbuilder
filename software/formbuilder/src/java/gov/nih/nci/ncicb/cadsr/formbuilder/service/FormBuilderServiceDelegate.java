@@ -2,6 +2,7 @@ package gov.nih.nci.ncicb.cadsr.formbuilder.service;
 
 import gov.nih.nci.ncicb.cadsr.common.resource.AdminComponentType;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormInstructionChanges;
 import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
 import gov.nih.nci.ncicb.cadsr.common.resource.Module;
@@ -34,6 +35,8 @@ public interface FormBuilderServiceDelegate {
     public Collection getAllPublishedFormsForProtocol(String protocolIdSeq);
 
     public Form getFormDetails(String formPK) throws FormBuilderException;
+
+    public FormV2 getFormDetailsV2(String formPK) throws FormBuilderException;
 
     public Form updateForm(String formIdSeq, Form formHeader, Collection updatedModules,
         Collection deletedModules,Collection addedModules,
