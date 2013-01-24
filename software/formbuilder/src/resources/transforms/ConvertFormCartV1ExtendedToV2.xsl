@@ -119,13 +119,17 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:element>
-            <xsl:element name="modifiedBy"/>
+            <xsl:element name="modifiedBy">
             <!-- new in formCartV2 -->
+                <xsl:value-of select="./modified-by"/>
+            </xsl:element>
             <xsl:element name="longName">
                 <xsl:value-of select="./long-name"/>
             </xsl:element>
-            <xsl:element name="changeNote"/>
+            <xsl:element name="changeNote">
             <!-- new in formCartV2 -->
+                <xsl:value-of select="./change-note"/>
+            </xsl:element>
             <xsl:element name="preferredDefinition">
                 <xsl:value-of select="normalize-space(./preferred-definition)"/>
             </xsl:element>
@@ -135,7 +139,7 @@
             <xsl:element name="version">
                 <xsl:value-of select="./version"/>
             </xsl:element>
-            <xsl:apply-templates select="registrationStatus"/>
+            <xsl:apply-templates select="registration-status"/>
             <!-- new in formCartV2  -->
             <xsl:element name="workflowStatusName">
                 <xsl:value-of select="./asl-name"/>
@@ -173,7 +177,7 @@
     <xsl:template match="instruction[parent::form-v2-transfer-object]"/>
     <xsl:template match="context[parent::form-v2-transfer-object]"/>
 
-    <xsl:template match="registrationStatus">
+    <xsl:template match="registration-status">
         <xsl:element name="registrationStatus">
             <xsl:value-of select="."/>
         </xsl:element>
@@ -757,9 +761,6 @@
                 <xsl:value-of select="./@doc-size"/>
             </xsl:element>
         </xsl:element>
-    </xsl:template>
-    <xsl:template match="registrationStatus">
-        <xsl:value-of select="."/>
     </xsl:template>
 
     <xsl:template match="*"/>
