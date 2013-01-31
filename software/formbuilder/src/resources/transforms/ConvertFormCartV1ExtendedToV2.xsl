@@ -170,7 +170,7 @@
             <xsl:apply-templates select="modules"/>
             <xsl:apply-templates select="protocols"/>
             <xsl:apply-templates select="ref-docs"/>
-            <xsl:call-template name="ContactCommunication"/>
+            <xsl:apply-templates select="contact-communication-v2"/>
         </xsl:element>
     </xsl:template>
 
@@ -907,37 +907,97 @@
         </xsl:element>
     </xsl:template>
 
-    <xsl:template name="ContactCommunication">
+    <xsl:template match="contact-communication-v2">
         <!-- Added v20 for completeness -->
         <xsl:element name="contactCommunication">
-            <xsl:element name="rank"/>
-            <xsl:element name="type">PHONE</xsl:element>
-            <xsl:element name="value"/>
-            <xsl:element name="organizationName"/>
-            <xsl:element name="organizationRAI"/>
-            <xsl:element name="person">
-                <xsl:element name="firstName"/>
-                <xsl:element name="lastName"/>
-                <xsl:element name="position"/>
-                <xsl:element name="address">
-                    <xsl:element name="addressLine1"/>
-                    <xsl:element name="addressLine2"/>
-                    <xsl:element name="city"/>
-                    <xsl:element name="state"/>
-                    <xsl:element name="country"/>
-                    <xsl:element name="postalCode"/>
-                    <xsl:element name="rank"/>
-                    <xsl:element name="type">MAILING</xsl:element>
-                </xsl:element>
+            <xsl:element name="rank">
+            	<xsl:value-of select="./@rank-order"/>
             </xsl:element>
-            <xsl:element name="createdBy"/>
+            <xsl:element name="type">
+            	<xsl:value-of select="./type"/>
+            </xsl:element>
+            <xsl:element name="value">
+            	<xsl:value-of select="./value"/>
+            </xsl:element>
+            <xsl:element name="organizationName">
+            	<xsl:value-of select="./organization-name"/>
+            </xsl:element>
+            <xsl:element name="organizationRAI">
+            	<xsl:value-of select="./organization-rai"/>
+            </xsl:element>            
+            <xsl:element name="person">
+                <xsl:element name="firstName">
+	            	<xsl:value-of select="./person/first-name"/>
+    	        </xsl:element>     
+                <xsl:element name="lastName">
+					<xsl:value-of select="./person/last-name"/>
+				</xsl:element>               
+                <xsl:element name="position">
+					<xsl:value-of select="./person/position"/>
+				</xsl:element>
+				<xsl:apply-templates select="./person/addresses"/>				
+            </xsl:element>
+            <xsl:element name="createdBy">
+                <xsl:value-of select="created-by"/>
+            </xsl:element>
             <xsl:element name="dateCreated">
-                <xsl:value-of select="$FILLDATE"/>
+                <!--  e.g. 2012-08-17 10:59:57.0 transform to xs:dateTime format 2001-10-26T21:32:52.12679-->
+                <xsl:choose>
+                    <xsl:when test="date-created != ''">
+                <xsl:value-of
+                    select="concat(substring(date-created, 1, 10), 'T', substring(date-created, 12, 10))"
+                />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$FILLDATE"/>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:element>
             <xsl:element name="dateModified">
-                <xsl:value-of select="$FILLDATE"/>
+                <!--  e.g. 2012-08-17 10:59:57.0 transform to xs:dateTime format 2001-10-26T21:32:52.12679-->
+                <xsl:choose>
+                    <xsl:when test="date-modified != ''">
+                <xsl:value-of
+                    select="concat(substring(date-modified, 1, 10), 'T', substring(date-modified, 12, 10))"
+                />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$FILLDATE"/>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:element>
-            <xsl:element name="modifiedBy"/>
+            <xsl:element name="modifiedBy">
+                <xsl:value-of select="./modified-by"/>
+            </xsl:element>            
         </xsl:element>
     </xsl:template>
+
+	<xsl:template match="addresses">
+		<xsl:element name="address">
+			<xsl:element name="addressLine1">
+				<xsl:value-of select="address-line1" />
+			</xsl:element>
+			<xsl:element name="addressLine2">
+				<xsl:value-of select="address-line2" />
+			</xsl:element>
+			<xsl:element name="city">
+				<xsl:value-of select="city" />
+			</xsl:element>
+			<xsl:element name="state">
+				<xsl:value-of select="state" />
+			</xsl:element>
+			<xsl:element name="country">
+				<xsl:value-of select="country" />
+			</xsl:element>
+			<xsl:element name="postalCode">
+				<xsl:value-of select="postal-code" />
+			</xsl:element>
+			<xsl:element name="rank">
+				<xsl:value-of select="rank" />
+			</xsl:element>
+			<xsl:element name="type">
+				<xsl:value-of select="type" />
+			</xsl:element>
+		</xsl:element>
+	</xsl:template>    
 </xsl:stylesheet>
