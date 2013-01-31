@@ -26,6 +26,7 @@ import gov.nih.nci.ncicb.cadsr.common.persistence.dao.QuestionRepititionDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ReferenceDocumentDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.TriggerActionDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ValueDomainDAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ContactCommunicationV2DAO;
 import gov.nih.nci.ncicb.cadsr.common.resource.AdminComponentType;
 import gov.nih.nci.ncicb.cadsr.common.resource.ClassSchemeItem;
 import gov.nih.nci.ncicb.cadsr.common.resource.ConceptDerivationRule;
@@ -340,7 +341,7 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
         QuestionInstructionDAO qInstrdao =
             daoFactory.getQuestionInstructionDAO();
 
-        FormValidValueDAO vdao = daoFactory.getFormValidValueDAO();
+//        FormValidValueDAO vdao = daoFactory.getFormValidValueDAO();
         FormValidValueInstructionDAO vvInstrdao =
             daoFactory.getFormValidValueInstructionDAO();
         ContextDAO cdao = daoFactory.getContextDAO();
@@ -461,6 +462,15 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
         //myForm.setClassifications(formCSIs);
         setTargetsForTriggerActions(possibleTargets,allActions);
 
+        // set contact communication info
+        ContactCommunicationV2DAO ccdao = daoFactory.getContactCommunicationV2DAO();
+        myForm.setContactCommunicationV2(ccdao.getContactCommunicationV2sForAC(myForm.getIdseq()));
+// test hack using another AC's data to get contact communication by org  
+//myForm.setContactCommunicationV2(ccdao.getContactCommunicationV2sForAC("0FBEFA30-4787-6717-E044-0003BA3F9857"));
+// test hack using another AC's data to get contact communication person  
+//myForm.setContactCommunicationV2(ccdao.getContactCommunicationV2sForAC("21C05FEA-450A-716D-E044-0003BA3F9857"));
+
+        
         return myForm;
     }
 
