@@ -255,11 +255,11 @@
         <xsl:element name="question">
             <!-- added V22 -->
             <xsl:element name="publicID">
-                <xsl:value-of select="$FILLPUBLICID"/>
+                <xsl:value-of select="./public-id"/>
             </xsl:element>
             <!-- added V22 -->
             <xsl:element name="version">
-                <xsl:value-of select="$FILLVERSION"/>
+                <xsl:value-of select="./version"/>
             </xsl:element>
             <xsl:element name="isDerived">
                 <xsl:value-of select="@de-derived"/>
@@ -361,7 +361,9 @@
             <xsl:element name="longName">
                 <xsl:value-of select="long-name"/>
             </xsl:element>
-            <xsl:element name="shortName"/>
+            <xsl:element name="shortName">
+                <xsl:value-of select="preferred-name"/>
+            </xsl:element>
             <!-- Added in formCartV2 filled in by Form Builder 4.0.4 -->
             <xsl:element name="publicID">
                 <xsl:value-of select="CDEId"/>
@@ -537,7 +539,7 @@
         </xsl:element>
     </xsl:template>
 
-    <xsl:template match="value-meaning" name="ValueMeaning">
+    <xsl:template match="value-meaning-v2" name="ValueMeaning">
         <xsl:element name="valueMeaning">
             <xsl:element name="publicID">
                 <xsl:choose>
@@ -817,10 +819,12 @@
         </xsl:element>
     </xsl:template>
 
-    <xsl:template name="PermissibleValue">
+    <xsl:template match="permissible-value-v2" name="PermissibleValue">
         <!-- added v20 to support dataElementDerivation/componentDataElement details -->
         <xsl:element name="permissibleValue">
-            <xsl:element name="value"/>
+            <xsl:element name="value">
+            	<xsl:value-of select="./value"/>
+            </xsl:element>            
             <xsl:call-template name="ValueMeaning"/>
             <xsl:element name="beginDate"/>
             <xsl:element name="endDate"/>

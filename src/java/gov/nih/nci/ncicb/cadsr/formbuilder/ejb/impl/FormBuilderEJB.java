@@ -18,6 +18,7 @@ import gov.nih.nci.ncicb.cadsr.common.persistence.dao.FormValidValueDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.FormValidValueInstructionDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.InstructionDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ModuleDAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ModuleV2DAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ModuleInstructionDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ProtocolDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.QuestionDAO;
@@ -26,6 +27,7 @@ import gov.nih.nci.ncicb.cadsr.common.persistence.dao.QuestionRepititionDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ReferenceDocumentDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.TriggerActionDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ValueDomainDAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ValueDomainV2DAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ContactCommunicationV2DAO;
 import gov.nih.nci.ncicb.cadsr.common.resource.AdminComponentType;
 import gov.nih.nci.ncicb.cadsr.common.resource.ClassSchemeItem;
@@ -52,6 +54,7 @@ import gov.nih.nci.ncicb.cadsr.common.resource.TriggerAction;
 import gov.nih.nci.ncicb.cadsr.common.resource.TriggerActionChanges;
 import gov.nih.nci.ncicb.cadsr.common.resource.ValidValue;
 import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomain;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomainV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.Version;
 import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocator;
 import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocatorFactory;
@@ -334,7 +337,7 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
         QuestionRepititionDAO qrdao = daoFactory.getQuestionRepititionDAO();
         FormInstructionDAO fInstrdao = daoFactory.getFormInstructionDAO();
 
-        ModuleDAO mdao = daoFactory.getModuleDAO();
+        ModuleV2DAO mdao = daoFactory.getModuleV2DAO();
         ModuleInstructionDAO mInstrdao = daoFactory.getModuleInstructionDAO();
 
         QuestionDAO qdao = daoFactory.getQuestionDAO();
@@ -382,7 +385,7 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
             List mInstructions = mInstrdao.getInstructions(moduleId);
             block.setInstructions(mInstructions);
 
-            questions = (List)mdao.getQuestionsInAModule(moduleId);
+            questions = (List)mdao.getQuestionsInAModuleV2(moduleId);
             qIter = questions.iterator();
 
             while (qIter.hasNext())
@@ -401,8 +404,8 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
                     //set the value domain 
                     ValueDomain currentVd = term.getDataElement().getValueDomain();                    
                     if (currentVd!=null && currentVd.getVdIdseq()!=null){
-                        ValueDomainDAO vdDAO = daoFactory.getValueDomainDAO();                        
-                        ValueDomain vd = vdDAO.getValueDomainById(currentVd.getVdIdseq());
+                        ValueDomainV2DAO vdDAO = daoFactory.getValueDomainV2DAO();                        
+                        ValueDomainV2 vd = vdDAO.getValueDomainV2ById(currentVd.getVdIdseq());
                         
                         //set concept to the value domain.
                         String cdrId = vd.getConceptDerivationRule().getIdseq();
