@@ -548,7 +548,8 @@
         <xsl:element name="valueMeaning">
             <xsl:element name="publicID">
                 <xsl:choose>
-                    <xsl:when test="contains(name(), 'value-meaning')">
+                <!--  Note: this test was changed in v24 but I'm ignoring that change, probably shouldn't test at all -->
+                    <xsl:when test="./@public-id">
                         <xsl:value-of select="./@public-id"/>
                     </xsl:when>
                     <xsl:otherwise>
@@ -567,7 +568,7 @@
                 </xsl:choose>
             </xsl:element>
             <xsl:element name="longName">
-                <xsl:value-of select="./longName"/>
+                <xsl:value-of select="./long-name"/>
             </xsl:element>
             <xsl:choose>
                 <xsl:when test="designations">
