@@ -70,6 +70,11 @@
        add form/module/question/version (added to XSD v19) -->
     <!-- Version 23 Dec-11-2012
         Fix dateModified when empty, generate valid empty date -->
+    <!-- Version 24 Feb-05-2013
+        Fix dataElement/valueDomain/permissibleValue/valueMeaning/publicID -> should be 000000 because the permissible value information is not in the
+        current download -->
+    <!-- Version 25 Feb-21-2013 
+        Fix add valueMeaning/longName -> was overlooked in original design --> 
     <xsl:output indent="yes" exclude-result-prefixes="xsi"/>
     <xsl:variable name="FILLDATE">0001-01-01T00:00:01</xsl:variable>
     <xsl:variable name="FILLPUBLICID">0000000</xsl:variable>
@@ -82,7 +87,7 @@
     <xsl:template match="form-transfer-object">
         <xsl:text>
 </xsl:text>
-        <xsl:comment>Transformed with FinalFormCartTransformv23.xsl and validated with FormCartv19.xsd </xsl:comment>
+        <xsl:comment>Transformed with FinalFormCartTransformv25.xsl and validated with FormCartv20.xsd </xsl:comment>
         <xsl:text>
 </xsl:text>
         <xsl:element name="form">
@@ -527,7 +532,7 @@
         <xsl:element name="valueMeaning">
             <xsl:element name="publicID">
                 <xsl:choose>
-                    <xsl:when test="./@public-id">
+                    <xsl:when test="contains(name(), 'value-meaning')">
                         <xsl:value-of select="./@public-id"/>
                     </xsl:when>
                     <xsl:otherwise>
@@ -544,6 +549,9 @@
                         <xsl:value-of select="$FILLVERSION"/>
                     </xsl:otherwise>
                 </xsl:choose>
+            </xsl:element>
+            <xsl:element name="longName">
+                <xsl:value-of select="./longName"/>
             </xsl:element>
             <xsl:choose>
                 <xsl:when test="designations">
