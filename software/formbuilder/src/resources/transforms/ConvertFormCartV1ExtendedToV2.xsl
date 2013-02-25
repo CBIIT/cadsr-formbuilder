@@ -486,7 +486,7 @@
             </xsl:element>
             <xsl:apply-templates select="concept-derivation-rule/component-concepts"/>
             <!-- new in formCartV2 - complex element -->
-            <xsl:call-template name="PermissibleValue"/>
+            <xsl:apply-templates select="permissible-value-v2"/>
             <!-- new in formCartV2 - complex element -->
         </xsl:element>
     </xsl:template>
@@ -824,19 +824,19 @@
                 <xsl:element name="primaryConceptCode"/>
                 <xsl:element name="nciTermBrowserLink">http://blankNode</xsl:element>
             </xsl:element>
-            <xsl:call-template name="PermissibleValue"/>
+            <xsl:apply-templates select="permissible-value-v2"/>
         </xsl:element>
     </xsl:template>
 
-    <xsl:template match="permissible-value-v2" name="PermissibleValue">
+    <xsl:template match="permissible-value-v2">
         <!-- added v20 to support dataElementDerivation/componentDataElement details -->
         <xsl:element name="permissibleValue">
-            <xsl:element name="value">
-            	<xsl:value-of select="./value"/>
-            </xsl:element>            
-            <xsl:call-template name="ValueMeaning"/>
-            <xsl:element name="beginDate"/>
-            <xsl:element name="endDate"/>
+           	<xsl:element name="value">
+           		<xsl:value-of select="value"/>
+           	</xsl:element>            
+           	<xsl:call-template name="ValueMeaning"/>
+           	<xsl:element name="beginDate"/>
+           	<xsl:element name="endDate"/>
         </xsl:element>
     </xsl:template>
 
