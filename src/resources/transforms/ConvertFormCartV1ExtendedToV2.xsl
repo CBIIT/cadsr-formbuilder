@@ -544,7 +544,7 @@
         </xsl:element>
     </xsl:template>
 
-    <xsl:template match="value-meaning-v2" name="ValueMeaning">
+    <xsl:template match="value-meaning-v2">
         <xsl:element name="valueMeaning">
             <xsl:element name="publicID">
                 <xsl:choose>
@@ -834,7 +834,7 @@
            	<xsl:element name="value">
            		<xsl:value-of select="value"/>
            	</xsl:element>            
-           	<xsl:call-template name="ValueMeaning"/>
+           	<xsl:apply-templates select="value-meaning-v2"/>
            	<xsl:element name="beginDate"/>
            	<xsl:element name="endDate"/>
         </xsl:element>
