@@ -260,7 +260,7 @@
         <xsl:element name="question">
             <!-- added V22 -->
             <xsl:element name="publicID">
-                <xsl:value-of select="./public-id"/>
+                <xsl:value-of select="@public-id"/>
             </xsl:element>
             <!-- added V22 -->
             <xsl:element name="version">
@@ -417,7 +417,7 @@
             <xsl:element name="cdeBrowserLink">
                 <!-- Added in formCartV2 - generated in Form Builder 4.0.4 - not a database field -->
                 <xsl:variable name="baseURL"
-                    >https://cdebrowser.nci.nih.gov/CDEBrowser/search?elementDetails=9%26FirstTimer=0%26PageId=ElementDetailsGroup&amp;publicId=</xsl:variable>
+                    >https://cdebrowser.nci.nih.gov/CDEBrowser/search?elementDetails=9&amp;FirstTimer=0&amp;PageId=ElementDetailsGroup&amp;publicId=</xsl:variable>
                 <xsl:variable name="publicIdValue" select="CDEId"/>
                 <xsl:variable name="attributeName">&amp;version=</xsl:variable>
                 <xsl:variable name="value" select="version"/>
