@@ -37,27 +37,30 @@ public class FormConverterUtil {
 	}
 
 	
-	public String convertFormToV2(FormV2 crf) {
+	public String convertFormToV2 (FormV2 crf) throws MarshalException, ValidationException, TransformerException {
 
 		// Start with our standard conversion to xml (in V1 format)
 		StringWriter writer = new StringWriter();
 		try {
 			Marshaller.marshal(crf, writer);
 		} catch (MarshalException ex) {
-			// need exception handling
+			log.debug("FormV2 " + crf);
+			throw ex;
 		} catch (ValidationException ex) {
 			// need exception handling	
+			log.debug("FormV2 " + crf);
+			throw ex;
 		}
 
 		// Now use our transformer to create V2 format
 		Source xmlInput = new StreamSource(new StringReader(writer.toString()));
-//log.debug(writer.toString());		
 		ByteArrayOutputStream xmlOutputStream = new ByteArrayOutputStream();  
 		Result xmlOutput = new StreamResult(xmlOutputStream);
 		try {
 			transformerV1ToV2.transform(xmlInput, xmlOutput);
 		} catch (TransformerException e) {
-			// need exception handling.
+			log.debug(writer.toString());
+			throw e;
 		}	
 				
 		String V2XML = xmlOutputStream.toString();
@@ -79,7 +82,6 @@ public class FormConverterUtil {
 			log.debug("creating transformerV1ToV2");			
 			transformerV1ToV2 = net.sf.saxon.TransformerFactoryImpl.newInstance().newTransformer(xslSource);
 		} catch (TransformerException e) {
-		// need exception handling.
 			log.debug("transformerV1ToV2 exception: " + e.toString());
 			log.debug("transformerV1ToV2 exception: " + e.getMessage());
 		}	
