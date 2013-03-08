@@ -75,6 +75,9 @@
         current download -->
     <!-- Version 25 Feb-21-2013 
         Fix add valueMeaning/longName -> was overlooked in original design --> 
+    <!-- Version 26 Mar-04-2013 
+        Fix module/usageCatetory/rule xpath 
+        Generate empty valueDomain/referenceDocument -->
     <xsl:output indent="yes" exclude-result-prefixes="xsi"/>
     <xsl:variable name="FILLDATE">0001-01-01T00:00:01</xsl:variable>
     <xsl:variable name="FILLPUBLICID">0000000</xsl:variable>
@@ -87,7 +90,7 @@
     <xsl:template match="form-transfer-object">
         <xsl:text>
 </xsl:text>
-        <xsl:comment>Transformed with FinalFormCartTransformv25.xsl and validated with FormCartv20.xsd </xsl:comment>
+        <xsl:comment>Transformed with FinalFormCartTransformv26.xsl and validated with FormCartv21.xsd </xsl:comment>
         <xsl:text>
 </xsl:text>
         <xsl:element name="form">
@@ -234,7 +237,7 @@
                     </xsl:choose>
                 </xsl:element>
                 <xsl:element name="rule">
-                    <xsl:value-of select="/instruction/preferred-definition"/>
+                    <xsl:value-of select="instruction/preferred-definition"/>
                 </xsl:element>
             </xsl:element>
             <xsl:apply-templates select="questions"/>
@@ -472,6 +475,7 @@
             <!-- new in formCartV2 - complex element -->
             <xsl:call-template name="PermissibleValue"/>
             <!-- new in formCartV2 - complex element -->
+            <xsl:element name="referenceDocument"/> <!-- New - empty node for 4.0.4 - in Version 26 of xsl --> 
         </xsl:element>
     </xsl:template>
 
