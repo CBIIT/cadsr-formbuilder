@@ -45,20 +45,26 @@ public class FormDownloadXMLAction extends Action {
 			return mapping.findForward(CommonNavigationConstants.FAILURE);
 		}
 
-		String convertedForm = FormConverterUtil.instance().convertFormToV2(crf);  
+		try {
+			String convertedForm = FormConverterUtil.instance().convertFormToV2(crf);  
 
-		CDEBrowserParams params = CDEBrowserParams.getInstance();
-		String xmlFilename ="Form"  + crf.getPublicId() + "_v" + crf.getVersion();
-		xmlFilename = xmlFilename.replace('/', '_').replace('.', '_');
-		xmlFilename = params.getXMLDownloadDir() + xmlFilename + ".xml";
+			CDEBrowserParams params = CDEBrowserParams.getInstance();
+			String xmlFilename ="Form"  + crf.getPublicId() + "_v" + crf.getVersion();
+			xmlFilename = xmlFilename.replace('/', '_').replace('.', '_');
+			xmlFilename = params.getXMLDownloadDir() + xmlFilename + ".xml";
 
-		FileOutputStream fileOut = new FileOutputStream(xmlFilename);
-		byte[] xmlBytes = convertedForm.getBytes();
-		fileOut.write(xmlBytes);
-		fileOut.flush();
-		fileOut.close();
+			FileOutputStream fileOut = new FileOutputStream(xmlFilename);
+			byte[] xmlBytes = convertedForm.getBytes();
+			fileOut.write(xmlBytes);
+			fileOut.flush();
+			fileOut.close();
 
-		request.setAttribute("fileName", xmlFilename);
+			request.setAttribute("fileName", xmlFilename);
+		} catch (Exception exp) {
+			log.error("Exception converting CRF", exp);
+			return mapping.findForward(CommonNavigationConstants.FAILURE);
+		}
+
 		return mapping.findForward("downloadSuccess");
 	}
 

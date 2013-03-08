@@ -626,7 +626,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 	  return mapping.findForward("success");
   }
 
-  private CartObject translateCartObject(FormV2 crf) {
+  private CartObject translateCartObject(FormV2 crf) throws Exception {
 		CartObject ob = new CartObject();
 		ob.setType(FormConverterUtil.instance().getCartObjectType());
 		ob.setDisplayText(Integer.toString(crf.getPublicId()) + "v" + Float.toString(crf.getVersion()));
