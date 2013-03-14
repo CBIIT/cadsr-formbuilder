@@ -308,7 +308,7 @@
             </xsl:element>
             <xsl:element name="isMandatory">
                 <xsl:choose>
-                    <xsl:when test="../questions/@mandatory = 'true'">
+                    <xsl:when test="@mandatory = 'true'">
                         <xsl:text>Yes</xsl:text>
                     </xsl:when>
                     <xsl:otherwise>
@@ -383,7 +383,7 @@
                 <xsl:value-of select="asl-name"/>
             </xsl:element>
             <xsl:element name="preferredDefinition">
-                <xsl:value-of select="normalize-space(../preferred-definition)"/>
+                <xsl:value-of select="normalize-space(./preferred-definition)"/>
             </xsl:element>
             <xsl:call-template name="Designation"/>
             <!-- Added in formCartV2  -->
