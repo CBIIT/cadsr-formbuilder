@@ -15,10 +15,8 @@ Expected ant build targets are "dist" (default) and "clean".
 The build creates FormConverter.jar under the dist folder and copies required libraries to dist/lib.
 
 First argument is the Form Builder URL for EJB use.
-Second argument is a username to access Form Builder EJB.
-Third argument is the password to access Form Builder EJB.
-Fourth argument is the Object Cart API URL.
-Fifth argument is "all" to convert all carts, "guest" to convert only the guest cart, or anything else to connect and run through the steps without changing anything.
+Second argument is the Object Cart API URL.
+Third argument is "all" to convert all carts, "guest" to convert only the guest cart, or anything else to connect and run through the steps without changing anything.
 
-example execution: java -Xmx512M -jar FormCartConverter.jar jnp://127.0.0.1:1099 user password https://objcart-dev.nci.nih.gov/objcart10/ guest
+example execution: java -Xmx512M -jar FormCartConverter.jar jnp://127.0.0.1:1099 https://objcart-dev.nci.nih.gov/objcart10/ guest
 

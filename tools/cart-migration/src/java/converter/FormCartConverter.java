@@ -60,7 +60,7 @@ public class FormCartConverter {
 	private boolean limitToGuest; // limit changes to the guest cart (if changes are allowed)
 	private boolean noChanges;
 
-	public FormCartConverter(String formbuilderURL, String username, String password, String ocURL, boolean limit, boolean guestOnly) {
+	public FormCartConverter(String formbuilderURL, String ocURL, boolean limit, boolean guestOnly) {
 		try {
 			objectCartURL = ocURL;
 			noChanges = limit;
@@ -86,16 +86,17 @@ public class FormCartConverter {
 			Properties env = new Properties();
 			env.put(Context.INITIAL_CONTEXT_FACTORY, "org.jnp.interfaces.NamingContextFactory");
 			env.put(Context.URL_PKG_PREFIXES, "org.jboss.naming:org.jnp.interfaces");		
-			env.put(Context.PROVIDER_URL, formbuilderURL);			
-			env.put(Context.SECURITY_PRINCIPAL, username);
-			env.put(Context.SECURITY_CREDENTIALS, password);
+			env.put(Context.PROVIDER_URL, formbuilderURL);
+			// Form Builder EJB doesn't seem to have security
+			env.put(Context.SECURITY_PRINCIPAL, "dummy-username");
+			env.put(Context.SECURITY_CREDENTIALS, "dummy-password");
 			Context context = new InitialContext(env);
 			Object remote = context.lookup("FormBuilder");
 			FormBuilderHome home = (FormBuilderHome)PortableRemoteObject.narrow(remote,FormBuilderHome.class);	
 			formBuilderService = home.create();
 			String testConnection = formBuilderService.getIdseq((int)1, (float)0.1); // ("" instead of exception when no matching form)
 			_logger.info("testConnection returned: " + testConnection);
-			_logger.info("Form Builder service created using URL " + formbuilderURL + " for username " + username);
+			_logger.info("Form Builder service created using URL " + formbuilderURL);
 		} catch (Exception e) {
 			throw new RuntimeException("FormCartConverter failed to create FormBuilder service ", e);
 		}
@@ -109,33 +110,29 @@ public class FormCartConverter {
 			_logger.info("started main FormCartConverter");
 
 			int argsCount = args_.length;
-			if (argsCount < 4 || argsCount > 5) {
+			if (argsCount < 2 || argsCount > 3) {
 				_logger.info("Incorrect number of arguments.");				
 				_logger.info("First argument is the Form Builder URL for EJB use.");				
-				_logger.info("Second argument is a username to access Form Builder EJB.");				
-				_logger.info("Third argument is the password to access Form Builder EJB.");				
-				_logger.info("Fourth argument is the object cart url.");
-				_logger.info("Optional fifth argument may be blank, 'guest', or 'all' to specify which carts to operate on (blank is none)");
-				_logger.info("e.g.: java -Xmx512M -jar FormCartConverter.jar jnp://127.0.0.1:1099 user password https://objcart-dev.nci.nih.gov/objcart10/ all");
+				_logger.info("Second argument is the object cart url.");
+				_logger.info("Optional third argument may be blank, 'guest', or 'all' to specify which carts to operate on (blank is none)");
+				_logger.info("e.g.: java -Xmx512M -jar FormCartConverter.jar jnp://127.0.0.1:1099 https://objcart-dev.nci.nih.gov/objcart10/ all");
 			} else {
 			
 				String formbuilderURL = args_[0];
-				String username = args_[1];
-				String password = args_[2];
-				String ocURL = args_[3];
+				String ocURL = args_[1];
 				
 				boolean limit = true;
 				boolean guestOnly = true;
-				if (argsCount == 5 && args_[4].equalsIgnoreCase("guest")) {
+				if (argsCount == 3 && args_[2].equalsIgnoreCase("guest")) {
 					limit = false;
 					guestOnly = true;
 				}
-				if (argsCount == 5 && args_[4].equalsIgnoreCase("all")) {
+				if (argsCount == 3 && args_[2].equalsIgnoreCase("all")) {
 					limit = false;
 					guestOnly = false;
 				}
 				
-				FormCartConverter converter = new FormCartConverter(formbuilderURL, username, password, ocURL, limit, guestOnly);
+				FormCartConverter converter = new FormCartConverter(formbuilderURL, ocURL, limit, guestOnly);
 				
 				int clearingErrors = converter.clearExistingV2FormCarts();
 				if (clearingErrors == 0) {
