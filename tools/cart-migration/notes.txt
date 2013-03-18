@@ -20,3 +20,4 @@ Third argument is "all" to convert all carts, "guest" to convert only the guest 
 
 example execution: java -Xmx512M -jar FormCartConverter.jar jnp://127.0.0.1:1099 https://objcart-dev.nci.nih.gov/objcart10/ guest
 
+For additional information, see https://wiki.nci.nih.gov/x/FoLpBQ
