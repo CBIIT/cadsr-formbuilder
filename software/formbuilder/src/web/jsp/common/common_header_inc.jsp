@@ -99,7 +99,7 @@
 		
 		<td align="center" width="10%" height="10">
 			<span style="font-size: 10.0pt; font-family: Arial"> <A
-				HREF="<%=params.getFormBuilderHelpUrl()%>" target="_blank">
+				HREF="<%=params.getFormBuilderWhatsNewUrl()%>" target="_blank">
 					What's new</a>&nbsp;&nbsp;</span>
 		</td>
 	</tr>
