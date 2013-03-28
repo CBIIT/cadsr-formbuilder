@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import oracle.cle.process.ProcessConstants;
+//import oracle.cle.process.ProcessConstants;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
