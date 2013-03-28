@@ -686,10 +686,11 @@
    </listener>  
   <listener>
      <listener-class>gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormLockerSessionListener</listener-class>
-    </listener>  
+    </listener>
+ <!-- 
   <listener>
     <listener-class>oracle.clex.util.ServletEventListener</listener-class>
-     </listener>  
+     </listener>   -->  
   <listener>
    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
    </listener>  
