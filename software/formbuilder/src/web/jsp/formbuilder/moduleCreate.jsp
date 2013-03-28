@@ -3,7 +3,7 @@
 <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/tld/cdebrowser.tld" prefix="cde"%>
 
-<%@ page import="oracle.clex.process.jsp.GetInfoBean "%>
+<%--@ page import="oracle.clex.process.jsp.GetInfoBean "--%>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.html.* "%>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.util.* "%>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.CaDSRConstants"%>
