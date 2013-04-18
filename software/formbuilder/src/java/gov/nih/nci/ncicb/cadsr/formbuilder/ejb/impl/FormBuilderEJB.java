@@ -319,7 +319,8 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
         }
 
         myForm.setModules(modules);
-        Context caBIG = cdao.getContextByName(CaDSRConstants.CONTEXT_CABIG);
+        //Context caBIG = cdao.getContextByName(CaDSRConstants.CONTEXT_CABIG);
+        Context caBIG = cdao.getContextByName(CaDSRConstants.CONTEXT_NCI);
         myForm
         .setPublished(fdao.isFormPublished(myForm.getIdseq(), caBIG.getConteIdseq()));
 
@@ -457,7 +458,8 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
         }
 
         myForm.setModules(modules);
-        Context caBIG = cdao.getContextByName(CaDSRConstants.CONTEXT_CABIG);
+        //Context caBIG = cdao.getContextByName(CaDSRConstants.CONTEXT_CABIG);
+        Context caBIG = cdao.getContextByName(CaDSRConstants.CONTEXT_NCI);
         myForm
         .setPublished(fdao.isFormPublished(myForm.getIdseq(), caBIG.getConteIdseq()));
 
