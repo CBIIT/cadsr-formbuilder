@@ -1,7 +1,6 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext.CDECartOCImplExtensionLoaded;
-
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext.CDECartOCImplExtension;
 import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
 import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
 import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.CDECartFormBean;
@@ -69,14 +68,14 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchAction {
 		  else
 	    	  cartClient = new ObjectCartClient();
 
-	      if (FormCartOptionsUtil.instance().writeInV1Format() || FormCartOptionsUtil.instance().readInV1Format()){		  
+	      if (FormCartOptionsUtil.instance().writeInV1Format()){		  
 	    	  CDECart userCart = new CDECartOCImpl(cartClient, user.getUsername(),CaDSRConstants.FORMS_CART);
     	      this.setSessionObject(request, CaDSRConstants.FORMS_CART, userCart);
     	      log.debug("setSessionObject " + CaDSRConstants.FORMS_CART + " " + userCart);
 	      }      
 
-	      if (FormCartOptionsUtil.instance().writeInV2Format() || FormCartOptionsUtil.instance().readInV2Format()){		  
-	    	  CDECart userCartV2 = new CDECartOCImplExtensionLoaded(cartClient, user.getUsername(),CaDSRConstants.FORMS_CART_V2, getFormBuilderService() );     
+	      if (true){  // we always write the formCartV2 cart now		  
+	    	  CDECart userCartV2 = new CDECartOCImplExtension(cartClient, user.getUsername(),CaDSRConstants.FORMS_CART_V2, getFormBuilderService() );     
 	    	  this.setSessionObject(request, CaDSRConstants.FORMS_CART_V2, userCartV2);
     	      log.debug("setSessionObject " + CaDSRConstants.FORMS_CART_V2 + " " + userCartV2);
 	      }
@@ -168,7 +167,7 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchAction {
     	  }
       }      
       
-      if (FormCartOptionsUtil.instance().writeInV2Format()){
+      if (true){ // we always write the formCartV2 cart now
     	  try {
     		  Collection items = new ArrayList();
 
