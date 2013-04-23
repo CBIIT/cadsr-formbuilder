@@ -25,7 +25,7 @@ import org.apache.struts.action.ActionMapping;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormCartOptionsUtil;
 
 
-public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchAction {
+public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchActionWithCarts {
 
   /**
    * Displays Form Cart.
@@ -55,30 +55,10 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchAction {
 	    HttpServletRequest request,
 	    HttpServletResponse response) throws IOException, ServletException {
 	     
-	    try {
-	      NCIUser user =
-	        (NCIUser) this.getSessionObject(request, CaDSRConstants.USER_KEY);
-	      CDEBrowserParams params = CDEBrowserParams.getInstance();
-	      String ocURL = params.getObjectCartUrl();
-	      //Get the cart in the session
-	      ObjectCartClient cartClient = null;
-	      
-		  if (!ocURL.equals(""))
-			  cartClient = new ObjectCartClient(ocURL);
-		  else
-	    	  cartClient = new ObjectCartClient();
-
-	      if (FormCartOptionsUtil.instance().writeInV1Format()){		  
-	    	  CDECart userCart = new CDECartOCImpl(cartClient, user.getUsername(),CaDSRConstants.FORMS_CART);
-    	      this.setSessionObject(request, CaDSRConstants.FORMS_CART, userCart);
-    	      log.debug("setSessionObject " + CaDSRConstants.FORMS_CART + " " + userCart);
-	      }      
-
-	      if (true){  // we always write the formCartV2 cart now		  
-	    	  CDECart userCartV2 = new CDECartOCImplExtension(cartClient, user.getUsername(),CaDSRConstants.FORMS_CART_V2, getFormBuilderService() );     
-	    	  this.setSessionObject(request, CaDSRConstants.FORMS_CART_V2, userCartV2);
-    	      log.debug("setSessionObject " + CaDSRConstants.FORMS_CART_V2 + " " + userCartV2);
-	      }
+	    try {	    	
+	    	ensureSessionCarts(request);
+	    	CDECartOCImplExtension extendedCart = (CDECartOCImplExtension)this.getSessionObject(request, CaDSRConstants.FORMS_CART_V2);
+	    	extendedCart.setFormDisplayObjects();	    		      
 	    }
 	    catch (Exception exp) {
 	      if (log.isErrorEnabled()) {
@@ -108,16 +88,21 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchAction {
     ActionForm form,
     HttpServletRequest request,
     HttpServletResponse response) throws IOException, ServletException {
-    try {
-      CDECart cart =
-        (CDECart) this.getSessionObject(request, CaDSRConstants.FORMS_CART);
-      saveMessage("cadsr.common.formcart.save.success",request);
-    }
-    catch (Exception exp) {
-      if (log.isErrorEnabled()) {
-        log.error("Exception on addItems " , exp);
-      }
-    }
+	  
+    // Don't think this is used (or really did anything). No longer supported.
+    if (log.isErrorEnabled())
+    	log.error("addItems not supported");
+	  
+//    try {
+//      CDECart cart =
+//        (CDECart) this.getSessionObject(request, CaDSRConstants.FORMS_CART);
+//      saveMessage("cadsr.common.formcart.save.success",request);
+//    }
+//    catch (Exception exp) {
+//      if (log.isErrorEnabled()) {
+//        log.error("Exception on addItems " , exp);
+//      }
+//    }
 
     return mapping.findForward("addDeleteSuccess");
   }
@@ -160,7 +145,7 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchAction {
     		  for (int i = 0; i < selectedDeleteItems.length; i++) {
     			  items.add(selectedDeleteItems[i]);
     		  }
-    		  sessionCart.removeDataElements(items);
+    		  sessionCart.removeDataElements(items);  // (removeDataElements works on native id and doesn't care about element type)
     	  }
     	  catch (Exception exp) {
     		  log.error("Exception on removeItems from " + CaDSRConstants.FORMS_CART + " ", exp);
@@ -179,7 +164,7 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchAction {
     		  for (int i = 0; i < selectedDeleteItems.length; i++) {
     			  items.add(selectedDeleteItems[i]);
     		  }
-    		  sessionCart.removeDataElements(items);
+    		  sessionCart.removeDataElements(items);  // (removeDataElements works on native id and doesn't care about element type)
     	  }
     	  catch (Exception exp) {
     		  log.error("Exception on removeItems from " + CaDSRConstants.FORMS_CART_V2 + " ", exp);
