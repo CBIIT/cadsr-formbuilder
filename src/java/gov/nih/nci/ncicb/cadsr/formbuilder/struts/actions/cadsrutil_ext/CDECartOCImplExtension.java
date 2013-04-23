@@ -1,6 +1,10 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext;
 
-// This class extends the previous objectCart code from cadsrutil and allows it to retrieve forms that are in the new forCartV2 format 
+// This class extends the previous objectCart code from cadsrutil and allows it return something akin to a form DTO for display
+// the FormTransferObject (with only the values needed for the display) that is returned by getForms
+// but based on a V2 form.
+// It also provides for caching so repeated calls are more efficient
+// Note: there is no automatic mechanism for ensuring the cache is in sync with the forms
 
 import gov.nih.nci.ncicb.cadsr.objectCart.impl.CDECartOCImpl;
 
@@ -45,24 +49,28 @@ import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConverterUtil;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormCartOptionsUtil;
 import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
 
-
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormCartDisplayObject;
 
 public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.impl.CDECartOCImpl implements CDECart, Serializable  {
 
 	private static Log log = LogFactory.getLog(CDECartOCImplExtension.class.getName());
 
-	public static final String transformToConvertCartToDTO = "/transforms/ConvertFormCartV2ToDTO.xsl";  // consider changing to a non-versioned name
+	public static final String transformToConvertCartToDisplayObject = "/transforms/ConvertFormCartV2ToDisplayObject.xsl";
 	public static final String formNotInDatabaseLongNamePrefix = "NOT IN DATABASE: "; 
 	
 	protected FormBuilderServiceDelegate formBuilderService;
-
+	protected Collection formDisplayObjects;
+	
 	public CDECartOCImplExtension(ObjectCartClient client, String uid, String cName, FormBuilderServiceDelegate formBuilderServiceDelegate) {
 		super(client, uid, cName);
 		formBuilderService = formBuilderServiceDelegate;
+
+		setFormDisplayObjects();
 	}
 
-	public Collection getForms() {
-
+	
+	public void setFormDisplayObjects() {
+		log.debug("setFormDisplayObjects");
 		log.debug("cartClient " + cartClient + " oCart " + oCart);
 		log.debug("cart id " + oCart.getId());
 
@@ -73,7 +81,8 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 			List itemList = new ArrayList();
 
 			// create the transformer 
-			InputStream xslStream = this.getClass().getResourceAsStream(transformToConvertCartToDTO);
+			InputStream xslStream = this.getClass().getResourceAsStream(transformToConvertCartToDisplayObject);
+						
 			StreamSource xslSource = new StreamSource(xslStream);
 			Transformer transformer = null;
 			try {
@@ -97,30 +106,30 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 					if (FormCartOptionsUtil.instance().dumpXMLDuringDebug())
 						log.debug("Converted XML: " + xmlOutputStream.toString());
 	
-					// convert the serialized FormTransferObject back into an actual FormTransferObject
+					// convert the serialized FormCartDisplayObject into an actual FormCartDisplayObject
 					Object pOb = new Object();
 					StringReader reader = new StringReader(xmlOutputStream.toString());
-					pOb = Unmarshaller.unmarshal(FormTransferObject.class, reader);		
+					pOb = Unmarshaller.unmarshal(FormCartDisplayObject.class, reader);		
 	
-					log.debug("Trying to convert object pointer to FormTransferObject...");		
-					FormTransferObject FTO = (FormTransferObject)pOb;
+					log.debug("Trying to convert object pointer to FormCartDisplayObject...");		
+					FormCartDisplayObject FCDO = (FormCartDisplayObject)pOb;
 					if (FormCartOptionsUtil.instance().dumpXMLDuringDebug())
-						log.debug("FormTransferObject: " + FTO.toString());
+						log.debug("FormCartDisplayObject: " + FCDO.toString());
 	
 					// new form cart data doesn't include idseq, get it from the cart native id
 					String idseq = f.getNativeId();
-					FTO.setIdseq(idseq);
+					FCDO.setIdseq(idseq);
 					
 					// check whether the form exists in database and show a warning prefix on the name if it doesn't 
-					String databaseidseq = formBuilderService.getIdseq(FTO.getPublicId(), FTO.getVersion());
+					String databaseidseq = formBuilderService.getIdseq(FCDO.getPublicId(), FCDO.getVersion());
 
 					if (databaseidseq.length() == 0) {
-			    		log.info("Form " + FTO.getPublicId() + " " + FTO.getVersion() + " in cart not found in database");
-			    		FTO.setLongName(formNotInDatabaseLongNamePrefix + FTO.getLongName());   		
+			    		log.info("Form " + FCDO.getPublicId() + " " + FCDO.getVersion() + " in cart not found in database");
+			    		FCDO.setLongName(formNotInDatabaseLongNamePrefix + FCDO.getLongName());   		
 					}
 	
-					itemList.add(FTO);
-					log.debug("Loaded " + FTO.getIdseq());
+					itemList.add(FCDO);
+					log.debug("Loaded " + FCDO.getIdseq());
 					
 				} catch (TransformerException e) {
 					log.error("TransformerException loading forms", e);
@@ -132,12 +141,17 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 				
 			}
 
-			return itemList;		
+			formDisplayObjects = itemList;		
 
 		} catch (ObjectCartException oce) {
 			oce.printStackTrace();
 			throw new RuntimeException("getForms: Error loading forms", oce);
 		}
-	}	
-
+	}
+	
+	public Collection getFormDisplayObjects() {
+		log.debug("getFormDisplayObjects " + formDisplayObjects.size() + " objects");		
+		return formDisplayObjects;
+	}
+	
 }

@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0">
 
-<!-- This is an incomplete transformation from the new object cart format to a FormTransferObject. Only the data needed for the Form Cart display (displayFormsCart.jsp) is included in the transformation.  -->
+<!-- This is a transformation from the new object cart format to a FormCartDisplayObject. Only the data needed for the Form Cart display (displayFormsCart.jsp) is included in the transformation.  -->
 
     <xsl:output indent="yes" exclude-result-prefixes="xsi"/>
 
@@ -11,18 +11,15 @@
     </xsl:template>
 
     <xsl:template match="form">
-        <xsl:element name="form-transfer-object">
+        <xsl:element name="form-cart-display-object">
             <xsl:attribute name="public-id">
                 <xsl:value-of select="./publicID"/>
             </xsl:attribute>
             <xsl:element name="long-name">
                 <xsl:value-of select="./longName"/>
             </xsl:element>
-            <xsl:element name="context">
-			<xsl:attribute name="xsi:type">java:gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject</xsl:attribute>
-	            <xsl:element name="name">
-      	          <xsl:value-of select="./context"/>
-	            </xsl:element>
+            <xsl:element name="context-name">
+     	          <xsl:value-of select="./context"/>
             </xsl:element>
             <xsl:element name="form-type">
                 <xsl:value-of select="./type"/>
