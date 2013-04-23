@@ -576,7 +576,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchAction {
 			clearCheckedFormIds = true;
 		}
 
-		if (FormCartOptionsUtil.instance().writeInV2Format()){
+		if (true) {   // we always write the formCartV2 cart now
 			Map<String, String> objectDisplayNames = new HashMap<String, String> ();
 			Map<String, Object>  objects = new HashMap<String, Object>();
 
