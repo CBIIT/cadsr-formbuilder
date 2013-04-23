@@ -1,10 +1,10 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext;
 
-// This class extends the previous objectCart code from cadsrutil and allows it return something akin to a form DTO for display
-// the FormTransferObject (with only the values needed for the display) that is returned by getForms
-// but based on a V2 form.
-// It also provides for caching so repeated calls are more efficient
-// Note: there is no automatic mechanism for ensuring the cache is in sync with the forms
+// This class extends the previous objectCart code from cadsrutil and provides additional functionality needed for V2 forms
+// Since getForms was only used for display, an alternate mechanism providing display objects for V2 forms is provided 
+// Caching is provided for the display objects so repeated calls are more efficient
+// Note: There is no automatic mechanism for ensuring the cache is in sync with the forms.
+// setFormDisplayObjects should be explicitly called before displaying the cart.
 
 import gov.nih.nci.ncicb.cadsr.objectCart.impl.CDECartOCImpl;
 
@@ -64,11 +64,8 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 	public CDECartOCImplExtension(ObjectCartClient client, String uid, String cName, FormBuilderServiceDelegate formBuilderServiceDelegate) {
 		super(client, uid, cName);
 		formBuilderService = formBuilderServiceDelegate;
-
-		setFormDisplayObjects();
 	}
 
-	
 	public void setFormDisplayObjects() {
 		log.debug("setFormDisplayObjects");
 		log.debug("cartClient " + cartClient + " oCart " + oCart);
@@ -152,6 +149,11 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 	public Collection getFormDisplayObjects() {
 		log.debug("getFormDisplayObjects " + formDisplayObjects.size() + " objects");		
 		return formDisplayObjects;
+	}
+	
+	// need access to some generic (non-typed, non-POJO) cart functions 
+	public void addObjectCollection(Collection<CartObject> cartObjects) throws gov.nih.nci.objectCart.client.ObjectCartException {
+		oCart = cartClient.storeObjectCollection(oCart, cartObjects);		
 	}
 	
 }
