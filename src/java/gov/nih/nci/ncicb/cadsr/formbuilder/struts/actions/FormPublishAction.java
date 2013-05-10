@@ -67,7 +67,8 @@ public class FormPublishAction extends FormBuilderSecureBaseDispatchAction {
       Collection contexts = (Collection)getSessionObject(request, ALL_CONTEXTS);
 
       //Context currContext = ContextUtils.getContextByName(contexts,CONTEXT_CABIG); 
-      Context currContext = ContextUtils.getContextByName(contexts, CONTEXT_NCI);     
+      //Context currContext = ContextUtils.getContextByName(contexts, CONTEXT_NCI);   
+      Context currContext = ContextUtils.getContextByName(contexts, CONTEXT_NCIP);   
       service.publishForm(aForm.getIdseq(),aForm.getFormType(),currContext.getConteIdseq());
       setSessionObject(request,TREE_REFRESH_INDICATOR,YES,true);
     }
@@ -110,7 +111,8 @@ public class FormPublishAction extends FormBuilderSecureBaseDispatchAction {
       Collection contexts = (Collection)getSessionObject(request, ALL_CONTEXTS);
 
       //Context currContext = ContextUtils.getContextByName(contexts,CONTEXT_CABIG);  
-      Context currContext = ContextUtils.getContextByName(contexts,CONTEXT_NCI);  
+      //Context currContext = ContextUtils.getContextByName(contexts,CONTEXT_NCI);  
+      Context currContext = ContextUtils.getContextByName(contexts,CONTEXT_NCIP); 
       service.unpublishForm(aForm.getIdseq(),aForm.getFormType(),currContext.getConteIdseq());
       setSessionObject(request,TREE_REFRESH_INDICATOR,YES,true);
     }
