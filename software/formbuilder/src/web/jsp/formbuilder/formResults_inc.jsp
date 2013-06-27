@@ -56,6 +56,9 @@ function ToggleSelectAll(e){
        	<a href="javascript:document.forms[0].action=document.forms[0].action+'?method=addFormToCart';document.forms[0].submit()">
             <html:img src='<%="i/addtoformcart.gif"%>' border="0" alt="Add to Form Cart"/> 
           </a> 
+        <a href="javascript:document.forms[0].action=document.forms[0].action+'?method=saveFormInQueue';document.forms[0].submit()">
+            <html:img src='<%="i/save.gif"%>' border="0" alt="Save Forms in the queue"/> 
+          </a>
         <table width="100%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
           <tr class="OraTableColumnHeader">
             <logic:notPresent name="<%=FormConstants.IN_PROCESS%>">
