@@ -5,6 +5,7 @@ import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConverterUtil;
 import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
 import gov.nih.nci.ncicb.cadsr.common.cdebrowser.DataElementSearchBean;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.jdbc.JDBCFormTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
 import gov.nih.nci.ncicb.cadsr.common.jsp.bean.PaginationBean;
@@ -12,6 +13,7 @@ import gov.nih.nci.ncicb.cadsr.common.resource.Context;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
+import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.CDECartFormBean;
 import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
 import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
 import gov.nih.nci.ncicb.cadsr.common.util.StringPropertyComparator;
@@ -524,6 +526,75 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
     return mapping.findForward(SUCCESS);
     }
   
+	public ActionForward saveFormInQueue(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		
+		   FormBuilderServiceDelegate service = getFormBuilderService();
+		   CDECartOCImplExtension sessionCartV2 = (CDECartOCImplExtension) this
+					.getSessionObject(request, CaDSRConstants.FORMS_CART_V2);
+		   Collection selectedSaveItems = sessionCartV2.getFormCartV2();
+		   
+		    try {  	
+				if (FormCartOptionsUtil.instance().writeInV1Format()) {
+					Collection itemsToMerge = new ArrayList();
+					CDECart sessionCart = (CDECart) this.getSessionObject(request,
+							CaDSRConstants.FORMS_CART);
+					
+					if (selectedSaveItems != null) {
+						for (Object version2Form : selectedSaveItems) {
+							Form crf = service.getFormDetails(((FormV2TransferObject)version2Form).getFormIdseq());
+							log.debug("adding V1 form objects to cart (No Save)");
+							itemsToMerge.add(crf);
+						}
+						log.debug("merging V1 form objects");
+						sessionCart.mergeElements(itemsToMerge);
+						log.debug("done merging V1 form objects");
+					}
+					this.setSessionObject(request, CaDSRConstants.FORMS_CART, sessionCart);
+				}
+
+				if (true) { // we always write the formCartV2 cart now
+					log.debug("Starting new add-to-cart - creating objects");
+					Collection itemsToRemove = new ArrayList();
+					Collection itemsToAdd = new ArrayList();
+					
+					if (selectedSaveItems != null) {
+						for (Object version2Form : selectedSaveItems) {
+							itemsToRemove.add(((FormV2TransferObject)version2Form).getFormIdseq());
+							FormV2 crf = service.getFormDetailsV2(((FormV2TransferObject)version2Form).getFormIdseq());
+							itemsToAdd.add(translateCartObject((FormV2) crf));
+						}
+	
+						// remove from cart before adding (so that we'll update), removing non-existent doesn't hurt
+						// (wonder if that is really needed)
+						log.debug("removing re-used objects");
+						sessionCartV2.removeDataElements(itemsToRemove);
+						// (removeDataElements works on native id and doesn't care
+						// about element type)
+						log.debug("adding new objects");
+						sessionCartV2.addObjectCollection(itemsToAdd);
+						log.debug("done");
+						
+						// Remove the saved forms from cart in memory
+						selectedSaveItems.clear();
+						sessionCartV2.clearFormV2();
+					}
+					this.setSessionObject(request, CaDSRConstants.FORMS_CART_V2, sessionCartV2);
+				}
+			      saveMessage("cadsr.common.formcart.save.success",request);
+				}
+		    catch (Exception exp) {
+		        if (log.isErrorEnabled()) {
+		          log.error("Exception on addItems " , exp);
+		        }
+		      }
+		    
+
+
+		return mapping.findForward("success");
+	}
+  
 	public ActionForward addFormToCart(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
@@ -536,31 +607,9 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
 			DynaActionForm dynaBean = (DynaActionForm) form;
 			boolean clearCheckedFormIds = false;
 
-			if (FormCartOptionsUtil.instance().writeInV1Format()) {
+			if (true) { 
 
-				Collection itemsToMerge = new ArrayList();
-
-				CDECart sessionCart = (CDECart) this.getSessionObject(request,
-						CaDSRConstants.FORMS_CART);
-
-				String[] formIds = (String[]) dynaBean.get("checkedFormIds");
-				if (formIds != null) {
-					for (String formId : formIds) {
-						Form crf = service.getFormDetails(formId);
-						itemsToMerge.add(crf);
-					}
-
-					log.debug("merging V1 form objects");
-					sessionCart.mergeElements(itemsToMerge);
-					log.debug("done merging V1 form objects");
-				}
-			}
-
-			if (true) { // we always write the formCartV2 cart now
-
-				log.debug("Starting new add-to-cart - creating objects");
-
-				Collection itemsToRemove = new ArrayList();
+				log.debug("add-to-cart in memory - creating objects");
 				Collection itemsToAdd = new ArrayList();
 
 				CDECartOCImplExtension sessionCart = (CDECartOCImplExtension) this
@@ -570,26 +619,18 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
 
 				if (formIds != null) {
 					for (String formId : formIds) {
-						itemsToRemove.add(formId);
 						FormV2 crf = service.getFormDetailsV2(formId);
-						itemsToAdd.add(translateCartObject((FormV2) crf));
+						itemsToAdd.add(crf);
 					}
-
-					// remove from cart before adding (so that we'll update), removing non-existent doesn't hurt
-					// (wonder if that is really needed)
-					log.debug("removing re-used objects");
-					sessionCart.removeDataElements(itemsToRemove);
-					// (removeDataElements works on native id and doesn't care
-					// about element type)
-					log.debug("adding new objects");
-					sessionCart.addObjectCollection(itemsToAdd);
+					sessionCart.addFormsV2(itemsToAdd);
 					log.debug("done");
 					
 					clearCheckedFormIds = true;
 				}
+				this.setSessionObject(request, CaDSRConstants.FORMS_CART_V2, sessionCart);
 			}
+			saveMessage("cadsr.common.formcart.add.success", request);
 
-			saveMessage("cadsr.common.formcart.save.success", request);
 
 			dynaBean.set("cartAddFormId", "");
 			if (clearCheckedFormIds)

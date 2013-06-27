@@ -116,6 +116,7 @@ function retrieveSavedItems() {
   <table width="80%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
     <tr class="OraTableColumnHeader">
     <logic:notEmpty name="<%=CaDSRConstants.FORMS_CART_V2%>" property = "formDisplayObjects">
+      <th><center>Save<br/><input type="checkbox" name="saveAllChk" value="yes" onClick="ToggleSaveAll(this)"/></center></th>
       <th><center>Delete<br/><input type="checkbox" name="deleteAllChk" value="yes" onClick="ToggleDeleteAll(this)"/></center></th>
 	<th><center>Action</center></th>
     </logic:notEmpty>
@@ -136,12 +137,21 @@ function retrieveSavedItems() {
   </logic:empty>
   <logic:notEmpty name="<%=CaDSRConstants.FORMS_CART_V2%>" property = "formDisplayObjects">
 	<bean:size id="noOfItems" name="<%=CaDSRConstants.FORMS_CART_V2%>" property="formDisplayObjects" />
-    <logic:iterate id="form" name="<%=CaDSRConstants.FORMS_CART_V2%>" type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormCartDisplayObject" property="formDisplayObjects">
+    <logic:iterate id="form" name="<%=CaDSRConstants.FORMS_CART_V2%>" type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormCartDisplayObjectPersisted" property="formDisplayObjects">
 <%
       String formId = form.getIdseq();
       String detailsURL = "javascript:details('"+formId+"')";
+      boolean ISPERSISTED = form.getIsPersisted();
 %>
       <tr class="OraTabledata">
+      	<td class="OraFieldText">
+			<logic:equal name="form" property="isPersisted" value="true">
+              	&nbsp;       
+            </logic:equal>
+			<logic:notEqual name="form" property="isPersisted" value="true">
+				<input type="checkbox" name="selectedSaveItems" value="<%= formId %>" />
+			</logic:notEqual>
+		</td>
         <td><center>
           <input type="checkbox" name="selectedDeleteItems" value="<%= formId %>"/></center>
         </td>
@@ -215,7 +225,12 @@ function retrieveSavedItems() {
             <html:img src='<%="i/deleteButton.gif"%>' border="0" alt="Delete"/> 
           </a></center>
         </td> 
-		</logic:notEmpty>        
+		</logic:notEmpty>  
+		<td>
+          <center><a href="javascript:saveItems()">
+            <html:img src='<%="i/save.gif"%>' border="0" alt="Save"/> 
+          </a></center>
+        </td>       
         <td>
           <CENTER><html:link href="<%=doneURL%>">				
             <html:img src='<%="i/backButton.gif"%>' border="0" alt="Back"/>
