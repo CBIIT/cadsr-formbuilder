@@ -6,15 +6,31 @@ import java.util.List;
 
 public class FormCartDisplayObject {
 
-	private int publicId;
-	private String longName;
-	private String contextName = null;
-	private String formType = null;
-	private String aslName;
-	private Float version;
-	private List protocols = null;	
-	private String idseq;
+	protected int publicId;
+	protected String longName;
+	protected String contextName = null;
+	protected String formType = null;
+	protected String aslName;
+	protected Float version;
+	protected List protocols = null;	
+	protected String idseq;
 
+	public FormCartDisplayObject()
+		{
+			
+		}
+	
+	public FormCartDisplayObject(FormCartDisplayObject FCDO)
+		{
+			this.setAslName(FCDO.getAslName());
+			this.setContextName(FCDO.getContextName());
+			this.setFormType(FCDO.getFormType());
+			this.setIdseq(FCDO.getIdseq());
+			this.setLongName(FCDO.getLongName());
+			this.setProtocols(FCDO.getProtocols());
+			this.setPublicId(FCDO.getPublicId());
+			this.setVersion(FCDO.getVersion());
+		}
 	
 	public int getPublicId() {
 		return publicId;
@@ -79,5 +95,4 @@ public class FormCartDisplayObject {
 	public void setIdseq(String idseq) {
 		this.idseq = idseq;
 	}
-	
 }

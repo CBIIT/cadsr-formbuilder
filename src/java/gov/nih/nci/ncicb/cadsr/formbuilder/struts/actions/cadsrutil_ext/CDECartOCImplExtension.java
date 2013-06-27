@@ -11,10 +11,12 @@ import gov.nih.nci.ncicb.cadsr.objectCart.impl.CDECartOCImpl;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.ServiceDelegateFactory;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.ServiceStartupException;
+import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
 import gov.nih.nci.ncicb.cadsr.common.formbuilder.common.FormBuilderConstants;
 
 import gov.nih.nci.cadsr.domain.Form;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.objectCart.CDECart;
 import gov.nih.nci.ncicb.cadsr.objectCart.CDECartItem;
 import gov.nih.nci.ncicb.cadsr.objectCart.CDECartItemComparator;
@@ -28,8 +30,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.util.logging.Log;
 import gov.nih.nci.ncicb.cadsr.common.util.logging.LogFactory;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
@@ -37,6 +43,7 @@ import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
 import org.exolab.castor.xml.Unmarshaller;
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.ValidationException;
+
 import javax.xml.transform.*;
 import javax.xml.transform.stream.*;
 import java.io.ByteArrayOutputStream;
@@ -45,6 +52,7 @@ import java.io.StringReader;
 
 import net.sf.saxon.TransformerFactoryImpl;
 
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormCartDisplayObjectPersisted;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConverterUtil;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormCartOptionsUtil;
 import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
@@ -61,11 +69,18 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 	protected FormBuilderServiceDelegate formBuilderService;
 	protected Collection formDisplayObjects;
 	
+	// This holds V2 forms temporarily until the user is ready to
+	// save the forms. Once the user is ready to save the contents
+	// in this cart will be added to the contents of the oCart. - Sula
+	private ArrayList formCartV2;
+	
 	public CDECartOCImplExtension(ObjectCartClient client, String uid, String cName, FormBuilderServiceDelegate formBuilderServiceDelegate) {
 		super(client, uid, cName);
 		formBuilderService = formBuilderServiceDelegate;
+		formCartV2 = new ArrayList();
 	}
 
+	
 	public void setFormDisplayObjects() {
 		log.debug("setFormDisplayObjects");
 		log.debug("cartClient " + cartClient + " oCart " + oCart);
@@ -74,6 +89,8 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 		try {
 			Collection<CartObject> newFormCartElements = cartClient.getObjectsByType(oCart, FormConverterUtil.instance().getCartObjectType());
 			log.debug("newFormCartElements has " + newFormCartElements.size() + " elements");
+			
+			log.debug("Form Cart has " + formCartV2.size() + " new elements");
 
 			List itemList = new ArrayList();
 
@@ -125,7 +142,7 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 			    		FCDO.setLongName(formNotInDatabaseLongNamePrefix + FCDO.getLongName());   		
 					}
 	
-					itemList.add(FCDO);
+					itemList.add(new FormCartDisplayObjectPersisted(FCDO, true));
 					log.debug("Loaded " + FCDO.getIdseq());
 					
 				} catch (TransformerException e) {
@@ -137,12 +154,30 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 				}
 				
 			}
+			
+			for (Object crf: formCartV2) {
+				FormCartDisplayObject FCDO = new FormCartDisplayObject();
+				FormV2 formVersion2 = ((FormV2)crf);
+				FCDO.setAslName(formVersion2.getAslName());
+				FCDO.setContextName(formVersion2.getContext().getName());
+				FCDO.setFormType(formVersion2.getFormType());
+				FCDO.setIdseq(formVersion2.getIdseq());
+				FCDO.setLongName(formVersion2.getLongName());
+				FCDO.setProtocols(formVersion2.getProtocols());
+				FCDO.setPublicId(formVersion2.getPublicId());
+				FCDO.setVersion(formVersion2.getVersion());
+				itemList.add(new FormCartDisplayObjectPersisted(FCDO, false));
+			}
 
 			formDisplayObjects = itemList;		
 
 		} catch (ObjectCartException oce) {
 			oce.printStackTrace();
 			throw new RuntimeException("getForms: Error loading forms", oce);
+		}
+		for (Object each: formDisplayObjects)
+		{
+			System.out.println(" print form display object "+((FormCartDisplayObjectPersisted)each).getIsPersisted());
 		}
 	}
 	
@@ -155,5 +190,35 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 	public void addObjectCollection(Collection<CartObject> cartObjects) throws gov.nih.nci.objectCart.client.ObjectCartException {
 		oCart = cartClient.storeObjectCollection(oCart, cartObjects);		
 	}
+	
+	public void addFormsV2(Collection forms) {
+		Iterator itemIter = forms.iterator();
+		while (itemIter.hasNext()) {
+		    addForm((FormV2TransferObject)itemIter.next());
+		}
+	}
+	
+	public void addForm(Object form) {
+			formCartV2.add(form);
+	}
+	
+	public void removeFormV2(Object form) {
+			formCartV2.remove(form);
+	}
+	
+	public void clearFormV2()
+		{
+			formCartV2.clear();
+		}
+
+	public ArrayList getFormCartV2() {
+		return formCartV2;
+	}
+
+	public void setFormCartV2(ArrayList formCartV2) {
+		this.formCartV2 = formCartV2;
+	}
+
+	
 	
 }
