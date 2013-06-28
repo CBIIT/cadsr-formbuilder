@@ -533,7 +533,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
 		   FormBuilderServiceDelegate service = getFormBuilderService();
 		   CDECartOCImplExtension sessionCartV2 = (CDECartOCImplExtension) this
 					.getSessionObject(request, CaDSRConstants.FORMS_CART_V2);
-		   Collection selectedSaveItems = sessionCartV2.getFormCartV2();
+		   Collection selectedSaveItems = sessionCartV2.getFormCartV2().values();
 		   int formsInQueue = 0;
 		   
 		    try {  	
