@@ -72,12 +72,12 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 	// This holds V2 forms temporarily until the user is ready to
 	// save the forms. Once the user is ready to save the contents
 	// in this cart will be added to the contents of the oCart. - Sula
-	private ArrayList formCartV2;
+	private Map formCartV2;
 	
 	public CDECartOCImplExtension(ObjectCartClient client, String uid, String cName, FormBuilderServiceDelegate formBuilderServiceDelegate) {
 		super(client, uid, cName);
 		formBuilderService = formBuilderServiceDelegate;
-		formCartV2 = new ArrayList();
+		formCartV2 = new HashMap();
 	}
 
 	
@@ -155,7 +155,7 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 				
 			}
 			
-			for (Object crf: formCartV2) {
+			for (Object crf: formCartV2.values()) {
 				FormCartDisplayObject FCDO = new FormCartDisplayObject();
 				FormV2 formVersion2 = ((FormV2)crf);
 				FCDO.setAslName(formVersion2.getAslName());
@@ -199,8 +199,10 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 	}
 	
 	public void addForm(Object form) {
-			formCartV2.add(form);
+		if (!formCartV2.containsKey(((FormV2TransferObject)form).getIdseq()))
+			formCartV2.put(((FormV2TransferObject)form).getIdseq(), form);
 	}
+
 	
 	public void removeFormV2(Object form) {
 			formCartV2.remove(form);
@@ -211,11 +213,11 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 			formCartV2.clear();
 		}
 
-	public ArrayList getFormCartV2() {
+	public Map getFormCartV2() {
 		return formCartV2;
 	}
 
-	public void setFormCartV2(ArrayList formCartV2) {
+	public void setFormCartV2(Map formCartV2) {
 		this.formCartV2 = formCartV2;
 	}
 
