@@ -534,6 +534,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
 		   CDECartOCImplExtension sessionCartV2 = (CDECartOCImplExtension) this
 					.getSessionObject(request, CaDSRConstants.FORMS_CART_V2);
 		   Collection selectedSaveItems = sessionCartV2.getFormCartV2();
+		   int formsInQueue = 0;
 		   
 		    try {  	
 				if (FormCartOptionsUtil.instance().writeInV1Format()) {
@@ -577,12 +578,15 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
 						log.debug("done");
 						
 						// Remove the saved forms from cart in memory
+						formsInQueue = sessionCartV2.getFormCartV2().size();
 						selectedSaveItems.clear();
 						sessionCartV2.clearFormV2();
 					}
 					this.setSessionObject(request, CaDSRConstants.FORMS_CART_V2, sessionCartV2);
 				}
-			      saveMessage("cadsr.common.formcart.save.success",request);
+			      saveMessage("cadsr.common.formqueue.save.success",request, new Integer(formsInQueue).toString());
+			      //saveMessage("cadsr.common.formqueue.save.success",request);
+
 				}
 		    catch (Exception exp) {
 		        if (log.isErrorEnabled()) {
@@ -600,6 +604,8 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
 			throws IOException, ServletException {
 
 		FormBuilderServiceDelegate service = getFormBuilderService();
+		int formsInQueue = 0;
+		
 		try {
 
 			ensureSessionCarts(request);
@@ -628,8 +634,9 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
 					clearCheckedFormIds = true;
 				}
 				this.setSessionObject(request, CaDSRConstants.FORMS_CART_V2, sessionCart);
+				formsInQueue = sessionCart.getFormCartV2().size();
 			}
-			saveMessage("cadsr.common.formcart.add.success", request);
+			saveMessage("cadsr.common.formcart.add.success", request, new Integer(formsInQueue).toString());
 
 
 			dynaBean.set("cartAddFormId", "");
