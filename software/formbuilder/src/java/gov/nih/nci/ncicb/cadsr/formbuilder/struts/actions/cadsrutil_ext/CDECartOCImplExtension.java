@@ -175,10 +175,10 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 			oce.printStackTrace();
 			throw new RuntimeException("getForms: Error loading forms", oce);
 		}
-		for (Object each: formDisplayObjects)
-		{
-			System.out.println(" print form display object "+((FormCartDisplayObjectPersisted)each).getIsPersisted());
-		}
+//		for (Object each: formDisplayObjects)
+//		{
+//			System.out.println(" print form display object "+((FormCartDisplayObjectPersisted)each).getIsPersisted());
+//		}
 	}
 	
 	public Collection getFormDisplayObjects() {
