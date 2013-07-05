@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<formCollection xmlns:ns2="gov.nih.nci.cadsr.formloader.domain.FormCollection">
+    <createdBy>Denise</createdBy>
+    <dateCreated>2013-07-05T12:25:52.822-04:00</dateCreated>
+    <description>This is the collection from nci</description>
+    <forms>
+        <form>
+            <context>CRF</context>
+            <id>443355</id>
+            <loadType>New Form</loadType>
+            <numberOfModules>0</numberOfModules>
+            <publicID>1234345</publicID>
+            <selected>false</selected>
+            <version>1.0</version>
+            <xml_line_begin>0</xml_line_begin>
+            <xml_line_end>0</xml_line_end>
+        </form>
+        <form>
+            <context>CRF</context>
+            <id>553355</id>
+            <loadType>New Version</loadType>
+            <numberOfModules>0</numberOfModules>
+            <publicID>1234355</publicID>
+            <selected>false</selected>
+            <version>4.0</version>
+            <xml_line_begin>0</xml_line_begin>
+            <xml_line_end>0</xml_line_end>
+        </form>
+        <form>
+            <context>NCIP</context>
+            <id>663355</id>
+            <loadType>Update Form</loadType>
+            <numberOfModules>0</numberOfModules>
+            <publicID>1234366</publicID>
+            <selected>false</selected>
+            <version>3.0</version>
+            <xml_line_begin>0</xml_line_begin>
+            <xml_line_end>0</xml_line_end>
+        </form>
+        <form>
+            <context>NCIP</context>
+            <id>773355</id>
+            <loadType>Update Form</loadType>
+            <numberOfModules>0</numberOfModules>
+            <publicID>1234377</publicID>
+            <selected>false</selected>
+            <version>2.0</version>
+            <workflowStatusName>RELEASED</workflowStatusName>
+            <xml_line_begin>0</xml_line_begin>
+            <xml_line_end>0</xml_line_end>
+        </form>
+        <form>
+            <id>883355</id>
+            <numberOfModules>0</numberOfModules>
+            <publicID>1234388</publicID>
+            <selected>false</selected>
+            <version>1.0</version>
+            <xml_line_begin>0</xml_line_begin>
+            <xml_line_end>0</xml_line_end>
+        </form>
+    </forms>
+    <id>1234567</id>
+    <name>Denise's Collection</name>
+    <selected>false</selected>
+    <xmlFileName>denise-coll.xml</xmlFileName>
+    <xmlPathOnServer>/local/content/formloader/20130703</xmlPathOnServer>
+</formCollection>

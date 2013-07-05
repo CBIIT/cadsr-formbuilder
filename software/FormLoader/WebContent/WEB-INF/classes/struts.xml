@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.enable.DynamicMethodInvocation"
+		value="false" />
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.custom.i18n.resources"
+		value="ApplicationResources" />
+
+	<package name="default" extends="struts-default" namespace="/">
+		<result-types>
+			<result-type name="tiles"
+				class="org.apache.struts2.views.tiles.TilesResult" />
+		</result-types>	
+		<interceptors>
+			<interceptor name="mylogging"
+				class="gov.nih.nci.cadsr.formloader.struts2.interceptor.MyLoggingInterceptor">
+			</interceptor>
+			<interceptor-stack name="loggingStack">
+				<interceptor-ref name="mylogging" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+		</interceptors>
+		
+		
+		<action name="login" class="gov.nih.nci.cadsr.formloader.struts2.LoginAction"> 
+			<interceptor-ref name="loggingStack"/> 
+			<result name="success" type="tiles">/welcome.tiles</result> 
+			<result name="error">LoginForm.jsp</result> 
+		</action>
+		
+		
+		<action name="xmlFileUpload"
+    		class="gov.nih.nci.cadsr.formloader.struts2.XMLFileUploadAction">
+    			<interceptor-ref name="fileUpload">
+        			<param name="maximumSize">2597152</param>
+       				<param name="allowedTypes">text/xml, text/XML</param>
+    			</interceptor-ref>
+    			<interceptor-ref name="defaultStack"></interceptor-ref>
+   			 	<result name="input" type="tiles">/upload.tiles</result>
+				<result name="success" type="tiles">/upload.parse.tiles</result>
+				<result name="error" type="tiles">/upload.error.tiles</result>
+		</action>
+		<action name="upload-form">
+			<result type="tiles">/upload.tiles</result>
+		</action>
+		
+		
+		<action name="validateForms" 
+			class="gov.nih.nci.cadsr.formloader.struts2.ValidateFormsAction">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+				<result name="input" type="tiles">/upload.parse.tiles</result>
+    			<result name="success" type="tiles">/upload.validate.tiles</result>
+		</action>
+		<action name="upload-validate-form">
+			<result type="tiles">/upload.parse.tiles</result>
+		</action>
+		
+		<action name="loadForms" 
+			class="gov.nih.nci.cadsr.formloader.struts2.LoadFormsAction">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+				<result  name="input" type="tiles">/upload.validate.tiles</result>
+    			<result name="success" type="tiles">/upload.summary.tiles</result>
+		</action>
+		
+		<action name="search-form" 
+			class="gov.nih.nci.cadsr.formloader.struts2.SearchXMLFileAction">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+    			<result name="success" type="tiles">/search.tiles</result>
+    			<result type="tiles">/search.tiles</result>
+		</action>
+		
+		<action name="searchUploadedXMLFiles" method = "searchAction" 
+			class="gov.nih.nci.cadsr.formloader.struts2.SearchXMLFileAction">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+			<result name="success" type="tiles">/search.tiles</result>
+			<result type="tiles">/search.tiles</result>
+		</action>
+		
+		<action name="selectUploadedXMLFiles" 
+			class="gov.nih.nci.cadsr.formloader.struts2.ViewUploadedFormsAction">
+				<result name="success">/uploadedForm.tiles</result>
+				<result type="tiles">/uploadedForm.tiles</result>
+		</action>
+		
+		<action name="unloadForms" 
+			class="gov.nih.nci.cadsr.formloader.struts2.UnloadFormAction">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+    			<result name="success" type="tiles">/unloadSummary.tiles</result>
+    			<result type="tiles">/unloadSummary.tiles</result>
+		</action>
+		
+	</package>
+</struts>
