@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/jee
+	http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+              
+    <!--  jee:jndi-lookup id="dataSource" jndi-name="jdbc/FormBuilderDS" resource-ref="false" /> -->
+    
+    <!-- For testing -->
+    <!--<bean id="dataSource" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">
+    	<property name="dataSourceName" value="ds"/>
+    	<property name="URL" value="jdbc:oracle:thin:@ncidb-dsr-d:1551:DSRDEV"/>
+    	<property name="user" value="FORMBUILDER"/>
+    	<property name="password" value="formbuilder"/>
+    	<property name="connectionCachingEnabled" value="true"/>
+	</bean>
+	-->
+
+	<bean id="contentValidationService"
+		class="gov.nih.nci.cadsr.formloader.service.impl.ContentValidationServiceImplMockup"> 
+	</bean>
+	
+	<bean id="xmlValidationService"
+		class="gov.nih.nci.cadsr.formloader.service.impl.XmlValidationServiceImpl">
+	</bean>
+
+	<!-- For test -->
+	<!--  bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+
+		<property name="driverClassName" value="oracle.jdbc.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@ncidb-dsr-d:1551:DSRDEV" />
+		<property name="username" value="FORMBUILDER" />
+		<property name="password" value="FORMBUILDER" />
+		<property name="defaultAutoCommit" value="false" />
+		<property name="maxActive" value="60" />
+	</bean> -->
+
+	<!-- For production -->
+	<!--  bean id="connectionPool1" class="oracle.jdbc.pool.OracleDataSource"
+		destroy-method="close">
+		<property name="connectionCachingEnabled" value="true" />
+		<property name="URL">
+			<value>jdbc:oracle:thin:@ncidb-dsr-d:1551:DSRDEV</value>
+		</property>
+		<property name="user">
+			<value>FORMBUILDER</value>
+		</property>
+		<property name="password">
+			<value>FORMBUILDER</value>
+		</property>
+		<property name="connectionCacheProperties">
+			<value>
+				MinLimit:1
+				MaxLimit:5
+				InitialLimit:1
+				ConnectionWaitTimeout:120
+				InactivityTimeout:180
+				ValidateConnection:true
+			</value>
+		</property>
+	</bean> -->
+
+
+</beans>
+
