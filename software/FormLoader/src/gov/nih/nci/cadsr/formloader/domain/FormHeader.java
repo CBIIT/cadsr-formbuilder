@@ -7,34 +7,26 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceError;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
 
-@XmlRootElement(namespace ="gov.nih.nci.cadsr.formloader.domain.FormCollection")
-public class FormHeader {
+//@XmlRootElement(namespace ="gov.nih.nci.cadsr.formloader.domain.FormCollection")
+public class FormHeader extends FormTransferObject {
 	
 	public static final String LOAD_TYPE_NEW = "New Form";
 	public static final String LOAD_TYPE_NEW_VERSION = "New Version";
 	public static final String LOAD_TYPE_UPDATE_FORM = "Update Form";
 	public static final String LOAD_TYPE_DUPLICATE_FORM = "Duplicate Form";
-	
-	private String id;
-	private String publicID;
-	private String longName;
-	private String version;
-	private String context;
-	private String type;
-	private String protocolName;
-	private int numberOfModules;
-	private String workflowStatusName;
-	
+
 	//Any error (xml, content validation, etc) will be here
 	private List<FormLoaderServiceError> errors = new ArrayList<FormLoaderServiceError>();
 	
-	private transient boolean selected;
+	int numOfModules = 0;
 	
 	//Load services only: new form, new version or update
 	private String loadType;
-	private Status status;
+	private FormStatus status;
 	
+	private transient boolean selected;
 	private transient int xml_line_begin;
 	private transient int xml_line_end;
 	
@@ -42,68 +34,11 @@ public class FormHeader {
 	
 	public FormHeader() {}
 	
-	public FormHeader(String id, String publicId, String version) {
-		this.id = id;
-		this.publicID = publicId;
+	public FormHeader(String id, int publicId, float version) {
+		this.idseq = id;
+		this.publicId = publicId;
 		this.version = version;
 	}
-	
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
-	public String getPublicID() {
-		return publicID;
-	}
-	public void setPublicID(String publicID) {
-		this.publicID = publicID;
-	}
-	public String getLongName() {
-		return longName;
-	}
-	
-	@XmlElement
-	public void setLongName(String longName) {
-		this.longName = longName;
-	}
-	public String getVersion() {
-		return version;
-	}
-	public void setVersion(String version) {
-		this.version = version;
-	}
-	public String getContext() {
-		return context;
-	}
-	public void setContext(String context) {
-		this.context = context;
-	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
-	public String getProtocolName() {
-		return protocolName;
-	}
-	public void setProtocolName(String protocolName) {
-		this.protocolName = protocolName;
-	}
-	public String getWorkflowStatusName() {
-		return workflowStatusName;
-	}
-	public void setWorkflowStatusName(String workflowStatusName) {
-		this.workflowStatusName = workflowStatusName;
-	}
-	public int getNumberOfModules() {
-		return numberOfModules;
-	}
-	public void setNumberOfModules(int numberOfModules) {
-		this.numberOfModules = numberOfModules;
-	}	
 	
 	public List<FormLoaderServiceError> getErrors() {
 		return errors;
@@ -111,6 +46,15 @@ public class FormHeader {
 
 	public void setErrors(List<FormLoaderServiceError> errors) {
 		this.errors = errors;
+	}
+
+	
+	public int getNumOfModules() {
+		return numOfModules;
+	}
+
+	public void setNumOfModules(int numOfModules) {
+		this.numOfModules = numOfModules;
 	}
 
 	public boolean isSelected() {
@@ -129,11 +73,11 @@ public class FormHeader {
 		this.loadType = loadType;
 	}
 
-	public Status getStatus() {
+	public FormStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(Status status) {
+	public void setStatus(FormStatus status) {
 		this.status = status;
 	}
 
@@ -152,10 +96,48 @@ public class FormHeader {
 	public void setXml_line_end(int xml_line_end) {
 		this.xml_line_end = xml_line_end;
 	}
+	
+	//Overload method in super
+	public void setVersion(String version) {
+		if (version == null || version.length() == 0) return;
+		
+		setVersion(Float.parseFloat(version));
+	}
+	
+	//Overload method in AdminComponentTransferObject
+	public void setPublicId(String publicID) {
+		if (publicID == null || publicID.length() == 0) return;
+		
+		setPublicId(Integer.parseInt(publicID));
+	}
 
 	public String toString() {
-		return "Public Id: " + this.publicID + "; version: " + this.version + "; long name: " + this.longName +
-				"; protocol name: " + this.protocolName + "; type: " + this.type + "; workflow status: " + this.workflowStatusName +
-				"; num of modules: " + this.numberOfModules +  "(line positions: " + this.xml_line_begin + "-" + this.xml_line_end + ")"; 
+		String formString = "Public Id: " + this.publicId + "; version: " + this.version;
+		
+		formString += "; long name: ";
+		if (this.longName != null)
+			formString += this.longName;
+		
+		formString += "; protocol name: ";
+		if (this.protocolLongName != null)
+			formString += this.protocolLongName;
+		
+		formString += "; type: ";
+		if (this.formType != null)
+			formString += this.formType;
+		
+		formString += "; workflow status: ";
+		if (this.aslName != null)
+			formString += this.aslName;
+		
+		formString += "; num of modules: " + this.numOfModules + "(line positions: " + this.xml_line_begin + "-" + this.xml_line_end + ")";
+		
+		return formString;
+		
+		
+		
+		//return "Public Id: " + this.publicId + "; version: " + this.version + "; long name: " + this.longName +
+		//		"; protocol name: " + this.protocolLongName + "; type: " + this.formType + "; workflow status: " + this.aslName +
+		//		"; num of modules: " + this.modules.size() +  "(line positions: " + this.xml_line_begin + "-" + this.xml_line_end + ")"; 
 	}
 }
