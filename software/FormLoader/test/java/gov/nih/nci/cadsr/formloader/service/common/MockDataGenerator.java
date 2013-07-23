@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
-import gov.nih.nci.cadsr.formloader.domain.FormHeader;
+import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.FormStatus;
 
 /**
@@ -29,10 +29,10 @@ public class MockDataGenerator {
 		  aColl.setXmlFileName("denise-coll.xml");
 		  aColl.setXmlPathOnServer("/local/content/formloader/20130703");
 		  
-		  List<FormHeader> forms = new ArrayList<FormHeader>();
-		  FormHeader form = new FormHeader("443355", 1234345, (float)1.0);
-		  form.setContextName("CTRP");
-		  form.setLoadType(FormHeader.LOAD_TYPE_NEW);
+		  //1
+		  List<FormDescriptor> forms = new ArrayList<FormDescriptor>();
+		  FormDescriptor form = new FormDescriptor("443355", "1234345", "1.0");
+		  form.setContext("CTRP");
 		  FormStatus status = new FormStatus(FormStatus.STATUS_DB_VALIDATED);
 		  List<String> msgs = new ArrayList<String>();
 		  msgs.add("Question 1 has no default text");
@@ -41,9 +41,9 @@ public class MockDataGenerator {
 		  form.setStatus(status);
 		  forms.add(form);
 		  
-		  form = new FormHeader("553355", 1234355, (float)4.0);
-		  form.setContextName("NCIP");
-		  form.setLoadType(FormHeader.LOAD_TYPE_NEW_VERSION);
+		  //2
+		  form = new FormDescriptor("553355", "1234346", "3.0");
+		  form.setContext("NCIP");
 		  status = new FormStatus(FormStatus.STATUS_DB_VALIDATED);
 		  List<String> msgs2 = new ArrayList<String>();
 		  msgs.add("No error / success");
@@ -51,9 +51,10 @@ public class MockDataGenerator {
 		  form.setStatus(status);
 		  forms.add(form);
 		  
-		  form = new FormHeader("663355", 1234366, (float)3.0);
-		  form.setContextName("NCIP");
-		  form.setLoadType(FormHeader.LOAD_TYPE_UPDATE_FORM);
+		  //3
+		  form = new FormDescriptor("663355", "1234347", "4.0");
+		  form.setContext("NCIP");
+		  form.setLoadType(FormDescriptor.LOAD_TYPE_UPDATE_FORM);
 		  status = new FormStatus(FormStatus.STATUS_DB_VALIDATED);
 		  List<String> msgs3 = new ArrayList<String>();
 		  msgs.add("Question 1 has no default text");
@@ -62,10 +63,11 @@ public class MockDataGenerator {
 		  form.setStatus(status);
 		  forms.add(form);
 		  
-		  form = new FormHeader("773355", 1234377, (float)2.0);
-		  form.setAslName("RELEASED");
-		  form.setContextName("NCIP");
-		  form.setLoadType(FormHeader.LOAD_TYPE_UPDATE_FORM);
+		  //4
+		  form = new FormDescriptor("773355", "1234348", "2.0");
+		  form.setWorkflowStatusName("RELEASED");
+		  form.setContext("NCIP");
+		  form.setLoadType(FormDescriptor.LOAD_TYPE_UPDATE_FORM);
 		  status = new FormStatus(FormStatus.STATUS_DB_VALIDATED);
 		  List<String> msgs4 = new ArrayList<String>();
 		  msgs.add("Question 3 has no default text");
@@ -74,8 +76,12 @@ public class MockDataGenerator {
 		  form.setStatus(status);
 		  forms.add(form);
 		  
-		  form = new FormHeader("883355", 1234388, (float)1.0);
-		  forms.add(new FormHeader("883355", 1234388, (float)1.0));
+		  //5
+		 //public id = 0
+		  form = new FormDescriptor("883355", "0", "1.0");
+		  forms.add(form);
+		  //6
+		  forms.add(new FormDescriptor("883355", "1234349", "1.0"));
 		  
 		  aColl.setForms(forms);
 		  
