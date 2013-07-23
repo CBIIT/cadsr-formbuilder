@@ -2,8 +2,7 @@ package gov.nih.nci.cadsr.formloader.service.impl;
 
 import java.util.List;
 
-import gov.nih.nci.cadsr.formloader.domain.FormCollection;
-import gov.nih.nci.cadsr.formloader.domain.FormHeader;
+import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.service.XmlValidationService;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceError;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
@@ -20,13 +19,10 @@ import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/applicationContext-service-test.xml"})
+//@ContextConfiguration(locations = {"classpath:/applicationContext-xmlvalidation.xml"})
 public class XmlValidationServiceImplTest {
 	
 	private static Logger logger = Logger.getLogger(XmlValidationServiceImplTest.class.getName());
@@ -36,7 +32,7 @@ public class XmlValidationServiceImplTest {
 
 	@Before
 	public void setUp() throws Exception {
-	
+		//xmlValService = new XmlValidationServiceImpl();
 	}
 
 	@After
@@ -46,7 +42,7 @@ public class XmlValidationServiceImplTest {
 	@Test
 	public void testValidateXmlMalformed() {
 		try {
-			List<FormHeader> forms = this.xmlValService.validateXml(".\\test\\data\\forms-malformed.xml");
+			List<FormDescriptor> forms = this.xmlValService.validateXml(".\\test\\data\\forms-malformed.xml");
 			fail("Exception not thrown as expected");
 		} catch (FormLoaderServiceException e) {
 			System.out.println(e.toString());
@@ -58,9 +54,10 @@ public class XmlValidationServiceImplTest {
 	
 	@Test
 	public void testValidateXmlHappyPath() {
+		//This xsd has problems and, thus, good to generate "non-conformed" errors
 		XmlValidationServiceImpl.XSD_PATH_NAME = ".\\test\\data\\FormLoaderv1-testonly.xsd";
 		try {
-			List<FormHeader> forms = this.xmlValService.validateXml(".\\test\\data\\forms.xml");
+			List<FormDescriptor> forms = this.xmlValService.validateXml(".\\test\\data\\forms.xml");
 			assertNotNull(forms);
 			assertTrue(forms.size() == 3);
 			assertTrue(forms.get(0).getErrors().size() > 0);
@@ -70,4 +67,17 @@ public class XmlValidationServiceImplTest {
 		}
 	}
 
+	@Test
+	public void testValidateXmlWithEmptyPublicId() {
+		XmlValidationServiceImpl.XSD_PATH_NAME = ".\\test\\data\\FormLoaderv1-testonly.xsd";
+		try {
+			List<FormDescriptor> forms = this.xmlValService.validateXml(".\\test\\data\\forms-2.xml");
+			assertNotNull(forms);
+			FormDescriptor form = forms.get(0);
+			assertTrue(form.getPublicId() == null || form.getPublicId().length() == 0);
+		
+		} catch (FormLoaderServiceException e) {
+			fail("Got exception: " + e.toString());
+		}
+	}
 }
