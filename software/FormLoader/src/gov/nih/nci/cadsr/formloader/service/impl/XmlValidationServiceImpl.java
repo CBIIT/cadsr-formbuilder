@@ -1,6 +1,6 @@
 package gov.nih.nci.cadsr.formloader.service.impl;
 
-import gov.nih.nci.cadsr.formloader.domain.FormHeader;
+import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.service.XmlValidationService;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceError;
@@ -28,7 +28,7 @@ public class XmlValidationServiceImpl implements XmlValidationService {
 	 * @throws FormLoaderServiceException when xml is not valid or malformed
 	 */
 	@Override
-	public List<FormHeader> validateXml(String xmlPathName) throws FormLoaderServiceException{
+	public List<FormDescriptor> validateXml(String xmlPathName) throws FormLoaderServiceException{
 		
 		XmlValidationError error = FormLoaderHelper.checkXmlWellFormedness(xmlPathName);
 		if (error != null && error.getType() != XmlValidationError.XML_NO_ERROR)
@@ -39,13 +39,13 @@ public class XmlValidationServiceImpl implements XmlValidationService {
 		
 		//match errors with a form via line number in an error
 		StaXParser parser = new StaXParser();
-		List<FormHeader> forms = parser.parseFormHeaders(xmlPathName);		
+		List<FormDescriptor> forms = parser.parseFormHeaders(xmlPathName);		
 		assignErrorsToForms(forms, errors);
 		
 		return forms;
 	}
 	
-	protected void assignErrorsToForms(List<FormHeader> forms, List<XmlValidationError> errors) {
+	protected void assignErrorsToForms(List<FormDescriptor> forms, List<XmlValidationError> errors) {
 		if (forms == null || forms.size() == 0 ||
 				errors == null || errors.size() == 0) {
 			logger.debug("form list or error list is null or empty. Nothing to do");
@@ -68,11 +68,11 @@ public class XmlValidationServiceImpl implements XmlValidationService {
 	 * @param startIdx 
 	 * @return
 	 */
-	protected int assignError(XmlValidationError xmlError, List<FormHeader> forms, int startIdx) {
+	protected int assignError(XmlValidationError xmlError, List<FormDescriptor> forms, int startIdx) {
 		int total = forms.size();
 		int errorLineNum = xmlError.getLineNumber();
 		for (int i = startIdx; i < total; i++) {
-			FormHeader form = forms.get(i);
+			FormDescriptor form = forms.get(i);
 			if (errorLineNum >= form.getXml_line_begin() && errorLineNum <= form.getXml_line_end()) {
 				form.getErrors().add(xmlError);
 				return i;
