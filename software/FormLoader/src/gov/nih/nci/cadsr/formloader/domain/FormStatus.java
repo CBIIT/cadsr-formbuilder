@@ -10,8 +10,8 @@ public class FormStatus {
 	public static final String STATUS_UNLOADED = "UNLOADED";
 	public static final String STATUS_ERROR = "ERROR";
 	
-	private String type;
-	private List<String> messages;
+	protected String type;
+	protected List<String> messages;
 	
 	public FormStatus(String type) {
 		this.type = type;
