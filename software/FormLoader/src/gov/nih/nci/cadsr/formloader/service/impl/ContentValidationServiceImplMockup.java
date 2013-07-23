@@ -3,7 +3,6 @@ package gov.nih.nci.cadsr.formloader.service.impl;
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.service.ContentValidationService;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
-import gov.nih.nci.cadsr.formloader.service.common.JAXBMockGen;
 import gov.nih.nci.cadsr.formloader.service.common.MockDataGenerator;
 
 import org.apache.log4j.Logger;
