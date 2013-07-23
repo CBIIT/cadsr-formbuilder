@@ -49,11 +49,11 @@ public class FormCollection implements java.io.Serializable {
 	//	inverseJoinColumns={ @JoinColumn(name="PHONE_ID", referencedColumnName="ID", unique=true) }
 	//)
 	//@Transient
-	private List<FormHeader> forms;
+	private List<FormDescriptor> forms;
 
 	public FormCollection() {}
 	
-	public FormCollection(List<FormHeader> forms) {
+	public FormCollection(List<FormDescriptor> forms) {
 		this.forms = forms;
 	}
 	
@@ -138,12 +138,12 @@ public class FormCollection implements java.io.Serializable {
 
 	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "FORM_COLLECTIONS")
 	
-	public List<FormHeader> getForms() {
+	public List<FormDescriptor> getForms() {
 		return forms;
 	}
 	 @XmlElementWrapper(name ="forms")
 	 @XmlElement(name ="form")
-	public void setForms(List<FormHeader> forms) {
+	public void setForms(List<FormDescriptor> forms) {
 		this.forms = forms;
 	}
 	
