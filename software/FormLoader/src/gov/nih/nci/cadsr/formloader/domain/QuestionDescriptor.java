@@ -17,16 +17,18 @@ public class QuestionDescriptor {
 	
 	List<ValidValue> validValues = new ArrayList<ValidValue>();
 	String defaultValue;
-	
 	String instruction;
 	
 	boolean skip = false;
+	List<String> messages = new ArrayList<String>();
+	
+	public void addMessage(String msg) {
+		messages.add(msg);
+	}
 	
 	public String getQuestionSeqId() {
 		return questionSeqId;
 	}
-
-
 
 	public void setQuestionSeqId(String questionSeqId) {
 		this.questionSeqId = questionSeqId;
@@ -160,6 +162,14 @@ public class QuestionDescriptor {
 	public class ValidValue {
 		String value;
 		String meaningText;
+		boolean skip = false;
+		
+		public boolean isSkip() {
+			return skip;
+		}
+		public void setSkip(boolean skip) {
+			this.skip = skip;
+		}
 		public String getValue() {
 			return value;
 		}
