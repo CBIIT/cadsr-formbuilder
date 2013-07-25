@@ -142,34 +142,25 @@ public class ContentValidationServiceImplTest {
 		  List<FormDescriptor> forms = new ArrayList<FormDescriptor>();
 		  FormDescriptor form = new FormDescriptor("443355", "1234345", "1.0");
 		  form.setContext("CTRP");
-		  FormStatus status = new FormStatus(FormStatus.STATUS_DB_VALIDATED);
-		  List<String> msgs = new ArrayList<String>();
-		  msgs.add("Question 1 has no default text");
-		  msgs.add("Question 2 need work");
-		  status.setMessages(msgs);
-		  form.setStatus(status);
+		  //FormStatus status = new FormStatus(FormStatus.STATUS_DB_VALIDATED);
+		 // List<String> msgs = new ArrayList<String>();
+		  form.addMessage("Question 1 has no default text");
+		  form.addMessage("Question 2 need work");
 		  forms.add(form);
 		  
 		  //2
 		  form = new FormDescriptor("553355", "1234346", "3.0");
 		  form.setContext("NCIP");
-		  status = new FormStatus(FormStatus.STATUS_DB_VALIDATED);
-		  List<String> msgs2 = new ArrayList<String>();
-		  msgs.add("No error / success");
-		  status.setMessages(msgs);
-		  form.setStatus(status);
+		 form.addMessage("No error / success");
 		  forms.add(form);
 		  
 		  //3
 		  form = new FormDescriptor("663355", "1234347", "4.0");
 		  form.setContext("NCIP");
 		  form.setLoadType(FormDescriptor.LOAD_TYPE_UPDATE_FORM);
-		  status = new FormStatus(FormStatus.STATUS_DB_VALIDATED);
 		  List<String> msgs3 = new ArrayList<String>();
-		  msgs.add("Question 1 has no default text");
-		  msgs.add("Question 2 need work");
-		  status.setMessages(msgs);
-		  form.setStatus(status);
+		  form.addMessage("Question 1 has no default text");
+		  form.addMessage("Question 2 need work");
 		  forms.add(form);
 		  
 		  //4
@@ -177,12 +168,8 @@ public class ContentValidationServiceImplTest {
 		  form.setWorkflowStatusName("RELEASED");
 		  form.setContext("NCIP");
 		  form.setLoadType(FormDescriptor.LOAD_TYPE_UPDATE_FORM);
-		  status = new FormStatus(FormStatus.STATUS_DB_VALIDATED);
-		  List<String> msgs4 = new ArrayList<String>();
-		  msgs.add("Question 3 has no default text");
-		  msgs.add("Question 4 need work");
-		  status.setMessages(msgs);
-		  form.setStatus(status);
+		  form.addMessage("Question 3 has no default text");
+		  form.addMessage("Question 4 need work");
 		  forms.add(form);
 		  
 		  //5
