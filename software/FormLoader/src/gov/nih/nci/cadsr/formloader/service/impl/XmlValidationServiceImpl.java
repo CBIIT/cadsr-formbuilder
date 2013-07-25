@@ -3,7 +3,6 @@ package gov.nih.nci.cadsr.formloader.service.impl;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.service.XmlValidationService;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
-import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceError;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
 import gov.nih.nci.cadsr.formloader.service.common.XmlValidationError;
@@ -32,7 +31,7 @@ public class XmlValidationServiceImpl implements XmlValidationService {
 		
 		XmlValidationError error = FormLoaderHelper.checkXmlWellFormedness(xmlPathName);
 		if (error != null && error.getType() != XmlValidationError.XML_NO_ERROR)
-			throw new FormLoaderServiceException(FormLoaderServiceError.ERROR_MALFORMED_XML,
+			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_MALFORMED_XML,
 					"Xml Malform Error", error);
 		
 		List<XmlValidationError> errors = FormLoaderHelper.validateXml(xmlPathName, XSD_PATH_NAME);
@@ -45,6 +44,11 @@ public class XmlValidationServiceImpl implements XmlValidationService {
 		return forms;
 	}
 	
+	/**
+	 * Assign errors to forms based on line number where the error was detected
+	 * @param forms
+	 * @param errors
+	 */
 	protected void assignErrorsToForms(List<FormDescriptor> forms, List<XmlValidationError> errors) {
 		if (forms == null || forms.size() == 0 ||
 				errors == null || errors.size() == 0) {
@@ -58,6 +62,12 @@ public class XmlValidationServiceImpl implements XmlValidationService {
 			for (int i = 0; i < formSize; i++) {
 				currFormIdx = assignError(xmlError, forms, currFormIdx);
 			}
+		}
+		
+		//Update xml validation status to all forms
+		for (FormDescriptor form : forms) {
+			if (form.getLoadStatus() != FormDescriptor.STATUS_XML_VALIDATION_FAILED)
+				form.setLoadStatus(FormDescriptor.STATUS_XML_VALIDATED);	
 		}
 	}
 	
@@ -75,6 +85,7 @@ public class XmlValidationServiceImpl implements XmlValidationService {
 			FormDescriptor form = forms.get(i);
 			if (errorLineNum >= form.getXml_line_begin() && errorLineNum <= form.getXml_line_end()) {
 				form.getErrors().add(xmlError);
+				form.setLoadStatus(FormDescriptor.STATUS_XML_VALIDATION_FAILED);
 				return i;
 			}
 		}
