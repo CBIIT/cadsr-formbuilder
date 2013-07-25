@@ -13,6 +13,15 @@ public class FormDescriptor {
 	public static final String LOAD_TYPE_DUPLICATE_FORM = "Duplicate Form"; 
 	public static final String LOAD_TYPE_UNKNOWN = "Unknown";
 	
+	public static final int STATUS_ERROR = -1;
+	public static final int STATUS_XML_VALIDATION_FAILED = -2;
+	
+	public static final int STATUS_INITIALIZED = 0;
+	public static final int STATUS_XML_VALIDATED = 1; 
+	public static final int STATUS_DB_VALIDATED = 3;
+	public static final int STATUS_LOADED = 4;
+	public static final int STATUS_UNLOADED = 5;
+	
 	String formSeqId;
 	String publicId;
 	String version;
@@ -31,18 +40,34 @@ public class FormDescriptor {
 	
 	//Load services only: new form, new version or update
 	String loadType;
-	FormStatus status;
+	int loadStatus;
+	//FormStatus status;
 
 	protected transient boolean selected;
 	protected transient int xml_line_begin;
 	protected transient int xml_line_end;
 	
-	public FormDescriptor() {}
+	public FormDescriptor() {
+		loadStatus = STATUS_INITIALIZED;
+		loadType = LOAD_TYPE_UNKNOWN;
+	}
+	
+	/**
+	 * This intends to be called by front end or web service to gather all errors/info with the form and its
+	 * questions.
+	 * 
+	 * @return
+	 */
+	public String getStructuredMessages() {
+		return "Not yet implemented";
+	}
 	
 	public FormDescriptor(String id, String publicId, String version) {
 		this.formSeqId = id;
 		this.publicId = publicId;
 		this.version = version;
+		loadStatus = STATUS_INITIALIZED;
+		loadType = LOAD_TYPE_UNKNOWN;
 	}
 	
 	public String getFormSeqId() {
@@ -106,12 +131,15 @@ public class FormDescriptor {
 	public void setLoadType(String loadType) {
 		this.loadType = loadType;
 	}
-	public FormStatus getStatus() {
-		return status;
+	
+	public int getLoadStatus() {
+		return loadStatus;
 	}
-	public void setStatus(FormStatus status) {
-		this.status = status;
+
+	public void setLoadStatus(int loadStatus) {
+		this.loadStatus = loadStatus;
 	}
+
 	public boolean isSelected() {
 		return selected;
 	}
@@ -141,6 +169,10 @@ public class FormDescriptor {
 		return this.modules.size();
 		
 	}
+	
+	public void addMessage(String msg) {
+		this.messages.add(msg);
+	}
 
 	public List<String> getMessages() {
 		return messages;
@@ -149,5 +181,7 @@ public class FormDescriptor {
 	public void setMessages(List<String> messages) {
 		this.messages = messages;
 	}
+	
+	
 
 }
