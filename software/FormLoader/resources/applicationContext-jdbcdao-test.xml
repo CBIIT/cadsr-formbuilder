@@ -29,5 +29,13 @@
     <bean id="adminComponentV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCAdminComponentDAOV2">
 		<constructor-arg ref="dataSource"/>       
     </bean>
+    
+    <bean id="questionV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCQuestionDAOV2">
+		<constructor-arg ref="dataSource"/>       
+    </bean>
+    
+    <bean id="valueDomainV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCValueDomainDAOV2">
+		<constructor-arg ref="dataSource"/>       
+    </bean>
 </beans>
 
