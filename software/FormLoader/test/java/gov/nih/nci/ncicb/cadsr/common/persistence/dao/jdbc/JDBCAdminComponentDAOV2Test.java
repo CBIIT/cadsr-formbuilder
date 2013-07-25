@@ -31,6 +31,7 @@ public class JDBCAdminComponentDAOV2Test {
 		assertTrue(refdocs.get(0).getDocName().equalsIgnoreCase("CRF Text"));
 		assertTrue(refdocs.get(0).getDocType().equalsIgnoreCase("Alternate Question Text") 
 				|| refdocs.get(0).getDocType().equalsIgnoreCase("Preferred Question Text"));
+		
 	}
 
 }
