@@ -2,8 +2,10 @@ package gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc;
 
 import gov.nih.nci.ncicb.cadsr.common.dto.CSITransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormValidValueTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ValueDomainV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ValueMeaningTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
@@ -894,6 +896,199 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
 
     	 return questions;
     }
+    
+    public List<QuestionTransferObject> getQuestionByPublicIdAndVersion(int publicId, float version) {
+    	String sql = "SELECT a.*, b.QC_ID " +
+    			"FROM SBREXT.FB_QUESTIONS_VIEW a, CABIO31_QUESTIONS_VIEW b " +
+    			"where B.QC_ID=:qcId and A.VERSION=:vers and a.ques_idseq=b.QC_IDSEQ";
+    	
+    	MapSqlParameterSource params = new MapSqlParameterSource();
+      	params.addValue("qcId", publicId);
+      	params.addValue("vers", version);
+
+      	List<QuestionTransferObject> questions = 
+      			 this.namedParameterJdbcTemplate.query(sql, params, 
+      					 new RowMapper<QuestionTransferObject>() {
+      				public QuestionTransferObject mapRow(ResultSet rs,
+      				      int rownum) throws SQLException {
+      					QuestionTransferObject question = new QuestionTransferObject();
+      				      question.setQuesIdseq(rs.getString("QUES_IDSEQ"));  //QUES_IDSEQ
+      				      question.setLongName(rs.getString("LONG_NAME"));   // LONG_NAME
+      				      question.setDisplayOrder(rs.getInt("DISPLAY_ORDER")); // DISPLAY_ORDER
+      				      question.setAslName(rs.getString("WORKFLOW"));//Workflow
+      				      question.setPreferredDefinition(rs.getString("DEFINITION"));
+      				      question.setMandatory("Yes".equalsIgnoreCase(rs.getString("MANDATORY_IND")));
+      				      question.setPublicId(rs.getInt("QC_ID"));
+      				      question.setVersion(new Float(rs.getFloat("VERSION")));
+      				      
+      				     /* String editabl
+      				      eInd = rs.getString("EDITABLE_IND");
+      				      boolean editable = (editableInd==null||editableInd.trim().equals("")||editableInd.equalsIgnoreCase("Yes"))?true:false;
+      				      question.setEditable(editable);
+      				      */
+      				     
+      				      /*
+      				      String derivRule = rs.getString("RULE");
+      				      if (derivRule != null && !derivRule.trim().equals("")) {
+      				    	  question.setDeDerived(true);
+      				      }
+      				      else {
+      				    	  question.setDeDerived(false);
+      				      }
+      				      */
+      				      
+      				      String deIdSeq = rs.getString("DE_IDSEQ");
+      				     /*
+      				      if(deIdSeq!=null)
+      				       {
+      				        DataElementTransferObject dataElementTransferObject =
+      				          new DataElementTransferObject();       
+      				        dataElementTransferObject.setDeIdseq(deIdSeq); // DE_IDSEQ
+      				        dataElementTransferObject.setLongCDEName(rs.getString(15)); // DOC_TEXT 
+      				        dataElementTransferObject.setVersion(new Float(rs.getFloat(16))); // VERSION
+      				        dataElementTransferObject.setLongName(rs.getString(17)); // DE_LONG_NAME
+      				        dataElementTransferObject.setCDEId(Integer.toString(rs.getInt(18)));
+      				        dataElementTransferObject.setAslName(rs.getString("DE_WORKFLOW"));
+      				        dataElementTransferObject.setPreferredName(rs.getString("DE_SHORT_NAME"));
+      				        dataElementTransferObject.setPreferredDefinition(rs.getString("DE_PREFERRED_DEFINITION"));
+      				        question.setDataElement(dataElementTransferObject); 
+      				      
+      				      
+      				        ValueDomainV2TransferObject valueDomainV2TransferObject = 
+      				                                         new ValueDomainV2TransferObject();
+      				        valueDomainV2TransferObject.setVdIdseq(rs.getString(19)); // VD_IDSEQ
+      				        dataElementTransferObject.setValueDomain(valueDomainV2TransferObject);
+      				    }*/
+      				    return question;
+      				   }
+      				 
+      				 /*
+      				 public Question mapRow(ResultSet rs, int rowNum) throws SQLException {
+      					 Question quest = new QuestionTransferObject();
+      					 //quest.setIdseq(rs.getString(1)); //this is the super class object id
+      					 quest.setQuesIdseq(rs.getString(1));
+      					 quest.setPublicId(rs.getInt(2));
+      					 quest.setVersion(rs.getFloat(3));
+      					 quest.setPreferredDefinition(rs.getString(4));
+      					 quest.setLongName(rs.getString(5));
+      					 return quest;
+      				 }*/
+      			 });
 
 
+      	 return questions;
+    }
+
+    public List<QuestionTransferObject> getQuestionsByPublicId(int publicId) {
+   	 String sql = 
+   	      "SELECT a.*, b.EDITABLE_IND, b.QC_ID, c.RULE, d.PREFERRED_NAME as DE_SHORT_NAME, " +
+   			 "d.PREFERRED_DEFINITION as DE_PREFERRED_DEFINITION " +
+   			 "FROM SBREXT.FB_QUESTIONS_VIEW a, CABIO31_QUESTIONS_VIEW b, COMPLEX_DATA_ELEMENTS_VIEW c, DATA_ELEMENTS_VIEW d " +
+   			 "where B.QC_ID=:qcId and a.ques_idseq=b.QC_IDSEQ and b.DE_IDSEQ = c.P_DE_IDSEQ(+) " +
+   			 "and b.de_idseq = d.de_idseq";
+   	 
+   	 //we could then get cde id with this:
+   	 //select Q.CDE_ID from FB_QUEST_MODULE_VIEW q where q.de_idseq='FAB2D8EC-69A4-68CB-E034-0003BA3F9857'
+
+   	 MapSqlParameterSource params = new MapSqlParameterSource();
+   	 params.addValue("qcId", publicId);
+
+   	List<QuestionTransferObject> questions = 
+   			 this.namedParameterJdbcTemplate.query(sql, params, 
+   					 new RowMapper<QuestionTransferObject>() {
+   				public QuestionTransferObject mapRow(ResultSet rs,
+   				      int rownum) throws SQLException {
+   					QuestionTransferObject question = new QuestionTransferObject();
+   				      question.setQuesIdseq(rs.getString("QUES_IDSEQ"));  //QUES_IDSEQ
+   				      question.setLongName(rs.getString("LONG_NAME"));   // LONG_NAME
+   				      question.setDisplayOrder(rs.getInt("DISPLAY_ORDER")); // DISPLAY_ORDER
+   				      question.setAslName(rs.getString("WORKFLOW"));//Workflow
+   				      question.setPreferredDefinition(rs.getString("DEFINITION"));
+   				      question.setMandatory("Yes".equalsIgnoreCase(rs.getString("MANDATORY_IND")));
+   				      question.setPublicId(rs.getInt("QC_ID"));
+   				      question.setVersion(new Float(rs.getFloat("VERSION")));
+   				      
+   				      String editableInd = rs.getString("EDITABLE_IND");
+   				      boolean editable = (editableInd==null||editableInd.trim().equals("")||editableInd.equalsIgnoreCase("Yes"))?true:false;
+   				      question.setEditable(editable);
+   				      
+   				      String derivRule = rs.getString("RULE");
+   				      if (derivRule != null && !derivRule.trim().equals("")) {
+   				    	  question.setDeDerived(true);
+   				      }
+   				      else {
+   				    	  question.setDeDerived(false);
+   				      }
+   				      
+   				      String deIdSeq = rs.getString("DE_IDSEQ");
+   				      if(deIdSeq!=null)
+   				       {
+   				        DataElementTransferObject dataElementTransferObject =
+   				          new DataElementTransferObject();       
+   				        dataElementTransferObject.setDeIdseq(deIdSeq); // DE_IDSEQ
+   				        dataElementTransferObject.setLongCDEName(rs.getString(15)); // DOC_TEXT 
+   				        dataElementTransferObject.setVersion(new Float(rs.getFloat(16))); // VERSION
+   				        dataElementTransferObject.setLongName(rs.getString(17)); // DE_LONG_NAME
+   				        dataElementTransferObject.setCDEId(Integer.toString(rs.getInt(18)));
+   				        dataElementTransferObject.setAslName(rs.getString("DE_WORKFLOW"));
+   				        dataElementTransferObject.setPreferredName(rs.getString("DE_SHORT_NAME"));
+   				        dataElementTransferObject.setPreferredDefinition(rs.getString("DE_PREFERRED_DEFINITION"));
+   				        question.setDataElement(dataElementTransferObject); 
+   				      
+   				      
+   				        ValueDomainV2TransferObject valueDomainV2TransferObject = 
+   				                                         new ValueDomainV2TransferObject();
+   				        valueDomainV2TransferObject.setVdIdseq(rs.getString(19)); // VD_IDSEQ
+   				        dataElementTransferObject.setValueDomain(valueDomainV2TransferObject);
+   				    }
+   				    return question;
+   				   }
+   				 
+   				 /*
+   				 public Question mapRow(ResultSet rs, int rowNum) throws SQLException {
+   					 Question quest = new QuestionTransferObject();
+   					 //quest.setIdseq(rs.getString(1)); //this is the super class object id
+   					 quest.setQuesIdseq(rs.getString(1));
+   					 quest.setPublicId(rs.getInt(2));
+   					 quest.setVersion(rs.getFloat(3));
+   					 quest.setPreferredDefinition(rs.getString(4));
+   					 quest.setLongName(rs.getString(5));
+   					 return quest;
+   				 }*/
+   			 });
+
+
+   	 return questions;
+   }
+    
+
+
+    public List<DataElementTransferObject> getCdesByPublicId(String cdePublidId) {
+    	String sql = 
+    			"select de.* from DATA_ELEMENTS_VIEW de " +
+    					"where de.cde_id=:id";
+
+    	//we could then get cde id with this:
+    	//select Q.CDE_ID from FB_QUEST_MODULE_VIEW q where q.de_idseq='FAB2D8EC-69A4-68CB-E034-0003BA3F9857'
+
+    	MapSqlParameterSource params = new MapSqlParameterSource();
+    	params.addValue("id", cdePublidId);
+
+    	List<DataElementTransferObject> des = 
+    			this.namedParameterJdbcTemplate.query(sql, params, 
+    					new RowMapper<DataElementTransferObject>() {
+    				public DataElementTransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
+    					DataElementTransferObject de = new DataElementTransferObject();
+    					de.setDeIdseq(rs.getString("DE_IDSEQ"));
+    					de.setVersion(rs.getFloat("VERSION"));
+    					de.setLongName(rs.getString("LONG_NAME"));
+    					de.setVdIdseq(rs.getString("VD_IDSEQ"));
+
+    					return de;
+    				}
+    			});
+
+    	return des;
+    }
+    
 }

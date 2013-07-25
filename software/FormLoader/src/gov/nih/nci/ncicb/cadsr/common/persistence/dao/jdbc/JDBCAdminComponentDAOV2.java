@@ -128,6 +128,7 @@ public class JDBCAdminComponentDAOV2 extends JDBCBaseDAOV2
   
   /**
    * Gets all ReferenceDocuments by cde public id and version
+   * (New for Form Loader)
    *
    * @return <b>Collection</b> Collection of ReferenceDocumentTransferObjects
    */
@@ -842,12 +843,13 @@ public class JDBCAdminComponentDAOV2 extends JDBCBaseDAOV2
     	super.setSql(
     			"SELECT ref.name, ref.dctl_name, ref.ac_idseq, " +
     	    	        "       ref.rd_idseq, ref.url, ref.doc_text, " +
-    	    	        " ref.conte_idseq, con.name, ref.display_order" +
+    	    	        " ref.conte_idseq, con.name, ref.display_order,DE.VERSION" +
     			" FROM sbr.DATA_ELEMENTS_VIEW de, sbr.reference_documents_view ref, sbr.contexts_view con" +
-    			" WHERE de.cde_id=" + publicId + "and de.version=" + version +
+    			" WHERE de.cde_id=" + publicId + " and DE.VERSION=" + version +
     			" and DE.DE_IDSEQ = REF.AC_IDSEQ" +
     			" AND ref.conte_idseq = con.conte_idseq " +
-    			" order by ref.display_order"
+    			" And (ref.dctl_name='Alternate Question Text' or ref.dctl_name='Preferred Question Text')" +
+    			" order by ref.dctl_name DESC NULLS LAST"
     	        );
     }
 
