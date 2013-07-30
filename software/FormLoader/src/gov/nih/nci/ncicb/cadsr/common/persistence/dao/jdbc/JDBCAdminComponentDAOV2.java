@@ -143,7 +143,9 @@ public class JDBCAdminComponentDAOV2 extends JDBCBaseDAOV2
      while (iter.hasNext())
      {
        ReferenceDocument ref = (ReferenceDocument) iter.next();
-       ref.setAttachments(this.getAllReferenceDocumentAttachments(ref.getDocIDSeq()));
+       
+       //TODO: watch
+       //ref.setAttachments(this.getAllReferenceDocumentAttachments(ref.getDocIDSeq()));
      }
      return col;
   }
