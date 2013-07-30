@@ -126,7 +126,7 @@ public class FormQuestionParserHandler extends ParserHandler {
 
 		this.methodName = null;
 		if (localName.equals(StaXParser.FORM)) {
-			logger.debug("Finished with a form");
+			logger.debug("Finished parsing a form");
 			module_idx = -1;
 			nodeQueue.clear();
 		} else {
