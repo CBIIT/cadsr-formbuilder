@@ -12,6 +12,9 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -22,7 +25,7 @@ import org.junit.Before;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/applicationContext-service-test.xml"})
-//@ContextConfiguration(locations = {"classpath:/applicationContext-xmlvalidation.xml"})
+//@ContextConfiguration(locations = {"classpath:/applicationContext-db-connectionless-test.xml"})
 public class XmlValidationServiceImplTest {
 	
 	private static Logger logger = Logger.getLogger(XmlValidationServiceImplTest.class.getName());
@@ -33,6 +36,16 @@ public class XmlValidationServiceImplTest {
 	@Before
 	public void setUp() throws Exception {
 		//xmlValService = new XmlValidationServiceImpl();
+		//@SuppressWarnings("resource")
+		//ApplicationContext applicationContext = new FileSystemXmlApplicationContext(
+		//		"/applicationContext-service-test.xml");
+		//		"C:/development/workspace-formloader3/FormLoader/applicationContext-service-test.xml");
+		//ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
+		//		"/applicationContext-service-test.xml");
+		//		"/applicationContext-mock-repository-test.xml");
+
+		//xmlValService = 
+		//		(XmlValidationServiceImpl)applicationContext.getBean("xmlValidationService");
 	}
 
 	@After

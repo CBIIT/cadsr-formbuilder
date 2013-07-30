@@ -5,7 +5,9 @@ import static org.junit.Assert.assertTrue;
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.FormStatus;
+import gov.nih.nci.cadsr.formloader.domain.QuestionDescriptor;
 import gov.nih.nci.cadsr.formloader.service.ContentValidationService;
+import gov.nih.nci.cadsr.formloader.service.XmlValidationService;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceError;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 import gov.nih.nci.cadsr.formloader.service.common.MockDataGenerator;
@@ -32,12 +34,66 @@ public class ContentValidationServiceImplTest {
 	@Autowired
 	ContentValidationService contentValidationService;
 	
+	FormCollection aColl = new FormCollection();
+	List<FormDescriptor> forms;
+	
 	@Before
 	public void setUp() throws Exception {
+		aColl.setName("TestCollection");
 	}
+	
+	@Test
+	public void testValidateXmlContentent() {
+		String xmlPathName = ".\\test\\data\\3193449_has_valid_values.xml";
+		XmlValidationService xmlValidator = new XmlValidationServiceImpl();
+		try {
+			forms = xmlValidator.validateXml(xmlPathName);
+			assertNotNull(forms);
+			assertTrue(forms.size() == 1);
+			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATED);
+			
+			aColl.setForms(forms);
+			
+			assertNotNull(contentValidationService);
+			aColl = contentValidationService.validateXmlContent(aColl, xmlPathName);
+			
+			assertNotNull(aColl);
+			forms = aColl.getForms();
+			assertTrue(forms.size() == 1);
+			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_DB_VALIDATED);
+			
+			FormDescriptor form = forms.get(0);
+			
+			//Question text in xml does not match. Should take from cde ref docs' docText of DCTL_Name "Preferred Question Text" 
+			//Question public id: 3193451
+			QuestionDescriptor question = form.getModules().get(0).getQuestions().get(0);
+			logger.debug("Question [" + question.getPublicId() + "|" + question.getVersion() + 
+					"] question text: " + question.getQuestionText());
+			assertTrue(!question.getQuestionText().startsWith("SY"));
+			
+			//Questiong's cde public id changes. Should get a message in instruction
+			question = form.getModules().get(0).getQuestions().get(1);
+			logger.debug("Question [" + question.getPublicId() + "|" + question.getVersion() + 
+					"] has this instruction: " + question.getInstruction());
+			
+			//3193457 | 1.0 has 6 permissible values
+			//valid valid #3 and #4 have fake values
+			question = form.getModules().get(0).getQuestions().get(5);
+			logger.debug("Question [" + question.getPublicId() + "|" + question.getVersion() + 
+					"] has this instruction: " + question.getInstruction());
+			assertTrue(question.getValidValues().get(2).isSkip());
+			assertTrue(question.getValidValues().get(3).isSkip());
+			
+			
+		} catch (FormLoaderServiceException fle) {
+			logger.debug(fle);
+			fail("Got exception: " + fle.getMessage());
+		}
+	}
+	
 
-	//@Test
-	public void testValidateXmlContent() {
+	//@Test -- broken
+	public void testValidateXmlContentWithMockData() {
 		try {
 			
 			FormCollection aColl = generateContentValidationData();
@@ -51,7 +107,7 @@ public class ContentValidationServiceImplTest {
 	}
 	
 	@Test
-	public void testDetermineLoadTypeByVersion() {
+	public void testDetermineLoadTypeByVersionWithMockData() {
 		//1234345, (float)1.0
 		//1234346, (float)3.0
 		//1234347, (float)4.0
@@ -80,11 +136,11 @@ public class ContentValidationServiceImplTest {
 		
 		((ContentValidationServiceImpl)contentValidationService).determineLoadTypeByVersion(forms, versions);
 		
-		assertTrue(forms.get(0).getLoadType() == FormDescriptor.LOAD_TYPE_NEW_VERSION);
-		assertTrue(forms.get(1).getLoadType() == FormDescriptor.LOAD_TYPE_UPDATE_FORM);
-		assertTrue(forms.get(2).getLoadType() == FormDescriptor.LOAD_TYPE_NEW_VERSION);
-		assertTrue(forms.get(3).getLoadType() == FormDescriptor.LOAD_TYPE_NEW);
-		assertTrue(forms.get(4).getLoadType() == FormDescriptor.LOAD_TYPE_NEW);
+		assertTrue(FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(forms.get(0).getLoadType()));
+		assertTrue(FormDescriptor.LOAD_TYPE_UPDATE_FORM.equals(forms.get(1).getLoadType()));
+		assertTrue(FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(forms.get(2).getLoadType()));
+		assertTrue(FormDescriptor.LOAD_TYPE_NEW.equals(forms.get(3).getLoadType()));
+		assertTrue(FormDescriptor.LOAD_TYPE_NEW.equals(forms.get(4).getLoadType()));
 		
 		
 	}
