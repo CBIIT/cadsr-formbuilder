@@ -56,10 +56,34 @@ public class JDBCValueDomainDAOV2 extends JDBCAdminComponentDAOV2 implements
 			PermissibleValueQuery pvQuery = new PermissibleValueQuery(dataSource);
 			pvQuery.setSql();
 			List permissibleValues = pvQuery.getPermissibleValuesByVDId(vdId);
+			//debug
+			if (permissibleValues.size() == 0) {
+				logger.debug("VD seqid [" + vdId + "] has no permissible values from db");
+			} else
+				logger.debug("VD seqid [" + vdId + "] has " + permissibleValues.size() + " permissible values from db");
 			valueDomainV2.setPermissibleValueV2(permissibleValues);
 		}
 
 		return valueDomainV2;
+	}
+	
+	public List<PermissibleValueV2> getPermissibleValuesByVdId(String vdId) {
+		ValueDomainQuery query = new ValueDomainQuery(dataSource);
+		query.setSql();
+
+		// get permissible values
+		PermissibleValueQuery pvQuery = new PermissibleValueQuery(dataSource);
+		pvQuery.setSql();
+		List<PermissibleValueV2> permissibleValues = pvQuery.getPermissibleValuesByVDId(vdId);
+		//debug
+		if (permissibleValues.size() == 0) {
+			logger.debug("VD seqid [" + vdId + "] has no permissible values from db");
+		} else
+			logger.debug("VD seqid [" + vdId + "] has " + permissibleValues.size() + " permissible values from db");
+
+		
+
+		return permissibleValues;
 	}
 
 	// based on ValueDomainQuery from JDBCValueDomainDAO
@@ -76,7 +100,9 @@ public class JDBCValueDomainDAOV2 extends JDBCAdminComponentDAOV2 implements
 		}
 
 		public void setSql() {
-			String sql = " SELECT VD_IDSEQ, LONG_NAME, VERSION, VD_ID, ASL_NAME, UOML_NAME, MAX_LENGTH_NUM, MIN_LENGTH_NUM, DECIMAL_PLACE, HIGH_VALUE_NUM, LOW_VALUE_NUM, CONDR_IDSEQ, FORML_NAME, DTL_NAME from SBR.VALUE_DOMAINS_VIEW where VD_IDSEQ=?";
+			String sql = " SELECT VD_IDSEQ, LONG_NAME, VERSION, VD_ID, ASL_NAME, UOML_NAME," +
+					" MAX_LENGTH_NUM, MIN_LENGTH_NUM, DECIMAL_PLACE, HIGH_VALUE_NUM, " +
+					" LOW_VALUE_NUM, CONDR_IDSEQ, FORML_NAME, DTL_NAME from SBR.VALUE_DOMAINS_VIEW where VD_IDSEQ=?";
 			setSql(sql);
 			declareParameter(new SqlParameter("VD_IDSEQ", Types.VARCHAR));
 			compile();
@@ -126,7 +152,9 @@ public class JDBCValueDomainDAOV2 extends JDBCAdminComponentDAOV2 implements
 		}
 
 		public void setSql() {
-			String sql = "select VALUE, vm.PUBLIC_ID, vm.VERSION, vm.PREFERRED_DEFINITION, vm.LONG_NAME from CABIO31_VD_PV_VIEW vdpv, CABIO31_PV_VIEW pv, CABIO31_VM_VIEW vm where vdpv.pv_idseq = pv.pv_idseq and pv.vm_idseq = vm.vm_idseq and vdpv.vd_idseq=?";
+			String sql = "select VALUE, vm.PUBLIC_ID, vm.VERSION, vm.PREFERRED_DEFINITION, vm.LONG_NAME " +
+					" from CABIO31_VD_PV_VIEW vdpv, CABIO31_PV_VIEW pv, CABIO31_VM_VIEW vm " +
+					" where vdpv.pv_idseq = pv.pv_idseq and pv.vm_idseq = vm.vm_idseq and vdpv.vd_idseq=?";
 			setSql(sql);
 			declareParameter(new SqlParameter("VD_IDSEQ", Types.VARCHAR));
 			compile();
@@ -148,7 +176,7 @@ public class JDBCValueDomainDAOV2 extends JDBCAdminComponentDAOV2 implements
 			return pv;
 		}
 
-		public List getPermissibleValuesByVDId(String vdId) {
+		public List<PermissibleValueV2> getPermissibleValuesByVDId(String vdId) {
 			Object[] obj = new Object[] { vdId };
 
 			return execute(obj);
