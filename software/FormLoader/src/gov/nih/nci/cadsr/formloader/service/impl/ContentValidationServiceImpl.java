@@ -1,39 +1,27 @@
 package gov.nih.nci.cadsr.formloader.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.sql.DataSource;
-
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
-import gov.nih.nci.cadsr.formloader.domain.FormStatus;
 import gov.nih.nci.cadsr.formloader.domain.ModuleDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.QuestionDescriptor;
 import gov.nih.nci.cadsr.formloader.repository.FormLoaderRepository;
+//import gov.nih.nci.cadsr.formloader.repository.FormLoaderRepositoryImpl;
 import gov.nih.nci.cadsr.formloader.service.ContentValidationService;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.ModuleTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.FormDAO;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormDAO;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
-import gov.nih.nci.ncicb.cadsr.common.resource.Module;
 import gov.nih.nci.ncicb.cadsr.common.resource.PermissibleValueV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.ReferenceDocument;
-import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomain;
-import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomainV2;
-import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocator;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ContentValidationServiceImpl implements ContentValidationService {
@@ -114,15 +102,15 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 	protected HashMap<String, List<Float>> createFormExistingVersionMap(List<FormV2> formDtos) {
 		HashMap<String, List<Float>> map = new HashMap<String, List<Float>>();
 		for (FormV2 form : formDtos) {
-			List<Float> vers = (!map.containsKey(form.getPublicId())) ? new ArrayList<Float>() :
-				map.get(form.getPublicId());
+			String pubId = String.valueOf(form.getPublicId());
+			List<Float> vers = (!map.containsKey(pubId)) ? new ArrayList<Float>() : map.get(pubId);
 			
 			vers.add(Float.valueOf(form.getVersion()));		
+			map.put(pubId, vers);
 		}
 		
 		return map;
 	}
-	
 	
 	
 	/**
@@ -198,7 +186,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 	 */
 	protected void transferFormDtos(List<FormV2>formDtos, List<FormDescriptor> formDescriptors) {
 		for (FormDescriptor formDesc : formDescriptors) {
-			if (formDesc.getLoadType() != FormDescriptor.LOAD_TYPE_UPDATE_FORM) //for now we only care for this case
+			if (formDesc.getLoadType().equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)) //for now we only care for this case
 				continue;
 			
 			FormV2 match = findMatchingFormDto(formDtos, formDesc);
@@ -262,15 +250,25 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		for (FormDescriptor form : formDescriptors) {
 			if (form.getLoadStatus() < FormDescriptor.STATUS_XML_VALIDATED)
 				continue;
+			
 			logger.debug("Start validating questions for form [" + form.getPublicId() + "|" + form.getVersion() + "|" + form.getFormSeqId() + "]");
+			
+			//List<QuestionDescriptor> questionsInForm = new ArrayList<QuestionDescriptor>();
+			
+			
 			
 			List<ModuleDescriptor> modules = form.getModules();
 			for (ModuleDescriptor module : modules) {
 				logger.debug("Start validating questions for module [" + module.getPublicId() + "|" + module.getVersion() + "|" + module.getModuleSeqId()  + "]");
 				
 				List<QuestionDescriptor> questions = module.getQuestions();
+				
+				
+				
 				for (QuestionDescriptor question : questions) {
 					logger.debug("Start validating question [" + question.getPublicId() + "|" + question.getVersion() + "|" + question.getQuestionSeqId()  + "]");
+					
+					
 					
 					validateQuestion(question, form);
 					
@@ -278,6 +276,11 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 				
 				logger.debug("Done validating questions for module [" + module.getPublicId() + "|" + module.getVersion() + "|" + module.getModuleSeqId()  + "]");
 			}
+			
+			
+			
+			
+			
 			
 			form.setLoadStatus(FormDescriptor.STATUS_DB_VALIDATED);
 			logger.debug("Done validating questions for form [" + form.getPublicId() + "|" + form.getVersion()  + "]");
@@ -298,8 +301,8 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		String version = question.getVersion();
 		
 		if (!formLoadType.equals(FormDescriptor.LOAD_TYPE_NEW_VERSION)
-				|| formLoadType.equals(FormDescriptor.LOAD_TYPE_NEW) 
-				|| formLoadType.equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)) {
+				&& !formLoadType.equals(FormDescriptor.LOAD_TYPE_NEW) 
+				&& !formLoadType.equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)) {
 			String msg = "Error: the form containing the question has undetermined load type";
 			question.addMessage(msg);
 			logger.error("Error for Question [" + publicId + "|" + version + "] " + msg);
@@ -394,6 +397,11 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			return; 
 		}
 		
+		//DEBUG
+				if (question.getPublicId().equals("3193457")) {
+					int i = 10;
+					i++;
+				}
 		List<PermissibleValueV2> pValues = getPermissibleValueListFromDB(matchingCde, question);	
 		List<ReferenceDocument> refDocs = getReferenceDocsForCdeFromDB(cdePublicId, cdeVersion, question);
 		matchingCde.setReferenceDocs(refDocs); //we probably don't need this
@@ -429,7 +437,8 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		
 		List<DataElementTransferObject> cdes = repository.getCDEByPublicId(cdePublicId);
 		if (cdes == null || cdes.size() ==0) {
-			question.addInstruction("Question in xml contains CDE public id but they have no match in database");
+			question.addInstruction(
+					"Question in xml contains CDE public id but it has no match in database. Unable to validate question.");
 			return null;
 		} else {
 			for (DataElementTransferObject cde : cdes) {
@@ -438,7 +447,8 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 				}
 			}
 
-			question.addInstruction("Question in xml contains CDE public id and verion but the version has no match in database");
+			question.addInstruction(
+					"Question in xml contains CDE public id and verion but the version has no match in database. Unable to validate question.");
 			return null;
 			
 		}
@@ -450,19 +460,17 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		List<PermissibleValueV2> pValues = null;
 		String vdSeqId = cde.getVdIdseq();
         
-		 if (vdSeqId != null && vdSeqId.length() > 0){
-       	 ValueDomainV2 vd = repository.getValueDomainBySeqId(vdSeqId);
-       	 if (vd != null) {
-       		 pValues = vd.getPermissibleValueV2();
-       	 }
-		 }
+		if (vdSeqId != null && vdSeqId.length() > 0) {
+			pValues = repository.getValueDomainPermissibleValuesByVdId(vdSeqId);
+
+			if (pValues == null || pValues.size() == 0) {
+				logger.debug("The value domain associated with data Element [" + 
+						cde.getLongName() + 
+						"] does not have permissible values. Will not be able to verify question's default value and valid values");
+			}
+		}
 		 
-		 if (pValues == null || pValues.size() == 0) {
-			 question.addInstruction("The value domain associated with data Element [" + 
-					 cde.getLongName() + 
-					 "] does not have permissible values. Unable to verify question's default value and valid values");
-		 }
-		 return pValues;
+		return pValues;
 	}
 	
 	protected List<ReferenceDocument> getReferenceDocsForCdeFromDB(String cdePublicId, String cdeVersion,
@@ -471,7 +479,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		List<ReferenceDocument> refDocs = repository.getReferenceDocsForQuestionCde(cdePublicId, cdeVersion);
 		 
 		if (refDocs == null || refDocs.size() == 0) {
-			question.addInstruction("Unable to load any reference document with CDE public id and version [" + cdePublicId +
+			logger.debug("Unable to load any reference document from db with CDE public id and version [" + cdePublicId +
 					"|" + cdeVersion + "] in xml");
 		}
 		
@@ -494,7 +502,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		if (pValues == null || pValues.size() == 0) {
 			question.addInstruction("The value domain associated with data Element [" + 
 					matchingCde.getLongName() + 
-					"] does not have permissible values. Unable to verify question's default value and valid values");
+					"] does not have permissible values. Unable to verify question's default value");
 			return;
 		} 	 
 		
@@ -511,6 +519,8 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 				question.addInstruction("Question's default value [" + defaultValue + "] doesn't match any of the associated CDE's permissible values");
 				question.setDefaultValue("");
 			}
+		} else {
+			question.addInstruction("Question's default value is null");
 		}
 	}
 	
@@ -526,6 +536,13 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 	 */
 	protected void verifyQuestionValidValues(QuestionDescriptor question, List<PermissibleValueV2> pValues,
 			DataElementTransferObject matchingCde) {
+		
+		if (pValues == null || pValues.size() == 0) {
+			question.addInstruction("The value domain associated with data Element [" + 
+					matchingCde.getLongName() + 
+					"] does not have permissible values. Unable to verify question's valid values");
+			return;
+		} 	
 
 		List<QuestionDescriptor.ValidValue> validValues = question.getValidValues();
 		 if (validValues == null || validValues.size() == 0)
@@ -576,7 +593,19 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 	 */
 	protected void verifyQuestionText(QuestionDescriptor question, List<ReferenceDocument> refDocs, 
 			DataElementTransferObject matchingCde) {
+		if (refDocs == null || refDocs.size() == 0) {
+			question.addInstruction("Unable to load any reference document with CDE public id and version [" + 
+				matchingCde.getPublicId() +
+				"|" + matchingCde.getVersion() + "] in xml");
+			return;
+		}
 		String questionText = question.getQuestionText();
+		
+		//DEBUG
+		if (question.getPublicId().equals("3193451")) {
+			int i = 10;
+			i++;
+		}
 		
 		//refdoc list is ordered by type, preferred first
 		if (questionText == null || questionText.length() == 0) {
