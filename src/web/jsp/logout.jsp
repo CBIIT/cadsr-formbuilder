@@ -1,26 +1,74 @@
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.CaDSRConstants"%>
 <%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html"%>
 <%@page import="gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams" %>
+
+<%@ page session="true" %>
 <%
-  CDEBrowserParams params = CDEBrowserParams.getInstance();
+CDEBrowserParams params = CDEBrowserParams.getInstance();
+
+String username=(String) session.getAttribute("myUsername");
+System.out.println("logout.jsp:" + username);
+
 %>
 <html>
 <head>
 <title>Logout</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <LINK REL=STYLESHEET TYPE="text/css" HREF="<%=request.getContextPath()%>/css/blaf.css">
+
+<LINK REL=STYLESHEET TYPE="text/css" HREF="<%=request.getContextPath()%>/css/ui-lightness/jquery-ui-1.10.3.custom.min.css">
+<script src="./js/jquery-1.9.1.js"></SCRIPT>
+<script src="./js/jquery-ui-1.10.3.custom.min.js"></SCRIPT>
+<script src="./js/jquery.cookie.js"></SCRIPT>
+
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 if (parent.frames[1]) 
   parent.location.href = self.location.href; 
 -->
+	
+var un = $.cookie('FormbuilderUsername');
+var pw = $.cookie('FormbuilderPassword');
+var nun = $.cookie('newFormbuilderUsername');
+
+$(document).ready(function()
+{
+	if( ( nun == "viewer" ) )  //logout
+    {
+		$("#bd").show();
+		
+		un = "viewer";
+		pw = "viewer";
+
+		$.cookie( 'FormbuilderUsername', un );	
+		$.cookie( 'FormbuilderPassword', pw );	
+		$.cookie( 'newFormbuilderUsername', un );	
+    }
+	else  //login
+    {
+		un = "guest";
+		pw = "Nci_gue5t";
+
+		$.cookie( 'FormbuilderUsername', un );	
+		$.cookie( 'FormbuilderPassword', pw );	
+		$.cookie( 'newFormbuilderUsername', un );	
+		
+		var link = $('#goahead').attr('href');
+		$('body').append('<form id="new_form" action="'+link+'"></form>');
+		$('#new_form').submit();
+
+    }
+
+});
+
+
 </SCRIPT>
 </head>
 <%
   String forwardUrl="formSearchAction.do";
 	
 %>
-<body text="#000000" topmargin="0">
+<body text="#000000" topmargin="0" id="bd" style="display:none">
 
 	<%@ include file="basicHeader_inc.jsp"%>
 	
@@ -52,7 +100,7 @@ if (parent.frames[1])
       <tr><td>&nbsp;</td></tr>
       <tr class="OraTipLabel">
           <td align="center" class="OraTipLabel">You have been successfully logged out.
-          Click <a target="_top" href="<%=forwardUrl%>">here</a> to return to Form Builder Login.
+          Click <a id="goahead" target="_top" href="<%=forwardUrl%>">here</a> to return to Form Builder as a viewer.
           </td>
       </tr>
       <tr><td>&nbsp;</td></tr>

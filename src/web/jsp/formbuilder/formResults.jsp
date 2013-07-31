@@ -10,11 +10,59 @@
 <%@page import="gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants" %>
 <%@page import="gov.nih.nci.ncicb.cadsr.common.formbuilder.common.FormBuilderConstants" %>
 <%@page import="gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormJspUtil" %>
+<%@ page session="true" %>
 <HTML>
 <HEAD>
 <TITLE>Welcome to Form Builder..</TITLE>
 <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
 <LINK rel="stylesheet" TYPE="text/css" HREF="<html:rewrite page='/css/blaf.css' />">
+
+<LINK REL=STYLESHEET TYPE="text/css" HREF="<%=request.getContextPath()%>/css/ui-lightness/jquery-ui-1.10.3.custom.min.css">
+<script src="./js/jquery-1.9.1.js"></SCRIPT>
+<script src="./js/jquery-ui-1.10.3.custom.min.js"></SCRIPT>
+<script src="./js/jquery.cookie.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript">
+var un = $.cookie('FormbuilderUsername');
+var pw = $.cookie('FormbuilderPassword');
+var nun = $.cookie('newFormbuilderUsername');
+
+////alert("formResultPage");
+
+
+
+$(document).ready(function()
+{
+	
+	setupUser();
+	
+});
+
+function setupUser()
+{
+	var myInputun = $("#myInputUserName").val();
+	////alert(myInputun);
+		
+		if( myInputun != "viewer/" )  //logout
+	    {
+			$(".viewer").hide("fast");
+			$(".noneViewer").show("fast");
+
+			$("#idLogout").show("fast");
+			$.cookie( 'newFormbuilderUsername', "viewer" );			
+	    }
+		else  //login
+	    {
+			$(".noneViewer").hide("fast");
+			$(".viewer").show("fast");
+
+			$("#idLogin").show("fast");
+			$.cookie( 'newFormbuilderUsername', "guest" );			
+	    }
+	
+	}
+</script>	
+
 <%
   String urlPrefix = "";
   String jumpto = (String)request.getSession().getAttribute(CaDSRConstants.ANCHOR);
@@ -24,6 +72,9 @@
     jumptoStr = "onload=\"location.hash='#"+jumpto+"'\"";
 
 %>
+
+
+
 </HEAD>
 <BODY topmargin=0 bgcolor="#ffffff" <%=jumptoStr%> ">
 
