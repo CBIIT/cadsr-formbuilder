@@ -50,7 +50,7 @@ public class JDBCFormV2DAOTest {
 		ids.add("3460365");
 		ids.add("1234567"); //bogus
 		
-		List<FormV2> forms = formV2Dao.getVersionsByPublicIds(ids);
+		List<FormV2> forms = formV2Dao.getExistingVersionsForPublicIds(ids);
 		assertNotNull(forms);
 		assertTrue(forms.size() > 3);
 	

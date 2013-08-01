@@ -2,7 +2,9 @@ package gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc;
 
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.resource.Question;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -40,4 +42,39 @@ public class JDBCQuestionDAOV2Test {
 		assertTrue(des.size() == 2);
 		
 	}
-}
+	
+	@Test
+	public void testGetCdesByPublicIds() {
+		List<String> publicIds = new ArrayList<String>();
+		
+		publicIds.add("2002460");
+		publicIds.add("782");
+		publicIds.add("2001039");
+		publicIds.add("2002713");
+		publicIds.add("470"); //fake
+		
+		List<DataElementTransferObject> des = questionV2Dao.getCdesByPublicIds(publicIds);
+		assertNotNull(des);
+		assertTrue(des.size() >= 4);
+		
+	}
+	
+	@Test 
+	public void testGetQuestionsByPublicIds() {
+		List<String> publicIds = new ArrayList<String>();
+		
+		publicIds.add("3193451");
+		publicIds.add("3193452");
+		publicIds.add("3193453");
+		publicIds.add("3193455");
+		publicIds.add("470"); //fake
+		publicIds.add("3193456");
+		publicIds.add("3193457");
+		publicIds.add("3193470");
+		//QuestionTransferObject
+		List<QuestionTransferObject> qDtos = questionV2Dao.getQuestionsByPublicIds(publicIds);
+		assertNotNull(qDtos);
+		
+		assertTrue(qDtos.size() == 7);
+	}
+ }
