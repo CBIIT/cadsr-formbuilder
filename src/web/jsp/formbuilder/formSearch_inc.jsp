@@ -271,7 +271,7 @@ function gotoClassificationsLOV() {
     </table>
 </logic:present>        
  <logic:notPresent name="<%=FormConstants.IN_PROCESS%>"> 
-    <table align="center">
+    <table class="noneViewer" style="display:none" align="center">
      <TR>
         <td  align="center" nowrap>
           <html:link action='<%="/gotoFormCreate?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GO_TO_CREATE_FORM%>' target="_parent" >
