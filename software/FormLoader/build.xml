@@ -37,7 +37,11 @@
 
     <target name="jar" depends="compile">
         <mkdir dir="${jar.dir}"/>
-        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+        <jar destfile="${jar.dir}/${ant.project.name}-services.jar" basedir="${classes.dir}"
+        	includes="gov/nih/nci/cadsr/formloader/domain/**,
+        		gov/nih/nci/cadsr/formloader/repository/**,
+        	gov/nih/nci/cadsr/formloader/service/**,
+        	gov/nih/nci/ncicb/cadsr/common/persistence/**" >
         </jar>
     </target>
 	
