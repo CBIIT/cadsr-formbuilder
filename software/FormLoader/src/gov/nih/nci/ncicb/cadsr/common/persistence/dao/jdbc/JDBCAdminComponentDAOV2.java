@@ -7,9 +7,11 @@ import gov.nih.nci.ncicb.cadsr.common.dto.CSITransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContactCommunicationTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContactTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.OrganizationTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.PermissibleValueV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.PersonTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
@@ -47,8 +49,10 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.object.MappingSqlQuery;
 import org.springframework.jdbc.object.SqlUpdate;
 import org.springframework.jdbc.object.StoredProcedure;
@@ -1818,5 +1822,64 @@ public class JDBCAdminComponentDAOV2 extends JDBCBaseDAOV2
 	}
 	   
    }
+   
+   
+   //public List<ReferenceDocumentTransferObject> getReferenceDocumentsByCdePublicIds(List<String> cdePublidIds) {
+   public HashMap<String, List<ReferenceDocumentTransferObject>> getReferenceDocumentsByCdePublicIds(List<String> cdePublidIds) {
+   	String sql = 
+   			"SELECT ref.name, ref.dctl_name, ref.ac_idseq, " +
+	    	        "       ref.rd_idseq, ref.url, ref.doc_text, " +
+	    	        " ref.conte_idseq, con.name, ref.display_order, de.cde_id, DE.VERSION " +
+			" FROM sbr.DATA_ELEMENTS_VIEW de, sbr.reference_documents_view ref, sbr.contexts_view con" +
+			" WHERE de.cde_id in (:ids)" + 
+			" and DE.DE_IDSEQ = REF.AC_IDSEQ" +
+			" AND ref.conte_idseq = con.conte_idseq " +
+			" And (ref.dctl_name='Alternate Question Text' or ref.dctl_name='Preferred Question Text')" +
+			" order by de.cde_id, ref.dctl_name DESC NULLS LAST";
+   	
+   	final HashMap<String, List<ReferenceDocumentTransferObject>> refdocMap = 
+			new HashMap<String, List<ReferenceDocumentTransferObject>>();
+
+   	MapSqlParameterSource params = new MapSqlParameterSource();
+   	params.addValue("ids", cdePublidIds);
+
+   	List<ReferenceDocumentTransferObject> des = 
+   			this.namedParameterJdbcTemplate.query(sql, params, 
+   					new RowMapper<ReferenceDocumentTransferObject>() {
+   				public ReferenceDocumentTransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
+   					ReferenceDocumentTransferObject refDoc = new ReferenceDocumentTransferObject();
+   					
+   			      refDoc.setDocName(rs.getString(1));
+   			      refDoc.setDocType(rs.getString(2));
+   			      refDoc.setDocIDSeq(rs.getString(4));
+   			      
+   			      String url = getURLWithProtocol(rs.getString(5));
+   			      
+   			      refDoc.setUrl(getURLWithProtocol(url));
+   			      refDoc.setDocText(rs.getString(6));
+   			      refDoc.setDisplayOrder(rs.getInt(9));
+
+   			      ContextTransferObject contextTransferObject = new ContextTransferObject();
+   			      contextTransferObject.setConteIdseq(rs.getString(7)); //CONTE_IDSEQ
+   			      contextTransferObject.setName(rs.getString(8)); // CONTEXT_NAME
+   			      refDoc.setContext(contextTransferObject);
+   			      
+   			      String key = "" + rs.getInt("CDE_ID") + "-" + rs.getFloat("VERSION");
+
+   			      if (!refdocMap.containsKey(key)) 
+   			    	  refdocMap.put(key, new ArrayList<ReferenceDocumentTransferObject>());
+					
+   			      refdocMap.get(key).add(refDoc); 
+   			      
+   			      return refDoc;
+   				}
+   			});
+
+   	//return des;
+   	
+   	return refdocMap;
+   }
+   
+   
 
 }

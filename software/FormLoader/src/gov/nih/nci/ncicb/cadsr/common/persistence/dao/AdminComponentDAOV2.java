@@ -1,5 +1,6 @@
 package gov.nih.nci.ncicb.cadsr.common.persistence.dao;
 
+import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.resource.AdminComponentType;
 import gov.nih.nci.ncicb.cadsr.common.resource.ClassSchemeItem;
 import gov.nih.nci.ncicb.cadsr.common.resource.Contact;
@@ -8,6 +9,7 @@ import gov.nih.nci.ncicb.cadsr.common.resource.Definition;
 import gov.nih.nci.ncicb.cadsr.common.resource.Designation;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -106,6 +108,8 @@ public interface AdminComponentDAOV2 {
    * @return <b>Collection</b> Collection of ReferenceDocumentTransferObjects
    */
   public List getAllReferenceDocuments(int publicId, float version);
+  //public List getReferenceDocumentsByCdePublicIds(List<String> cdePublicIds);
+  public HashMap<String, List<ReferenceDocumentTransferObject>> getReferenceDocumentsByCdePublicIds(List<String> cdePublicIds);
 
 // Publish Change order
   /**

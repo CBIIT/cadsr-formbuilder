@@ -26,6 +26,10 @@ public class QuestionDescriptor {
 		messages.add(msg);
 	}
 	
+	public List<String> getMessages() {
+		return messages;
+	}
+	
 	public String getQuestionSeqId() {
 		return questionSeqId;
 	}

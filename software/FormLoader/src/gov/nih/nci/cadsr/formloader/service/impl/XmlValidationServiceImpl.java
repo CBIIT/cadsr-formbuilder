@@ -6,10 +6,14 @@ import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
 import gov.nih.nci.cadsr.formloader.service.common.XmlValidationError;
+import gov.nih.nci.cadsr.formloader.service.common.XmlValidationErrorHandler;
 
+import java.io.File;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.dom4j.DocumentException;
+import org.dom4j.io.SAXReader;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,7 +21,7 @@ public class XmlValidationServiceImpl implements XmlValidationService {
 	
 	private static Logger logger = Logger.getLogger(XmlValidationServiceImpl.class.getName());
 	
-	protected static String XSD_PATH_NAME = "forms.xsd";
+	protected static String XSD_PATH_NAME = ".\\resources\\FormLoaderv2.xsd";
 
 	public XmlValidationServiceImpl() {}
 	
@@ -29,7 +33,10 @@ public class XmlValidationServiceImpl implements XmlValidationService {
 	@Override
 	public List<FormDescriptor> validateXml(String xmlPathName) throws FormLoaderServiceException{
 		
-		XmlValidationError error = FormLoaderHelper.checkXmlWellFormedness(xmlPathName);
+		checkInputFile(xmlPathName);
+		checkInputFile(XSD_PATH_NAME);
+		
+		XmlValidationError error = checkXmlWellFormedness(xmlPathName);
 		if (error != null && error.getType() != XmlValidationError.XML_NO_ERROR)
 			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_MALFORMED_XML,
 					"Xml Malform Error", error);
@@ -43,6 +50,19 @@ public class XmlValidationServiceImpl implements XmlValidationService {
 		
 		return forms;
 	}
+	
+	protected void checkInputFile(String xmlPathName) 
+			throws FormLoaderServiceException
+		{
+			if (xmlPathName == null || xmlPathName.length() == 0)
+				throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_FILE_INVALID,
+						"Input file path/name is null or empty. Unable to validate form content.");
+			
+			File input = new File(xmlPathName);
+			if (input == null || !input.exists() || !input.canRead())
+				throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_FILE_INVALID,
+						"Input file [" + xmlPathName + "]is invalid. Unable to validate form content.");
+		}
 	
 	/**
 	 * Assign errors to forms based on line number where the error was detected
@@ -95,5 +115,31 @@ public class XmlValidationServiceImpl implements XmlValidationService {
 		return startIdx;
 	}
 	
-
+	/**
+	 * Check WellFormedness of an xml file
+	 * @param xmlPathName
+	 * @return If wellformed, XmlValidationError with XML_NO_ERROR. Otherwise, XmlValidationError with one of the error types
+	 */
+	public XmlValidationError checkXmlWellFormedness(String xmlPathName) 
+		throws FormLoaderServiceException {
+		
+		XmlValidationError error;
+		
+			
+		XmlValidationErrorHandler errorHandler = new XmlValidationErrorHandler();
+		try {
+            SAXReader reader = new SAXReader();
+            reader.setValidation(false);
+            reader.setErrorHandler(errorHandler);
+            reader.read(xmlPathName);
+        } catch (DocumentException e) {
+        	logger.error(e);
+        	throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_MALFORMED_XML,
+					"Xml Malform Error: " + e.getMessage());
+        	
+        }
+		
+		return (errorHandler.getXmlErrors().size() > 0) ? 
+				errorHandler.getXmlErrors().get(0) : new XmlValidationError(XmlValidationError.XML_NO_ERROR, "Xml well formed", 0);
+	}
 }

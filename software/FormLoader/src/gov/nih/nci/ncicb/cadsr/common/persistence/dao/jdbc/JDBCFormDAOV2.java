@@ -252,16 +252,13 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
     /**
      * Get versions for public ids. -- Form Loader
      * @param publicIds
-     * @return a hashmap containing publicid - seqid + versions matching. Value has this format:
-     * 	"form seqid | version1,version2,..." (Not pretty but we'll see...)
+     * @return a list of form dtos with only seqid, public id and version populated
      */
-    public List<FormV2> getVersionsByPublicIds(List<String> publicIds) {
+    public List<FormV2> getExistingVersionsForPublicIds(List<String> publicIds) {
        
         String sql = 
         	"SELECT FV.QC_IDSEQ, FV.PUBLIC_ID, FV.VERSION FROM FB_FORMS_VIEW fv WHERE FV.PUBLIC_ID in (:ids) " +
         			"ORDER BY FV.PUBLIC_ID, FV.VERSION";
-      		//"SELECT FV.QC_IDSEQ, FV.QC_ID, FV.VERSION FROM CABIO31_FORMS_VIEW fv WHERE FV.QC_ID in (:ids) " + 
-      		//		"ORDER BY FV.QC_ID, FV.VERSION";
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("ids", publicIds);

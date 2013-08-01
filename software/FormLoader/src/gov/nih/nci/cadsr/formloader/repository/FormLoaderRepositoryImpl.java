@@ -3,7 +3,9 @@ package gov.nih.nci.cadsr.formloader.repository;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ModuleTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.PermissibleValueV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCModuleDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCQuestionDAOV2;
@@ -13,7 +15,6 @@ import gov.nih.nci.ncicb.cadsr.common.resource.PermissibleValueV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.ReferenceDocument;
 import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomainV2;
 
-import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -21,26 +22,19 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	private static Logger logger = Logger.getLogger(FormLoaderRepositoryImpl.class.getName());
 	
-	@Autowired
 	JDBCFormDAOV2 formV2Dao;
-	
-	@Autowired
 	JDBCModuleDAOV2 moduleV2Dao;
-	
-	@Autowired
 	JDBCQuestionDAOV2 questionV2Dao;
-	
-	@Autowired
 	JDBCValueDomainDAOV2 valueDomainV2Dao;
 	
 
@@ -56,40 +50,9 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		}
 		
 		//Seq id, public id and version are set in the returned forms
-		List<FormV2> formDtos = formV2Dao.getVersionsByPublicIds(pubicIDList);
+		List<FormV2> formDtos = formV2Dao.getExistingVersionsForPublicIds(pubicIDList);
 		logger.debug("getFormsForPublicIDs() returns " + formDtos.size() + " forms with " + pubicIDList.size() 
 				+ " public ids");
-		
-		try {
-		// Serialize data object to a file
-		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("FormV2List.ser"));
-		for (FormV2 form : formDtos) {
-			out.writeObject(form);
-		}
-		out.close();
-		} catch (IOException ioe) {
-			
-		}
-		
-		try {
-		List<FormV2TransferObject> newFormList = new ArrayList<FormV2TransferObject>();
-		FileInputStream fis = new FileInputStream("FormV2List.ser");
-        //Create new ObjectInputStream object to read object from file
-        ObjectInputStream obj = new ObjectInputStream(fis);
-        
-            while (fis.available() != -1) {
-                //Read object from file
-            	FormV2TransferObject acc = (FormV2TransferObject) obj.readObject();
-                newFormList.add(acc);
-            }
-            fis.close();
-        } catch (ClassNotFoundException fne) {
-        	logger.error(fne);
-        }catch (FileNotFoundException fne) {
-        	logger.error(fne);
-        } catch (IOException ioe) {
-        	logger.error(ioe);
-		}
 		
 		return formDtos;
 	}
@@ -107,6 +70,17 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		return questions;
 	}
 	
+	public List<QuestionTransferObject> getQuestionsByPublicIds(List<String> publicIds) {
+		if (publicIds == null || publicIds.size() == 0) {
+			logger.debug("getQuestionsByPublicIds(): Question public id list is null or empty. Unable to querry db.");
+			return null;
+		}
+			
+		List<QuestionTransferObject> questions = questionV2Dao.getQuestionsByPublicIds(publicIds);
+		logger.debug("getQuestionsByPublicId(): Dao returns " + questions.size() + " questions.");
+		return questions;
+	}
+	
 	public List<DataElementTransferObject> getCDEByPublicId(String cdePublicId) {
 		if (cdePublicId == null || cdePublicId.length() == 0) {
 			logger.debug("getCDEByPublicId(): Question's CDE public id is null or empty. Unable to querry db.");
@@ -119,7 +93,18 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		return des;
 	}
 	
-	public List<ReferenceDocument> getReferenceDocsForQuestionCde(String cdePublicId, String cdeVersion) {
+	public List<DataElementTransferObject> getCDEsByPublicIds(List<String> cdePublicIds) {
+		if (cdePublicIds == null || cdePublicIds.size() == 0) {
+			logger.debug("getCDEsByPublicIds(): cde public id list is null or empty. Unable to querry db.");
+			return null;
+		}
+		List<DataElementTransferObject> des = questionV2Dao.getCdesByPublicIds(cdePublicIds);
+		logger.debug("getCDEsByPublicIds(): Dao returns " + des.size() + " CDEs");
+		
+		return des;
+	}
+	
+	public List<ReferenceDocumentTransferObject> getReferenceDocsForQuestionCde(String cdePublicId, String cdeVersion) {
 		if (cdePublicId == null || cdePublicId.length() == 0) {
 			logger.debug("getReferenceDocsForQuestionCde(): Question's CDE public id is null or empty. Unable to querry db.");
 			return null;
@@ -130,7 +115,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			return null;
 		}
 		
-		List<ReferenceDocument> deRefDocs = 
+		List<ReferenceDocumentTransferObject> deRefDocs = 
 				questionV2Dao.getAllReferenceDocuments(
 						Integer.parseInt(cdePublicId), Float.parseFloat(cdeVersion));
 		logger.debug("getReferenceDocsForQuestionCde(): Dao returns " + deRefDocs.size() + " CDE reference docs.");
@@ -138,14 +123,49 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		return deRefDocs;
 	}
 	
-	public List<PermissibleValueV2> getValueDomainPermissibleValuesByVdId(String vdSeqId) {
+	
+	public HashMap<String, List<ReferenceDocumentTransferObject>> getReferenceDocsByCdePublicIds(List<String> cdePublicIds) {
+		if (cdePublicIds == null || cdePublicIds.size() == 0) {
+			logger.debug("getReferenceDocsByCdePublicIds(): cde public id list is null or empty. Unable to querry db.");
+			return null;
+		}
+		
+		HashMap<String, List<ReferenceDocumentTransferObject>> deRefDocs = 
+				questionV2Dao.getReferenceDocumentsByCdePublicIds(cdePublicIds);
+				
+				
+		logger.debug("getReferenceDocsByCdePublicIds(): Dao returns " + deRefDocs.size() + " CDE reference docs.");
+		
+		return deRefDocs;
+	}
+	
+	public List<PermissibleValueV2TransferObject> getValueDomainPermissibleValuesByVdId(String vdSeqId) {
 		if (vdSeqId == null || vdSeqId.length() == 0) {
 			logger.debug("getValueDomainBySeqId(): Value domain seq id is null or empty. Unable to querry db.");
 			return null;
 		}
 		
-		List<PermissibleValueV2> pValues = valueDomainV2Dao.getPermissibleValuesByVdId(vdSeqId);
+		List<PermissibleValueV2TransferObject> pValues = valueDomainV2Dao.getPermissibleValuesByVdId(vdSeqId);
 		String msg = "getValueDomainPermissibleValuesByVdId(): Dao returns ";
+		if (pValues == null || pValues.size() == 0)
+			msg += "a value domain obj with 0 permissible value.";
+		else
+			msg += "a value domain obj with " + pValues.size() + " permissible values";
+		
+		logger.debug("msg");
+		return pValues;
+	}
+	
+	public HashMap<String, List<PermissibleValueV2TransferObject>> getPermissibleValuesByVdIds(List<String> vdSeqIds) {
+		if (vdSeqIds == null || vdSeqIds.size() == 0) {
+			logger.debug("getPermissibleValuesByVdIds(): vdSeqIds list is null or empty. Unable to querry db.");
+			return null;
+		}
+		
+		HashMap<String, List<PermissibleValueV2TransferObject>> pValues = 
+				valueDomainV2Dao.getPermissibleValuesByVdIds(vdSeqIds);
+		
+		String msg = "getPermissibleValuesByVdIds(): Dao returns ";
 		if (pValues == null || pValues.size() == 0)
 			msg += "a value domain obj with 0 permissible value.";
 		else
@@ -221,4 +241,38 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		logger.debug("getQuestionsByPublicIdAndVersion(): Dao returns " + questions.size() + " questions.");
 		return questions;
 	}
+
+	public JDBCFormDAOV2 getFormV2Dao() {
+		return formV2Dao;
+	}
+
+	public void setFormV2Dao(JDBCFormDAOV2 formV2Dao) {
+		this.formV2Dao = formV2Dao;
+	}
+
+	public JDBCModuleDAOV2 getModuleV2Dao() {
+		return moduleV2Dao;
+	}
+
+	public void setModuleV2Dao(JDBCModuleDAOV2 moduleV2Dao) {
+		this.moduleV2Dao = moduleV2Dao;
+	}
+
+	public JDBCQuestionDAOV2 getQuestionV2Dao() {
+		return questionV2Dao;
+	}
+
+	public void setQuestionV2Dao(JDBCQuestionDAOV2 questionV2Dao) {
+		this.questionV2Dao = questionV2Dao;
+	}
+
+	public JDBCValueDomainDAOV2 getValueDomainV2Dao() {
+		return valueDomainV2Dao;
+	}
+
+	public void setValueDomainV2Dao(JDBCValueDomainDAOV2 valueDomainV2Dao) {
+		this.valueDomainV2Dao = valueDomainV2Dao;
+	}
+	
+	
 }

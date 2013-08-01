@@ -9,18 +9,23 @@ import gov.nih.nci.ncicb.cadsr.common.resource.ConceptDerivationRule;
 import gov.nih.nci.ncicb.cadsr.common.resource.PermissibleValueV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.ValueMeaningV2;
 import gov.nih.nci.ncicb.cadsr.common.dto.ConceptDerivationRuleTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.PermissibleValueV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ValueMeaningV2TransferObject;
 
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.object.MappingSqlQuery;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.sql.DataSource;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Iterator;
 
@@ -67,14 +72,14 @@ public class JDBCValueDomainDAOV2 extends JDBCAdminComponentDAOV2 implements
 		return valueDomainV2;
 	}
 	
-	public List<PermissibleValueV2> getPermissibleValuesByVdId(String vdId) {
+	public List<PermissibleValueV2TransferObject> getPermissibleValuesByVdId(String vdId) {
 		ValueDomainQuery query = new ValueDomainQuery(dataSource);
 		query.setSql();
 
 		// get permissible values
 		PermissibleValueQuery pvQuery = new PermissibleValueQuery(dataSource);
 		pvQuery.setSql();
-		List<PermissibleValueV2> permissibleValues = pvQuery.getPermissibleValuesByVDId(vdId);
+		List<PermissibleValueV2TransferObject> permissibleValues = pvQuery.getPermissibleValuesByVDId(vdId);
 		//debug
 		if (permissibleValues.size() == 0) {
 			logger.debug("VD seqid [" + vdId + "] has no permissible values from db");
@@ -162,7 +167,7 @@ public class JDBCValueDomainDAOV2 extends JDBCAdminComponentDAOV2 implements
 
 		protected Object mapRow(ResultSet rs, int rownum) throws SQLException {
 
-			PermissibleValueV2 pv = new PermissibleValueV2TransferObject();
+			PermissibleValueV2TransferObject pv = new PermissibleValueV2TransferObject();
 			pv.setValue(rs.getString("VALUE"));
 
 			ValueMeaningV2 vm = new ValueMeaningV2TransferObject();
@@ -176,12 +181,59 @@ public class JDBCValueDomainDAOV2 extends JDBCAdminComponentDAOV2 implements
 			return pv;
 		}
 
-		public List<PermissibleValueV2> getPermissibleValuesByVDId(String vdId) {
+		public List<PermissibleValueV2TransferObject> getPermissibleValuesByVDId(String vdId) {
 			Object[] obj = new Object[] { vdId };
 
 			return execute(obj);
 
 		}
 	}
+	
+	public HashMap<String, List<PermissibleValueV2TransferObject>> getPermissibleValuesByVdIds(List<String> vdSeqIds) {
+	//public List<PermissibleValueV2TransferObject> getPermissibleValuesByVdIds(List<String> vdSeqIds) {
+    	String sql = 
+    			"select vdpv.vd_idseq, pv.VALUE, vm.PUBLIC_ID, vm.VERSION, vm.PREFERRED_DEFINITION, vm.LONG_NAME " +
+    					" from CABIO31_VD_PV_VIEW vdpv, CABIO31_PV_VIEW pv, CABIO31_VM_VIEW vm " +
+    					" where vdpv.pv_idseq = pv.pv_idseq and pv.vm_idseq = vm.vm_idseq and vdpv.vd_idseq in (:seqIds) " +
+    					" order by vdpv.vd_idseq";
+
+    	MapSqlParameterSource params = new MapSqlParameterSource();
+    	params.addValue("seqIds", vdSeqIds);
+    	
+    	final HashMap<String, List<PermissibleValueV2TransferObject>> pvsMap = 
+    			new HashMap<String, List<PermissibleValueV2TransferObject>>();
+    	
+    	List<PermissibleValueV2TransferObject> des = 
+    			this.namedParameterJdbcTemplate.query(sql, params, 
+    					new RowMapper<PermissibleValueV2TransferObject>() {
+    				public PermissibleValueV2TransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
+    					
+    					String vdSeqId = rs.getString("VD_IDSEQ");				
+    					
+    					PermissibleValueV2TransferObject pv = new PermissibleValueV2TransferObject();
+    					pv.setValue(rs.getString("VALUE"));
+
+    					ValueMeaningV2 vm = new ValueMeaningV2TransferObject();
+    					vm.setPublicId(rs.getInt("PUBLIC_ID"));
+    					vm.setVersion(rs.getFloat("VERSION"));
+    					vm.setPreferredDefinition(rs.getString("PREFERRED_DEFINITION"));
+    					vm.setLongName(rs.getString("LONG_NAME"));
+
+    					pv.setValueMeaningV2(vm);
+    					
+    					
+    					if (!pvsMap.containsKey(vdSeqId)) 
+    						pvsMap.put(vdSeqId, new ArrayList<PermissibleValueV2TransferObject>());
+    						
+    					pvsMap.get(vdSeqId).add(pv);    					
+
+    					return pv;
+    				}
+    			});
+    	
+
+    	//return des;
+    	return pvsMap;
+    }
 
 }

@@ -6,6 +6,7 @@ public class FormLoaderServiceException extends Exception {
 	public static final int ERROR_NO_ERROR = 0;
 	public static final int ERROR_MALFORMED_XML = 1;
 	public static final int ERROR_EMPTY_FORM_LIST = 2;
+	public static final int ERROR_FILE_INVALID = 3;
 	
 	protected int errorCode;
 	

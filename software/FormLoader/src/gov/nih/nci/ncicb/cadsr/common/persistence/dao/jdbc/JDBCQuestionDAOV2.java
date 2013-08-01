@@ -1,31 +1,29 @@
 package gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc;
 
-import gov.nih.nci.ncicb.cadsr.common.dto.CSITransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormValidValueTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ValueDomainV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ValueMeaningTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.QuestionDAO;
-import gov.nih.nci.ncicb.cadsr.common.resource.ClassSchemeItem;
-import gov.nih.nci.ncicb.cadsr.common.resource.Designation;
-import gov.nih.nci.ncicb.cadsr.common.resource.Definition;
-import gov.nih.nci.ncicb.cadsr.common.resource.Context;
-import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
-import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.CSITransferObject;
-
 import gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue;
-import gov.nih.nci.ncicb.cadsr.common.resource.ValueMeaning;
 import gov.nih.nci.ncicb.cadsr.common.resource.Question;
 import gov.nih.nci.ncicb.cadsr.common.resource.QuestionChange;
-import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocator;
-import gov.nih.nci.ncicb.cadsr.common.servicelocator.SimpleServiceLocator;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValueMeaning;
 import gov.nih.nci.ncicb.cadsr.common.util.StringUtils;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.RowMapper;
@@ -35,19 +33,6 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.object.MappingSqlQuery;
 import org.springframework.jdbc.object.SqlUpdate;
 import org.springframework.jdbc.object.StoredProcedure;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.sql.DataSource;
 
 
 public class JDBCQuestionDAOV2 extends JDBCAdminComponentDAOV2 implements QuestionDAO {
@@ -771,39 +756,6 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
 
     }
 
-/*
-    class ValidValuesForAQuestionQuery_STMT extends MappingSqlQuery {
-      ValidValuesForAQuestionQuery_STMT() {
-        super();
-      }
-
-      public void _setSql(String idSeq) {
-        super.setSql(
-          "SELECT * FROM SBREXT.FB_VALID_VALUES_VIEW where QUES_IDSEQ = '" + idSeq + "'");
-    //       declareParameter(new SqlParameter("QUESTION_IDSEQ", Types.VARCHAR));
-      }
-      protected Object mapRow(
-        ResultSet rs,
-        int rownum) throws SQLException {
-            FormValidValue fvv = new FormValidValueTransferObject();
-            fvv.setValueIdseq(rs.getString(1));     // VV_IDSEQ
-            fvv.setVpIdseq(rs.getString(8));        // VP_IDSEQ
-            fvv.setLongName(rs.getString(9));       // LONG_NAME
-            fvv.setDisplayOrder(rs.getInt(14));     // DISPLAY_ORDER
-            fvv.setShortMeaning(rs.getString(15));    // Meaning  
-            fvv.setVersion(new Float(rs.getString(2))); // VERSION
-            //Bug Fix tt#1058
-            fvv.setAslName(rs.getString(5));
-            fvv.setPreferredDefinition(rs.getString(7));
-            ContextTransferObject contextTransferObject = new ContextTransferObject();
-            contextTransferObject.setConteIdseq(rs.getString(4)); //CONTE_IDSEQ
-            fvv.setContext(contextTransferObject);
-            
-           return fvv;
-      }
-    }
-
-*/
     private class DeleteQuestAttrQuery extends SqlUpdate {
       public DeleteQuestAttrQuery(DataSource ds) {
         String deleteSql =
@@ -866,23 +818,25 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
         }
 }
     
-    public List<Question> getQuestionsByPublicIds(List<String> publicIds) {
+    /**
+     * Get a list of question dtos with public ids
+     * @param publicIds
+     * @return
+     */
+    public List<QuestionTransferObject> getQuestionsByPublicIds(List<String> publicIds) {
     	 String sql = 
     	      "select Q.QC_IDSEQ, Q.QC_ID, Q.VERSION, Q.PREFERRED_DEFINITION, Q.LONG_NAME, " +
     	    		  "Q.DE_IDSEQ from QUEST_CONTENTS_VIEW_EXT q " +
     	    		  "where Q.QC_ID in (:ids) and Q.QTL_NAME='QUESTION'";
-    	 
-    	 //we could then get cde id with this:
-    	 //select Q.CDE_ID from FB_QUEST_MODULE_VIEW q where q.de_idseq='FAB2D8EC-69A4-68CB-E034-0003BA3F9857'
 
     	 MapSqlParameterSource params = new MapSqlParameterSource();
     	 params.addValue("ids", publicIds);
 
-    	List<Question> questions = 
+    	List<QuestionTransferObject> questions = 
     			 this.namedParameterJdbcTemplate.query(sql, params, 
-    					 new RowMapper<Question>() {
-    				 public Question mapRow(ResultSet rs, int rowNum) throws SQLException {
-    					 Question quest = new QuestionTransferObject();
+    					 new RowMapper<QuestionTransferObject>() {
+    				 public QuestionTransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
+    					 QuestionTransferObject quest = new QuestionTransferObject();
     					 //quest.setIdseq(rs.getString(1)); //this is the super class object id
     					 quest.setQuesIdseq(rs.getString(1));
     					 quest.setPublicId(rs.getInt(2));
@@ -897,6 +851,12 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
     	 return questions;
     }
     
+    /**
+     * Gets question dto by public id and version.
+     * @param publicId
+     * @param version
+     * @return
+     */
     public List<QuestionTransferObject> getQuestionByPublicIdAndVersion(int publicId, float version) {
     	String sql = "SELECT a.*, b.QC_ID " +
     			"FROM SBREXT.FB_QUESTIONS_VIEW a, CABIO31_QUESTIONS_VIEW b " +
@@ -962,23 +922,18 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
       				    return question;
       				   }
       				 
-      				 /*
-      				 public Question mapRow(ResultSet rs, int rowNum) throws SQLException {
-      					 Question quest = new QuestionTransferObject();
-      					 //quest.setIdseq(rs.getString(1)); //this is the super class object id
-      					 quest.setQuesIdseq(rs.getString(1));
-      					 quest.setPublicId(rs.getInt(2));
-      					 quest.setVersion(rs.getFloat(3));
-      					 quest.setPreferredDefinition(rs.getString(4));
-      					 quest.setLongName(rs.getString(5));
-      					 return quest;
-      				 }*/
+      				
       			 });
 
 
       	 return questions;
     }
 
+    /**
+     * Gets the full question dto, with its associated data element dto attached.
+     * @param publicId
+     * @return
+     */
     public List<QuestionTransferObject> getQuestionsByPublicId(int publicId) {
    	 String sql = 
    	      "SELECT a.*, b.EDITABLE_IND, b.QC_ID, c.RULE, d.PREFERRED_NAME as DE_SHORT_NAME, " +
@@ -986,9 +941,6 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
    			 "FROM SBREXT.FB_QUESTIONS_VIEW a, CABIO31_QUESTIONS_VIEW b, COMPLEX_DATA_ELEMENTS_VIEW c, DATA_ELEMENTS_VIEW d " +
    			 "where B.QC_ID=:qcId and a.ques_idseq=b.QC_IDSEQ and b.DE_IDSEQ = c.P_DE_IDSEQ(+) " +
    			 "and b.de_idseq = d.de_idseq";
-   	 
-   	 //we could then get cde id with this:
-   	 //select Q.CDE_ID from FB_QUEST_MODULE_VIEW q where q.de_idseq='FAB2D8EC-69A4-68CB-E034-0003BA3F9857'
 
    	 MapSqlParameterSource params = new MapSqlParameterSource();
    	 params.addValue("qcId", publicId);
@@ -1044,17 +996,7 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
    				    return question;
    				   }
    				 
-   				 /*
-   				 public Question mapRow(ResultSet rs, int rowNum) throws SQLException {
-   					 Question quest = new QuestionTransferObject();
-   					 //quest.setIdseq(rs.getString(1)); //this is the super class object id
-   					 quest.setQuesIdseq(rs.getString(1));
-   					 quest.setPublicId(rs.getInt(2));
-   					 quest.setVersion(rs.getFloat(3));
-   					 quest.setPreferredDefinition(rs.getString(4));
-   					 quest.setLongName(rs.getString(5));
-   					 return quest;
-   				 }*/
+   				
    			 });
 
 
@@ -1068,9 +1010,6 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
     			"select de.* from DATA_ELEMENTS_VIEW de " +
     					"where de.cde_id=:id";
 
-    	//we could then get cde id with this:
-    	//select Q.CDE_ID from FB_QUEST_MODULE_VIEW q where q.de_idseq='FAB2D8EC-69A4-68CB-E034-0003BA3F9857'
-
     	MapSqlParameterSource params = new MapSqlParameterSource();
     	params.addValue("id", cdePublidId);
 
@@ -1080,6 +1019,33 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
     				public DataElementTransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
     					DataElementTransferObject de = new DataElementTransferObject();
     					de.setDeIdseq(rs.getString("DE_IDSEQ"));
+    					de.setPublicId(rs.getInt("CDE_ID"));
+    					de.setVersion(rs.getFloat("VERSION"));
+    					de.setLongName(rs.getString("LONG_NAME"));
+    					de.setVdIdseq(rs.getString("VD_IDSEQ"));
+
+    					return de;
+    				}
+    			});
+
+    	return des;
+    }
+    
+    public List<DataElementTransferObject> getCdesByPublicIds(List<String> cdePublidIds) {
+    	String sql = 
+    			"select de.* from DATA_ELEMENTS_VIEW de " +
+    					"where de.cde_id in(:ids)";
+
+    	MapSqlParameterSource params = new MapSqlParameterSource();
+    	params.addValue("ids", cdePublidIds);
+
+    	List<DataElementTransferObject> des = 
+    			this.namedParameterJdbcTemplate.query(sql, params, 
+    					new RowMapper<DataElementTransferObject>() {
+    				public DataElementTransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
+    					DataElementTransferObject de = new DataElementTransferObject();
+    					de.setDeIdseq(rs.getString("DE_IDSEQ"));
+    					de.setPublicId(rs.getInt("CDE_ID"));
     					de.setVersion(rs.getFloat("VERSION"));
     					de.setLongName(rs.getString("LONG_NAME"));
     					de.setVdIdseq(rs.getString("VD_IDSEQ"));
