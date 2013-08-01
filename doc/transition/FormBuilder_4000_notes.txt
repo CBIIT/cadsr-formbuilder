@@ -1,0 +1,62 @@
+                          Release Notes
+    
+                         Form Builder Tool
+                          Version 4.0.0.0
+                          April 30, 2008
+
+       National Cancer Institute Center for Bioinformatics
+
+
+================================================================
+                            Contents
+================================================================
+
+
+    1.0 Release History
+    2.0 New Features and Updates
+    3.0 Bugs Fixed Since Last Release
+    4.0 Known Issues
+
+
+----------------------------------------------------------------
+    1.0 Release History
+----------------------------------------------------------------
+
+    3.2
+
+    -- 22 December 2006
+ 
+    3.2.0.3
+
+    -- 10 December 2007
+
+
+----------------------------------------------------------------
+    2.0 New Features and Updates
+----------------------------------------------------------------
+
+    -- Enhance Form Builder to work with the underlying database changes resulting from completing the work to turn Value Meanings into Administered Components. (GF 12092)
+
+    -- Enhance Form Builder to work with the underlying database changes resulting from turning Classification Scheme Items into Administered Components. (GF 12122) 
+
+    -- Confirm and document that the Form Builder code is fully functional on the caCORE 4.0 technology stack. (GF 12121)
+
+    -- Adapt the Form Builder build and deployment operations to use the automated deployment process. (GF 12123)
+
+    -- Add ability to set search preferences for Test and Training Contexts. (GF 13023)
+
+
+----------------------------------------------------------------
+    3.0 Bugs Fixed Since Last Release
+----------------------------------------------------------------
+
+    -- The Instruction Text for Form Headers / Footers is sized at 2000 characters in the database, but the tool is restricting the maximum length to be 255 characters. Increase the maximum length of instruction fields to be 2000 characters long. (GF 4104)
+
+----------------------------------------------------------------
+    4.0 Known Issues
+----------------------------------------------------------------
+
+    -- None
+
+
+//end
