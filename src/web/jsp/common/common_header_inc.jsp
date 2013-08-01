@@ -1,13 +1,20 @@
-<%@page import="gov.nih.nci.ncicb.cadsr.common.util.*"%>
+<%@ page import="gov.nih.nci.ncicb.cadsr.common.*"%>
+<%@page import="gov.nih.nci.ncicb.cadsr.common.util.* " %>
+
 <%
+String destLogin = pageContext.getRequest().getParameter("loginDestination");
+
+String username=(String) session.getAttribute("myUsername");
+System.out.println("common_header_inc.jsp:" + username);
+
 	CDEBrowserParams params = CDEBrowserParams.getInstance();
 %>
-
 
 <SCRIPT LANGUAGE="JavaScript1.1"
 	SRC='<html:rewrite page="/js/helpWinJS.js"/>'></SCRIPT>
 <SCRIPT LANGUAGE="JavaScript1.1"
 	SRC='<html:rewrite page="/js/newWinJS.js"/>'></SCRIPT>
+	
 <TABLE width=100% valign=top Cellpadding=0 Cellspacing=0 border=0>
 	<tr>
 		<td align="left" valign=top nowrap>
@@ -46,7 +53,9 @@
 						<br>
 						<font color=brown face=verdana size=1>&nbsp;Help&nbsp;</font>
 					</TD>
-					<TD valign="TOP" align="CENTER" width="1%" colspan=1>
+
+<%--GF29128 Begin, D.An,20130729. --%>
+					<TD id="idLogout" style="display:none" valign="TOP" align="CENTER" width="1%" colspan=1>
 						<html:link page="/logout?FirstTimer=0" target="_top">
 							<html:img page="/i/logout.gif" alt="Logout" border="0" width="32"
 								height="32" />
@@ -54,6 +63,17 @@
 						<br>
 						<font color=brown face=verdana size=1>&nbsp;Logout&nbsp;</font>
 					</TD>
+					<TD id="idLogin" style="display:none" valign="TOP" align="CENTER" width="1%" colspan=1>
+						<html:link page="/logout?FirstTimer=0" target="_top">
+							<html:img page="/i/icon_login.gif" alt="Logout" border="0" width="32"
+								height="32" />
+						</html:link>
+						<br>
+						<font color=brown face=verdana size=1>&nbsp;Login&nbsp;</font>
+					</TD>
+ <input type="hidden" id="myInputUserName" name="myInputUserName" value=<%=username %>/>
+ <%--GF29128 end --%>	
+ 				
 				</TR>
 			</TABLE>
 		</td>

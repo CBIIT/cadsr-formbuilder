@@ -67,6 +67,11 @@ public class FormBuilderSecureBaseDispatchAction extends FormBuilderBaseDispatch
           setApplictionUser(username, request);
         }
       }
+      
+//// GF29128  D.An, 20130729.    
+      request.getSession().setAttribute("myUsername", username);
+System.out.println( request.getSession().getAttribute("myUsername") );
+
       return super.dispatchMethod(mapping, form, request, response, name);
     }
     catch(InvalidUserException userExp)
