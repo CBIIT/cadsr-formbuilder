@@ -686,7 +686,7 @@
         </exec>
     </target>
 
-    <target name="-deploy-db" depends="" description="execute database update scripts">
+    <target name="-deploy-db" depends="-do-load-options,-do-update-options" description="execute database update scripts">
     </target>
 
     <target name="-deploy-gforge-check" description="Check for published files.">
@@ -742,3 +742,4 @@
     </target>
 
 </project>
+
