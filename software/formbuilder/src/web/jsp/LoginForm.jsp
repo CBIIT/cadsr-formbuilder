@@ -30,19 +30,7 @@ var nun = $.cookie('newFormbuilderUsername');
 
 $(document).ready(function()
 {
-	if( nun == "guest")
-    {
-		$("#bd").show();
-		
-		un = "guest";
-		pw = "Nci_gue5t";
-		$("#j_username").val(un);
-		$("#j_username").text(un);
-		$("#j_password").val(pw);
-		$("#j_password").text(pw);
-		
-    }
-	else 
+	if( nun != null && nun == "viewer")
     {
 		un = "viewer";
 		pw = "viewer";
@@ -53,7 +41,19 @@ $(document).ready(function()
 		
 		submitForm();   
     }
-
+	else 
+    {
+		$("#bd").show();
+		
+		un = "guest";
+		pw = "Nci_gue5t";
+		$("#j_username").val(un);
+		$("#j_username").text(un);
+		$("#j_password").val(pw);
+		$("#j_password").text(pw);
+		
+		$.cookie( 'newFormbuilderUsername', "viewer" );	
+    }
 });
 	
 function submitForm() {

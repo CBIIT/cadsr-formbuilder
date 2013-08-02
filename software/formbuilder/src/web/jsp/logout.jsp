@@ -33,7 +33,7 @@ var nun = $.cookie('newFormbuilderUsername');
 
 $(document).ready(function()
 {
-	if( ( nun == "viewer" ) )  //logout
+	if( ( nun != null && nun == "viewer" ) )  //logout
     {
 		$("#bd").show();
 		
@@ -56,9 +56,7 @@ $(document).ready(function()
 		var link = $('#goahead').attr('href');
 		$('body').append('<form id="new_form" action="'+link+'"></form>');
 		$('#new_form').submit();
-
     }
-
 });
 
 
