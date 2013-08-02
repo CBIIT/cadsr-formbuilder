@@ -56,9 +56,9 @@ function ToggleSelectAll(e){
        	<a href="javascript:document.forms[0].action=document.forms[0].action+'?method=addFormToCart';document.forms[0].submit()">
             <html:img src='<%="i/addtoformcart.gif"%>' border="0" alt="Add to Form Cart"/> 
           </a> 
-        <a href="javascript:document.forms[0].action=document.forms[0].action+'?method=saveFormInQueue';document.forms[0].submit()">
+<a class="noneViewer" style="display:none" href="javascript:document.forms[0].action=document.forms[0].action+'?method=saveFormInQueue';document.forms[0].submit()">
             <html:img src='<%="i/save.gif"%>' border="0" alt="Save Forms in the queue"/> 
-          </a>
+</a>
         <table width="100%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
           <tr class="OraTableColumnHeader">
             <logic:notPresent name="<%=FormConstants.IN_PROCESS%>">
@@ -165,21 +165,38 @@ function ToggleSelectAll(e){
                     			<html:img src='<%=urlPrefix+"i/xml-icon.gif"%>' border="0" alt="XML Download"/>
                     		</html:link>                 
                     	</td>
+<%-- Begin GF31697 fix. -D.An, 20130723
                       <td width="20" class="OraTabledata" align=center>
-                           <cde:secureIcon  formId="form" 
+           <cde:secureIcon  formId="form" 
                     formScope="<%=CaDSRConstants.PAGE_SCOPE%>"
                     activeImageSource="i/copy.gif" 
                             activeUrl='<%="/formToCopyAction.do?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GET_FORM_TO_COPY%>' 
                                     formType="TEMPLATE" 
-                    role="<%=CaDSRConstants.CDE_MANAGER%>" 
+                	role="<%=CaDSRConstants.CDE_MANAGER%>" 
                                     urlPrefix="<%=urlPrefix%>"
                                     paramId = "<%=FormConstants.FORM_ID_SEQ%>"
                                     paramProperty="formIdseq"
                     inactiveImageSource="i/copy_inactive.gif"
                                     altMessage="Select for Copy"
                                     target="_parent"
-                    />            
-                     </td>                  
+                    />  
+                     </td> 
+--%> 
+<TD class="noneViewer" style="display:none" width="20" class="OraTabledata" align=center>
+                    		<html:link action='<%="/formToCopyAction.do?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GET_FORM_TO_COPY%>' 
+			                    paramId = "<%=FormConstants.FORM_ID_SEQ%>"
+			                    paramName="form" paramProperty="formIdseq"
+			                    target="_parent" >
+                    			<html:img src='<%=urlPrefix+"i/copy.gif"%>' border="0" alt="Select for Copy"/>
+                    		</html:link>                 
+</TD>
+<TD class="viewer" style="display:none" width="20" class="OraTabledata" align=center>
+                    		<img src='<%=urlPrefix+"i/copy_inactive.gif"%>' border="0" alt="No Copy"/>
+</TD>
+<%-- GF31697 End --%>
+                    
+                               
+                 
                       <td width="20" class="OraTabledata" align=center>
                            <cde:secureIcon  formId="form" 
                     formScope="<%=CaDSRConstants.PAGE_SCOPE%>" 
