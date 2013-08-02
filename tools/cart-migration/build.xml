@@ -1,0 +1,72 @@
+<project name="FormBuilder 4.0.4 cart converter" default="dist" basedir=".">
+	<description>
+	</description>
+
+	<!-- set global properties for this build -->
+	<property name="src.dir" location="src"/>
+	<property name="build.dir" location="build"/>
+	<property name="dist.dir"  location="dist"/>
+	<property name="temp.dir" location="tmp" />
+	<property name="lib.dir" location="lib" />
+
+	<path id="libpath">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp/>
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${temp.dir}"/>
+	</target>
+
+	<target name="compile" depends="init"
+        description="compile the source " >
+		<echo message="java version = ${ant.java.version}"/>
+		<!-- Compile the java code from ${src.dir} into ${build.dir} -->
+		<javac srcdir="${src.dir}/java" destdir="${build.dir}" tempdir="${temp.dir}" debug="on" failonerror="yes">
+			<compilerarg line="-deprecation"/>
+			<compilerarg line="-Xlint:unchecked"/>
+			<classpath refid="libpath"/>
+		</javac>
+	</target>
+
+	<target name="dist" depends="compile"
+        description="generate the distribution" >
+
+		<!-- Copy support files for inclusion in jar-->
+		<copy tofile="${build.dir}/log4j.xml" >
+			<fileset file="${src.dir}/log4j.xml" />
+		</copy>		
+		<copy todir="${build.dir}" >
+			<fileset dir="${src.dir}/web/services-config" />
+		</copy>	
+		
+		<!-- Create the distribution directory -->
+		<mkdir dir="${dist.dir}"/>
+
+		<!-- Put everything in ${build.dir} into the FormCartConverter.jar file -->
+<!-- 		<jar jarfile="${dist.dir}/FormCartConverter-${DSTAMP}.jar" basedir="${build.dir}" manifest="${src.dir}/Manifest.mf" />  -->
+		<jar jarfile="${dist.dir}/FormCartConverter.jar" basedir="${build.dir}" manifest="${src.dir}/Manifest.mf" />
+
+		<!-- Copy libraries for use with jar  -->
+		<copy todir="${dist.dir}/lib" >
+			<fileset dir="${lib.dir}" />
+		</copy>
+		
+	</target>
+
+	<target name="clean"
+        description="clean up" >
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${build.dir}"/>
+		<delete dir="${dist.dir}"/>
+		<delete dir="${temp.dir}"/>
+	</target>
+</project>
+
+
+

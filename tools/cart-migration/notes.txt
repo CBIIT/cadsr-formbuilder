@@ -1,0 +1,23 @@
+This utility is based on Form Builder 4.0.4 code.
+
+Libraries were copied from software/formbuilder/lib. Except formbuilder.jar which is an artifact of the Form Builder build: software\formbuilder\deployment-artifacts\bin
+
+Service configuration files were copied from software/formbuilder/src/web/services-config/ and modified. The way they are used is not tier-specific.
+
+This was developed to run under Java 1.5 as a command-line utility.
+
+Certificates must be installed to successfully access the Object Cart API.
+
+The program gets all carts by name and needs a reasonable amount of memory to hold the list.
+
+Expected ant build targets are "dist" (default) and "clean".
+
+The build creates FormConverter.jar under the dist folder and copies required libraries to dist/lib.
+
+First argument is the Form Builder URL for EJB use.
+Second argument is the Object Cart API URL.
+Third argument is "all" to convert all carts, "guest" to convert only the guest cart, or anything else to connect and run through the steps without changing anything.
+
+example execution: java -Xmx512M -jar FormCartConverter.jar jnp://127.0.0.1:1099 https://objcart-dev.nci.nih.gov/objcart10/ guest
+
+For additional information, see https://wiki.nci.nih.gov/x/FoLpBQ
