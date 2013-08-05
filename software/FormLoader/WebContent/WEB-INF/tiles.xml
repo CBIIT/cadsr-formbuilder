@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
+<!--L
+  Copyright Oracle Inc, ScenPro Inc, SAIC-F
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
+L-->
+
 <!DOCTYPE tiles-definitions PUBLIC
        "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">

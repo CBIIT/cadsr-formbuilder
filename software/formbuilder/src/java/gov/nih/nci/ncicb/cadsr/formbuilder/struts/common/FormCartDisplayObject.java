@@ -1,3 +1,10 @@
+/*L
+ * Copyright Oracle Inc, ScenPro Inc, SAIC-F
+ *
+ * Distributed under the OSI-approved BSD 3-Clause License.
+ * See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
+ */
+
 // bean for holding the data that we display for a form on the form cart page
 
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.common;

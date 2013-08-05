@@ -1,3 +1,10 @@
+<%--L
+  Copyright Oracle Inc, ScenPro Inc, SAIC-F
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
+L--%>
+
                                   <tr>
                                     <td>
                                       <table width="100%" align="center" cellpadding="0" cellspacing="1" border="0" >

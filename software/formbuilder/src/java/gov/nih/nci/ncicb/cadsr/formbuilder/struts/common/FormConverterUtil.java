@@ -1,3 +1,10 @@
+/*L
+ * Copyright Oracle Inc, ScenPro Inc, SAIC-F
+ *
+ * Distributed under the OSI-approved BSD 3-Clause License.
+ * See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
+ */
+
 // This class provides utility functions for supporting the new form cart format
 
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.common;

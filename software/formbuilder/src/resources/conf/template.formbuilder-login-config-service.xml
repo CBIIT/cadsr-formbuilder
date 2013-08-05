@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--L
+  Copyright Oracle Inc, ScenPro Inc, SAIC-F
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
+L-->
+
 <!-- $Id: template.formbuilder-login-config-service.xml,v 1.2 2008-06-06 20:46:04 hegdes Exp $ -->
 
 <!-- ===================================================================== -->

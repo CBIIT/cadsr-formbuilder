@@ -1,3 +1,10 @@
+<%--L
+  Copyright Oracle Inc, ScenPro Inc, SAIC-F
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
+L--%>
+
             <logic:notEmpty name="<%=FormConstants.CRF%>" property = "modules">
               <logic:iterate id="module" name="<%=FormConstants.CRF%>" type="gov.nih.nci.ncicb.cadsr.common.resource.Module" property="modules" indexId="modIndex" >                            
                <table width="80%" align="center" cellpadding="0" cellspacing="0" border="0" >

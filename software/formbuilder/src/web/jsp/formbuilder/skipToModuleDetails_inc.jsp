@@ -1,3 +1,10 @@
+<%--L
+  Copyright Oracle Inc, ScenPro Inc, SAIC-F
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
+L--%>
+
             <bean:define id="currentModuleIndex" name="moduleEditForm" property="moduleIndex" scope="session"/>
             <logic:notEmpty name="<%=FormConstants.SKIP_TARGET_FORM%>" property = "modules">
               <logic:iterate id="module" name="<%=FormConstants.SKIP_TARGET_FORM%>" type="gov.nih.nci.ncicb.cadsr.common.resource.Module" property="modules" indexId="modIndex" >                            

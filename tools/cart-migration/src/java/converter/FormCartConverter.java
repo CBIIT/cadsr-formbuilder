@@ -1,3 +1,10 @@
+/*L
+ * Copyright Oracle Inc, ScenPro Inc, SAIC-F
+ *
+ * Distributed under the OSI-approved BSD 3-Clause License.
+ * See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
+ */
+
 package converter;
 
 // watch out for certs being installed and using correct (1.5) version of Java
