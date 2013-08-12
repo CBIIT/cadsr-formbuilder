@@ -1,12 +1,4 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-
-<!--L
-  Copyright Oracle Inc, ScenPro Inc, SAIC-F
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
-L-->
-
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" >
 <log4j:configuration debug="false">
 
@@ -14,22 +6,23 @@ L-->
         <param name="target" value="System.out" />
         <param name="threshold" value="debug" />
         <layout class="org.apache.log4j.PatternLayout">
-            <!-- param name="ConversionPattern" value="%d{ISO8601} %-5p [%c{1}] - %m%n" /  -->
+            <param name="ConversionPattern" value="%d{ISO8601} %-5p [%c{1}] - %m%n" />
         </layout>
     </appender>
 
     <appender name="default.file" class="org.apache.log4j.FileAppender">
-        <param name="file" value="/log/formloader.log" />
+        <param name="file" value="./log/formloader.log" />
         <param name="append" value="true" />
         <param name="threshold" value="debug" />
         <layout class="org.apache.log4j.PatternLayout">
-            <!-- param name="ConversionPattern" value="%d{ISO8601} %-5p [%c{1}] - %m%n" / -->
+            <param name="ConversionPattern" value="%d{ISO8601} %-5p [%c{1}] - %m%n" />
         </layout>
     </appender>
 
     <root>
         <priority value="debug" />
-        <appender-ref ref="default.console" />
         <appender-ref ref="default.file" />
+        <appender-ref ref="default.console" />
+        
     </root>
 </log4j:configuration>
