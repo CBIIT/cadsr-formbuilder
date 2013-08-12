@@ -1,20 +1,26 @@
-/*L
- * Copyright Oracle Inc, ScenPro Inc, SAIC-F
- *
- * Distributed under the OSI-approved BSD 3-Clause License.
- * See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
- */
-
 package gov.nih.nci.cadsr.formloader.service.common;
 
 
 public class FormLoaderServiceException extends Exception {
 	
+	public static final int ERROR_NO_ERROR = 0;
+	public static final int ERROR_MALFORMED_XML = 1;
+	public static final int ERROR_EMPTY_FORM_LIST = 2;
+	public static final int ERROR_FILE_INVALID = 3;
+	public static final int ERROR_COLLECTION_NULL = 4;
+	public static final int ERROR_USER_INVALID = 5;
+	
 	protected int errorCode;
 	
-	FormLoaderServiceError error; 
+	//seems this is the only type that has an error object. Others are just messages.
+	XmlValidationError error; 
 	
-	public FormLoaderServiceException(int errorCode, String message, FormLoaderServiceError error)  {
+	public  FormLoaderServiceException(int errorCode, String message) {
+		super(message);
+		this.errorCode = errorCode;
+	}
+	
+	public FormLoaderServiceException(int errorCode, String message, XmlValidationError error)  {
 		super(message);
 		this.errorCode = errorCode;
 		this.error = error;
@@ -28,11 +34,11 @@ public class FormLoaderServiceException extends Exception {
 		this.errorCode = errorCode;
 	}
 
-	public FormLoaderServiceError getError() {
+	public XmlValidationError getError() {
 		return error;
 	}
 
-	public void setError(FormLoaderServiceError error) {
+	public void setError(XmlValidationError error) {
 		this.error = error;
 	}
 	

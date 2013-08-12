@@ -1,16 +1,9 @@
-/*L
- * Copyright Oracle Inc, ScenPro Inc, SAIC-F
- *
- * Distributed under the OSI-approved BSD 3-Clause License.
- * See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
- */
-
 package gov.nih.nci.cadsr.formloader.service.common;
 
 
 import org.apache.log4j.Logger;
 
-public class XmlValidationError extends FormLoaderServiceError {
+public class XmlValidationError {
 	
 	private static Logger logger = Logger.getLogger(XmlValidationError.class.getName());
 	
@@ -60,7 +53,7 @@ public class XmlValidationError extends FormLoaderServiceError {
 	}
 	
 	public String toString() {
-		return this.type + " at " + this.lineNumber + ": " + this.message;
+		return this.type + " at line " + this.lineNumber + ": " + this.message;
 	}
 
 }
