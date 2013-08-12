@@ -1,10 +1,3 @@
-<%--L
-  Copyright Oracle Inc, ScenPro Inc, SAIC-F
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
-L--%>
-
 <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean"%>
 
 <%
@@ -14,7 +7,7 @@ L--%>
 
 <TABLE width=100% Cellpadding=0 Cellspacing=0 border=0>
 	<tr>
-		<td width=98% align="left" class="OraInlineInfoText" nowrap>
+		<td id="noneViewer" style="display:none" width=98% align="left" class="OraInlineInfoText" nowrap>
 			&nbsp;
 			<logic:present name="nciUser">
 				<bean:message key="user.greet" />
@@ -24,6 +17,9 @@ L--%>
 				&nbsp;
 			</logic:notPresent>
 		</td>
+    <td id="urViewer" style="display:none" width=98% align="left" class="OraInlineInfoText" nowrap>
+    VIEWER - please login.
+	</td>
 		<td valign=bottom align=right>
 			<table border=0 cellpadding=0 cellspacing=0>
 				<tr>

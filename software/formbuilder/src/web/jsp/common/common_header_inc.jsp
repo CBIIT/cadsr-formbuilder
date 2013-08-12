@@ -1,20 +1,20 @@
-<%--L
-  Copyright Oracle Inc, ScenPro Inc, SAIC-F
+<%@ page import="gov.nih.nci.ncicb.cadsr.common.*"%>
+<%@page import="gov.nih.nci.ncicb.cadsr.common.util.* " %>
 
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
-L--%>
-
-<%@page import="gov.nih.nci.ncicb.cadsr.common.util.*"%>
 <%
+String destLogin = pageContext.getRequest().getParameter("loginDestination");
+
+String username=(String) session.getAttribute("myUsername");
+System.out.println("common_header_inc.jsp:" + username);
+
 	CDEBrowserParams params = CDEBrowserParams.getInstance();
 %>
-
 
 <SCRIPT LANGUAGE="JavaScript1.1"
 	SRC='<html:rewrite page="/js/helpWinJS.js"/>'></SCRIPT>
 <SCRIPT LANGUAGE="JavaScript1.1"
 	SRC='<html:rewrite page="/js/newWinJS.js"/>'></SCRIPT>
+	
 <TABLE width=100% valign=top Cellpadding=0 Cellspacing=0 border=0>
 	<tr>
 		<td align="left" valign=top nowrap>
@@ -53,7 +53,9 @@ L--%>
 						<br>
 						<font color=brown face=verdana size=1>&nbsp;Help&nbsp;</font>
 					</TD>
-					<TD valign="TOP" align="CENTER" width="1%" colspan=1>
+
+<%--GF29128 Begin, See implementation in <head>   D.An,20130729. --%>
+					<TD id="idLogout" style="display:none" valign="TOP" align="CENTER" width="1%" colspan=1>
 						<html:link page="/logout?FirstTimer=0" target="_top">
 							<html:img page="/i/logout.gif" alt="Logout" border="0" width="32"
 								height="32" />
@@ -61,6 +63,17 @@ L--%>
 						<br>
 						<font color=brown face=verdana size=1>&nbsp;Logout&nbsp;</font>
 					</TD>
+					<TD id="idLogin" style="display:none" valign="TOP" align="CENTER" width="1%" colspan=1>
+						<html:link page="/logout?FirstTimer=0" target="_top">
+							<html:img page="/i/icon_login.gif" alt="Logout" border="0" width="32"
+								height="32" />
+						</html:link>
+						<br>
+						<font color=brown face=verdana size=1>&nbsp;Login&nbsp;</font>
+					</TD>
+ <input type="hidden" id="myInputUserName" name="myInputUserName" value=<%=username %>/>
+ <%--GF29128 end --%>	
+ 				
 				</TR>
 			</TABLE>
 		</td>
@@ -69,16 +82,18 @@ L--%>
 
 <TABLE align="left" width="100%" Cellpadding=0 Cellspacing=0 border=0>
 	<tr>
+<%--GF26236 Begin, See implementation in <head>  D.An,20130808. --%>
 		<td align="center" width="10%" height="10">
-			<span style="font-size: 9pt; font-family: Arial"> <a
+			<span style="font-size: 9pt; font-family: Arial"> <a id="idCDEBrowser" 
 				href="<%=params.getCdeBrowserUrl()%>" target="_blank">CDE Browser</a> </span>
 		</td>
-
+		
 		<td align="center" width="10%" height="10">
-			<span style="font-size: 9pt; font-family: Arial"> <a
+			<span style="font-size: 9pt; font-family: Arial"> <a id="idCaDSRAdmin" 
 				href="http://cadsradmin.nci.nih.gov" target="_blank">Admin Tool</a> </span>
 		</td>
-		
+ <%--GF26236 end --%>
+ 		
 		<td align="center" width="10%" height="10">
 			<span style="font-size: 9pt; font-family: Arial"> <a
 				href="<%=params.getCurationToolUrl()%>" target="_blank">Curation Tool</a> </span>

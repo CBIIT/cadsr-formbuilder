@@ -1,10 +1,3 @@
-<%--L
-  Copyright Oracle Inc, ScenPro Inc, SAIC-F
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
-L--%>
-
 <SCRIPT LANGUAGE="JavaScript1.1" SRC="js/newWinJS.js"></SCRIPT>
 <SCRIPT LANGUAGE="JavaScript">
 <!--
@@ -278,7 +271,7 @@ function gotoClassificationsLOV() {
     </table>
 </logic:present>        
  <logic:notPresent name="<%=FormConstants.IN_PROCESS%>"> 
-    <table align="center">
+    <table class="noneViewer" style="display:none" align="center">
      <TR>
         <td  align="center" nowrap>
           <html:link action='<%="/gotoFormCreate?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GO_TO_CREATE_FORM%>' target="_parent" >

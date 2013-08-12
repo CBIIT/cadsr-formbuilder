@@ -1,10 +1,3 @@
-/*L
- * Copyright Oracle Inc, ScenPro Inc, SAIC-F
- *
- * Distributed under the OSI-approved BSD 3-Clause License.
- * See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
- */
-
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
 import java.util.ArrayList;
@@ -74,6 +67,11 @@ public class FormBuilderSecureBaseDispatchAction extends FormBuilderBaseDispatch
           setApplictionUser(username, request);
         }
       }
+      
+//// GF29128  D.An, 20130729.    
+      request.getSession().setAttribute("myUsername", username);
+System.out.println( request.getSession().getAttribute("myUsername") );
+
       return super.dispatchMethod(mapping, form, request, response, name);
     }
     catch(InvalidUserException userExp)

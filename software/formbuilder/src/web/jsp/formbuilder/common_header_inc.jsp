@@ -1,9 +1,3 @@
-<%--L
-  Copyright Oracle Inc, ScenPro Inc, SAIC-F
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
-L--%>
 
 
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.*"%>
@@ -42,11 +36,14 @@ L--%>
     </td>
   </tr>
   <tr>
-    <td align="left" class="OraInlineInfoText" nowrap>
+    <td id="noneViewer" style="display:none" align="left" class="OraInlineInfoText" nowrap>
        <logic:present name="nciUser">
         <bean:message key="user.greet" />
     	<bean:write name="nciUser" property="username"  scope="session"/>
        </logic:present>
+    </td>
+    <td id="urViewer" style="display:none" width=98% align="left" class="OraInlineInfoText" nowrap>
+    VIEWER - please login.
     </td>    
   </tr>
 </TABLE>

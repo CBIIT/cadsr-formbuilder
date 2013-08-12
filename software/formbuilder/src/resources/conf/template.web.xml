@@ -1,15 +1,12 @@
 <?xml version = '1.0' encoding = 'windows-1252'?>
-
-<!--L
-  Copyright Oracle Inc, ScenPro Inc, SAIC-F
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
-L-->
-
 <!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
 <web-app>
   <description>web.xml file for Form Builder</description>
+  
+<context-param>
+<param-name>org.jboss.jbossfaces.WAR_BUNDLES_JSF_IMPL</param-name>
+<param-value>true</param-value>
+</context-param>
 
   <context-param>
     <param-name>javax.faces.CONFIG_FILES</param-name>
@@ -759,6 +756,10 @@ L-->
     <init-param>
       <param-name>LogoutHome</param-name>
       <param-value>formSearchAction.do</param-value>
+    </init-param>
+    <init-param>
+      <param-name>LogthroughJSP</param-name>
+      <param-value>/jsp/logthrough.jsp</param-value>
     </init-param>
     <init-param>
       <param-name>LogoutJSP</param-name>

@@ -1,10 +1,3 @@
-<%--L
-  Copyright Oracle Inc, ScenPro Inc, SAIC-F
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
-L--%>
-
 <%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html"%>
 <%@page import="gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams" %>
 <%
@@ -16,14 +9,58 @@ L--%>
 <title>Login</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <LINK REL=STYLESHEET TYPE="text/css" HREF="<%=request.getContextPath()%>/css/blaf.css">
-<SCRIPT LANGUAGE="JavaScript">
-<!--
 
-if (parent.frames[1])
+<LINK REL=STYLESHEET TYPE="text/css" HREF="<%=request.getContextPath()%>/css/ui-lightness/jquery-ui-1.10.3.custom.min.css">
+<script src="./js/jquery-1.9.1.js"></SCRIPT>
+<script src="./js/jquery-ui-1.10.3.custom.min.js"></SCRIPT>
+<script src="./js/jquery.cookie.js"></SCRIPT>
+
+<script type="text/javascript">
+
+if (parent.frames[1]) 
   parent.location.href = self.location.href; 
-	//request.getRequestDispatcher("formSearchAction.do").forward(request, response); 
+	//request.getRequestDispatcher("formSearchAction.do").forward(request, response);
+	
+var un = $.cookie('FormbuilderUsername');
+var pw;
+var nun = $.cookie('newFormbuilderUsername');
 
+////alert("loginPage");
+
+$(document).ready(function()
+{
+	if( nun == 'LoginAsGuest' )
+    {
+		un = "viewer";
+		$.cookie( 'newFormbuilderUsername', un );
+		
+		$("#bd").show();
+		
+		un = "guest";
+
+		$("#j_username").val(un);			
+		$("#j_password").val(pw);			
+    }
+	else 
+    {
+		un = "viewer";
+		pw = "viewer";
+		$("#j_username").val(un);
+		$("#j_password").val(pw);
+		
+		submitForm();   
+    }
+});
+	
 function submitForm() {
+	
+	un = $('#j_username').val();
+	
+	$.cookie( 'FormbuilderUsername', un );		
+	$.cookie( 'newFormbuilderUsername', un );	
+	
+	////alert('ck-un:' + $.cookie('FormbuilderUsername') + ';   ck-pw:' + $.cookie('FormbuilderPassword') + '!' );
+		
   document.forms[0].submit();
 }
 
@@ -31,17 +68,17 @@ function clearForm()
 {
   document.form[0].reset();
 }
--->
+
 </SCRIPT>
 </head>
 
-<body text="#000000" topmargin="0">
+<body text="#000000" topmargin="0" id="bd" style="display:none">
 
    <%@ include file="basicHeader_inc.jsp"%>
    
 <br>
 <br>
-  
+<div>  
   <TABLE width=100% Cellpadding=0 Cellspacing=0 border=0>
   <TR>
   <td align=left valign=top width="1%" bgcolor="#336699"><img src="<%=request.getContextPath()%>/i/top_left.gif" width=4 height="25"></td>
@@ -76,7 +113,7 @@ function clearForm()
   
   <form method="POST" action="j_security_check">
 
-  <table align=center cellspacing="2" cellpadding="3" border="0" onkeypress="if(event.keyCode==13){submitForm()};">
+  <table id="loginTb" display="inline" align=center cellspacing="2" cellpadding="3" border="0" onkeypress="if(event.keyCode==13){submitForm()};">
     <% if(request.getAttribute("msg") != null) { 
     	System.out.println("msg " + request.getAttribute("msg"));
     %>
@@ -87,13 +124,13 @@ function clearForm()
     <tr>
         <td class="OraFieldtitlebold" nowrap>Username:</td>
         <td class="OraFieldText" nowrap>
-          <input type="text" name="j_username" value="" size ="20"> 
+          <input type="text" id="j_username" name="j_username" value="" size ="20"> 
         </td>
     </tr>
     <tr>
         <td class="OraFieldtitlebold" nowrap>Password:</td>
         <td class="OraFieldText" nowrap>
-          <input type="password" name="j_password" value="" size ="20"> 
+          <input type="password" id="j_password" name="j_password" value="" size ="20"> 
         </td>
     </tr>  
 
@@ -122,6 +159,8 @@ function clearForm()
   </SCRIPT>
 
 <%@ include file="common/common_bottom_border.jsp"%>
+
+</div>
 
 </body>
 </html>

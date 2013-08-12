@@ -1,33 +1,51 @@
-<%--L
-  Copyright Oracle Inc, ScenPro Inc, SAIC-F
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
-L--%>
-
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.CaDSRConstants"%>
 <%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html"%>
 <%@page import="gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams" %>
+
+<%@ page session="true" %>
 <%
-  CDEBrowserParams params = CDEBrowserParams.getInstance();
+CDEBrowserParams params = CDEBrowserParams.getInstance();
+
+String username=(String) session.getAttribute("myUsername");
+System.out.println("logout.jsp:" + username);
+
 %>
 <html>
 <head>
 <title>Logout</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <LINK REL=STYLESHEET TYPE="text/css" HREF="<%=request.getContextPath()%>/css/blaf.css">
-<SCRIPT LANGUAGE="JavaScript">
-<!--
+
+<LINK REL=STYLESHEET TYPE="text/css" HREF="<%=request.getContextPath()%>/css/ui-lightness/jquery-ui-1.10.3.custom.min.css">
+<script src="./js/jquery-1.9.1.js"></SCRIPT>
+<script src="./js/jquery-ui-1.10.3.custom.min.js"></SCRIPT>
+<script src="./js/jquery.cookie.js"></SCRIPT>
+
+<script type="text/javascript">
+
 if (parent.frames[1]) 
   parent.location.href = self.location.href; 
--->
+
+	
+var un = $.cookie('FormbuilderUsername');
+var nun = $.cookie('newFormbuilderUsername');
+
+$(document).ready(function()
+{		
+		un = "viewer";
+
+		$.cookie( 'FormbuilderUsername', un );		
+		$.cookie( 'newFormbuilderUsername', un );	
+});
+
+
 </SCRIPT>
 </head>
 <%
   String forwardUrl="formSearchAction.do";
 	
 %>
-<body text="#000000" topmargin="0">
+<body text="#000000" topmargin="0" id="bd" style="display:inline">
 
 	<%@ include file="basicHeader_inc.jsp"%>
 	
@@ -59,7 +77,7 @@ if (parent.frames[1])
       <tr><td>&nbsp;</td></tr>
       <tr class="OraTipLabel">
           <td align="center" class="OraTipLabel">You have been successfully logged out.
-          Click <a target="_top" href="<%=forwardUrl%>">here</a> to return to Form Builder Login.
+          Click <a id="goahead" target="_top" href="<%=forwardUrl%>">here</a> to return to Form Builder as a viewer.
           </td>
       </tr>
       <tr><td>&nbsp;</td></tr>

@@ -1,10 +1,3 @@
-/*L
- * Copyright Oracle Inc, ScenPro Inc, SAIC-F
- *
- * Distributed under the OSI-approved BSD 3-Clause License.
- * See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
- */
-
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext;
 
 // This class extends the previous objectCart code from cadsrutil and provides additional functionality needed for V2 forms
