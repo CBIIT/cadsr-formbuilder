@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="FormLoader">
+    <wb-module deploy-name="FormLoader-git.sav">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/test/java"/>
-        <property name="context-root" value="FormLoader"/>
-        <property name="java-output-path" value="/FormLoader/build/classes"/>
+        <property name="java-output-path" value="/FormLoader-git.sav/build/classes"/>
+        <property name="context-root" value="FormLoader-git.sav"/>
     </wb-module>
 </project-modules>

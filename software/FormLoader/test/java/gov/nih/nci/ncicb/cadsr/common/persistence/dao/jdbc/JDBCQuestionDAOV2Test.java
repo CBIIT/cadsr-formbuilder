@@ -1,13 +1,12 @@
 package gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.resource.Question;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

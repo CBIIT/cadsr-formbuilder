@@ -1,11 +1,11 @@
 package gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc;
 
-import static org.junit.Assert.fail;
-
-import java.util.List;
-
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ModuleDAOV2;
+
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,12 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:/applicationContext-jdbcdao-test.xml"})
+@ContextConfiguration(locations = {"classpath:/applicationContext-service-test-db.xml"})
 public class JDBCModuleDAOV2Test {
 
 	@Autowired

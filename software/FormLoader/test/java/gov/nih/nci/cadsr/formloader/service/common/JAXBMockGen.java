@@ -8,7 +8,7 @@
 package gov.nih.nci.cadsr.formloader.service.common;
 
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
-import gov.nih.nci.cadsr.formloader.domain.FormHeader;
+import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,30 +35,30 @@ public class JAXBMockGen {
 	  aColl.setXmlFileName("denise-coll.xml");
 	  aColl.setXmlPathOnServer("/local/content/formloader/20130703");
 	  
-	  List<FormHeader> forms = new ArrayList<FormHeader>();
-	  FormHeader form = new FormHeader("443355", "1234345", "1.0");
+	  List<FormDescriptor> forms = new ArrayList<FormDescriptor>();
+	  FormDescriptor form = new FormDescriptor("443355", "1234345", "1.0");
 	  form.setContext("CRF");
-	  form.setLoadType(FormHeader.LOAD_TYPE_NEW);
+	  form.setLoadType(FormDescriptor.LOAD_TYPE_NEW);
 	  forms.add(form);
 	  
-	  form = new FormHeader("553355", "1234355", "4.0");
+	  form = new FormDescriptor("553355", "1234355", "4.0");
 	  form.setContext("CRF");
-	  form.setLoadType(FormHeader.LOAD_TYPE_NEW_VERSION);
+	  form.setLoadType(FormDescriptor.LOAD_TYPE_NEW_VERSION);
 	  forms.add(form);
 	  
-	  form = new FormHeader("663355", "1234366", "3.0");
+	  form = new FormDescriptor("663355", "1234366", "3.0");
 	  form.setContext("NCIP");
-	  form.setLoadType(FormHeader.LOAD_TYPE_UPDATE_FORM);
+	  form.setLoadType(FormDescriptor.LOAD_TYPE_UPDATE_FORM);
 	  forms.add(form);
 	  
-	  form = new FormHeader("773355", "1234377", "2.0");
+	  form = new FormDescriptor("773355", "1234377", "2.0");
 	  form.setWorkflowStatusName("RELEASED");
 	  form.setContext("NCIP");
-	  form.setLoadType(FormHeader.LOAD_TYPE_UPDATE_FORM);
+	  form.setLoadType(FormDescriptor.LOAD_TYPE_UPDATE_FORM);
 	  forms.add(form);
 	  
-	  form = new FormHeader("883355", "1234388", "1.0");
-	  forms.add(new FormHeader("883355", "1234388", "1.0"));
+	  form = new FormDescriptor("883355", "1234388", "1.0");
+	  forms.add(new FormDescriptor("883355", "1234388", "1.0"));
 	  
 	  aColl.setForms(forms);
  

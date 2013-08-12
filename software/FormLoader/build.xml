@@ -77,7 +77,7 @@
 	 	 </junit>
 	  </target>
 	
-	 <target name="junitreport">
+	 <target name="junitreport" depends="junit">
 	        <junitreport todir="${report.dir}">
 	            <fileset dir="${report.dir}" includes="TEST-*.xml"/>
 	            <report todir="${report.dir}"/>
