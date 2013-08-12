@@ -1,12 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!--L
-  Copyright Oracle Inc, ScenPro Inc, SAIC-F
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
-L-->
-
 <!--Transform based on FinalFormCartTransformv26.xsl which was validated with FormCartv21.xsd -->
 <forms>
 <form>
@@ -18,7 +10,7 @@ L-->
    <longName>CALGB: 40101 HER-2/neu TESTING FORM</longName>
    <changeNote/>
    <preferredDefinition>CALGB: 40101 HER-2/neu TESTING FORM</preferredDefinition>
-   <publicID>2321849</publicID>
+   <publicID></publicID>
    <version>1.0</version>
    <workflowStatusName>RELEASED</workflowStatusName>
    <categoryName>Treatment</categoryName>
