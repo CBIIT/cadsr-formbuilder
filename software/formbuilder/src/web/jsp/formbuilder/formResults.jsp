@@ -54,6 +54,8 @@ function setupUser()
 			$("#noneViewer").show("fast");
 
 			$("#idLogout").show("fast");
+			
+			$("input.viewerDisable").removeAttr("disabled");
 	    }
 		else  //login
 	    {
@@ -64,6 +66,8 @@ function setupUser()
 			$("#urViewer").show("fast");
 			
 			$("#idLogin").show("fast");
+			
+		    $("input.viewerDisable").attr("disabled", true);
 	    }
 	
 }
