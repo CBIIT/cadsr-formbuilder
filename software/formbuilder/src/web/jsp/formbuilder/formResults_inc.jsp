@@ -53,17 +53,20 @@ function ToggleSelectAll(e){
         	     nextOffImage="i/next_off.gif"
         	     urlPrefix="<%=urlPrefix%>"
         	     />  
-       	<a href="javascript:document.forms[0].action=document.forms[0].action+'?method=addFormToCart';document.forms[0].submit()">
+<%-- Begin GF29128 fix. -D.An, 20130812 --%>        	     
+<a class="noneViewer" style="display:none"  href="javascript:document.forms[0].action=document.forms[0].action+'?method=addFormToCart';document.forms[0].submit()">
             <html:img src='<%="i/addtoformcart.gif"%>' border="0" alt="Add to Form Cart"/> 
-          </a> 
+</a> 
 <a class="noneViewer" style="display:none" href="javascript:document.forms[0].action=document.forms[0].action+'?method=saveFormInQueue';document.forms[0].submit()">
             <html:img src='<%="i/save.gif"%>' border="0" alt="Save Forms in the queue"/> 
 </a>
+
         <table width="100%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
           <tr class="OraTableColumnHeader">
             <logic:notPresent name="<%=FormConstants.IN_PROCESS%>">
 				<th class="OraTableColumnHeader" nowrap>
-					<input type="checkbox" name="selectAllChk" value="yes" onClick="ToggleSelectAll(this)"/>
+<input class="viewerDisable" type="checkbox" name="selectAllChk" value="yes" onClick="ToggleSelectAll(this)"/>
+<%-- end GF29128 fix --%>
 				</th> 
                <th class="OraTableColumnHeader" nowrap>Action</th>
             </logic:notPresent>        
@@ -141,11 +144,17 @@ function ToggleSelectAll(e){
                 length="<%=Integer.toString(pageBean.getPageSize())%>">
             <tr class="OraTabledata">  
             <logic:notPresent name="<%=FormConstants.IN_PROCESS%>"> 
-				<td width="20" align="center">
-					<html:multibox name="searchForm" property="checkedFormIds">
-						<bean:write name="form" property="formIdseq" />
-                   	</html:multibox>
-				</td>
+ 
+<%-- Begin GF29128 fix. -D.An, 20130812 --%>        	                 
+<TD class="noneViewer" style="display:none" width="20" align="center">
+	<html:multibox name="searchForm" property="checkedFormIds">
+		<bean:write name="form" property="formIdseq" />
+               	</html:multibox>
+</TD>
+<TD class="viewer" style="display:none" width="20" class="OraTabledata" align=center>
+	<input class="viewerDisable" type="checkbox" name="noName" value="yes" />
+</TD>
+<%-- end --%>
                 <td width="100">
                     <table  >
                     <tr>               
