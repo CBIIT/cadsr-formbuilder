@@ -181,12 +181,14 @@ if(confirm(message)) location.href = url;
           
           <tr width="100%" align="right">
           <td colspan="12">
+<p class="noneViewer" style="display:none" >          
 			<html:link action='<%= "/addFormToCartFromView?method=addFormToCart" %>'
  	       		paramId = '<%= "checkedFormIds" %>'
  				paramName="<%=FormConstants.CRF%>" paramProperty="formIdseq"
  				>
 			Add Form to Cart
 	      </html:link>
+</p>	     
 			&nbsp;&nbsp;
  	       <html:link action='<%="/formPrinterAction?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GET_FORM_TO_PRINT%>' 
  	       		paramId = "<%=FormConstants.FORM_ID_SEQ%>"

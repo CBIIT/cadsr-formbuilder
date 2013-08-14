@@ -21,6 +21,78 @@
 <LINK rel="stylesheet" TYPE="text/css" HREF="<html:rewrite page='/css/blaf.css' />">
     <link href="../css/jdeveloper.css" rel="stylesheet" media="screen"/>
 
+<LINK REL=STYLESHEET TYPE="text/css" HREF="<%=request.getContextPath()%>/css/ui-lightness/jquery-ui-1.10.3.custom.min.css">
+<script src="./js/jquery-1.9.1.js"></SCRIPT>
+<script src="./js/jquery-ui-1.10.3.custom.min.js"></SCRIPT>
+<script src="./js/jquery.cookie.js"></SCRIPT>
+
+<script type="text/javascript">
+var un = $.cookie('FormbuilderUsername');
+var pw;
+var nun = $.cookie('newFormbuilderUsername');
+
+////alert("formResultPage");
+
+
+
+$(document).ready(function()
+{
+	
+	setupUser();
+	
+	setupLink();
+
+});
+
+function setupUser()
+{
+	var myInputun = $("#myInputUserName").val();
+	////alert(myInputun);
+		
+		if( myInputun != "viewer/" )  //logout
+	    {
+			$(".viewer").hide("fast");
+			$(".noneViewer").show("fast");
+
+			$("#urViewer").hide("fast");
+			$("#noneViewer").show("fast");
+
+			$("#idLogout").show("fast");
+			
+			$("input.viewerDisable").removeAttr("disabled");
+	    }
+		else  //login
+	    {
+			$(".noneViewer").hide("fast");
+			$(".viewer").show("fast");
+
+			$("#noneViewer").hide("fast");
+			$("#urViewer").show("fast");
+			
+			$("#idLogin").show("fast");
+			
+		    $("input.viewerDisable").attr("disabled", true);
+		    
+		    $('input[type="text"], textarea').attr('readonly','readonly');
+	    }
+	
+}
+
+function setupLink()
+{
+	var cdeBrowserlink = $("#idCDEBrowser").attr('href');
+	
+	var strAdm="cadsradmin";
+	var n = cdeBrowserlink.search("-");
+	
+	if( n == 18 )
+	{
+		var cadsrAdminLink = "http://" + strAdm + cdeBrowserlink.substring(n);
+		////alert(cadsrAdminLink);
+		$("#idCaDSRAdmin").attr('href', cadsrAdminLink);		
+	}
+}
+</script>	
 
 </HEAD>
 <BODY topmargin=0 bgcolor="#ffffff">
@@ -35,7 +107,8 @@
 <html:form action='<%="/saveLatestVersion?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.SAVE_LATEST_VERSION%>'>
 <table width="20%" align="center" cellpadding="1" cellspacing="1" border="0" >
   <tr >
-    <td >
+<%--GF29128 -D.An,20130815 --%>
+<td class="noneViewer" style="display:none" >
       <html:image src='<%=urlPrefix+"i/save.gif"%>' border="0" alt="Save"/>
     </td> 
     <td>
