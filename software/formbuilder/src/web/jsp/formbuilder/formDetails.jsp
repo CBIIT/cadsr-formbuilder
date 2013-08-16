@@ -37,25 +37,19 @@
     <LINK rel="stylesheet" TYPE="text/css" HREF="<html:rewrite page='/css/blaf.css' />">
 
 <script type="text/javascript" src='<html:rewrite page="/js/collapsible.js"/>' ></script>
+
 <LINK REL=STYLESHEET TYPE="text/css" HREF="<%=request.getContextPath()%>/css/ui-lightness/jquery-ui-1.10.3.custom.min.css">
 <script src="./js/jquery-1.9.1.js"></SCRIPT>
 <script src="./js/jquery-ui-1.10.3.custom.min.js"></SCRIPT>
 <script src="./js/jquery.cookie.js"></SCRIPT>
-
 <script type="text/javascript">
 var un = $.cookie('FormbuilderUsername');
 var pw;
 var nun = $.cookie('newFormbuilderUsername');
 
-////alert("formResultPage");
-
-
-
 $(document).ready(function()
 {
-	
 	setupUser();
-	
 });
 
 function setupUser()
@@ -65,8 +59,8 @@ function setupUser()
 		
 		if( myInputun != "viewer/" )  //logout
 	    {
-			$("p.noCopy").hide("fast");
-			$("p.myCopy").show("fast");
+			$(".viewer").hide("fast");
+			$(".noneViewer").show("fast");
 
 			$("#urViewer").hide("fast");
 			$("#noneViewer").show("fast");
@@ -75,16 +69,17 @@ function setupUser()
 	    }
 		else  //login
 	    {
-			$("p.myCopy").hide("fast");
-			$("p.noCopy").show("fast");
+			$(".noneViewer").hide("fast");
+			$(".viewer").show("fast");
 
 			$("#noneViewer").hide("fast");
 			$("#urViewer").show("fast");
 			
 			$("#idLogin").show("fast");
+			
+		    $("input.viewerDisable").attr("disabled", true);
 	    }
-	
-	}
+}
 </script>	
 
   </HEAD>

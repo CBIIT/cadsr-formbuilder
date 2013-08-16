@@ -36,7 +36,7 @@
     </td>
   </tr>
   <tr>
-    <td id="noneViewer" style="display:none" align="left" class="OraInlineInfoText" nowrap>
+    <td id="noneViewer" align="left" class="OraInlineInfoText" nowrap>
        <logic:present name="nciUser">
         <bean:message key="user.greet" />
     	<bean:write name="nciUser" property="username"  scope="session"/>
