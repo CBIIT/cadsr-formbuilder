@@ -7,7 +7,7 @@
 
 <TABLE width=100% Cellpadding=0 Cellspacing=0 border=0>
 	<tr>
-		<td id="noneViewer" style="display:none" width=98% align="left" class="OraInlineInfoText" nowrap>
+		<td id="noneViewer" width=98% align="left" class="OraInlineInfoText" nowrap>
 			&nbsp;
 			<logic:present name="nciUser">
 				<bean:message key="user.greet" />
