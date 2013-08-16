@@ -181,6 +181,7 @@ if(confirm(message)) location.href = url;
           
           <tr width="100%" align="right">
           <td colspan="12">
+<%--GF29128 remove add form cart for viewer. D.An, 20130815 --%>          
 <p class="noneViewer" style="display:none" >          
 			<html:link action='<%= "/addFormToCartFromView?method=addFormToCart" %>'
  	       		paramId = '<%= "checkedFormIds" %>'

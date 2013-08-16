@@ -29,15 +29,11 @@ var nun = $.cookie('newFormbuilderUsername');
 
 ////alert("formResultPage");
 
-
-
 $(document).ready(function()
 {
-	
 	setupUser();
 	
 	setupLink();
-
 });
 
 function setupUser()
@@ -54,8 +50,6 @@ function setupUser()
 			$("#noneViewer").show("fast");
 
 			$("#idLogout").show("fast");
-			
-			$("input.viewerDisable").removeAttr("disabled");
 	    }
 		else  //login
 	    {
@@ -69,7 +63,6 @@ function setupUser()
 			
 		    $("input.viewerDisable").attr("disabled", true);
 	    }
-	
 }
 
 function setupLink()

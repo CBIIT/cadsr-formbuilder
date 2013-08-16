@@ -14,38 +14,15 @@
 <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache"/>
 <LINK REL=STYLESHEET TYPE="text/css" HREF="<%=request.getContextPath()%>/css/blaf.css">
 <SCRIPT LANGUAGE="JavaScript1.1" SRC="<%=request.getContextPath()%>/jsLib/checkbox.js"></SCRIPT>
+
 <LINK REL=STYLESHEET TYPE="text/css" HREF="<%=request.getContextPath()%>/css/ui-lightness/jquery-ui-1.10.3.custom.min.css">
 <script src="./js/jquery-1.9.1.js"></SCRIPT>
 <script src="./js/jquery-ui-1.10.3.custom.min.js"></SCRIPT>
 <script src="./js/jquery.cookie.js"></SCRIPT>
-
-<SCRIPT LANGUAGE="JavaScript">
-<!--
-function save() {
-  document.forms[0].<%=NavigationConstants.METHOD_PARAM%>.value="saveFormSearchPref";
-  document.forms[0].submit();
-}
-function cancel() {
-  document.forms[0].<%=NavigationConstants.METHOD_PARAM%>.value="cancelFormSearchPref";
-  document.forms[0].submit();
-}
-
-function setDefaults() {
-  document.forms[0].<%=NavigationConstants.METHOD_PARAM%>.value="setDefaultFormSearchPref";
-  document.forms[0].submit();
-}
--->
-
-</SCRIPT>
-
 <script type="text/javascript">
 var un = $.cookie('FormbuilderUsername');
 var pw;
 var nun = $.cookie('newFormbuilderUsername');
-
-////alert("formResultPage");
-
-
 
 $(document).ready(function()
 {
@@ -66,8 +43,6 @@ function setupUser()
 			$("#noneViewer").show("fast");
 
 			$("#idLogout").show("fast");
-			
-			$("input.viewerDisable").removeAttr("disabled");
 	    }
 		else  //login
 	    {
@@ -81,9 +56,29 @@ function setupUser()
 			
 		    $("input.viewerDisable").attr("disabled", true);
 	    }
-	
 }
 </script>	
+
+
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+function save() {
+  document.forms[0].<%=NavigationConstants.METHOD_PARAM%>.value="saveFormSearchPref";
+  document.forms[0].submit();
+}
+function cancel() {
+  document.forms[0].<%=NavigationConstants.METHOD_PARAM%>.value="cancelFormSearchPref";
+  document.forms[0].submit();
+}
+
+function setDefaults() {
+  document.forms[0].<%=NavigationConstants.METHOD_PARAM%>.value="setDefaultFormSearchPref";
+  document.forms[0].submit();
+}
+-->
+
+</SCRIPT>
+
 
 
 </HEAD>

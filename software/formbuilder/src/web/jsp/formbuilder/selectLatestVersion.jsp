@@ -25,23 +25,14 @@
 <script src="./js/jquery-1.9.1.js"></SCRIPT>
 <script src="./js/jquery-ui-1.10.3.custom.min.js"></SCRIPT>
 <script src="./js/jquery.cookie.js"></SCRIPT>
-
 <script type="text/javascript">
 var un = $.cookie('FormbuilderUsername');
 var pw;
 var nun = $.cookie('newFormbuilderUsername');
 
-////alert("formResultPage");
-
-
-
 $(document).ready(function()
 {
-	
 	setupUser();
-	
-	setupLink();
-
 });
 
 function setupUser()
@@ -58,8 +49,6 @@ function setupUser()
 			$("#noneViewer").show("fast");
 
 			$("#idLogout").show("fast");
-			
-			$("input.viewerDisable").removeAttr("disabled");
 	    }
 		else  //login
 	    {
@@ -72,25 +61,7 @@ function setupUser()
 			$("#idLogin").show("fast");
 			
 		    $("input.viewerDisable").attr("disabled", true);
-		    
-		    $('input[type="text"], textarea').attr('readonly','readonly');
 	    }
-	
-}
-
-function setupLink()
-{
-	var cdeBrowserlink = $("#idCDEBrowser").attr('href');
-	
-	var strAdm="cadsradmin";
-	var n = cdeBrowserlink.search("-");
-	
-	if( n == 18 )
-	{
-		var cadsrAdminLink = "http://" + strAdm + cdeBrowserlink.substring(n);
-		////alert(cadsrAdminLink);
-		$("#idCaDSRAdmin").attr('href', cadsrAdminLink);		
-	}
 }
 </script>	
 
