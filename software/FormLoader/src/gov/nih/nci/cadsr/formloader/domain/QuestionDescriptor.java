@@ -19,6 +19,10 @@ public class QuestionDescriptor {
 	String defaultValue;
 	String instruction;
 	
+	boolean isEditable;
+	boolean isMandatory;
+	
+	//Needed for loader only
 	boolean skip = false;
 	List<String> messages = new ArrayList<String>();
 	
@@ -161,12 +165,59 @@ public class QuestionDescriptor {
 		this.skip = skip;
 	}
 
+	public boolean isEditable() {
+		return isEditable;
+	}
+
+	public void setEditable(boolean isEditable) {
+		this.isEditable = isEditable;
+	}
+	
+	public void setEditable(String val) {
+		if (val == null || val.length() == 0)
+			setEditable(true); //should default to true?
+		
+		boolean yesno = (val.equalsIgnoreCase("yes") || val.equalsIgnoreCase("true")) ?
+				true : false;
+		
+		setEditable(yesno);
+	}
+
+	public boolean isMandatory() {
+		return isMandatory;
+	}
+
+	public void setMandatory(boolean isMandatory) {
+		this.isMandatory = isMandatory;
+	}
+	
+	public void setMandatory(String val) {
+		if (val == null || val.length() == 0)
+			setMandatory(true); //should default to true?
+		
+		boolean yesno = (val.equalsIgnoreCase("yes") || val.equalsIgnoreCase("true")) ?
+				true : false;
+		
+		setMandatory(yesno);
+	}
+
+
+
 
 
 	public class ValidValue {
 		String value;
 		String meaningText;
 		boolean skip = false;
+		
+		//These will come back from value domain permissible value query
+		String vdPermissibleValueSeqid;
+		
+		String preferredName; //This happens to be the value meaning's public id
+		String perferredDefinition;
+		String longName;
+		String instruction;
+		String description;
 		
 		public boolean isSkip() {
 			return skip;
@@ -186,6 +237,43 @@ public class QuestionDescriptor {
 		public void setMeaningText(String valueMeaning) {
 			this.meaningText = valueMeaning;
 		}
+		public String getVdPermissibleValueSeqid() {
+			return vdPermissibleValueSeqid;
+		}
+		public void setVdPermissibleValueSeqid(String vdPermissibleValueSeqid) {
+			this.vdPermissibleValueSeqid = vdPermissibleValueSeqid;
+		}
+		public String getPreferredName() {
+			return preferredName;
+		}
+		public void setPreferredName(String preferredName) {
+			this.preferredName = preferredName;
+		}
+		public String getPerferredDefinition() {
+			return perferredDefinition;
+		}
+		public void setPerferredDefinition(String perferredDefinition) {
+			this.perferredDefinition = perferredDefinition;
+		}
+		public String getLongName() {
+			return longName;
+		}
+		public void setLongName(String longName) {
+			this.longName = longName;
+		}
+		public String getInstruction() {
+			return instruction;
+		}
+		public void setInstruction(String instruction) {
+			this.instruction = instruction;
+		}
+		public String getDescription() {
+			return description;
+		}
+		public void setDescription(String description) {
+			this.description = description;
+		}
+		
 		
 	}
 

@@ -15,6 +15,7 @@ public class FormDescriptor {
 	
 	public static final int STATUS_ERROR = -1;
 	public static final int STATUS_XML_VALIDATION_FAILED = -2;
+	public static final int STATUS_LOAD_FAILED = -3;
 	
 	public static final int STATUS_INITIALIZED = 0;
 	public static final int STATUS_XML_VALIDATED = 1; 
@@ -33,6 +34,7 @@ public class FormDescriptor {
 	String type;
 	String protocolName;
 	String workflowStatusName;
+	String modifiedBy;
 	
 	//pass 2
 	String createdBy;
@@ -53,8 +55,7 @@ public class FormDescriptor {
 	//Load services only: new form, new version or update
 	String loadType;
 	int loadStatus;
-	//FormStatus status;
-
+	
 	protected transient boolean selected;
 	protected transient int xml_line_begin;
 	protected transient int xml_line_end;
@@ -71,7 +72,7 @@ public class FormDescriptor {
 	 * @return
 	 */
 	public FormStatus getStructuredStatus() {
-		FormStatus formStatus = new FormStatus(this.publicId + "|" + this.version + "|" + this.formSeqId);
+		FormStatus formStatus = new FormStatus(this.getFormIdString() + "|" + this.formSeqId);
 		formStatus.setLoadType(this.loadType);
 		formStatus.setLoadStatus(getLoadStatusString(this.loadStatus));
 		
@@ -274,6 +275,14 @@ public class FormDescriptor {
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
 	}
+
+	public String getModifiedBy() {
+		return modifiedBy;
+	}
+
+	public void setModifiedBy(String modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
 	
 	protected String getLoadStatusString(int statusCode) {
 		switch (statusCode) {
@@ -291,9 +300,22 @@ public class FormDescriptor {
 			return "Skipped Loading";
 		case STATUS_SKIPPED_UNLOADING:
 			return "Stipped Unloading";
+		case STATUS_XML_VALIDATION_FAILED:
+			return "Xml validation failed";
+		case STATUS_LOAD_FAILED:
+			return "Load failed";
+			
 		default: 
 			return "Status Unknown";
 			
 		}
+	}
+	
+	/**
+	 * Returns form's id in this format: <publicid>|<version> 
+	 * * @return
+	 */
+	public String getFormIdString() {
+		return this.publicId + "|" + this.version;
 	}
 }

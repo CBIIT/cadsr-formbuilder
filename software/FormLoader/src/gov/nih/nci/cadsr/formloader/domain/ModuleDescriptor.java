@@ -8,6 +8,11 @@ public class ModuleDescriptor {
 	String publicId;
 	String version;
 	
+	String longName;
+	String preferredDefinition;
+	String createdBy;
+	String modifiedBy;
+	
 	List<QuestionDescriptor> questions = new ArrayList<QuestionDescriptor>();
 	
 	public List<QuestionStatus> getQuestionStatuses() {
@@ -62,6 +67,38 @@ public class ModuleDescriptor {
 
 	public void setQuestions(List<QuestionDescriptor> questions) {
 		this.questions = questions;
+	}
+
+	public String getLongName() {
+		return longName;
+	}
+
+	public void setLongName(String longName) {
+		this.longName = longName;
+	}
+
+	public String getPreferredDefinition() {
+		return preferredDefinition;
+	}
+
+	public void setPreferredDefinition(String preferredDefinition) {
+		this.preferredDefinition = preferredDefinition;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public String getModifiedBy() {
+		return modifiedBy;
+	}
+
+	public void setModifiedBy(String modifiedBy) {
+		this.modifiedBy = modifiedBy;
 	}
 
 	
