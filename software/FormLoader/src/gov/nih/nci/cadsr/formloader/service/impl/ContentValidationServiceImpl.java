@@ -1,5 +1,6 @@
 package gov.nih.nci.cadsr.formloader.service.impl;
 
+import static org.junit.Assert.assertTrue;
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.ModuleDescriptor;
@@ -16,6 +17,7 @@ import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.PermissibleValueV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.ReferenceDocument;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValueMeaningV2;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -96,13 +98,8 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 				continue;
 			
 			String publicid = form.getPublicId();
-			if (publicid == null || publicid.length() == 0) {
-				form.setLoadType(FormDescriptor.LOAD_TYPE_NEW);
-			} else {
-				pidList.add(publicid); //TODO: Could be duplicated ids
-										//need handle: 2 forms with same public id but different versions
-										//what if: 2 forms with same public id and empty version
-			}
+			if (publicid != null && publicid.length() > 0)
+				pidList.add(publicid); 			
 		}
 		
 		List<FormV2> formDtos = repository.getFormsForPublicIDs(pidList);
@@ -147,15 +144,19 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		HashMap<String, String> processed = new HashMap<String, String>();
 		
 		for (FormDescriptor form : formHeaders) {
+			if (form.getLoadStatus() < FormDescriptor.STATUS_XML_VALIDATED)
+				continue;
+			
 			String publicid = form.getPublicId();
 			String version = form.getVersion();
 			
-			if (publicid == null || publicid.length() == 0)
+			if (publicid == null || publicid.length() == 0) {
 				form.setLoadType(FormDescriptor.LOAD_TYPE_NEW);
-			else if (!existingVersions.containsKey(publicid)) {// invalid public id from xml
-				form.setLoadType(FormDescriptor.LOAD_TYPE_NEW);
+				form.setVersion("1.0");
+			} else if (!existingVersions.containsKey(publicid)) {// invalid public id from xml
+				form.setLoadType(FormDescriptor.LOAD_TYPE_UNKNOWN);
 				form.addMessage(
-						"Form public id from xml doesn't have a match in database. Will load as new form");
+					"Form public id from xml doesn't have a match in database. Please correct or it'll be skipped loading");
 			} else 
 				determineLoadTypeForForm(form, existingVersions.get(publicid));
 	
@@ -170,9 +171,12 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 	 * @param existingVersions assumption is that existing versions are ordered from least to greatest
 	 */
 	protected void determineLoadTypeForForm(FormDescriptor form, List<Float> existingVersions) {
+		
 		String version = form.getVersion();
-		if (version == null || version.length() == 0)
-			form.setLoadType(FormDescriptor.LOAD_TYPE_NEW_VERSION);
+		if (version == null || version.length() == 0) {
+			form.setLoadType(FormDescriptor.LOAD_TYPE_UNKNOWN);
+			form.addMessage("Form public id from xml has a match in database but version string is null. Please correct or it'll be skipped loading");
+		}
 		else {
 			float versNum = Float.valueOf(version).floatValue();
 			float highestVers = existingVersions.get(existingVersions.size()-1);
@@ -192,7 +196,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 				
 				if (!matched) {
 					form.setLoadType(FormDescriptor.LOAD_TYPE_NEW_VERSION);
-					form.getMessages().add("Form version in xml doesn't match an existing version in database and is less than the highest version in database. Will load as new version");
+					form.getMessages().add("Form version in xml doesn't match any existing version in database and is less than the highest version in database. Will load as new version");
 				}
 			}
 		}
@@ -305,6 +309,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 					repository.getPermissibleValuesByVdIds(vdSeqIds);
 			
 			validateQuestionsInModules(modules, form, questDtos, cdeDtos, refdocDtos, pvDtos);			
+			
 			form.setLoadStatus(FormDescriptor.STATUS_DB_VALIDATED);
 			
 			logger.debug("Done validating questions for form [" + form.getPublicId() + "|" + form.getVersion()  + "]");
@@ -580,7 +585,10 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		
 		String errField = verifyPublicIdAndVersion(cdePublicId, cdeVersion); 
 		if (errField.length() > 0) {
+			//TODO: Denise to check with Diana to see where we should add messages.
 			question.addInstruction("Question in xml doesn't contain valid CDE " + errField + ". Unable to validate question in xml");
+			question.addMessage("Question in xml doesn't contain valid CDE " + errField + ". Unable to validate question in xml. Skip loading");
+			
 			return;
 		}
 		
@@ -622,6 +630,8 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 	 * @param cdePublicId
 	 * @param cdeVersion
 	 * @param question
+	 * 
+	 * @deprecated
 	 * @return
 	 */
 	protected DataElementTransferObject getDataElementFromDB(String cdePublicId, String cdeVersion, QuestionDescriptor question) {
@@ -645,7 +655,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		}
 	}
 	
-protected DataElementTransferObject getMatchingDataElement(String cdePublicId, String cdeVersion, 
+	protected DataElementTransferObject getMatchingDataElement(String cdePublicId, String cdeVersion, 
 		QuestionDescriptor question, List<DataElementTransferObject> cdeDtos) {
 		
 		if (cdeDtos == null || cdeDtos.size() ==0) {
@@ -663,8 +673,10 @@ protected DataElementTransferObject getMatchingDataElement(String cdePublicId, S
 			else
 				continue;
 
-			if (cdeVerNum == cde.getVersion()) 
+			if (cdeVerNum == cde.getVersion()) {
+				question.setCdeSeqId(cde.getDeIdseq());
 				return cde;
+			}
 		}
 
 		if (pidMatched)
@@ -785,10 +797,19 @@ protected DataElementTransferObject getMatchingDataElement(String cdePublicId, S
 			 String val = vVal.getValue();
 			 String valMeaning = vVal.getMeaningText();
 			 for (PermissibleValueV2 pVal : pValues) {
-				 if (val.equalsIgnoreCase(pVal.getValue())) {
+				 String pValStr = pVal.getValue();
+				//TODO: big hack here. val field contains value and vpseqid that we'll
+				 //need at load time. More comment the JDBC dao method for permissible values
+				 String [] valElems = pValStr.split(",");
+				 if (val.equalsIgnoreCase(valElems[0])) {
 					 valValidated = true;
-					 if (valMeaning.equalsIgnoreCase(pVal.getValueMeaningV2().getLongName())) {
+					 ValueMeaningV2 valMeaningDto = pVal.getValueMeaningV2();
+					 String valMeaningLongName = valMeaningDto.getLongName();
+					 if (valMeaning.equalsIgnoreCase(valMeaningLongName)) {
 						 meaningValidated = true; 
+						 vVal.setVdPermissibleValueSeqid(valElems[1]);
+						 vVal.setLongName(valMeaningLongName);
+						 vVal.setPerferredDefinition(valMeaningDto.getPreferredDefinition());
 					 }
 				 }
 			 }
