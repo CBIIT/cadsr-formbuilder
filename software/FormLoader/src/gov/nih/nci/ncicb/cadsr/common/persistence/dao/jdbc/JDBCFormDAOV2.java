@@ -311,6 +311,37 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
         return forms;
     }
     
+    /**
+     * Get versions for public ids. -- Form Loader
+     * @param publicIds
+     * @return a list of form dtos with only seqid, public id and version populated
+     */
+    public HashMap<String, FormV2TransferObject> getFormsBySeqids(List<String> seqids) {
+       
+        String sql = 
+        	"SELECT QC_IDSEQ, PUBLIC_ID, VERSION FROM FB_FORMS_VIEW where QC_IDSEQ in (:ids)";
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("ids", seqids);
+        
+        final HashMap<String, FormV2TransferObject> idMap = new HashMap<String, FormV2TransferObject>();
+
+        List<FormV2> forms = 
+        this.namedParameterJdbcTemplate.query(sql, params, 
+        		new RowMapper<FormV2>() {
+        	public FormV2TransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
+        		String seqid = rs.getString("QC_IDSEQ");
+        		FormV2TransferObject form = new FormV2TransferObject();
+            	form.setPublicId(rs.getInt("PUBLIC_ID"));
+            	form.setVersion(rs.getFloat("VERSION"));
+            	idMap.put(seqid, form);
+            	return form;
+            }
+        });
+      
+        
+        return idMap;
+    }
     
     public String createFormComponent(Form sourceForm) throws DMLException {
     	// check if the user has the privilege to create module
@@ -422,6 +453,122 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
     			});
 
     	  return (rows.size() > 0) ? true : false;
+    }
+    
+    public Float getMaxFormVersion(int publicId){
+        MaxFormVersionsQuery query = new MaxFormVersionsQuery();
+        query.setDataSource(getDataSource());
+        query.setSql(publicId);
+        List result = (List) query.execute();
+
+        if (result == null || result.isEmpty()){
+            DMLException dmlExp = new DMLException("No matching record found.");
+                  dmlExp.setErrorCode(NO_MATCH_FOUND);
+              throw dmlExp;
+        }
+
+        Float maxVersion = (Float) (result.get(0));
+        return maxVersion;
+    }
+    
+    /**
+     * Inner class that accesses database to get the maximum form version
+     * by the form public id.
+     */
+    class  MaxFormVersionsQuery  extends MappingSqlQuery {
+       public MaxFormVersionsQuery() {
+       super();
+      }
+
+      public void setSql(int publicId) {
+      String maxFormVersionsByPublicId =
+               " SELECT MAX(version) from SBREXT.QUEST_CONTENTS_VIEW_EXT crf where (crf.QTL_NAME = 'CRF' or crf.QTL_NAME = 'TEMPLATE') AND QC_ID = " + publicId;
+      super.setSql(maxFormVersionsByPublicId);
+      System.out.println("[maxFormVersionsByPublicId Query: " + maxFormVersionsByPublicId + "]");
+      compile();
+     }
+
+     protected Object mapRow(ResultSet rs, int rownum) throws SQLException {
+       Float maxVersion = rs.getFloat(1);
+       return maxVersion;
+     }
+
+    }
+    
+    public int updateFormComponent(Form newForm) throws DMLException {
+
+        UpdateFormComponent  updateFormComponent  =
+          new UpdateFormComponent (this.getDataSource());
+        int res = updateFormComponent.updateFormFields(newForm);
+        if (res != 1) {
+             DMLException dmlExp = new DMLException("Did not succeed updating form record in the " +
+            " quest_contents_ext table.");
+    	       dmlExp.setErrorCode(ERROR_UPDATING_FORM);
+               throw dmlExp;
+        }
+        return res;
+    }
+    
+    /**
+     * Inner class to update the Form component.
+     *
+     */
+     //Form is now associated with multiple protocols. So form header does not include protocols any more
+    private class UpdateFormComponent extends SqlUpdate {
+      public UpdateFormComponent(DataSource ds) {
+        /*String updateFormSql =
+          " UPDATE quest_contents_ext SET " +
+          " qtl_name = ?, conte_idseq = ?, asl_name = ?, preferred_name = ?, " +
+          " preferred_definition = ?, proto_idseq = ?, long_name = ?, qcdl_name = ?, " +
+          " modified_by = ? " +
+          " WHERE qc_idseq = ? ";
+         */
+         
+         //update form should keep the existing proto_idseq 
+         //even though the protocols are stored in a new table in 3.1
+         String updateFormSql =
+           " UPDATE sbrext.quest_contents_view_ext SET " +
+           " qtl_name = ?, conte_idseq = ?, asl_name = ?, preferred_name = ?, " +
+           " preferred_definition = ?, long_name = ?, qcdl_name = ?, " +
+           " modified_by = ? " +
+           " WHERE qc_idseq = ? ";        
+
+        this.setDataSource(ds);
+        this.setSql(updateFormSql);
+        declareParameter(new SqlParameter("qtl_name", Types.VARCHAR));
+        declareParameter(new SqlParameter("conte_idseq", Types.VARCHAR));
+        declareParameter(new SqlParameter("asl_name", Types.VARCHAR));
+        declareParameter(new SqlParameter("preferred_name", Types.VARCHAR));
+        declareParameter(new SqlParameter("preferred_definition", Types.VARCHAR));
+        //declareParameter(new SqlParameter("proto_idseq", Types.VARCHAR));
+        declareParameter(new SqlParameter("long_name", Types.VARCHAR));
+        declareParameter(new SqlParameter("qcdl_name", Types.VARCHAR));
+        declareParameter(new SqlParameter("modified_by", Types.VARCHAR));
+       declareParameter(new SqlParameter("qc_idseq", Types.VARCHAR));
+        compile();
+      }
+
+      protected int updateFormFields(Form form) {
+
+        //String protocolIdSeq = null;
+        //form is now associated with mulitple forms. Form fields do not include protocols.
+        /*if(form.getProtocol()!=null) {
+           protocolIdSeq = form.getProtocol().getProtoIdseq();
+        }
+        */
+
+        Object[] obj =
+          new Object[] {
+            form.getFormType(), form.getContext().getConteIdseq(), form.getAslName(),
+            form.getPreferredName(), form.getPreferredDefinition(),
+            //protocolIdSeq, 
+            form.getLongName(),
+            form.getFormCategory(), form.getModifiedBy(), form.getFormIdseq()
+          };
+        int res = update(obj);
+
+        return res;
+      }
     }
     
     

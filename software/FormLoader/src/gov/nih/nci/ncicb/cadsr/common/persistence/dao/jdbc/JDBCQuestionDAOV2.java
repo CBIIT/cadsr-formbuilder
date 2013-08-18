@@ -50,14 +50,14 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
    *
    * @return valid values that belong to the specified question
    */
-  public Collection getValidValues(String questionId) {
-    Collection col = new ArrayList();
+  public List<FormValidValueTransferObject> getValidValues(String questionId) {
+	//List<FormValidValue> = new ArrayList();
     ValidValuesForAQuestionQuery_STMT query = new ValidValuesForAQuestionQuery_STMT();
     query.setDataSource(this.dataSource);
     query._setSql(questionId);
 
-    Collection result =  query.execute();
-    return result;
+    List<FormValidValueTransferObject> results =  query.execute();
+    return results;
   }
 
   public Question addValidValues(
@@ -385,7 +385,7 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
       
       if( sm.getDataElement()!=null)
       {
-         deIdseq = deIdseq = sm.getDataElement().getDeIdseq();
+         deIdseq = sm.getDataElement().getDeIdseq();
       }       
       Object[] obj =
         new Object[] {
@@ -457,10 +457,10 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
    /**
     * 3.0 Refactoring- Removed JDBCTransferObject
     */
-    protected Object mapRow(
+    protected FormValidValueTransferObject mapRow(
       ResultSet rs,
       int rownum) throws SQLException {
-          FormValidValue fvv = new FormValidValueTransferObject();
+          FormValidValueTransferObject fvv = new FormValidValueTransferObject();
           fvv.setValueIdseq(rs.getString(1));     // VV_IDSEQ
           fvv.setVpIdseq(rs.getString(8));        // VP_IDSEQ
           fvv.setLongName(rs.getString(9));       // LONG_NAME

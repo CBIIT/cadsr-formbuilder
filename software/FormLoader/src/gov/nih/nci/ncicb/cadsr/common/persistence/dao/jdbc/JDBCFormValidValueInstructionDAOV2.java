@@ -9,14 +9,16 @@ import gov.nih.nci.ncicb.cadsr.common.servicelocator.SimpleServiceLocator;
 
 import java.util.List;
 
+import javax.sql.DataSource;
 
-public class JDBCFormValidValueInstructionDAO extends JDBCInstructionDAO
+
+public class JDBCFormValidValueInstructionDAOV2 extends JDBCInstructionDAOV2
   implements FormValidValueInstructionDAO {
   
 	
-	public JDBCFormValidValueInstructionDAO(ServiceLocator locator) {
-    super(locator);
-  }
+	public JDBCFormValidValueInstructionDAOV2(DataSource dataSource) {
+		super(dataSource);
+	}
 
 
   /**
