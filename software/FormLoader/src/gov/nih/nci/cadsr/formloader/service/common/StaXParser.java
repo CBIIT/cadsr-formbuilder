@@ -30,11 +30,14 @@ public class StaXParser {
 	
 	protected static final String PREFIX_CDE = "cde";
 
+	//Method names that are not in this format: set<NodeName>
     protected static Map<String, String> createMap() {
         Map<String, String> mapping = new HashMap<String, String>();
         mapping.put("publicID", "publicId");
         mapping.put(PREFIX_CDE+"publicID", "cdePublicId");
         mapping.put(PREFIX_CDE+"version", "cdeVersion");
+        mapping.put("isEditable", "editable");
+        mapping.put("isMandatory", "mandatory");
        return Collections.unmodifiableMap(mapping);
     }
 
@@ -52,6 +55,7 @@ public class StaXParser {
 	
 	//Form mapping pass 2	
 	protected static final String CREATED_BY = "createdBy";
+	protected static final String MODIFIED_BY = "modifiedBy";
 	protected static final String CHANGE_NOTE = "changeNote";
 	protected static final String PREFERRED_DEFINITION = "preferredDefinition";
 	protected static final String REGISTRATION_STATUS = "registrationStatus";
@@ -76,6 +80,9 @@ public class StaXParser {
 	protected static final String VALID_VALUE = "validValue";
 	protected static final String VALUE = "value";
 	protected static final String MEANING_TEXT = "meaningText";
+	protected static final String DESCRIPTION = "description";
+	protected static final String IS_EDITABLE = "isEditable";
+	protected static final String IS_MANDATORY = "isMandatory";
 	
 	protected static final String DATA_ELEMENT = "dataElement";
 	protected static final String VALUE_DOMAIN = "valueDomain";

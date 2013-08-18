@@ -22,6 +22,8 @@ public class FormQuestionParserHandler extends ParserHandler {
 	FormDescriptor currForm;
 	ModuleDescriptor currModule;
 	QuestionDescriptor currQuestion;
+	QuestionDescriptor.ValidValue currValidValue;
+	
 	Object objToSetProperty;
 
 	int form_idx = -1;
@@ -70,7 +72,8 @@ public class FormQuestionParserHandler extends ParserHandler {
 			currModule.getQuestions().add(currQuestion);
 			
 		} else if (localName.equalsIgnoreCase(StaXParser.PUBLIC_ID)
-				|| localName.equalsIgnoreCase(StaXParser.VERSION)) {
+				|| localName.equalsIgnoreCase(StaXParser.VERSION)
+				|| localName.equalsIgnoreCase(StaXParser.MODIFIED_BY)) {
 			if (nodeQueue.peek().equals(StaXParser.MODULE)) {
 				this.objToSetProperty = currModule;
 				this.methodName = getMethodName(localName);
@@ -83,7 +86,9 @@ public class FormQuestionParserHandler extends ParserHandler {
 			}
 
 		} else if  (localName.equalsIgnoreCase(StaXParser.QUESTION_TEXT)
-				|| localName.equalsIgnoreCase(StaXParser.DEFAULT_VALUE)) {
+				|| localName.equalsIgnoreCase(StaXParser.DEFAULT_VALUE)
+				|| localName.equalsIgnoreCase(StaXParser.IS_EDITABLE) 
+				|| localName.equalsIgnoreCase(StaXParser.IS_MANDATORY)){
 			if (nodeQueue.peek().equals(StaXParser.QUESTION)) {
 				this.objToSetProperty = currQuestion;
 				this.methodName = getMethodName(localName);
@@ -92,16 +97,33 @@ public class FormQuestionParserHandler extends ParserHandler {
 			if (nodeQueue.peek().equals(StaXParser.QUESTION)) {
 				QuestionDescriptor.ValidValue vValue = currQuestion.new ValidValue();
 				currQuestion.getValidValues().add(vValue);
+				this.currValidValue = vValue;
 				this.objToSetProperty = vValue;
 			}
 		} else if (localName.equalsIgnoreCase(StaXParser.VALUE)
-				|| localName.equalsIgnoreCase(StaXParser.MEANING_TEXT)) {
+				|| localName.equalsIgnoreCase(StaXParser.MEANING_TEXT)
+				|| localName.equalsIgnoreCase(StaXParser.DESCRIPTION)) {
 			if (nodeQueue.peek().equals(StaXParser.VALID_VALUE))
 				this.methodName = getMethodName(localName);
+		} else if (localName.equalsIgnoreCase(StaXParser.INSTRUCTION)) {
+			if (nodeQueue.peek().equals(StaXParser.QUESTION))
+				this.objToSetProperty = currQuestion;
+			else if (nodeQueue.peek().equals(StaXParser.VALID_VALUE))
+				this.objToSetProperty = currValidValue;
 		} else if (localName.equalsIgnoreCase(StaXParser.TEXT)) {
 			if (nodeQueue.peek().equals(StaXParser.INSTRUCTION)) {
-				this.objToSetProperty = currQuestion;
 				this.methodName = getMethodName(StaXParser.INSTRUCTION);
+			}
+		} else if (localName.equals(StaXParser.PREFERRED_DEFINITION)) {
+			if (nodeQueue.peek().equals(StaXParser.MODULE)) {
+				this.objToSetProperty = currModule;
+				this.methodName = getMethodName(StaXParser.PREFERRED_DEFINITION);
+			}
+		}  else if (localName.equals(StaXParser.LONG_NAME) 
+				|| localName.equals(StaXParser.CREATED_BY)) {
+			if (nodeQueue.peek().equals(StaXParser.MODULE)) {
+				this.objToSetProperty = currModule;
+				this.methodName = getMethodName(localName);
 			}
 		}
 		

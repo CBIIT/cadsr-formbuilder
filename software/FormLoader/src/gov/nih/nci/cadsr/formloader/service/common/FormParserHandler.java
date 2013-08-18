@@ -69,6 +69,7 @@ public class FormParserHandler extends ParserHandler {
 				localName.equalsIgnoreCase(StaXParser.PUBLIC_ID) ||
 				localName.equals(StaXParser.CHANGE_NOTE) || 
 				localName.equals(StaXParser.CREATED_BY) || 
+				localName.equals(StaXParser.MODIFIED_BY) ||
 				localName.equals(StaXParser.PREFERRED_DEFINITION)  ||
 				localName.equals(StaXParser.REGISTRATION_STATUS) ||
 				localName.equals(StaXParser.CATEGORY_NAME)) {
