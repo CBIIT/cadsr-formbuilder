@@ -18,6 +18,12 @@
 		<property name="password" value="FORMBUILDER" />
 	</bean> -->
 	
+	<bean id="dataSource" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">
+    	<property name="URL" value="jdbc:oracle:thin:@ncidb-dsr-d:1551:DSRDEV"/>
+    	<property name="user" value="FORMBUILDER"/>
+    	<property name="password" value="FORMBUILDER"/>
+    	<property name="connectionCachingEnabled" value="true"/>
+	</bean>
 	
 	<bean id="formV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormDAOV2">
 		<constructor-arg ref="dataSource"/>       
@@ -27,9 +33,9 @@
 		<constructor-arg ref="dataSource"/>       
     </bean>
     
-    <bean id="adminComponentV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCAdminComponentDAOV2">
+    <!--  bean id="adminComponentV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCAdminComponentDAOV2">
 		<constructor-arg ref="dataSource"/>       
-    </bean>
+    </bean>-->
     
     <bean id="questionV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCQuestionDAOV2">
 		<constructor-arg ref="dataSource"/>       
@@ -39,11 +45,27 @@
 		<constructor-arg ref="dataSource"/>       
     </bean>
     
-    <bean id="formInstructionDAOV2" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormInstructionDAOV2">
+    
+    <bean id="formInstructionV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormInstructionDAOV2">
+		<constructor-arg ref="dataSource"/>       
+    </bean>
+    
+    <bean id="questInstructionV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCQuestionInstructionDAOV2">
 		<constructor-arg ref="dataSource"/>       
     </bean>
     
     <bean id="userManagerDAO" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCUserManagerDAOV2">
+		<constructor-arg ref="dataSource"/>       
+    </bean>
+    
+     <bean id="formValidValueV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormValidValueDAOV2">
+		<constructor-arg ref="dataSource"/>       
+    </bean>
+    <bean id="formValidValueInstructionV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormValidValueInstructionDAOV2">
+		<constructor-arg ref="dataSource"/>       
+    </bean>
+   
+   <bean id="collectionDao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCCollectionDAO">
 		<constructor-arg ref="dataSource"/>       
     </bean>
 </beans>
