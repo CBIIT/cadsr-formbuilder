@@ -410,7 +410,26 @@ public class FormLoaderRepositoryMockup implements FormLoaderRepository {
 	}
 
 	@Override
-	public String createNewForm(FormDescriptor form, String userName, String xmlPathName, int formIdx) {
+	public String createForm(FormDescriptor form, String userName, String xmlPathName, int formIdx) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String updateForm(FormDescriptor form, String userName,
+			String xmlPathName, int formIdx) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setPublicIdVersionBySeqids(List<FormDescriptor> forms) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String createFormCollectionRecords(FormCollection coll) {
 		// TODO Auto-generated method stub
 		return null;
 	}

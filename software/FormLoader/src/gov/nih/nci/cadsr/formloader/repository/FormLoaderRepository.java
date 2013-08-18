@@ -1,5 +1,6 @@
 package gov.nih.nci.cadsr.formloader.repository;
 
+import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.PermissibleValueV2TransferObject;
@@ -26,5 +27,9 @@ public interface FormLoaderRepository {
 
 	public String getContextSeqId(String contextName);
 	
-	public String createNewForm(FormDescriptor form, String userName, String xmlPathName, int formIdx);
+	public String createForm(FormDescriptor form, String userName, String xmlPathName, int formIdx);
+	public String updateForm(FormDescriptor form, String userName, String xmlPathName, int formIdx);
+	public void setPublicIdVersionBySeqids(List<FormDescriptor> forms);
+	
+	public String createFormCollectionRecords(FormCollection coll);
 }
