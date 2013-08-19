@@ -25,7 +25,6 @@ import org.junit.Before;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/applicationContext-service-test.xml"})
-//@ContextConfiguration(locations = {"classpath:/applicationContext-db-connectionless-test.xml"})
 public class XmlValidationServiceImplTest {
 	
 	private static Logger logger = Logger.getLogger(XmlValidationServiceImplTest.class.getName());

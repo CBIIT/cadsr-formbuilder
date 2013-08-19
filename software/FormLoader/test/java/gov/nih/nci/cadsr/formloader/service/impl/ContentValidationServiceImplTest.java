@@ -145,9 +145,16 @@ public class ContentValidationServiceImplTest {
 		assertTrue(FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(forms.get(0).getLoadType()));
 		assertTrue(FormDescriptor.LOAD_TYPE_UPDATE_FORM.equals(forms.get(1).getLoadType()));
 		assertTrue(FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(forms.get(2).getLoadType()));
-		assertTrue(FormDescriptor.LOAD_TYPE_NEW.equals(forms.get(3).getLoadType()));
-		assertTrue(FormDescriptor.LOAD_TYPE_NEW.equals(forms.get(4).getLoadType()));
-	
+		assertTrue(FormDescriptor.LOAD_TYPE_UNKNOWN.equals(forms.get(3).getLoadType()));
+		assertTrue(FormDescriptor.LOAD_TYPE_UNKNOWN.equals(forms.get(4).getLoadType()));
+		/*
+		Denise:
+			if public ID exists but no version element in the form, skip loading.
+			If public ID is null, and no version, default to version 1.0
+			If public ID does not exist, skip loading.
+			If public id exist and version does not exist, create new version
+			If public id exists and version exists, update existing version
+	*/
 	}
 	
 	//@Test
@@ -207,12 +214,14 @@ public class ContentValidationServiceImplTest {
 		 // List<String> msgs = new ArrayList<String>();
 		  form.addMessage("Question 1 has no default text");
 		  form.addMessage("Question 2 need work");
+		  form.setLoadStatus(FormDescriptor.STATUS_XML_VALIDATED);
 		  forms.add(form);
 		  
 		  //2
 		  form = new FormDescriptor("553355", "1234346", "3.0");
 		  form.setContext("NCIP");
 		 form.addMessage("No error / success");
+		 form.setLoadStatus(FormDescriptor.STATUS_XML_VALIDATED);
 		  forms.add(form);
 		  
 		  //3
@@ -222,6 +231,7 @@ public class ContentValidationServiceImplTest {
 		  List<String> msgs3 = new ArrayList<String>();
 		  form.addMessage("Question 1 has no default text");
 		  form.addMessage("Question 2 need work");
+		  form.setLoadStatus(FormDescriptor.STATUS_XML_VALIDATED);
 		  forms.add(form);
 		  
 		  //4
@@ -231,11 +241,13 @@ public class ContentValidationServiceImplTest {
 		  form.setLoadType(FormDescriptor.LOAD_TYPE_UPDATE_FORM);
 		  form.addMessage("Question 3 has no default text");
 		  form.addMessage("Question 4 need work");
+		  form.setLoadStatus(FormDescriptor.STATUS_XML_VALIDATED);
 		  forms.add(form);
 		  
 		  //5
 		 //public id = 0
 		  form = new FormDescriptor("883355", "0", "1.0");
+		  form.setLoadStatus(FormDescriptor.STATUS_XML_VALIDATED);
 		  forms.add(form);
 		  //6
 		  forms.add(new FormDescriptor("883355", "1234349", "1.0"));
