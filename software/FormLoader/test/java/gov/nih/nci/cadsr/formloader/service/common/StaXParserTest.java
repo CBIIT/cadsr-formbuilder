@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.List;
 
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
+import gov.nih.nci.cadsr.formloader.domain.QuestionDescriptor;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObject;
 
@@ -45,6 +46,11 @@ public class StaXParserTest {
 		assertTrue("2+".equals(forms.get(2).getModules().get(2).getQuestions()
 				.get(8).getValidValues().get(2).getValue()));
 		
+		assertTrue("Unnamed2".equals(forms.get(2).getModules().get(1).getPreferredDefinition()));
+		assertTrue("Unnamed2".equals(forms.get(2).getModules().get(1).getLongName()));
+		
+		assertTrue(forms.get(2).getModules().get(0).getQuestions().get(1).isEditable() == true);
+		assertTrue(forms.get(2).getModules().get(0).getQuestions().get(1).isMandatory() == false);
 	}
 	
 	@Test
@@ -71,6 +77,25 @@ public class StaXParserTest {
 		assertTrue(desObjs.get(0).getName() == null || desObjs.get(0).getName().length() ==0);
 		assertTrue(desObjs.get(0).getType().equals("ABBREVIATION"));
 		assertTrue(desObjs.get(0).getLanguage().equals("ENGLISH"));
+		
+	}
+	
+	@Test
+	public void testParseFormQuestions() {
+		parser = new StaXParser();
+		String xmlPathName = ".\\test\\data\\3193449_has_valid_values.xml";
+		List<FormDescriptor> forms = parser.parseFormHeaders(xmlPathName);
+		assertNotNull(forms);
+		assertTrue(forms.size() == 1);
+		
+		forms = parser.parseFormQuestions(xmlPathName, forms);
+		assertNotNull(forms);
+		
+		List<QuestionDescriptor.ValidValue> vvs = forms.get(0).getModules().get(0).getQuestions().get(5).getValidValues();
+		assertNotNull(vvs);
+		assertTrue(vvs.size() == 4);
+		assertTrue(vvs.get(0).getDescription().length() > 0);
+		assertTrue(vvs.get(0).getInstruction().startsWith("SY"));
 		
 	}
 
