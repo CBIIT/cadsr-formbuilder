@@ -199,14 +199,6 @@ public class FormLoaderRepositoryDataGen implements FormLoaderRepository {
 
 		return pvs;
 	}
-	
-	
-
-	@Override
-	public String getContextSeqId(String contextName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	public List<QuestionTransferObject> getQuestionsByPublicIds(
 			List<String> publicIds) {
@@ -413,6 +405,18 @@ public class FormLoaderRepositoryDataGen implements FormLoaderRepository {
 
 	@Override
 	public String createFormCollectionRecords(FormCollection coll) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean hasLoadFormRight(String userName, String contextName) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String getContextSeqIdByName(String contextName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
