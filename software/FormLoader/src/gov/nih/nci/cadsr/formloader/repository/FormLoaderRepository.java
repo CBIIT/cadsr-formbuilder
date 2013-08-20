@@ -25,11 +25,13 @@ public interface FormLoaderRepository {
 	public HashMap<String, List<ReferenceDocumentTransferObject>> getReferenceDocsByCdePublicIds(List<String> cdePublicIds);
 	public HashMap<String, List<PermissibleValueV2TransferObject>> getPermissibleValuesByVdIds(List<String> vdSeqIds);
 
-	public String getContextSeqId(String contextName);
+	public String getContextSeqIdByName(String contextName);
 	
 	public String createForm(FormDescriptor form, String userName, String xmlPathName, int formIdx);
 	public String updateForm(FormDescriptor form, String userName, String xmlPathName, int formIdx);
 	public void setPublicIdVersionBySeqids(List<FormDescriptor> forms);
 	
 	public String createFormCollectionRecords(FormCollection coll);
+	
+	public boolean hasLoadFormRight(String userName, String contextName);
 }

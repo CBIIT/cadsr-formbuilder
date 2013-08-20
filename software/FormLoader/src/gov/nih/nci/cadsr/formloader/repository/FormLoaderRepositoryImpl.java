@@ -50,6 +50,8 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	
 	static final int MAX_LONG_NAME_LENGTH = 255;
 	
+	public static final String COMPONENT_TYPE_FORM = "QUEST_CONTENT";
+	
 	JDBCFormDAOV2 formV2Dao;
 	JDBCModuleDAOV2 moduleV2Dao;
 	JDBCQuestionDAOV2 questionV2Dao;
@@ -203,7 +205,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		else
 			msg += "a value domain obj with " + pValues.size() + " permissible values";
 		
-		logger.debug("msg");
+		logger.debug(msg);
 		return pValues;
 	}
 	
@@ -282,9 +284,27 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	public void setFormValidValueV2Dao(JDBCFormValidValueDAOV2 formValidValueV2Dao) {
 		this.formValidValueV2Dao = formValidValueV2Dao;
 	}
+	
+
+	public JDBCFormValidValueInstructionDAOV2 getFormValidValueInstructionV2Dao() {
+		return formValidValueInstructionV2Dao;
+	}
+
+	public void setFormValidValueInstructionV2Dao(
+			JDBCFormValidValueInstructionDAOV2 formValidValueInstructionV2Dao) {
+		this.formValidValueInstructionV2Dao = formValidValueInstructionV2Dao;
+	}
+
+	public JDBCCollectionDAO getCollectionDao() {
+		return collectionDao;
+	}
+
+	public void setCollectionDao(JDBCCollectionDAO collectionDao) {
+		this.collectionDao = collectionDao;
+	}
 
 	@Transactional(readOnly=true)
-	public String getContextSeqId(String contextName) {
+	public String getContextSeqIdByName(String contextName) {
 		if (conteNameSeqIdMap == null)
 			conteNameSeqIdMap = this.formV2Dao.getAllContextSeqIds();
 		
@@ -300,31 +320,8 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		FormTransferObject formdto = translateIntoFormDTO(form);	
 		if (formdto == null) 
 			return null;
-
-		//when loading, first check user from xml form. If that's invalid,
-		//check with the form loader user name. If neither works, inform user
-		// - confirmed with Denise on 8/7/2013
-		String formSeqid = "";
-		for (int tryCnt = 0; tryCnt < 2; tryCnt++) {
-			try {
-				formSeqid = formV2Dao.createFormComponent(formdto);
-			} catch (DMLException dmle) {
-				if (dmle.getErrorCode() == ErrorCodeConstants.INSUFFICIENT_PRIVILEGES &&
-						tryCnt == 0) {
-					logger.warn("This user \"" + formdto.getCreatedBy() + 
-							"\" doesn't have enough privileges to load form in context \"" + 
-							form.getContext() + "\". Trying again with the loggedin user name");
-					formdto.setCreatedBy(loggedinUser);
-					formSeqid = "";
-				} else {
-					logger.error("Unable to load [" + form.getFormIdString() + "] with reason: " + dmle.getMessage());
-					form.addMessage("Failed to load form with reason: " + dmle.getMessage());
-					form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
-					return null;
-				}
-					
-			}
-		}
+		
+		String formSeqid = formV2Dao.createFormComponent(formdto);		
 		
 		formdto.setFormIdseq(formSeqid);
 		form.setFormSeqId(formSeqid);
@@ -426,9 +423,9 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		
 		if (contextName != null && contextName.length() > 0) {
 			Context context = new ContextTransferObject();
-		    context.setConteIdseq(this.getContextSeqId(contextName));
+		    context.setConteIdseq(this.getContextSeqIdByName(contextName));
 		    formdto.setContext(context);
-			formdto.setConteIdseq(this.getContextSeqId(contextName));
+			formdto.setConteIdseq(this.getContextSeqIdByName(contextName));
 		} else {
 			String msg = "Form doesn't have a valid context name. Unable to load";
 			form.addMessage(msg);
@@ -494,9 +491,15 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		//processDefinitions()
 	}
 
+	/**
+	 * For update form, if designation doesn't already exist, designate it to the context. For new version or new form,
+	 * designate the form to the context.
+	 * @param form
+	 * @param designations
+	 */
 	protected void processDesignations(FormDescriptor form, List<DesignationTransferObject> designations) {
 		String formSeqid = form.getFormSeqId();
-		String contextSeqId = this.getContextSeqId(form.getContext());
+		String contextSeqId = this.getContextSeqIdByName(form.getContext());
 		
 		for (DesignationTransferObject desig : designations) {
 			if (form.getLoadType().equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)) {
@@ -518,6 +521,11 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		return formV2Dao.designate(contextSeqid, ac_seqids, createdby);
 	}
 	
+	/**
+	 * 
+	 * @param form
+	 * @param protoIds
+	 */
 	protected void processProtocols(FormDescriptor form, List<String> protoIds) {
 		String formSeqid = form.getFormSeqId();
 		if (protoIds != null && protoIds.size() > 0) {
@@ -527,7 +535,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			for (String protoSeqid : protoSeqIds) {
 				if (FormDescriptor.LOAD_TYPE_UPDATE_FORM.equals(form.getLoadType())) {
 					if (!formV2Dao.formProtocolExists(formSeqid, protoSeqid));
-						formV2Dao.addFormProtocol(formSeqid, protoSeqid, form.getCreatedBy());
+						formV2Dao.addFormProtocol(formSeqid, protoSeqid, form.getModifiedBy());
 
 				} else {
 					formV2Dao.addFormProtocol(formSeqid, protoSeqid, form.getCreatedBy());
@@ -998,5 +1006,10 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		}
 		
 		return collSeqid;
+	}
+	
+	public boolean hasLoadFormRight(String userName, String contextName) {
+		String contextseqid = this.getContextSeqIdByName(contextName);
+		return this.formV2Dao.hasCreate(userName, COMPONENT_TYPE_FORM, contextseqid);
 	}
 }

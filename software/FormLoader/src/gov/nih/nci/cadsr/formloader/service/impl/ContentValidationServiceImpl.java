@@ -1,12 +1,10 @@
 package gov.nih.nci.cadsr.formloader.service.impl;
 
-import static org.junit.Assert.assertTrue;
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.ModuleDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.QuestionDescriptor;
 import gov.nih.nci.cadsr.formloader.repository.FormLoaderRepository;
-//import gov.nih.nci.cadsr.formloader.repository.FormLoaderRepositoryImpl;
 import gov.nih.nci.cadsr.formloader.service.ContentValidationService;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
@@ -25,8 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+//import gov.nih.nci.cadsr.formloader.repository.FormLoaderRepositoryImpl;
 
 @Service
 public class ContentValidationServiceImpl implements ContentValidationService {
@@ -99,16 +97,21 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			
 			String publicid = form.getPublicId();
 			if (publicid != null && publicid.length() > 0)
-				pidList.add(publicid); 			
+				pidList.add(publicid); 	
+			else {
+				form.setLoadType(FormDescriptor.LOAD_TYPE_NEW);
+			}
 		}
 		
-		List<FormV2> formDtos = repository.getFormsForPublicIDs(pidList);
-		HashMap<String, List<Float>> publicIdVersions = createFormExistingVersionMap(formDtos);
-		determineLoadTypeByVersion(formDescriptors, publicIdVersions);
-		
-		//extra info we want from the dtos, eg. seq id for existing forms
-		//Only update forms are worth taking what's from dtos
-		transferFormDtos(formDtos, formDescriptors);
+		if (pidList.size() > 0) {
+			List<FormV2> formDtos = repository.getFormsForPublicIDs(pidList);
+			HashMap<String, List<Float>> publicIdVersions = createFormExistingVersionMap(formDtos);
+			determineLoadTypeByVersion(formDescriptors, publicIdVersions);
+
+			//extra info we want from the dtos, eg. seq id for existing forms
+			//Only update forms are worth taking what's from dtos
+			transferFormDtos(formDtos, formDescriptors);
+		}
 		
 	}
 	
@@ -119,11 +122,11 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 	 */
 	protected HashMap<String, List<Float>> createFormExistingVersionMap(List<FormV2> formDtos) {
 		HashMap<String, List<Float>> map = new HashMap<String, List<Float>>();
-		for (FormV2 form : formDtos) {
-			String pubId = String.valueOf(form.getPublicId());
+		for (FormV2 formdto : formDtos) {
+			String pubId = String.valueOf(formdto.getPublicId());
 			List<Float> vers = (!map.containsKey(pubId)) ? new ArrayList<Float>() : map.get(pubId);
 			
-			vers.add(Float.valueOf(form.getVersion()));		
+			vers.add(Float.valueOf(formdto.getVersion()));		
 			map.put(pubId, vers);
 		}
 		
@@ -372,7 +375,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 					question.addMessage("Question has not associated data element public id. Unable to validate");				
 			}
 			
-			logger.debug("Collected " + questPublicIds.size() + "question public ids and " + questCdePublicIds.size() +
+			logger.debug("Collected " + questPublicIds.size() + " question public ids and " + questCdePublicIds.size() +
 					" cde public ids in module [" + module.getPublicId() + "|" + module.getVersion() + "]");
 		}
 		
@@ -804,7 +807,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 				 if (val.equalsIgnoreCase(valElems[0])) {
 					 valValidated = true;
 					 ValueMeaningV2 valMeaningDto = pVal.getValueMeaningV2();
-					 String valMeaningLongName = valMeaningDto.getLongName();
+					 String valMeaningLongName = valMeaningDto.getLongName().trim();
 					 if (valMeaning.equalsIgnoreCase(valMeaningLongName)) {
 						 meaningValidated = true; 
 						 vVal.setVdPermissibleValueSeqid(valElems[1]);

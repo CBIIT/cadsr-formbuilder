@@ -60,6 +60,9 @@ public class FormDescriptor {
 	protected transient int xml_line_begin;
 	protected transient int xml_line_end;
 	
+	//This is from db by name
+	protected String contextSeqid; 
+	
 	public FormDescriptor() {
 		loadStatus = STATUS_INITIALIZED;
 		loadType = LOAD_TYPE_UNKNOWN;
@@ -284,6 +287,14 @@ public class FormDescriptor {
 		this.modifiedBy = modifiedBy;
 	}
 	
+	public String getContextSeqid() {
+		return contextSeqid;
+	}
+
+	public void setContextSeqid(String contextSeqid) {
+		this.contextSeqid = contextSeqid;
+	}
+
 	protected String getLoadStatusString(int statusCode) {
 		switch (statusCode) {
 		case STATUS_INITIALIZED:

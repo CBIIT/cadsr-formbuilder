@@ -226,7 +226,7 @@ public class FormLoaderRepositoryMockup implements FormLoaderRepository {
 	
 	
 	@Override
-	public String getContextSeqId(String contextName) {
+	public String getContextSeqIdByName(String contextName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -432,6 +432,12 @@ public class FormLoaderRepositoryMockup implements FormLoaderRepository {
 	public String createFormCollectionRecords(FormCollection coll) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean hasLoadFormRight(String userName, String contextName) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	

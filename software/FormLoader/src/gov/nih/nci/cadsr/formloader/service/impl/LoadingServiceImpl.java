@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.context.ResourceLoaderAware;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,6 +22,12 @@ public class LoadingServiceImpl implements LoadingService {
 	private static Logger logger = Logger.getLogger(LoadingServiceImpl.class.getName());
 	
 	FormLoaderRepository repository;
+	
+	public LoadingServiceImpl() {}
+	
+	public LoadingServiceImpl(FormLoaderRepository repository) {
+		this.repository = repository;
+	}
 
 	public FormLoaderRepository getRepository() {
 		return repository;
@@ -37,8 +45,8 @@ public class LoadingServiceImpl implements LoadingService {
 			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_COLLECTION_NULL,
 					"Input collection is null");
 		
-		String user = aCollection.getCreatedBy();
-		if (user == null || user.length() == 0) 
+		String loggedinuser = aCollection.getCreatedBy();
+		if (loggedinuser == null || loggedinuser.length() == 0) 
 			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_USER_INVALID,
 					"User name for the collection is either null or empty. Unable to load form collection");
 		
@@ -59,7 +67,7 @@ public class LoadingServiceImpl implements LoadingService {
 					"Input form list is null or empty. Unable to validate form content.");
 		}
 			
-		//loadForms(xmlPathName, forms, user);
+		loadForms(xmlPathName, forms, loggedinuser);
 		
 		//TODO: update form loader related tables.
 		//createRecordsForCollection(aCollection, user);
@@ -80,31 +88,109 @@ public class LoadingServiceImpl implements LoadingService {
 		
 	}
 	
-	protected void loadForms(String xmlPathName, List<FormDescriptor> forms, String loggedinUser) {
+	protected void loadForms(String xmlPathName, List<FormDescriptor> forms, String loggedinUser) 
+	throws FormLoaderServiceException {
 		
 		int form_idx = 0;
 		for (FormDescriptor form : forms) {
-			if (form.getLoadStatus() < FormDescriptor.STATUS_DB_VALIDATED)
+			if (form.getLoadStatus() < FormDescriptor.STATUS_DB_VALIDATED) {
+				form.addMessage("Form didn't pass db validation. Unable to load fomr");
 				continue;
+			}
 			
-			if (!form.isSelected())
+			if (!form.isSelected()) {
+				form.addMessage("Form is not selected by user. Skip loading");
 				continue;
+			}
 			
+			if (!form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW ) &&
+					!form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW_VERSION ) &&
+					!form.getLoadType().equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)) {
+				form.addMessage("Form has undetermined loat type. Unable to load form");
+				continue;
+			}
+			
+			//TODO: check context, designation, definition and reference doc type here
+			//What about UOM name
+			
+			if (!validContextName(form)) {
+				form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
+				continue;
+			}
+			
+			if (!userHasRight(form, loggedinUser)) {
+				form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
+				continue;
+			}
+				
 			if (FormDescriptor.LOAD_TYPE_NEW.equals(form.getLoadType())
 					|| FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(form.getLoadType())) {
-				
 				this.repository.createForm(form, loggedinUser, xmlPathName, form_idx);
 				form.setLoadStatus(FormDescriptor.STATUS_LOADED);
 			} else if (FormDescriptor.LOAD_TYPE_UPDATE_FORM.equals(form.getLoadType())) {
 				this.repository.updateForm(form, loggedinUser, xmlPathName, form_idx);
 				form.setLoadStatus(FormDescriptor.STATUS_LOADED);
-			} else {
-				form.addMessage("Form will not be loaded due to unknown load type");
-				form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
-			}
+			} 
 			
 			form_idx++;
 		}	
 	}
+	
+	protected boolean validContextName(FormDescriptor form) {
+		
+		String contextName = form.getContext();
+		if (contextName == null || contextName.length() == 0) {
+			form.addMessage("Context name in form is null or empty. Use \"NCIP\" context to load form");
+			form.setContext("NCIP");
+		}
+		
+		String contextSeqid = this.repository.getContextSeqIdByName(form.getContext());
+		if (contextSeqid == null || contextSeqid.length() == 0) {
+			form.addMessage("Context name in form \"" + form.getContext() + "\" is not valid. Unable to load form");
+			return false;
+		} 
+		
+		form.setContextSeqid(contextSeqid);
+		return true;
+	}
+	
+	/**
+	 * when loading, first check user from xml form. If that's invalid, 
+	 * check with the form loader user name. If neither works, inform user
+	 *  - confirmed with Denise on 8/7/2013
+	 * @param form
+	 * @param loggeduser
+	 * @return
+	 */
+	protected boolean userHasRight(FormDescriptor form, String loggeduser) {
+		if (form.getLoadType().equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)) {
+			if (!this.repository.hasLoadFormRight(form.getModifiedBy(), form.getContext())) {
+				form.addMessage("Form's modifiedBy user has no right to update form into context \"" + form.getContext() + 
+						". Will try with Form Loader's logged-in user");
+				
+				if (this.repository.hasLoadFormRight(loggeduser, form.getContext())) {
+					form.setModifiedBy(loggeduser);
+					return true;
+				}
+				
+			} else
+				return true;
+		} else {
+			if (!this.repository.hasLoadFormRight(form.getCreatedBy(), form.getContext())) {
+				form.addMessage("Form's createdBy user has no right to create form into context \"" + form.getContext() + 
+						". Will try with Form Loader's logged-in user");
+				if (this.repository.hasLoadFormRight(loggeduser, form.getContext())) {
+					form.setCreatedBy(loggeduser);
+					return true;
+				}
+				form.setCreatedBy(loggeduser);	
+			} else 
+				return true;
+		}
+		
+		form.addMessage("Neither the form's createdBy/modifiedBy nor the Form Loader logged in user has right to load form. Form load failed");
+		return false;
+	}
+	
 
 }

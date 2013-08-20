@@ -1,11 +1,17 @@
 package gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc;
+        
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.util.DataSourceUtil;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.stereotype.Repository;
 
-public class JDBCCollectionDAO extends JDBCBaseDAOV2 {
+@Repository
+public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 	
 	
 	private static Logger logger = Logger.getLogger(JDBCFormDAOV2.class.getName());
@@ -15,7 +21,7 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 {
 	}
 	
 	public String createCollectionRecord(String name, String desc, String fileName, String filePath, String createdBy) {
-		String sql = "INSERT into FORM_COLLECTIONS (form_collection_idseq, description, name, " +
+		String sql = "INSERT into sbrext.FORM_COLLECTIONS (form_collection_idseq, description, name, " +
 				" xml_file_name, xml_file_path, created_by) " +
 				" VALUES (:idseq, :description, :name, :xml_file_name, :xml_file_path,:created_by)";
 		
@@ -48,5 +54,23 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 {
 		return res;
 		
 	}
+	
+	 public static void main(String[] args) {
+	    	
+	    	//DataSource ds = DataSourceUtil.getDriverManagerDS(
+	    	//		"oracle.jdbc.OracleDriver", 
+	    	//		"jdbc:oracle:thin:@ncidb-dsr-d:1551:DSRDEV", 
+	    	//		"FORMBUILDER", "FORMBUILDER");
+	    	
+	    	DataSource ds = new DriverManagerDataSource("jdbc:oracle:thin:@ncidb-dsr-d:1551:DSRDEV", 
+	    			"sbrext", "jjuser");
+	    	
+	    	JDBCCollectionDAO collDao = new JDBCCollectionDAO(ds);
+	    	String idseq = collDao.createCollectionRecord("collection dao unit test", 
+					"UnitTest", "SomeFile", "/opt/content/formloader", "shanyang");
+	    	System.out.println("Add a coll record");
+	    	
+	  
+	    }
 
 }
