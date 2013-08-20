@@ -28,6 +28,13 @@
 			<ref local="repository" />
 		</property>
 	</bean> -->
+	
+	<bean id="loadService"
+		class="gov.nih.nci.cadsr.formloader.service.impl.LoadingServiceImpl"> 
+		<property name="repository">
+			<ref local="repository" />
+		</property>
+	</bean>
 
 	<bean id="contentValidationService"
 		class="gov.nih.nci.cadsr.formloader.service.impl.ContentValidationServiceImpl"> 

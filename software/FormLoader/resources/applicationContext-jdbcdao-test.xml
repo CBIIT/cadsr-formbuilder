@@ -20,10 +20,14 @@
 	
 	<bean id="dataSource" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">
     	<property name="URL" value="jdbc:oracle:thin:@ncidb-dsr-d:1551:DSRDEV"/>
-    	<property name="user" value="FORMBUILDER"/>
-    	<property name="password" value="FORMBUILDER"/>
+    	<property name="user" value="sbrext"/>
+    	<property name="password" value="jjuser"/>
     	<property name="connectionCachingEnabled" value="true"/>
 	</bean>
+	                                
+	<bean id="collectionDao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCCollectionDAO">
+		<constructor-arg ref="dataSource"/>       
+    </bean>
 	
 	<bean id="formV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormDAOV2">
 		<constructor-arg ref="dataSource"/>       
@@ -32,10 +36,6 @@
     <bean id="moduleV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCModuleDAOV2">
 		<constructor-arg ref="dataSource"/>       
     </bean>
-    
-    <!--  bean id="adminComponentV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCAdminComponentDAOV2">
-		<constructor-arg ref="dataSource"/>       
-    </bean>-->
     
     <bean id="questionV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCQuestionDAOV2">
 		<constructor-arg ref="dataSource"/>       
@@ -65,8 +65,6 @@
 		<constructor-arg ref="dataSource"/>       
     </bean>
    
-   <bean id="collectionDao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCCollectionDAO">
-		<constructor-arg ref="dataSource"/>       
-    </bean>
+   
 </beans>
 
