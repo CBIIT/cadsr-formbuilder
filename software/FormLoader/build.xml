@@ -7,6 +7,13 @@
 	 <property name="src.dir"     value="src"/>
 	 <property name="test.src.dir"     value="${test.dir}/java"/>
 	<property name="resources.dir"     value="${basedir}/resources"/>
+	<property name="source.dir"     value="${basedir}/src"/>
+    <property name="web.dir"   value="${basedir}/WebContent"/>
+	<property name="dist.home" value="dist"/>
+	<property name="app.name" value="FormLoader"/>
+	<property name="compile.debug"     value="true"/>
+	<property name="compile.deprecation"     value="false"/>
+	<property name="compile.optimize"     value="true"/>
 	
 	<property name="lib.dir"     value="${basedir}/WebContent/WEB-INF/lib"/>
 	<property name="report.dir"  value="${build.dir}/junitreport"/>
@@ -37,6 +44,31 @@
         </javac>
     </target>
 
+    <target name="compile-war" depends="clean" description="Compiles the project source.">
+		<mkdir dir="${build.dir}/WEB-INF/classes" />
+        <javac destdir="${build.dir}/WEB-INF/classes" classpathref="classpath"  includeantruntime="false" debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}" source="1.6" target="1.6">
+        	<src path="${src.dir}" />
+        	 <src path="${test.src.dir}" />
+        	<compilerarg value="-Xlint:unchecked"/>
+        </javac>
+    </target>
+	
+    <target name="build" depends="compile-war">
+		<copy todir="${build.dir}">
+			<fileset dir="${web.dir}" excludes="CVS,**/*.class" />
+		</copy>
+    </target>
+	
+	<target name="archive" depends="build" description="Create binary archive of all files in dist.home">
+		
+		<mkdir     dir="${dist.home}" />
+		
+		<!-- Create application WAR file -->
+	    <jar jarfile="${dist.home}/${app.name}.war"
+				basedir="${build.dir}" />
+
+	</target>
+	
     <target name="jar" depends="compile">
         <mkdir dir="${jar.dir}"/>
         <jar destfile="${jar.dir}/${ant.project.name}-services.jar" basedir="${classes.dir}" >

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+              
+    <!--  jee:jndi-lookup id="dataSource" jndi-name="jdbc/FormBuilderDS" resource-ref="false" /> -->
+    
+	<!-- For test -->
+	<!--  bean id="dataSourcetest" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+
+		<property name="driverClassName" value="oracle.jdbc.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@ncidb-dsr-d:1551:DSRDEV" />
+		<property name="username" value="FORMBUILDER" />
+		<property name="password" value="FORMBUILDER" />
+	</bean> -->
+	
+	
+	<bean id="formV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormDAOV2">
+		<constructor-arg ref="dataSource"/>       
+    </bean>
+    
+    <bean id="moduleV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCModuleDAOV2">
+		<constructor-arg ref="dataSource"/>       
+    </bean>
+    
+    <bean id="adminComponentV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCAdminComponentDAOV2">
+		<constructor-arg ref="dataSource"/>       
+    </bean>
+    
+    <bean id="questionV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCQuestionDAOV2">
+		<constructor-arg ref="dataSource"/>       
+    </bean>
+    
+    <bean id="valueDomainV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCValueDomainDAOV2">
+		<constructor-arg ref="dataSource"/>       
+    </bean>
+    
+<!--    <bean id="formInstructionDAOV2" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormInstructionDAOV2">
+		<constructor-arg ref="dataSource"/>       
+    </bean> -->
+    
+    <bean id="userManagerDAO" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCUserManagerDAOV2">
+		<constructor-arg ref="dataSource"/>       
+    </bean>
+</beans>
+
