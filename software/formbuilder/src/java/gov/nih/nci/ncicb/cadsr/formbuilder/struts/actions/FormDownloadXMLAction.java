@@ -49,9 +49,8 @@ public class FormDownloadXMLAction extends Action {
 			String convertedForm = FormConverterUtil.instance().convertFormToV2(crf);  
 
 			CDEBrowserParams params = CDEBrowserParams.getInstance();
-			String xmlFilename ="Form"  + crf.getPublicId() + "_v" + crf.getVersion();
-			xmlFilename = xmlFilename.replace('/', '_').replace('.', '_');
-			xmlFilename = params.getXMLDownloadDir() + xmlFilename + ".xml";
+			String xmlFilename =params.getXMLDownloadDir() +"Form"  + crf.getPublicId() + "_v" + crf.getVersion();
+			xmlFilename = xmlFilename.replace('/', '_').replace('.', '_') + ".xml";
 
 			FileOutputStream fileOut = new FileOutputStream(xmlFilename);
 			byte[] xmlBytes = convertedForm.getBytes();
