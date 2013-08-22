@@ -415,7 +415,7 @@
                 </xsl:when>
                 <xsl:otherwise/>
             </xsl:choose>
-            <xsl:apply-templates select="reference-docs"/>
+            <xsl:apply-templates select="referece-docs"/>
             <!-- generate url to link to CDE Browser for the data element -->
             <xsl:element name="cdeBrowserLink">
                 <!-- Added in formCartV2 - generated in Form Builder 4.0.4 - not a database field -->
@@ -745,7 +745,7 @@
         </xsl:element>
     </xsl:template>
 
-    <xsl:template match="reference-docs">
+    <xsl:template match="referece-docs">
         <xsl:element name="referenceDocument">
             <xsl:element name="name">
                 <xsl:value-of select="doc-name"/>
