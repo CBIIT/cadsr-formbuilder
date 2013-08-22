@@ -177,7 +177,7 @@
             </xsl:element>
             <xsl:apply-templates select="modules"/>
             <xsl:apply-templates select="protocols"/>
-            <xsl:apply-templates select="reference-docs"/>
+            <xsl:apply-templates select="referece-docs"/>
             <xsl:apply-templates select="contact-communication-v2"/>
         </xsl:element>
     </xsl:template>
