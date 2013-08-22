@@ -7,6 +7,7 @@ import gov.nih.nci.cadsr.formloader.domain.QuestionDescriptor;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
@@ -42,6 +43,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
@@ -63,6 +65,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	JDBCCollectionDAO collectionDao;
 	
 	HashMap<String, String> conteNameSeqIdMap;
+	List<String> designationTypes;
 
 	/**
 	 * Gets Seq id, public id and version for forms with the given public ids
@@ -317,23 +320,30 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	@Transactional
 	public String createForm(FormDescriptor form, String loggedinUser, String xmlPathName, int formIdx) {
 		
-		FormTransferObject formdto = translateIntoFormDTO(form);	
-		if (formdto == null) 
-			return null;
+		String formSeqid = "";
 		
-		String formSeqid = formV2Dao.createFormComponent(formdto);		
-		
-		formdto.setFormIdseq(formSeqid);
-		form.setFormSeqId(formSeqid);
-		
-		//instructions
-		createFormInstructions(form, formdto);
-		
-		//designations, refdocs, definitions and contact communications
-		processFormdetails(form, xmlPathName, formIdx);
-		
-		//Onto modules and questions
-		createModulesInForm(form, formdto);
+		try {
+			FormTransferObject formdto = translateIntoFormDTO(form);	
+			if (formdto == null) 
+				return null;
+
+			formSeqid = formV2Dao.createFormComponent(formdto);		
+			logger.debug("Created form. Seqid: " + formSeqid);
+
+			formdto.setFormIdseq(formSeqid);
+			form.setFormSeqId(formSeqid);
+
+			//instructions
+			createFormInstructions(form, formdto);
+
+			//designations, refdocs, definitions and contact communications
+			processFormdetails(form, xmlPathName, formIdx);
+
+			//Onto modules and questions
+			createModulesInForm(form, formdto);
+		} catch (DMLException dbe) {
+			logger.error(dbe.getMessage());
+		}
 		
 		return formSeqid;
 	}
@@ -418,6 +428,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		formdto.setLongName(form.getLongName());
 		formdto.setFormType(form.getType());
 		formdto.setFormCategory(form.getCategoryName());
+		formdto.setPreferredDefinition(form.getPreferredDefinition());
 		
 		String contextName = form.getContext();
 		
@@ -441,6 +452,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	
 	
 	protected void createFormInstructions(FormDescriptor form, FormTransferObject formdto) {
+		logger.debug("Creating instructions for form");
 		String instructString = form.getHeaderInstruction();
 		
 		InstructionTransferObject formInstruction = createInstruction(form, formdto, instructString);
@@ -451,6 +463,8 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		formInstruction = createInstruction(form, formdto, instructString);
 		if (formInstruction != null)
 			formInstructionV2Dao.createFooterInstruction(formInstruction, formdto.getFormIdseq());
+		
+		logger.debug("Done creating instructions for form");
 	}
 	
 	protected InstructionTransferObject createInstruction(FormDescriptor form, 
@@ -476,6 +490,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	}
 	
 	protected void processFormdetails(FormDescriptor form, String xmlPathName, int currFormIdx) {
+		logger.debug("Processing protocols, designations, refdocs and definitions for form");
 		StaXParser parser = new StaXParser();
 		parser.parseFormDetails(xmlPathName, form, currFormIdx);
 		
@@ -485,10 +500,14 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		List<DesignationTransferObject> designations = parser.getDesignations();
 		processDesignations(form, designations);
 		
+		List<DefinitionTransferObject> definitions = parser.getDefinitions();
+		
 		//TODO
 		//processRefdocs();
 		//processContactCommunications()
-		//processDefinitions()
+		
+		
+		logger.debug("Done processing protocols, designations, refdocs and definitions for form");
 	}
 
 	/**
@@ -562,7 +581,9 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		return protoSeqIds;
 	}
 	
+	@Transactional
 	protected void createModulesInForm(FormDescriptor form, FormTransferObject formdto) {
+		logger.debug("Start creating modules for form");
 		List<ModuleDescriptor> modules = form.getModules();
 		
 		/*
@@ -578,6 +599,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			ModuleTransferObject moduledto = translateIntoModuleDTO(module, form, formdto);
 			
 			String moduleSeqid = moduleV2Dao.createModuleComponent(moduledto);
+			logger.debug("Created a module with seqid: " + moduleSeqid);
 			
 			module.setModuleSeqId(moduleSeqid);
 			moduledto.setIdseq(moduleSeqid);
@@ -586,12 +608,16 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			//Now, onto questions
 			createQuestionsInModule(module, moduledto, form, formdto);
 		}
+		
+		logger.debug("Done creating modules for form");
 	}
 	
+	@Transactional
 	protected void createQuestionsInModule(ModuleDescriptor module, ModuleTransferObject moduledto, 
 			FormDescriptor form, FormTransferObject formdto) {
 		List<QuestionDescriptor> questions = module.getQuestions();
 		
+		logger.debug("Creating questions for module");
 		int idx = 0;
 		for (QuestionDescriptor question : questions) {
 			if (question.isSkip()) continue;
@@ -604,6 +630,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			
 			//better to call createQuestionComponents, which is not implement.
 			QuestionTransferObject newQuestdto = (QuestionTransferObject)this.questionV2Dao.createQuestionComponent(questdto);
+			logger.debug("Created a question: " + newQuestdto.getQuesIdseq());
 			
 			
 			createQuestionInstruction(newQuestdto, moduledto, question.getInstruction());
@@ -611,8 +638,10 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			createQuestionValidValues(question, form, newQuestdto, moduledto);
 			
 		}
+		logger.debug("Done creating questions for module");
 	}
 	
+	@Transactional
 	protected void createQuestionValidValues(QuestionDescriptor question, FormDescriptor form, QuestionTransferObject newQuestdto, 
 			ModuleTransferObject moduledto) {
 		
@@ -627,12 +656,13 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			fvv.setVpIdseq(vValue.getVdPermissibleValueSeqid());
 			fvv.setVersion(Float.valueOf("1.0"));
 			
-			//These are for calling the stored procedure "sbrext_form_builder_pkg.ins_value"
+			//These are for calling the stored procedure "sbrext_form_builder_pkg.ins_value"		
 			
-			//These values are from the permissible value query
-			fvv.setLongName(vValue.getLongName());
-			fvv.setPreferredDefinition(vValue.getPerferredDefinition());
-			fvv.setPreferredName(vValue.getPreferredName());
+			
+			fvv.setLongName(vValue.getValue());
+			fvv.setPreferredName(vValue.getMeaningText());
+			fvv.setPreferredDefinition(vValue.getDescription());
+			
 			fvv.setContext(moduledto.getContext());
 			fvv.setAslName("DRAFT NEW");
 			fvv.setCreatedBy(moduledto.getCreatedBy());
@@ -643,23 +673,14 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			
 			//createFormValidValueComponent() will 
 			//create valid value and record in the valid_value_att_ext 
-			String newFVVIdseq =
-					formValidValueV2Dao.createFormValidValueComponent(
-							fvv,newQuestdto.getQuesIdseq(),moduledto.getCreatedBy());
 			
-			//TODO: update valid value instruction
-			//instructions
-			/*
-			Instruction vvInstr = fvv.getInstruction();
-			if (vvInstr != null)
-			{
-				vvInstr.setCreatedBy(getUserName());
-				vvInstr.setContext(questionContext);
-				fvvInstrDao
-				.createInstruction(vvInstr, newFVVIdseq);
-			}
+			//TODO: failed to create. complaining about null version. Even hardcoded one still trigger complain.
+			// Investigate later
 			
-			*/
+			
+			//String newFVVIdseq =
+			//		formValidValueV2Dao.createFormValidValueComponent(
+			//				fvv,newQuestdto.getQuesIdseq(),moduledto.getCreatedBy());
 		}
 	}
 	
@@ -746,6 +767,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		}
 		
 		moduleDto.setContext(formdto.getContext());
+		moduleDto.setPreferredDefinition(module.getPreferredDefinition());
 		
 		return moduleDto;
 	}
@@ -914,9 +936,9 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			//These are for calling the stored procedure "sbrext_form_builder_pkg.ins_value"
 
 			//These values are from the permissible value query
-			fvvdto.setLongName(vValue.getLongName());
-			fvvdto.setPreferredDefinition(vValue.getPerferredDefinition());
-			fvvdto.setPreferredName(vValue.getPreferredName());
+			fvvdto.setLongName(vValue.getValue());
+			fvvdto.setPreferredDefinition(vValue.getDescription());
+			fvvdto.setPreferredName(vValue.getMeaningText());
 			fvvdto.setContext(moduledto.getContext());
 			fvvdto.setAslName("DRAFT NEW");
 			fvvdto.setCreatedBy(moduledto.getCreatedBy());
@@ -1012,4 +1034,12 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		String contextseqid = this.getContextSeqIdByName(contextName);
 		return this.formV2Dao.hasCreate(userName, COMPONENT_TYPE_FORM, contextseqid);
 	}
+	
+	/*
+	public boolean definitionTypeValid(String defType) {
+		if (designationTypes == null) {
+			
+		}
+	}
+	*/
 }

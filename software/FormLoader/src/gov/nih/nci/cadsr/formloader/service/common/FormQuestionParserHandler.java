@@ -82,7 +82,10 @@ public class FormQuestionParserHandler extends ParserHandler {
 				this.methodName = getMethodName(localName);
 			} else if (nodeQueue.peek().equals(StaXParser.DATA_ELEMENT)) {
 				this.objToSetProperty = currQuestion;
-				this.methodName = getMethodName(StaXParser.PREFIX_CDE + localName);
+				//There could be dataElement under dataElement so this is a dirty way to handle that
+				if (localName.equalsIgnoreCase(StaXParser.PUBLIC_ID) && currQuestion.getCdePublicId() == null 
+						||localName.equalsIgnoreCase(StaXParser.VERSION) && currQuestion.getCdeVersion() == null )
+					this.methodName = getMethodName(StaXParser.PREFIX_CDE + localName);
 			}
 
 		} else if  (localName.equalsIgnoreCase(StaXParser.QUESTION_TEXT)

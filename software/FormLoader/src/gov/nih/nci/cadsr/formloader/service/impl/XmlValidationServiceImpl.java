@@ -38,7 +38,8 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 	
 	protected ResourceLoader resourceLoader;
 	
-	protected String XSD_PATH_NAME = "FormLoaderv2.xsd";
+	//protected String XSD_PATH_NAME = "FormLoaderv2.xsd";
+	protected String XSD_PATH_NAME = "FormCartv22.xsd";
 
 	public XmlValidationServiceImpl() {}
 	
@@ -101,17 +102,18 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 	 * @param errors
 	 */
 	protected void assignErrorsToForms(List<FormDescriptor> forms, List<XmlValidationError> errors) {
-		if (forms == null || forms.size() == 0 ||
-				errors == null || errors.size() == 0) {
-			logger.debug("form list or error list is null or empty. Nothing to do");
+		if (forms == null || forms.size() == 0) {
+			logger.debug("form list null or empty. Nothing to do");
 			return;
 		}
 		
-		int currFormIdx = 0;
-		for (XmlValidationError xmlError : errors) {
-			int formSize = forms.size();
-			for (int i = 0; i < formSize; i++) {
-				currFormIdx = assignError(xmlError, forms, currFormIdx);
+		if (errors != null && errors.size() > 0) {
+			int currFormIdx = 0;
+			for (XmlValidationError xmlError : errors) {
+				int formSize = forms.size();
+				for (int i = 0; i < formSize; i++) {
+					currFormIdx = assignError(xmlError, forms, currFormIdx);
+				}
 			}
 		}
 		

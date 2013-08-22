@@ -1894,8 +1894,25 @@ public class JDBCAdminComponentDAOV2 extends JDBCBaseDAOV2
 	   	
 	   	return nameSeqIdMap;
 	   	
-   } 
-   
+   }
+   /*
+   public List<String> getAllDesignationTypes() {
+
+	   String sql = 
+			   "select distinct DETL_NAME from DESIGNATION_TYPES_LOV_VIEW order by DETL_NAME";
+
+	   List rows = this.namedParameterJdbcTemplate.getJdbcOperations().queryForList(sql);
+	   
+	   
+	   
+	   for (Object row : rows) {
+		   nameSeqIdMap.put((String)((Map)row).get("NAME"), (String)((Map)row).get("CONTE_IDSEQ"));
+	   }
+
+	   return nameSeqIdMap;
+
+   }
+   */
    public List<DesignationTransferObject> getDesignationsForForm(String formseqid, String desigName,
 		   String desigType, String desigLanguage) {
 

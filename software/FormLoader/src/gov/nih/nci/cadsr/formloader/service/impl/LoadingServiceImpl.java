@@ -70,7 +70,7 @@ public class LoadingServiceImpl implements LoadingService {
 		loadForms(xmlPathName, forms, loggedinuser);
 		
 		//TODO: update form loader related tables.
-		//createRecordsForCollection(aCollection, user);
+		createRecordsForCollection(aCollection, loggedinuser);
 		
 		
 		return aCollection;
@@ -125,8 +125,12 @@ public class LoadingServiceImpl implements LoadingService {
 				
 			if (FormDescriptor.LOAD_TYPE_NEW.equals(form.getLoadType())
 					|| FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(form.getLoadType())) {
-				this.repository.createForm(form, loggedinUser, xmlPathName, form_idx);
-				form.setLoadStatus(FormDescriptor.STATUS_LOADED);
+				
+				String seqid = this.repository.createForm(form, loggedinUser, xmlPathName, form_idx);
+				if (seqid == null || seqid.length() == 0)
+					form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
+				else
+					form.setLoadStatus(FormDescriptor.STATUS_LOADED);
 			} else if (FormDescriptor.LOAD_TYPE_UPDATE_FORM.equals(form.getLoadType())) {
 				this.repository.updateForm(form, loggedinUser, xmlPathName, form_idx);
 				form.setLoadStatus(FormDescriptor.STATUS_LOADED);

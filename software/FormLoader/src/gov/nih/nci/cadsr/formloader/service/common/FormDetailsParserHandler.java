@@ -140,7 +140,8 @@ public class FormDetailsParserHandler extends ParserHandler {
 					this.currClassName = null;
 				}
 			} else if (localName.equals(StaXParser.DEFINITION) && nodeQueue.peek().equals(StaXParser.FORM)) {
-				this.definitions.add(this.currDefinition);;
+				this.definitions.add(this.currDefinition);
+				this.currClassName = null;
 			}
 		}
 		
@@ -169,10 +170,10 @@ public class FormDetailsParserHandler extends ParserHandler {
 			if (peek.equals(StaXParser.PROTOCOL_ID)) 
 				this.protocolIds.add(xmlreader.getText());
 			else if (peek.equals(StaXParser.NAME) || peek.equals(StaXParser.TYPE) || peek.equals(StaXParser.LANGUAGE_NAME)) {
-					if (this.currClassName != null && this.currClassName.equals("DesignationTransferObject") &&
-					this.methodName != null) {
-						setPropertyForObject(this.currDesignation, methodName, xmlreader.getText());
-			}
+				if (this.currClassName != null && this.currClassName.equals("DesignationTransferObject") &&
+						this.methodName != null) {
+					setPropertyForObject(this.currDesignation, methodName, xmlreader.getText());
+				}
 			}
 		}
 		
