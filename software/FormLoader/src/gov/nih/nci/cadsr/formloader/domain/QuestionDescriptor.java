@@ -154,7 +154,7 @@ public class QuestionDescriptor {
 		if (instruction == null)
 			instruction = newInstruction;
 		else
-			instruction += ";" + newInstruction;
+			instruction += "; [FormLoader]:" + newInstruction;
 	}
 
 	public boolean isSkip() {
@@ -243,24 +243,30 @@ public class QuestionDescriptor {
 		public void setVdPermissibleValueSeqid(String vdPermissibleValueSeqid) {
 			this.vdPermissibleValueSeqid = vdPermissibleValueSeqid;
 		}
+		/*
 		public String getPreferredName() {
 			return preferredName;
 		}
 		public void setPreferredName(String preferredName) {
 			this.preferredName = preferredName;
 		}
+		*/
+		/*
 		public String getPerferredDefinition() {
 			return perferredDefinition;
 		}
 		public void setPerferredDefinition(String perferredDefinition) {
 			this.perferredDefinition = perferredDefinition;
 		}
+		*/
+		/*
 		public String getLongName() {
 			return longName;
 		}
 		public void setLongName(String longName) {
 			this.longName = longName;
 		}
+		*/
 		public String getInstruction() {
 			return instruction;
 		}

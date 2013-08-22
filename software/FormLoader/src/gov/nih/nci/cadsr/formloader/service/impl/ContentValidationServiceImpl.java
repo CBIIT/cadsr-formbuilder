@@ -471,8 +471,8 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 				}
 			} else {
 				//question's public id and version will be generated at load time
-				question.setPublicId("");
-				question.setVersion("");
+				//question.setPublicId("");
+				//question.setVersion("");
 			}
 		}
 		
@@ -811,8 +811,8 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 					 if (valMeaning.equalsIgnoreCase(valMeaningLongName)) {
 						 meaningValidated = true; 
 						 vVal.setVdPermissibleValueSeqid(valElems[1]);
-						 vVal.setLongName(valMeaningLongName);
-						 vVal.setPerferredDefinition(valMeaningDto.getPreferredDefinition());
+						 //vVal.setLongName(valMeaningLongName);
+						 //vVal.setPerferredDefinition(valMeaningDto.getPreferredDefinition());
 					 }
 				 }
 			 }
