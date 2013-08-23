@@ -88,11 +88,6 @@
     </xsl:template>
 
     <xsl:template match="form-v2-transfer-object">
-        <xsl:text>
-</xsl:text>
-        <xsl:comment>Transform based on FinalFormCartTransformv26.xsl which was validated with FormCartv21.xsd </xsl:comment>
-        <xsl:text>
-</xsl:text>
         <xsl:element name="form">
             <xsl:element name="context">
                 <xsl:value-of select="./context-name"/>
