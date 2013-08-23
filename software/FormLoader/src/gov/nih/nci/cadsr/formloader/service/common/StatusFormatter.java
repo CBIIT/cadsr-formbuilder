@@ -1,5 +1,7 @@
 package gov.nih.nci.cadsr.formloader.service.common;
 
+import gov.nih.nci.cadsr.formloader.domain.FormCollection;
+import gov.nih.nci.cadsr.formloader.domain.FormCollectionStatus;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.FormStatus;
 
@@ -31,7 +33,26 @@ public class StatusFormatter {
 			e.printStackTrace();
 		}
 		
-		return "Status xml generation failed";
+		return "Form status xml generation failed";
+	}
+	
+	public static String getStatusInXml(FormCollection coll) {
+		FormCollectionStatus collStatus= coll.getStructuredStatus();
+		
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(FormCollectionStatus.class);
+			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+			final StringWriter stringWriter = new StringWriter();
+			
+			jaxbMarshaller.marshal(collStatus, stringWriter);
+			return stringWriter.toString();
+			
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+		
+		return "Collection status xml generation failed";
 	}
 	
 	public static void writeStatusToXml(String content, String fileNamePath) {

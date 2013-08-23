@@ -394,13 +394,17 @@ public class FormLoaderRepositoryMockup implements FormLoaderRepository {
 		String testFile = ".\\test\\data\\3193449_has_valid_values.xml";
 		
 		try {
-		List<FormDescriptor> forms = xmlValidator.validateXml(testFile);
-		FormCollection aColl = new FormCollection();
+			FormCollection aColl = new FormCollection();
+			aColl.setXmlPathOnServer(".\\test\\data");
+			aColl.setXmlFileName("3193449_has_valid_values.xml");
+			aColl = xmlValidator.validateXml(aColl);
+		List<FormDescriptor> forms = aColl.getForms();
+		
 		aColl.setName("TestCollection");
-		aColl.setForms(forms);
+	
 		
 		
-		contentValidator.validateXmlContent(aColl, testFile);
+		contentValidator.validateXmlContent(aColl);
 		
 		} catch (FormLoaderServiceException fle) {
 			System.out.println(fle);

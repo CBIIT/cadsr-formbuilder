@@ -1,7 +1,9 @@
 package gov.nih.nci.cadsr.formloader.service.impl;
 
+import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.service.XmlValidationService;
+import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
 import gov.nih.nci.cadsr.formloader.service.common.XmlValidationError;
@@ -38,8 +40,9 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 	
 	protected ResourceLoader resourceLoader;
 	
-	//protected String XSD_PATH_NAME = "FormLoaderv2.xsd";
 	protected String XSD_PATH_NAME = "FormCartv22.xsd";
+	//protected String XSD_PATH_NAME = "FormLoaderv2.xsd";
+	
 
 	public XmlValidationServiceImpl() {}
 	
@@ -58,15 +61,21 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 	 * 
 	 */
 	@Override
-	public List<FormDescriptor> validateXml(String xmlPathName) throws FormLoaderServiceException{
+	public FormCollection validateXml(FormCollection collection) throws FormLoaderServiceException{
 		
-		checkInputFile(xmlPathName);
+		if (collection == null) {
+			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_COLLECTION_NULL,
+					"Input collection object is null");
+		}
+		
+		String xmlPathName = FormLoaderHelper.checkInputFile(collection.getXmlPathOnServer(), collection.getXmlFileName());
 		
 		XmlValidationError error = checkXmlWellFormedness(xmlPathName);
 		if (error != null && error.getType() != XmlValidationError.XML_NO_ERROR)
 			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_MALFORMED_XML,
 					"Xml Malform Error", error);
 		
+		logger.debug("XSD_PATH_NAME: " + XSD_PATH_NAME);
 		Resource resource = this.resourceLoader.getResource(
 				"classpath:gov/nih/nci/cadsr/formloader/service/impl/" + XSD_PATH_NAME);
 
@@ -79,22 +88,9 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 		forms = parser.parseFormHeaders(xmlPathName);		
 		assignErrorsToForms(forms, errors);
 
-
-		return forms;
+		collection.setForms(forms);
+		return collection;
 	}
-	
-	protected void checkInputFile(String xmlPathName) 
-			throws FormLoaderServiceException
-		{
-			if (xmlPathName == null || xmlPathName.length() == 0)
-				throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_FILE_INVALID,
-						"Input file path/name is null or empty. Unable to validate form content.");
-			
-			File input = new File(xmlPathName);
-			if (input == null || !input.exists() || !input.canRead())
-				throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_FILE_INVALID,
-						"Input file [" + xmlPathName + "]is invalid. Unable to validate form content.");
-		}
 	
 	/**
 	 * Assign errors to forms based on line number where the error was detected
@@ -196,13 +192,13 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
             reader.read(xmlPathName);
             
         } catch (IOException e) { //TODO: all these should throw FormLoaderServiceException
-            logger.error("IOException while validing xml");
+            logger.error("IOException while validing xml: " + e.getMessage());
         } catch (ParserConfigurationException e) {
-        	logger.error("ParserConfigurationException while validing xml");
+        	logger.error("ParserConfigurationException while validing xml:" + e.getMessage());
         } catch (SAXException e) {
-        	logger.error("SAXException while validing xml");
+        	logger.error("SAXException while validing xml: " + e.getMessage());
         } catch (DocumentException e) {
-        	logger.error("DocumentException while validing xml");
+        	logger.error("DocumentException while validing xml: " + e.getMessage());
         } finally {
         	try {
         		if (is != null)

@@ -1,5 +1,6 @@
 package gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc;
 
+import gov.nih.nci.cadsr.formloader.repository.FormLoaderRepositoryImpl;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.exception.FatalException;
 import gov.nih.nci.ncicb.cadsr.common.persistence.jdbc.oracle.ObjectTransformer;
@@ -19,6 +20,7 @@ import oracle.jdbc.OracleCallableStatement;
 //import oracle.jdbc.OracleCallableStatement;
 
 
+import org.apache.log4j.Logger;
 import org.springframework.jdbc.object.MappingSqlQuery;
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.SqlParameter;
@@ -55,6 +57,8 @@ import java.util.List;
 
 public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
   implements FormValidValueDAO {
+	
+	private static Logger logger = Logger.getLogger(JDBCFormValidValueDAOV2.class.getName());
   
 	public JDBCFormValidValueDAOV2(DataSource dataSource) {
 		super(dataSource);
@@ -455,16 +459,34 @@ public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
      
       Map in = new HashMap();
       
+      logger.debug("question seqid: " + parentId);
+      
+      fvv.setVersion(Float.valueOf("3.0"));
+      
       in.put("p_ques_idseq", parentId);
+      logger.debug("p_version: >" + fvv.getVersion().toString() + "<");
       in.put("p_version", fvv.getVersion().toString());
-      in.put("p_preferred_name", fvv.getPreferredName());
+      logger.debug("p_preferred_name: " + "TestingPrepareName");
+      in.put("p_preferred_name", "TestingPrepareName");
+      logger.debug("qp_long_name: " + fvv.getLongName());
       in.put("p_long_name", fvv.getLongName());
+      logger.debug("p_preferred_definition: " + fvv.getPreferredDefinition());
       in.put("p_preferred_definition", fvv.getPreferredDefinition());
+      logger.debug("p_conte_idseq: " + fvv.getContext().getConteIdseq());
       in.put("p_conte_idseq", fvv.getContext().getConteIdseq());
+      
+      //logger.debug("p_proto_idseq: " + fvv.getVpIdseq());
       in.put("p_proto_idseq", protocolIdSeq);
+      in.put("p_proto_idseq", fvv.getVpIdseq());
+      
+      
+      logger.debug("p_asl_name: " + fvv.getAslName());
       in.put("p_asl_name", fvv.getAslName());
+      logger.debug("p_vp_idseq: " + fvv.getVpIdseq());
       in.put("p_vp_idseq", fvv.getVpIdseq());
+      logger.debug("p_created_by: " + fvv.getCreatedBy());
       in.put("p_created_by", fvv.getCreatedBy());
+      logger.debug("p_display_order: " + new Integer(fvv.getDisplayOrder()));
       in.put("p_display_order", new Integer(fvv.getDisplayOrder()));
 
       Map out = execute(in);

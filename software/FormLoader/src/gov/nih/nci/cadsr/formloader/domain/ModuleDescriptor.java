@@ -15,15 +15,20 @@ public class ModuleDescriptor {
 	
 	List<QuestionDescriptor> questions = new ArrayList<QuestionDescriptor>();
 	
-	public List<QuestionStatus> getQuestionStatuses() {
+	public List<QuestionStatus> getQuestionStatuses(String formLoadStatus) {
 		List<QuestionStatus> statuses = new ArrayList<QuestionStatus>();
 		for (QuestionDescriptor question : questions) {
+			String seqid = question.getQuestionSeqId();
 			QuestionStatus status = new QuestionStatus(question.publicId + 
-					"|" + question.version + "|" + question.questionSeqId);
+					"|" + question.version + "|" + seqid);
 			if (question.skip)
 				status.setLoadStatus("Skipped");
-			else
-				status.setLoadStatus("OK");
+			else {
+				if (seqid != null && seqid.length() > 0)
+					status.setLoadStatus("Loaded");	
+				else
+					status.setLoadStatus(formLoadStatus);
+			}
 			
 			List<String> questMsgs = new ArrayList<String>();
 			if (question.messages.size() > 0) 

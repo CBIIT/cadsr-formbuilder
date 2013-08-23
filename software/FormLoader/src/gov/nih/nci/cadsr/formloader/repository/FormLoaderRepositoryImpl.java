@@ -219,14 +219,20 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	public void setPublicIdVersionBySeqids(List<FormDescriptor> forms) {
 		List<String> seqids = new ArrayList<String>();
 		for (FormDescriptor form : forms) {
-			seqids.add(form.getFormSeqId());
+			if (form.getLoadStatus() == FormDescriptor.STATUS_LOADED)
+				seqids.add(form.getFormSeqId());
 		}
+		
+		if (seqids.size() == 0)
+			return; 
 		
 		HashMap<String, FormV2TransferObject> seqidMap = formV2Dao.getFormsBySeqids(seqids);
 		for (FormDescriptor form : forms) {
 			FormV2TransferObject formdto = seqidMap.get(form.getFormSeqId());
-			form.setPublicId(String.valueOf(formdto.getPublicId()));
-			form.setVersion(String.valueOf(formdto.getVersion()));
+			if (formdto != null) {
+				form.setPublicId(String.valueOf(formdto.getPublicId()));
+				form.setVersion(String.valueOf(formdto.getVersion()));
+			}
 		}
 	}
 
@@ -631,11 +637,13 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			//better to call createQuestionComponents, which is not implement.
 			QuestionTransferObject newQuestdto = (QuestionTransferObject)this.questionV2Dao.createQuestionComponent(questdto);
 			logger.debug("Created a question: " + newQuestdto.getQuesIdseq());
-			
+			question.setQuestionSeqId(newQuestdto.getQuesIdseq());
 			
 			createQuestionInstruction(newQuestdto, moduledto, question.getInstruction());
 			
 			createQuestionValidValues(question, form, newQuestdto, moduledto);
+			
+			
 			
 		}
 		logger.debug("Done creating questions for module");
@@ -660,7 +668,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			
 			
 			fvv.setLongName(vValue.getValue());
-			fvv.setPreferredName(vValue.getMeaningText());
+			fvv.setPreferredName(vValue.getPreferredName());
 			fvv.setPreferredDefinition(vValue.getDescription());
 			
 			fvv.setContext(moduledto.getContext());
@@ -679,8 +687,8 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			
 			
 			//String newFVVIdseq =
-			//		formValidValueV2Dao.createFormValidValueComponent(
-			//				fvv,newQuestdto.getQuesIdseq(),moduledto.getCreatedBy());
+			//.createFormValidValueComponent(
+			///				fvv,newQuestdto.getQuesIdseq(),moduledto.getCreatedBy());
 		}
 	}
 	
@@ -1017,13 +1025,18 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		
 		List<FormDescriptor> forms = coll.getForms();
 		for (FormDescriptor form : forms) {
+			if (form.getLoadStatus() != FormDescriptor.STATUS_LOADED)
+				continue;
+			
 			int res = collectionDao.createCollectionFormMappingRecord(collSeqid, form.getFormSeqId(),
 					Integer.parseInt(form.getPublicId()), Float.parseFloat(form.getVersion()));
 			
 			//TODO: check response value.
 			int loatStatus = (res == 1) ? FormDescriptor.STATUS_LOADED : FormDescriptor.STATUS_LOAD_FAILED;
 			
-			form.setLoadStatus(loatStatus);
+			logger.error("Unable to create form collection relationship");
+			
+			//form.setLoadStatus(loatStatus);
 			
 		}
 		

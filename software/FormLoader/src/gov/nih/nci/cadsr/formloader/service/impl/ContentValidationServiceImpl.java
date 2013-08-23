@@ -6,6 +6,7 @@ import gov.nih.nci.cadsr.formloader.domain.ModuleDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.QuestionDescriptor;
 import gov.nih.nci.cadsr.formloader.repository.FormLoaderRepository;
 import gov.nih.nci.cadsr.formloader.service.ContentValidationService;
+import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
@@ -48,7 +49,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 	}
 
 	@Override
-	public FormCollection validateXmlContent(FormCollection aCollection, String xmlPathName) 
+	public FormCollection validateXmlContent(FormCollection aCollection) 
 			throws FormLoaderServiceException {
 		
 		if (aCollection == null)
@@ -62,25 +63,12 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 					"Input form list is null or empty. Unable to validate form content.");
 		}
 		
-		checkInputFile(xmlPathName);
+		String xmlPathName = FormLoaderHelper.checkInputFile(aCollection.getXmlPathOnServer(), aCollection.getXmlFileName());
 		
 		determineLoadType(formHeaders);
 		validateQuestions(xmlPathName, formHeaders);
 		
 		return aCollection;
-	}
-	
-	protected void checkInputFile(String xmlPathName) 
-		throws FormLoaderServiceException
-	{
-		if (xmlPathName == null || xmlPathName.length() == 0)
-			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_FILE_INVALID,
-					"Input file path/name is null or empty. Unable to validate form content.");
-		
-		File input = new File(xmlPathName);
-		if (input == null || !input.exists() || !input.canRead())
-			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_FILE_INVALID,
-					"Input file is invalid. Unable to validate form content.");
 	}
 	
 	/**
@@ -811,6 +799,8 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 					 if (valMeaning.equalsIgnoreCase(valMeaningLongName)) {
 						 meaningValidated = true; 
 						 vVal.setVdPermissibleValueSeqid(valElems[1]);
+						 
+						 vVal.setPreferredName(String.valueOf(valMeaningDto.getPublicId()));
 						 //vVal.setLongName(valMeaningLongName);
 						 //vVal.setPerferredDefinition(valMeaningDto.getPreferredDefinition());
 					 }

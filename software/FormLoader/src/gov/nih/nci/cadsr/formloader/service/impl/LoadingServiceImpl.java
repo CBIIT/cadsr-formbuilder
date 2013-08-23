@@ -9,6 +9,7 @@ import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -80,9 +81,11 @@ public class LoadingServiceImpl implements LoadingService {
 		List<FormDescriptor> forms = coll.getForms();
 		
 		//get generated public id for the loaded forms
-		this.repository.setPublicIdVersionBySeqids(forms);;
+		this.repository.setPublicIdVersionBySeqids(forms);
 		
 		String collSeqid = this.repository.createFormCollectionRecords(coll);
+		coll.setId(collSeqid);
+		coll.setDateCreated(new Date()); //TODO: This probably should come from db after create
 		
 		logger.info("Collection \"" + coll.getName() + "\" loaded successfully, with seqid: " + collSeqid);
 		
@@ -94,12 +97,14 @@ public class LoadingServiceImpl implements LoadingService {
 		int form_idx = 0;
 		for (FormDescriptor form : forms) {
 			if (form.getLoadStatus() < FormDescriptor.STATUS_DB_VALIDATED) {
-				form.addMessage("Form didn't pass db validation. Unable to load fomr");
+				form.addMessage("Form didn't pass db validation. Unable to load form");
+				logger.debug("Form didn't pass db validation. Unable to load form");
 				continue;
 			}
 			
 			if (!form.isSelected()) {
 				form.addMessage("Form is not selected by user. Skip loading");
+				logger.debug("Form is not selected by user. Skip loading");
 				continue;
 			}
 			
@@ -107,6 +112,7 @@ public class LoadingServiceImpl implements LoadingService {
 					!form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW_VERSION ) &&
 					!form.getLoadType().equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)) {
 				form.addMessage("Form has undetermined loat type. Unable to load form");
+				logger.debug("Form has undetermined loat type. Unable to load form");
 				continue;
 			}
 			
@@ -115,11 +121,13 @@ public class LoadingServiceImpl implements LoadingService {
 			
 			if (!validContextName(form)) {
 				form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
+				logger.debug("Context name invalid");
 				continue;
 			}
 			
 			if (!userHasRight(form, loggedinUser)) {
 				form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
+				logger.debug("User right issue");
 				continue;
 			}
 				

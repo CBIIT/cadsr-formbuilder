@@ -243,14 +243,14 @@ public class QuestionDescriptor {
 		public void setVdPermissibleValueSeqid(String vdPermissibleValueSeqid) {
 			this.vdPermissibleValueSeqid = vdPermissibleValueSeqid;
 		}
-		/*
+		
 		public String getPreferredName() {
 			return preferredName;
 		}
 		public void setPreferredName(String preferredName) {
 			this.preferredName = preferredName;
 		}
-		*/
+		
 		/*
 		public String getPerferredDefinition() {
 			return perferredDefinition;

@@ -16,7 +16,7 @@ public class ContentValidationServiceImplMockup implements ContentValidationServ
 	public ContentValidationServiceImplMockup() {}
 	
 	@Override
-	public FormCollection validateXmlContent(FormCollection aCollection, String xmlPathName) 
+	public FormCollection validateXmlContent(FormCollection aCollection) 
 			throws FormLoaderServiceException {
 		
 		aCollection = MockDataGenerator.generateContentValidationData();

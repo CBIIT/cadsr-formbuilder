@@ -92,7 +92,7 @@ public class FormDescriptor {
 		if (this.modules.size() > 0) {
 			for (int i = 0; i < this.modules.size(); i++) {
 				ModuleStatus moduleStatus = new ModuleStatus("" + (i+1));
-				moduleStatus.setQuestionStatuses(modules.get(i).getQuestionStatuses());
+				moduleStatus.setQuestionStatuses(modules.get(i).getQuestionStatuses(formStatus.getLoadStatus()));
 				formStatus.getModuleStatuses().add(moduleStatus);
 			}
 		}

@@ -13,6 +13,6 @@ public interface ContentValidationService {
 	 * @return
 	 * @throws FormLoaderServiceException
 	 */
-	public FormCollection validateXmlContent(FormCollection aCollection, String xmlPathName) 
+	public FormCollection validateXmlContent(FormCollection aCollection) 
 			throws FormLoaderServiceException;
 }

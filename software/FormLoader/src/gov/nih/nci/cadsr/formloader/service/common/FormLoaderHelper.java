@@ -22,6 +22,30 @@ import org.xml.sax.SAXException;
 public class FormLoaderHelper {
 	
 	private static Logger logger = Logger.getLogger(FormLoaderHelper.class.getName());
+	
+	public static String checkInputFile(String xmlPath, String xmlName) 
+			throws FormLoaderServiceException
+	{
+		if (xmlPath == null || xmlPath.length() == 0)
+			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_FILE_INVALID,
+					"Input file path on server is null or empty. Unable to validate form content.");
+
+		if (xmlName == null || xmlName.length() == 0)
+			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_FILE_INVALID,
+					"Input file name is null or empty. Unable to validate form content.");
+
+		String xmlPathName = xmlPath.endsWith("\\") ? xmlPath + xmlName : xmlPath + "\\" + xmlName;
+
+		File input = new File(xmlPathName);
+		if (input == null || !input.exists() || !input.canRead())
+			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_FILE_INVALID,
+					"Input file [" + xmlPathName + "] is invalid. Unable to validate form content.");
+
+
+		return xmlPathName;
+	}
+
+	
 
 	public static XmlValidationError filePahtNameContainsError(String filePathName) {
 		if (filePathName == null)

@@ -1,5 +1,6 @@
 package gov.nih.nci.cadsr.formloader.domain;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -155,4 +156,27 @@ public class FormCollection implements java.io.Serializable {
 		this.selected = selected;
 	}
 	
+	public FormCollectionStatus getStructuredStatus() {
+		FormCollectionStatus formCollStatus = new FormCollectionStatus();
+		formCollStatus.setName(this.name);
+		formCollStatus.setXmlFileName(this.xmlFileName);
+		formCollStatus.setCreatedBy(this.createdBy);
+		
+		String dateString = "";
+		if (this.dateCreated != null) {
+			SimpleDateFormat fomatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+			dateString = fomatter.format(this.dateCreated);
+		}
+		
+		formCollStatus.setDateCreated(dateString);  
+		
+		if (this.forms.size() > 0) {
+			for (FormDescriptor form : forms) {
+				FormStatus formStatus = form.getStructuredStatus();
+				formCollStatus.getFormStatuses().add(formStatus);
+			}
+		}
+		
+		return formCollStatus;
+	}
 }
