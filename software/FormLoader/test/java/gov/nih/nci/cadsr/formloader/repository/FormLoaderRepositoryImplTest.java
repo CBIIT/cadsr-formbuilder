@@ -66,7 +66,11 @@ public class FormLoaderRepositoryImplTest {
 		
 		
 		try {
-			List<FormDescriptor> forms = xmlValidator.validateXml(filepath + "\\" + testfile);
+			FormCollection aColl = new FormCollection();
+			aColl.setXmlPathOnServer(filepath);
+			aColl.setXmlFileName(testfile);
+			aColl = xmlValidator.validateXml(aColl);
+			List<FormDescriptor> forms = aColl.getForms();
 			assertNotNull(forms);
 			assertTrue(forms.size() == 1);
 			
@@ -84,7 +88,7 @@ public class FormLoaderRepositoryImplTest {
 			aColl.setXmlPathOnServer(filepath);
 			
 			assertNotNull(contentValidationService);
-			aColl = contentValidationService.validateXmlContent(aColl, filepath + "\\" + testfile);
+			aColl = contentValidationService.validateXmlContent(aColl);
 			
 			assertNotNull(aColl);
 			forms = aColl.getForms();

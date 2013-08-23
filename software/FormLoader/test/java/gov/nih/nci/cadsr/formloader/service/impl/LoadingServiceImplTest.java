@@ -108,12 +108,31 @@ public void testUserHasRight() {
 			fail("Got exception: " + fle.getMessage());
 		}
 	}
+	
+	@Test
+	public void testLoadBiggerNewForm() {
+		this.prepareCollectionToLoad(".\\.\\test\\data", "3256357_v1_0_newform.xml");
+		try {
+			FormDescriptor form = aColl.getForms().get(0);
+			form.setSelected(true);
+			aColl = this.loadService.loadForms(aColl);
+			form = aColl.getForms().get(0);
+			String status = StatusFormatter.getStatusInXml(aColl);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\LoadService-creatednew-bigger.xml");
+		} catch (FormLoaderServiceException fle) {
+			fail("Got exception: " + fle.getMessage());
+		}
+	}
 
 	protected void prepareCollectionToLoad(String filepath, String testfile) {
 		assertNotNull(loadService);
 		
 		try {
-			List<FormDescriptor> forms = xmlValidator.validateXml(filepath + "\\" + testfile);
+			FormCollection aColl = new FormCollection();
+			aColl.setXmlPathOnServer(filepath);
+			aColl.setXmlFileName(testfile);
+			aColl = xmlValidator.validateXml(aColl);
+			List<FormDescriptor> forms = aColl.getForms();
 			assertNotNull(forms);
 			assertTrue(forms.size() == 1);
 			
@@ -131,7 +150,7 @@ public void testUserHasRight() {
 			aColl.setXmlPathOnServer(filepath);
 			
 			assertNotNull(contentValidationService);
-			aColl = contentValidationService.validateXmlContent(aColl, filepath + "\\" + testfile);
+			aColl = contentValidationService.validateXmlContent(aColl);
 			
 			assertNotNull(aColl);
 			forms = aColl.getForms();
@@ -145,8 +164,8 @@ public void testUserHasRight() {
 			//assertTrue(questions.get(1).getPublicId() != null);
 			//assertTrue(questions.get(1).getCdePublicId().equals("2341940"));
 
-			String status = StatusFormatter.getStatusInXml(form);
-			StatusFormatter.writeStatusToXml(status, filepath + "\\LoadService-before.xml");
+			String status = StatusFormatter.getStatusInXml(aColl);
+			StatusFormatter.writeStatusToXml(status, filepath + "\\LoadService-collection.xml");
 		} catch (FormLoaderServiceException fle) {
 			fail("Got exception: " + fle.getMessage());
 		}

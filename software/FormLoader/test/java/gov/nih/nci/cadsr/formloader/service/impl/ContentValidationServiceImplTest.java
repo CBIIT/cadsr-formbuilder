@@ -10,6 +10,7 @@ import gov.nih.nci.cadsr.formloader.domain.QuestionDescriptor;
 import gov.nih.nci.cadsr.formloader.service.ContentValidationService;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceError;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
+import gov.nih.nci.cadsr.formloader.service.common.StatusFormatter;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -53,7 +54,11 @@ public class ContentValidationServiceImplTest {
 		String xmlPathName = ".\\test\\data\\3193449_has_valid_values.xml";
 		
 		try {
-			forms = xmlValidator.validateXml(xmlPathName);
+			FormCollection aColl = new FormCollection();
+			aColl.setXmlPathOnServer(".\\test\\data");
+			aColl.setXmlFileName("3193449_has_valid_values.xml");
+			aColl = xmlValidator.validateXml(aColl);
+			forms = aColl.getForms();
 			assertNotNull(forms);
 			assertTrue(forms.size() == 1);
 			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATED);
@@ -61,7 +66,7 @@ public class ContentValidationServiceImplTest {
 			aColl.setForms(forms);
 			
 			assertNotNull(contentValidationService);
-			aColl = contentValidationService.validateXmlContent(aColl, xmlPathName);
+			aColl = contentValidationService.validateXmlContent(aColl);
 			
 			assertNotNull(aColl);
 			forms = aColl.getForms();
@@ -90,27 +95,15 @@ public class ContentValidationServiceImplTest {
 			assertTrue(question.getValidValues().get(2).isSkip());
 			assertTrue(question.getValidValues().get(3).isSkip());
 			
+			String status = StatusFormatter.getStatusInXml(form);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\3193449_has_valid_values_valstatus.xml");
 			
 		} catch (FormLoaderServiceException fle) {
 			logger.debug(fle);
 			fail("Got exception: " + fle.getMessage());
 		}
 	}
-	
 
-	//@Test -- broken
-	public void testValidateXmlContentWithMockData() {
-		try {
-			
-			FormCollection aColl = generateContentValidationData();
-			aColl = contentValidationService.validateXmlContent(aColl, "afafa");
-			assertNotNull(aColl);
-		} catch (FormLoaderServiceException e) {
-			logger.debug(e);
-		}
-		
-		//fail("Not yet implemented");
-	}
 	
 	@Test
 	public void testDetermineLoadTypeByVersionWithMockData() {

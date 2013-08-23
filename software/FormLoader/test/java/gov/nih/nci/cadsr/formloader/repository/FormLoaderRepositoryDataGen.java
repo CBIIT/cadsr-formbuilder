@@ -339,12 +339,15 @@ public class FormLoaderRepositoryDataGen implements FormLoaderRepository {
 		String testFile = ".\\test\\data\\3193449_has_valid_values.xml";
 
 		try {
-			List<FormDescriptor> forms = xmlValidator.validateXml(testFile);
 			FormCollection aColl = new FormCollection();
+			aColl.setXmlPathOnServer(".\\test\\data");
+			aColl.setXmlFileName("3193449_has_valid_values.xml");
 			aColl.setName("TestCollection");
-			aColl.setForms(forms);
+			aColl = xmlValidator.validateXml(aColl);
+			
+			List<FormDescriptor> forms = aColl.getForms();
 
-			contentValidator.validateXmlContent(aColl, testFile);
+			contentValidator.validateXmlContent(aColl);
 
 		} catch (FormLoaderServiceException fle) {
 			System.out.println(fle);
