@@ -46,30 +46,30 @@ public class JDBCFormValidValueInstructionDAOV2 extends JDBCInstructionDAOV2
    */
   public static void main(String[] args) {
     ServiceLocator locator = new SimpleServiceLocator();
-    JDBCFormValidValueInstructionDAO test = 
-      new JDBCFormValidValueInstructionDAO(locator);
-    
-
-    
-    // test createValueInstructionComponent method.
-    // for each test, change long name(preferred name generated from long name)
-    try {
-      Instruction formValidValueInstr = 
-        new InstructionTransferObject();
-      
-      formValidValueInstr.setVersion(new Float(2.31));
-      formValidValueInstr.setLongName("Test Valid Value Instr Long Name 030204 1");
-      formValidValueInstr.setPreferredDefinition("Test Valid Value Instr pref def");
-      formValidValueInstr.setConteIdseq("99BA9DC8-2095-4E69-E034-080020C9C0E0");
-      formValidValueInstr.setAslName("DRAFT NEW");
-      formValidValueInstr.setCreatedBy("Hyun Kim");
-      formValidValueInstr.setDisplayOrder(101);
-      int res = test.createInstruction(formValidValueInstr,"D4AA6D94-3345-1C0E-E034-0003BA0B1A09");
-      System.out.println("\n*****Create Valid Value Instruction Result 1: " + res);
-    }
-    catch (DMLException de) {
-      de.printStackTrace();
-    }
+//    JDBCFormValidValueInstructionDAO test = 
+//      new JDBCFormValidValueInstructionDAO(locator);
+//    
+//
+//    
+//    // test createValueInstructionComponent method.
+//    // for each test, change long name(preferred name generated from long name)
+//    try {
+//      Instruction formValidValueInstr = 
+//        new InstructionTransferObject();
+//      
+//      formValidValueInstr.setVersion(new Float(2.31));
+//      formValidValueInstr.setLongName("Test Valid Value Instr Long Name 030204 1");
+//      formValidValueInstr.setPreferredDefinition("Test Valid Value Instr pref def");
+//      formValidValueInstr.setConteIdseq("99BA9DC8-2095-4E69-E034-080020C9C0E0");
+//      formValidValueInstr.setAslName("DRAFT NEW");
+//      formValidValueInstr.setCreatedBy("Hyun Kim");
+//      formValidValueInstr.setDisplayOrder(101);
+//      int res = test.createInstruction(formValidValueInstr,"D4AA6D94-3345-1C0E-E034-0003BA0B1A09");
+//      System.out.println("\n*****Create Valid Value Instruction Result 1: " + res);
+//    }
+//    catch (DMLException de) {
+//      de.printStackTrace();
+//    }
   }
 
 

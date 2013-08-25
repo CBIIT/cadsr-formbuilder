@@ -18,50 +18,49 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.FileUtils;
 import org.apache.struts2.interceptor.ServletRequestAware;
+import org.apache.struts2.interceptor.SessionAware;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-public class ValidateFormsAction extends ActionSupport implements ServletRequestAware{
+public class ValidateFormsAction extends ActionSupport implements SessionAware{
 	private Map<Integer, String> checkboxes;
     private List<FormObj> selectedFormsList = new ArrayList<FormObj>();
-    private HttpServletRequest servletRequest;
     
     
     public String execute() {
     	System.out.println("in ValidateFormsAction.execute()");
-        try {
-        	List<FormObj> parsedFormsList = (List<FormObj>) servletRequest.getSession().getValue("parsedFormsList");
-        	
-        	if (checkboxes != null && checkboxes.size()>0){
-				
-				for (int i=0; i<checkboxes.size();i++) {
-					Integer key = new Integer(i);
-					if (checkboxes.containsKey(key)) {
-						String checkboxValue = checkboxes.get(key).toString();
-						if (checkboxValue.equals("true")) {
-							FormObj selectedForm = parsedFormsList.get(i);
-							selectedForm = ValidationMockupService.getInstance().validateForm(selectedForm);
-							
-							selectedFormsList.add(selectedForm);
-						}
-					}
-				}
-				
-			}
-        	
-        	servletRequest.getSession().putValue("selectedFormsList", selectedFormsList);
-        	System.out.println(selectedFormsList.size()+" Forms selected for validation");
-        	
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getMessage());
-            addActionError(e.getMessage());
- 
-            return INPUT;
-        }
+//        try {
+//        	List<FormObj> parsedFormsList = (List<FormObj>) servletRequest.getSession().getValue("parsedFormsList");
+//        	
+//        	if (checkboxes != null && checkboxes.size()>0){
+//				
+//				for (int i=0; i<checkboxes.size();i++) {
+//					Integer key = new Integer(i);
+//					if (checkboxes.containsKey(key)) {
+//						String checkboxValue = checkboxes.get(key).toString();
+//						if (checkboxValue.equals("true")) {
+//							FormObj selectedForm = parsedFormsList.get(i);
+//							selectedForm = ValidationMockupService.getInstance().validateForm(selectedForm);
+//							
+//							selectedFormsList.add(selectedForm);
+//						}
+//					}
+//				}
+//				
+//			}
+//        	
+//        	servletRequest.getSession().putValue("selectedFormsList", selectedFormsList);
+//        	System.out.println(selectedFormsList.size()+" Forms selected for validation");
+//        	
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            System.err.println(e.getMessage());
+//            addActionError(e.getMessage());
+// 
+//            return INPUT;
+//        }
         return SUCCESS;
     }
  
@@ -80,10 +79,11 @@ public class ValidateFormsAction extends ActionSupport implements ServletRequest
 	public void setCheckboxes(Map<Integer, String> checkboxes) {
 		this.checkboxes = checkboxes;
 	}
-	
 
-    public void setServletRequest(HttpServletRequest servletRequest) {
-        this.servletRequest = servletRequest;
- 
-    }
+
+	@Override
+	public void setSession(Map<String, Object> arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 }
