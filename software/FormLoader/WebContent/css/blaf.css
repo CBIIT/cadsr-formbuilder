@@ -169,3 +169,12 @@ B:gvisited {font-family:Arial, Helvetica, Geneva, sans-serif; font-size:10pt; co
 .OraHeaderSubSubSub {font-family:Arial, Helvetica, Geneva, sans-serif; font-size: 10pt; color:#336699; font-weight:bold}
 .AbbreviatedTextBold {FONT-SIZE: 8pt; COLOR: #336699; FONT-FAMILY: Arial, Helvetica, Geneva, sans-serif; text-align: left; font-weight:bold;}
 .AltQuestionField {font-family:Arial, Helvetica, Geneva, sans-serif; font-size:10pt; color:#000000; width:150mm }
+
+.tdLabel {FONT-WEIGHT: bold; FONT-SIZE: 10pt; COLOR: #336699; FONT-FAMILY: Arial, Helvetica, Geneva, sans-serif; TEXT-ALIGN: right}
+.u {font-family:Arial, Helvetica, Geneva, sans-serif; font-size:10pt; color:#336699}
+.td {font-family:Arial, Helvetica, Geneva, sans-serif; font-size:10pt; color:#336699}
+.h5 {font-family:Arial, Helvetica, Geneva, sans-serif; font-size:10pt; color:#336699}
+table, td
+{
+font-family:Arial, Helvetica, Geneva, sans-serif; font-size:10pt; color:#336699;
+}

@@ -1,10 +1,3 @@
-<%--L
-  Copyright Oracle Inc, ScenPro Inc, SAIC-F
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
-L--%>
-
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 
@@ -13,12 +6,14 @@ L--%>
 <head>
 <title>Login</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<LINK REL=STYLESHEET TYPE="text/css" HREF="<%=request.getContextPath()%>/css/blaf.css">
+
  <s:head />
 </head>
 
 <body  height ="100%" width = "100%" text="#000000" topmargin="0">
 
-   <%@ include file="basicHeader_inc.jsp"%>
+   <%@ include file="basicHeaderLogin_inc.jsp"%>
    
 <br>
 <br>
@@ -49,18 +44,27 @@ L--%>
    <br> If you require an account with curator privileges to a specific context other than Test, please contact NCICB Application Support Email: <a href='mailto:ncicb@pop.nci.nih.gov'>ncicb@pop.nci.nih.gov</a>
       </td>
     </tr>  
-  </table>  
+    </table>
   
 
   <p>
 
   <s:actionerror />
+
+ <table>
 <s:form action="login" method="post">
-	<s:textfield name="username" key="label.username" size="20" />
-	<s:password name="password" key="label.password" size="20" />
-	<s:submit method="execute" key="label.login" align="center" />
+  <tr>
+	<s:textfield name="username" key="label.username" size="20" />  </tr>
+	  <tr>
+	<s:password name="password" key="label.password" size="20" />  </tr>
+	  <tr>
+	  	<td colspan="1" align="left" nowrap>
+<s:submit type="image" src="/FormLoader/i/logon.gif" method="execute" align="left" theme="simple" /></td>
+	  	<td colspan="1" align="left" nowrap>
+<s:submit type="image" src="/FormLoader/i/clear.gif" method="clear" align="left" theme="simple"/></td>
+  </tr>
 </s:form>
- 
+ </table> 
   <p>
 <%@ include file="common/common_bottom_border.jsp"%>
 

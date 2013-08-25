@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<!--L
-  Copyright Oracle Inc, ScenPro Inc, SAIC-F
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
-L-->
-
 <!DOCTYPE tiles-definitions PUBLIC
        "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
@@ -15,23 +8,25 @@ L-->
 
 	<definition name="baseLayout" template="/BaseLayout.jsp">
 		<put-attribute name="title" value="" />
-		<put-attribute name="header" value="/basicHeader_inc.jsp" />
-		<put-attribute name="menu" value="/Menu2.jsp" />
+		<put-attribute name="header" value="/basicHeaderLogin_inc.jsp" />
 		<put-attribute name="body" value="" />
 		<put-attribute name="footer" value="/Footer.jsp" />
 	</definition>
 
-	<definition name="/welcome.tiles" extends="baseLayout">
+	<definition name="/home.tiles" extends="baseLayout">
 		<put-attribute name="title" value="Welcome" />
-		<put-attribute name="body" value="/Welcome.jsp" />
+		<put-attribute name="header" value="/basicHeader_inc.jsp" />
+		<put-attribute name="body" value="/HomePage.jsp" />
 	</definition>
 	
 	<definition name="/upload.tiles" extends="baseLayout">
 		<put-attribute name="title" value="Upload a XML File" />
+		<put-attribute name="header" value="/basicHeader_inc.jsp" />
 		<put-attribute name="body" value="/UploadXMLFile.jsp" />
 	</definition>
 	<definition name="/upload.parse.tiles" extends="baseLayout">
 		<put-attribute name="title" value="View Validated Forms" />
+		<put-attribute name="header" value="/basicHeader_inc.jsp" />
 		<put-attribute name="body" value="/ViewParsedForms.jsp" />
 	</definition>
 	<definition name="/upload.error.tiles" extends="baseLayout">
