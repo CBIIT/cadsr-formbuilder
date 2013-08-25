@@ -1,9 +1,3 @@
-<%--L
-  Copyright Oracle Inc, ScenPro Inc, SAIC-F
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
-L--%>
 
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
@@ -24,7 +18,7 @@ L--%>
     <bean:write name="nciUser" property="username"  scope="session"/>
   </logic:present>
   <logic:notPresent name="nciUser">
-    Public User    
+    <s:property value="username" />    
   </logic:notPresent>
 </FONT>
 </td>
@@ -33,7 +27,7 @@ L--%>
 </TD>
 
 <td width="30%" align="right">
- <FONT color="white" size=-2 face=arial>Version 4.0.4 Iteration 2&nbsp;&nbsp;Build 3
+ <FONT color="white" size=-2 face=arial>Version 4.1 Iteration 1&nbsp;&nbsp;Build 1
  </FONT>
 </TD>
 
