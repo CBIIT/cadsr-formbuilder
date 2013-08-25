@@ -28,12 +28,32 @@
 		
 		<action name="login" class="gov.nih.nci.cadsr.formloader.struts2.LoginAction"> 
 			<interceptor-ref name="loggingStack"/> 
-			<result name="success" type="tiles">/welcome.tiles</result> 
+			<result name="success" type="tiles">/home.tiles</result> 
 			<result name="error">LoginForm.jsp</result> 
 		</action>
 		
+		<action name="clear" class="gov.nih.nci.cadsr.formloader.struts2.LoginAction">
+			<result name="success" type="redirect">LoginForm.jsp</result>
+		</action>
 		
-		<action name="xmlFileUpload"
+		<action name="logout" class="gov.nih.nci.cadsr.formloader.struts2.LogoutAction">
+			<result name="success" type="redirect">LoginForm.jsp</result>
+		</action>
+		
+		<action name="home" class="gov.nih.nci.cadsr.formloader.struts2.HomeAction">
+			<interceptor-ref name="loggingStack"/> 
+			<result name="success" type="tiles">/home.tiles</result>
+		</action>
+		
+		<action name="validatexml" class="gov.nih.nci.cadsr.formloader.struts2.ValidateXMLAction">
+			<result name="success" type="tiles">/upload.parse.tiles</result>
+		</action>
+		
+		<action name="cancelloadform" class="gov.nih.nci.cadsr.formloader.struts2.ValidateXMLAction">
+			<result name="success" type="tiles">/home.tiles</result>
+		</action>
+		
+<!-- 		<action name="xmlFileUpload"
     		class="gov.nih.nci.cadsr.formloader.struts2.XMLFileUploadAction">
     			<interceptor-ref name="fileUpload">
         			<param name="maximumSize">2597152</param>
@@ -43,37 +63,37 @@
    			 	<result name="input" type="tiles">/upload.tiles</result>
 				<result name="success" type="tiles">/upload.parse.tiles</result>
 				<result name="error" type="tiles">/upload.error.tiles</result>
-		</action>
+		</action> -->
 		<action name="upload-form">
 			<result type="tiles">/upload.tiles</result>
 		</action>
 		
 		
-<!--		<action name="validateForms" 
+<!-- 		<action name="validateForms" 
 			class="gov.nih.nci.cadsr.formloader.struts2.ValidateFormsAction">
 			<interceptor-ref name="loggingStack"></interceptor-ref>
 				<result name="input" type="tiles">/upload.parse.tiles</result>
     			<result name="success" type="tiles">/upload.validate.tiles</result>
-		</action>
+		</action>-->
 		<action name="upload-validate-form">
 			<result type="tiles">/upload.parse.tiles</result>
 		</action>
 		
- 		<action name="loadForms" 
+<!-- 		<action name="loadForms" 
 			class="gov.nih.nci.cadsr.formloader.struts2.LoadFormsAction">
 			<interceptor-ref name="loggingStack"></interceptor-ref>
 				<result  name="input" type="tiles">/upload.validate.tiles</result>
     			<result name="success" type="tiles">/upload.summary.tiles</result>
-		</action>
+		</action> -->
 		
-		<action name="search-form" 
+<!--  	<action name="search-form" 
 			class="gov.nih.nci.cadsr.formloader.struts2.SearchXMLFileAction">
 			<interceptor-ref name="loggingStack"></interceptor-ref>
     			<result name="success" type="tiles">/search.tiles</result>
     			<result type="tiles">/search.tiles</result>
-		</action>
+		</action> -->
 		
-		<action name="searchUploadedXMLFiles" method = "searchAction" 
+<!-- 		<action name="searchUploadedXMLFiles" method = "searchAction" 
 			class="gov.nih.nci.cadsr.formloader.struts2.SearchXMLFileAction">
 			<interceptor-ref name="loggingStack"></interceptor-ref>
 			<result name="success" type="tiles">/search.tiles</result>
@@ -91,7 +111,7 @@
 			<interceptor-ref name="loggingStack"></interceptor-ref>
     			<result name="success" type="tiles">/unloadSummary.tiles</result>
     			<result type="tiles">/unloadSummary.tiles</result>
-		</action>
-		-->
+		</action> -->
+		
 	</package>
 </struts>
