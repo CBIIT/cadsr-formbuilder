@@ -11,15 +11,30 @@ L--%>
 <html>
 <head>
 <title>Upload XML File</title>
+<LINK REL=STYLESHEET TYPE="text/css" HREF="<%=request.getContextPath()%>/css/blaf.css">
 <sx:head />
 </head>
  
 <body>
-<h2>Upload a XML File defining Forms</h2>
+<h2>Load Form Collection</h2>
 <s:actionerror />
+<table>
 <s:form action="xmlFileUpload" method="post" enctype="multipart/form-data">
-    <s:file name="xmlFile" label="XML File" />
-    <s:submit value="Upload" align="center" />
+<tr><td colspan="2" align="left" nowrap>
+   <s:textfield key="Form Collection XML File" name="form_collection" /></td></tr>
+    <tr><td colspan="2" align="left" nowrap>
+   <s:textfield key="Form Collection Name" name="collection_name" /></td></tr>
+   <tr><td colspan="2" align="left" nowrap>
+   <s:textarea key="Form Collection Description" name="description"/></td></tr>
+    	  <tr>
+	  	<td colspan="1" align="left" nowrap>
+<s:submit type="image" src="/FormLoader/i/validate.gif" method="execute" align="left" theme="simple" /></td>
+	  	<td colspan="1" align="left" nowrap>
+<s:submit type="image" src="/FormLoader/i/cancel.gif" method="cancel" align="left" theme="simple"/></td>
+	  	<td colspan="1" align="left" nowrap>
+<s:submit type="image" src="/FormLoader/i/reset.gif" method="reset" align="left" theme="simple"/></td>
+  </tr>
 </s:form>
+</table>
 </body>
 </html>
