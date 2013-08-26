@@ -12,6 +12,7 @@ import org.apache.struts2.interceptor.SessionAware;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class LoginAction extends ActionSupport implements SessionAware{
@@ -37,6 +38,8 @@ public class LoginAction extends ActionSupport implements SessionAware{
 		UserManagerDAO userManagerDAOV2 = (UserManagerDAO)applicationContext.getBean("userManagerDAO");
 
 		if (userManagerDAOV2.validUser(username, password)==true) {
+			Map session = ActionContext.getContext().getSession();
+			setSession(session);
 			return SUCCESS;
 		} else
 		{
@@ -90,6 +93,7 @@ public class LoginAction extends ActionSupport implements SessionAware{
 	public void setSession(Map<String, Object> map) {
 		sessionmap = (SessionMap)map;
 		sessionmap.put("login","true");
+		sessionmap.put("username",getUsername());
 	}
 	
 	public String clear()

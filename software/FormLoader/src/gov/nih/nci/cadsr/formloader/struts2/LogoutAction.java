@@ -13,8 +13,8 @@ public class LogoutAction extends ActionSupport {
 	@Override
 	public String execute() throws Exception {
 	Map session = ActionContext.getContext().getSession();
-	session.remove("userName");
-	session.remove("password");
+	session.clear();
 	return SUCCESS;
+	
 	}
 	}

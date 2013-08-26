@@ -14,12 +14,10 @@
 &nbsp;
 <FONT face="Arial" color="WHITE" size="-2">User: </FONT>
 <FONT face="Arial" size="-1" color="#CCCC99">
-  <logic:present name="nciUser">
-    <bean:write name="nciUser" property="username"  scope="session"/>
-  </logic:present>
-  <logic:notPresent name="nciUser">
-    <s:property value="username" />    
-  </logic:notPresent>
+<%
+   String name = request.getParameter( "username" );
+%>
+<s:property value="%{#session.username}" />  
 </FONT>
 </td>
 <td width="10%" align="right">
