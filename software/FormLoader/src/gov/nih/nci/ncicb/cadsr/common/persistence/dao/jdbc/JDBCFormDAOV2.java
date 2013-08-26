@@ -1,26 +1,73 @@
 package gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc;
 
+import gov.nih.nci.cadsr.formloader.service.common.FormXMLConverter;
+import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ModuleTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.jdbc.JDBCFormTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ConceptDAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ContactCommunicationV2DAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ContextDAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.FormDAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.FormInstructionDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.FormV2DAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.FormValidValueInstructionDAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ModuleInstructionDAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ModuleV2DAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.QuestionDAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.QuestionInstructionDAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.QuestionRepititionDAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ReferenceDocumentDAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.TriggerActionDAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ValueDomainV2DAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormDAO.FormByClassificationQuery;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormDAO.FormProtocolByFormPrimaryKey;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormDAO.FormQuery;
+import gov.nih.nci.ncicb.cadsr.common.resource.ConceptDerivationRule;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormElement;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue;
 import gov.nih.nci.ncicb.cadsr.common.resource.Module;
 import gov.nih.nci.ncicb.cadsr.common.resource.Protocol;
+import gov.nih.nci.ncicb.cadsr.common.resource.Question;
+import gov.nih.nci.ncicb.cadsr.common.resource.QuestionRepitition;
+import gov.nih.nci.ncicb.cadsr.common.resource.ReferenceDocument;
+import gov.nih.nci.ncicb.cadsr.common.resource.TriggerAction;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomain;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomainV2;
+import gov.nih.nci.ncicb.cadsr.common.util.StringUtils;
 
+import java.io.ByteArrayOutputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
+import org.exolab.castor.xml.MarshalException;
+import org.exolab.castor.xml.Marshaller;
+import org.exolab.castor.xml.ValidationException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -569,24 +616,618 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
     }
     
     
-    public static void main(String[] args) {
-    	
-    	//DataSource ds = DataSourceUtil.getDriverManagerDS(
-    	//		"oracle.jdbc.OracleDriver", 
-    	//		"jdbc:oracle:thin:@ncidb-dsr-d:1551:DSRDEV", 
-    	//		"FORMBUILDER", "FORMBUILDER");
-    	
-    	DataSource ds = new DriverManagerDataSource("jdbc:oracle:thin:@ncidb-dsr-d:1551:DSRDEV", 
-    			"FORMBUILDER", "FORMBUILDER");
-    	
-    	JDBCFormDAOV2 form2Dao = new JDBCFormDAOV2(ds);   	
-    	FormV2 form = form2Dao.findFormV2ByPrimaryKey("BFC76B3A-AC92-45C7-E040-BB89AD430B2C");
-    	String workflow = form.getAslName();
-    	System.out.println("Got workflow: " + workflow);
-    	//ds.getConnection().close();
-    	
-  
+
+    
+    /**
+     * Gets all the forms that match the given criteria
+     *
+     * @param formName
+     * @param protocolIdseq
+     * @param contextIdseq
+     * @param workflow
+     * @param category
+     * @param type
+     *
+     * @return forms that match the criteria.
+     */
+    public Collection getAllForms(
+      String formLongName,
+      String protocolIdSeq,
+      String contextIdSeq,
+      String workflow,
+      String categoryName,
+      String type,
+      String classificationIdseq,
+      String contextRestriction,
+      String publicId,
+      String version,
+      String moduleLongName,
+      String cdePublicId) {
+      FormQuery query = new FormQuery();
+      query.setDataSource(getDataSource());
+      query.setSql(
+        formLongName, protocolIdSeq, contextIdSeq, workflow, categoryName, type,
+        classificationIdseq,contextRestriction, publicId, version, moduleLongName, cdePublicId);
+
+      Collection forms =  query.execute();
+      //add protocols
+      fetchProtocols(forms);
+      return forms;
+    }
+
+
+   //Publis Change Order
+    /**
+     * Gets all the forms that has been classified by this Classification
+     *
+     * @param <b>formId</b> Idseq of the Classification
+     *
+     * @return <b>Collection</b> List of Forms
+     */
+    public Collection getAllFormsForClassification(String classificationIdSeq)
+    {
+      FormByClassificationQuery query = new FormByClassificationQuery();
+      query.setDataSource(getDataSource());
+      query.setQuerySql(classificationIdSeq);
+      List forms = query.execute();
+      fetchProtocols(forms);
+      return forms;
     }
     
+    private void fetchProtocols( Collection forms){
+        if (forms == null || forms.isEmpty()){
+            return;
+        }
+
+        Iterator it = forms.iterator();
+        while (it.hasNext()){
+            Form form = (Form)it.next();
+            form.setProtocols(getProtocols(form));
+        }
+        return;
+    }
+
+    /**
+     * Inner class that accesses database to get all the forms and modules that
+     * match the given criteria
+     */
+    class FormQuery extends MappingSqlQuery {
+      FormQuery() {
+        super();
+      }
+
+      public void setSql(
+        String formLongName,
+        String protocolIdSeq,
+        String contextIdSeq,
+        String workflow,
+        String categoryName,
+        String type,
+        String classificationIdseq,
+        String contextRestriction,
+        String publicId,
+        String version,
+        String moduleName,
+        String cdePublicId) {
+
+        String selectWhat = "SELECT distinct f.qc_idseq, f.version, f.type, f.conte_idseq, f.CATEGORY_NAME, f.workflow, f.preferred_name, f.definition, " +
+                            " f.long_name, f.context_name, f.public_id, latest_version_ind,  f.DATE_MODIFIED, f.DATE_CREATED ";
+        StringBuffer fromWhat = new StringBuffer(" FROM FB_FORMS_VIEW f ");
+        StringBuffer initialWhere = new StringBuffer();
+        boolean hasWhere = false;
+        if (StringUtils.doesValueExist(moduleName) || StringUtils.doesValueExist(cdePublicId)){
+          fromWhat.append(", FB_QUEST_MODULE_VIEW q ");
+          initialWhere.append(" where ( f.QC_IDSEQ = q.FORM_IDSEQ )");
+          hasWhere = true;
+        }
+        if (StringUtils.doesValueExist(protocolIdSeq) || StringUtils.doesValueExist(protocolIdSeq)){
+          fromWhat.append(", protocol_qc_ext p ");
+          if (hasWhere){
+              initialWhere.append(" AND ( f.QC_IDSEQ = p.qc_idseq) and (p.proto_idseq ='" + protocolIdSeq + "') ");
+          }else{
+              initialWhere.append(" where ( f.QC_IDSEQ = p.qc_idseq) and (p.proto_idseq ='" + protocolIdSeq + "') ");
+              hasWhere = true;
+          }
+        }
+        String whereClause = makeWhereClause(
+                            formLongName, protocolIdSeq, contextIdSeq, workflow, categoryName,
+                            type, classificationIdseq,contextRestriction,
+                            publicId, version, moduleName, cdePublicId, hasWhere);
+        String sql = selectWhat.toString() + " " + fromWhat.toString() + " "
+                      + initialWhere.toString() + whereClause;
+        super.setSql(sql);
+        
+        System.out.println("FRM SEARCH QRY: ["+sql+"]");
+
+      }   
+      
+      /**
+       * 3.0 Refactoring- Removed JDBCTransferObject
+       */
+       protected Object mapRow(
+         ResultSet rs,
+         int rownum) throws SQLException {
+         String formName = rs.getString("LONG_NAME");
+
+         Form form = new FormTransferObject();
+   /*      String selectWhat = "distinct f.qc_idseq, f.version, f.type, f.conte_idseq, f.CATEGORY_NAME, f.workflow, f.preferred_name, f.definition, " +
+                             " f.long_name, f.context_name, f.public_id, latest_version_ind, f. ";
+   */
+        form.setFormIdseq(rs.getString(1)); // QC_IDSEQ
+        form.setIdseq(rs.getString(1));
+        form.setLongName(rs.getString(9)); //LONG_NAME
+        form.setPreferredName(rs.getString(7)); // PREFERRED_NAME
+
+        //setContext(new ContextTransferObject(rs.getString("context_name")));
+        ContextTransferObject contextTransferObject = new ContextTransferObject();
+        contextTransferObject.setConteIdseq(rs.getString(4)); //CONTE_IDSEQ
+        contextTransferObject.setName(rs.getString(10)); // CONTEXT_NAME
+        form.setContext(contextTransferObject);
+        form.setDateModified(rs.getTimestamp(13));
+
+        //multiple protcols will be set later
+        form.setFormType(rs.getString(3)); // TYPE
+        form.setAslName(rs.getString(6)); // WORKFLOW
+        form.setVersion(new Float(rs.getString(2))); // VERSION
+        form.setPublicId(rs.getInt(11)); //Public ID
+        form.setPreferredDefinition(rs.getString(8)); // PREFERRED_DEFINITION
+        form.setCreatedBy(rs.getString(14)); // CREATED_BY
+        form.setFormCategory(rs.getString(5));
+
+       return form;
+       }
+       
+      public String makeWhereClause(
+    	      String formName,
+    	      String protocol,
+    	      String context,
+    	      String workflow,
+    	      String category,
+    	      String type,
+    	      String classificationIdseq,
+    	      String contextRestriction,
+    	      String publicId,
+    	      String version,
+    	      String moduleName,
+    	      String cdePublicId,
+    	      boolean hasWhere)
+    	    {
+    	      String where = "";
+    	      StringBuffer whereBuffer = new StringBuffer("");
+
+    	      if (StringUtils.doesValueExist(formName)) {
+    	        String temp = StringUtils.strReplace(formName, "*", "%");
+    	        temp = StringUtils.strReplace(temp, "'", "''");
+
+    	        if (hasWhere) {
+    	          whereBuffer.append(
+    	            " AND UPPER(f.LONG_NAME) LIKE " + "UPPER('" + temp + "')");
+    	        }
+    	        else {
+    	          whereBuffer.append(
+    	            " WHERE UPPER(f.LONG_NAME) LIKE " + "UPPER('" + temp + "')");
+    	          hasWhere = true;
+    	        }
+    	      }
+
+    	      if (StringUtils.doesValueExist(protocol)) {
+    	        if (hasWhere) {
+    	          whereBuffer.append(" AND p.PROTO_IDSEQ ='" + protocol + "'");
+    	        }
+    	        else {
+    	          whereBuffer.append(" WHERE p.PROTO_IDSEQ ='" + protocol + "'");
+    	          hasWhere = true;
+    	        }
+    	      }
+
+    	      //context filter or exclude contexts
+    	      if (StringUtils.doesValueExist(context)) {
+    	        if (hasWhere) {
+    	          whereBuffer.append(" AND f.CONTE_IDSEQ ='" + context + "'");
+    	        }
+    	        else {
+    	          whereBuffer.append(" WHERE f.CONTE_IDSEQ ='" + context + "'");
+    	          hasWhere = true;
+    	        }
+    	      }
+    	      else if (StringUtils.doesValueExist(contextRestriction)) {
+    	        if (hasWhere) {
+    	          whereBuffer.append(" AND ");
+    	        }
+    	        else {
+    	          whereBuffer.append(" WHERE ");
+    	          hasWhere = true;
+    	        }
+    	        whereBuffer.append("(f.CONTEXT_NAME not in (" + contextRestriction + "))");
+    	      }
+
+    	      if (StringUtils.doesValueExist(workflow)) {
+    	        if (hasWhere) {
+    	          whereBuffer.append(" AND f.WORKFLOW ='" + workflow + "'");
+    	        }
+    	        else {
+    	          whereBuffer.append(" WHERE f.WORKFLOW ='" + workflow + "'");
+    	          hasWhere = true;
+    	        }
+    	      }
+
+    	      if (StringUtils.doesValueExist(category)) {
+    	        if (hasWhere) {
+    	          whereBuffer.append(" AND f.CATEGORY_NAME ='" + category + "'");
+    	        }
+    	        else {
+    	          whereBuffer.append(" WHERE f.CATEGORY_NAME ='" + category + "'");
+    	          hasWhere = true;
+    	        }
+    	      }
+
+    	      if (StringUtils.doesValueExist(type)) {
+    	        if (hasWhere) {
+    	          whereBuffer.append(" AND f.TYPE ='" + type + "'");
+    	        }
+    	        else {
+    	          whereBuffer.append(" WHERE f.TYPE ='" + type + "'");
+    	          hasWhere = true;
+    	        }
+    	      }
+
+    	      if (StringUtils.doesValueExist(classificationIdseq)) {
+    	        if (hasWhere) {
+    	          whereBuffer.append(
+    	            " AND f.QC_IDSEQ in (select ac_idseq from sbr.ac_csi_view where CS_CSI_IDSEQ ='" +
+    	            classificationIdseq + "')");
+    	        }
+    	        else {
+    	          whereBuffer.append(
+    	            " WHERE f.QC_IDSEQ in (select ac_idseq from sbr.ac_csi_view where CS_CSI_IDSEQ ='" +
+    	            classificationIdseq + "')");
+    	          hasWhere = true;
+    	        }
+    	      }
+
+    	        if (StringUtils.doesValueExist(publicId)) {
+    	          if (hasWhere) {
+    	            whereBuffer.append(" AND (f.PUBLIC_ID =" + publicId + ")");
+    	          }
+    	          else {
+    	            whereBuffer.append(" WHERE (f.PUBLIC_ID =" + publicId + ")");
+    	            hasWhere = true;
+    	          }
+    	        }
+
+    	        if (StringUtils.doesValueExist(version) && "latestVersion".equals(version)) {
+    	            if (hasWhere) {
+    	              whereBuffer.append(" AND (f.LATEST_VERSION_IND='Yes')");
+    	            }
+    	            else {
+    	              whereBuffer.append(" WHERE (f.LATEST_VERSION_IND='Yes')");
+    	              hasWhere = true;
+    	            }
+    	        }//eles indicate all versions.
+
+    	         if (StringUtils.doesValueExist(moduleName)) {
+    	            String temp = StringUtils.strReplace(moduleName, "*", "%");
+    	            temp = StringUtils.strReplace(temp, "'", "''");
+    	             if (hasWhere) {
+    	               whereBuffer.append(" AND (UPPER(q.MODULE_NAME) like UPPER('" + temp + "'))");
+    	             }
+    	             else {
+    	               whereBuffer.append(" WHERE (UPPER(q.MODULE_NAME) like UPPER('" + temp + "'))");
+    	               hasWhere = true;
+    	             }
+    	         }
+
+    	        if (StringUtils.doesValueExist(cdePublicId)) {
+    	            if (hasWhere) {
+    	              whereBuffer.append(" AND (q.CDE_ID='" + cdePublicId + "')");
+    	            }
+    	            else {
+    	              whereBuffer.append(" WHERE (q.CDE_ID='" + cdePublicId + "')");
+    	              hasWhere = true;
+    	            }
+    	        }
+
+    	      where = whereBuffer.toString();
+
+    	      return where;
+    	    }
+    	  }
+
+    	//Publish Change Order
+
+	  /**
+	   * Inner class that accesses database to get all the forms
+	   * match the given criteria
+	   */
+	  class FormByClassificationQuery extends MappingSqlQuery {
+	    FormByClassificationQuery() {
+	      super();
+	    }
+
+	    public void setQuerySql(String csidSeq) {
+	     String querySql = " SELECT * FROM FB_FORMS_VIEW formview, sbr.cs_csi_view csc,sbr.ac_csi_view acs "
+	        + " where  csc.cs_idseq = '"+ csidSeq +"'"
+	        + " and csc.cs_csi_idseq = acs.cs_csi_idseq "
+					+ " and acs.AC_IDSEQ=formview.QC_IDSEQ "
+	        + " ORDER BY upper(protocol_long_name), upper(context_name)";
+	      super.setSql(querySql);
+	    }
+
+
+	    protected Object mapRow(
+	      ResultSet rs,
+	      int rownum) throws SQLException {
+	      String formName = rs.getString("LONG_NAME");
+
+	      return new JDBCFormTransferObject(rs);
+	    }
+
+	  }  
+    	  
+    		
+    		
+		public FormV2 getFormDetailsV2(String formPK)
+	    {
+	        FormV2 myForm = null;
+	        JDBCFormDAOV2 fdao = new JDBCFormDAOV2(getDataSource());
+	        JDBCQuestionRepititionDAOV2 qrdao = new JDBCQuestionRepititionDAOV2(getDataSource());
+	        JDBCFormInstructionDAOV2 fInstrdao = new JDBCFormInstructionDAOV2(getDataSource());
+
+	        JDBCModuleDAOV2 mdao = new JDBCModuleDAOV2(getDataSource());
+	        JDBCModuleInstructionDAOV2 mInstrdao = new JDBCModuleInstructionDAOV2(getDataSource());
+
+	        JDBCQuestionDAOV2 qdao = new JDBCQuestionDAOV2(getDataSource());
+	        JDBCQuestionInstructionDAOV2 qInstrdao = new JDBCQuestionInstructionDAOV2(getDataSource());
+
+//    	        FormValidValueDAO vdao = daoFactory.getFormValidValueDAO();
+	        JDBCFormValidValueInstructionDAOV2 vvInstrdao = new JDBCFormValidValueInstructionDAOV2(getDataSource());
+	        JDBCContextDAOV2 cdao = new JDBCContextDAOV2(getDataSource());
+
+	        JDBCFormDAOV2 fV2dao = new JDBCFormDAOV2(getDataSource());
+	        myForm = fV2dao.findFormV2ByPrimaryKey(formPK);
+
+	        List refDocs =
+	            fdao.getAllReferenceDocuments(formPK, ReferenceDocument.REF_DOC_TYPE_IMAGE);
+	        myForm.setReferenceDocs(refDocs);
+
+	        List instructions = fInstrdao.getInstructions(formPK);
+	        myForm.setInstructions(instructions);
+
+	        List footerInstructions = fInstrdao.getFooterInstructions(formPK);
+	        myForm.setFooterInstructions(footerInstructions);
+
+	        List modules = (List)fdao.getModulesInAForm(formPK);
+	        Iterator mIter = modules.iterator();
+	        List questions;
+	        Iterator qIter;
+	        List values;
+	        Iterator vIter;
+	        Module block;
+	        Question term;
+	        FormValidValue value;
+
+	        Map<String,FormElement> possibleTargets = new HashMap<String,FormElement>();
+	        List<TriggerAction>  allActions = new ArrayList<TriggerAction>();
+
+	        while (mIter.hasNext())
+	        {
+	            block = (Module)mIter.next();
+	            block.setForm(myForm);
+
+	            String moduleId = block.getModuleIdseq();
+
+	            List mInstructions = mInstrdao.getInstructions(moduleId);
+	            block.setInstructions(mInstructions);
+
+	            questions = (List)mdao.getQuestionsInAModuleV2(moduleId);
+	            qIter = questions.iterator();
+
+	            while (qIter.hasNext())
+	            {
+	                term = (Question)qIter.next();
+	                term.setModule(block);
+	                String termId = term.getQuesIdseq();
+	                 possibleTargets.put(termId,term); //one of the possible targets
+
+	                if (term.getDataElement() != null){
+	                    List<ReferenceDocument> deRefDocs =
+	                    getReferenceDocuments(term.getDataElement().getDeIdseq());
+	                    term.getDataElement().setReferenceDocs(deRefDocs);
+	                    
+	                    
+	                    //set the value domain 
+	                    ValueDomain currentVd = term.getDataElement().getValueDomain();                    
+	                    if (currentVd!=null && currentVd.getVdIdseq()!=null){
+	                    	JDBCValueDomainDAOV2 vdDAO = new JDBCValueDomainDAOV2(getDataSource());                      
+	                        ValueDomainV2 vd = vdDAO.getValueDomainV2ById(currentVd.getVdIdseq());
+	                        
+	                        //set concept to the value domain.
+	                        String cdrId = vd.getConceptDerivationRule().getIdseq();
+	                        if (cdrId!=null){
+	                        	JDBCConceptDAOV2 conceptDAO = new JDBCConceptDAOV2(getDataSource());
+	                            ConceptDerivationRule cdr =  
+	                                conceptDAO.findConceptDerivationRule(vd.getConceptDerivationRule().getIdseq());
+	                            vd.setConceptDerivationRule(cdr);
+	                        }                        
+	                        term.getDataElement().setValueDomain(vd);
+	                    }//end of if   
+	                }
+	                List qInstructions = qInstrdao.getInstructions(termId);
+	                term.setInstructions(qInstructions);
+	                                
+	                
+	                values = (List)qdao.getValidValues(termId);
+	                term.setValidValues(values);
+
+	                vIter = values.iterator();
+	                while (vIter.hasNext())
+	                {
+	                    FormValidValue vv = (FormValidValue)vIter.next();
+	                    vv.setQuestion(term);
+	                    String vvId = vv.getValueIdseq();
+	                    List vvInstructions = vvInstrdao.getInstructions(vvId);
+	                    vv.setInstructions(vvInstructions);
+	                    //Set Skip Patterns
+	                    List<TriggerAction> actions= getAllTriggerActionsForSource(vvId);
+	                    allActions.addAll(actions);
+	                    setSourceForTriggerActions(vv,actions);
+	                    vv.setTriggerActions(actions);
+	                }
+	                
+	                //set question default 
+	                term = setQuestionDefaultValue(term);
+	                List<QuestionRepitition> qReps = qrdao.getQuestionRepititions(term.getQuesIdseq());
+	                setQuestionRepititionDefaults(qReps,values);
+	                term.setQuestionRepitition(qReps);                
+	            }
+
+	            block.setQuestions(questions);
+	            //Set Skip Patterns
+	             possibleTargets.put(moduleId,block); //one of the possible targets
+	            List<TriggerAction> actions= getAllTriggerActionsForSource(moduleId);
+	            allActions.addAll(actions);
+	            setSourceForTriggerActions(block,actions);
+	            block.setTriggerActions(actions);
+	        }
+
+	        myForm.setModules(modules);
+	        //Context caBIG = cdao.getContextByName(CaDSRConstants.CONTEXT_CABIG);
+	        Context caBIG = cdao.getContextByName(CaDSRConstants.CONTEXT_NCIP);
+	        myForm
+	        .setPublished(fdao.isFormPublished(myForm.getIdseq(), caBIG.getConteIdseq()));
+
+	        //Collection formCSIs = fdao.retrieveClassifications(formPK);
+	        //myForm.setClassifications(formCSIs);
+	        setTargetsForTriggerActions(possibleTargets,allActions);
+
+	        // set contact communication info
+	        JDBCContactCommunicationDAOV2 ccdao = new JDBCContactCommunicationDAOV2(getDataSource());
+	        myForm.setContactCommunicationV2(ccdao.getContactCommunicationV2sForAC(myForm.getIdseq()));
+	// test hack using another AC's data to get contact communication by org  
+	//myForm.setContactCommunicationV2(ccdao.getContactCommunicationV2sForAC("0FBEFA30-4787-6717-E044-0003BA3F9857"));
+	// test hack using another AC's data to get contact communication person  
+	//myForm.setContactCommunicationV2(ccdao.getContactCommunicationV2sForAC("21C05FEA-450A-716D-E044-0003BA3F9857"));
+
+    	        
+    	        return myForm;
+    	    }
+    		
+    	    private List<ReferenceDocument> getReferenceDocuments(String acIdseq)
+    	    {
+    	    	JDBCReferenceDocumentDAOV2 myDAO = new JDBCReferenceDocumentDAOV2(getDataSource());
+    	        List refDocs = myDAO.getAllReferenceDocuments(acIdseq, 
+    	                        null);
+    	        return refDocs;        
+    	    }
    
+    	    private void setTargetsForTriggerActions(Map<String,FormElement> possibleTargetMap, List<TriggerAction> actions)
+    	    {
+    	        for(TriggerAction action : actions)
+    	        {
+    	            FormElement element = possibleTargetMap.get(action.getActionTarget().getIdseq());
+    	            // the target FormElement may not may not in the possibleTargetMap considering it may
+	            //skip to a FormElement in a different module for example.
+	            //In case the target FormElement is not in the possibleTargetMap, element will be null,
+	            //In this case just keep the idseq which is already in the target action.
+	            if (element!=null){
+	                action.setActionTarget(element);
+	            }    
+
+	        }
+	    }
+	    
+	    public List<TriggerAction> getAllTriggerActionsForSource(String sourceId)
+	    {
+	    	JDBCTriggerActionDAOV2 dao = new JDBCTriggerActionDAOV2(getDataSource());
+	        List<TriggerAction> triggerActions = dao.getTriggerActionsForSource(sourceId);
+	        for(TriggerAction action:triggerActions)
+	        {
+	            action.setProtocols(dao.getAllProtocolsForTriggerAction(action.getIdSeq()));
+	            action.setClassSchemeItems(dao.getAllClassificationsForTriggerAction(action.getIdSeq()));
+	        }
+	        return triggerActions;
+	    }
+	    
+	    private void setSourceForTriggerActions(FormElement source, List<TriggerAction> actions)
+	    {
+	        for(TriggerAction action : actions)
+	        {
+	            action.setActionSource(source);
+
+	        }
+	    }
+	    
+	    private Question setQuestionDefaultValue(Question term ){
+	    	JDBCQuestionDAOV2 dao = new JDBCQuestionDAOV2(getDataSource());
+	        term = dao.getQuestionDefaultValue(term);
+	        return term;
+	    }
+	    
+	    /**
+	     * Get FormValidValue from the question and assign it to Question repitition.
+	     * This is done since the Question repitition quesry only retrives ids
+	     * @param qreps
+	     * @param values
+	     */
+	    private void setQuestionRepititionDefaults(List<QuestionRepitition> qreps,List values)
+	    {
+	        for(QuestionRepitition repitition:qreps)
+	        {
+	            if(repitition.getDefaultValidValue()!=null)
+	            {
+	              if(values!=null)
+	              {
+	                  Iterator it = values.iterator();
+	                  FormValidValue value =null;
+	                  while(it.hasNext())
+	                  {
+	                       value = (FormValidValue)it.next();
+	                       if(value.getValueIdseq().equals(repitition.getDefaultValidValue().getValueIdseq()))
+	                       {
+	                           repitition.setDefaultValidValue(value);
+	                       }
+	                  }
+	                  
+	              }
+	              
+	            }
+	        }
+	    }
+	    
+	    /**
+	     * Checks if the Form Component is published
+	     *
+	     * @param <b>acId</b> Idseq of an admin component
+	     */
+	    public boolean isFormPublished(String formIdSeq,String conteIdSeq) {
+	      return this.isClassifiedForPublish(formIdSeq,conteIdSeq);
+
+	    }    	   
+    	    
+	    public static void main(String[] args) {
+	    	
+	    	//DataSource ds = DataSourceUtil.getDriverManagerDS(
+	    	//		"oracle.jdbc.OracleDriver", 
+	    	//		"jdbc:oracle:thin:@ncidb-dsr-d:1551:DSRDEV", 
+	    	//		"FORMBUILDER", "FORMBUILDER");
+	    	
+	    	DataSource ds = new DriverManagerDataSource("jdbc:oracle:thin:@ncidb-dsr-d:1551:DSRDEV", 
+	    			"FORMBUILDER", "FORMBUILDER");
+	    	
+	    	JDBCFormDAOV2 form2Dao = new JDBCFormDAOV2(ds);   	
+	    	FormV2 form = form2Dao.findFormV2ByPrimaryKey("BFC76B3A-AC92-45C7-E040-BB89AD430B2C");
+	    	String workflow = form.getAslName();
+	    	System.out.println("Got workflow: " + workflow);
+	    	//ds.getConnection().close();
+	    	String xmlFile = "";
+			try {
+				xmlFile = FormXMLConverter.instance().convertFormToXML(form);
+			}
+			catch (Exception e) 
+			{
+				System.out.println(e);
+			}
+			System.out.println("XML****");
+			System.out.println(xmlFile);
+	    }
 }
