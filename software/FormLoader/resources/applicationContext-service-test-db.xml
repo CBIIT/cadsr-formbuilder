@@ -29,6 +29,20 @@
 		</property>
 	</bean> -->
 	
+	<bean id="unloadService"
+		class="gov.nih.nci.cadsr.formloader.service.impl.UnloadingServiceImpl">
+		<property name="repository">
+			<ref local="repository" />
+		</property>
+	</bean>
+	
+	<bean id="collectionRetrievalService"
+		class="gov.nih.nci.cadsr.formloader.service.impl.CollectionRetrievalServiceImpl">
+		<property name="repository">
+			<ref local="repository" />
+		</property>
+	</bean>
+	
 	<bean id="loadService"
 		class="gov.nih.nci.cadsr.formloader.service.impl.LoadingServiceImpl"> 
 		<property name="repository">
