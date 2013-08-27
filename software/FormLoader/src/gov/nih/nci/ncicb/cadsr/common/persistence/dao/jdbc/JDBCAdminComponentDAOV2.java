@@ -1895,7 +1895,7 @@ public class JDBCAdminComponentDAOV2 extends JDBCBaseDAOV2
 	   	return nameSeqIdMap;
 	   	
    }
-   /*
+   
    public List<String> getAllDesignationTypes() {
 
 	   String sql = 
@@ -1903,16 +1903,74 @@ public class JDBCAdminComponentDAOV2 extends JDBCBaseDAOV2
 
 	   List rows = this.namedParameterJdbcTemplate.getJdbcOperations().queryForList(sql);
 	   
-	   
-	   
+	   List<String> desigTypes = new ArrayList<String>();
 	   for (Object row : rows) {
-		   nameSeqIdMap.put((String)((Map)row).get("NAME"), (String)((Map)row).get("CONTE_IDSEQ"));
+		   desigTypes.add((String)((Map)row).get("DETL_NAME"));
 	   }
 
-	   return nameSeqIdMap;
+	   return desigTypes;
 
    }
-   */
+   
+   public List<String> getAllRefdocTypes() {
+
+	   String sql = 
+			   "SELECT distinct DCTL_NAME FROM DOCUMENT_TYPES_LOV order by DCTL_NAME";
+
+	   List rows = this.namedParameterJdbcTemplate.getJdbcOperations().queryForList(sql);
+	   
+	   List<String> refdocTypes = new ArrayList<String>();
+	   for (Object row : rows) {
+		   refdocTypes.add((String)((Map)row).get("DCTL_NAME"));
+	   }
+
+	   return refdocTypes;
+   }
+   
+   public List<String> getAllDefinitionTypes() {
+
+	   String sql = 
+			   "select distinct DEFL_NAME from sbrext.DEFINITION_TYPES_LOV_EXT order by DEFL_NAME";
+
+	   List rows = this.namedParameterJdbcTemplate.getJdbcOperations().queryForList(sql);
+	   
+	   List<String> defTypes = new ArrayList<String>();
+	   for (Object row : rows) {
+		   defTypes.add((String)((Map)row).get("DEFL_NAME"));
+	   }
+
+	   return defTypes;
+   }
+   
+   public List<String> getAllWorkflowNames() {
+
+	   String sql = 
+			   "select distinct ASL_NAME from sbrext.ASL_ACTL_VIEW_EXT order by ASL_NAME";
+
+	   List rows = this.namedParameterJdbcTemplate.getJdbcOperations().queryForList(sql);
+	   
+	   List<String> wfTypes = new ArrayList<String>();
+	   for (Object row : rows) {
+		   wfTypes.add((String)((Map)row).get("ASL_NAME"));
+	   }
+
+	   return wfTypes;
+   }
+   
+   public int updateWorkflowStatus(String componentSeqid, String newWorkflowStatus) {
+	   String sql = "UPDATE sbrext.quest_contents_view_ext SET asl_name = :newasl " +
+			   " where qc_idseq=:seqid";
+
+	   MapSqlParameterSource params = new MapSqlParameterSource();
+	   params.addValue("newasl", newWorkflowStatus);
+	   params.addValue("seqid", componentSeqid);
+
+	   int res = this.namedParameterJdbcTemplate.update(sql, params);
+	   return res;
+
+
+   }
+   
    public List<DesignationTransferObject> getDesignationsForForm(String formseqid, String desigName,
 		   String desigType, String desigLanguage) {
 

@@ -444,6 +444,24 @@ public class FormLoaderRepositoryMockup implements FormLoaderRepository {
 		return false;
 	}
 
+	@Override
+	public List<FormCollection> getAllLoadedCollections() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void checkWorkflowStatusName(FormDescriptor form) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unloadForm(FormDescriptor form) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 	
 }

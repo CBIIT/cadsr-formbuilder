@@ -193,7 +193,7 @@ public class JDBCValueDomainDAOV2 extends JDBCAdminComponentDAOV2 implements
 		
 		//TODO: this query returns almost identical rows. Need fine tuning
     	String sql = 
-    			"select vdpv.vd_idseq, vdpv.vp_idseq, pv.VALUE, vm.PUBLIC_ID, vm.VERSION, vm.PREFERRED_DEFINITION, vm.LONG_NAME " +
+    			"select vdpv.vd_idseq, vdpv.vp_idseq, pv.VALUE, vm.PUBLIC_ID, vm.VERSION, vm.PREFERRED_DEFINITION, vm.LONG_NAME, vm.DESCRIPTION " +
     					" from CABIO31_VD_PV_VIEW vdpv, CABIO31_PV_VIEW pv, CABIO31_VM_VIEW vm " +
     					" where vdpv.pv_idseq = pv.pv_idseq and pv.vm_idseq = vm.vm_idseq and vdpv.vd_idseq in (:seqIds) " +
     					" order by vdpv.vd_idseq";
@@ -218,11 +218,13 @@ public class JDBCValueDomainDAOV2 extends JDBCAdminComponentDAOV2 implements
     					//without changing the class
     					pv.setValue(rs.getString("VALUE") + "," + rs.getString("VP_IDSEQ"));
 
-    					ValueMeaningV2 vm = new ValueMeaningV2TransferObject();
+    					ValueMeaningV2TransferObject vm = new ValueMeaningV2TransferObject();
     					vm.setPublicId(rs.getInt("PUBLIC_ID")); //this is also the preferred name for some reason
     					vm.setVersion(rs.getFloat("VERSION"));
     					vm.setPreferredDefinition(rs.getString("PREFERRED_DEFINITION"));
     					vm.setLongName(rs.getString("LONG_NAME"));
+    					vm.setDescription(rs.getString("DESCRIPTION").trim());
+    					
 
     					pv.setValueMeaningV2(vm);
     					

@@ -2,7 +2,7 @@ package gov.nih.nci.cadsr.formloader.service.common;
 
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
 
 import java.lang.reflect.InvocationTargetException;
@@ -30,9 +30,9 @@ public class FormDetailsParserHandler extends ParserHandler {
 	List<ReferenceDocumentTransferObject> refdocs = new ArrayList<ReferenceDocumentTransferObject>();
 	List<DefinitionTransferObject> definitions = new ArrayList<DefinitionTransferObject>();
 	List<String> protocolIds = new ArrayList<String>();
-	List<DesignationTransferObject> designations = new ArrayList<DesignationTransferObject>();
+	List<DesignationTransferObjectExt> designations = new ArrayList<DesignationTransferObjectExt>();
 	
-	DesignationTransferObject currDesignation;
+	DesignationTransferObjectExt currDesignation;
 	ReferenceDocumentTransferObject currRefDoc;
 	DefinitionTransferObject currDefinition;
 	
@@ -88,7 +88,7 @@ public class FormDetailsParserHandler extends ParserHandler {
 
 			}else if (localName.equals(StaXParser.DESIGNATION)) {
 				if (nodeQueue.peek().equals(StaXParser.FORM)) {
-					this.currDesignation = new DesignationTransferObject();
+					this.currDesignation = new DesignationTransferObjectExt();
 					currClassName = "DesignationTransferObject";
 				}
 				
@@ -109,6 +109,8 @@ public class FormDetailsParserHandler extends ParserHandler {
 				this.methodName = "setType";
 			} else if (localName.equals(StaXParser.LANGUAGE_NAME) && nodeQueue.peek().equals(StaXParser.DESIGNATION)) {
 				this.methodName = "setLanguage";
+			} else if (localName.equals(StaXParser.CONTEXT) && nodeQueue.peek().equals(StaXParser.DESIGNATION)) {
+				this.methodName = "setContextName";
 			}
 
 		}
@@ -169,7 +171,8 @@ public class FormDetailsParserHandler extends ParserHandler {
 					
 			if (peek.equals(StaXParser.PROTOCOL_ID)) 
 				this.protocolIds.add(xmlreader.getText());
-			else if (peek.equals(StaXParser.NAME) || peek.equals(StaXParser.TYPE) || peek.equals(StaXParser.LANGUAGE_NAME)) {
+			else if (peek.equals(StaXParser.NAME) || peek.equals(StaXParser.TYPE) 
+					|| peek.equals(StaXParser.LANGUAGE_NAME) || peek.equals(StaXParser.CONTEXT)) {
 				if (this.currClassName != null && this.currClassName.equals("DesignationTransferObject") &&
 						this.methodName != null) {
 					setPropertyForObject(this.currDesignation, methodName, xmlreader.getText());
@@ -210,12 +213,12 @@ public class FormDetailsParserHandler extends ParserHandler {
 	}
 
 
-	public List<DesignationTransferObject> getDesignations() {
+	public List<DesignationTransferObjectExt> getDesignations() {
 		return designations;
 	}
 
 
-	public void setDesignations(List<DesignationTransferObject> designations) {
+	public void setDesignations(List<DesignationTransferObjectExt> designations) {
 		this.designations = designations;
 	}
 	

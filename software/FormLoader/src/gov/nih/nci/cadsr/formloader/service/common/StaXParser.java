@@ -2,7 +2,7 @@ package gov.nih.nci.cadsr.formloader.service.common;
 
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
 
 import java.io.BufferedReader;
@@ -93,7 +93,7 @@ public class StaXParser {
 	List<ReferenceDocumentTransferObject> refdocs;
 	List<DefinitionTransferObject> definitions;
 	List<String> protocolIds;
-	List<DesignationTransferObject> designations;
+	List<DesignationTransferObjectExt> designations;
 	
 	
 	/**
@@ -258,11 +258,11 @@ public class StaXParser {
 		this.protocolIds = protocolIds;
 	}
 
-	public List<DesignationTransferObject> getDesignations() {
+	public List<DesignationTransferObjectExt> getDesignations() {
 		return designations;
 	}
 
-	public void setDesignations(List<DesignationTransferObject> designations) {
+	public void setDesignations(List<DesignationTransferObjectExt> designations) {
 		this.designations = designations;
 	}
 

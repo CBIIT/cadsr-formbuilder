@@ -852,6 +852,38 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
     }
     
     /**
+     * Get a list of question dtos with public ids
+     * @param publicIds
+     * @return
+     */
+    public QuestionTransferObject getQuestionsPublicIdVersionBySeqid(String questSeqid) {
+    	 String sql = 
+    	      "select Q.QC_IDSEQ, Q.QC_ID, Q.VERSION, Q.PREFERRED_DEFINITION, Q.LONG_NAME, " +
+    	    		  "Q.DE_IDSEQ from QUEST_CONTENTS_VIEW_EXT q " +
+    	    		  "where Q.QC_IDSEQ=:seqid";
+
+    	 MapSqlParameterSource params = new MapSqlParameterSource();
+    	 params.addValue("seqid", questSeqid);
+
+    	List<QuestionTransferObject> questions = 
+    			 this.namedParameterJdbcTemplate.query(sql, params, 
+    					 new RowMapper<QuestionTransferObject>() {
+    				 public QuestionTransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
+    					 QuestionTransferObject quest = new QuestionTransferObject();
+    					 //quest.setIdseq(rs.getString(1)); //this is the super class object id
+    					 quest.setQuesIdseq(rs.getString("QC_IDSEQ"));
+    					 quest.setPublicId(rs.getInt("QC_ID"));
+    					 quest.setVersion(rs.getFloat("VERSION"));
+
+    					 return quest;
+    				 }
+    			 });
+
+
+    	 return questions.get(0);
+    }
+    
+    /**
      * Gets question dto by public id and version.
      * @param publicId
      * @param version

@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 import org.springframework.jdbc.object.MappingSqlQuery;
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.object.StoredProcedure;
 import org.springframework.jdbc.object.SqlUpdate;
 
@@ -62,6 +63,137 @@ public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
   
 	public JDBCFormValidValueDAOV2(DataSource dataSource) {
 		super(dataSource);
+	}
+	
+	/**
+	 * This mimicks the behavior of the store procedure "sbrext_form_builder_pkg.ins_value()
+	 * 
+	 * @param newVV
+	 * @param parentId
+	 * @param userName
+	 * @return
+	 */
+	public int createValidValue(FormValidValue newVV, String parentId, String userName)
+			throws DMLException {
+		
+		String vvidseq = generateGUID();
+		String recidseq = generateGUID();
+		
+		
+		int res = insertValidValue(newVV, vvidseq);
+		
+		if (res == 1) {//success
+			res = createComponentValidValueMapping(recidseq, parentId, vvidseq, newVV, userName);
+		}
+		
+		return res;
+	}
+	
+	protected int insertValidValue(FormValidValue newVV, String vvidseq) 
+			throws DMLException {
+		
+		String sql = "INSERT INTO quest_contents_ext " +
+                  "(qc_idseq, VERSION, preferred_name, long_name, " +
+                  " preferred_definition, conte_idseq, " +
+                  " asl_name, vp_idseq, created_by, qtl_name " +
+                 " ) " +
+          " VALUES (:v_qc_idseq, :p_version, :v_preferred_name, :p_long_name, " +
+                   ":p_preferred_definition, :p_conte_idseq,  " +
+                  " :p_asl_name, :p_vp_idseq, :p_created_by, 'VALID_VALUE' " +
+                  ")";
+		
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("v_qc_idseq", vvidseq);
+		
+		params.addValue("p_version", newVV.getVersion().toString());
+		logger.debug(newVV.getVersion().toString());
+		params.addValue("v_preferred_name", newVV.getPreferredName());
+		logger.debug(newVV.getPreferredName());
+		params.addValue("p_long_name", newVV.getLongName());
+		logger.debug(newVV.getLongName());
+		params.addValue("p_preferred_definition", newVV.getPreferredDefinition());
+		logger.debug(newVV.getPreferredDefinition());
+		params.addValue("p_conte_idseq", newVV.getContext().getConteIdseq());
+		logger.debug(newVV.getContext().getConteIdseq());
+		//params.addValue("p_proto_idseq", null);
+		
+		params.addValue("p_asl_name", newVV.getAslName());
+		logger.debug(newVV.getAslName());
+		params.addValue("p_vp_idseq", newVV.getVpIdseq());
+		logger.debug( newVV.getVpIdseq());
+		params.addValue("p_created_by", newVV.getCreatedBy());		
+		logger.debug(newVV.getCreatedBy());
+		int res = this.namedParameterJdbcTemplate.update(sql, params);
+		return res;
+		
+	}
+	
+	protected int createComponentValidValueMapping(String recSeqid, String compSeqid, String vvSeqid, 
+			FormValidValue newVV, String userName) 
+			throws DMLException {
+		String sql = "INSERT INTO qc_recs_ext " +
+                  "(qr_idseq, p_qc_idseq, c_qc_idseq, display_order, " +
+                  " rl_name, created_by " +
+                  ") " +
+           "VALUES (:v_qr_idseq, :p_ques_idseq, :v_qc_idseq, :p_display_order, " +
+                 "  'ELEMENT_VALUE', :p_created_by " +
+                 " )";
+		
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("v_qr_idseq", recSeqid);
+		params.addValue("p_ques_idseq", compSeqid);
+		params.addValue("v_qc_idseq", vvSeqid);
+		params.addValue("p_display_order", newVV.getDisplayOrder());
+		params.addValue("p_created_by", userName);
+	
+		int res = this.namedParameterJdbcTemplate.update(sql, params);
+		return res;
+		
+		
+	}
+	
+	public int createValidValueAssociation(FormValidValue newVV, String parentId, String userName) 
+			throws DMLException {
+	
+		//qr_idseq: generated
+		//p_qc_idseq: question seqid
+		//c_qc_idseq: vv seq id (generated)
+		//
+		
+		String sql = "INSERT INTO qc_recs_ext " +
+                  "(qr_idseq, p_qc_idseq, c_qc_idseq, display_order, " +
+                  " rl_name, created_by " +
+                  ")  " +
+           "VALUES (v_qr_idseq, p_ques_idseq, v_qc_idseq, p_display_order, " +
+                   "'ELEMENT_VALUE', p_created_by  " +
+                  ")";
+	      
+		String idseq = generateGUID();
+		
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("v_qc_idseq", idseq);
+		logger.debug(parentId);
+		params.addValue("p_version", newVV.getVersion().toString());
+		logger.debug(newVV.getVersion().toString());
+		params.addValue("v_preferred_name", newVV.getPreferredName());
+		logger.debug(newVV.getPreferredName());
+		params.addValue("p_long_name", newVV.getLongName());
+		logger.debug(newVV.getLongName());
+		params.addValue("p_preferred_definition", newVV.getPreferredDefinition());
+		logger.debug(newVV.getPreferredDefinition());
+		params.addValue("p_conte_idseq", newVV.getContext().getConteIdseq());
+		logger.debug(newVV.getContext().getConteIdseq());
+		params.addValue("p_proto_idseq", null);
+		
+		params.addValue("p_asl_name", newVV.getAslName());
+		logger.debug(newVV.getAslName());
+		params.addValue("p_vp_idseq", newVV.getVpIdseq());
+		logger.debug( newVV.getVpIdseq());
+		params.addValue("p_created_by", newVV.getCreatedBy());		
+		logger.debug(newVV.getCreatedBy());
+		int res = this.namedParameterJdbcTemplate.update(sql, params);
+		return res;
+		
 	}
 
   /**

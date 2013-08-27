@@ -213,6 +213,7 @@ public class QuestionDescriptor {
 		//These will come back from value domain permissible value query
 		String vdPermissibleValueSeqid;
 		
+		//Denise: value meaning public id_quetionpublicid_form_public_id_version_<x> x = 1, 2, 3
 		String preferredName; //This happens to be the value meaning's public id
 		String perferredDefinition;
 		String longName;

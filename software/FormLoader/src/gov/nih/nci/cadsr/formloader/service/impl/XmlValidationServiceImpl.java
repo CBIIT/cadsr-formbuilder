@@ -170,7 +170,8 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 				errorHandler.getXmlErrors().get(0) : new XmlValidationError(XmlValidationError.XML_NO_ERROR, "Xml well formed", 0);
 	}
 	
-	public List<XmlValidationError> validateXml(String xmlPathName, Resource resource) {
+	public List<XmlValidationError> validateXml(String xmlPathName, Resource resource) 
+	throws FormLoaderServiceException {
 		
 		logger.debug("Start validating xml file: " + xmlPathName);
 		XmlValidationErrorHandler handler = new XmlValidationErrorHandler();
@@ -191,14 +192,22 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
             reader.setErrorHandler(handler);
             reader.read(xmlPathName);
             
-        } catch (IOException e) { //TODO: all these should throw FormLoaderServiceException
+        } catch (IOException e) { 
             logger.error("IOException while validing xml: " + e.getMessage());
+            throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_XML_EXCEPTION,
+					"Xml validation Error: " + e.getMessage());
         } catch (ParserConfigurationException e) {
         	logger.error("ParserConfigurationException while validing xml:" + e.getMessage());
+        	throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_XML_EXCEPTION,
+					"Xml validation Error: " + e.getMessage());
         } catch (SAXException e) {
         	logger.error("SAXException while validing xml: " + e.getMessage());
+        	throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_XML_EXCEPTION,
+					"Xml validation Error: " + e.getMessage());
         } catch (DocumentException e) {
         	logger.error("DocumentException while validing xml: " + e.getMessage());
+        	throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_XML_EXCEPTION,
+					"Xml validation Error: " + e.getMessage());
         } finally {
         	try {
         		if (is != null)

@@ -101,8 +101,8 @@
         <xs:element ref="longName" minOccurs="1" maxOccurs="1"/>
         <xs:element ref="changeNote" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="preferredDefinition" minOccurs="1" maxOccurs="1"/>
-        <xs:element ref="publicID"/>
-        <xs:element ref="version"/>
+        <xs:element minOccurs="0" ref="publicID"/>
+        <xs:element minOccurs="0" ref="version"/>
         <xs:element ref="registrationStatus" minOccurs="0"/>
         <xs:element ref="workflowStatusName"/>
         <xs:element ref="categoryName" minOccurs="0" maxOccurs="unbounded"/>

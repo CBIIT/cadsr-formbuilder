@@ -15,7 +15,9 @@ public class FormDescriptor {
 	
 	public static final int STATUS_ERROR = -1;
 	public static final int STATUS_XML_VALIDATION_FAILED = -2;
-	public static final int STATUS_LOAD_FAILED = -3;
+	public static final int STATUS_CONTENT_VALIDATION_FAILED = -3;
+	public static final int STATUS_LOAD_FAILED = -4;
+	public static final int STATUS_UNLOAD_FAILED = -5;
 	
 	public static final int STATUS_INITIALIZED = 0;
 	public static final int STATUS_XML_VALIDATED = 1; 
@@ -25,9 +27,9 @@ public class FormDescriptor {
 	public static final int STATUS_SKIPPED_LOADING = 6;
 	public static final int STATUS_SKIPPED_UNLOADING = 7;
 	
-	String formSeqId;
-	String publicId;
-	String version;
+	String formSeqId = "";
+	String publicId = "";
+	String version = "";
 	
 	String longName;
 	String context;
@@ -45,6 +47,12 @@ public class FormDescriptor {
 	String footerInstruction;
 	String categoryName;
 	//pass2
+	
+	///////////TODO
+	List definitions;
+	List designations;
+	List refdocs;
+	////
 	
 	List<ModuleDescriptor> modules = new ArrayList<ModuleDescriptor>();
 	

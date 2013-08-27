@@ -1,11 +1,24 @@
 package gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc;
         
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import gov.nih.nci.cadsr.formloader.domain.FormCollection;
+import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
+import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.util.DataSourceUtil;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Repository;
@@ -55,7 +68,54 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 		
 	}
 	
-	 public static void main(String[] args) {
+	 @Override
+	public List<FormCollection> getAllLoadedCollections() {
+		String sql = 
+		      "select * from form_collections order by date_created desc";
+
+		List<FormCollection> colls = new ArrayList<FormCollection>();
+		
+		List rows = this.namedParameterJdbcTemplate.getJdbcOperations().queryForList(sql);  
+		for (Object row : rows) {
+			FormCollection aColl = new FormCollection();
+			aColl.setId( (String) ((Map)row).get("FORM_COLLECTION_IDSEQ"));
+			aColl.setName((String) ((Map)row).get("NAME"));
+			aColl.setDescription( (String) ((Map)row).get("DESCRIPTION"));
+			aColl.setCreatedBy( (String) ((Map)row).get("CREATED_BY"));
+			aColl.setDateCreated((Date) ((Map)row).get("DATE_CREATED"));
+			aColl.setXmlFileName((String) ((Map)row).get("XML_FILE_NAME"));
+			aColl.setXmlPathOnServer((String) ((Map)row).get("XML_FILE_PATH"));
+			
+			colls.add(aColl);
+		}
+		        
+		return colls;      
+	}
+	 
+	 public List<String> getAllFormSeqidsForCollection(String collseqid) {
+		 String sql = 
+				 "select FORM_IDSEQ from forms_in_collection " +
+						 " where form_collection_idseq=:collseqid";
+
+		 MapSqlParameterSource params = new MapSqlParameterSource();
+		 params.addValue("collseqid", collseqid);
+		 
+		 List<String> seqid = 
+				 this.namedParameterJdbcTemplate.query(sql, params, 
+						 new RowMapper<String>() {
+					 public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+						 return rs.getString("FORM_IDSEQ");
+
+					 }
+				 });
+
+		 return seqid;
+
+	 }
+	 
+	 //public List<FormDescriptor> getForm
+
+	public static void main(String[] args) {
 	    	
 	    	//DataSource ds = DataSourceUtil.getDriverManagerDS(
 	    	//		"oracle.jdbc.OracleDriver", 

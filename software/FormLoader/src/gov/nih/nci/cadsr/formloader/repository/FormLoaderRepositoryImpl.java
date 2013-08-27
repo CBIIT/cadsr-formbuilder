@@ -4,11 +4,13 @@ import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.ModuleDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.QuestionDescriptor;
+import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormValidValueChangesTransferObject;
@@ -54,6 +56,13 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	
 	public static final String COMPONENT_TYPE_FORM = "QUEST_CONTENT";
 	
+	public static final String DEFAULT_WORKFLOW_STATUS = "DRAFT NEW";
+	public static final String DEFAULT_DEFINITION_TYPE = "Form Loader";
+	public static final String DEFAULT_DESIGNATION_TYPE = "Form Loader";
+	public static final String DEFAULT_CONTEXT_NAME = "NCIP";
+	public static final String DEFAULT_FORM_TYPE = "CRF";
+	public static final	String DEFAULT_REFDOC_TYPE	= "To find out";
+	
 	JDBCFormDAOV2 formV2Dao;
 	JDBCModuleDAOV2 moduleV2Dao;
 	JDBCQuestionDAOV2 questionV2Dao;
@@ -64,8 +73,12 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	JDBCFormValidValueInstructionDAOV2 formValidValueInstructionV2Dao;
 	JDBCCollectionDAO collectionDao;
 	
+	//These are loaded from database for validation purposes
 	HashMap<String, String> conteNameSeqIdMap;
+	List<String> definitionTypes;
 	List<String> designationTypes;
+	List<String> refdocTypes;
+	List<String> workflowNames;
 
 	/**
 	 * Gets Seq id, public id and version for forms with the given public ids
@@ -216,6 +229,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	 * To get the public id and version for the loaded forms
 	 * @param forms
 	 */
+	@Transactional(readOnly=true)
 	public void setPublicIdVersionBySeqids(List<FormDescriptor> forms) {
 		List<String> seqids = new ArrayList<String>();
 		for (FormDescriptor form : forms) {
@@ -235,6 +249,44 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			}
 		}
 	}
+	
+	@Transactional(readOnly=true)
+	public List<FormCollection> getAllLoadedCollections() {
+		
+		//first get collection headers
+		List<FormCollection> colls = collectionDao.getAllLoadedCollections();
+		
+		for (FormCollection coll : colls) {
+			if (coll.getId().equals("E49101B2-1B48-BA26-E040-BB8921B61DC6")) {
+				logger.debug("debug");
+				
+			}
+			List<String> formseqids = collectionDao.getAllFormSeqidsForCollection(coll.getId());
+			if (formseqids == null || formseqids.size() == 0) 
+				logger.warn("Collection " + coll.getId() + " doesn't have form seqids associated with it in database");
+			else {
+				List<FormV2TransferObject> formdtos = this.formV2Dao.getFormHeadersBySeqids(formseqids);
+				List<FormDescriptor> forms = translateIntoFormDescriptors(formdtos);
+				coll.setForms(forms);
+			}
+				
+		}
+		
+		return colls;
+	}
+	
+	protected void retrievePublicIdForForm(String formSeqid, FormDescriptor form) {
+		FormV2TransferObject formdto = this.formV2Dao.getFormPublicIdVersion(formSeqid);
+		form.setPublicId(String.valueOf(formdto.getPublicId()));
+		form.setVersion(String.valueOf(formdto.getVersion()));
+	}
+	
+	protected void retrievePublicIdForQuestion(String questSeqid, QuestionDescriptor quest) {
+		QuestionTransferObject dto = this.questionV2Dao.getQuestionsPublicIdVersionBySeqid(questSeqid);
+		quest.setPublicId(String.valueOf(dto.getPublicId()));
+		quest.setVersion(String.valueOf(dto.getVersion()));
+	}
+	
 
 	public JDBCFormDAOV2 getFormV2Dao() {
 		return formV2Dao;
@@ -335,6 +387,10 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 
 			formSeqid = formV2Dao.createFormComponent(formdto);		
 			logger.debug("Created form. Seqid: " + formSeqid);
+			
+			//public id is created when new component is created
+			//Need to go back to db for it
+			retrievePublicIdForForm(formSeqid, form);
 
 			formdto.setFormIdseq(formSeqid);
 			form.setFormSeqId(formSeqid);
@@ -503,7 +559,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		List<String> protoIds = parser.getProtocolIds();
 		processProtocols(form, protoIds);
 		
-		List<DesignationTransferObject> designations = parser.getDesignations();
+		List<DesignationTransferObjectExt> designations = parser.getDesignations();
 		processDesignations(form, designations);
 		
 		List<DefinitionTransferObject> definitions = parser.getDefinitions();
@@ -522,12 +578,25 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	 * @param form
 	 * @param designations
 	 */
-	protected void processDesignations(FormDescriptor form, List<DesignationTransferObject> designations) {
+	protected void processDesignations(FormDescriptor form, List<DesignationTransferObjectExt> designations) {
 		String formSeqid = form.getFormSeqId();
 		String contextSeqId = this.getContextSeqIdByName(form.getContext());
 		
-		for (DesignationTransferObject desig : designations) {
+		for (DesignationTransferObjectExt desig : designations) {
 			if (form.getLoadType().equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)) {
+				//Check context name in designation elem from xml. If that's not valid, use form's
+				String desigContext = desig.getContextName();
+				String desgContextSeqid = this.getContextSeqIdByName(desigContext);
+				if (desgContextSeqid == null || desgContextSeqid.length() == 0)
+					desgContextSeqid = contextSeqId;
+				
+				//validate the type, use default if neccessary
+				String desigType = desig.getType();
+				if (!this.designationTypes.contains(desigType)) {
+					form.addMessage("Designation type \"" + desigType + "\" is invalid. Use default type Form Loader");
+					desig.setType(DEFAULT_DESIGNATION_TYPE);
+				}
+				
 				List<DesignationTransferObject> existing = formV2Dao.getDesignationsForForm(
 						formSeqid, desig.getName(), desig.getType(), desig.getLanguage());
 				if (existing == null || existing.size() == 0) {
@@ -540,7 +609,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	}
 	
 	protected int designateForm(String formSeqid, String contextSeqid, String createdby,
-			DesignationTransferObject desig) {
+			DesignationTransferObjectExt desig) {
 		List<String> ac_seqids = new ArrayList<String>();
 		ac_seqids.add(formSeqid);
 		return formV2Dao.designate(contextSeqid, ac_seqids, createdby);
@@ -636,16 +705,18 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			
 			//better to call createQuestionComponents, which is not implement.
 			QuestionTransferObject newQuestdto = (QuestionTransferObject)this.questionV2Dao.createQuestionComponent(questdto);
-			logger.debug("Created a question: " + newQuestdto.getQuesIdseq());
-			question.setQuestionSeqId(newQuestdto.getQuesIdseq());
+			String seqid = newQuestdto.getQuesIdseq();
+			logger.debug("Created a question: " + seqid);
+			question.setQuestionSeqId(seqid);
+			retrievePublicIdForQuestion(seqid, question);
 			
 			createQuestionInstruction(newQuestdto, moduledto, question.getInstruction());
 			
 			createQuestionValidValues(question, form, newQuestdto, moduledto);
-			
-			
-			
 		}
+		
+		
+		
 		logger.debug("Done creating questions for module");
 	}
 	
@@ -657,6 +728,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		
 		int idx = 0;
 		for (QuestionDescriptor.ValidValue vValue : validValues) {
+			idx++;
 			FormValidValueTransferObject fvv = new FormValidValueTransferObject();
 			
 			fvv.setCreatedBy(moduledto.getCreatedBy());
@@ -666,30 +738,32 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			
 			//These are for calling the stored procedure "sbrext_form_builder_pkg.ins_value"		
 			
+			//PreferredName format: value meaning public id_quetionpublicid_form_public_id_version_<x> x = 1, 2, 3
+			String preferredName = composeVVPreferredName(form, question, vValue, idx);
 			
 			fvv.setLongName(vValue.getValue());
-			fvv.setPreferredName(vValue.getPreferredName());
+			fvv.setPreferredName(preferredName);
 			fvv.setPreferredDefinition(vValue.getDescription());
 			
 			fvv.setContext(moduledto.getContext());
 			fvv.setAslName("DRAFT NEW");
 			fvv.setCreatedBy(moduledto.getCreatedBy());
-			fvv.setDisplayOrder(idx++);
+			fvv.setDisplayOrder(idx);
 			
 			//in.put("p_proto_idseq", protocolIdSeq);
-		     
 			
-			//createFormValidValueComponent() will 
-			//create valid value and record in the valid_value_att_ext 
-			
-			//TODO: failed to create. complaining about null version. Even hardcoded one still trigger complain.
-			// Investigate later
-			
-			
-			//String newFVVIdseq =
-			//.createFormValidValueComponent(
-			///				fvv,newQuestdto.getQuesIdseq(),moduledto.getCreatedBy());
+			int res  = 
+					formValidValueV2Dao.createValidValue(fvv,newQuestdto.getQuesIdseq(),moduledto.getCreatedBy());
+			logger.debug("Created new valid valid");
 		}
+	}
+	
+	//PreferredName format: value meaning public id_quetionpublicid_form_public_id_version_<x> x = 1, 2, 3
+	protected String composeVVPreferredName(FormDescriptor form, QuestionDescriptor question, 
+			QuestionDescriptor.ValidValue vValue, int displayorder) {
+		
+		return vValue.getPreferredName() + "_" + question.getPublicId() + "_" + displayorder;
+		
 	}
 	
 	protected void createQuestionInstruction(QuestionTransferObject newQuestdto, 
@@ -778,6 +852,31 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		moduleDto.setPreferredDefinition(module.getPreferredDefinition());
 		
 		return moduleDto;
+	}
+	
+	protected List<FormDescriptor> translateIntoFormDescriptors(List<FormV2TransferObject> formdtos) {
+		List<FormDescriptor> forms = new ArrayList<FormDescriptor>();
+		
+		if (formdtos == null) {
+			logger.debug("Form dtos is null. Can't translater list into FormDescriptors");
+			return forms;
+		}
+		
+		for (FormV2TransferObject dto : formdtos) {
+			FormDescriptor form  = new FormDescriptor();
+			form.setFormSeqId(dto.getFormIdseq());
+			form.setLongName(dto.getLongName());
+			form.setContext(dto.getContextName());
+			form.setModifiedBy(dto.getModifiedBy());
+			form.setCreatedBy(dto.getCreatedBy());
+			form.setProtocolName(dto.getProtocolLongName());
+			form.setPublicId(String.valueOf(dto.getPublicId()));
+			form.setVersion(String.valueOf(dto.getVersion()));
+			form.setType(dto.getFormType());
+			forms.add(form);
+		}
+		
+		return forms;
 	}
 	
 	protected void updateModulesInForm(FormDescriptor form, FormTransferObject formdto) {
@@ -1032,11 +1131,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 					Integer.parseInt(form.getPublicId()), Float.parseFloat(form.getVersion()));
 			
 			//TODO: check response value.
-			int loatStatus = (res == 1) ? FormDescriptor.STATUS_LOADED : FormDescriptor.STATUS_LOAD_FAILED;
-			
-			logger.error("Unable to create form collection relationship");
-			
-			//form.setLoadStatus(loatStatus);
+			int loatStatus = (res > 0) ? FormDescriptor.STATUS_LOADED : FormDescriptor.STATUS_LOAD_FAILED;
 			
 		}
 		
@@ -1048,11 +1143,62 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		return this.formV2Dao.hasCreate(userName, COMPONENT_TYPE_FORM, contextseqid);
 	}
 	
-	/*
-	public boolean definitionTypeValid(String defType) {
+	@Transactional(readOnly=true)
+	public boolean definitionTypeValid(FormDescriptor form) {
+		if (definitionTypes == null) {
+			definitionTypes = this.formV2Dao.getAllDefinitionTypes();
+		}
+		
+		return false;
+	}
+	
+	@Transactional(readOnly=true)
+	public boolean designationTypeValid(FormDescriptor form) {
 		if (designationTypes == null) {
-			
+			designationTypes = this.formV2Dao.getAllDesignationTypes();
+		}
+		
+		return false;
+	}
+	
+	@Transactional(readOnly=true)
+	public boolean refDocTypeValid(FormDescriptor form) {
+		if (refdocTypes == null) {
+			refdocTypes = this.formV2Dao.getAllRefdocTypes();
+		}
+		
+		return false;
+	}
+	
+	@Transactional(readOnly=true)
+	public void checkWorkflowStatusName(FormDescriptor form) {
+		if (workflowNames == null) {
+			workflowNames = this.formV2Dao.getAllWorkflowNames();
+		}
+		
+		String formWfName = form.getWorkflowStatusName();
+		if (!workflowNames.contains(formWfName)) {
+			form.addMessage("Form's workflow status name invalid. Use default value Draft New");
+			form.setWorkflowStatusName(DEFAULT_WORKFLOW_STATUS);
 		}
 	}
-	*/
+	
+	@Transactional
+	public void unloadForm(FormDescriptor form) {
+		String seqid = form.getFormSeqId();
+		if (seqid == null || seqid.length() == 0) {
+			logger.debug("Form's seqid is invalid");
+			form.addMessage("Form's seqid is invalid. Unable to unload form");
+			form.setLoadStatus(FormDescriptor.STATUS_UNLOAD_FAILED);
+			return;
+		}
+		
+		int res = formV2Dao.updateWorkflowStatus(seqid, "RETIRED WITHDRAWN");
+		if (res <= 0) {
+			form.addMessage("Failed to update form's workflow status. Unload failed");
+			form.setLoadStatus(FormDescriptor.STATUS_UNLOAD_FAILED);
+		} else
+			form.setLoadStatus(FormDescriptor.STATUS_UNLOADED);
+	}
+	
 }

@@ -9,6 +9,7 @@ public class FormLoaderServiceException extends Exception {
 	public static final int ERROR_FILE_INVALID = 3;
 	public static final int ERROR_COLLECTION_NULL = 4;
 	public static final int ERROR_USER_INVALID = 5;
+	public static final int ERROR_XML_EXCEPTION = 6;
 	
 	protected int errorCode;
 	

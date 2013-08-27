@@ -9,24 +9,7 @@ import gov.nih.nci.ncicb.cadsr.common.dto.ModuleTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.jdbc.JDBCFormTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ConceptDAO;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ContactCommunicationV2DAO;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ContextDAO;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.FormDAO;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.FormInstructionDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.FormV2DAO;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.FormValidValueInstructionDAO;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ModuleInstructionDAO;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ModuleV2DAO;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.QuestionDAO;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.QuestionInstructionDAO;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.QuestionRepititionDAO;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ReferenceDocumentDAO;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.TriggerActionDAO;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ValueDomainV2DAO;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormDAO.FormByClassificationQuery;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormDAO.FormProtocolByFormPrimaryKey;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormDAO.FormQuery;
 import gov.nih.nci.ncicb.cadsr.common.resource.ConceptDerivationRule;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
@@ -43,9 +26,6 @@ import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomain;
 import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomainV2;
 import gov.nih.nci.ncicb.cadsr.common.util.StringUtils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -57,17 +37,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
-import org.exolab.castor.xml.MarshalException;
-import org.exolab.castor.xml.Marshaller;
-import org.exolab.castor.xml.ValidationException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -356,9 +327,9 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
     }
     
     /**
-     * Get versions for public ids. -- Form Loader
-     * @param publicIds
-     * @return a list of form dtos with only seqid, public id and version populated
+     * Get form headers (public id and version) by a list of form seq ids
+     * @param 
+     * @return hashmap of formseqid/FormTransfertObject
      */
     public HashMap<String, FormV2TransferObject> getFormsBySeqids(List<String> seqids) {
        
@@ -382,9 +353,72 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
             	return form;
             }
         });
-      
         
         return idMap;
+    }
+    
+    public FormV2TransferObject getFormPublicIdVersion(String seqid) {
+    	String sql = 
+    			"SELECT QC_IDSEQ, PUBLIC_ID, VERSION FROM FB_FORMS_VIEW where QC_IDSEQ=:seqid";
+
+    	MapSqlParameterSource params = new MapSqlParameterSource();
+    	params.addValue("seqid", seqid);
+
+    	List<FormV2TransferObject> forms = 
+    			this.namedParameterJdbcTemplate.query(sql, params, 
+    					new RowMapper<FormV2TransferObject>() {
+    				public FormV2TransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+    					FormV2TransferObject form = new FormV2TransferObject();
+    					form.setPublicId(rs.getInt("PUBLIC_ID"));
+    					form.setVersion(rs.getFloat("VERSION"));
+    					form.setFormIdseq(rs.getString("QC_IDSEQ"));
+
+    					return form;
+    				}
+    			});
+
+    	return forms.get(0);
+    }
+    
+    /**
+     * Get forms by a list of form seq ids
+     * 
+     * @param publicIds
+     * @return a list of form dtos with only seqid, public id and version populated
+     */
+    public List<FormV2TransferObject> getFormHeadersBySeqids(List<String> seqids) {
+       
+        String sql = 
+        	"SELECT * FROM FB_FORMS_VIEW where QC_IDSEQ in (:ids)";
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("ids", seqids);
+        
+        List<FormV2TransferObject> forms = 
+        this.namedParameterJdbcTemplate.query(sql, params, 
+        		new RowMapper<FormV2TransferObject>() {
+        	public FormV2TransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
+        		FormV2TransferObject form = new FormV2TransferObject();
+            	form.setPublicId(rs.getInt("PUBLIC_ID"));
+            	form.setVersion(rs.getFloat("VERSION"));
+            	form.setFormIdseq(rs.getString("QC_IDSEQ"));
+            	
+            	form.setLongName(rs.getString("LONG_NAME"));
+            	form.setAslName(rs.getString("WORKFLOW"));
+            	form.setContextName(rs.getString("CONTEXT_NAME"));
+            	form.setProtocolLongName(rs.getString("PROTOCOL_LONG_NAME"));
+            	form.setFormType(rs.getString("TYPE"));
+            	form.setCreatedBy(rs.getString("CREATED_BY"));
+            	//form.setModifiedBy(rs.getString("QC_IDSEQ"));
+            	form.setDateCreated(rs.getTimestamp("DATE_CREATED"));
+            	form.setDateModified(rs.getTimestamp("DATE_MODIFIED"));
+            
+            	return form;
+            }
+        });
+        
+        return forms;
     }
     
     public String createFormComponent(Form sourceForm) throws DMLException {

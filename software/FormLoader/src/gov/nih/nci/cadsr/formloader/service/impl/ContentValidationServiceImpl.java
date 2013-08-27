@@ -5,6 +5,7 @@ import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.ModuleDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.QuestionDescriptor;
 import gov.nih.nci.cadsr.formloader.repository.FormLoaderRepository;
+import gov.nih.nci.cadsr.formloader.repository.FormLoaderRepositoryImpl;
 import gov.nih.nci.cadsr.formloader.service.ContentValidationService;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
@@ -13,6 +14,7 @@ import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.PermissibleValueV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ValueMeaningV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.PermissibleValueV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.ReferenceDocument;
@@ -66,6 +68,11 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		String xmlPathName = FormLoaderHelper.checkInputFile(aCollection.getXmlPathOnServer(), aCollection.getXmlFileName());
 		
 		determineLoadType(formHeaders);
+		
+		//TODO
+		//validate context and workflow status by name, form type, designations, definitions and refdocs by type, 
+		validateFormInfo(formHeaders);
+		
 		validateQuestions(xmlPathName, formHeaders);
 		
 		return aCollection;
@@ -80,8 +87,13 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		List<String> pidList = new ArrayList<String>();
 		
 		for (FormDescriptor form : formDescriptors) {
-			if (form.getLoadStatus() < FormDescriptor.STATUS_XML_VALIDATED)
+			if (!form.isSelected()) 
 				continue;
+			
+			if (form.getLoadStatus() < FormDescriptor.STATUS_XML_VALIDATED) {
+				form.setSelected(false); //turn this off so we won't do other val check.
+				continue;
+			}
 			
 			String publicid = form.getPublicId();
 			if (publicid != null && publicid.length() > 0)
@@ -101,6 +113,58 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			transferFormDtos(formDtos, formDescriptors);
 		}
 		
+	}
+	
+	protected void validateFormInfo(List<FormDescriptor> formDescriptors) {
+		
+		int idx = 0;
+		for (FormDescriptor form : formDescriptors) {		
+			if (!form.isSelected()) 
+				continue;
+			
+			if (!validContextName(form)) {
+				form.setLoadStatus(FormDescriptor.STATUS_CONTENT_VALIDATION_FAILED);
+				form.setSelected(false);
+				return;
+			}
+				
+			this.repository.checkWorkflowStatusName(form);
+			
+			//This should be done with list from database
+			//But we couldn't find the table that contains the list
+			String formType = form.getType();
+			if (formType != null && formType.length() > 0) {
+				form.addMessage("Form type is invalid. Use default type CRF");
+				form.setType("CRF");
+			} else {
+				if (!formType.equals("CRF") || !formType.equals("TEMPLATE")) {
+					form.addMessage("Form type \"" + formType + "\" is invalid. Use default type CRF");
+					form.setType("CRF");
+				}
+			}
+			
+			//check designation types, def types and refdoc types;
+			//this check will be done at load type
+			
+		}
+	}
+	
+	protected boolean validContextName(FormDescriptor form) {
+		
+		String contextName = form.getContext();
+		if (contextName == null || contextName.length() == 0) {
+			form.addMessage("Context name in form is null or empty. Use \"NCIP\" context to load form");
+			form.setContext("NCIP");
+		}
+		
+		String contextSeqid = this.repository.getContextSeqIdByName(form.getContext());
+		if (contextSeqid == null || contextSeqid.length() == 0) {
+			form.addMessage("Context name in form \"" + form.getContext() + "\" is not valid. Unable to load form");
+			return false;
+		} 
+		
+		form.setContextSeqid(contextSeqid);
+		return true;
 	}
 	
 	/**
@@ -135,7 +199,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		HashMap<String, String> processed = new HashMap<String, String>();
 		
 		for (FormDescriptor form : formHeaders) {
-			if (form.getLoadStatus() < FormDescriptor.STATUS_XML_VALIDATED)
+			if (!form.isSelected())
 				continue;
 			
 			String publicid = form.getPublicId();
@@ -166,6 +230,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		String version = form.getVersion();
 		if (version == null || version.length() == 0) {
 			form.setLoadType(FormDescriptor.LOAD_TYPE_UNKNOWN);
+			form.setSelected(false);
 			form.addMessage("Form public id from xml has a match in database but version string is null. Please correct or it'll be skipped loading");
 		}
 		else {
@@ -212,10 +277,17 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 	protected FormV2 findMatchingFormDto(List<FormV2> formDtos, FormDescriptor form) {
 		
 		for (FormV2 formdto : formDtos) {
+			try {
 			int publicId = Integer.parseInt(form.getPublicId());
 			float version = Float.parseFloat(form.getVersion());
+			
 			if (formdto.getPublicId() == publicId && formdto.getVersion().floatValue() == version) 
 				return formdto;
+			} catch (NumberFormatException ne) {
+				logger.debug("Error while converting string to number: >" + form.getPublicId() + "< and >" + form.getVersion() + "<");
+				continue;
+			}
+			
 		}
 		
 		return null;
@@ -264,16 +336,16 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		//First pass, collect question public ids and their cde ids so we could get necessary data from 
 		//database as a list (= less queries)
 		for (FormDescriptor form : formDescriptors) {
-			if (form.getLoadStatus() < FormDescriptor.STATUS_XML_VALIDATED) {
-				form.addMessage("The form hasn't passed xml validation. Unable to validate its questions");
+			if (!form.isSelected()) 
 				continue;
-			}
 			
 			String formLoadType = form.getLoadType();
 			if (!formLoadType.equals(FormDescriptor.LOAD_TYPE_NEW_VERSION)
 					&& !formLoadType.equals(FormDescriptor.LOAD_TYPE_NEW) 
 					&& !formLoadType.equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)) {
-				form.addMessage("The form has undetermined load type. Unable to validate its questions");
+				//TODO: We should not get here. Check code if we see this message.
+				form.addMessage("The form has undetermined load type. Unable to validate its questions.");
+				form.setSelected(false);
 				continue;
 			}
 			
@@ -785,6 +857,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		 for (QuestionDescriptor.ValidValue vVal : validValues) {
 			 boolean valValidated = false;
 			 boolean meaningValidated = false;
+			 boolean meaningDescValidated = false;
 			 String val = vVal.getValue();
 			 String valMeaning = vVal.getMeaningText();
 			 for (PermissibleValueV2 pVal : pValues) {
@@ -794,15 +867,20 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 				 String [] valElems = pValStr.split(",");
 				 if (val.equalsIgnoreCase(valElems[0])) {
 					 valValidated = true;
-					 ValueMeaningV2 valMeaningDto = pVal.getValueMeaningV2();
+					 ValueMeaningV2TransferObject valMeaningDto = (ValueMeaningV2TransferObject)pVal.getValueMeaningV2();
 					 String valMeaningLongName = valMeaningDto.getLongName().trim();
+					 String valMeaningDescription = valMeaningDto.getDescription();
 					 if (valMeaning.equalsIgnoreCase(valMeaningLongName)) {
 						 meaningValidated = true; 
-						 vVal.setVdPermissibleValueSeqid(valElems[1]);
+						 if (valMeaningDescription.equalsIgnoreCase(vVal.getDescription())) {
+							 meaningDescValidated = true;
+							 vVal.setVdPermissibleValueSeqid(valElems[1]);
 						 
-						 vVal.setPreferredName(String.valueOf(valMeaningDto.getPublicId()));
-						 //vVal.setLongName(valMeaningLongName);
-						 //vVal.setPerferredDefinition(valMeaningDto.getPreferredDefinition());
+							 //This will be used as the first part of the valid value preferred name
+							 vVal.setPreferredName(String.valueOf(valMeaningDto.getPublicId()));
+							 //vVal.setLongName(valMeaningLongName);
+							 //vVal.setPerferredDefinition(valMeaningDto.getPreferredDefinition());
+						 }
 					 }
 				 }
 			 }
@@ -812,10 +890,13 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 				 msg = "Valid value [" + val + "] doesn't match any of the associated CDE's permissible values. Skip loading";
 			 else if (!meaningValidated)
 				 msg = "Valid value meaning text [" + valMeaning + "] doesn't match any of the associated CDE's permissible value meaning. Skip loading";
+			 else if (!meaningDescValidated)
+				 msg = "Valid value description [" + vVal.getDescription() + 
+				 "] doesn't match any of the associated CDE's permissible value's value meaning description. Skip loading";
 			 
 			 if (msg.length() > 0) {
 				 vVal.setSkip(true);
-				 question.addInstruction(msg); //TODO: not needed
+				 question.addInstruction(msg);
 				 question.addMessage(msg);
 			 }
 		 }
@@ -893,6 +974,26 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			}
 		}
 		question.setQuestionText(questionText);
+	}
+	
+	//default: CRF
+	protected void validateFormType() {
+		
+	}
+	
+	//default: Form Loader (create new in db)
+	protected void validateDesignationTypes() {
+		
+	}
+	
+	//default: ??
+	protected void validateRefdocTypes() {
+		
+	}
+	
+	//default: Form Loader (create new in db)
+	protected void validateDefinitionTypes() {
+		
 	}
 	
 	/*

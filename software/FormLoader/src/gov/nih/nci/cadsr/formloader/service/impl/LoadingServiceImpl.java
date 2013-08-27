@@ -99,12 +99,13 @@ public class LoadingServiceImpl implements LoadingService {
 			if (form.getLoadStatus() < FormDescriptor.STATUS_DB_VALIDATED) {
 				form.addMessage("Form didn't pass db validation. Unable to load form");
 				logger.debug("Form didn't pass db validation. Unable to load form");
+				form.setSelected(false);
 				continue;
 			}
 			
 			if (!form.isSelected()) {
-				form.addMessage("Form is not selected by user. Skip loading");
-				logger.debug("Form is not selected by user. Skip loading");
+				//form.addMessage("Form is not selected by user. Skip loading");
+				logger.debug("Form is not selected to load. Skip loading");
 				continue;
 			}
 			
@@ -113,21 +114,14 @@ public class LoadingServiceImpl implements LoadingService {
 					!form.getLoadType().equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)) {
 				form.addMessage("Form has undetermined loat type. Unable to load form");
 				logger.debug("Form has undetermined loat type. Unable to load form");
-				continue;
-			}
-			
-			//TODO: check context, designation, definition and reference doc type here
-			//What about UOM name
-			
-			if (!validContextName(form)) {
-				form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
-				logger.debug("Context name invalid");
+				form.setSelected(false);
 				continue;
 			}
 			
 			if (!userHasRight(form, loggedinUser)) {
 				form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
-				logger.debug("User right issue");
+				form.setSelected(false);
+				logger.debug("Error with User right issue");
 				continue;
 			}
 				
@@ -146,24 +140,6 @@ public class LoadingServiceImpl implements LoadingService {
 			
 			form_idx++;
 		}	
-	}
-	
-	protected boolean validContextName(FormDescriptor form) {
-		
-		String contextName = form.getContext();
-		if (contextName == null || contextName.length() == 0) {
-			form.addMessage("Context name in form is null or empty. Use \"NCIP\" context to load form");
-			form.setContext("NCIP");
-		}
-		
-		String contextSeqid = this.repository.getContextSeqIdByName(form.getContext());
-		if (contextSeqid == null || contextSeqid.length() == 0) {
-			form.addMessage("Context name in form \"" + form.getContext() + "\" is not valid. Unable to load form");
-			return false;
-		} 
-		
-		form.setContextSeqid(contextSeqid);
-		return true;
 	}
 	
 	/**
