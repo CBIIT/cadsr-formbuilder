@@ -87,6 +87,7 @@
         	     <patternset>
         	         <include name="gov/nih/nci/cadsr/formloader/service/*.xml"/>
         	         <include name="gov/nih/nci/cadsr/formloader/service/impl/*.xsd"/>
+        	     	 <include name="gov/nih/nci/cadsr/formloader/service/common/*.xsl"/>
         	           
         	     </patternset>
         	</fileset>  
