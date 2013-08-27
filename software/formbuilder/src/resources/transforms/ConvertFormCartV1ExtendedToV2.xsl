@@ -88,11 +88,6 @@
     </xsl:template>
 
     <xsl:template match="form-v2-transfer-object">
-        <xsl:text>
-</xsl:text>
-        <xsl:comment>Transform based on FinalFormCartTransformv26.xsl which was validated with FormCartv21.xsd </xsl:comment>
-        <xsl:text>
-</xsl:text>
         <xsl:element name="form">
             <xsl:element name="context">
                 <xsl:value-of select="./context-name"/>
@@ -177,7 +172,7 @@
             </xsl:element>
             <xsl:apply-templates select="modules"/>
             <xsl:apply-templates select="protocols"/>
-            <xsl:apply-templates select="ref-docs"/>
+            <xsl:apply-templates select="referece-docs"/>
             <xsl:apply-templates select="contact-communication-v2"/>
         </xsl:element>
     </xsl:template>
@@ -745,7 +740,7 @@
         </xsl:element>
     </xsl:template>
 
-    <xsl:template match="referece-docs">
+    <xsl:template match="referece-docs" name="reference-document">
         <xsl:element name="referenceDocument">
             <xsl:element name="name">
                 <xsl:value-of select="doc-name"/>
