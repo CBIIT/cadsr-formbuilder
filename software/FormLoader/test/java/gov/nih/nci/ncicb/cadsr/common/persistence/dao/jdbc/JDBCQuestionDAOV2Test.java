@@ -77,4 +77,13 @@ public class JDBCQuestionDAOV2Test {
 		
 		assertTrue(qDtos.size() == 7);
 	}
+	
+	@Test
+	public void testGetQuestionsPublicIdVersionBySeqid() {
+		String questSeqid = "9D1F6BBF-4349-0B69-E040-BB89AD436323";
+		QuestionTransferObject questdto = questionV2Dao.getQuestionsPublicIdVersionBySeqid(questSeqid);
+		
+		assertNotNull(questdto);
+		
+	}
  }

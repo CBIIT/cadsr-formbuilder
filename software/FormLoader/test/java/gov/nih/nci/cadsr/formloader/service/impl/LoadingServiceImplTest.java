@@ -62,24 +62,6 @@ public class LoadingServiceImplTest {
 	}
 	
 	@Test
-	public void testValidContextName() {
-		this.prepareCollectionToLoad(".\\.\\test\\data", "3256357_v1_0_newform.xml");
-		FormDescriptor form = aColl.getForms().get(0);
-		boolean valid = this.loadService.validContextName(form);
-		assertTrue(valid);
-		
-		form.setContext("");
-		valid = this.loadService.validContextName(form);
-		assertTrue(valid);
-		assertTrue(form.getContext().equals("NCIP"));
-		
-		form.setContext("BOGUS");
-		valid = this.loadService.validContextName(form);
-		assertFalse(valid);
-		
-	}
-	
-	@Test
 public void testUserHasRight() {
 		this.prepareCollectionToLoad(".\\.\\test\\data", "3256357_v1_0_newform.xml");
 		FormDescriptor form = aColl.getForms().get(0);
@@ -123,12 +105,29 @@ public void testUserHasRight() {
 			fail("Got exception: " + fle.getMessage());
 		}
 	}
+	
+	@Test
+	public void testLoadNewVersion() {
+		this.prepareCollectionToLoad(".\\.\\test\\data", "3256357_v1_0_newform-partial-newversion.xml");
+		try {
+			FormDescriptor form = aColl.getForms().get(0);
+			form.setSelected(true);
+			aColl = this.loadService.loadForms(aColl);
+			form = aColl.getForms().get(0);
+			String status = StatusFormatter.getStatusInXml(aColl);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\LoadService-creatednew-version.xml");
+		} catch (FormLoaderServiceException fle) {
+			fail("Got exception: " + fle.getMessage());
+		}
+	}
+	
+	
 
 	protected void prepareCollectionToLoad(String filepath, String testfile) {
 		assertNotNull(loadService);
 		
 		try {
-			FormCollection aColl = new FormCollection();
+			aColl = new FormCollection();
 			aColl.setXmlPathOnServer(filepath);
 			aColl.setXmlFileName(testfile);
 			aColl = xmlValidator.validateXml(aColl);
@@ -141,15 +140,19 @@ public void testUserHasRight() {
 			//StatusFormatter.writeStatusToXml(status, filepath + "\\LoadServiceTest-xmlVal.xml");
 			
 			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATED);
-			
-			aColl = new FormCollection();
-			aColl.setForms(forms);
+	
+			//aColl.setForms(forms);
 			aColl.setName("Testing Create New Form");
 			aColl.setCreatedBy("FORMBUILDER");
 			aColl.setXmlFileName(testfile);
 			aColl.setXmlPathOnServer(filepath);
 			
+			for (FormDescriptor f : forms) 
+				f.setSelected(true);
+			
 			assertNotNull(contentValidationService);
+			
+			
 			aColl = contentValidationService.validateXmlContent(aColl);
 			
 			assertNotNull(aColl);

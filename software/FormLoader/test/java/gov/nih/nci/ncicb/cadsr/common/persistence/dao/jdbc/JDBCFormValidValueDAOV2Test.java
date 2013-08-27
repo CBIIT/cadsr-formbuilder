@@ -34,7 +34,7 @@ public class JDBCFormValidValueDAOV2Test {
 	public void setUp() throws Exception {
 	}
 
-	@Test
+	//@Test
 	public void testCreateFormValidValueComponent() {
 		
 		try {	
@@ -62,6 +62,33 @@ public class JDBCFormValidValueDAOV2Test {
 		
 	}
 
-	
+	@Test
+	public void testCreateValidValue() {
+		
+		try {	
+
+			String parentQuestId = "E479549F-5D87-A01B-E040-BB8921B6711";
+			FormValidValueTransferObject vValue = new FormValidValueTransferObject();
+			vValue.setVersion(Float.valueOf("1.0"));
+			vValue.setPreferredName("Testshan8800");
+			vValue.setLongName("New VV LongName");
+			vValue.setPreferredDefinition("Description of the VV");
+			vValue.setAslName("DRAFT NEW");
+
+			ContextTransferObject context = new ContextTransferObject();
+			context.setConteIdseq("29A8FB18-0AB1-11D6-A42F-0010A4C1E842");
+			vValue.setContext(context);
+
+			vValue.setVpIdseq("EAA80DF9-32D1-4CDE-E034-0003BA3F9857");
+			vValue.setCreatedBy("FORMBUILDER");
+
+			vValue.setDisplayOrder(2);
+
+			validValueV2Dao.createValidValue(vValue,  parentQuestId, "FORMBUILDER");
+		} catch (DMLException dme) {
+			System.out.println(dme.getMessage());
+		}
+		
+	}
 
 }

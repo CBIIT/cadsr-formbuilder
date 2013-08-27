@@ -8,6 +8,7 @@ import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.QuestionDescriptor;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -71,12 +72,15 @@ public class StaXParserTest {
 		assertTrue(protoList.get(0).equals("01_C_0129F"));
 		assertTrue(protoList.get(1).equals("02_C_0241E"));
 		
-		List<DesignationTransferObject> desObjs = parser.getDesignations();
+		List<DesignationTransferObjectExt> desObjs = parser.getDesignations();
 		assertNotNull(desObjs);
 		assertTrue(desObjs.size() == 1);
-		assertTrue(desObjs.get(0).getName() == null || desObjs.get(0).getName().length() ==0);
-		assertTrue(desObjs.get(0).getType().equals("ABBREVIATION"));
-		assertTrue(desObjs.get(0).getLanguage().equals("ENGLISH"));
+		
+		DesignationTransferObjectExt desig = desObjs.get(0);
+		assertTrue(desig.getName() == null || desig.getName().length() == 0);
+		assertTrue(desig.getType().equals("ABBREVIATION"));
+		assertTrue(desig.getLanguage().equals("ENGLISH"));
+		assertTrue(desig.getContextName().equals("caBIG"));
 		
 	}
 	

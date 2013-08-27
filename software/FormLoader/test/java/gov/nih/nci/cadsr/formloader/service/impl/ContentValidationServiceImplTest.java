@@ -1,5 +1,6 @@
 package gov.nih.nci.cadsr.formloader.service.impl;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -37,7 +38,7 @@ public class ContentValidationServiceImplTest {
 	private static Logger logger = Logger.getLogger(ContentValidationServiceImplTest.class.getName());
 
 	@Autowired
-	ContentValidationService contentValidationService;
+	ContentValidationServiceImpl contentValidationService;
 	@Autowired
 	XmlValidationServiceImpl xmlValidator;
 	
@@ -63,7 +64,9 @@ public class ContentValidationServiceImplTest {
 			assertTrue(forms.size() == 1);
 			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATED);
 			
-			aColl.setForms(forms);
+			for (FormDescriptor form : forms) {
+				form.setSelected(true);
+			}
 			
 			assertNotNull(contentValidationService);
 			aColl = contentValidationService.validateXmlContent(aColl);
@@ -103,6 +106,24 @@ public class ContentValidationServiceImplTest {
 			fail("Got exception: " + fle.getMessage());
 		}
 	}
+	
+	@Test
+	public void testValidContextName() {
+		this.prepareCollectionForValidation(".\\.\\test\\data", "3256357_v1_0_newform.xml");
+		FormDescriptor form = aColl.getForms().get(0);
+		boolean valid = this.contentValidationService.validContextName(form);
+		assertTrue(valid);
+		
+		form.setContext("");
+		valid = this.contentValidationService.validContextName(form);
+		assertTrue(valid);
+		assertTrue(form.getContext().equals("NCIP"));
+		
+		form.setContext("BOGUS");
+		valid = this.contentValidationService.validContextName(form);
+		assertFalse(valid);
+		
+	}
 
 	
 	@Test
@@ -119,7 +140,7 @@ public class ContentValidationServiceImplTest {
 		HashMap<String, List<Float>> versions = new HashMap<String, List<Float>>();
 		List<Float> vers = new ArrayList<Float>();
 		vers.add(Float.parseFloat("4.0"));
-		versions.put("1234345", vers);
+		versions.put("1234345", vers); 
 
 		vers = new ArrayList<Float>();
 		vers.add(Float.parseFloat("1.0"));
@@ -135,11 +156,13 @@ public class ContentValidationServiceImplTest {
 		
 		((ContentValidationServiceImpl)contentValidationService).determineLoadTypeByVersion(forms, versions);
 		
+		
 		assertTrue(FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(forms.get(0).getLoadType()));
 		assertTrue(FormDescriptor.LOAD_TYPE_UPDATE_FORM.equals(forms.get(1).getLoadType()));
 		assertTrue(FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(forms.get(2).getLoadType()));
 		assertTrue(FormDescriptor.LOAD_TYPE_UNKNOWN.equals(forms.get(3).getLoadType()));
 		assertTrue(FormDescriptor.LOAD_TYPE_UNKNOWN.equals(forms.get(4).getLoadType()));
+		
 		/*
 		Denise:
 			if public ID exists but no version element in the form, skip loading.
@@ -186,6 +209,26 @@ public class ContentValidationServiceImplTest {
 	}
 	*/
 	
+	protected void prepareCollectionForValidation (String filepath, String testfile) {
+		assertNotNull(contentValidationService);
+		
+		try {
+			aColl = new FormCollection();
+			aColl.setXmlPathOnServer(filepath);
+			aColl.setXmlFileName(testfile);
+			aColl = xmlValidator.validateXml(aColl);
+			
+			
+			List<FormDescriptor> forms = aColl.getForms();
+			assertNotNull(forms);
+			assertTrue(forms.size() == 1);
+			
+			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATED);
+	
+		} catch (FormLoaderServiceException fle) {
+			fail("Got exception: " + fle.getMessage());
+		}
+	}
 	
 	public FormCollection generateContentValidationData() {
 		FormCollection aColl = new FormCollection();
@@ -201,20 +244,22 @@ public class ContentValidationServiceImplTest {
 		  
 		  //1
 		  List<FormDescriptor> forms = new ArrayList<FormDescriptor>();
-		  FormDescriptor form = new FormDescriptor("443355", "1234345", "1.0");
+		  FormDescriptor form = new FormDescriptor("443355", "1234345", "1.0"); //p.id invalid
 		  form.setContext("CTRP");
 		  //FormStatus status = new FormStatus(FormStatus.STATUS_DB_VALIDATED);
 		 // List<String> msgs = new ArrayList<String>();
 		  form.addMessage("Question 1 has no default text");
 		  form.addMessage("Question 2 need work");
 		  form.setLoadStatus(FormDescriptor.STATUS_XML_VALIDATED);
+		  form.setSelected(true);
 		  forms.add(form);
 		  
 		  //2
-		  form = new FormDescriptor("553355", "1234346", "3.0");
+		  form = new FormDescriptor("553355", "1234346", "3.0"); //p.id invalid
 		  form.setContext("NCIP");
 		 form.addMessage("No error / success");
 		 form.setLoadStatus(FormDescriptor.STATUS_XML_VALIDATED);
+		 form.setSelected(true);
 		  forms.add(form);
 		  
 		  //3
@@ -225,6 +270,7 @@ public class ContentValidationServiceImplTest {
 		  form.addMessage("Question 1 has no default text");
 		  form.addMessage("Question 2 need work");
 		  form.setLoadStatus(FormDescriptor.STATUS_XML_VALIDATED);
+		  form.setSelected(true);
 		  forms.add(form);
 		  
 		  //4
@@ -235,13 +281,16 @@ public class ContentValidationServiceImplTest {
 		  form.addMessage("Question 3 has no default text");
 		  form.addMessage("Question 4 need work");
 		  form.setLoadStatus(FormDescriptor.STATUS_XML_VALIDATED);
+		  form.setSelected(true);
 		  forms.add(form);
 		  
 		  //5
 		 //public id = 0
 		  form = new FormDescriptor("883355", "0", "1.0");
 		  form.setLoadStatus(FormDescriptor.STATUS_XML_VALIDATED);
+		  form.setSelected(true);
 		  forms.add(form);
+		  
 		  //6
 		  forms.add(new FormDescriptor("883355", "1234349", "1.0"));
 		  

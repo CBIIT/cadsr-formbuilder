@@ -56,6 +56,39 @@ public class FormLoaderRepositoryImplTest {
 		
 	}
 	
+	@Test
+	public void testCheckWorkflowStatusName() {
+		FormDescriptor form = new FormDescriptor("seqid", "345678", "1.0");
+		form.setWorkflowStatusName("Fake Name");
+		repository.checkWorkflowStatusName(form);
+		
+		assertTrue(form.getWorkflowStatusName().equals("DRAFT NEW"));
+		
+		form.setWorkflowStatusName("RELEASED");
+		repository.checkWorkflowStatusName(form);
+		assertTrue(form.getWorkflowStatusName().equals("RELEASED"));
+	}
+	
+	@Test
+	public void testGetAllLoadedCollections() {
+		List<FormCollection> colls = repository.getAllLoadedCollections();
+		
+		assertNotNull(colls);
+		assertTrue(colls.size() > 0);
+
+		for (FormCollection coll : colls) {
+			if (coll.getId().equals("E49101B2-1B48-BA26-E040-BB8921B61DC6")) {
+				List<FormDescriptor> forms = coll.getForms();
+
+				assertNotNull(forms.get(0).getPublicId());
+				assertTrue(forms.get(0).getPublicId().length() > 0);
+
+				assertNotNull(forms.get(0).getVersion());
+				assertTrue(forms.get(0).getVersion().length() > 0);
+			}
+		}
+	}
+	
 	protected void prepareCollectionToLoad() {
 		assertNotNull(loadService);
 		
@@ -66,28 +99,30 @@ public class FormLoaderRepositoryImplTest {
 		
 		
 		try {
-			FormCollection aColl = new FormCollection();
+			aColl = new FormCollection();
 			aColl.setXmlPathOnServer(filepath);
 			aColl.setXmlFileName(testfile);
+			
 			aColl = xmlValidator.validateXml(aColl);
 			List<FormDescriptor> forms = aColl.getForms();
 			assertNotNull(forms);
 			assertTrue(forms.size() == 1);
 			
 			FormDescriptor form = forms.get(0);
+			form.setSelected(true);
 			//String status = StatusFormatter.getStatusInXml(form);
 			//StatusFormatter.writeStatusToXml(status, filepath + "\\LoadServiceTest-xmlVal.xml");
 			
 			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATED);
-			
-			aColl = new FormCollection();
-			aColl.setForms(forms);
+		
+			//aColl.setForms(forms);
 			aColl.setName("Testing Create New Form");
 			aColl.setCreatedBy("jjuser");
 			aColl.setXmlFileName(testfile);
 			aColl.setXmlPathOnServer(filepath);
 			
 			assertNotNull(contentValidationService);
+			form.setSelected(true);
 			aColl = contentValidationService.validateXmlContent(aColl);
 			
 			assertNotNull(aColl);

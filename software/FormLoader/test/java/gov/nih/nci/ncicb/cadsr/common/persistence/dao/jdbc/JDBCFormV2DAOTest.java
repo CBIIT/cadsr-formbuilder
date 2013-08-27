@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ModuleTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 
@@ -117,6 +118,18 @@ public class JDBCFormV2DAOTest {
 		proto_idseq = "afagasgaeageagae";
 		proto = formV2Dao.formProtocolExists(formSeqId, proto_idseq);
 		assertFalse(proto);
+		
+	}
+	
+	@Test
+	public void testGetFormHeadersBySeqids() {
+		List<String> seqids = new ArrayList<String>();
+		seqids.add("E49101B2-1B33-BA26-E040-BB8921B61DC6");
+		seqids.add("E49101B2-1B33-BA26-E040-BB8921B61DC6");
+		String formSeqId = "9D1F6BBF-433E-0B69-E040-BB89AD436323";
+		List<FormV2TransferObject> forms = formV2Dao.getFormHeadersBySeqids(seqids);
+		assertNotNull(forms);
+		assertTrue(forms.size() >= 2);
 		
 	}
 }

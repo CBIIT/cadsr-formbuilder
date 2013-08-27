@@ -83,4 +83,42 @@ public class JDBCAdminComponentDAOV2Test {
 		assertNotNull(desigs);
 		assertTrue(desigs.size() > 0);
 	}
+	
+	@Test
+	public void testGetAllDesignationTypes() {
+		List<String> alltypes = adminComponentV2Dao.getAllDesignationTypes();
+		assertTrue(alltypes.size() > 10 && alltypes.size() < 100);
+		
+	}
+	
+	@Test
+	public void testGetAllRefdocTypes() {
+		List<String> alltypes = adminComponentV2Dao.getAllRefdocTypes();
+		assertTrue(alltypes.size() > 10 && alltypes.size() < 100);
+		
+	}
+	
+	@Test
+	public void testGetAllDefinitionTypes() {
+		List<String> alltypes = adminComponentV2Dao.getAllDefinitionTypes();
+		assertTrue(alltypes.size() > 10 && alltypes.size() < 100);
+		
+	}
+	
+	@Test
+	public void testGetAllWorkflowStatusName() {
+		List<String> alltypes = adminComponentV2Dao.getAllWorkflowNames();
+		assertTrue(alltypes.size() > 10 && alltypes.size() < 100);
+		
+	}
+	
+	@Test
+	public void testUpdateWorkflowStatus() {
+		String formseqid = "E4910B27-8CFE-1F87-E040-BB8921B66CFF";
+		String wfName = "RETIRED DELETED";
+		
+		int res = adminComponentV2Dao.updateWorkflowStatus(formseqid, wfName);
+		
+		assertTrue(res >= 1);
+	}
 }

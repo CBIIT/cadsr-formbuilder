@@ -423,6 +423,24 @@ public class FormLoaderRepositoryDataGen implements FormLoaderRepository {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public List<FormCollection> getAllLoadedCollections() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void checkWorkflowStatusName(FormDescriptor form) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unloadForm(FormDescriptor form) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 
