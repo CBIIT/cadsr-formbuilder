@@ -50,8 +50,12 @@ public class StaXParserTest {
 		assertTrue("Unnamed2".equals(forms.get(2).getModules().get(1).getPreferredDefinition()));
 		assertTrue("Unnamed2".equals(forms.get(2).getModules().get(1).getLongName()));
 		
+		assertTrue(forms.get(0).getModules().get(0).getQuestions().get(3).getValidValues().get(0).getInstruction().startsWith("Last"));
+		
 		assertTrue(forms.get(2).getModules().get(0).getQuestions().get(1).isEditable() == true);
 		assertTrue(forms.get(2).getModules().get(0).getQuestions().get(1).isMandatory() == false);
+		
+		assertTrue("0".equals(forms.get(2).getModules().get(0).getMaximumModuleRepeat()));
 	}
 	
 	@Test
