@@ -73,7 +73,8 @@ public class FormQuestionParserHandler extends ParserHandler {
 			
 		} else if (localName.equalsIgnoreCase(StaXParser.PUBLIC_ID)
 				|| localName.equalsIgnoreCase(StaXParser.VERSION)
-				|| localName.equalsIgnoreCase(StaXParser.MODIFIED_BY)) {
+				|| localName.equalsIgnoreCase(StaXParser.MODIFIED_BY)
+				|| localName.equals(StaXParser.MODULE_MAX_REPEAT)) {
 			if (nodeQueue.peek().equals(StaXParser.MODULE)) {
 				this.objToSetProperty = currModule;
 				this.methodName = getMethodName(localName);
@@ -128,9 +129,7 @@ public class FormQuestionParserHandler extends ParserHandler {
 				this.objToSetProperty = currModule;
 				this.methodName = getMethodName(localName);
 			}
-		}
-		
-
+		}  
 		this.nodeQueue.push(localName);
 
 	}

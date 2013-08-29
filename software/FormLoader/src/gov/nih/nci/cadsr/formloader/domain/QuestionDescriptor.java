@@ -152,7 +152,7 @@ public class QuestionDescriptor {
 
 	public void addInstruction(String newInstruction) {
 		if (instruction == null)
-			instruction = newInstruction;
+			instruction = "[FormLoader]:" + newInstruction;
 		else
 			instruction += "; [FormLoader]:" + newInstruction;
 	}

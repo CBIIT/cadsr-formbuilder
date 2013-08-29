@@ -4,8 +4,8 @@ import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.ModuleDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.QuestionDescriptor;
-import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
+import gov.nih.nci.ncicb.cadsr.common.dto.AdminComponentTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
@@ -13,14 +13,13 @@ import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.FormValidValueChangesTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormValidValueTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.InstructionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ModuleTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.PermissibleValueV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionChangeTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.InstructionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
 import gov.nih.nci.ncicb.cadsr.common.persistence.ErrorCodeConstants;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCCollectionDAO;
@@ -35,17 +34,13 @@ import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCValueDomainDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
-import gov.nih.nci.ncicb.cadsr.common.resource.PermissibleValueV2;
-import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomainV2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
@@ -517,34 +512,33 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		logger.debug("Creating instructions for form");
 		String instructString = form.getHeaderInstruction();
 		
-		InstructionTransferObject formInstruction = createInstruction(form, formdto, instructString);
+		InstructionTransferObject formInstruction = createInstructionDto(formdto, instructString);
 		if (formInstruction != null)
 			formInstructionV2Dao.createInstruction(formInstruction, formdto.getFormIdseq());
 		
 		instructString = form.getFooterInstruction();
-		formInstruction = createInstruction(form, formdto, instructString);
+		formInstruction = createInstructionDto(formdto, instructString);
 		if (formInstruction != null)
 			formInstructionV2Dao.createFooterInstruction(formInstruction, formdto.getFormIdseq());
 		
 		logger.debug("Done creating instructions for form");
 	}
 	
-	protected InstructionTransferObject createInstruction(FormDescriptor form, 
-			FormTransferObject formdto, String instructionString) {
+	protected InstructionTransferObject createInstructionDto(AdminComponentTransferObject compdto, String instructionString) {
 			
-		InstructionTransferObject formInstruction = null;
+		InstructionTransferObject instruction = null;
 		if (instructionString != null && instructionString.length() > 0) {
-			formInstruction = new InstructionTransferObject();
-			formInstruction.setLongName(form.getLongName());
-			formInstruction.setPreferredDefinition(instructionString);
-			formInstruction.setContext(formdto.getContext());
-			formInstruction.setAslName("DRAFT NEW");
-			formInstruction.setVersion(new Float(1.0));
-			formInstruction.setCreatedBy(form.getCreatedBy());
-			formInstruction.setDisplayOrder(1);
+			instruction = new InstructionTransferObject();
+			instruction.setLongName(compdto.getLongName());
+			instruction.setPreferredDefinition(instructionString);
+			instruction.setContext(compdto.getContext());
+			instruction.setAslName("DRAFT NEW");
+			instruction.setVersion(new Float(1.0));
+			instruction.setCreatedBy(compdto.getCreatedBy());
+			instruction.setDisplayOrder(1);
 		}
 		
-		return formInstruction;
+		return instruction;
 	}
 	
 	protected List<String> getCdeSeqIdsFromForm(FormDescriptor form) {
@@ -635,6 +629,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 					formV2Dao.addFormProtocol(formSeqid, protoSeqid, form.getCreatedBy());
 				}
 			}
+			
 		}
 	}
 	
@@ -728,15 +723,15 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		
 		int idx = 0;
 		for (QuestionDescriptor.ValidValue vValue : validValues) {
+			if (vValue.isSkip()) continue;
+			
 			idx++;
 			FormValidValueTransferObject fvv = new FormValidValueTransferObject();
 			
 			fvv.setCreatedBy(moduledto.getCreatedBy());
 			fvv.setQuestion(newQuestdto);
 			fvv.setVpIdseq(vValue.getVdPermissibleValueSeqid());
-			fvv.setVersion(Float.valueOf("1.0"));
-			
-			//These are for calling the stored procedure "sbrext_form_builder_pkg.ins_value"		
+			fvv.setVersion(Float.valueOf("1.0"));		
 			
 			//PreferredName format: value meaning public id_quetionpublicid_form_public_id_version_<x> x = 1, 2, 3
 			String preferredName = composeVVPreferredName(form, question, vValue, idx);
@@ -752,8 +747,19 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			
 			//in.put("p_proto_idseq", protocolIdSeq);
 			
-			int res  = 
+			String vvSeqid  = 
 					formValidValueV2Dao.createValidValue(fvv,newQuestdto.getQuesIdseq(),moduledto.getCreatedBy());
+			
+			if (vvSeqid != null && vvSeqid.length() > 0) {
+				formValidValueV2Dao.createValidValueAttributes(vvSeqid, vValue.getMeaningText(), vValue.getDescription(), moduledto.getCreatedBy());
+				
+				String instr = vValue.getInstruction();
+				if (instr != null && instr.length() > 0) {
+					InstructionTransferObject instrdto = createInstructionDto(fvv, instr);
+					formValidValueInstructionV2Dao.createInstruction(instrdto, vvSeqid);
+				}
+			}
+			
 			logger.debug("Created new valid valid");
 		}
 	}

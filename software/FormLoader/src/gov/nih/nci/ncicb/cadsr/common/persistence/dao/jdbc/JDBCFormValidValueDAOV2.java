@@ -73,23 +73,22 @@ public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
 	 * @param userName
 	 * @return
 	 */
-	public int createValidValue(FormValidValue newVV, String parentId, String userName)
+	public String createValidValue(FormValidValue newVV, String parentId, String userName)
 			throws DMLException {
 		
 		String vvidseq = generateGUID();
 		String recidseq = generateGUID();
 		
-		
-		int res = insertValidValue(newVV, vvidseq);
+		int res = createtValidValue(newVV, vvidseq);
 		
 		if (res == 1) {//success
 			res = createComponentValidValueMapping(recidseq, parentId, vvidseq, newVV, userName);
 		}
 		
-		return res;
+		return (res == 1) ? vvidseq : null;
 	}
 	
-	protected int insertValidValue(FormValidValue newVV, String vvidseq) 
+	protected int createtValidValue(FormValidValue newVV, String vvidseq) 
 			throws DMLException {
 		
 		String sql = "INSERT INTO quest_contents_ext " +
@@ -148,8 +147,21 @@ public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
 	
 		int res = this.namedParameterJdbcTemplate.update(sql, params);
 		return res;
+	}
+	
+	public int createValidValueAttributes(String vvSeqid, String meaningText, String description, String userName) {
+		String sql = 
+				"insert into valid_values_att_ext (qc_idseq, meaning_text, description_text, created_by) " +
+				" values(:vvseqid, :meaningText, :desc, :createdBy)";
 		
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("vvseqid", vvSeqid);
+		params.addValue("meaningText", meaningText);
+		params.addValue("desc", description);
+		params.addValue("createdBy", userName);
 		
+		int res = this.namedParameterJdbcTemplate.update(sql, params);
+		return res;
 	}
 	
 	public int createValidValueAssociation(FormValidValue newVV, String parentId, String userName) 

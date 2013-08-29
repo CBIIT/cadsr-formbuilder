@@ -13,6 +13,9 @@ public class ModuleDescriptor {
 	String createdBy;
 	String modifiedBy;
 	
+	//TODO: we probably don't need to load this. Check with Denise
+	String maximumModuleRepeat;
+	
 	List<QuestionDescriptor> questions = new ArrayList<QuestionDescriptor>();
 	
 	public List<QuestionStatus> getQuestionStatuses(String formLoadStatus) {
@@ -106,5 +109,12 @@ public class ModuleDescriptor {
 		this.modifiedBy = modifiedBy;
 	}
 
+	public String getMaximumModuleRepeat() {
+		return maximumModuleRepeat;
+	}
+
+	public void setMaximumModuleRepeat(String maximumModuleRepeat) {
+		this.maximumModuleRepeat = maximumModuleRepeat;
+	}
 	
 }

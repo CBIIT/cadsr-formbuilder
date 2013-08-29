@@ -51,7 +51,8 @@ public class StaXParser {
 	protected static final String TYPE = "type";
 	protected static final String PROTOCOL = "protocol";
 	protected static final String PROTOCOL_ID = "protocolID";
-	protected static final String MODULE = "module";	
+	protected static final String MODULE = "module";
+	protected static final String MODULE_MAX_REPEAT = "maximumModuleRepeat";
 	
 	//Form mapping pass 2	
 	protected static final String CREATED_BY = "createdBy";
