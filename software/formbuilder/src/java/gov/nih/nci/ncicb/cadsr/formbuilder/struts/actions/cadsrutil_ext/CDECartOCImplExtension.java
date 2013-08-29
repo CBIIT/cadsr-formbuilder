@@ -6,30 +6,16 @@ package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext;
 // Note: There is no automatic mechanism for ensuring the cache is in sync with the forms.
 // setFormDisplayObjects should be explicitly called before displaying the cart.
 
-import gov.nih.nci.ncicb.cadsr.objectCart.impl.CDECartOCImpl;
-
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.ServiceDelegateFactory;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.ServiceStartupException;
-import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
-import gov.nih.nci.ncicb.cadsr.common.formbuilder.common.FormBuilderConstants;
-
-import gov.nih.nci.cadsr.domain.Form;
-import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.objectCart.CDECart;
-import gov.nih.nci.ncicb.cadsr.objectCart.CDECartItem;
-import gov.nih.nci.ncicb.cadsr.objectCart.CDECartItemComparator;
-import gov.nih.nci.ncicb.cadsr.objectCart.CDECartItemTransferObject;
 import gov.nih.nci.objectCart.client.ObjectCartClient;
 import gov.nih.nci.objectCart.client.ObjectCartException;
-import gov.nih.nci.objectCart.domain.Cart;
 import gov.nih.nci.objectCart.domain.CartObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -38,7 +24,6 @@ import java.util.Map;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.util.logging.Log;
 import gov.nih.nci.ncicb.cadsr.common.util.logging.LogFactory;
-import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
 
 import org.exolab.castor.xml.Unmarshaller;
 import org.exolab.castor.xml.MarshalException;
@@ -50,12 +35,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.StringReader;
 
-import net.sf.saxon.TransformerFactoryImpl;
-
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormCartDisplayObjectPersisted;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConverterUtil;
+import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormCartOptionsUtil;
-import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
 
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormCartDisplayObject;
 
@@ -85,7 +68,6 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 		log.debug("setFormDisplayObjects");
 		log.debug("cartClient " + cartClient + " oCart " + oCart);
 		log.debug("cart id " + oCart.getId());
-
 		try {
 			Collection<CartObject> newFormCartElements = cartClient.getObjectsByType(oCart, FormConverterUtil.instance().getCartObjectType());
 			log.debug("newFormCartElements has " + newFormCartElements.size() + " elements");
@@ -133,15 +115,13 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 					// new form cart data doesn't include idseq, get it from the cart native id
 					String idseq = f.getNativeId();
 					FCDO.setIdseq(idseq);
-					
 					// check whether the form exists in database and show a warning prefix on the name if it doesn't 
 					String databaseidseq = formBuilderService.getIdseq(FCDO.getPublicId(), FCDO.getVersion());
-
 					if (databaseidseq.length() == 0) {
 			    		log.info("Form " + FCDO.getPublicId() + " " + FCDO.getVersion() + " in cart not found in database");
 			    		FCDO.setLongName(formNotInDatabaseLongNamePrefix + FCDO.getLongName());   		
 					}
-	
+					FCDO.setProtocols(formBuilderService.getFormDetailsV2(FCDO.getIdseq()).getProtocols());
 					itemList.add(new FormCartDisplayObjectPersisted(FCDO, true));
 					log.debug("Loaded " + FCDO.getIdseq());
 					
@@ -151,6 +131,9 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 					log.error("MarshalException loading forms", e);	
 				} catch (ValidationException e) {
 					log.error("ValidationException loading forms", e);	
+				} catch (FormBuilderException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 				
 			}
