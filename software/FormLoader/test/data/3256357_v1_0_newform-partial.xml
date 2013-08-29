@@ -1,0 +1,851 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Transform based on FinalFormCartTransformv26.xsl which was validated with FormCartv21.xsd -->
+<forms>
+<form>
+   <context>TEST</context>
+   <createdBy>FORMBUILDER</createdBy>
+   <dateCreated>2012-11-07T09:51:43.0</dateCreated>
+   <dateModified>2012-12-19T13:39:17.0</dateModified>
+   <modifiedBy>FORMBUILDER</modifiedBy>
+   <longName>SY Testing FL</longName>
+   <changeNote/>
+   <preferredDefinition>Description of the form, such as Testing CRF XML XSD functionality</preferredDefinition>
+   <workflowStatusName>DRAFT NEW</workflowStatusName>
+   <categoryName>Eligibility</categoryName>
+   <disease/>
+   <type>CRF</type>
+   <designation>
+      <createdBy/>
+      <dateCreated>0001-01-01T00:00:01</dateCreated>
+      <dateModified>0001-01-01T00:00:01</dateModified>
+      <modifiedBy/>
+      <languageName>ENGLISH</languageName>
+      <name/>
+      <type>ABBREVIATION</type>
+      <context>caBIG</context>
+      <classification>
+         <name/>
+         <publicID>0000000</publicID>
+         <version>1.0</version>
+         <preferredDefinition/>
+         <classificationSchemeItem>
+            <name/>
+            <publicID>0000000</publicID>
+            <version>1.0</version>
+            <type>TEST</type>
+            <preferredDefinition/>
+         </classificationSchemeItem>
+      </classification>
+   </designation>
+   <definition>
+      <createdBy/>
+      <dateCreated>0001-01-01T00:00:01</dateCreated>
+      <dateModified>0001-01-01T00:00:01</dateModified>
+      <modifiedBy/>
+      <languageName>ENGLISH</languageName>
+      <text/>
+      <type>NCI</type>
+      <classification>
+         <name/>
+         <publicID>0000000</publicID>
+         <version>1.0</version>
+         <preferredDefinition/>
+         <classificationSchemeItem>
+            <name/>
+            <publicID>0000000</publicID>
+            <version>1.0</version>
+            <type>TEST</type>
+            <preferredDefinition/>
+         </classificationSchemeItem>
+      </classification>
+      <context>TEST</context>
+   </definition>
+   <headerInstruction>
+      <text>This is based on form 3256357 created by DWARZEL.</text>
+   </headerInstruction>
+   <footerInstruction>
+      <text>This is a Footer Instruction.</text>
+   </footerInstruction>
+   <module>
+      <displayOrder>0</displayOrder>
+      <maximumModuleRepeat>3</maximumModuleRepeat>
+      <createdBy/>
+      <dateCreated>0001-01-01T00:00:01</dateCreated>
+      <dateModified>0001-01-01T00:00:01</dateModified>
+      <modifiedBy/>
+      <longName>New Module of CEMs</longName>
+      <instruction>
+         <text/>
+      </instruction>
+      <preferredDefinition>New Module of CEMs</preferredDefinition>
+      <publicID>3256358</publicID>
+      <version>1.0</version>
+      <usageCategory>
+         <usageType>None</usageType>
+         <rule/>
+      </usageCategory>
+      <question>
+         <publicID>3256362</publicID>
+         <version>1.0</version>
+         <isDerived>false</isDerived>
+         <displayOrder>0</displayOrder>
+         <createdBy/>
+         <dateCreated>0001-01-01T00:00:01</dateCreated>
+         <dateModified>0001-01-01T00:00:01</dateModified>
+         <modifiedBy/>
+         <questionText>Race</questionText>
+         <instruction>
+            <text/>
+         </instruction>
+         <defaultValue/>
+         <isEditable>Yes</isEditable>
+         <isMandatory>No</isMandatory>
+         <multiValue>No</multiValue>
+         <dataElement>
+            <longName>Race Category Text</longName>
+            <shortName>RACE_CAT_TXT</shortName>
+            <publicID>2192199</publicID>
+            <version>1.0</version>
+            <workflowStatusName>RELEASED</workflowStatusName>
+            <preferredDefinition>The text for reporting information about race based on the Office of Management and Budget (OMB) categories.</preferredDefinition>
+            <designation>
+               <createdBy/>
+               <dateCreated>0001-01-01T00:00:01</dateCreated>
+               <dateModified>0001-01-01T00:00:01</dateModified>
+               <modifiedBy/>
+               <languageName>ENGLISH</languageName>
+               <name/>
+               <type>ABBREVIATION</type>
+               <context>caBIG</context>
+               <classification>
+                  <name/>
+                  <publicID>0000000</publicID>
+                  <version>1.0</version>
+                  <preferredDefinition/>
+                  <classificationSchemeItem>
+                     <name/>
+                     <publicID>0000000</publicID>
+                     <version>1.0</version>
+                     <type>TEST</type>
+                     <preferredDefinition/>
+                  </classificationSchemeItem>
+               </classification>
+            </designation>
+            <valueDomain>
+               <longName>Race Category</longName>
+               <shortName/>
+               <publicID>2015164</publicID>
+               <version>6.0</version>
+               <type>Enumerated</type>
+               <context>TEST</context>
+               <workflowStatusName>RELEASED</workflowStatusName>
+               <datatypeName>CHARACTER</datatypeName>
+               <decimalPlace/>
+               <formatName/>
+               <highValueNumber/>
+               <lowValueNumber/>
+               <maximumLengthNumber>41</maximumLengthNumber>
+               <minimumLengthNumber>5</minimumLengthNumber>
+               <UOMName/>
+               <permissibleValue>
+                  <value>American Indian or Alaska Native</value>
+                  <valueMeaning>
+                     <publicID>2572232</publicID>
+                     <version>1.0</version>
+                     <longName>American Indian or Alaska Native </longName>
+                     <designation>
+                        <createdBy/>
+                        <dateCreated>0001-01-01T00:00:01</dateCreated>
+                        <dateModified>0001-01-01T00:00:01</dateModified>
+                        <modifiedBy/>
+                        <languageName>ENGLISH</languageName>
+                        <name/>
+                        <type>ABBREVIATION</type>
+                        <context>caBIG</context>
+                        <classification>
+                           <name/>
+                           <publicID>0000000</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition/>
+                           <classificationSchemeItem>
+                              <name/>
+                              <publicID>0000000</publicID>
+                              <version>1.0</version>
+                              <type>TEST</type>
+                              <preferredDefinition/>
+                           </classificationSchemeItem>
+                        </classification>
+                     </designation>
+                     <definition>
+                        <createdBy/>
+                        <dateCreated>0001-01-01T00:00:01</dateCreated>
+                        <dateModified>0001-01-01T00:00:01</dateModified>
+                        <modifiedBy/>
+                        <languageName>ENGLISH</languageName>
+                        <text/>
+                        <type>NCI</type>
+                        <classification>
+                           <name/>
+                           <publicID>0000000</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition/>
+                           <classificationSchemeItem>
+                              <name/>
+                              <publicID>0000000</publicID>
+                              <version>1.0</version>
+                              <type>TEST</type>
+                              <preferredDefinition/>
+                           </classificationSchemeItem>
+                        </classification>
+                        <context>TEST</context>
+                     </definition>
+                     <preferredDefinition>Denotes a person having origins in one of the indigenous peoples of North America, who lived on the continent prior to the European colonization. The term includes individuals belonging to a large number of tribes, states, and ethnic groups, many of them still enduring as communities.</preferredDefinition>
+                  </valueMeaning>
+                  <beginDate/>
+                  <endDate/>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>Asian</value>
+                  <valueMeaning>
+                     <publicID>2572233</publicID>
+                     <version>1.0</version>
+                     <longName>Asian</longName>
+                     <designation>
+                        <createdBy/>
+                        <dateCreated>0001-01-01T00:00:01</dateCreated>
+                        <dateModified>0001-01-01T00:00:01</dateModified>
+                        <modifiedBy/>
+                        <languageName>ENGLISH</languageName>
+                        <name/>
+                        <type>ABBREVIATION</type>
+                        <context>caBIG</context>
+                        <classification>
+                           <name/>
+                           <publicID>0000000</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition/>
+                           <classificationSchemeItem>
+                              <name/>
+                              <publicID>0000000</publicID>
+                              <version>1.0</version>
+                              <type>TEST</type>
+                              <preferredDefinition/>
+                           </classificationSchemeItem>
+                        </classification>
+                     </designation>
+                     <definition>
+                        <createdBy/>
+                        <dateCreated>0001-01-01T00:00:01</dateCreated>
+                        <dateModified>0001-01-01T00:00:01</dateModified>
+                        <modifiedBy/>
+                        <languageName>ENGLISH</languageName>
+                        <text/>
+                        <type>NCI</type>
+                        <classification>
+                           <name/>
+                           <publicID>0000000</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition/>
+                           <classificationSchemeItem>
+                              <name/>
+                              <publicID>0000000</publicID>
+                              <version>1.0</version>
+                              <type>TEST</type>
+                              <preferredDefinition/>
+                           </classificationSchemeItem>
+                        </classification>
+                        <context>TEST</context>
+                     </definition>
+                     <preferredDefinition>Denotes a person having origins in any of the original peoples of the Far East, Southeast Asia, or the Indian subcontinent, including Cambodia, China, India, Japan, Korea, Malaysia, Mongolia, Pakistan, the Philippine Islands, Thailand, and Vietnam.</preferredDefinition>
+                  </valueMeaning>
+                  <beginDate/>
+                  <endDate/>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>White</value>
+                  <valueMeaning>
+                     <publicID>2572236</publicID>
+                     <version>1.0</version>
+                     <longName>White</longName>
+                     <designation>
+                        <createdBy/>
+                        <dateCreated>0001-01-01T00:00:01</dateCreated>
+                        <dateModified>0001-01-01T00:00:01</dateModified>
+                        <modifiedBy/>
+                        <languageName>ENGLISH</languageName>
+                        <name/>
+                        <type>ABBREVIATION</type>
+                        <context>caBIG</context>
+                        <classification>
+                           <name/>
+                           <publicID>0000000</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition/>
+                           <classificationSchemeItem>
+                              <name/>
+                              <publicID>0000000</publicID>
+                              <version>1.0</version>
+                              <type>TEST</type>
+                              <preferredDefinition/>
+                           </classificationSchemeItem>
+                        </classification>
+                     </designation>
+                     <definition>
+                        <createdBy/>
+                        <dateCreated>0001-01-01T00:00:01</dateCreated>
+                        <dateModified>0001-01-01T00:00:01</dateModified>
+                        <modifiedBy/>
+                        <languageName>ENGLISH</languageName>
+                        <text/>
+                        <type>NCI</type>
+                        <classification>
+                           <name/>
+                           <publicID>0000000</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition/>
+                           <classificationSchemeItem>
+                              <name/>
+                              <publicID>0000000</publicID>
+                              <version>1.0</version>
+                              <type>TEST</type>
+                              <preferredDefinition/>
+                           </classificationSchemeItem>
+                        </classification>
+                        <context>TEST</context>
+                     </definition>
+                     <preferredDefinition>Denotes person with European, Middle Eastern, or North African ancestral origin who identifies, or is identified, as White.</preferredDefinition>
+                  </valueMeaning>
+                  <beginDate/>
+                  <endDate/>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>Black or African American</value>
+                  <valueMeaning>
+                     <publicID>2572313</publicID>
+                     <version>1.0</version>
+                     <longName>Black or African American </longName>
+                     <designation>
+                        <createdBy/>
+                        <dateCreated>0001-01-01T00:00:01</dateCreated>
+                        <dateModified>0001-01-01T00:00:01</dateModified>
+                        <modifiedBy/>
+                        <languageName>ENGLISH</languageName>
+                        <name/>
+                        <type>ABBREVIATION</type>
+                        <context>caBIG</context>
+                        <classification>
+                           <name/>
+                           <publicID>0000000</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition/>
+                           <classificationSchemeItem>
+                              <name/>
+                              <publicID>0000000</publicID>
+                              <version>1.0</version>
+                              <type>TEST</type>
+                              <preferredDefinition/>
+                           </classificationSchemeItem>
+                        </classification>
+                     </designation>
+                     <definition>
+                        <createdBy/>
+                        <dateCreated>0001-01-01T00:00:01</dateCreated>
+                        <dateModified>0001-01-01T00:00:01</dateModified>
+                        <modifiedBy/>
+                        <languageName>ENGLISH</languageName>
+                        <text/>
+                        <type>NCI</type>
+                        <classification>
+                           <name/>
+                           <publicID>0000000</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition/>
+                           <classificationSchemeItem>
+                              <name/>
+                              <publicID>0000000</publicID>
+                              <version>1.0</version>
+                              <type>TEST</type>
+                              <preferredDefinition/>
+                           </classificationSchemeItem>
+                        </classification>
+                        <context>TEST</context>
+                     </definition>
+                     <preferredDefinition>A term used in the United States to categorize a population group comprised of persons having origins in any of the black racial groups of Africa. Includes population subgroups (e.g., Kenyan, Nigerian, Haitian). The concept refers also to individuals who classify themselves as described.</preferredDefinition>
+                  </valueMeaning>
+                  <beginDate/>
+                  <endDate/>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>Not Reported</value>
+                  <valueMeaning>
+                     <publicID>2572578</publicID>
+                     <version>1.0</version>
+                     <longName>Not Reported</longName>
+                     <designation>
+                        <createdBy/>
+                        <dateCreated>0001-01-01T00:00:01</dateCreated>
+                        <dateModified>0001-01-01T00:00:01</dateModified>
+                        <modifiedBy/>
+                        <languageName>ENGLISH</languageName>
+                        <name/>
+                        <type>ABBREVIATION</type>
+                        <context>caBIG</context>
+                        <classification>
+                           <name/>
+                           <publicID>0000000</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition/>
+                           <classificationSchemeItem>
+                              <name/>
+                              <publicID>0000000</publicID>
+                              <version>1.0</version>
+                              <type>TEST</type>
+                              <preferredDefinition/>
+                           </classificationSchemeItem>
+                        </classification>
+                     </designation>
+                     <definition>
+                        <createdBy/>
+                        <dateCreated>0001-01-01T00:00:01</dateCreated>
+                        <dateModified>0001-01-01T00:00:01</dateModified>
+                        <modifiedBy/>
+                        <languageName>ENGLISH</languageName>
+                        <text/>
+                        <type>NCI</type>
+                        <classification>
+                           <name/>
+                           <publicID>0000000</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition/>
+                           <classificationSchemeItem>
+                              <name/>
+                              <publicID>0000000</publicID>
+                              <version>1.0</version>
+                              <type>TEST</type>
+                              <preferredDefinition/>
+                           </classificationSchemeItem>
+                        </classification>
+                        <context>TEST</context>
+                     </definition>
+                     <preferredDefinition>Not provided or available.</preferredDefinition>
+                  </valueMeaning>
+                  <beginDate/>
+                  <endDate/>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>Unknown</value>
+                  <valueMeaning>
+                     <publicID>2572577</publicID>
+                     <version>1.0</version>
+                     <longName>Unknown</longName>
+                     <designation>
+                        <createdBy/>
+                        <dateCreated>0001-01-01T00:00:01</dateCreated>
+                        <dateModified>0001-01-01T00:00:01</dateModified>
+                        <modifiedBy/>
+                        <languageName>ENGLISH</languageName>
+                        <name/>
+                        <type>ABBREVIATION</type>
+                        <context>caBIG</context>
+                        <classification>
+                           <name/>
+                           <publicID>0000000</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition/>
+                           <classificationSchemeItem>
+                              <name/>
+                              <publicID>0000000</publicID>
+                              <version>1.0</version>
+                              <type>TEST</type>
+                              <preferredDefinition/>
+                           </classificationSchemeItem>
+                        </classification>
+                     </designation>
+                     <definition>
+                        <createdBy/>
+                        <dateCreated>0001-01-01T00:00:01</dateCreated>
+                        <dateModified>0001-01-01T00:00:01</dateModified>
+                        <modifiedBy/>
+                        <languageName>ENGLISH</languageName>
+                        <text/>
+                        <type>NCI</type>
+                        <classification>
+                           <name/>
+                           <publicID>0000000</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition/>
+                           <classificationSchemeItem>
+                              <name/>
+                              <publicID>0000000</publicID>
+                              <version>1.0</version>
+                              <type>TEST</type>
+                              <preferredDefinition/>
+                           </classificationSchemeItem>
+                        </classification>
+                        <context>TEST</context>
+                     </definition>
+                     <preferredDefinition>Not known, not observed, not recorded, or refused.</preferredDefinition>
+                  </valueMeaning>
+                  <beginDate/>
+                  <endDate/>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>Native Hawaiian or other Pacific Islander</value>
+                  <valueMeaning>
+                     <publicID>2572235</publicID>
+                     <version>1.0</version>
+                     <longName>Native Hawaiian or Other Pacific Islander</longName>
+                     <designation>
+                        <createdBy/>
+                        <dateCreated>0001-01-01T00:00:01</dateCreated>
+                        <dateModified>0001-01-01T00:00:01</dateModified>
+                        <modifiedBy/>
+                        <languageName>ENGLISH</languageName>
+                        <name/>
+                        <type>ABBREVIATION</type>
+                        <context>caBIG</context>
+                        <classification>
+                           <name/>
+                           <publicID>0000000</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition/>
+                           <classificationSchemeItem>
+                              <name/>
+                              <publicID>0000000</publicID>
+                              <version>1.0</version>
+                              <type>TEST</type>
+                              <preferredDefinition/>
+                           </classificationSchemeItem>
+                        </classification>
+                     </designation>
+                     <definition>
+                        <createdBy/>
+                        <dateCreated>0001-01-01T00:00:01</dateCreated>
+                        <dateModified>0001-01-01T00:00:01</dateModified>
+                        <modifiedBy/>
+                        <languageName>ENGLISH</languageName>
+                        <text/>
+                        <type>NCI</type>
+                        <classification>
+                           <name/>
+                           <publicID>0000000</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition/>
+                           <classificationSchemeItem>
+                              <name/>
+                              <publicID>0000000</publicID>
+                              <version>1.0</version>
+                              <type>TEST</type>
+                              <preferredDefinition/>
+                           </classificationSchemeItem>
+                        </classification>
+                        <context>TEST</context>
+                     </definition>
+                     <preferredDefinition>Denotes a person having origins in any of the original peoples of Hawaii, Guam, Samoa, or other Pacific Islands. The term covers particularly people who identify themselves as part-Hawaiian, Native Hawaiian, Guamanian or Chamorro, Carolinian, Samoan, Chuukese (Trukese), Fijian, Kosraean, Melanesian, Micronesian, Northern Mariana Islander, Palauan, Papua New Guinean, Pohnpeian, Polynesian, Solomon Islander, Tahitian, Tokelauan, Tongan, Yapese, or Pacific Islander, not specified.</preferredDefinition>
+                  </valueMeaning>
+                  <beginDate/>
+                  <endDate/>
+               </permissibleValue>
+               <referenceDocument/>
+            </valueDomain>
+            <referenceDocument>
+               <name>Rec for Spec of Race/Ethnicity</name>
+               <type>REFERENCE</type>
+               <context>TEST</context>
+               <doctext>Definition of basic template data elements for Race and Ethnicity.</doctext>
+               <URL/>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Race</name>
+               <type>Preferred Question Text</type>
+               <context>TEST</context>
+               <doctext>Race</doctext>
+               <URL/>
+               <attachments>
+                  <name>F16991/Specification of Race and Ethnicity12102004.doc</name>
+                  <mimeType>application/msword</mimeType>
+                  <size>187904</size>
+               </attachments>
+            </referenceDocument>
+            <referenceDocument>
+               <name>CRF TEXT</name>
+               <type>Alternate Question Text</type>
+               <context>TEST</context>
+               <doctext>Unknown</doctext>
+               <URL/>
+            </referenceDocument>
+            <referenceDocument>
+               <name>CRF TEXT1</name>
+               <type>Alternate Question Text</type>
+               <context>TEST</context>
+               <doctext>American Indian or Alaska Native</doctext>
+               <URL/>
+            </referenceDocument>
+            <referenceDocument>
+               <name>CRF TEXT3</name>
+               <type>Alternate Question Text</type>
+               <context>TEST</context>
+               <doctext>Asian</doctext>
+               <URL/>
+            </referenceDocument>
+            <referenceDocument>
+               <name>NINDS CDE Project</name>
+               <type>REFERENCE</type>
+               <context>NINDS</context>
+               <doctext>NINDS CDE Project</doctext>
+               <URL>http://www.commondataelements.ninds.nih.gov/</URL>
+            </referenceDocument>
+            <referenceDocument>
+               <name>CRF TEXT5</name>
+               <type>Alternate Question Text</type>
+               <context>TEST</context>
+               <doctext>Native Hawaiian or other Pacific Islander</doctext>
+               <URL/>
+            </referenceDocument>
+            <referenceDocument>
+               <name>CRF TEXT6</name>
+               <type>Alternate Question Text</type>
+               <context>TEST</context>
+               <doctext>White</doctext>
+               <URL/>
+            </referenceDocument>
+            <referenceDocument>
+               <name>CRF TEXT7</name>
+               <type>Alternate Question Text</type>
+               <context>TEST</context>
+               <doctext>Black or African American</doctext>
+               <URL/>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Instructions for Race/Ethnicity</name>
+               <type>REFERENCE</type>
+               <context>TEST</context>
+               <doctext>Race to be listed as 'Unknown' and Ethnicity as 'Hispanic' if race was originally reported as 'Hispanic'.</doctext>
+               <URL/>
+            </referenceDocument>
+            <referenceDocument>
+               <name>TARGET CRF Text</name>
+               <type>Alternate Question Text</type>
+               <context>TEST</context>
+               <doctext>Race</doctext>
+               <URL/>
+            </referenceDocument>
+            <referenceDocument>
+               <name>CRF Text2</name>
+               <type>Alternate Question Text</type>
+               <context>CTEP</context>
+               <doctext>Patient Race</doctext>
+               <URL/>
+            </referenceDocument>
+            <referenceDocument>
+               <name>CRF TEXT4</name>
+               <type>Alternate Question Text</type>
+               <context>TEST</context>
+               <doctext>Not Reported</doctext>
+               <URL/>
+            </referenceDocument>
+            <cdeBrowserLink>https://cdebrowser.nci.nih.gov/CDEBrowser/search?elementDetails=9&amp;FirstTimer=0&amp;PageId=ElementDetailsGroup&amp;publicId=2192199&amp;version=1.0</cdeBrowserLink>
+         </dataElement>
+         <validValue>
+            <displayOrder>0</displayOrder>
+            <value>American Indian or Alaska Native</value>
+            <meaningText>American Indian or Alaska Native</meaningText>
+            <description>Denotes a person having origins in one of the indigenous peoples of North America, who lived on the continent prior to the European colonization. The term includes individuals belonging to a large number of tribes, states, and ethnic groups, many of them still enduring as communities.</description>
+            <instruction>
+               <text>This is American Indian or Alaska Native VM instruction.</text>
+            </instruction>
+         </validValue>
+         <validValue>
+            <displayOrder>1</displayOrder>
+            <value>Asian</value>
+            <meaningText>Asian</meaningText>
+            <description>Denotes a person having origins in any of the original peoples of the Far East, Southeast Asia, or the Indian subcontinent, including Cambodia, China, India, Japan, Korea, Malaysia, Mongolia, Pakistan, the Philippine Islands, Thailand, and Vietnam.</description>
+            <instruction>
+               <text/>
+            </instruction>
+         </validValue>
+         <validValue>
+            <displayOrder>2</displayOrder>
+            <value>Black or African American</value>
+            <meaningText>Black or African American</meaningText>
+            <description>A term used in the United States to categorize a population group comprised of persons having origins in any of the black racial groups of Africa. Includes population subgroups (e.g., Kenyan, Nigerian, Haitian). The concept refers also to individuals who classify themselves as described.</description>
+            <instruction>
+               <text/>
+            </instruction>
+         </validValue>
+         <validValue>
+            <displayOrder>3</displayOrder>
+            <value>Native Hawaiian or other Pacific Islander</value>
+            <meaningText>Native Hawaiian or Other Pacific Islander</meaningText>
+            <description>Denotes a person having origins in any of the original peoples of Hawaii, Guam, Samoa, or other Pacific Islands. The term covers particularly people who identify themselves as part-Hawaiian, Native Hawaiian, Guamanian or Chamorro, Carolinian, Samoan, Chuukese (Trukese), Fijian, Kosraean, Melanesian, Micronesian, Northern Mariana Islander, Palauan, Papua New Guinean, Pohnpeian, Polynesian, Solomon Islander, Tahitian, Tokelauan, Tongan, Yapese, or Pacific Islander, not specified.</description>
+            <instruction>
+               <text/>
+            </instruction>
+         </validValue>
+         <validValue>
+            <displayOrder>4</displayOrder>
+            <value>Not Reported</value>
+            <meaningText>Not Reported</meaningText>
+            <description>Not provided or available.</description>
+            <instruction>
+               <text/>
+            </instruction>
+         </validValue>
+         <validValue>
+            <displayOrder>5</displayOrder>
+            <value>Unknown</value>
+            <meaningText>Unknown</meaningText>
+            <description>Not known, not observed, not recorded, or refused.</description>
+            <instruction>
+               <text/>
+            </instruction>
+         </validValue>
+         <validValue>
+            <displayOrder>6</displayOrder>
+            <value>White</value>
+            <meaningText>White</meaningText>
+            <description>Denotes person with European, Middle Eastern, or North African ancestral origin who identifies, or is identified, as White.</description>
+            <instruction>
+               <text/>
+            </instruction>
+         </validValue>
+         <triggerAction/>
+      </question>
+      <question>
+         <publicID>3256543</publicID>
+         <version>1.0</version>
+         <isDerived>true</isDerived>
+         <displayOrder>1</displayOrder>
+         <createdBy/>
+         <dateCreated>0001-01-01T00:00:01</dateCreated>
+         <dateModified>0001-01-01T00:00:01</dateModified>
+         <modifiedBy/>
+         <questionText>Derived Address Street/Thoroughfare Line1 Text</questionText>
+         <instruction>
+            <text>This is a derived data element. There should be component data elements listed in the form cart. This is similar to a CEM, and is used on QA tier instead of CDE 3421600 which is only on Production Denise Test CRF New Module of CEMs.</text>
+         </instruction>
+         <defaultValue/>
+         <isEditable>No</isEditable>
+         <isMandatory>No</isMandatory>
+         <multiValue>No</multiValue>
+         <dataElement>
+            <longName>Derived Address Street/Thoroughfare Line 1 Text</longName>
+            <shortName>DERIV_ADDR_STRT1_TXT</shortName>
+            <publicID>2341940</publicID>
+            <version>1.0</version>
+            <workflowStatusName>RELEASED</workflowStatusName>
+            <preferredDefinition>A component of an address that specifies a location by formatted concatenation of street/thoroughfare address components as described by a derivation rule.</preferredDefinition>
+            <designation>
+               <createdBy/>
+               <dateCreated>0001-01-01T00:00:01</dateCreated>
+               <dateModified>0001-01-01T00:00:01</dateModified>
+               <modifiedBy/>
+               <languageName>ENGLISH</languageName>
+               <name/>
+               <type>ABBREVIATION</type>
+               <context>caBIG</context>
+               <classification>
+                  <name/>
+                  <publicID>0000000</publicID>
+                  <version>1.0</version>
+                  <preferredDefinition/>
+                  <classificationSchemeItem>
+                     <name/>
+                     <publicID>0000000</publicID>
+                     <version>1.0</version>
+                     <type>TEST</type>
+                     <preferredDefinition/>
+                  </classificationSchemeItem>
+               </classification>
+            </designation>
+            <valueDomain>
+               <longName>Address Street/Thoroughfare Text</longName>
+               <shortName/>
+               <publicID>2341935</publicID>
+               <version>1.0</version>
+               <type>NonEnumerated</type>
+               <context>TEST</context>
+               <workflowStatusName>RELEASED</workflowStatusName>
+               <datatypeName>CHARACTER</datatypeName>
+               <decimalPlace/>
+               <formatName/>
+               <highValueNumber/>
+               <lowValueNumber/>
+               <maximumLengthNumber>200</maximumLengthNumber>
+               <minimumLengthNumber/>
+               <UOMName/>
+               <referenceDocument/>
+            </valueDomain>
+            <dataElementDerivation>
+               <type/>
+               <methods/>
+               <concatenationCharacter/>
+               <rule/>
+               <componentDataElement>
+                  <usageCategory>
+                     <usageType>Mandatory</usageType>
+                     <rule/>
+                  </usageCategory>
+                  <displayOrder>0</displayOrder>
+                  <dataElement>
+                     <publicID>0</publicID>
+                     <version>0</version>
+                     <valueDomain>
+                        <longName/>
+                        <shortName/>
+                        <publicID>0000000</publicID>
+                        <version>1.0</version>
+                        <type>Enumerated</type>
+                        <context>TEST</context>
+                        <workflowStatusName>DRAFT NEW</workflowStatusName>
+                        <datatypeName>CHARACTER</datatypeName>
+                        <decimalPlace/>
+                        <formatName/>
+                        <highValueNumber/>
+                        <lowValueNumber/>
+                        <maximumLengthNumber/>
+                        <minimumLengthNumber/>
+                        <UOMName/>
+                        <valueDomainConcept>
+                           <primaryConceptName/>
+                           <primaryConceptCode/>
+                           <nciTermBrowserLink>http://blankNode</nciTermBrowserLink>
+                        </valueDomainConcept>
+                     </valueDomain>
+                  </dataElement>
+               </componentDataElement>
+            </dataElementDerivation>
+            <referenceDocument>
+               <name>Derived Address Street/Thorou</name>
+               <type>Preferred Question Text</type>
+               <context>TEST</context>
+               <doctext>Derived Address Street/Thoroughfare Line1 Text</doctext>
+               <URL/>
+            </referenceDocument>
+            <cdeBrowserLink>https://cdebrowser.nci.nih.gov/CDEBrowser/search?elementDetails=9&amp;FirstTimer=0&amp;PageId=ElementDetailsGroup&amp;publicId=2341940&amp;version=1.0</cdeBrowserLink>
+         </dataElement>
+         <triggerAction/>
+      </question>
+   </module>
+   <protocol>
+      <leadOrganization/>
+      <phase/>
+      <type/>
+      <protocolID>01_C_0129F</protocolID>
+      <longName>01_C_0129F - A Phase I Study of an oral Histone Deacetylase Inhibitor, MS-275, in Refractory Solid Tumors</longName>
+      <context>CCR</context>
+      <shortName>01_C_0129F</shortName>
+      <preferredDefinition>A Phase I Study of an oral Histone Deacetylase Inhibitor, MS-275, in Refractory Solid Tumors and</preferredDefinition>
+   </protocol>
+   <protocol>
+      <leadOrganization/>
+      <phase>1</phase>
+      <type>Treatment trials</type>
+      <protocolID>02_C_0241E</protocolID>
+      <longName>02_C_0241E</longName>
+      <context>CCR</context>
+      <shortName>02_C_0241E</shortName>
+      <preferredDefinition>Previous clinical experience with UCN-01 has suggested activity in lymphoma and in vitro data suggests synergy is possible with other cytotoxic chemotherapeutic agents. For these reasons it is of interest to combine UCN-01 with anti-lymphoma regimens in future clinical trials. Many such regimens include prednisone (i.e. EPOCH, CHOP) and given that hyperglycemia was a dose limiting toxicity of UCN-01 in initial Phase I trials, it is prudent to first discover the toxicities and maximally tolerated dose of the UCN-01 and prednisone combination prior to combining UCN-01 to prednisone containing antilymphoma regimens. This trial will provide information necessary for further development of UCN-01 in prednisone containing chemotherapy strategies. In addition to following toxicities, monitoring the pharmacokinetic profile of this combination will be important. Earlier Phase I trials with UCN-01 alone demonstrated unexpectedly higher plasma concentrations of UCN-01 and a prolonged half-life. Subsequent in vitro and in vivo animal experiments determined the likely etiology was high affinity binding to a human plasma protein, alpha-1-acid glycoprotein (hAAG). Prednisilone, the active metabolite of prednisone, also binds to hAAG and may raise the active, unbound ("free") fraction of UCN-01 by competitively binding to the plasma protein. Higher levels of "free" UCN-01 may exacerbate the hyperglycemic and pulmonary toxicities seen in single agent UCN-01. In addition, the hyperglycemic effect of prednisone may add to that of UCN-01. Conversely, prednisone may ameliorate the pulmonary toxicities by the ability of glucocorticords to inhibit nitric oxide synthase. Therefore, the main goal of combining prednisone with UCN-01 is to discover the toxicities and maximally tolerated dose of the combination. Ancillary goals will be to assess changes in the pharmacokinetics of UCN-01 and to determine the effect of the combination on nitric oxide production.</preferredDefinition>
+   </protocol>
+</form>
+</forms>
