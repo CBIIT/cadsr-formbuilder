@@ -676,12 +676,13 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
       String publicId,
       String version,
       String moduleLongName,
-      String cdePublicId) {
+      String cdePublicId,
+      String createdBy) {
       FormQuery query = new FormQuery();
       query.setDataSource(getDataSource());
       query.setSql(
         formLongName, protocolIdSeq, contextIdSeq, workflow, categoryName, type,
-        classificationIdseq,contextRestriction, publicId, version, moduleLongName, cdePublicId);
+        classificationIdseq,contextRestriction, publicId, version, moduleLongName, cdePublicId, createdBy);
 
       Collection forms =  query.execute();
       //add protocols
@@ -742,7 +743,8 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
         String publicId,
         String version,
         String moduleName,
-        String cdePublicId) {
+        String cdePublicId,
+        String createdBy) {
 
         String selectWhat = "SELECT distinct f.qc_idseq, f.version, f.type, f.conte_idseq, f.CATEGORY_NAME, f.workflow, f.preferred_name, f.definition, " +
                             " f.long_name, f.context_name, f.public_id, latest_version_ind,  f.DATE_MODIFIED, f.DATE_CREATED ";
@@ -766,7 +768,7 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
         String whereClause = makeWhereClause(
                             formLongName, protocolIdSeq, contextIdSeq, workflow, categoryName,
                             type, classificationIdseq,contextRestriction,
-                            publicId, version, moduleName, cdePublicId, hasWhere);
+                            publicId, version, moduleName, cdePublicId, createdBy, hasWhere);
         String sql = selectWhat.toString() + " " + fromWhat.toString() + " "
                       + initialWhere.toString() + whereClause;
         super.setSql(sql);
@@ -824,6 +826,7 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
     	      String version,
     	      String moduleName,
     	      String cdePublicId,
+    	      String createdBy,
     	      boolean hasWhere)
     	    {
     	      String where = "";
@@ -959,6 +962,19 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
     	              whereBuffer.append(" WHERE (q.CDE_ID='" + cdePublicId + "')");
     	              hasWhere = true;
     	            }
+    	        }
+    	        
+      	      
+    	        if (StringUtils.doesValueExist(createdBy)) {
+	    	        if (hasWhere) {
+		  	          whereBuffer.append(
+		  	            " AND UPPER(f.CREATED_BY) = " + "UPPER('" + createdBy + "')");
+		  	        }
+		  	        else {
+		  	          whereBuffer.append(
+		  	            " WHERE UPPER(f.CREATED_BY) = " + "UPPER('" + createdBy + "')");
+		  	          hasWhere = true;
+		  	        }
     	        }
 
     	      where = whereBuffer.toString();
@@ -1249,10 +1265,11 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 	    			"FORMBUILDER", "FORMBUILDER");
 	    	
 	    	JDBCFormDAOV2 form2Dao = new JDBCFormDAOV2(ds);   	
+    	
 	    	FormV2 form = form2Dao.findFormV2ByPrimaryKey("BFC76B3A-AC92-45C7-E040-BB89AD430B2C");
 	    	String workflow = form.getAslName();
 	    	System.out.println("Got workflow: " + workflow);
-	    	//ds.getConnection().close();
+
 	    	String xmlFile = "";
 			try {
 				xmlFile = FormXMLConverter.instance().convertFormToXML(form);
@@ -1262,6 +1279,6 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 				System.out.println(e);
 			}
 			System.out.println("XML****");
-			System.out.println(xmlFile);
+			System.out.println(xmlFile);   
 	    }
 }
