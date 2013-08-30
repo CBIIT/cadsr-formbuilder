@@ -3,14 +3,15 @@
               <logic:notPresent name="formLocked">
                <table width="80%" align="center" cellpadding="0" cellspacing="0" border="0" >
                  <tr >
-           	    <td align="left" width="18%" >
+<%--GF29128 remove add form cart for viewer. D.An, 20130815 --%>          
+<td align="left" width="18%" class="noneViewerAddFormCart" style="display:none">
                    <html:link action='<%="/formbuilder/moduleSearch?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.COPY_SELECTED_MODULE_TO_LIST%>'
                       paramId= "<%=FormConstants.MODULE_INDEX%>"
 		      paramName="modIndex"
                       scope="page">
                        Copy to module cart
                   </html:link>&nbsp;
-           	    </td>    
+</td>    
            	    <td align="left" width="82%" >
                    <html:link action='<%="/formbuilder/moduleSearch?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.COPY_SELECTED_MODULE_TO_FORM%>'
                       paramId= "<%=FormConstants.MODULE_INDEX%>"

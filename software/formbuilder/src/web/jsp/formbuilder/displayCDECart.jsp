@@ -77,44 +77,16 @@ function retrieveSavedItems() {
 <script src="./js/jquery-1.9.1.js"></SCRIPT>
 <script src="./js/jquery-ui-1.10.3.custom.min.js"></SCRIPT>
 <script src="./js/jquery.cookie.js"></SCRIPT>
+<script src="./js/jquery.marquee.js"></script>
+<script src="./js/formbuilderJQ.js"></script>
+
 <script type="text/javascript">
-var un = $.cookie('FormbuilderUsername');
-var pw;
-var nun = $.cookie('newFormbuilderUsername');
 
 $(document).ready(function()
 {
 	setupUser();
 });
 
-function setupUser()
-{
-	var myInputun = $("#myInputUserName").val();
-	////alert(myInputun);
-		
-		if( myInputun != "viewer/" )  //logout
-	    {
-			$(".viewer").hide("fast");
-			$(".noneViewer").show("fast");
-
-			$("#urViewer").hide("fast");
-			$("#noneViewer").show("fast");
-
-			$("#idLogout").show("fast");
-	    }
-		else  //login
-	    {
-			$(".noneViewer").hide("fast");
-			$(".viewer").show("fast");
-
-			$("#noneViewer").hide("fast");
-			$("#urViewer").show("fast");
-			
-			$("#idLogin").show("fast");
-			
-		    $("input.viewerDisable").attr("disabled", true);
-	    }
-}
 </script>	
 
 

@@ -106,6 +106,8 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchActionWi
    CDECartFormBean myForm = (CDECartFormBean) form;
    String[] selectedSaveItems = myForm.getSelectedSaveItems();
    
+   int formsInQueue = 0;
+   
     try {  	
 	if (FormCartOptionsUtil.instance().writeInV1Format()) {
 		Collection itemsToMerge = new ArrayList();
@@ -153,10 +155,15 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchActionWi
 				sessionCart.removeFormV2((String)version2FormId);
 			}
 		}
+		formsInQueue = sessionCart.getFormCartV2().size();
+
 		this.setSessionObject(request, CaDSRConstants.FORMS_CART_V2, sessionCart);
 	}
+	//// GF32932  D.An, 20130825.
+    request.getSession().setAttribute("myFormCartInfo", new Integer(formsInQueue).toString());
+System.out.println( "Forms Queued in Cart : " + request.getSession().getAttribute("myFormCartInfo") );
 
-      saveMessage("cadsr.common.formcart.save.success",request);
+	      saveMessage("cadsr.common.formcart.save.success",request);
     }
     catch (Exception exp) {
       if (log.isErrorEnabled()) {

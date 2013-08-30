@@ -25,6 +25,23 @@
     <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache"/>
     <LINK rel="stylesheet" TYPE="text/css" HREF="<html:rewrite page='/css/blaf.css' />">
 	<script type="text/javascript" src='<html:rewrite page="/js/collapsible.js"/>' ></script>
+<LINK REL=STYLESHEET TYPE="text/css" HREF="<%=request.getContextPath()%>/css/ui-lightness/jquery-ui-1.10.3.custom.min.css">
+<script src="./js/jquery-1.9.1.js"></SCRIPT>
+<script src="./js/jquery-ui-1.10.3.custom.min.js"></SCRIPT>
+<script src="./js/jquery.cookie.js"></SCRIPT>
+<script src="./js/jquery.marquee.js"></script>
+<script src="./js/formbuilderJQ.js"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function()
+{
+	setupUser();	
+});
+
+</script>	
+
+	
     <SCRIPT LANGUAGE="JavaScript">
 <!--
 
@@ -175,6 +192,22 @@ function repeatDisplay(methodName) {
       <%@ include file="editButton_inc.jsp"%>
     <%@ include file="showMessages.jsp" %>
 
+<!--GF32932 D.An, 20130828  -->
+<input type="hidden" id="myInputCurrentPage" name="myInputCurrentPage" value="Edit" />
+<input type="hidden" id="myInputFirstTime" name="myInputFirstTime" value="Y" />
+<script type="text/javascript">
+var currentPageIs = $.cookie( 'currentPageIs' );
+if( currentPageIs == $("#myInputCurrentPage").val() )
+	$("#myInputFirstTime").val("n");
+$.cookie( 'currentPageIs', $("#myInputCurrentPage").val() );
+</script> 
+       <table width="80%" height="25" align="center" cellpadding="1" cellspacing="1" border="0">
+        <tr>
+          <td>
+<%@ include file="additionalMessages.jsp" %>
+          </td>                
+        </tr>
+	</table>
 
       <logic:present name="<%=FormConstants.CRF%>">
 

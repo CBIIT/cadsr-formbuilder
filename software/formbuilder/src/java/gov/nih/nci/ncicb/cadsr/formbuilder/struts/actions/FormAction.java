@@ -584,6 +584,9 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
 					}
 					this.setSessionObject(request, CaDSRConstants.FORMS_CART_V2, sessionCartV2);
 				}
+			//// GF32932  D.An, 20130825.    
+			      request.getSession().setAttribute("myFormCartInfo", new Integer(formsInQueue).toString());
+System.out.println( "Forms Queued in Cart : " + request.getSession().getAttribute("myFormCartInfo") );
 			      saveMessage("cadsr.common.formqueue.save.success",request, new Integer(formsInQueue).toString());
 			      //saveMessage("cadsr.common.formqueue.save.success",request);
 
@@ -622,7 +625,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
 						.getSessionObject(request, CaDSRConstants.FORMS_CART_V2);
 
 				String[] formIds = (String[]) dynaBean.get("checkedFormIds");
-
+								
 				if (formIds != null) {
 					for (String formId : formIds) {
 						FormV2 crf = service.getFormDetailsV2(formId);
@@ -636,6 +639,12 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
 				this.setSessionObject(request, CaDSRConstants.FORMS_CART_V2, sessionCart);
 				formsInQueue = sessionCart.getFormCartV2().size();
 			}
+//// GF32932  D.An, 20130825.    
+		      request.getSession().setAttribute("myFormCartInfo", new Integer(formsInQueue).toString());
+		      request.getSession().setAttribute("myFormAdded", "Y");
+System.out.println( "Forms Queued in Cart : " + request.getSession().getAttribute("myFormCartInfo") );
+System.out.println( "Forms Added : " + request.getSession().getAttribute("myFormAdded") );
+			
 			saveMessage("cadsr.common.formcart.add.success", request, new Integer(formsInQueue).toString());
 
 

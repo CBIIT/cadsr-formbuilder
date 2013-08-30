@@ -39,7 +39,7 @@ System.out.println("in_process_common_header_inc_no_strip.jsp:" + username);
 								height="32" />
 						</html:link>
 						<br>
-						<font color=brown face=verdana size=1>&nbsp;com-com Logout&nbsp;</font>
+						<font color=brown face=verdana size=1>&nbsp;Logout&nbsp;</font>
 					</TD>
 					<TD id="idLogin" style="display:none" valign="TOP" align="CENTER" width="1%" colspan=1>
 						<html:link page="/logout?FirstTimer=0" target="_top">
@@ -47,7 +47,7 @@ System.out.println("in_process_common_header_inc_no_strip.jsp:" + username);
 								height="32" />
 						</html:link>
 						<br>
-						<font color=brown face=verdana size=1>&nbsp;com-com Login&nbsp;</font>
+						<font color=brown face=verdana size=1>&nbsp;Login&nbsp;</font>
 					</TD>
  <input type="hidden" id="myInputUserName" name="myInputUserName" value=<%=username %>/>
  <%--GF29128 end --%>	

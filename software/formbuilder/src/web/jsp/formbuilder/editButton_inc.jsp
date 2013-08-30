@@ -5,7 +5,7 @@ if(confirm(message)) location.href = url;
 }
 // --->
 </SCRIPT>
-      <table width="40%" align="center" cellpadding="1" cellspacing="1" border="0" >
+      <table width="80%" align="center" cellpadding="1" cellspacing="1" border="0" >
         <tr >
 		<td>&nbsp;</td>
 			<td>&nbsp;</td>
@@ -65,14 +65,15 @@ if(confirm(message)) location.href = url;
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
-			<td>
+<%--GF29128 remove add form cart for viewer. D.An, 20130815 --%>          
+<td width="300" class="noneViewerAddFormCart" style="display:none" >          
 				<html:link action='<%= "/addFormToCartFromEdit?method=addFormToCart" %>'
  	       		paramId = '<%= "checkedFormIds" %>'
  				paramName="<%=FormConstants.CRF%>" paramProperty="formIdseq"
  				>
-					Add&nbsp;Form&nbsp;to&nbsp;Cart
+			Add Form to Cart
 		      </html:link>
-			</td>
+</td>
         </tr> 
                 
       </table>

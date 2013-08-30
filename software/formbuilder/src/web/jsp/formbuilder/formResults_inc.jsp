@@ -16,11 +16,30 @@ function ToggleSelectAll(e){
 }
 
 </SCRIPT>
+
 <SCRIPT LANGUAGE="JavaScript1.1" SRC="js/checkbox.js"></SCRIPT>
+  
 <%@ include file="showMessages.jsp" %>
-   
+
+<!--GF32932 D.An, 20130828  -->
+<input type="hidden" id="myInputCurrentPage" name="myInputCurrentPage" value="Result" />
+<input type="hidden" id="myInputFirstTime" name="myInputFirstTime" value="Y" />
+<script type="text/javascript">
+var currentPageIs = $.cookie( 'currentPageIs' );
+$.cookie( 'currentPageIs', $("#myInputCurrentPage").val() );
+</script> 
+      <table width="100%" height="25" align="center" cellpadding="1" cellspacing="1" border="0">
+        <tr>
+          <td width="50%" >
+<%@ include file="additionalMessages.jsp" %>
+          </td>                
+          <td width="50%">&nbsp;
+          </td>
+        </tr>
+	</table>
+
    <logic:notEmpty name="<%=FormConstants.FORM_SEARCH_RESULTS%>">
-   
+  
          <table width="100%" align="center" cellpadding="1" cellspacing="1" border="0">
                <tr>
                  <td align="left" class="OraTableColumnHeaderNoBG" width="10%" nowrap>Sort order :</td>
@@ -35,7 +54,6 @@ function ToggleSelectAll(e){
                           descendingText=" [Descending]"                          
                    />           
                  </td> 
-           
                </tr>
         </table>
 
@@ -53,14 +71,16 @@ function ToggleSelectAll(e){
         	     nextOffImage="i/next_off.gif"
         	     urlPrefix="<%=urlPrefix%>"
         	     />  
-<%-- Begin GF29128 fix. -D.An, 20130812 --%>        	     
-<a class="noneViewer" style="display:none"  href="javascript:document.forms[0].action=document.forms[0].action+'?method=addFormToCart';document.forms[0].submit()">
+<%-- Begin GF29128 fix. -D.An, 20130812 --%>       	     
+<a id="addForm2Cart" class="noneViewer" style="display:none"  href="javascript:document.forms[0].action=document.forms[0].action+'?method=addFormToCart';document.forms[0].submit()">
             <html:img src='<%="i/addtoformcart.gif"%>' border="0" alt="Add to Form Cart"/> 
 </a> 
+
+<%-- GF32932. Remove Save button. -D.An, 20130828
 <a class="noneViewer" style="display:none" href="javascript:document.forms[0].action=document.forms[0].action+'?method=saveFormInQueue';document.forms[0].submit()">
             <html:img src='<%="i/save.gif"%>' border="0" alt="Save Forms in the queue"/> 
 </a>
-
+--%>
         <table width="100%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
           <tr class="OraTableColumnHeader">
             <logic:notPresent name="<%=FormConstants.IN_PROCESS%>">

@@ -180,17 +180,16 @@ if(confirm(message)) location.href = url;
           </tr>
           
           <tr width="100%" align="right">
-          <td colspan="12">
 <%--GF29128 remove add form cart for viewer. D.An, 20130815 --%>          
-<p class="noneViewer" style="display:none" >          
+<td colspan="4" width="200" class="noneViewerAddFormCart" style="display:none" >          
 			<html:link action='<%= "/addFormToCartFromView?method=addFormToCart" %>'
  	       		paramId = '<%= "checkedFormIds" %>'
  				paramName="<%=FormConstants.CRF%>" paramProperty="formIdseq"
  				>
 			Add Form to Cart
 	      </html:link>
-</p>	     
-			&nbsp;&nbsp;
+</td>
+<td colspan="12">
  	       <html:link action='<%="/formPrinterAction?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GET_FORM_TO_PRINT%>' 
  	       		paramId = "<%=FormConstants.FORM_ID_SEQ%>"
  				paramName="<%=FormConstants.CRF%>" paramProperty="formIdseq"

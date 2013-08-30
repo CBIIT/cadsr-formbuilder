@@ -12,7 +12,7 @@
   </table>
 </logic:messagesPresent>  
 <logic:messagesPresent message="true">
-  <table width="100%" align="center">
+  <table id="originalMessage" width="100%" align="center">
     <html:messages id="message" 
       message="true">
       <logic:present name="message">

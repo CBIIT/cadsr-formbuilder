@@ -38,8 +38,8 @@ $(document).ready(function()
 		
 		un = "guest";
 
-		$("#j_username").val(un);			
-		$("#j_password").val(pw);			
+		$("#j_username").val("");
+		$("#j_username").focus().select();
     }
 	else 
     {
