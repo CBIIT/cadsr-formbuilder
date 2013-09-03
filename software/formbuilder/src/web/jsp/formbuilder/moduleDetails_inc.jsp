@@ -3,7 +3,7 @@
                <table width="80%" align="center" cellpadding="0" cellspacing="0" border="0" >
                  <tr >
 <%--GF29128 remove add form cart for viewer. D.An, 20130815 --%>          
-<td align="left" width="18%" class="noneViewerAddFormCart" style="display:none">
+<td align="left" width="18%" class="noneViewer" style="display:none">
                    <html:link action='<%="/formViewAddToList?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.COPY_SELECTED_MODULE_TO_LIST%>'
                       paramId= "<%=FormConstants.MODULE_INDEX%>"
 		      paramName="modIndex"
@@ -12,7 +12,7 @@
                   </html:link>&nbsp;
 </td>                       
      <logic:present name="<%=FormConstants.MODULE_DISPLAY_ORDER_TO_COPY%>"> 
-          	    <td align="left" width="82%" >
+<td align="left" width="82%" class="noneViewer">
                    <html:link action='<%="/formbuilder/moduleSearch?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.COPY_SELECTED_MODULE_TO_FORM%>'
                       paramId= "<%=FormConstants.MODULE_INDEX%>"
 		      paramName="modIndex"

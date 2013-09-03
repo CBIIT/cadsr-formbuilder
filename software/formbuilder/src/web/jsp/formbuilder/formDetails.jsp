@@ -16,6 +16,9 @@
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams"%>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.jsp.util.CDEDetailsUtils"%>
 
+<%@ page session="true" %>
+<% String formIsInCart =(String) session.getAttribute("myFormCartInfo");%>
+
 <% CDEBrowserParams params = CDEBrowserParams.getInstance();%> 
 
 <%
@@ -79,11 +82,16 @@ $(document).ready(function()
 <!--GF32932 D.An, 20130828  -->
 <input type="hidden" id="myInputCurrentPage" name="myInputCurrentPage" value="Detail" />
 <input type="hidden" id="myInputFirstTime" name="myInputFirstTime" value="Y" />
+<input type="hidden" id="myInputFormIsInCart" name="myInputFormIsInCart" value="<%=formIsInCart %>" />
 <script type="text/javascript">
 var currentPageIs = $.cookie( 'currentPageIs' );
-if( currentPageIs == $("#myInputCurrentPage").val() )
+var formWasInCart = $.cookie( 'formWasInCart' );
+if( currentPageIs == $("#myInputCurrentPage").val() && formWasInCart != $("#myInputFormIsInCart").val() )
+{
 	$("#myInputFirstTime").val("n");
+}
 $.cookie( 'currentPageIs', $("#myInputCurrentPage").val() );
+$.cookie( 'formWasInCart', $("#myInputFormIsInCart").val() );
 </script> 
        <table width="80%" height="25" align="center" cellpadding="1" cellspacing="1" border="0">
         <tr>
