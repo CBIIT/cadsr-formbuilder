@@ -78,14 +78,14 @@ public void testUserHasRight() {
 	
 	@Test
 	public void testLoadNewForm() {
-		this.prepareCollectionToLoad(".\\.\\test\\data", "3256357_v1_0_newform-partial.xml");
+		this.prepareCollectionToLoad(".\\.\\test\\data\\loading", "load_newform.xml");
 		try {
 			FormDescriptor form = aColl.getForms().get(0);
 			form.setSelected(true);
 			aColl = this.loadService.loadForms(aColl);
 			form = aColl.getForms().get(0);
 			String status = StatusFormatter.getStatusInXml(form);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\LoadService-creatednew.xml");
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\loading\\load_newform.status.xml");
 		} catch (FormLoaderServiceException fle) {
 			fail("Got exception: " + fle.getMessage());
 		}
@@ -121,7 +121,28 @@ public void testUserHasRight() {
 		}
 	}
 	
-	
+	@Test
+	public void testLoadUpdateForm() {
+		/*
+		 * To run this case, first run testLoadNewForm(), go to FB to download
+		 * the newly loaded form xml and use it as input here
+		 * 
+		 * Remember to edit the xml to have <forms>
+		 */
+		this.prepareCollectionToLoad(".\\.\\test\\data\\loading", "load-newform-update.xml");
+		try {
+			FormDescriptor form = aColl.getForms().get(0);
+			assertTrue(form.getLoadType() == FormDescriptor.LOAD_TYPE_UPDATE_FORM);
+			form.setSelected(true);
+			aColl = this.loadService.loadForms(aColl);
+			form = aColl.getForms().get(0);
+			assertTrue(form.getLoadStatus() == FormDescriptor.STATUS_LOADED);
+			String status = StatusFormatter.getStatusInXml(aColl);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\loading\\load-newform-update.status.xml");
+		} catch (FormLoaderServiceException fle) {
+			fail("Got exception: " + fle.getMessage());
+		}
+	}
 
 	protected void prepareCollectionToLoad(String filepath, String testfile) {
 		assertNotNull(loadService);
@@ -136,8 +157,8 @@ public void testUserHasRight() {
 			assertTrue(forms.size() == 1);
 			
 			FormDescriptor form = forms.get(0);
-			//String status = StatusFormatter.getStatusInXml(form);
-			//StatusFormatter.writeStatusToXml(status, filepath + "\\LoadServiceTest-xmlVal.xml");
+			String status = StatusFormatter.getStatusInXml(form);
+			StatusFormatter.writeStatusToXml(status, filepath + "\\load-preparation-xml.xml");
 			
 			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATED);
 	
@@ -152,23 +173,19 @@ public void testUserHasRight() {
 			
 			assertNotNull(contentValidationService);
 			
-			
 			aColl = contentValidationService.validateXmlContent(aColl);
 			
 			assertNotNull(aColl);
 			forms = aColl.getForms();
 			assertTrue(forms.size() == 1);
+			status = StatusFormatter.getStatusInXml(form);
+			StatusFormatter.writeStatusToXml(status, filepath + "\\load-preparation-content.xml");
 			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_DB_VALIDATED);
 			
 			form = forms.get(0);
-			
-			//List<QuestionDescriptor> questions = forms.get(0).getModules().get(0).getQuestions();
-			//assertTrue(questions.size() == 2);
-			//assertTrue(questions.get(1).getPublicId() != null);
-			//assertTrue(questions.get(1).getCdePublicId().equals("2341940"));
 
-			String status = StatusFormatter.getStatusInXml(aColl);
-			StatusFormatter.writeStatusToXml(status, filepath + "\\LoadService-collection.xml");
+			//status = StatusFormatter.getStatusInXml(aColl);
+			//StatusFormatter.writeStatusToXml(status, filepath + "\\LoadService-collection.xml");
 		} catch (FormLoaderServiceException fle) {
 			fail("Got exception: " + fle.getMessage());
 		}

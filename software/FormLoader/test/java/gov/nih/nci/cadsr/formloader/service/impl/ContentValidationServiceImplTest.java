@@ -77,6 +77,8 @@ public class ContentValidationServiceImplTest {
 			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_DB_VALIDATED);
 			
 			FormDescriptor form = forms.get(0);
+			assertTrue(form.getLoadType().equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM));
+			assertTrue(form.getFormSeqId() != null && form.getFormSeqId().length() > 0);
 			
 			//Question text in xml does not match. Should take from cde ref docs' docText of DCTL_Name "Preferred Question Text" 
 			//Question public id: 3193451
@@ -108,6 +110,47 @@ public class ContentValidationServiceImplTest {
 	}
 	
 	@Test
+	public void testValidateXmlContententNewVersion() {
+		//String xmlPathName = ".\\test\\data\\3193449_has_valid_values.xml";
+		
+		try {
+			FormCollection aColl = new FormCollection();
+			aColl.setXmlPathOnServer(".\\test\\data");
+			aColl.setXmlFileName("3256357_v1_0_newform-partial-newversion.xml");
+			aColl = xmlValidator.validateXml(aColl);
+			forms = aColl.getForms();
+			assertNotNull(forms);
+			assertTrue(forms.size() == 1);
+			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATED);
+			
+			for (FormDescriptor form : forms) {
+				form.setSelected(true);
+			}
+			
+			assertNotNull(contentValidationService);
+			aColl = contentValidationService.validateXmlContent(aColl);
+			
+			assertNotNull(aColl);
+			forms = aColl.getForms();
+			assertTrue(forms.size() == 1);
+			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_DB_VALIDATED);
+			
+			FormDescriptor form = forms.get(0);
+			assertTrue(form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW_VERSION));
+			assertTrue(form.getFormSeqId() != null && form.getFormSeqId().length() > 0);
+			
+		
+			
+			String status = StatusFormatter.getStatusInXml(form);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\3256357_v1_0_newform-partial-newversion.status.xml");
+			
+		} catch (FormLoaderServiceException fle) {
+			logger.debug(fle);
+			fail("Got exception: " + fle.getMessage());
+		}
+	}
+	
+	@Test
 	public void testValidContextName() {
 		this.prepareCollectionForValidation(".\\.\\test\\data", "3256357_v1_0_newform.xml");
 		FormDescriptor form = aColl.getForms().get(0);
@@ -123,6 +166,22 @@ public class ContentValidationServiceImplTest {
 		valid = this.contentValidationService.validContextName(form);
 		assertFalse(valid);
 		
+	}
+	
+	@Test
+	public void testValidateContentInvalidPublicid() {
+		try {
+		this.prepareCollectionForValidation(".\\.\\test\\data", "invalid-publicid.xml");
+		FormDescriptor form = aColl.getForms().get(0);
+		form.setSelected(true);
+		aColl = this.contentValidationService.validateXmlContent(aColl);
+		assertTrue(aColl.getForms().get(0).getLoadStatus() == FormDescriptor.STATUS_CONTENT_VALIDATION_FAILED);
+		
+		String status = StatusFormatter.getStatusInXml(form);
+		StatusFormatter.writeStatusToXml(status, ".\\test\\data\\invalid-publicid.status.xml");
+		} catch (FormLoaderServiceException e) {
+			fail("Got FormLoaderServiceException: " + e.getMessage());
+		}
 	}
 
 	

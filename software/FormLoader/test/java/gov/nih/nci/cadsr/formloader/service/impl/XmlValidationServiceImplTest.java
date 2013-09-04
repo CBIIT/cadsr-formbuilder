@@ -55,14 +55,17 @@ public class XmlValidationServiceImplTest {
 
 	@Test
 	public void testValidateXmlMalformed() {
-		try {
-			
-			FormCollection aColl = new FormCollection();
+		FormCollection aColl = new FormCollection();
+		try {			
 			aColl.setXmlPathOnServer(".\\test\\data");
 			aColl.setXmlFileName("forms-malformed.xml");
 			aColl = this.xmlValService.validateXml(aColl);
 			fail("Exception not thrown as expected");
 		} catch (FormLoaderServiceException e) {
+			
+			String status = StatusFormatter.getStatusInXml(aColl);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlValService-malformed.xml");
+			
 			System.out.println(e.toString());
 			assertTrue(e.getErrorCode() == FormLoaderServiceError.ERROR_MALFORMED_XML);
 			//assertTrue(e.getError() instanceof XmlValidationError);
@@ -114,5 +117,70 @@ public class XmlValidationServiceImplTest {
 		}
 	}
 	
+	@Test
+	public void testValidateXmlWithInvalidContext() {
+		try {
+			FormCollection aColl = new FormCollection();
+			aColl.setXmlPathOnServer(".\\test\\data");
+			aColl.setXmlFileName("invalid-context.xml");
+			aColl = this.xmlValService.validateXml(aColl);
+			List<FormDescriptor> forms = aColl.getForms();
+			assertNotNull(forms);
+			FormDescriptor form = forms.get(0);
+			assertTrue(form.getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATION_FAILED);
+			String status = StatusFormatter.getStatusInXml(aColl);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\invalid-context.status.xml");
+			
+		
+		} catch (FormLoaderServiceException e) {
+			fail("Got exception: " + e.toString());
+		}
+	}
+	
+	@Test
+	public void testValidatexmlWithInvalidStatusXml() {
+		//entirely wrong xml but with forms and form element	
+		FormCollection aColl = new FormCollection();
+		try {
+			
+			aColl.setXmlPathOnServer(".\\test\\data");
+			aColl.setXmlFileName("invalid-xml.xml");
+			aColl = this.xmlValService.validateXml(aColl);
+			List<FormDescriptor> forms = aColl.getForms();
+			assertNotNull(forms);
+			FormDescriptor form = forms.get(0);
+			assertTrue(form.getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATION_FAILED);
+			String status = StatusFormatter.getStatusInXml(aColl);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\invalid-xml.status.xml");
+			
+		
+		} catch (FormLoaderServiceException e) {
+			String status = StatusFormatter.getStatusInXml(aColl);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\invalid-xml.status.xml");
+		}
+	}
+	
+	@Test
+	public void testValidatexmlWithWrongXml() {
+		//entirely wrong xml but with forms and form element	
+		FormCollection aColl = new FormCollection();
+		try {
+			
+			aColl.setXmlPathOnServer(".\\test\\data");
+			aColl.setXmlFileName("build.xml");
+			aColl = this.xmlValService.validateXml(aColl);
+			List<FormDescriptor> forms = aColl.getForms();
+			assertNotNull(forms);
+			assertTrue(forms.size() == 0);
+			
+			String status = StatusFormatter.getStatusInXml(aColl);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\build.xml.status.xml");
+			
+		
+		} catch (FormLoaderServiceException e) {
+			String status = StatusFormatter.getStatusInXml(aColl);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\invalid-xml.status.xml");
+		}
+	}
 	
 }

@@ -91,4 +91,12 @@ public class JDBCFormValidValueDAOV2Test {
 		
 	}
 
+	@Test
+	public void testGetValidValueSeqidsByQuestionSeqid() {
+		String questionSeqid = "E57CB31B-A244-E359-E040-BB8921B6085C";
+		List<String> vvIds = validValueV2Dao.getValidValueSeqidsByQuestionSeqid(questionSeqid);
+		
+		assertNotNull(vvIds);
+		assertTrue(vvIds.size() > 0);
+	}
 }

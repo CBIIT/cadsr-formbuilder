@@ -413,7 +413,7 @@ public class FormLoaderRepositoryDataGen implements FormLoaderRepository {
 	}
 
 	@Override
-	public boolean hasLoadFormRight(String userName, String contextName) {
+	public boolean hasLoadFormRight(FormDescriptor form, String userName, String contextName) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -440,6 +440,13 @@ public class FormLoaderRepositoryDataGen implements FormLoaderRepository {
 	public void unloadForm(FormDescriptor form) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public String createFormNewVersion(FormDescriptor form,
+			String loggedinUser, String xmlPathName, int formIdx) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	
