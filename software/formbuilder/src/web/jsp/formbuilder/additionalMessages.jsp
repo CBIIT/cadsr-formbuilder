@@ -2,7 +2,7 @@
 <%
 String showMessageUsername = (String) session.getAttribute("myUsername");
 String myFormAdded = (String) session.getAttribute("myFormAdded");
-System.out.println("additionalMessages.jsp: myFormAdded" + myFormAdded );
+System.out.println("additionalMessages.jsp: myFormAdded : " + myFormAdded );
 
 System.out.println("additionalMessages.jsp:" + showMessageUsername);
 	String formCartInfo;

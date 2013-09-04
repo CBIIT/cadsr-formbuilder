@@ -23,10 +23,7 @@ function ToggleSelectAll(e){
 
 <!--GF32932 D.An, 20130828  -->
 <input type="hidden" id="myInputCurrentPage" name="myInputCurrentPage" value="Result" />
-<input type="hidden" id="myInputFirstTime" name="myInputFirstTime" value="Y" />
 <script type="text/javascript">
-var currentPageIs = $.cookie( 'currentPageIs' );
-$.cookie( 'currentPageIs', $("#myInputCurrentPage").val() );
 </script> 
       <table width="100%" height="25" align="center" cellpadding="1" cellspacing="1" border="0">
         <tr>

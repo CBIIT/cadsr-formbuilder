@@ -21,7 +21,9 @@
 %>
 
 <%@ page session="true" %>
-<% String formIsInCart =(String) session.getAttribute("myFormCartInfo");%>
+<% 
+	String formsInCart =(String) session.getAttribute("myFormCartInfo");
+%>
 
 <HTML>
   <HEAD>
@@ -197,24 +199,16 @@ function repeatDisplay(methodName) {
     <%@ include file="showMessages.jsp" %>
 
 <!--GF32932 D.An, 20130828  -->
-<input type="hidden" id="myInputCurrentPage" name="myInputCurrentPage" value="Detail" />
-<input type="hidden" id="myInputFirstTime" name="myInputFirstTime" value="Y" />
-<input type="hidden" id="myInputFormIsInCart" name="myInputFormIsInCart" value="<%=formIsInCart %>" />
+<input type="hidden" id="myInputFormsInCart" name="myInputFormsInCart" value="<%=formsInCart %>" />
+<input type="hidden" id="myInputCurrentPage" name="myInputCurrentPage" value="Edit" />
 <script type="text/javascript">
-var currentPageIs = $.cookie( 'currentPageIs' );
-var formWasInCart = $.cookie( 'formWasInCart' );
-if( currentPageIs == $("#myInputCurrentPage").val() && formWasInCart != $("#myInputFormIsInCart").val() )
-{
-	$("#myInputFirstTime").val("n");
-}
-$.cookie( 'currentPageIs', $("#myInputCurrentPage").val() );
-$.cookie( 'formWasInCart', $("#myInputFormIsInCart").val() );
 </script> 
        <table width="80%" height="25" align="center" cellpadding="1" cellspacing="1" border="0">
         <tr>
           <td>
 <%@ include file="additionalMessages.jsp" %>
           </td>                
+           </td>
         </tr>
 	</table>
 

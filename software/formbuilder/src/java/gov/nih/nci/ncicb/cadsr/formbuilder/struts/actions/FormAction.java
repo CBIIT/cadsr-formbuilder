@@ -372,14 +372,65 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
     HttpServletRequest request,
     HttpServletResponse response) throws IOException, ServletException {
     setInitLookupValues(request);
-    try {
+        
+    DynaActionForm hrefCRFForm = (DynaActionForm) form;
+    Form crf2 = null;
+    String showCached = (String)request.getAttribute("showCached");
+
+	int formsInQueue = 0;
+ 	  String sFormIdSeq = (String)request.getParameter(FormConstants.FORM_ID_SEQ);       
+	    if(showCached!=null&&showCached.equalsIgnoreCase(CaDSRConstants.YES))
+	    {
+	        crf2 = (Form) getSessionObject(request, CRF);
+	        sFormIdSeq = crf2.getIdseq();
+	    }
+	    else if (hrefCRFForm != null)
+	    {
+	    	  sFormIdSeq = (String) hrefCRFForm.get(FORM_ID_SEQ);
+	    }
+	    
+    try 
+    {
        Object displayOrderToCopy = getSessionObject(request,MODULE_DISPLAY_ORDER_TO_COPY);
        
        if (displayOrderToCopy != null) {
           return mapping.findForward("setModuleCopyForm");
        }
       setFormForAction(form, request);
-
+      
+//// Begin added for monitor if the current form has been added in Form Cart for saving.  D.An, 20130830.  
+      String userMame = (String) request.getSession().getAttribute("myUsername");
+      if( userMame != null && userMame.equalsIgnoreCase("viewer") != true && sFormIdSeq.length() > 8 )
+      {
+System.out.println("userName -- " + userMame );	
+		  ////request.getSession().setAttribute("myFormAdded", "n");
+System.out.println(" " + sFormIdSeq + " not found " );	
+  	
+  	   CDECartOCImplExtension sessionCartV2 = (CDECartOCImplExtension) this
+  				.getSessionObject(request, CaDSRConstants.FORMS_CART_V2);
+  	   Collection itemsAdded = null;
+  	   if( sessionCartV2 != null )
+  		   if( sessionCartV2.getFormCartV2().size() >= 0 )
+  			   itemsAdded = sessionCartV2.getFormCartV2().values();
+  	   
+  	   if ( itemsAdded != null )
+  	   {
+  		   for ( Object version2Form : itemsAdded ) 
+  		   {
+  			   if( ((FormV2TransferObject)version2Form).getFormIdseq().equals(sFormIdSeq) ) 
+  			   {
+  				   formsInQueue = 1;
+System.out.println("sFormIdSeq found !!!!! -- " + sFormIdSeq );	
+					break;
+  			   }
+  			}
+  		}
+  	   if( formsInQueue == 0 )
+  			   request.getSession().setAttribute("myFormAdded", "n");
+  	   else
+			   request.getSession().setAttribute("myFormAdded", "Y");  		   
+//// End. 	D.An, 20130830.	
+      }
     }
     catch (FormBuilderException exp) {
       if (log.isErrorEnabled()) {
@@ -607,17 +658,24 @@ System.out.println( "Forms Queued in Cart : " + request.getSession().getAttribut
 			throws IOException, ServletException {
 
 		FormBuilderServiceDelegate service = getFormBuilderService();
-		int formsInQueue = 0;
 		
-		try {
+	    DynaActionForm dynaBean2 = (DynaActionForm) form;
+	    Form crf2 = null;
+	    String showCached = (String)request.getAttribute("showCached");
+		int formsInQueue = 0;
+     	String[] sFormIdSeqA = (String[]) dynaBean2.get("checkedFormIds");
+     	String sFormIdSeq = sFormIdSeqA[0];
+     	
+		try 
+		{
 
 			ensureSessionCarts(request);
 
 			DynaActionForm dynaBean = (DynaActionForm) form;
 			boolean clearCheckedFormIds = false;
 
-			if (true) { 
-
+			if (true)
+			{ 
 				log.debug("add-to-cart in memory - creating objects");
 				Collection itemsToAdd = new ArrayList();
 
@@ -639,23 +697,61 @@ System.out.println( "Forms Queued in Cart : " + request.getSession().getAttribut
 				this.setSessionObject(request, CaDSRConstants.FORMS_CART_V2, sessionCart);
 				formsInQueue = sessionCart.getFormCartV2().size();
 			}
-//// GF32932  D.An, 20130825.    
+//// GF32932  D.An, 20130825.  
 		      request.getSession().setAttribute("myFormCartInfo", new Integer(formsInQueue).toString());
-		      request.getSession().setAttribute("myFormAdded", "Y");
 System.out.println( "Forms Queued in Cart : " + request.getSession().getAttribute("myFormCartInfo") );
-System.out.println( "Forms Added : " + request.getSession().getAttribute("myFormAdded") );
-			
-			saveMessage("cadsr.common.formcart.add.success", request, new Integer(formsInQueue).toString());
 
-
-			dynaBean.set("cartAddFormId", "");
-			if (clearCheckedFormIds)
-				dynaBean.set("checkedFormIds", new String[] {});
+		saveMessage("cadsr.common.formcart.add.success", request, new Integer(formsInQueue).toString());
+		
+		
+		dynaBean.set("cartAddFormId", "");
+		if (clearCheckedFormIds)
+			dynaBean.set("checkedFormIds", new String[] {});
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 		}
-		return mapping.findForward("success");
+		
+	    
+	  		  
+////Begin added for monitor if the current form has been added in Form Cart for saving.  -D.An, 20130830. 
+		formsInQueue = 0;
+	    String userMame = (String) request.getSession().getAttribute("myUsername");
+	    if( userMame != null && userMame.equalsIgnoreCase("viewer") != true )
+	    {
+System.out.println("userName -- " + userMame );	
+			  ////request.getSession().setAttribute("myFormAdded", "n");
+System.out.println(" " + sFormIdSeq + " not found " );	
+		
+		   CDECartOCImplExtension sessionCartV2 = (CDECartOCImplExtension) this
+					.getSessionObject(request, CaDSRConstants.FORMS_CART_V2);
+		   Collection itemsAdded = null;
+		   if( sessionCartV2 != null )
+			   if( sessionCartV2.getFormCartV2().size() >= 0 )
+				   itemsAdded = sessionCartV2.getFormCartV2().values();
+		   
+		   if ( itemsAdded != null )
+		   {
+			   for ( Object version2Form : itemsAdded ) 
+			   {
+				   if( ((FormV2TransferObject)version2Form).getFormIdseq().equals(sFormIdSeq) ) 
+				   {
+					   formsInQueue = 1;
+					  //// request.getSession().setAttribute("myFormAdded", "Y");
+System.out.println("sFormIdSeq found !!!!! -- " + sFormIdSeq );	
+						break;
+				   }
+				}
+			}
+	    }
+	   if( formsInQueue == 0 )
+  			   request.getSession().setAttribute("myFormAdded", "n");
+  	   else
+			   request.getSession().setAttribute("myFormAdded", "Y");  		   
+	    
+//// End. -D.An, 20130830.
+		
+				return mapping.findForward("success");
 	}
 
   

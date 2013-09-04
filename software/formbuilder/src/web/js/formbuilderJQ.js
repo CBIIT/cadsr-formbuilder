@@ -50,8 +50,8 @@ function setupUser()
 	    $("input.viewerDisable").attr("disabled", true);
     }
 	
-	var myFirstTime = $("#myInputFirstTime").val();
-	if( myFirstTime == "Y" && myInputun != "viewer/" )
+	var myFormAdded = $("#myInputMyFormAdded").val();
+	if( myFormAdded != "Y/" && myInputun != "viewer/" )
 		$(".noneViewerAddFormCart").show();
 	else
 		$(".noneViewerAddFormCart").hide();
@@ -78,7 +78,7 @@ function displayAdditionalMessage( )
 	var myInputun = $("#myInputUserName").val();		
 	var myInfo = $("#myInputAdditionalMessage").val();		
 	var currentPage = $("#myInputCurrentPage").val();
-	var firstTime = $("#myInputFirstTime").val();
+	var formHasBeenAdded = $("#myInputMyFormAdded").val();
 
 	var info = "No form is added in the Form Cart.";
 	var p1 = "No form is added in the Form Cart.";
@@ -120,7 +120,7 @@ function displayAdditionalMessage( )
 	}
 	else 
 	{
-		if( firstTime != "Y" )
+		if( formHasBeenAdded == "Y/" )
 		{		
 			info = "This form has bee added in Form Cart for saving. Please go to Form Cart to save it.";
 			

@@ -4,19 +4,25 @@ import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormInstructionChangesTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
+
+import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
+
 import gov.nih.nci.ncicb.cadsr.common.dto.InstructionChangesTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.InstructionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.exception.FatalException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext.CDECartOCImplExtension;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormActionUtil;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConverterUtil;
 import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
 import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants;
 import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
 import gov.nih.nci.ncicb.cadsr.common.persistence.PersistenceConstants;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormInstructionChanges;
 import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
 import gov.nih.nci.ncicb.cadsr.common.resource.InstructionChanges;
@@ -46,6 +52,11 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
 
+import gov.nih.nci.objectCart.client.ObjectCartClient;
+import gov.nih.nci.objectCart.client.ObjectCartException;
+import gov.nih.nci.objectCart.domain.Cart;
+import gov.nih.nci.objectCart.domain.CartObject;
+import gov.nih.nci.ncicb.cadsr.objectCart.CDECart;
 
 public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
 
@@ -83,6 +94,49 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
     String showCached = (String)request.getAttribute("showCached");
 
     String formIdSeq = null;
+	  String sFormIdSeq = null; 
+	  
+	    if(showCached!=null&&showCached.equalsIgnoreCase(CaDSRConstants.YES))
+	    {
+	        crf = (Form) getSessionObject(request, CRF);
+	        sFormIdSeq = crf.getIdseq();
+	    }
+	    else if (hrefCRFForm != null)
+	    {
+	    	  sFormIdSeq = (String) hrefCRFForm.get(FORM_ID_SEQ);
+	    }
+
+	  
+////Begin added for monitor if the current form has been added in Form Cart for saving.  -D.An, 20130830.  
+    String userMame = (String) request.getSession().getAttribute("myUsername");
+    if( userMame != null && userMame.equalsIgnoreCase("viewer") != true )
+    {
+System.out.println("userName -- " + userMame );	
+		  request.getSession().setAttribute("myFormAdded", "n");
+System.out.println(" " + sFormIdSeq + " not found " );	
+	
+	   CDECartOCImplExtension sessionCartV2 = (CDECartOCImplExtension) this
+				.getSessionObject(request, CaDSRConstants.FORMS_CART_V2);
+	   Collection itemsAdded = null;
+	   if( sessionCartV2 != null )
+		   if( sessionCartV2.getFormCartV2().size() >= 0 )
+			   itemsAdded = sessionCartV2.getFormCartV2().values();
+	   
+	   if ( itemsAdded != null )
+	   {
+		   for ( Object version2Form : itemsAdded ) 
+		   {
+			   if( ((FormV2TransferObject)version2Form).getFormIdseq().equals(sFormIdSeq) ) 
+			   {
+				   request.getSession().setAttribute("myFormAdded", "Y");
+System.out.println("sFormIdSeq found !!!!! -- " + sFormIdSeq );	
+					break;
+			   }
+			}
+		}
+    }
+//// End. -D.An, 20130830.
+	   
     if(showCached!=null&&showCached.equalsIgnoreCase(CaDSRConstants.YES))
     {
         crf = (Form) getSessionObject(request, CRF);
@@ -1346,6 +1400,19 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
             }
         return service.isTargetForTriggerAction(targetIdList);
     }
+    
+    private CartObject translateCartObject(FormV2 crf) throws Exception {
+  		CartObject ob = new CartObject();
+  		ob.setType(FormConverterUtil.instance().getCartObjectType());
+  		ob.setDisplayText(Integer.toString(crf.getPublicId()) + "v" + Float.toString(crf.getVersion()));
+  		ob.setNativeId(crf.getFormIdseq());
+  		
+  		String convertedForm = FormConverterUtil.instance().convertFormToV2(crf);		
+  		ob.setData(convertedForm);
+  		return ob;	  
+    }
+
+
     
     private List getProtocolIds(List protocols){
         if (protocols==null || protocols.isEmpty()){
