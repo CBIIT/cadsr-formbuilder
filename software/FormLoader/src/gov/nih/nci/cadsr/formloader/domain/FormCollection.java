@@ -1,6 +1,7 @@
 package gov.nih.nci.cadsr.formloader.domain;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -38,6 +39,8 @@ public class FormCollection implements java.io.Serializable {
 	
 	//@Column(name = "CREATED_BY", nullable = false)
 	private String createdBy;
+	
+	private List<String> messages = new ArrayList<String>();
 	
 	//@Transient
 	private boolean selected;
@@ -139,6 +142,18 @@ public class FormCollection implements java.io.Serializable {
 
 	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "FORM_COLLECTIONS")
 	
+	public List<String> getMessage() {
+		return messages;
+	}
+
+	private void setMessage(List<String> messages) {
+		this.messages.addAll(messages);
+	}
+	
+	public void addMessage(String message) {
+		this.messages.add(message);
+	}
+
 	public List<FormDescriptor> getForms() {
 		return forms;
 	}
@@ -161,6 +176,7 @@ public class FormCollection implements java.io.Serializable {
 		formCollStatus.setName(this.name);
 		formCollStatus.setXmlFileName(this.xmlFileName);
 		formCollStatus.setCreatedBy(this.createdBy);
+		formCollStatus.setMessage(this.formatMessages());
 		
 		String dateString = "";
 		if (this.dateCreated != null) {
@@ -170,7 +186,7 @@ public class FormCollection implements java.io.Serializable {
 		
 		formCollStatus.setDateCreated(dateString);  
 		
-		if (this.forms.size() > 0) {
+		if (this.forms != null && this.forms.size() > 0) {
 			for (FormDescriptor form : forms) {
 				FormStatus formStatus = form.getStructuredStatus();
 				formCollStatus.getFormStatuses().add(formStatus);
@@ -178,5 +194,14 @@ public class FormCollection implements java.io.Serializable {
 		}
 		
 		return formCollStatus;
+	}
+	
+	public String formatMessages() {
+		StringBuilder sb = new StringBuilder();
+		for (String message : messages) {
+			sb.append(message).append(";");
+		}
+		
+		return sb.toString();
 	}
 }

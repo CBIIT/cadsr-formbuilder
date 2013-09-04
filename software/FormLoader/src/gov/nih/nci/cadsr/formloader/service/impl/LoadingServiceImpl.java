@@ -104,7 +104,6 @@ public class LoadingServiceImpl implements LoadingService {
 			}
 			
 			if (!form.isSelected()) {
-				//form.addMessage("Form is not selected by user. Skip loading");
 				logger.debug("Form is not selected to load. Skip loading");
 				continue;
 			}
@@ -125,10 +124,14 @@ public class LoadingServiceImpl implements LoadingService {
 				continue;
 			}
 				
-			if (FormDescriptor.LOAD_TYPE_NEW.equals(form.getLoadType())
-					|| FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(form.getLoadType())) {
-				
+			if (FormDescriptor.LOAD_TYPE_NEW.equals(form.getLoadType())) {
 				String seqid = this.repository.createForm(form, loggedinUser, xmlPathName, form_idx);
+				if (seqid == null || seqid.length() == 0)
+					form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
+				else
+					form.setLoadStatus(FormDescriptor.STATUS_LOADED);
+			} else if (FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(form.getLoadType())) {
+				String seqid = this.repository.createFormNewVersion(form, loggedinUser, xmlPathName, form_idx);
 				if (seqid == null || seqid.length() == 0)
 					form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
 				else
@@ -151,34 +154,50 @@ public class LoadingServiceImpl implements LoadingService {
 	 * @return
 	 */
 	protected boolean userHasRight(FormDescriptor form, String loggeduser) {
+		String createdBy = form.getCreatedBy();
+		String modifiedBy = form.getModifiedBy();
+		String contextName = form.getContext();
+		
 		if (form.getLoadType().equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)) {
-			if (!this.repository.hasLoadFormRight(form.getModifiedBy(), form.getContext())) {
-				form.addMessage("Form's modifiedBy user has no right to update form into context \"" + form.getContext() + 
-						". Will try with Form Loader's logged-in user");
-				
-				if (this.repository.hasLoadFormRight(loggeduser, form.getContext())) {
-					form.setModifiedBy(loggeduser);
-					return true;
+			//TODO: check with Denise on req. on this.
+			if (modifiedBy == null || modifiedBy.length() == 0) {
+				if (createdBy != null && createdBy.length() > 0) {
+					form.addMessage("ModifiedBy in xml is empty. Reset modifiedBy with createdBy to update form");
+					modifiedBy = createdBy;
+					
+				} else {
+					form.addMessage("Both modifiedBy and createdBy in xml is empty. Reset modifiedBy with FormLoader logged-in user to update form");
+					modifiedBy = loggeduser;
 				}
 				
-			} else
-				return true;
+				form.setModifiedBy(modifiedBy);
+			}
+			
+			return checkUserRight(form, modifiedBy, loggeduser, contextName);
+
 		} else {
-			if (!this.repository.hasLoadFormRight(form.getCreatedBy(), form.getContext())) {
-				form.addMessage("Form's createdBy user has no right to create form into context \"" + form.getContext() + 
-						". Will try with Form Loader's logged-in user");
-				if (this.repository.hasLoadFormRight(loggeduser, form.getContext())) {
-					form.setCreatedBy(loggeduser);
-					return true;
-				}
-				form.setCreatedBy(loggeduser);	
-			} else 
-				return true;
+			if (createdBy == null || createdBy.length() == 0) {
+				form.addMessage("Form's createdBy is empty. Will try with Form Loader's logged-in user");
+				createdBy = loggeduser;
+				form.setCreatedBy(createdBy);
+			}
+			
+			return checkUserRight(form, createdBy, loggeduser, contextName);
 		}
 		
-		form.addMessage("Neither the form's createdBy/modifiedBy nor the Form Loader logged in user has right to load form. Form load failed");
-		return false;
 	}
 	
-
+	protected boolean checkUserRight(FormDescriptor form, String formUser, String loggedinUser, String context) {
+		if (!this.repository.hasLoadFormRight(form, formUser, context)) {
+			form.addMessage("User [" + formUser + "] has no right to load form in context [" + context + 
+					"]. Will load with Form Loader logged-in user [" + loggedinUser + "]");
+			
+			if (!this.repository.hasLoadFormRight(form, loggedinUser, context)) {
+				form.addMessage("Form Loader loggedin user has right to load form. Form load failed");
+				return false;
+			}
+		}
+			
+		return true;
+	}
 }

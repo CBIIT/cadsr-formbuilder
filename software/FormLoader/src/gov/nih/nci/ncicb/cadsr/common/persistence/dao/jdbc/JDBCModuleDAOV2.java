@@ -7,17 +7,22 @@ import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ModuleDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.Module;
 import gov.nih.nci.ncicb.cadsr.common.resource.Question;
+import gov.nih.nci.ncicb.cadsr.common.util.StringUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.object.MappingSqlQuery;
 import org.springframework.jdbc.object.SqlUpdate;
+import org.springframework.jdbc.object.StoredProcedure;
 
 //Modification off JDBCModuleV2DAO
 public class JDBCModuleDAOV2 extends JDBCAdminComponentDAOV2 implements ModuleDAOV2 {
@@ -306,6 +311,53 @@ public class JDBCModuleDAOV2 extends JDBCAdminComponentDAOV2 implements ModuleDA
      return res;
    }
  }
-  
+ 
+ /**
+  * Deletes the specified module and all its associated components.
+  *
+  * @param <b>moduleId</b> Idseq of the module component.
+  *
+  * @return <b>int</b> 1 - success, 0 - failure.
+  *
+  * @throws <b>DMLException</b>
+  */
+ public int deleteModule(String moduleId) throws DMLException {
+	 DeleteModule deleteMod = new DeleteModule(this.getDataSource());
+	 Map out = deleteMod.executeDeleteCommand(moduleId);
+
+	 String returnCode = (String) out.get("p_return_code");
+	 String returnDesc = (String) out.get("p_return_desc");
+	 if (!StringUtils.doesValueExist(returnCode)) {
+		 return 1;
+	 }
+	 else{
+		 DMLException dmlExp = new DMLException(returnDesc);
+		 dmlExp.setErrorCode(ERROR_DELETEING_MODULE);    
+		 throw dmlExp;
+	 }
+ }
+ 
+ /**
+  * Inner class that accesses database to delete a module.
+  */
+ private class DeleteModule extends StoredProcedure {
+	 public DeleteModule(DataSource ds) {
+		 super(ds, "sbrext_form_builder_pkg.remove_module");
+		 declareParameter(new SqlParameter("p_mod_idseq", Types.VARCHAR));
+		 declareParameter(new SqlOutParameter("p_return_code", Types.VARCHAR));
+		 declareParameter(new SqlOutParameter("p_return_desc", Types.VARCHAR));
+		 compile();
+	 }
+
+	 public Map executeDeleteCommand(String modIdseq) {
+		 Map in = new HashMap();
+		 in.put("p_mod_idseq", modIdseq);
+
+		 Map out = execute(in);
+
+		 return out;
+	 }
+
+ }
 }
 

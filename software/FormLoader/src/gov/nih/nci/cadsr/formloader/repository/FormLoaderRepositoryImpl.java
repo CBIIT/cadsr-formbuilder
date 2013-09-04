@@ -58,6 +58,8 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	public static final String DEFAULT_FORM_TYPE = "CRF";
 	public static final	String DEFAULT_REFDOC_TYPE	= "To find out";
 	
+	protected static final int MARK_TO_KEEP = 99;
+	
 	JDBCFormDAOV2 formV2Dao;
 	JDBCModuleDAOV2 moduleV2Dao;
 	JDBCQuestionDAOV2 questionV2Dao;
@@ -367,6 +369,15 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		return conteNameSeqIdMap.get(contextName);
 	}
 	
+	
+	@Transactional(readOnly=true)
+	public boolean designationTypeExists(String designName) {
+		if (designationTypes == null)
+			designationTypes = this.formV2Dao.getAllDesignationTypes();
+		
+		return designationTypes.contains(designName);
+	}
+	
 	/**
 	 * Create new form or new version of an existing form
 	 */
@@ -405,38 +416,52 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		return formSeqid;
 	}
 	
+	/**
+	 * Create new form or new version of an existing form
+	 */
+	@Transactional
+	public String createFormNewVersion(FormDescriptor form, String loggedinUser, String xmlPathName, int formIdx) {
+		
+		String formSeqid = "";
+		
+		try {
+			FormTransferObject formdto = translateIntoFormDTO(form);	
+			if (formdto == null) 
+				return null;
+
+			formSeqid = formV2Dao.createNewFormVersion(formdto.getFormIdseq(), formdto.getVersion(), 
+					"New version form by Form Loader", formdto.getCreatedBy());		
+			
+			logger.debug("Created new version for form. Seqid: " + formSeqid);
+			
+			formdto.setFormIdseq(formSeqid);
+			form.setFormSeqId(formSeqid);
+
+			updateForm(form, loggedinUser, xmlPathName, formIdx);
+			
+		} catch (DMLException dbe) {
+			logger.error(dbe.getMessage());
+		}
+		
+		return formSeqid;
+	}
+	
 	@Transactional
 	public String updateForm(FormDescriptor form, String loggedinUser, String xmlPathName, int formIdx) {
 		
 		FormTransferObject formdto = translateIntoFormDTO(form);	
-		if (formdto == null) 
+		if (formdto == null) {
+			logger.error("Error!! Failed to translate xml form into FormTransferObject");
 			return null;
+		}
 
-		//when loading, first check user from xml form. If that's invalid,
-		//check with the form loader user name. If neither works, inform user
-		// - confirmed with Denise on 8/7/2013
-		int res;
-		for (int tryCnt = 0; tryCnt < 2; tryCnt++) {
-			try {
-				res = formV2Dao.updateFormComponent(formdto);
-			} catch (DMLException dmle) {
-				if (dmle.getErrorCode() == ErrorCodeConstants.INSUFFICIENT_PRIVILEGES &&
-						tryCnt == 0) {
-					logger.warn("This user \"" + formdto.getModifiedBy() + 
-							"\" doesn't have enough privileges to modify form in context \"" + 
-							form.getContext() + "\". Trying again with the loggedin user name");
-					formdto.setModifiedBy(loggedinUser);
-				} else {
-					logger.error("Unable to update [" + form.getFormIdString() + "] with reason: " + dmle.getMessage());
-					form.addMessage("Failed to load form with reason: " + dmle.getMessage());
-					form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
-					return null;
-				}
-					
-			}
+		int res = formV2Dao.updateFormComponent(formdto);
+		if (res != 1) {
+			logger.error("Error!! Failed to update form");
+			return null;
 		}
 		
-		form.setFormSeqId(formdto.getFormIdseq());
+		//form.setFormSeqId(formdto.getFormIdseq());
 		
 		//TODO: check with Denise if this is right
 		//On Form Builder, you could only modify what's already in the header or footer
@@ -459,6 +484,8 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		if (FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(loadType)) {
 			float latest = this.formV2Dao.getMaxFormVersion(Integer.parseInt(form.getPublicId()));
 			formdto.setVersion(new Float(latest + 1.0)); //TODO: is this the way to assign new version?
+			formdto.setPublicId(Integer.parseInt(form.getPublicId()));
+			formdto.setFormIdseq(form.getFormSeqId());
 			formdto.setAslName("DRAFT NEW");
 			formdto.setCreatedBy(form.getCreatedBy()); 
 		} else if (FormDescriptor.LOAD_TYPE_NEW.equals(loadType)) {
@@ -469,7 +496,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			formdto.setVersion(Float.valueOf(form.getVersion()));
 			formdto.setAslName(form.getWorkflowStatusName()); 
 			formdto.setModifiedBy(form.getModifiedBy());
-			String seqid = form.getFormSeqId();
+			String seqid = form.getFormSeqId(); //we got this when we queried on form public id
 			//This should not happen
 			if (seqid == null || seqid.length() == 0) {
 				String msg = "Update form doesn't have a valid seqid. Unable to load.";
@@ -483,6 +510,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		}
 		
 		formdto.setLongName(form.getLongName());
+		formdto.setPreferredName(form.getLongName());
 		formdto.setFormType(form.getType());
 		formdto.setFormCategory(form.getCategoryName());
 		formdto.setPreferredDefinition(form.getPreferredDefinition());
@@ -511,6 +539,8 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	protected void createFormInstructions(FormDescriptor form, FormTransferObject formdto) {
 		logger.debug("Creating instructions for form");
 		String instructString = form.getHeaderInstruction();
+		if (instructString == null || instructString.length() == 0)
+			return;
 		
 		InstructionTransferObject formInstruction = createInstructionDto(formdto, instructString);
 		if (formInstruction != null)
@@ -567,7 +597,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	}
 
 	/**
-	 * For update form, if designation doesn't already exist, designate it to the context. For new version or new form,
+	 * For new version and update form, if designation doesn't already exist, designate it to the context. For new form,
 	 * designate the form to the context.
 	 * @param form
 	 * @param designations
@@ -577,7 +607,9 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		String contextSeqId = this.getContextSeqIdByName(form.getContext());
 		
 		for (DesignationTransferObjectExt desig : designations) {
-			if (form.getLoadType().equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)) {
+			if (form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW)) {
+				designateForm(formSeqid, contextSeqId, form.getCreatedBy(), desig);
+			} else {
 				//Check context name in designation elem from xml. If that's not valid, use form's
 				String desigContext = desig.getContextName();
 				String desgContextSeqid = this.getContextSeqIdByName(desigContext);
@@ -586,7 +618,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 				
 				//validate the type, use default if neccessary
 				String desigType = desig.getType();
-				if (!this.designationTypes.contains(desigType)) {
+				if (!this.designationTypeExists(desigType)) {
 					form.addMessage("Designation type \"" + desigType + "\" is invalid. Use default type Form Loader");
 					desig.setType(DEFAULT_DESIGNATION_TYPE);
 				}
@@ -596,9 +628,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 				if (existing == null || existing.size() == 0) {
 					designateForm(formSeqid, contextSeqId, form.getCreatedBy(), desig);
 				}
-			} else {
-				designateForm(formSeqid, contextSeqId, form.getCreatedBy(), desig);
-			}
+			} 
 		}
 	}
 	
@@ -610,6 +640,8 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	}
 	
 	/**
+	 * 1. New form : add all listed protocols from xml to new form.
+	 * 2. New version and update form: add only if a protocol in xml doesn't already exist with the form.
 	 * 
 	 * @param form
 	 * @param protoIds
@@ -621,13 +653,13 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			List<String> protoSeqIds = markNoMatchProtoIds(form, protoIds, protoIdMap);
 
 			for (String protoSeqid : protoSeqIds) {
-				if (FormDescriptor.LOAD_TYPE_UPDATE_FORM.equals(form.getLoadType())) {
-					if (!formV2Dao.formProtocolExists(formSeqid, protoSeqid));
+				if (FormDescriptor.LOAD_TYPE_NEW.equals(form.getLoadType())) {
+					formV2Dao.addFormProtocol(formSeqid, protoSeqid, form.getCreatedBy());
+				} else  {
+					if (!formV2Dao.formProtocolExists(formSeqid, protoSeqid))
 						formV2Dao.addFormProtocol(formSeqid, protoSeqid, form.getModifiedBy());
 
-				} else {
-					formV2Dao.addFormProtocol(formSeqid, protoSeqid, form.getCreatedBy());
-				}
+				} 
 			}
 			
 		}
@@ -815,20 +847,25 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			questdto.setDataElement(de);
 		}
 			
-		if (!FormDescriptor.LOAD_TYPE_UPDATE_FORM.equals(form.getLoadType())) 
+		if (!FormDescriptor.LOAD_TYPE_UPDATE_FORM.equals(form.getLoadType())) {
 			questdto.setVersion(Float.valueOf("1.0")); 
+			questdto.setCreatedBy(form.getCreatedBy());
+		}
 		else {
 			questdto.setVersion(Float.valueOf(question.getVersion())); 
-			//questdto.setModifiedBy(form.getModifiedBy());
+			questdto.setModifiedBy(form.getModifiedBy());
 		}
+		
+		String pid = question.getPublicId();
+		if (pid != null && pid.length() > 0)
+			questdto.setPublicId(Integer.parseInt(pid));
 		
 		questdto.setEditable(question.isEditable());
 		questdto.setMandatory(question.isMandatory());
 		questdto.setDefaultValue(question.getDefaultValue());
-		
 		questdto.setAslName("DRAFT NEW");
-		//xsd doesn't have long name for question
-		//use question text - confirmed with Denise
+		
+		
 		questdto.setLongName(question.getQuestionText());  
 		
 		//TODO: xsd doesn't have preferred def use question text now
@@ -885,6 +922,13 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		return forms;
 	}
 	
+	/**
+	 * Update inlcudes adding new modules, updating existing ones and delete extra ones that are not in xml
+	 * 
+	 * @param form
+	 * @param formdto
+	 */
+	@Transactional
 	protected void updateModulesInForm(FormDescriptor form, FormTransferObject formdto) {
 		
 		List<ModuleDescriptor> modules = form.getModules();
@@ -900,18 +944,18 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 				b. If the module's createdBy is not valid, use form's createdBy and apply to all questions.
 		 */
 		
+		int displayOrder = 0;
 		for (ModuleDescriptor module : modules) {
 			ModuleTransferObject moduledto = translateIntoModuleDTO(module, form, formdto);
-			
+			moduledto.setDisplayOrder(++displayOrder);
 			String moduleSeqid = "";
+	
 			if (isExistingModule(moduledto, existingModuledtos)) {
 				int res = moduleV2Dao.updateModuleComponent(moduledto);
 				//TODO: better understand spring sqlupdate return code
-				
 				updateQuestionsInModule(module, moduledto, form, formdto);
 			}
 			else {
-				
 				moduledto.setContext(formdto.getContext());
 				moduleSeqid = moduleV2Dao.createModuleComponent(moduledto);
 				module.setModuleSeqId(moduleSeqid);
@@ -923,15 +967,19 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			}
 			
 		}
+		
+		//Find the existing modules to be deleted
+		removeExtraModulesIfAny(existingModuledtos);
 	}
 	
 	protected boolean isExistingModule(ModuleTransferObject currModule, List<ModuleTransferObject> existingModuledtos) {
 		
 		for (ModuleTransferObject moduledto : existingModuledtos) {
-			if (moduledto.getPublicId() == currModule.getPublicId() &&
-					moduledto.getVersion() == currModule.getVersion()) {
+			if ((moduledto.getPublicId() == currModule.getPublicId()) &&
+					(moduledto.getVersion().floatValue() == currModule.getVersion().floatValue())) {
 				currModule.setIdseq(moduledto.getIdseq());
 				currModule.setModuleIdseq(moduledto.getModuleIdseq()); //don't know how these are used
+				moduledto.setDisplayOrder(MARK_TO_KEEP); //use this to indicate module's taken
 				return true;
 			}
 		}
@@ -940,7 +988,59 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	}
 	
 	/**
-	 * Reset all question versions to 1.0 in a module
+	 * Check the list to see if any is marked with MARK_FOR_DELETE. Delete the marked ones.
+	 * @param existingmoduledtos
+	 */
+	protected void removeExtraModulesIfAny(List<ModuleTransferObject> existingmoduledtos) {
+		for (ModuleTransferObject moduledto : existingmoduledtos) {
+			if (moduledto.getDisplayOrder() != MARK_TO_KEEP) {
+				logger.debug("Found a module to delete: [" + moduledto.getPublicId() + "|" + moduledto.getVersion() + "]");
+				this.moduleV2Dao.deleteModule(moduledto.getModuleIdseq());
+			}
+		}
+	}
+	
+	@Transactional
+	protected void removeExtraQuestionsIfAny(List<QuestionTransferObject> questiondtos) {
+		//Method copied from FormBuilderEJB
+		
+		for (QuestionTransferObject qdto : questiondtos) {
+			if (qdto.getDisplayOrder() == MARK_TO_KEEP)
+				continue;
+			
+			String qSeqid = qdto.getQuesIdseq();
+			logger.debug("Found a question to delete: [" + qdto.getPublicId() + "|" + qdto.getVersion() + "|" + qSeqid);
+			
+			//delete question
+			questionV2Dao.deleteQuestion(qdto.getQuesIdseq());
+			logger.debug("Done deleting question");
+			
+			//delete instructions
+			List instructions = this.questInstructionV2Dao.getInstructions(qSeqid);
+			if (instructions != null && instructions.size() > 0) {
+				logger.debug("Deleting instructions for question...");
+				for (int i = 0; i < instructions.size(); i++) {
+					InstructionTransferObject instr = (InstructionTransferObject)instructions.get(i);
+					this.questInstructionV2Dao.deleteInstruction(instr.getIdseq());
+					logger.debug("Deleted an instruction for question");
+				}
+			}
+			
+			//delete valid values
+			List<String> vvIds = this.formValidValueV2Dao.getValidValueSeqidsByQuestionSeqid(qSeqid);
+			if (vvIds != null) {
+				for (String vvid : vvIds) {
+					//This calls remove_value sp which takes care of vv and instruction
+					formValidValueV2Dao.deleteFormValidValue(vvid);
+				}
+			}
+			
+		}
+	}
+	
+	/**
+	 * Reset all question versions to 1.0 in a module, mostly because we'll insert these questions
+	 * as new.
 	 * @param module
 	 */
 	protected void resetQeustionVersionInModule(ModuleDescriptor module) {
@@ -950,7 +1050,13 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		}
 	}
 	
-	
+	/**
+	 * 
+	 * @param module
+	 * @param moduledto
+	 * @param form
+	 * @param formdto
+	 */
 	protected void updateQuestionsInModule(ModuleDescriptor module, ModuleTransferObject moduledto, 
 			FormDescriptor form, FormTransferObject formdto) {
 		
@@ -958,12 +1064,6 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 				moduleV2Dao.getQuestionsInAModuleV2(moduledto.getModuleIdseq());
 		
 		List<QuestionDescriptor> questions = module.getQuestions();
-		
-		/*
-		 * Need to think about the display order
-		 * 
-		 * 
-		 */
 		
 		int idx = 0;
 		for (QuestionDescriptor question : questions) {
@@ -973,13 +1073,15 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	
 			questdto.setContext(formdto.getContext());
 			questdto.setModule(moduledto);
-			questdto.setModifiedBy(module.getModifiedBy());
+			//questdto.setModifiedBy(module.getModifiedBy());
 			
-			//TODO: display order needs to come from xml
+			//TODO: display order should come from xml?
 			questdto.setDisplayOrder(idx++);
 			
-			if (isExistingQuestion(questdto, existingQuestiondtos)) {
-				
+			QuestionTransferObject existingquestdto = getExistingQuestionDto(questdto, existingQuestiondtos);
+			if (existingquestdto != null) {
+				//existing question
+				updateQuestion(question, questdto, existingquestdto, moduledto);
 				
 			} else {
 				//better to call createQuestionComponents, which is not implemented.
@@ -988,29 +1090,57 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 				createQuestionValidValues(question, form, newQuestdto, moduledto);
 			}
 		}
+		
+		removeExtraQuestionsIfAny(existingQuestiondtos);
 	}
 	
-	protected boolean isExistingQuestion(QuestionTransferObject currQuestiondto, List<QuestionTransferObject> existingQuestiondtos) {
+	/**
+	 * Determine if it's an existing question based on public id and version
+	 * @param currQuestiondto
+	 * @param existingQuestiondtos
+	 * @return
+	 */
+	protected QuestionTransferObject getExistingQuestionDto(QuestionTransferObject currQuestdto, List<QuestionTransferObject> existingQuestiondtos) {
 		for (QuestionTransferObject quest : existingQuestiondtos) {
-			if (currQuestiondto.getPublicId() == quest.getPublicId() && 
-				 currQuestiondto.getVersion() == quest.getVersion()) {
-				currQuestiondto.setQuesIdseq(quest.getQuesIdseq());
-				currQuestiondto.setIdseq(quest.getIdseq());
-				return true;
+			if (currQuestdto.getPublicId() == quest.getPublicId() && 
+					currQuestdto.getVersion().floatValue() == quest.getVersion().floatValue()) {
+				currQuestdto.setQuesIdseq(quest.getQuesIdseq());
+				currQuestdto.setIdseq(quest.getIdseq());
+				//Mark this as being update so we don't collect it to delete later.
+				quest.setDisplayOrder(MARK_TO_KEEP);
+				return quest;
 			}
 		}
 		
-		return false;
+		return null;
 	}
 	
-	protected void updateQuestion(QuestionDescriptor question, QuestionTransferObject questdto,
+	/**
+	 * Update an existing question's various attributes.
+	 * @param question
+	 * @param questdto
+	 * @param moduledto
+	 */
+	@Transactional
+	protected void updateQuestion(QuestionDescriptor question, QuestionTransferObject questdto, QuestionTransferObject existing,
 			ModuleTransferObject moduledto) {
 		
-		int re = questionV2Dao.updateQuestionLongNameDispOrderDeIdseq(questdto);
+		//What we could update in sbrext.Quest_contents_view_ext
+		//display order, long name and asl name
+		if (!questdto.getLongName().equals(existing.getLongName()) ||
+				questdto.getDisplayOrder() != existing.getDisplayOrder()) {
+			int re = questionV2Dao.updateQuestionLongNameDispOrderDeIdseq(questdto);
+		}
 		
+		//What we could update in sbrext.quest_attributes_ext
+		//manditory, editable, default value
 		QuestionChangeTransferObject qChangedto = new QuestionChangeTransferObject();
+		qChangedto.setDefaultValue(question.getDefaultValue());
+		qChangedto.setEditable(question.isEditable());
+		qChangedto.setMandatory(question.isMandatory());
+		qChangedto.setQuestionId(questdto.getQuesIdseq());
 		
-		//fill data
+		qChangedto.setQuestAttrChange(true);
         
 		//update isEditable, isMandatory and default value
 		questionV2Dao.updateQuestAttr(qChangedto, questdto.getModifiedBy().toUpperCase());
@@ -1134,7 +1264,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 				continue;
 			
 			int res = collectionDao.createCollectionFormMappingRecord(collSeqid, form.getFormSeqId(),
-					Integer.parseInt(form.getPublicId()), Float.parseFloat(form.getVersion()));
+					Integer.parseInt(form.getPublicId()), Float.parseFloat(form.getVersion()), form.getLoadType());
 			
 			//TODO: check response value.
 			int loatStatus = (res > 0) ? FormDescriptor.STATUS_LOADED : FormDescriptor.STATUS_LOAD_FAILED;
@@ -1144,8 +1274,19 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		return collSeqid;
 	}
 	
-	public boolean hasLoadFormRight(String userName, String contextName) {
+	public boolean hasLoadFormRight(FormDescriptor form, String userName, String contextName) {
 		String contextseqid = this.getContextSeqIdByName(contextName);
+		
+		if (userName == null || userName.length() == 0) {
+			form.addMessage("User name is emppty. Unable to verify user load right");
+			return false;
+		}
+		
+		if (contextseqid == null || contextseqid.length() == 0) {
+			form.addMessage("Context name [" + contextName + "]is empty. Unable to verify user load right");
+			return false;
+		}
+			
 		return this.formV2Dao.hasCreate(userName, COMPONENT_TYPE_FORM, contextseqid);
 	}
 	

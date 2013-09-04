@@ -108,9 +108,8 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			HashMap<String, List<Float>> publicIdVersions = createFormExistingVersionMap(formDtos);
 			determineLoadTypeByVersion(formDescriptors, publicIdVersions);
 
-			//extra info we want from the dtos, eg. seq id for existing forms
-			//Only update forms are worth taking what's from dtos
-			transferFormDtos(formDtos, formDescriptors);
+			//extra info we want from the dtos, eg. seq id for update form and new version
+			transferFormSeqids(formDtos, formDescriptors);
 		}
 		
 	}
@@ -133,11 +132,11 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			//This should be done with list from database
 			//But we couldn't find the table that contains the list
 			String formType = form.getType();
-			if (formType != null && formType.length() > 0) {
-				form.addMessage("Form type is invalid. Use default type CRF");
+			if (formType == null || formType.length() == 0) {
+				form.addMessage("Form type in xml is empty. Use default type CRF");
 				form.setType("CRF");
 			} else {
-				if (!formType.equals("CRF") || !formType.equals("TEMPLATE")) {
+				if (!formType.equals("CRF") && !formType.equals("TEMPLATE")) {
 					form.addMessage("Form type \"" + formType + "\" is invalid. Use default type CRF");
 					form.setType("CRF");
 				}
@@ -185,11 +184,10 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		return map;
 	}
 	
-	
 	/**
 	 * 
-	 * @param formHeaders
-	 * @param existingVersions comma delimited versions
+	 * @param formHeaders forms parsed from xml
+	 * @param existingVersions hashmap with form public id as key and a list of existing versions from db as value
 	 */
 	protected void determineLoadTypeByVersion(List<FormDescriptor> formHeaders,
 			HashMap<String, List<Float>> existingVersions) {
@@ -210,8 +208,10 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 				form.setVersion("1.0");
 			} else if (!existingVersions.containsKey(publicid)) {// invalid public id from xml
 				form.setLoadType(FormDescriptor.LOAD_TYPE_UNKNOWN);
+				form.setSelected(false);
 				form.addMessage(
 					"Form public id from xml doesn't have a match in database. Please correct or it'll be skipped loading");
+				form.setLoadStatus(FormDescriptor.STATUS_CONTENT_VALIDATION_FAILED);
 			} else 
 				determineLoadTypeForForm(form, existingVersions.get(publicid));
 	
@@ -259,13 +259,13 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 	}
 	
 	/**
-	 * Transfer extra info from form dtos to the form descriptor list for "update" forms, for later use
-	 * @param formDtos
-	 * @param formDescriptors
+	 * Transfer extra info from form dtos to the form descriptor list for "update" forms or new version forms, for later use
+	 * @param formDtos list of dtos from a query by public id query
+	 * @param forms forms parsed from xml
 	 */
-	protected void transferFormDtos(List<FormV2>formDtos, List<FormDescriptor> formDescriptors) {
-		for (FormDescriptor formDesc : formDescriptors) {
-			if (formDesc.getLoadType().equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)) //for now we only care for this case
+	protected void transferFormSeqids(List<FormV2>formDtos, List<FormDescriptor> forms) {
+		for (FormDescriptor formDesc : forms) {
+			if (formDesc.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW)) 
 				continue;
 			
 			FormV2 match = findMatchingFormDto(formDtos, formDesc);
@@ -274,6 +274,14 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		}
 	}
 	
+	/**
+	 * Find a matching form dto based on a xml form (form parsed from xml)'s public id or/and version,
+	 * depending on whether it's a new version form or an update form
+	 * 
+	 * @param formDtos form dtos from a query by public ids
+	 * @param form a form from xml
+	 * @return a matching dto or null
+	 */
 	protected FormV2 findMatchingFormDto(List<FormV2> formDtos, FormDescriptor form) {
 		
 		for (FormV2 formdto : formDtos) {
@@ -281,12 +289,18 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			int publicId = Integer.parseInt(form.getPublicId());
 			float version = Float.parseFloat(form.getVersion());
 			
-			if (formdto.getPublicId() == publicId && formdto.getVersion().floatValue() == version) 
-				return formdto;
-			} catch (NumberFormatException ne) {
+			if (formdto.getPublicId() == publicId) {
+				if (form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW_VERSION))
+					return formdto;
+				else if (form.getLoadType().equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)
+						&& formdto.getVersion().floatValue() == version) 
+					return formdto;
+			} 
+			
+		} catch (NumberFormatException ne) {
 				logger.debug("Error while converting string to number: >" + form.getPublicId() + "< and >" + form.getVersion() + "<");
 				continue;
-			}
+		}
 			
 		}
 		
@@ -514,7 +528,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 				for (QuestionTransferObject qDto : questDtos) {
 					if (qDto.getPublicId() == Integer.parseInt(publicId)) {
 						match = 1;
-						if (qDto.getVersion() == Float.parseFloat(version)) {
+						if (qDto.getVersion().floatValue() == Float.parseFloat(version)) {
 							match = 2;
 						}
 					}
@@ -582,7 +596,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			return 1; //public id no match
 			
 		for (QuestionTransferObject qDto : qDtos) {
-			if (qDto.getVersion() == Float.parseFloat(version))
+			if (qDto.getVersion().floatValue() == Float.parseFloat(version))
 				return 0; //match found
 		}
 		
@@ -706,7 +720,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			return null;
 		} else {
 			for (DataElementTransferObject cde : cdes) {
-				if (Float.parseFloat(cdeVersion) == cde.getVersion()) {
+				if (Float.parseFloat(cdeVersion) == cde.getVersion().floatValue()) {
 					return cde;
 				}
 			}
@@ -736,7 +750,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			else
 				continue;
 
-			if (cdeVerNum == cde.getVersion()) {
+			if (cdeVerNum == cde.getVersion().floatValue()) {
 				question.setCdeSeqId(cde.getDeIdseq());
 				return cde;
 			}
@@ -996,90 +1010,5 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		
 	}
 	
-	/*
-	protected void verifyQuestionInModule(QuestionDescriptor question, List<QuestionTransferObject> questiondtos,
-			FormDescriptor form) {
-		if (questiondtos == null || questiondtos.size() == 0) {
-			if (form.getLoadType().equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)) {
-				question.addInstruction("Question has no match in database. Skip loading");
-				question.setSkip(true);
-			} else if (form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW_VERSION)) {
-				question.setPublicId("");
-				question.setVersion("1.0");
-			}
-			
-			logger.debug("Question DTO list is null or empty");
-		}
-		
-		QuestionTransferObject qDto = findMatchingDtoForQuestion(question, questiondtos);
-		
-		compareQuestions(question, qDto);
-	}
-	*/
-	
-	/**
-	 * Find a matching question DTO for the question from xml, based on public id and version
-	 * @param question question from xml
-	 * @param questiondtos question list from database
-	 * @return
-	 */
-	/*
-	protected QuestionTransferObject findMatchingDtoForQuestion(QuestionDescriptor question, List<QuestionTransferObject> questiondtos) {
-		int publicId = Integer.parseInt(question.getPublicId());
-		float version = Float.parseFloat(question.getVersion());
-		
-		boolean pidfound = false;
-		for (QuestionTransferObject qDto : questiondtos) {
-			if (qDto.getPublicId() != publicId)
-				continue;
-			
-			if (qDto.getVersion() == version) {
-				question.setQuestionSeqId(qDto.getQuesIdseq()); //don't know if it's useful now
-				return qDto;
-			}
-			else {
-				pidfound = true;
-				//availVersions.add(Float.valueOf(qDto.getVersion()));
-			}
-			
-		}
-		if (!pidfound)
-			question.addInstruction("Question's public id and version [" + publicId + "|" + version 
-					+ "] from xml have no match in database");
-		else {
-			
-			//TODO: Should create a new version of the question correct?
-			question.addInstruction("Question's version have no match in database with this public id: " 
-					+ publicId);
-			//TODO: need a way to mark create new version of a question
-			}
-			
-		return null;
-	}
-	
-	protected void compareQuestions(QuestionDescriptor question, QuestionTransferObject qDto) {
-		//Here we need to query for all definitions if preferred text doesn't match in the 2 quests
-	}
-	
-	//maynot need this
-	protected void validateQuestionAgainstRefDocs(QuestionDescriptor question, FormDescriptor form) {
-		String cdePublicId = question.getCdePublicId();
-		String cdeVersion = question.getCdeVersion();
-		if (cdePublicId == null || cdePublicId.length() == 0 
-				|| cdeVersion == null || cdeVersion.length() == 0) {
-			String msg = "Question [" + question.getPublicId() + "|" + question.getVersion() 
-					+ "] doesn't have valid cde public id or version";
-			logger.debug(msg);
-			question.addInstruction(msg);
-			return;
-		}
-		
-		
-		List<ReferenceDocument> refDocs = 
-				repository.getReferenceDocsForQuestionCde(cdePublicId, cdeVersion);
-		
-		
-	}
-	
-	*/
+
 }

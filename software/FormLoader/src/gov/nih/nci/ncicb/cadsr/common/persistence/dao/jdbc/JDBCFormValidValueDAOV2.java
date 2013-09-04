@@ -22,6 +22,7 @@ import oracle.jdbc.OracleCallableStatement;
 
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.object.MappingSqlQuery;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -207,6 +208,25 @@ public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
 		return res;
 		
 	}
+	
+	public List<String> getValidValueSeqidsByQuestionSeqid(String questId) {
+		String sql = "select C_QC_IDSEQ from sbrext.qc_recs_ext " +
+				" where RL_NAME='ELEMENT_VALUE' and P_QC_IDSEQ=:questId";
+		
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("questId", questId);
+		
+		List<String> rows = 
+    			this.namedParameterJdbcTemplate.query(sql, params, 
+    					new RowMapper<String>() {
+    				public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+    					
+    					return rs.getString("C_QC_IDSEQ");
+    				}
+    			});
+		return rows;
+
+	}
 
   /**
    * Creates a new form valid value component (just the header info).
@@ -353,7 +373,7 @@ public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
     if (!StringUtils.doesValueExist(returnCode)) {
       return 1;
     }
-    else{
+    else {
       DMLException dml =  new DMLException(returnDesc);
       dml.setErrorCode(this.ERROR_DELETEING_VALID_VALUE);
       throw dml;

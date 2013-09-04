@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(namespace ="gov.nih.nci.cadsr.formloader.domain.Moduletatus")
+@XmlRootElement(namespace ="gov.nih.nci.cadsr.formloader.domain.ModuleStatus")
 public class QuestionStatus {
 	protected String identifier;
 	protected String loadStatus; //skipped or loaded

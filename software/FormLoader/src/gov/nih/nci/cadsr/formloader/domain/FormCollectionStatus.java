@@ -14,6 +14,8 @@ public class FormCollectionStatus {
 	String xmlFileName;
 	String createdBy;
 	String dateCreated;
+	
+	String message;
 
 	List<FormStatus> formStatuses = new ArrayList<FormStatus>();
 
@@ -64,6 +66,15 @@ public class FormCollectionStatus {
 
 	public List<FormStatus> getFormStatuses() {
 		return formStatuses;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	@XmlElement
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	@XmlElementWrapper(name ="forms")

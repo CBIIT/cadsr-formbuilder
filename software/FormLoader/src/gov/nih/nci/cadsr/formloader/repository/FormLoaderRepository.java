@@ -33,11 +33,13 @@ public interface FormLoaderRepository {
 	
 	public String createFormCollectionRecords(FormCollection coll);
 	
-	public boolean hasLoadFormRight(String userName, String contextName);
+	public boolean hasLoadFormRight(FormDescriptor form, String userName, String contextName);
 	
 	public List<FormCollection> getAllLoadedCollections();
 	
 	public void checkWorkflowStatusName(FormDescriptor form);
 	
 	public void unloadForm(FormDescriptor form);
+	
+	public String createFormNewVersion(FormDescriptor form, String loggedinUser, String xmlPathName, int formIdx);
 }

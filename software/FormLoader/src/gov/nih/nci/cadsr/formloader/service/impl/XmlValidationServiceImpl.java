@@ -40,8 +40,8 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 	
 	protected ResourceLoader resourceLoader;
 	
-	protected String XSD_PATH_NAME = "FormCartv22.xsd";
-	//protected String XSD_PATH_NAME = "FormLoaderv5.xsd";
+	//protected String XSD_PATH_NAME = "FormCartv22.xsd";
+	protected String XSD_PATH_NAME = "FormLoaderv4.xsd";
 	
 
 	public XmlValidationServiceImpl() {}
@@ -68,27 +68,35 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 					"Input collection object is null");
 		}
 		
-		String xmlPathName = FormLoaderHelper.checkInputFile(collection.getXmlPathOnServer(), collection.getXmlFileName());
-		
-		XmlValidationError error = checkXmlWellFormedness(xmlPathName);
-		if (error != null && error.getType() != XmlValidationError.XML_NO_ERROR)
-			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_MALFORMED_XML,
-					"Xml Malform Error", error);
-		
-		logger.debug("XSD_PATH_NAME: " + XSD_PATH_NAME);
-		Resource resource = this.resourceLoader.getResource(
-				"classpath:gov/nih/nci/cadsr/formloader/service/impl/" + XSD_PATH_NAME);
+		try {
+			String xmlPathName = FormLoaderHelper.checkInputFile(collection.getXmlPathOnServer(), collection.getXmlFileName());
 
-		List<FormDescriptor> forms = null;
+			XmlValidationError error = checkXmlWellFormedness(xmlPathName);
+			if (error != null && error.getType() != XmlValidationError.XML_NO_ERROR) {
+				collection.addMessage(error.getMessage());
+				throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_MALFORMED_XML,
+						"Xml Malform Error", error);
+			}
 
-		List<XmlValidationError> errors = validateXml(xmlPathName, resource);
+			logger.debug("XSD_PATH_NAME: " + XSD_PATH_NAME);
+			Resource resource = this.resourceLoader.getResource(
+					"classpath:gov/nih/nci/cadsr/formloader/service/impl/" + XSD_PATH_NAME);
 
-		//match errors with a form via line number in an error
-		StaXParser parser = new StaXParser();
-		forms = parser.parseFormHeaders(xmlPathName);		
-		assignErrorsToForms(forms, errors);
+			List<FormDescriptor> forms = null;
 
-		collection.setForms(forms);
+			List<XmlValidationError> errors = validateXml(xmlPathName, resource);
+
+			//match errors with a form via line number in an error
+			StaXParser parser = new StaXParser();
+			forms = parser.parseFormHeaders(xmlPathName);		
+
+			assignErrors(collection, forms, errors);
+
+			collection.setForms(forms);
+		} catch (FormLoaderServiceException e) {
+			collection.addMessage(e.getMessage());
+			throw e;
+		}
 		return collection;
 	}
 	
@@ -97,18 +105,20 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 	 * @param forms
 	 * @param errors
 	 */
-	protected void assignErrorsToForms(List<FormDescriptor> forms, List<XmlValidationError> errors) {
-		if (forms == null || forms.size() == 0) {
-			logger.debug("form list null or empty. Nothing to do");
-			return;
-		}
+	protected void assignErrors(FormCollection collection, List<FormDescriptor> forms, List<XmlValidationError> errors) {
 		
 		if (errors != null && errors.size() > 0) {
 			int currFormIdx = 0;
 			for (XmlValidationError xmlError : errors) {
 				int formSize = forms.size();
-				for (int i = 0; i < formSize; i++) {
-					currFormIdx = assignError(xmlError, forms, currFormIdx);
+				if (formSize == 0)
+					collection.addMessage(xmlError.toString());
+				else {
+					for (int i = 0; i < formSize; i++) {
+						currFormIdx = assignErrorToForm(xmlError, forms, i);
+						if (currFormIdx < 0)
+							collection.addMessage(xmlError.toString());
+					}
 				}
 			}
 		}
@@ -127,7 +137,7 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 	 * @param startIdx 
 	 * @return
 	 */
-	protected int assignError(XmlValidationError xmlError, List<FormDescriptor> forms, int startIdx) {
+	protected int assignErrorToForm(XmlValidationError xmlError, List<FormDescriptor> forms, int startIdx) {
 		int total = forms.size();
 		int errorLineNum = xmlError.getLineNumber();
 		for (int i = startIdx; i < total; i++) {
@@ -141,7 +151,7 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 		
 		//If we get here, no match is found. This could be errors outside of "form" elements
 		logger.warn("Unable to find owner form for this error: " + xmlError.toString());
-		return startIdx;
+		return -1;
 	}
 	
 	/**
@@ -161,6 +171,7 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
             reader.setErrorHandler(errorHandler);
             reader.read(xmlPathName);
         } catch (DocumentException e) {
+        	//add message here
         	logger.error(e);
         	throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_MALFORMED_XML,
 					"Xml Malform Error: " + e.getMessage());

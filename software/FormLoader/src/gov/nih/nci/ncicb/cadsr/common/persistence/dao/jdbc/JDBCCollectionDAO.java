@@ -52,16 +52,17 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 		return idseq;
 	}
 	
-	public int createCollectionFormMappingRecord(String collectionseqid, String formseqid, int formpublicid, float formversion) {
-		String sql = "INSERT into FORMS_IN_COLLECTION (FORM_COLLECTION_IDSEQ, FORM_IDSEQ, PUBLIC_ID, VERSION) " +
-				" VALUES (:collectionseqid, :formseqid, :formpublicid, :formversion)";
+	public int createCollectionFormMappingRecord(String collectionseqid, String formseqid, 
+			int formpublicid, float formversion, String loadType) {
+		String sql = "INSERT into FORMS_IN_COLLECTION (FORM_COLLECTION_IDSEQ, FORM_IDSEQ, PUBLIC_ID, VERSION, LOAD_TYPE) " +
+				" VALUES (:collectionseqid, :formseqid, :formpublicid, :formversion, :loadtype)";
 		
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("collectionseqid", collectionseqid);
 		params.addValue("formseqid", formseqid);
 		params.addValue("formpublicid", formpublicid);
 		params.addValue("formversion", formversion);
-		
+		params.addValue("loadtype", loadType);
 		
 		int res = this.namedParameterJdbcTemplate.update(sql, params);
 		return res;

@@ -323,8 +323,12 @@ public class FormDescriptor {
 			return "Xml validation failed";
 		case STATUS_LOAD_FAILED:
 			return "Load failed";
+		case STATUS_UNLOAD_FAILED:
+			return "Unload failed";
 		case STATUS_ERROR:
 			return "Error";
+		case STATUS_CONTENT_VALIDATION_FAILED:
+			return "Content validation failed";
 			
 		default: 
 			return "Status Unknown";
