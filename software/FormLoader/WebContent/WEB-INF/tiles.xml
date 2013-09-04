@@ -18,6 +18,12 @@
 		<put-attribute name="header" value="/basicHeader_inc.jsp" />
 		<put-attribute name="body" value="/HomePage.jsp" />
 	</definition>
+
+	<definition name="/upload.file.tiles" extends="baseLayout">
+		<put-attribute name="title" value="Select a XML form collection File" />
+		<put-attribute name="header" value="/basicHeader_inc.jsp" />
+		<put-attribute name="body" value="/UploadFile.jsp" />
+	</definition>
 	
 	<definition name="/upload.tiles" extends="baseLayout">
 		<put-attribute name="title" value="Upload a XML File" />
