@@ -759,9 +759,9 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
         if (StringUtils.doesValueExist(protocolIdSeq) || StringUtils.doesValueExist(protocolIdSeq)){
           fromWhat.append(", protocol_qc_ext p ");
           if (hasWhere){
-              initialWhere.append(" AND ( f.QC_IDSEQ = p.qc_idseq) and (p.proto_idseq ='" + protocolIdSeq + "') ");
+              initialWhere.append(" AND ( f.QC_IDSEQ = p.qc_idseq) and (p.proto_idseq IN (" + protocolIdSeq + ")) ");
           }else{
-              initialWhere.append(" where ( f.QC_IDSEQ = p.qc_idseq) and (p.proto_idseq ='" + protocolIdSeq + "') ");
+              initialWhere.append(" where ( f.QC_IDSEQ = p.qc_idseq) and (p.proto_idseq IN (" + protocolIdSeq + ")) ");
               hasWhere = true;
           }
         }
@@ -846,24 +846,25 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
     	          hasWhere = true;
     	        }
     	      }
-
+/*
     	      if (StringUtils.doesValueExist(protocol)) {
     	        if (hasWhere) {
-    	          whereBuffer.append(" AND p.PROTO_IDSEQ ='" + protocol + "'");
+    	          whereBuffer.append(" AND p.PROTO_IDSEQ IN (" + protocol + ")");
     	        }
     	        else {
-    	          whereBuffer.append(" WHERE p.PROTO_IDSEQ ='" + protocol + "'");
+    	          whereBuffer.append(" WHERE p.PROTO_IDSEQ IN (" + protocol + ")");
     	          hasWhere = true;
     	        }
     	      }
+*/
 
     	      //context filter or exclude contexts
     	      if (StringUtils.doesValueExist(context)) {
     	        if (hasWhere) {
-    	          whereBuffer.append(" AND f.CONTE_IDSEQ ='" + context + "'");
+    	          whereBuffer.append(" AND f.CONTE_IDSEQ IN (" + context + ")");
     	        }
     	        else {
-    	          whereBuffer.append(" WHERE f.CONTE_IDSEQ ='" + context + "'");
+    	          whereBuffer.append(" WHERE f.CONTE_IDSEQ IN (" + context + ")");
     	          hasWhere = true;
     	        }
     	      }
@@ -911,23 +912,23 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
     	      if (StringUtils.doesValueExist(classificationIdseq)) {
     	        if (hasWhere) {
     	          whereBuffer.append(
-    	            " AND f.QC_IDSEQ in (select ac_idseq from sbr.ac_csi_view where CS_CSI_IDSEQ ='" +
-    	            classificationIdseq + "')");
+    	            " AND f.QC_IDSEQ in (select ac_idseq from sbr.ac_csi_view where CS_CSI_IDSEQ IN (" +
+    	            classificationIdseq + "))");
     	        }
     	        else {
     	          whereBuffer.append(
-    	            " WHERE f.QC_IDSEQ in (select ac_idseq from sbr.ac_csi_view where CS_CSI_IDSEQ ='" +
-    	            classificationIdseq + "')");
+    	            " WHERE f.QC_IDSEQ in (select ac_idseq from sbr.ac_csi_view where CS_CSI_IDSEQ IN (" +
+    	            classificationIdseq + "))");
     	          hasWhere = true;
     	        }
     	      }
 
     	        if (StringUtils.doesValueExist(publicId)) {
     	          if (hasWhere) {
-    	            whereBuffer.append(" AND (f.PUBLIC_ID =" + publicId + ")");
+    	            whereBuffer.append(" AND (f.PUBLIC_ID IN (" + publicId + "))");
     	          }
     	          else {
-    	            whereBuffer.append(" WHERE (f.PUBLIC_ID =" + publicId + ")");
+    	            whereBuffer.append(" WHERE (f.PUBLIC_ID IN (" + publicId + "))");
     	            hasWhere = true;
     	          }
     	        }
@@ -996,7 +997,7 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 
 	    public void setQuerySql(String csidSeq) {
 	     String querySql = " SELECT * FROM FB_FORMS_VIEW formview, sbr.cs_csi_view csc,sbr.ac_csi_view acs "
-	        + " where  csc.cs_idseq = '"+ csidSeq +"'"
+	        + " where  csc.cs_idseq IN ("+ csidSeq +")"
 	        + " and csc.cs_csi_idseq = acs.cs_csi_idseq "
 					+ " and acs.AC_IDSEQ=formview.QC_IDSEQ "
 	        + " ORDER BY upper(protocol_long_name), upper(context_name)";
