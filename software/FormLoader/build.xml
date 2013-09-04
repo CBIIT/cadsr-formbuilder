@@ -14,12 +14,16 @@
 	<property name="compile.debug"     value="true"/>
 	<property name="compile.deprecation"     value="false"/>
 	<property name="compile.optimize"     value="true"/>
-	
+	<property name="JBOSS.DEPLOY.DIR"     value="C:\Jboss\jboss-5.1.0.GA\server\default\deploy"/>
+	<property name="JBOSS.HOME"     value="C:\Jboss\jboss-5.1.0.GA"/>
+	<property name="jboss.lib.dir"   value= "${JBOSS.HOME}/common" />
+	<property name="dist.dir"    value="${basedir}/dist"/>
 	<property name="lib.dir"     value="${basedir}/WebContent/WEB-INF/lib"/>
 	<property name="report.dir"  value="${build.dir}/junitreport"/>
 
 	<path id="classpath">
 		<fileset dir="${lib.dir}" includes="**/*.jar"/>
+		<fileset dir="${jboss.lib.dir}" includes="**/*.jar"/>
 		<fileset dir="${test.dir}/lib" includes="**/*.jar"/>
 	</path>
 	
@@ -67,6 +71,38 @@
 	    <jar jarfile="${dist.home}/${app.name}.war"
 				basedir="${build.dir}" />
 
+	</target>
+	
+	<target name="-deploy-war-local" depends="archive"  description="Deploys the war file">
+	        <echo>Deploying war ...</echo>
+<!--	        <copy todir="${JBOSS.DEPLOY.DIR}">
+	            <fileset dir="${artifacts.dir}/jboss">
+	                <include name="**/*-oracle-ds.xml" />
+	            </fileset>
+	        </copy> 
+	        <copy todir="${JBOSS.DEPLOY.DIR}">
+	            <fileset dir="${artifacts.dir}/jboss">
+	                <include name="**/*-login-config-service.xml" />
+	            </fileset>
+	        </copy>
+	        <copy todir="${JBOSS.CONF.DIR}">
+	            <fileset dir="${artifacts.dir}/jboss">
+	                <include name="**/*-login-config.xml" />
+	            </fileset>
+	        </copy> 
+	        <copy todir="${JBOSS.CONF.DIR}/log4j">
+	            <fileset dir="${artifacts.dir}/jboss">
+	                <include name="**/formbuilder-log4j-*.xml" />
+	            </fileset>
+	        </copy>
+	        <copy todir="${JBOSS.CONF.DIR}/log4j">
+	            <fileset dir="${artifacts.dir}/jboss">
+	                <include name="**/cadsrutil-log4j-*.xml" />
+	            </fileset>
+	        </copy> -->
+	        <copy tofile="${JBOSS.DEPLOY.DIR}/FormLoader.war">
+	            <fileset file="${dist.dir}/FormLoader.war" />
+	        </copy>
 	</target>
 	
     <target name="jar" depends="compile">

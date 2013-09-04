@@ -19,7 +19,7 @@
 <tr>
 <td>
 <s:form action="upload-form" theme = 'css_xhtml' > 
-<s:submit type="image" src="/FormLoader/i/load_forms.jpg" method="execute" alt="Load Forms" align="left" />
+<s:submit type="image" src="/FormLoader/i/load.jpg" method="execute" alt="Load Forms" align="left" />
 </s:form>
 </td>
 <td>
@@ -32,7 +32,7 @@
 <tr>
 <td>
 <s:form action="search-form" theme = 'css_xhtml'>   
-<s:submit type="image" src="/FormLoader/i/unload_forms.jpg" method="execute" alt="Unload Forms" align="left" />
+<s:submit type="image" src="/FormLoader/i/unload.jpg" method="execute" alt="Unload Forms" align="left" />
 </s:form>
 </td>
 <td>

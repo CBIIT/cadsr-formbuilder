@@ -52,23 +52,33 @@
 		<action name="cancelloadform" class="gov.nih.nci.cadsr.formloader.struts2.ValidateXMLAction">
 			<result name="success" type="tiles">/home.tiles</result>
 		</action>
-		
 
-		
-<!-- 		<action name="xmlFileUpload"
-    		class="gov.nih.nci.cadsr.formloader.struts2.XMLFileUploadAction">
-    			<interceptor-ref name="fileUpload">
-        			<param name="maximumSize">2597152</param>
-       				<param name="allowedTypes">text/xml, text/XML</param>
-    			</interceptor-ref>
-    			<interceptor-ref name="defaultStack"></interceptor-ref>
-   			 	<result name="input" type="tiles">/upload.tiles</result>
-				<result name="success" type="tiles">/upload.parse.tiles</result>
-				<result name="error" type="tiles">/upload.error.tiles</result>
-		</action> -->
-		<action name="upload-form">
+
+		<action name="upload-form" class="gov.nih.nci.cadsr.formloader.struts2.XMLFileUploadAction">
 			<result type="tiles">/upload.tiles</result>
 		</action>
+		
+   		<action name="xmlFileUpload" class="gov.nih.nci.cadsr.formloader.struts2.XMLFileUploadAction">
+		    <interceptor-ref name="exception"/>
+	        <interceptor-ref name="i18n"/>
+	        <interceptor-ref name="fileUpload">
+	       		<param name="allowedTypes">text/xml</param>
+	       		<!--  <param name="maximumSize">10240</param> -->
+	  	    </interceptor-ref> 
+	            <interceptor-ref name="params">
+	                <param name="excludeParams">dojo\..*,^struts\..*</param>
+	            </interceptor-ref>
+	            <interceptor-ref name="validation">
+	                <param name="excludeMethods">input,back,cancel,browse</param>
+	            </interceptor-ref>
+	            <interceptor-ref name="workflow">
+	                <param name="excludeMethods">input,back,cancel,browse</param>
+	            </interceptor-ref>
+	 
+		    <result name="success" type="tiles">/upload.tiles</result>
+		    <result name="input" type="tiles">/upload.tiles</result>
+		</action>
+		
 		
 		
 <!-- 		<action name="validateForms" 

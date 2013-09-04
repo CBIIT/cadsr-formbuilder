@@ -20,15 +20,16 @@ L--%>
 <s:actionerror />
 <table>
 <s:form action="xmlFileUpload" method="post" enctype="multipart/form-data">
-<tr><td colspan="2" align="left" nowrap>
-   <s:textfield key="Form Collection XML File" name="form_collection" /></td></tr>
-    <tr><td colspan="2" align="left" nowrap>
+<tr><td>
+   <!-- <s:textfield key="Form Collection XML File" name="form_collection" /> -->
+   <s:file name="upload" label="Form Collection XML File" cols="20" rows="1" /></td></tr>
+   <tr><td>
    <s:textfield key="Form Collection Name" name="collection_name" /></td></tr>
-   <tr><td colspan="2" align="left" nowrap>
-   <s:textarea key="Form Collection Description" name="description"/></td></tr>
+   <tr><td>
+   <s:textarea key="Form Collection Description" name="description" cols="20" rows="5"/></td></tr>
     	  <tr>
 	  	<td colspan="1" align="left" nowrap>
-<s:submit type="image" src="/FormLoader/i/validate.gif" method="execute" align="left" theme="simple" /></td>
+<s:submit type="image" src="/FormLoader/i/validate-XML.gif" method="execute" align="left" theme="simple" /></td>
 	  	<td colspan="1" align="left" nowrap>
 <s:submit type="image" src="/FormLoader/i/cancel.gif" method="cancel" align="left" theme="simple"/></td>
 	  	<td colspan="1" align="left" nowrap>
