@@ -42,11 +42,10 @@ ServletRequestAware{
     private FormCollection formCollection;
     private HttpServletRequest servletRequest;
     
-    private List<FormObj> parsedFormsList = new ArrayList<FormObj>();
+    private List<FormDescriptor> parsedFormsList = null;
     private Properties configProp;
     private File uploadedfile = null;
     private XmlValidationServiceImpl xmlValidator = null;
-	private List<FormDescriptor> forms;
     
     public void loadProps() {
     	InputStream in = null;
@@ -97,35 +96,40 @@ ServletRequestAware{
 
 
     
-    public List<FormObj> getParsedFormsList() {
+    public List<FormDescriptor> getParsedFormsList() {
 		return parsedFormsList;
 	}
 
 
-	public void setParsedFormsList(List<FormObj> parsedFormsList) {
+	public void setParsedFormsList(List<FormDescriptor> parsedFormsList) {
 		this.parsedFormsList = parsedFormsList;
 	}
     
     public String execute() {
     	servletRequest = ServletActionContext.getRequest();
+    	if (this.file!=null)
+	    	{
+				saveUploadedFile(this.file);
+				validateXML();
+	    	}
         return SUCCESS;
     }
  
-    private boolean isValidated() {
-    	boolean isValidated = true;
-    	for (int i=0; i<parsedFormsList.size();i++) {
-    		FormObj one = parsedFormsList.get(i);
-    		try {
-   
-    			one = ValidationMockupService.getInstance().validateForm(one);
-    		} catch (Exception e) {
-                e.printStackTrace();
-               	one.setErrorMessage(e.getMessage());
-                isValidated = false;
-            }					
-		}
-    	return isValidated;
-    }
+//    private boolean isValidated() {
+//    	boolean isValidated = true;
+//    	for (int i=0; i<parsedFormsList.size();i++) {
+//    		FormObj one = parsedFormsList.get(i);
+//    		try {
+//   
+//    			one = ValidationMockupService.getInstance().validateForm(one);
+//    		} catch (Exception e) {
+//                e.printStackTrace();
+//               	one.setErrorMessage(e.getMessage());
+//                isValidated = false;
+//            }					
+//		}
+//    	return isValidated;
+//    }
     
     private void saveUploadedFile(File xmlFile)
     {	
@@ -170,7 +174,6 @@ ServletRequestAware{
 
 	private void validateXML()
 	{
-		
 		applicationContext =
 				WebApplicationContextUtils.getRequiredWebApplicationContext(
 	                                    ServletActionContext.getServletContext()
@@ -182,7 +185,7 @@ ServletRequestAware{
 		aColl.setXmlFileName(this.fileName);
 		try {
 			aColl = xmlValidator.validateXml(aColl);
-			forms = aColl.getForms();
+			parsedFormsList = aColl.getForms();
 		} catch (FormLoaderServiceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -192,8 +195,6 @@ ServletRequestAware{
 	
 	public void setUploadFileName(String xmlFileName) {
 		this.fileName = xmlFileName;
-		saveUploadedFile(this.file);
-		validateXML();
 	}
 
 	public void setUploadContentType(String xmlFileContentType) {
@@ -203,6 +204,5 @@ ServletRequestAware{
 	@Override
 	public void setServletRequest(HttpServletRequest arg0) {
 		this.servletRequest = arg0;
-		
 	}
 }

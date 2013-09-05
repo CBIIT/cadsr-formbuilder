@@ -45,9 +45,7 @@
 			<result name="success" type="tiles">/home.tiles</result>
 		</action>
 		
-		<action name="validatexml" class="gov.nih.nci.cadsr.formloader.struts2.ValidateXMLAction">
-			<result name="success" type="tiles">/upload.parse.tiles</result>
-		</action>
+
 		
 		<action name="cancelloadform" class="gov.nih.nci.cadsr.formloader.struts2.ValidateXMLAction">
 			<result name="success" type="tiles">/home.tiles</result>
@@ -75,11 +73,13 @@
 	                <param name="excludeMethods">input,back,cancel,browse</param>
 	            </interceptor-ref>
 	 
-		    <result name="success" type="tiles">/upload.tiles</result>
-		    <result name="input" type="tiles">/upload.tiles</result>
+		    <result name="success" type="tiles">/upload.parse.tiles</result>
+		    <!--  <result name="input" type="tiles">/upload.tiles</result> -->
 		</action>
 		
-		
+		<action name="validatexml" class="gov.nih.nci.cadsr.formloader.struts2.ValidateXMLAction">
+			<result name="success" type="tiles">/upload.parse.tiles</result>
+		</action>
 		
 <!-- 		<action name="validateForms" 
 			class="gov.nih.nci.cadsr.formloader.struts2.ValidateFormsAction">
