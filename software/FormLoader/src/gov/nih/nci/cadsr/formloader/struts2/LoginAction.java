@@ -7,19 +7,26 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.dispatcher.SessionMap;
+import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.SessionAware;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
-public class LoginAction extends ActionSupport implements SessionAware{
+public class LoginAction extends ActionSupport implements SessionAware, ServletRequestAware{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private WebApplicationContext applicationContext;
+    private HttpServletRequest servletRequest;
+    
 	private String username;
 	private String password;
 	private String appname; 
@@ -27,14 +34,10 @@ public class LoginAction extends ActionSupport implements SessionAware{
 	SessionMap<String, String> sessionmap;
 	
 	public String execute() {
-		//WebApplicationContext context =
-		//		WebApplicationContextUtils.getRequiredWebApplicationContext(
-	    //                                ServletActionContext.getServletContext()
-	    //                    );
-		@SuppressWarnings("resource")
-		ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
-				"/applicationContext-service-test-db.xml");
-		//UserManagerDAO userManagerDAOV2 = (UserManagerDAO)context.getBean("userManagerDAO");
+		applicationContext =
+				WebApplicationContextUtils.getRequiredWebApplicationContext(
+	                                    ServletActionContext.getServletContext()
+	                        );
 		UserManagerDAO userManagerDAOV2 = (UserManagerDAO)applicationContext.getBean("userManagerDAO");
 
 		if (userManagerDAOV2.validUser(username, password)==true) {
@@ -100,5 +103,11 @@ public class LoginAction extends ActionSupport implements SessionAware{
 	{
 		sessionmap.invalidate();
 		return "success";
+	}
+
+	@Override
+	public void setServletRequest(HttpServletRequest arg0) {
+		servletRequest = arg0;
+		
 	}
 }

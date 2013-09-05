@@ -22,23 +22,44 @@
     	<property name="connectionCachingEnabled" value="true"/>
 	</bean>
 
-<!--  	<bean id="contentValidationService"
+	<bean id="unloadService"
+		class="gov.nih.nci.cadsr.formloader.service.impl.UnloadingServiceImpl">
+		<property name="repository">
+			<ref local="repository" />
+		</property>
+	</bean>
+	
+	<bean id="collectionRetrievalService"
+		class="gov.nih.nci.cadsr.formloader.service.impl.CollectionRetrievalServiceImpl">
+		<property name="repository">
+			<ref local="repository" />
+		</property>
+	</bean>
+	
+	<bean id="loadService"
+		class="gov.nih.nci.cadsr.formloader.service.impl.LoadingServiceImpl"> 
+		<property name="repository">
+			<ref local="repository" />
+		</property>
+	</bean>
+
+	<bean id="contentValidationService"
 		class="gov.nih.nci.cadsr.formloader.service.impl.ContentValidationServiceImpl"> 
 		<property name="repository">
 			<ref local="repository" />
 		</property>
-	</bean> 
+	</bean>
 	
 	<bean id="xmlValidationService"
 		class="gov.nih.nci.cadsr.formloader.service.impl.XmlValidationServiceImpl">
-	</bean> -->
+	</bean>
 	
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 	
-<!--  	<bean id="repository"
+	<bean id="repository"
 		class="gov.nih.nci.cadsr.formloader.repository.FormLoaderRepositoryImpl"> 
 		<property name="formV2Dao">
 			<ref bean="formV2Dao" />
@@ -52,9 +73,23 @@
 		<property name="valueDomainV2Dao">
 			<ref bean="valueDomainV2Dao" />
 		</property>
-	</bean> -->
-	
-	
+		<property name="formInstructionV2Dao">
+			<ref bean="formInstructionV2Dao" />
+		</property>
+		<property name="questInstructionV2Dao">
+			<ref bean="questInstructionV2Dao" />
+		</property>
+		<property name="formValidValueV2Dao">
+			<ref bean="formValidValueV2Dao" />
+		</property>
+		<property name="formValidValueInstructionV2Dao">
+			<ref bean="formValidValueInstructionV2Dao" />
+		</property>
+		<property name="collectionDao">
+			<ref bean="collectionDao" />
+		</property>
+		
+	</bean>
 	
 	<import resource="applicationContext-jdbcdao-test.xml" />
 

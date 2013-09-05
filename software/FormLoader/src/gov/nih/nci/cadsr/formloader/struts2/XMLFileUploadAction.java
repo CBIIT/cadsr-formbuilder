@@ -1,18 +1,12 @@
 package gov.nih.nci.cadsr.formloader.struts2;
 
 
-import org.apache.struts2.ServletActionContext;
-import org.apache.struts2.interceptor.ServletRequestAware;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.object.FormObj;
 import gov.nih.nci.cadsr.formloader.service.ValidationMockupService;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 import gov.nih.nci.cadsr.formloader.service.impl.XmlValidationServiceImpl;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.UserManagerDAO;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,12 +16,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.opensymphony.xwork2.ActionContext;
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.interceptor.ServletRequestAware;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
 import com.opensymphony.xwork2.ActionSupport;
  
 public class XMLFileUploadAction extends ActionSupport implements
@@ -36,6 +33,8 @@ ServletRequestAware{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	ApplicationContext applicationContext = null;
+	
 	private File file;
     private String fileName;
 	private String contentType;
@@ -172,13 +171,15 @@ ServletRequestAware{
 	private void validateXML()
 	{
 		
-		ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
-				"/applicationContext-service-test-db.xml");
-		XmlValidationServiceImpl xmlValidator = (XmlValidationServiceImpl)applicationContext.getBean("XmlValidationServiceImpl");
+		applicationContext =
+				WebApplicationContextUtils.getRequiredWebApplicationContext(
+	                                    ServletActionContext.getServletContext()
+	                        );
+		XmlValidationServiceImpl xmlValidator = (XmlValidationServiceImpl)this.applicationContext.getBean("xmlValidationService");
 		
 		FormCollection aColl = new FormCollection();
-		aColl.setXmlPathOnServer(".\\test\\data");
-		aColl.setXmlFileName("3193449_has_valid_values.xml");
+		aColl.setXmlPathOnServer(configProp.getProperty("upload.file.path") +"\\");
+		aColl.setXmlFileName(this.fileName);
 		try {
 			aColl = xmlValidator.validateXml(aColl);
 			forms = aColl.getForms();
