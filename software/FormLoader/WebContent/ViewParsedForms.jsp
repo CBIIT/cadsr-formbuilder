@@ -16,7 +16,8 @@ L--%>
 </style>
 </head>
 <body>
-<h2>View Parsed Forms from XML file: <s:property value="xmlFileFileName"/></h2>
+<h2>Successfully parsed forms from XML File: <s:property value="xmlFileFileName"/></h2>
+<h3>Select forms to validate the questions and <br>data elements against caDSR database</h3>
 
 <br>
 <s:actionerror />	
@@ -25,6 +26,7 @@ L--%>
 		<div class="content">
 		<table class="fileTable" cellpadding="5px">
 			<tr class="even">
+				<th>Select</th>
 				<th>Public Id</th>
 				<th>Version</th>
 				<th>Long Name</th>
@@ -33,22 +35,21 @@ L--%>
 				<th>Protocol Name</th>
 				<th>Workflow Status</th>
 				<th># Module(s)</th>
-				<th>Select</th>
 			</tr>
 			<s:iterator value="parsedFormsList" id = "bean" status="status">
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
+				<td>
+					<s:checkbox name="checkboxes[%{#status.index}]" theme = "simple" />
+					
+				</td>
 				<td><s:property value="publicId" /></td>
 				<td><s:property value="version" /></td>
 				<td><s:property value="longName" /></td>
 				<td><s:property value="context" /></td>
 				<td><s:property value="type" /></td>
 				<td><s:property value="protocolName" /></td>
-				<td><s:property value="workflowStatus" /></td>
-				<td><s:property value="numModules" /></td>
-				<td>
-					<s:checkbox name="checkboxes[%{#status.index}]" theme = "simple" />
-					
-				</td>
+				<td><s:property value="workflowStatusName" /></td>
+				<td><s:property value="modules.size()" /></td>
 			</tr>
 			</s:iterator>
 		</table>
