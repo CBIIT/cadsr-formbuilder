@@ -92,6 +92,21 @@ public void testUserHasRight() {
 	}
 	
 	@Test
+	public void testLoadNewFormWithQuestDefaultValue() {
+		this.prepareCollectionToLoad(".\\.\\test\\data\\loading", "load-newform-with-defaultVal.xml");
+		try {
+			FormDescriptor form = aColl.getForms().get(0);
+			form.setSelected(true);
+			aColl = this.loadService.loadForms(aColl);
+			form = aColl.getForms().get(0);
+			String status = StatusFormatter.getStatusInXml(form);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\loading\\load-newform-with-defaultVal.status.xml");
+		} catch (FormLoaderServiceException fle) {
+			fail("Got exception: " + fle.getMessage());
+		}
+	}
+	
+	@Test
 	public void testLoadBiggerNewForm() {
 		this.prepareCollectionToLoad(".\\.\\test\\data", "3256357_v1_0_newform.xml");
 		try {
