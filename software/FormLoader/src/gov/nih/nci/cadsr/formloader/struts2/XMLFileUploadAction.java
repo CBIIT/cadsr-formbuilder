@@ -3,8 +3,6 @@ package gov.nih.nci.cadsr.formloader.struts2;
 
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
-import gov.nih.nci.cadsr.formloader.object.FormObj;
-import gov.nih.nci.cadsr.formloader.service.ValidationMockupService;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 import gov.nih.nci.cadsr.formloader.service.impl.XmlValidationServiceImpl;
 
@@ -14,7 +12,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -26,9 +23,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.ValidationAware;
  
 public class XMLFileUploadAction extends ActionSupport implements
-ServletRequestAware{
+ServletRequestAware, ValidationAware{
     /**
 	 * 
 	 */
@@ -111,8 +109,9 @@ ServletRequestAware{
 	    	{
 				saveUploadedFile(this.file);
 				validateXML();
+			    return SUCCESS;
 	    	}
-        return SUCCESS;
+        return ERROR;
     }
  
 //    private boolean isValidated() {
