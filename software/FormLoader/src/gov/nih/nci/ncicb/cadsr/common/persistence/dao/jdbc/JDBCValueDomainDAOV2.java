@@ -213,10 +213,8 @@ public class JDBCValueDomainDAOV2 extends JDBCAdminComponentDAOV2 implements
     					
     					PermissibleValueV2TransferObject pv = new PermissibleValueV2TransferObject();
     					
-    					//TODO: this is a bad twist: attaching permissible seq id to value
-    					//as we don't have a way to set it to PermissibleValueV2TransferObject
-    					//without changing the class
-    					pv.setValue(rs.getString("VALUE") + "," + rs.getString("VP_IDSEQ"));
+    					pv.setValue(rs.getString("VALUE"));
+    					pv.setIdseq(rs.getString("VP_IDSEQ"));
 
     					ValueMeaningV2TransferObject vm = new ValueMeaningV2TransferObject();
     					vm.setPublicId(rs.getInt("PUBLIC_ID")); //this is also the preferred name for some reason

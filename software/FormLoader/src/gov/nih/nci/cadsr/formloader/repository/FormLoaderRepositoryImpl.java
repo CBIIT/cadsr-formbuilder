@@ -379,7 +379,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	}
 	
 	/**
-	 * Create new form or new version of an existing form
+	 * Create new form
 	 */
 	@Transactional
 	public String createForm(FormDescriptor form, String loggedinUser, String xmlPathName, int formIdx) {
@@ -418,6 +418,13 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	
 	/**
 	 * Create new form or new version of an existing form
+	 * <br><br>
+	 * This will first call the store procedure Sbrext_Form_Builder_Pkg.CRF_VERSION which will make a full copy
+	 * of the form with the same public id and an upgraded version number. Then it'll apply an update on the 
+	 * copy with content from the xml. This is very inefficient. 
+	 * <br><br>
+	 * Need to explore better way. Key quetions: how public id
+	 * is generated? Is it possible to insert new form row withough triggering a new public id generation.
 	 */
 	@Transactional
 	public String createFormNewVersion(FormDescriptor form, String loggedinUser, String xmlPathName, int formIdx) {
@@ -586,10 +593,15 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		List<DesignationTransferObjectExt> designations = parser.getDesignations();
 		processDesignations(form, designations);
 		
-		List<DefinitionTransferObject> definitions = parser.getDefinitions();
+		//Doesn't have xml that has refdoc
+		//processRefdocs();
 		
 		//TODO
-		//processRefdocs();
+		List<DefinitionTransferObject> definitions = parser.getDefinitions();
+		
+		
+		//TODO
+		
 		//processContactCommunications()
 		
 		
@@ -602,6 +614,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	 * @param form
 	 * @param designations
 	 */
+	@Transactional
 	protected void processDesignations(FormDescriptor form, List<DesignationTransferObjectExt> designations) {
 		String formSeqid = form.getFormSeqId();
 		String contextSeqId = this.getContextSeqIdByName(form.getContext());
@@ -619,7 +632,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 				//validate the type, use default if neccessary
 				String desigType = desig.getType();
 				if (!this.designationTypeExists(desigType)) {
-					form.addMessage("Designation type \"" + desigType + "\" is invalid. Use default type Form Loader");
+					form.addMessage("Designation type [" + desigType + "] is invalid. Use default type [Form Loader]");
 					desig.setType(DEFAULT_DESIGNATION_TYPE);
 				}
 				
@@ -632,6 +645,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		}
 	}
 	
+	@Transactional
 	protected int designateForm(String formSeqid, String contextSeqid, String createdby,
 			DesignationTransferObjectExt desig) {
 		List<String> ac_seqids = new ArrayList<String>();
@@ -804,6 +818,15 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		
 	}
 	
+	/**
+	 * Create new instruction for a question.
+	 * 
+	 * Do nothing is instruction string is null or empty. 
+	 * 
+	 * @param newQuestdto
+	 * @param moduledto
+	 * @param instString
+	 */
 	protected void createQuestionInstruction(QuestionTransferObject newQuestdto, 
 			ModuleTransferObject moduledto, String instString) {
 		
@@ -834,6 +857,40 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		
 		questInstructionV2Dao.createInstruction(instr, newQuestdto.getQuesIdseq());
          
+	}
+	
+	/**
+	 * Check if question has existing instruction. If instruction found in db, update it. Otherwise, create new.
+	 * 
+	 * Do nothing if instruction string is null or empty.
+	 * 
+	 * @param questdto
+	 * @param moduledto
+	 * @param instString
+	 */
+	protected void updateQuestionInstruction(QuestionTransferObject questdto, 
+			ModuleTransferObject moduledto, String instString) {
+		if (instString == null || instString.length() == 0)
+			return; //Nothing to do
+		
+		List existings = questInstructionV2Dao.getInstructions(questdto.getQuesIdseq());
+		if (existings != null && existings.size() > 0) {
+			String sizedUpInstr = instString;
+			InstructionTransferObject existing = (InstructionTransferObject)existings.get(0);
+
+			if (sizedUpInstr.length() > MAX_LONG_NAME_LENGTH) { 
+				sizedUpInstr = sizedUpInstr.substring(0, MAX_LONG_NAME_LENGTH);
+			}
+
+			Instruction instr = new InstructionTransferObject();
+			instr.setLongName(sizedUpInstr);
+			instr.setPreferredDefinition(instString);
+			instr.setModifiedBy(moduledto.getCreatedBy());
+			instr.setIdseq(existing.getIdseq());
+			questInstructionV2Dao.updateInstruction(instr);
+		} else {
+			createQuestionInstruction(questdto, moduledto, instString);
+		}
 	}
 	
 	
@@ -1129,7 +1186,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		//display order, long name and asl name
 		if (!questdto.getLongName().equals(existing.getLongName()) ||
 				questdto.getDisplayOrder() != existing.getDisplayOrder()) {
-			int re = questionV2Dao.updateQuestionLongNameDispOrderDeIdseq(questdto);
+			int res = questionV2Dao.updateQuestionLongNameDispOrderDeIdseq(questdto);
 		}
 		
 		//What we could update in sbrext.quest_attributes_ext
@@ -1147,7 +1204,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
       
 		//what to do with isderived?
 		
-		this.createQuestionInstruction(questdto, moduledto, question.getInstruction());
+		updateQuestionInstruction(questdto, moduledto, question.getInstruction());
 			
 		//For valid values, need to first compare what's in db
 		updateQuestionValidValues(question, questdto, moduledto);
@@ -1305,7 +1362,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			designationTypes = this.formV2Dao.getAllDesignationTypes();
 		}
 		
-		return false;
+		return false;		//return (designationTypes == null) ? false : designationTypes.contains(form.getd);
 	}
 	
 	@Transactional(readOnly=true)

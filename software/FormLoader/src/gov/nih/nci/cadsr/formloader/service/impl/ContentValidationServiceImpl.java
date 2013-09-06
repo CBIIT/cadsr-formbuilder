@@ -826,7 +826,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		boolean validated = false;
 		if (defaultValue != null && defaultValue.length() > 0) {
 			logger.debug("Verifying quesiton's default value [" + defaultValue + "]");
-			for (PermissibleValueV2 pVal : pValues) {
+			for (PermissibleValueV2TransferObject pVal : pValues) {
 				if (defaultValue.equalsIgnoreCase(pVal.getValue()))
 					validated = true;
 			}
@@ -867,33 +867,33 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			question.addMessage(msg);
 			return;
 		} 	
-
-		 for (QuestionDescriptor.ValidValue vVal : validValues) {
+		
+		for (QuestionDescriptor.ValidValue vVal : validValues) {
 			 boolean valValidated = false;
 			 boolean meaningValidated = false;
 			 boolean meaningDescValidated = false;
 			 String val = vVal.getValue();
-			 String valMeaning = vVal.getMeaningText();
-			 for (PermissibleValueV2 pVal : pValues) {
-				 String pValStr = pVal.getValue();
-				//TODO: big hack here. val field contains value and vpseqid that we'll
-				 //need at load time. More comment the JDBC dao method for permissible values
-				 String [] valElems = pValStr.split(",");
-				 if (val.equalsIgnoreCase(valElems[0])) {
+			 
+			 String valMeaning = FormLoaderHelper.normalizeSpace(vVal.getMeaningText());
+			 String valDesc = FormLoaderHelper.normalizeSpace(vVal.getDescription());
+			 
+			 for (PermissibleValueV2TransferObject pVal : pValues) {
+				 String pValStr = pVal.getValue().trim();
+				 if (val.equals(pValStr)) {
 					 valValidated = true;
 					 ValueMeaningV2TransferObject valMeaningDto = (ValueMeaningV2TransferObject)pVal.getValueMeaningV2();
-					 String valMeaningLongName = valMeaningDto.getLongName().trim();
-					 String valMeaningDescription = valMeaningDto.getDescription();
-					 if (valMeaning.equalsIgnoreCase(valMeaningLongName)) {
+					 
+					 String valMeaningLongName = FormLoaderHelper.normalizeSpace(valMeaningDto.getLongName());
+					 String valMeaningDescription = FormLoaderHelper.normalizeSpace(valMeaningDto.getDescription());
+					 
+					 if (valMeaning.equals(valMeaningLongName)) {
 						 meaningValidated = true; 
-						 if (valMeaningDescription.equalsIgnoreCase(vVal.getDescription())) {
+						 if (valMeaningDescription.equalsIgnoreCase(valDesc)) {
 							 meaningDescValidated = true;
-							 vVal.setVdPermissibleValueSeqid(valElems[1]);
+							 vVal.setVdPermissibleValueSeqid(pVal.getIdseq());
 						 
 							 //This will be used as the first part of the valid value preferred name
 							 vVal.setPreferredName(String.valueOf(valMeaningDto.getPublicId()));
-							 //vVal.setLongName(valMeaningLongName);
-							 //vVal.setPerferredDefinition(valMeaningDto.getPreferredDefinition());
 						 }
 					 }
 				 }

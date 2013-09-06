@@ -636,11 +636,11 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
            protocolIdSeq = form.getProtocol().getProtoIdseq();
         }
         */
-
+    	String preferredName = generatePreferredName(form.getLongName());
         Object[] obj =
           new Object[] {
             form.getFormType(), form.getContext().getConteIdseq(), form.getAslName(),
-            form.getPreferredName(), form.getPreferredDefinition(),
+            preferredName, form.getPreferredDefinition(),
             //protocolIdSeq, 
             form.getLongName(),
             form.getFormCategory(), form.getModifiedBy(), form.getFormIdseq()

@@ -86,6 +86,39 @@ public class FormLoaderHelper {
 		return error;
 	}
 	
-	
+	/**
+	 * This mimicks the xpath function normalize-space(): whitespace normalized by stripping leading and 
+	 * trailing whitespace and replacing sequences of whitespace characters by a single space.
+	 * 
+	 * @param input
+	 * @return
+	 */
+	public static String normalizeSpace(String input) {
+		if (input == null || input.length() == 0)
+			return input;
+		
+		String in = input.trim();
+		int len = in.length();
+		
+		char[] outArr = new char[len+1];
+		int outIdx = 0;
+		int spaceCnt = 0;
+		for (int i = 0; i < len; i++) {
+			char c = in.charAt(i);
+			
+			if (c != 32) {
+				outArr[outIdx++] = c;
+				spaceCnt = 0; 
+				continue;
+			}
+			
+			spaceCnt++;
+			if (spaceCnt == 1)
+				outArr[outIdx++] = c;
+		}
+		
+		return new String(outArr).trim();
+		
+	}
 
 }
