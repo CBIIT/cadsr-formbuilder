@@ -103,8 +103,6 @@ function displayAdditionalMessage( )
 				p1 =  n + " forms queued in Form Cart for saving."
 				p2 = "Please go to Form Cart to save them."
 			}
-			//$('#marqueeAdditionalMessage').show().delay( 200 );
-			//$('#marqueeAdditionalMessage').html(info);
 			
 			$('#p1Message').show().delay( 200 );
 			$('#p2Message').show().delay( 200 );
@@ -113,8 +111,6 @@ function displayAdditionalMessage( )
 		}
 		else
 		{
-			//$('#marqueeAdditionalMessage').hide().delay( 200 );
-			
 			$('#p1Message').hide().delay( 200 );
 			$('#p2Message').hide().delay( 200 );
 		}
@@ -128,9 +124,6 @@ function displayAdditionalMessage( )
 			p1 = "This form has been queued in Form Cart for saving."
 			p2 = "When done, please go to Form Cart to save it.";
 
-			//$('#marqueeAdditionalMessage').show().delay( 200 );
-			//$('#marqueeAdditionalMessage').html(info);
-			
 			$('#p1Message').show().delay( 200 );
 			$('#p2Message').show().delay( 200 );
 			$('#p1Message').html(p1);
@@ -138,7 +131,7 @@ function displayAdditionalMessage( )
 		}
 		else
 		{
-			//$('#marqueeAdditionalMessage').hide().delay( 200 );
+			$('.marqeeMessages').hide().delay( 200 );
 			
 			$('#p1Message').hide().delay( 200 );
 			$('#p2Message').hide().delay( 200 );			

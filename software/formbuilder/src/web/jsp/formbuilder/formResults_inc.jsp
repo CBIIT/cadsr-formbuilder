@@ -19,7 +19,6 @@ function ToggleSelectAll(e){
 
 <SCRIPT LANGUAGE="JavaScript1.1" SRC="js/checkbox.js"></SCRIPT>
   
-<%@ include file="showMessages.jsp" %>
 
 <!--GF32932 D.An, 20130828  -->
 <input type="hidden" id="myInputCurrentPage" name="myInputCurrentPage" value="Result" />
@@ -53,12 +52,21 @@ function ToggleSelectAll(e){
                  </td> 
                </tr>
         </table>
-
+       	      
 		
 
+<%-- Begin GF29128 fix. -D.An, 20130812 --%>       	     
+
+         <table width="100%" align="center" cellpadding="1" cellspacing="1" border="0">
+               <tr>
+<td align="left" width="50%" nowrap>
+<a id="addForm2Cart" class="noneViewer" style="display:none"  href="javascript:document.forms[0].action=document.forms[0].action+'?method=addFormToCart';document.forms[0].submit()">
+            <html:img src='<%="i/addtoformcart.gif"%>' border="0" alt="Add to Form Cart"/> 
+</a>                  
+</td>
+<td align="left" width="50%" nowrap>
         <bean:define id="pageBean" name="<%=FormConstants.FORM_SEARCH_RESULTS_PAGINATION%>" 
         	type="gov.nih.nci.ncicb.cadsr.common.jsp.bean.PaginationBean"/>
-
         <cde:pagination name="top" textClassName="OraFieldText" selectClassName="LOVField" formIndex="0" pageSize="100" 
                      beanId = "<%=FormConstants.FORM_SEARCH_RESULTS_PAGINATION%>" 
                      actionURL="pageAction.do"
@@ -67,17 +75,11 @@ function ToggleSelectAll(e){
         	     nextOnImage="i/next_on.gif"
         	     nextOffImage="i/next_off.gif"
         	     urlPrefix="<%=urlPrefix%>"
-        	     />  
-<%-- Begin GF29128 fix. -D.An, 20130812 --%>       	     
-<a id="addForm2Cart" class="noneViewer" style="display:none"  href="javascript:document.forms[0].action=document.forms[0].action+'?method=addFormToCart';document.forms[0].submit()">
-            <html:img src='<%="i/addtoformcart.gif"%>' border="0" alt="Add to Form Cart"/> 
-</a> 
+        	     /> 
+</td>
+<%-- GF32932. Remove Save button. end. -D.An, 20130828--%>
 
-<%-- GF32932. Remove Save button. -D.An, 20130828
-<a class="noneViewer" style="display:none" href="javascript:document.forms[0].action=document.forms[0].action+'?method=saveFormInQueue';document.forms[0].submit()">
-            <html:img src='<%="i/save.gif"%>' border="0" alt="Save Forms in the queue"/> 
-</a>
---%>
+
         <table width="100%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
           <tr class="OraTableColumnHeader">
             <logic:notPresent name="<%=FormConstants.IN_PROCESS%>">
