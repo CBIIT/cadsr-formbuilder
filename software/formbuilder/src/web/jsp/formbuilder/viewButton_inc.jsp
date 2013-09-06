@@ -178,10 +178,15 @@ if(confirm(message)) location.href = url;
           </td>         
           
           </tr>
-          
-          <tr width="100%" align="right">
+      </table>
+<table width="80%" align="center" cellpadding="0" cellspacing="1" border="0" >
+<tr align="right">  
+<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td>&nbsp;
 <%--GF29128 remove add form cart for viewer. D.An, 20130815 --%>          
-<td colspan="4" width="200" class="noneViewerAddFormCart" style="display:none" >          
+<td class="noneViewerAddFormCart" style="display:none" >          
 			<html:link action='<%= "/addFormToCartFromView?method=addFormToCart" %>'
  	       		paramId = '<%= "checkedFormIds" %>'
  				paramName="<%=FormConstants.CRF%>" paramProperty="formIdseq"
@@ -189,13 +194,15 @@ if(confirm(message)) location.href = url;
 			Add Form to Cart
 	      </html:link>
 </td>
-<td colspan="12">
+<td>
  	       <html:link action='<%="/formPrinterAction?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GET_FORM_TO_PRINT%>' 
  	       		paramId = "<%=FormConstants.FORM_ID_SEQ%>"
  				paramName="<%=FormConstants.CRF%>" paramProperty="formIdseq"
  				target="_blank">
 		Printer Friendly Version
 	      </html:link>
+</td>
+<td>	      
 	      &nbsp;&nbsp;
              <html:link action='<%="/formExcelDownload.do?"%>' 
                 paramId = "<%=FormConstants.FORM_ID_SEQ%>"
@@ -203,6 +210,8 @@ if(confirm(message)) location.href = url;
                 target="_blank" >
                 Excel Download
               </html:link> 
+</td>
+<td>              
 	      &nbsp;&nbsp;
              <html:link action='<%="/formXMLDownload.do?"%>' 
                 paramId = "<%=FormConstants.FORM_ID_SEQ%>"
@@ -210,13 +219,9 @@ if(confirm(message)) location.href = url;
                 target="_blank" >
                 XML Download
               </html:link> 
-        </td>
-
-
-          
-        </tr> 
-
-        <tr></tr>
-      </table>
+</td>
+ </tr> 
+<tr></tr>
+</table>
 
       

@@ -2,10 +2,10 @@
 var un = $.cookie('FormbuilderUsername');
 var pw;
 var nun = $.cookie('newFormbuilderUsername');
-
+/***
 $(function () {
 ////alert("function()");		
-	$('#marqueeAdditionalMessage').marquee('pointer').mouseover(function () {
+	$('.marqeeMessages').marquee('pointer').mouseover(function () {
         $(this).trigger('stop');
     }).mouseout(function () {
         $(this).trigger('start');
@@ -18,7 +18,8 @@ $(function () {
     }).mouseup(function () {
         $(this).data('drag', false);
     });
-});    
+});   
+***/ 
 //-->
 
 
@@ -85,7 +86,7 @@ function displayAdditionalMessage( )
 	var p2 = "No form is added in the Form Cart.";
 	if( currentPage == "Result" )
 	{	
-		var n = myInfo.substring(0,1);
+		var n = myInfo.replace("/","");
 		if( n != "0" )
 		{
 			if( n == "1" )
@@ -122,10 +123,10 @@ function displayAdditionalMessage( )
 	{
 		if( formHasBeenAdded == "Y/" )
 		{		
-			info = "This form has bee added in Form Cart for saving. Please go to Form Cart to save it.";
+			info = "This form has been queued in Form Cart for saving. When done, please go to Form Cart to save it.";
 			
-			p1 = "This form has bee added in Form Cart for saving."
-			p2 = "Please go to Form Cart to save it.";
+			p1 = "This form has been queued in Form Cart for saving."
+			p2 = "When done, please go to Form Cart to save it.";
 
 			//$('#marqueeAdditionalMessage').show().delay( 200 );
 			//$('#marqueeAdditionalMessage').html(info);

@@ -19,9 +19,9 @@ System.out.println("additionalMessages.jsp :  " + formCartInfo);
 
 <!-- <p id="marqueeAdditionalMessage" style="display:none">&nbsp</p>-->
 
-<marquee width="500" height="25" style="font-family:arial;color:green;font-size:16px;" scrollamount="1" direction="up" behavior="scroll">
-<p id="p1Message">&nbsp</p>
-<p id="p2Message">&nbsp</p>
+<marquee width="600" height="30" style="font-family:arial;color:green;font-size:18px;" scrollamount="1" direction="up" behavior="scroll">
+<p class="marqeeMessages" id="p1Message">&nbsp</p>
+<p class="marqeeMessages" id="p2Message">&nbsp</p>
 </marquee>
 
 <script type="text/javascript">
@@ -30,7 +30,6 @@ var myInputun = $("#myInputUserName").val();
 if( myInputun != "viewer/" )  //None Viewer
 {
 	displayAdditionalMessage();
-	$("#originalMessage").hide();
 }	
 
 </script>

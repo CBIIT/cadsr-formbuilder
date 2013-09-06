@@ -375,18 +375,15 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
         
     DynaActionForm hrefCRFForm = (DynaActionForm) form;
     Form crf2 = null;
-    String showCached = (String)request.getAttribute("showCached");
+////    String showCached = (String)request.getAttribute("showCached");
 
 	int formsInQueue = 0;
- 	  String sFormIdSeq = (String)request.getParameter(FormConstants.FORM_ID_SEQ);       
-	    if(showCached!=null&&showCached.equalsIgnoreCase(CaDSRConstants.YES))
+ 	  String sFormIdSeq = (String)request.getParameter(FormConstants.FORM_ID_SEQ);  
+ 	  if( sFormIdSeq == null || sFormIdSeq.length() < 8 )
+	////    if(showCached!=null&&showCached.equalsIgnoreCase(CaDSRConstants.YES))
 	    {
 	        crf2 = (Form) getSessionObject(request, CRF);
 	        sFormIdSeq = crf2.getIdseq();
-	    }
-	    else if (hrefCRFForm != null)
-	    {
-	    	  sFormIdSeq = (String) hrefCRFForm.get(FORM_ID_SEQ);
 	    }
 	    
     try 
@@ -663,8 +660,7 @@ System.out.println( "Forms Queued in Cart : " + request.getSession().getAttribut
 	    Form crf2 = null;
 	    String showCached = (String)request.getAttribute("showCached");
 		int formsInQueue = 0;
-     	String[] sFormIdSeqA = (String[]) dynaBean2.get("checkedFormIds");
-     	String sFormIdSeq = sFormIdSeqA[0];
+		String[] formIds = null;
      	
 		try 
 		{
@@ -682,7 +678,8 @@ System.out.println( "Forms Queued in Cart : " + request.getSession().getAttribut
 				CDECartOCImplExtension sessionCart = (CDECartOCImplExtension) this
 						.getSessionObject(request, CaDSRConstants.FORMS_CART_V2);
 
-				String[] formIds = (String[]) dynaBean.get("checkedFormIds");
+				////String[] formIds = (String[]) dynaBean.get("checkedFormIds");
+				formIds = (String[]) dynaBean.get("checkedFormIds");
 								
 				if (formIds != null) {
 					for (String formId : formIds) {
@@ -717,11 +714,11 @@ System.out.println( "Forms Queued in Cart : " + request.getSession().getAttribut
 ////Begin added for monitor if the current form has been added in Form Cart for saving.  -D.An, 20130830. 
 		formsInQueue = 0;
 	    String userMame = (String) request.getSession().getAttribute("myUsername");
-	    if( userMame != null && userMame.equalsIgnoreCase("viewer") != true )
+	    if( userMame != null && userMame.equalsIgnoreCase("viewer") != true && formIds != null )
 	    {
 System.out.println("userName -- " + userMame );	
 			  ////request.getSession().setAttribute("myFormAdded", "n");
-System.out.println(" " + sFormIdSeq + " not found " );	
+System.out.println(" " + formIds + " not found " );	
 		
 		   CDECartOCImplExtension sessionCartV2 = (CDECartOCImplExtension) this
 					.getSessionObject(request, CaDSRConstants.FORMS_CART_V2);
@@ -734,11 +731,11 @@ System.out.println(" " + sFormIdSeq + " not found " );
 		   {
 			   for ( Object version2Form : itemsAdded ) 
 			   {
-				   if( ((FormV2TransferObject)version2Form).getFormIdseq().equals(sFormIdSeq) ) 
+				   if( ((FormV2TransferObject)version2Form).getFormIdseq().equals(formIds) ) 
 				   {
 					   formsInQueue = 1;
 					  //// request.getSession().setAttribute("myFormAdded", "Y");
-System.out.println("sFormIdSeq found !!!!! -- " + sFormIdSeq );	
+System.out.println("sFormIdSeq found !!!!! -- " + formIds );	
 						break;
 				   }
 				}

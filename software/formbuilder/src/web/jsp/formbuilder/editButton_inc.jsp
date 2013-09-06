@@ -14,8 +14,6 @@ if(confirm(message)) location.href = url;
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
          <td>
             <a href="javascript:submitFormToSave('<%=NavigationConstants.SAVE_FORM%>')">
                 <html:img src='<%=urlPrefix+"i/save.gif"%>' border="0" alt="Save"/>
@@ -59,14 +57,8 @@ if(confirm(message)) location.href = url;
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
 <%--GF29128 remove add form cart for viewer. D.An, 20130815 --%>          
-<td width="300" class="noneViewerAddFormCart" style="display:none" >          
+<td class="noneViewerAddFormCart" style="display:none" >          
 				<html:link action='<%= "/addFormToCartFromEdit?method=addFormToCart" %>'
  	       		paramId = '<%= "checkedFormIds" %>'
  				paramName="<%=FormConstants.CRF%>" paramProperty="formIdseq"
