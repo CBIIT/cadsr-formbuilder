@@ -10,8 +10,10 @@
         </layout>
     </appender>
 
-    <appender name="default.file" class="org.apache.log4j.FileAppender">
+    <appender name="default.file" class="org.apache.log4j.RollingFileAppender">
         <param name="file" value="./log/formloader.log" />
+        <param name="MaxFileSize" value="5MB" />
+        <param name="MaxBackupIndex" value="20"/>
         <param name="append" value="true" />
         <param name="threshold" value="debug" />
         <layout class="org.apache.log4j.PatternLayout">
