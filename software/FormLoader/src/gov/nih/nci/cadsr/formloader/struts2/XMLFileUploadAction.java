@@ -37,7 +37,6 @@ ServletRequestAware, ValidationAware{
     private String fileName;
 	private String contentType;
 	 
-    private FormCollection formCollection;
     private HttpServletRequest servletRequest;
     
     private List<FormDescriptor> parsedFormsList = null;
@@ -86,12 +85,6 @@ ServletRequestAware, ValidationAware{
 	public String getContentType() {
 		return contentType;
 	}
-
-
-	public FormCollection getFormCollection() {
-		return formCollection;
-	}
-
 
     
     public List<FormDescriptor> getParsedFormsList() {
@@ -167,7 +160,6 @@ ServletRequestAware, ValidationAware{
     }
 
 	public void setUpload(File xmlFile) {
-		formCollection = new FormCollection();
 		this.file = xmlFile;
 	}
 

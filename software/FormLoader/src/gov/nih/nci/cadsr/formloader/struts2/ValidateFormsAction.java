@@ -8,68 +8,92 @@
 package gov.nih.nci.cadsr.formloader.struts2;
 
 
-import gov.nih.nci.cadsr.formloader.object.FormObj;
-import gov.nih.nci.cadsr.formloader.service.LoadingFormMockupService;
-import gov.nih.nci.cadsr.formloader.service.MiscMockupService;
-import gov.nih.nci.cadsr.formloader.service.ValidationMockupService;
+import gov.nih.nci.cadsr.formloader.domain.FormCollection;
+import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
+import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
+import gov.nih.nci.cadsr.formloader.service.impl.ContentValidationServiceImpl;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.struts2.interceptor.ServletRequestAware;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.SessionAware;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+
+
 public class ValidateFormsAction extends ActionSupport implements SessionAware{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Map<Integer, String> checkboxes;
-    private List<FormObj> selectedFormsList = new ArrayList<FormObj>();
-    
+    //private List<FormObj> selectedFormsList = new ArrayList<FormObj>();
+    private List<FormDescriptor> selectedFormsList = new ArrayList<FormDescriptor>();
+    private HttpServletRequest servletRequest;
+	ApplicationContext applicationContext = null;
     
     public String execute() {
     	System.out.println("in ValidateFormsAction.execute()");
-//        try {
-//        	List<FormObj> parsedFormsList = (List<FormObj>) servletRequest.getSession().getValue("parsedFormsList");
-//        	
-//        	if (checkboxes != null && checkboxes.size()>0){
-//				
-//				for (int i=0; i<checkboxes.size();i++) {
-//					Integer key = new Integer(i);
-//					if (checkboxes.containsKey(key)) {
-//						String checkboxValue = checkboxes.get(key).toString();
-//						if (checkboxValue.equals("true")) {
-//							FormObj selectedForm = parsedFormsList.get(i);
-//							selectedForm = ValidationMockupService.getInstance().validateForm(selectedForm);
-//							
-//							selectedFormsList.add(selectedForm);
-//						}
-//					}
-//				}
-//				
-//			}
-//        	
-//        	servletRequest.getSession().putValue("selectedFormsList", selectedFormsList);
-//        	System.out.println(selectedFormsList.size()+" Forms selected for validation");
-//        	
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            System.err.println(e.getMessage());
-//            addActionError(e.getMessage());
-// 
-//            return INPUT;
-//        }
+    	servletRequest = ServletActionContext.getRequest();
+        try {
+        	List<FormDescriptor> parsedFormsList = (List<FormDescriptor>) servletRequest.getSession().getAttribute("parsedFormsList");
+        	
+        	if (checkboxes != null && checkboxes.size()>0){
+				
+				for (int i=0; i<checkboxes.size();i++) {
+					Integer key = new Integer(i);
+					if (checkboxes.containsKey(key)) {
+						String checkboxValue = checkboxes.get(key).toString();
+						if (checkboxValue.equals("true")) {
+							FormDescriptor selectedForm = parsedFormsList.get(i);
+							selectedForm.setSelected(true);
+							selectedFormsList.add(selectedForm);
+						}
+					}
+				}
+				
+			}
+        	servletRequest.getSession().putValue("selectedFormsList", selectedFormsList);
+        	System.out.println(selectedFormsList.size()+" Forms selected for validation");
+        	
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getMessage());
+            addActionError(e.getMessage());
+ 
+            return INPUT;
+        }
         return SUCCESS;
     }
- 
     
-    public List<FormObj> getSelectedFormsList() {
+    private void validateFormCollection()
+    {
+		applicationContext =
+				WebApplicationContextUtils.getRequiredWebApplicationContext(
+	                                    ServletActionContext.getServletContext()
+	                        );
+		ContentValidationServiceImpl xmlContentValidator = (ContentValidationServiceImpl)this.applicationContext.getBean("contentValidationService");
+		try {
+				FormCollection aColl = new FormCollection(selectedFormsList);
+				xmlContentValidator.validateXmlContent(aColl);
+		} catch (FormLoaderServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    public List<FormDescriptor> getSelectedFormsList() {
 		return selectedFormsList;
 	}
 
-	public void setSelectedFormsList(List<FormObj> parsedFormsList) {
+	public void setSelectedFormsList(List<FormDescriptor> parsedFormsList) {
 		this.selectedFormsList = parsedFormsList;
 	}
 

@@ -84,14 +84,11 @@
 
 		</action>
 		
-<!-- 		<action name="validateForms" 
+ 		<action name="validateForms" 
 			class="gov.nih.nci.cadsr.formloader.struts2.ValidateFormsAction">
 			<interceptor-ref name="loggingStack"></interceptor-ref>
 				<result name="input" type="tiles">/upload.parse.tiles</result>
     			<result name="success" type="tiles">/upload.validate.tiles</result>
-		</action>-->
-		<action name="upload-validate-form">
-			<result type="tiles">/upload.parse.tiles</result>
 		</action>
 		
 <!-- 		<action name="loadForms" 
