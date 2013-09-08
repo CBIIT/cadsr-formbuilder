@@ -64,7 +64,7 @@ function ToggleSelectAll(e){
             <html:img src='<%="i/addtoformcart.gif"%>' border="0" alt="Add to Form Cart"/> 
 </a>                  
 </td>
-<td align="left" width="50%" nowrap>
+<td align="right" width="50%" nowrap>
         <bean:define id="pageBean" name="<%=FormConstants.FORM_SEARCH_RESULTS_PAGINATION%>" 
         	type="gov.nih.nci.ncicb.cadsr.common.jsp.bean.PaginationBean"/>
         <cde:pagination name="top" textClassName="OraFieldText" selectClassName="LOVField" formIndex="0" pageSize="100" 
@@ -78,7 +78,8 @@ function ToggleSelectAll(e){
         	     /> 
 </td>
 <%-- GF32932. Remove Save button. end. -D.An, 20130828--%>
-
+</tr>
+</table>
 
         <table width="100%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
           <tr class="OraTableColumnHeader">
