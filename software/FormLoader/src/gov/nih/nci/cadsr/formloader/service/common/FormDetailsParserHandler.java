@@ -3,7 +3,7 @@ package gov.nih.nci.cadsr.formloader.service.common;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
-import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.RefdocTransferObjectExt;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -27,13 +27,13 @@ public class FormDetailsParserHandler extends ParserHandler {
 	int startFormIdx;
 	int currFormIdx;
 	
-	List<ReferenceDocumentTransferObject> refdocs = new ArrayList<ReferenceDocumentTransferObject>();
+	List<RefdocTransferObjectExt> refdocs = new ArrayList<RefdocTransferObjectExt>();
 	List<DefinitionTransferObject> definitions = new ArrayList<DefinitionTransferObject>();
 	List<String> protocolIds = new ArrayList<String>();
 	List<DesignationTransferObjectExt> designations = new ArrayList<DesignationTransferObjectExt>();
 	
 	DesignationTransferObjectExt currDesignation;
-	ReferenceDocumentTransferObject currRefDoc;
+	RefdocTransferObjectExt currRefDoc;
 	DefinitionTransferObject currDefinition;
 	
 	String currClassName;
@@ -65,28 +65,9 @@ public class FormDetailsParserHandler extends ParserHandler {
 		
 		
 		if (this.startFormIdx == this.currFormIdx) {
+				
 
-			if (localName.equals(StaXParser.REFERENCE_DOCUMENT)) {
-				//this.currRefDoc = new ReferenceDocumentTransferObject();
-				/*
-				 * ReferenceDocument ref = new ReferenceDocumentTransferObject();
-
-  ref.setDocName(docName);
-  Context context = new ContextTransferObject();
-  context.setConteIdseq(contextIdSeq);
-  ref.setContext(context);
- 
-  ref.setUrl(url);
-  ref.setDocText(docText);
-  ref.setDocType(docType);
-  List attachments = new ArrayList();
-  ref.setAttachments(attachments);
-  
-  xml: doctext, type, URL, context (should get the name only)
-				 * 
-				 */
-
-			}else if (localName.equals(StaXParser.DESIGNATION)) {
+			if (localName.equals(StaXParser.DESIGNATION)) {
 				if (nodeQueue.peek().equals(StaXParser.FORM)) {
 					this.currDesignation = new DesignationTransferObjectExt();
 					currClassName = "DesignationTransferObject";
@@ -100,19 +81,33 @@ public class FormDetailsParserHandler extends ParserHandler {
 				
 			} else if (localName.equals(StaXParser.REFERENCE_DOCUMENT)) {
 				if (nodeQueue.peek().equals(StaXParser.FORM)) {
-					this.currRefDoc = new ReferenceDocumentTransferObject();
-					currClassName = "ReferenceDocumentTransferObject";
+					this.currRefDoc = new RefdocTransferObjectExt();
+					currClassName = "RefdocTransferObjectExt";
 				}
-			}  else if (localName.equals(StaXParser.NAME) && nodeQueue.peek().equals(StaXParser.DESIGNATION)) {
-				this.methodName = "setName";
-			} else if (localName.equals(StaXParser.TYPE) && nodeQueue.peek().equals(StaXParser.DESIGNATION)) {
-				this.methodName = "setType";
+			}  else if (localName.equals(StaXParser.NAME)) {
+				if (nodeQueue.peek().equals(StaXParser.DESIGNATION))
+					this.methodName = "setName";
+				else if (nodeQueue.peek().equals(StaXParser.REFERENCE_DOCUMENT)) 
+					this.methodName = "setDocName";
+						
+			} else if (localName.equals(StaXParser.TYPE)) {
+				if (nodeQueue.peek().equals(StaXParser.DESIGNATION))
+						this.methodName = "setType";
+				else if (nodeQueue.peek().equals(StaXParser.REFERENCE_DOCUMENT)) 
+					this.methodName = "setDocType";
+					
 			} else if (localName.equals(StaXParser.LANGUAGE_NAME) && nodeQueue.peek().equals(StaXParser.DESIGNATION)) {
 				this.methodName = "setLanguage";
-			} else if (localName.equals(StaXParser.CONTEXT) && nodeQueue.peek().equals(StaXParser.DESIGNATION)) {
-				this.methodName = "setContextName";
+			} else if (localName.equals(StaXParser.CONTEXT)) {
+				if (nodeQueue.peek().equals(StaXParser.DESIGNATION) || 
+						nodeQueue.peek().equals(StaXParser.REFERENCE_DOCUMENT))
+					this.methodName = "setContextName";
+			} else if (localName.equals(StaXParser.URL) && nodeQueue.peek().equals(StaXParser.REFERENCE_DOCUMENT)) {
+				this.methodName = "setUrl";
+			} else if (localName.equals(StaXParser.DOCTEXT) && nodeQueue.peek().equals(StaXParser.REFERENCE_DOCUMENT)) {
+				this.methodName = "setDocText";
 			}
-
+				
 		}
 		
 		//logger.debug("Pushing to node queue: " + localName);
@@ -141,9 +136,16 @@ public class FormDetailsParserHandler extends ParserHandler {
 					this.designations.add(this.currDesignation);
 					this.currClassName = null;
 				}
-			} else if (localName.equals(StaXParser.DEFINITION) && nodeQueue.peek().equals(StaXParser.FORM)) {
-				this.definitions.add(this.currDefinition);
-				this.currClassName = null;
+			} else if (localName.equals(StaXParser.DEFINITION)) {
+				if ( this.currClassName != null && this.currClassName.equals("DefinitionTransferObject")) {
+					this.definitions.add(this.currDefinition);
+					this.currClassName = null;
+				}
+			} else if (localName.equals(StaXParser.REFERENCE_DOCUMENT)) {
+				if ( this.currClassName != null && this.currClassName.equals("RefdocTransferObjectExt")) {
+					this.refdocs.add(this.currRefDoc);
+					this.currClassName = null;
+				}				
 			}
 		}
 		
@@ -172,10 +174,14 @@ public class FormDetailsParserHandler extends ParserHandler {
 			if (peek.equals(StaXParser.PROTOCOL_ID)) 
 				this.protocolIds.add(xmlreader.getText());
 			else if (peek.equals(StaXParser.NAME) || peek.equals(StaXParser.TYPE) 
-					|| peek.equals(StaXParser.LANGUAGE_NAME) || peek.equals(StaXParser.CONTEXT)) {
+					|| peek.equals(StaXParser.LANGUAGE_NAME) || peek.equals(StaXParser.CONTEXT)
+					||  peek.equals(StaXParser.URL) || peek.equals(StaXParser.DOCTEXT)) {
 				if (this.currClassName != null && this.currClassName.equals("DesignationTransferObject") &&
 						this.methodName != null) {
 					setPropertyForObject(this.currDesignation, methodName, xmlreader.getText());
+				} else if (this.currClassName != null && this.currClassName.equals("RefdocTransferObjectExt") &&
+						this.methodName != null) {
+					setPropertyForObject(this.currRefDoc, methodName, xmlreader.getText());
 				}
 			}
 		}
@@ -183,12 +189,12 @@ public class FormDetailsParserHandler extends ParserHandler {
 	}
 
 
-	public List<ReferenceDocumentTransferObject> getRefdocs() {
+	public List<RefdocTransferObjectExt> getRefdocs() {
 		return refdocs;
 	}
 
 
-	public void setRefdocs(List<ReferenceDocumentTransferObject> refdocs) {
+	public void setRefdocs(List<RefdocTransferObjectExt> refdocs) {
 		this.refdocs = refdocs;
 	}
 
