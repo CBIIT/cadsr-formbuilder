@@ -9,6 +9,7 @@ import gov.nih.nci.cadsr.formloader.domain.QuestionDescriptor;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
+import gov.nih.nci.ncicb.cadsr.common.dto.RefdocTransferObjectExt;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -86,6 +87,17 @@ public class StaXParserTest {
 		assertTrue(desig.getLanguage().equals("ENGLISH"));
 		assertTrue(desig.getContextName().equals("caBIG"));
 		
+		List<RefdocTransferObjectExt> refdocs = parser.getRefdocs();
+		assertNotNull(refdocs);
+		assertTrue("Expecting 2 but get " + refdocs.size(), refdocs.size() == 2);
+		
+		RefdocTransferObjectExt refdoc = refdocs.get(1);
+		assertTrue("Image for the form".equals(refdoc.getDocName()));
+		assertTrue("IMAGE_FILE".equals(refdoc.getDocType()));
+		assertTrue("SY testing another refdoc".equals(refdoc.getDocText()));
+		assertTrue(refdoc.getUrl() == null || refdoc.getUrl().length() == 0);
+		
+		assertTrue(refdocs.get(0).getUrl().startsWith("https://"));
 	}
 	
 	@Test

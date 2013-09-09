@@ -158,6 +158,29 @@ public void testUserHasRight() {
 			fail("Got exception: " + fle.getMessage());
 		}
 	}
+	
+	@Test
+	public void testLoadUpdateFormWithRefdocs() {
+		/*
+		 * To run this case, first run testLoadNewForm(), go to FB to download
+		 * the newly loaded form xml and use it as input here
+		 * 
+		 * Remember to edit the xml to have <forms>
+		 */
+		this.prepareCollectionToLoad(".\\.\\test\\data\\loading", "load-with-refdocs.xml");
+		try {
+			FormDescriptor form = aColl.getForms().get(0);
+			assertTrue(form.getLoadType() == FormDescriptor.LOAD_TYPE_UPDATE_FORM);
+			form.setSelected(true);
+			aColl = this.loadService.loadForms(aColl);
+			form = aColl.getForms().get(0);
+			assertTrue(form.getLoadStatus() == FormDescriptor.STATUS_LOADED);
+			String status = StatusFormatter.getStatusInXml(aColl);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\loading\\load-with-refdocs.status.xml");
+		} catch (FormLoaderServiceException fle) {
+			fail("Got exception: " + fle.getMessage());
+		}
+	}
 
 	protected void prepareCollectionToLoad(String filepath, String testfile) {
 		assertNotNull(loadService);
