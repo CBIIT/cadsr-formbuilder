@@ -364,9 +364,6 @@
             <xsl:element name="longName">
                 <xsl:value-of select="long-name"/>
             </xsl:element>
-            <xsl:element name="shortName">
-                <xsl:value-of select="preferred-name"/>
-            </xsl:element>
             <!-- Added in formCartV2 filled in by Form Builder 4.0.4 -->
             <xsl:element name="publicID">
                 <xsl:value-of select="CDEId"/>
@@ -374,13 +371,6 @@
             <xsl:element name="version">
                 <xsl:value-of select="version"/>
             </xsl:element>
-            <xsl:element name="workflowStatusName">
-                <xsl:value-of select="asl-name"/>
-            </xsl:element>
-            <xsl:element name="preferredDefinition">
-                <xsl:value-of select="normalize-space(./preferred-definition)"/>
-            </xsl:element>
-            <xsl:call-template name="Designation"/>
             <!-- Added in formCartV2  -->
             <xsl:apply-templates select="value-domain"/>
             <xsl:choose>
@@ -438,25 +428,12 @@
             <xsl:element name="longName">
                 <xsl:value-of select="long-name"/>
             </xsl:element>
-            <xsl:element name="shortName"/>
             <!-- New in formCartV2  -->
             <xsl:element name="publicID">
                 <xsl:value-of select="@public-id"/>
             </xsl:element>
             <xsl:element name="version">
                 <xsl:value-of select="version"/>
-            </xsl:element>
-            <xsl:element name="type">
-                <!-- New in formCartV2  - not a database field - derived from the presence of permissible values -->
-                <xsl:choose>
-                    <xsl:when test="ancestor::questions/valid-values">Enumerated</xsl:when>
-                    <xsl:otherwise>NonEnumerated</xsl:otherwise>
-                </xsl:choose>
-            </xsl:element>
-            <xsl:element name="context">TEST</xsl:element>
-            <!-- New in formCartV2 -->
-            <xsl:element name="workflowStatusName">
-                <xsl:value-of select="asl-name"/>
             </xsl:element>
             <xsl:element name="datatypeName">
                 <xsl:value-of select="datatype"/>
@@ -482,7 +459,6 @@
             <xsl:element name="UOMName">
                 <xsl:value-of select="unit-of-measure"/>
             </xsl:element>
-            <xsl:apply-templates select="concept-derivation-rule/component-concepts"/>
             <!-- new in formCartV2 - complex element -->
             <xsl:apply-templates select="permissible-value-v2"/>
             <!-- new in formCartV2 - complex element -->
@@ -596,17 +572,6 @@
 
     <xsl:template match="designations" name="Designations">
         <xsl:element name="designation">
-            <xsl:element name="createdBy"/>
-            <!-- Added in formCartV2  -->
-            <xsl:element name="dateCreated">
-                <!-- Added in formCartV2  -->
-                <xsl:value-of select="$FILLDATE"/>
-            </xsl:element>
-            <xsl:element name="dateModified">
-                <!-- Added in formCartV2  -->
-                <xsl:value-of select="$FILLDATE"/>
-            </xsl:element>
-            <xsl:element name="modifiedBy"/>
             <!-- Added in formCartV2 -->
             <xsl:element name="languageName">
                 <xsl:value-of select="language"/>
@@ -740,7 +705,7 @@
         </xsl:element>
     </xsl:template>
 
-    <xsl:template match="referece-docs">
+    <xsl:template match="referece-docs[contains(doc-type, 'Preferred Question Text') or contains(doc-type,'Alternate Question Text')]">
         <xsl:element name="referenceDocument">
             <xsl:element name="name">
                 <xsl:value-of select="doc-name"/>
@@ -755,7 +720,6 @@
             <xsl:element name="URL">
                 <xsl:value-of select="url"/>
             </xsl:element>
-            <xsl:apply-templates select="attachments"/>
         </xsl:element>
     </xsl:template>
 
@@ -779,14 +743,6 @@
     <xsl:template name="Designation">
         <!-- added v20 to support generating dataElementDerivation/componentDataElement details -->
         <xsl:element name="designation">
-            <xsl:element name="createdBy"/>
-            <xsl:element name="dateCreated">
-                <xsl:value-of select="$FILLDATE"/>
-            </xsl:element>
-            <xsl:element name="dateModified">
-                <xsl:value-of select="$FILLDATE"/>
-            </xsl:element>
-            <xsl:element name="modifiedBy"/>
             <xsl:element name="languageName">ENGLISH</xsl:element>
             <xsl:element name="name"/>
             <xsl:element name="type">ABBREVIATION</xsl:element>
@@ -868,14 +824,6 @@
     <xsl:template match="definitions" name="Definition">
         <!-- Added v20 to support generating multiple definitions for forms and to support valueMeaning definitions -->
         <xsl:element name="definition">
-            <xsl:element name="createdBy"/>
-            <xsl:element name="dateCreated">
-                <xsl:value-of select="$FILLDATE"/>
-            </xsl:element>
-            <xsl:element name="dateModified">
-                <xsl:value-of select="$FILLDATE"/>
-            </xsl:element>
-            <xsl:element name="modifiedBy"/>
             <xsl:element name="languageName">
                 <!-- modified in V22 -->
                 <xsl:choose>
