@@ -3,7 +3,7 @@ package gov.nih.nci.cadsr.formloader.service.common;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
-import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.RefdocTransferObjectExt;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -70,6 +70,8 @@ public class StaXParser {
 	protected static final String DESIGNATION = "designation";
 	protected static final String NAME = "name";
 	protected static final String LANGUAGE_NAME = "languageName";
+	protected static final String URL = "URL";
+	protected static final String DOCTEXT = "doctext";
 	
 	
 	//Question 
@@ -91,7 +93,7 @@ public class StaXParser {
 	
 	
 	
-	List<ReferenceDocumentTransferObject> refdocs;
+	List<RefdocTransferObjectExt> refdocs;
 	List<DefinitionTransferObject> definitions;
 	List<String> protocolIds;
 	List<DesignationTransferObjectExt> designations;
@@ -235,11 +237,11 @@ public class StaXParser {
 
 	}
 
-	public List<ReferenceDocumentTransferObject> getRefdocs() {
+	public List<RefdocTransferObjectExt> getRefdocs() {
 		return refdocs;
 	}
 
-	public void setRefdocs(List<ReferenceDocumentTransferObject> refdocs) {
+	public void setRefdocs(List<RefdocTransferObjectExt> refdocs) {
 		this.refdocs = refdocs;
 	}
 
