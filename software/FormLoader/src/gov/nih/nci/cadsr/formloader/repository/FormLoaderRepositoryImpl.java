@@ -457,7 +457,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			if (formdto == null) 
 				return null;
 
-			formSeqid = formV2Dao.createNewFormVersion(formdto.getFormIdseq(), formdto.getVersion(), 
+			formSeqid = formV2Dao.createNewFormVersionShellOnly(formdto.getFormIdseq(), formdto.getVersion(), 
 					"New version form by Form Loader", formdto.getCreatedBy());		
 			
 			logger.debug("Created new version for form. Seqid: " + formSeqid);
