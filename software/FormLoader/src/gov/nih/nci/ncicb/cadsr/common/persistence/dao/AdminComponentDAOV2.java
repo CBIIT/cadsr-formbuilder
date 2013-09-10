@@ -107,7 +107,8 @@ public interface AdminComponentDAOV2 {
    *
    * @return <b>Collection</b> Collection of ReferenceDocumentTransferObjects
    */
-  public List getAllReferenceDocuments(int publicId, float version);
+  public List getAllReferenceDocumentsForDE(int publicId, float version);
+  
   //public List getReferenceDocumentsByCdePublicIds(List<String> cdePublicIds);
   public HashMap<String, List<ReferenceDocumentTransferObject>> getReferenceDocumentsByCdePublicIds(List<String> cdePublicIds);
 

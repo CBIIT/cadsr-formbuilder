@@ -162,7 +162,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		}
 		
 		List<ReferenceDocumentTransferObject> deRefDocs = 
-				questionV2Dao.getAllReferenceDocuments(
+				questionV2Dao.getAllReferenceDocumentsForDE(
 						Integer.parseInt(cdePublicId), Float.parseFloat(cdeVersion));
 		logger.debug("getReferenceDocsForQuestionCde(): Dao returns " + deRefDocs.size() + " CDE reference docs.");
 		
@@ -465,7 +465,21 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			formdto.setFormIdseq(formSeqid);
 			form.setFormSeqId(formSeqid);
 
-			updateForm(form, loggedinUser, xmlPathName, formIdx);
+			int res = formV2Dao.updateFormComponent(formdto);
+			if (res != 1) {
+				logger.error("Error!! Failed to update form");
+				return null;
+			}
+			
+			createFormInstructions(form, formdto);
+			
+			//designations, refdocs, definitions and contact communications
+			processFormdetails(form, xmlPathName, formIdx);
+			
+			//Onto modules and questions
+			updateModulesInForm(form, formdto);
+			
+			return form.getFormSeqId();
 			
 		} catch (DMLException dbe) {
 			logger.error(dbe.getMessage());
@@ -489,11 +503,6 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			return null;
 		}
 		
-		//form.setFormSeqId(formdto.getFormIdseq());
-		
-		//TODO: check with Denise if this is right
-		//On Form Builder, you could only modify what's already in the header or footer
-		//And there'll only be one record associated with the form
 		createFormInstructions(form, formdto);
 		
 		//designations, refdocs, definitions and contact communications
@@ -643,61 +652,50 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		
 		String formSeqid = form.getFormSeqId();
 		String contextSeqId = this.getContextSeqIdByName(form.getContext());
+		List existings = null;
 		
-		if (form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW)) {
-			//create ref docs
-			int idx = 0;
-			for (RefdocTransferObjectExt refdoc : refdocs) {
-				String contextName = refdoc.getContextName();
-				String refdocContextSeqid = this.getContextSeqIdByName(contextName);
-				if (refdocContextSeqid == null || refdocContextSeqid.length() == 0) {
-					refdocContextSeqid = contextSeqId;
-					contextName = form.getContext();
-				}
-				
-				ContextTransferObject con = new ContextTransferObject(contextName);
-				con.setConteIdseq(refdocContextSeqid);
-				refdoc.setContext(con);
-				refdoc.setDisplayOrder(idx++);
-				
-				if (!this.refdocTypeExists(refdoc.getDocType())) {
-					form.addMessage("Refdoc type [" + refdoc.getDocType() + "] is invalid. Use default type [REFERENCE]");
-					refdoc.setDocType(DEFAULT_REFDOC_TYPE);
-				}
-				
-				
-				this.referenceDocV2Dao.createReferenceDoc(refdoc, form.getFormSeqId());
+		if (!form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW)) {
+			//2nd arg is not used in the actual query.
+			existings = this.formV2Dao.getAllReferenceDocuments(form.getFormSeqId(), null);
+		}
+		
+		//create ref docs
+		int idx = 0;
+		for (RefdocTransferObjectExt refdoc : refdocs) {
+			String contextName = refdoc.getContextName();
+			String refdocContextSeqid = this.getContextSeqIdByName(contextName);
+			if (refdocContextSeqid == null || refdocContextSeqid.length() == 0) {
+				refdocContextSeqid = contextSeqId;
+				contextName = form.getContext();
 			}
-		} else {
-			//need to first compare with existing refdoc for the form
-			List existings = this.formV2Dao.getAllReferenceDocuments(Integer.parseInt(form.getPublicId()), 
-					Float.parseFloat(form.getVersion()));
-			
-			int idx = 0;
-			for (RefdocTransferObjectExt refdoc : refdocs) {
-				String contextName = refdoc.getContextName();
-				String refdocContextSeqid = this.getContextSeqIdByName(contextName);
-				if (refdocContextSeqid == null || refdocContextSeqid.length() == 0) {
-					refdocContextSeqid = contextSeqId;
-					contextName = form.getContext();
-				}
-				
-				ContextTransferObject con = new ContextTransferObject(contextName);
-				con.setConteIdseq(refdocContextSeqid);
-				refdoc.setContext(con);
-				refdoc.setDisplayOrder(idx++);
-				if (isExistingRefdoc(refdoc, existings)) {
-					referenceDocV2Dao.updateReferenceDocument(refdoc);
-					
-				} else {
-					this.referenceDocV2Dao.createReferenceDoc(refdoc, form.getFormSeqId());
-				}
-				
-				removeExtraRefdocsIfAny(existings);
+
+			ContextTransferObject con = new ContextTransferObject(contextName);
+			con.setConteIdseq(refdocContextSeqid);
+			refdoc.setContext(con);
+			refdoc.setDisplayOrder(idx++);
+
+			if (!this.refdocTypeExists(refdoc.getDocType())) {
+				form.addMessage("Refdoc type [" + refdoc.getDocType() + "] is invalid. Use default type [REFERENCE]");
+				refdoc.setDocType(DEFAULT_REFDOC_TYPE);
+			}
+
+			if (existings != null && isExistingRefdoc(refdoc, existings)) {
+				referenceDocV2Dao.updateReferenceDocument(refdoc);
+			} else {
+				this.referenceDocV2Dao.createReferenceDoc(refdoc, formSeqid);
 			}
 		}
+		
+		removeExtraRefdocsIfAny(existings);
+		
 	}
 	
+	/**
+	 * Compare a refdoc against a list from database, based on name and type.
+	 * @param currRefdoc
+	 * @param refdocs
+	 * @return
+	 */
 	protected boolean isExistingRefdoc(ReferenceDocumentTransferObject currRefdoc, List<ReferenceDocumentTransferObject> refdocs) {
 		if (refdocs == null) {
 			return false;
@@ -705,8 +703,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		
 		for (ReferenceDocumentTransferObject refdoc : refdocs) {
 			if (refdoc.getDocName().equals(currRefdoc.getDocName()) && 
-					refdoc.getDocType().equals(currRefdoc.getDocType()) && 
-					refdoc.getDocText().equals(currRefdoc.getDocText())) {
+					refdoc.getDocType().equals(currRefdoc.getDocType()) ) {
 				refdoc.setDisplayOrder(MARK_TO_KEEP_IN_UPDATE);
 				currRefdoc.setDocIDSeq(refdoc.getDocIdSeq());
 				return true;
@@ -717,7 +714,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	}
 	
 	/**
-	 * Check a list of ref doc object that are previouly marked and delete from database those are not marked as "KEEP"
+	 * Check a list of ref doc object that are previously marked and delete from database those are not marked as "KEEP"
 	 * 
 	 * @param refdocs
 	 */
@@ -1206,6 +1203,10 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		}
 	}
 	
+	/**
+	 * Check a list of pre-processed existing questions from db. Delete those NOT marked as MARK_TO_KEEP_IN_UPDATE
+	 * @param questiondtos
+	 */
 	@Transactional
 	protected void removeExtraQuestionsIfAny(List<QuestionTransferObject> questiondtos) {
 		//Method copied from FormBuilderEJB

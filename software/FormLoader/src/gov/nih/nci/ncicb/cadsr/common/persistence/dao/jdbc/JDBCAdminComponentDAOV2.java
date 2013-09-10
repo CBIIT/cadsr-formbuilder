@@ -136,7 +136,7 @@ public class JDBCAdminComponentDAOV2 extends JDBCBaseDAOV2
    *
    * @return <b>Collection</b> Collection of ReferenceDocumentTransferObjects
    */
-  public List getAllReferenceDocuments(int publicId, float version) {
+  public List getAllReferenceDocumentsForDE(int publicId, float version) {
      List col = new ArrayList();
      ReferenceDocumentsQuery query = new ReferenceDocumentsQuery();
      query.setDataSource(this.dataSource);

@@ -39,7 +39,7 @@ public class FormLoaderHelper {
 		File input = new File(xmlPathName);
 		if (input == null || !input.exists() || !input.canRead())
 			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_FILE_INVALID,
-					"Input file [" + xmlPathName + "] is invalid. Unable to validate form content.");
+					"Input file [" + xmlPathName + "] is invalid. Does it exist? Unable to proceed to load form collection.");
 
 
 		return xmlPathName;
