@@ -1321,7 +1321,69 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 	      }
 	    }//end of private class
     	    
-	 
+	    /**
+	     * Creates a new verion of the form. It only makes a very shallow copy of the old verion - only header info.
+	     *
+	     * @param <b>formIdSeq</b> existing form IdSeq.
+	     * @param <b>newVersionNumber</b> new version number
+	     *
+	     * @return <b>String</b> the new Form Idseq.
+	     * @throws <b>DMLException</b>
+	     */
+	  public String createNewFormVersionShellOnly(String formIdSeq, Float newVersionNumber, String changeNote, String createdBy) 
+			  throws DMLException {
+		  VersionFormShellOnly vForm = new VersionFormShellOnly(this.getDataSource());
+
+	      Map out = vForm.execute(formIdSeq, newVersionNumber, changeNote, createdBy);
+
+	      if ((out.get("p_return_code")) == null) {
+	        /*newForm.setFormIdseq((String) out.get("p_new_idseq"));
+	        return newForm;*/
+	        return (String) out.get("p_new_idseq");
+	      }
+	      else {
+	          DMLException dmlExp = new DMLException((String) out.get("p_return_desc"));
+	          dmlExp.setErrorCode(ERROR_CREATE_NEW_VERSION_FORM);
+	           throw dmlExp;
+	      }
+	  }
+	    
+	    
+	    /**
+	     * Inner class that make a new version of the source form
+	     */
+	    private class VersionFormShellOnly extends StoredProcedure {
+	      public VersionFormShellOnly(DataSource ds) {
+	        super(ds, "Sbrext_Form_Builder_Pkg.CRF_VERSION_SHELL");
+	        declareParameter(new SqlParameter("P_Idseq", Types.VARCHAR));
+	        declareParameter(new SqlParameter("p_version", Types.FLOAT));
+	        declareParameter(new SqlParameter("p_change_note", Types.VARCHAR));
+	        declareParameter(new SqlParameter("p_Created_by", Types.VARCHAR));
+
+	        declareParameter(new SqlOutParameter("p_new_idseq", Types.VARCHAR));
+	        declareParameter(new SqlOutParameter("p_return_code", Types.VARCHAR));
+	        declareParameter(new SqlOutParameter("p_return_desc", Types.VARCHAR));
+	        compile();
+	      }
+
+	      public Map execute(
+	        String sourceFormId,
+	        Float newVersionNumber,
+	        String changeNote,
+	        String createdBy) {
+	        Map in = new HashMap();
+
+	        in.put("P_Idseq", sourceFormId);
+	        in.put("p_version", newVersionNumber);
+	        in.put("p_change_note", changeNote);
+	        in.put("p_Created_by", createdBy);
+	        System.out.println(this.getSql());
+	          System.out.println(this.getCallString());
+	          System.out.println(this.getGeneratedKeysColumnNames());
+	        Map out = execute(in);
+	        return out;
+	      }
+	    }//end of private class
     	    
 	    public static void main(String[] args) {
 	    	
