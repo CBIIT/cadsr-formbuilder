@@ -146,7 +146,7 @@ public class FormLoaderRepositoryDataGen implements FormLoaderRepository {
 
 		try {
 			if (!objs.exists()) {
-				deRefDocs = questionV2Dao.getAllReferenceDocuments(
+				deRefDocs = questionV2Dao.getAllReferenceDocumentsForDE(
 						Integer.parseInt(cdePublicId),
 						Float.parseFloat(cdeVersion));
 

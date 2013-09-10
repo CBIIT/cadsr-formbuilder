@@ -28,7 +28,7 @@ public class JDBCAdminComponentDAOV2Test {
 	@Test
 	public void testGetAllReferenceDocumentsIntFloat() {
 		List<ReferenceDocumentTransferObject> refdocs =
-				adminComponentV2Dao.getAllReferenceDocuments(64788, (float)2.31);
+				adminComponentV2Dao.getAllReferenceDocumentsForDE(64788, (float)2.31);
 		
 		assertNotNull(refdocs);
 		assertTrue(refdocs.size() == 2);
