@@ -1,0 +1,463 @@
+<?xml version = '1.0' encoding = 'windows-1252'?>
+<!--<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
+-->
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+  <form-beans>
+    <form-bean name="searchForm"
+      type="gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean"
+      dynamic="true">
+      <form-property name="searchFormName" type="java.lang.String"/>
+      <form-property name="searchProtoIdseq" type="java.lang.String"/>
+      <form-property name="searchContextIdseq" type="java.lang.String"/>
+      <form-property name="searchContextName" type="java.lang.String"/>
+      <form-property name="searchWorkflow" type="java.lang.String"/>
+      <form-property name="searchCategoryName" type="java.lang.String"/>
+      <form-property name="searchFormType" type="java.lang.String"/>
+      <form-property name="txtClassSchemeItem" type="java.lang.String"/>
+      <form-property name="jspClassification" type="java.lang.String"/>
+      <form-property name="protocolLongName" type="java.lang.String"/>
+      <form-property name="formIdSeq" type="java.lang.String"/>
+      <form-property name="sortField" type="java.lang.String"/>
+      <form-property name="sortOrder" type="java.lang.Integer"/>
+      <form-property name="csIdseq" type="java.lang.String"/>   
+      <form-property name="searchFormPublicID" type="java.lang.String"/>   
+      <form-property name="latestVersionIndicator" type="java.lang.String"/>   
+      <form-property name="moduleLongName" type="java.lang.String"/>   
+      <form-property name="cdePublicId" type="java.lang.String"/>
+      <form-property name="checkedFormIds" type="java.lang.String[]"/>
+      <form-property name="cartAddFormId" type="java.lang.String"/>
+    </form-bean>
+    <form-bean name="hrefCRFForm"
+      type="gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean"
+      dynamic="true">
+      <form-property name="formIdSeq" type="java.lang.String"/>
+    </form-bean>
+    <form-bean name="protocolLOVForm"
+      type="gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean"
+      dynamic="true">
+      <form-property name="protocolLongName" type="java.lang.String"/>
+      <form-property name="contextIdSeq" type="java.lang.String"/>
+      <form-property name="chkContext" type="java.lang.String"/>
+      <form-property name="idFieldName" type="java.lang.String"/>
+      <form-property name="valueFieldName" type="java.lang.String"/>
+      <form-property name="SEARCH" type="java.lang.String"/>
+    </form-bean>
+    <form-bean name="classificationLOVForm"
+      type="gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean"
+      dynamic="true">
+      <form-property name="contextIdSeq" type="java.lang.String"/>
+      <form-property name="chkContext" type="java.lang.String"/>
+      <form-property name="idFieldName" type="java.lang.String"/>
+      <form-property name="valueFieldName" type="java.lang.String"/>
+      <form-property name="SEARCH" type="java.lang.String"/>
+    </form-bean>
+    <form-bean name="formEditForm"
+      type="gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean"
+      dynamic="true">
+      <form-property name="formIdSeq" type="java.lang.String"/>
+      <form-property name="formLongName" type="java.lang.String"/>
+      <form-property name="preferredDefinition" type="java.lang.String"/>
+      <form-property name="contextIdSeq" type="java.lang.String"/>
+      <form-property name="protocolIdSeq" type="java.lang.String"/>
+      <form-property name="categoryName" type="java.lang.String"/>
+      <form-property name="protocolLongName" type="java.lang.String"/>
+      <form-property name="workflow" type="java.lang.String"/>      
+      <form-property name="formType" type="java.lang.String"/>
+      <form-property name="formHeaderInstruction" type="java.lang.String"/>
+      <form-property name="formFooterInstruction" type="java.lang.String"/>
+      <form-property name="moduleIdSeq" type="java.lang.String"/>
+      <form-property name="addDeletedModuleIdSeq" type="java.lang.String"/>
+      <form-property name="moduleIndex" type="java.lang.Integer"/>
+      <form-property name="deletedModuleIndex" type="java.lang.Integer"/>
+    </form-bean>
+    <form-bean name="moduleEditForm" type="gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean" dynamic="true">
+      <form-property name="formIdSeq" type="java.lang.String"/>
+      <form-property name="moduleLongName" type="java.lang.String"/>
+      <form-property name="moduleInstruction" type="java.lang.String"/>
+      <form-property name="moduleIndex" type="java.lang.Integer"/>
+      <form-property name="questionLongName" type="java.lang.String"/>
+      <form-property name="questionIdSeq" type="java.lang.String"/>
+      <form-property name="questionIndex" type="java.lang.Integer"/>
+      <form-property name="questionOption" type="java.lang.String"/>  
+      <form-property name="moduleQuestions" type="java.lang.String[]"/>  
+      <form-property name="questionInstructions" type="java.lang.String[]"/>
+      <form-property name="questionMandatories" type="java.lang.String[]"/>
+      <form-property name="questionEditables" type="java.lang.Boolean[]"/>
+      <form-property name="questionDefaultValues" type="java.lang.String[]"/>
+      <form-property name="questionDefaultValidValueIds" type="java.lang.String[]"/>
+      <form-property name="formsValidValueInstructions" type="java.lang.String[]"/>            
+      <form-property name="formsValueMeaningTexts" type="java.lang.String[]"/>            
+      <form-property name="formsValueMeaningIdVersions" type="java.lang.String[]"/>            
+      <form-property name="formsValueMeaningDescs" type="java.lang.String[]"/>            
+      <form-property name="addDeletedQuestionIdSeqArr" type="java.lang.String[]"/>
+      <form-property name="validValueIndex" type="java.lang.Integer"/>
+      <form-property name="addAvailableValidValueIndex" type="java.lang.Integer"/> 
+      <form-property name="selectedSubsetIndex" type="java.lang.Integer"/> 
+      <form-property name="skQuestionIndex" type="java.lang.Integer"/>
+      <form-property name="skValidValueIndex" type="java.lang.Integer"/>
+      <form-property name="triggerActionIndex" type="java.lang.Integer"/>
+      <form-property name="method" type="java.lang.String"/>
+      
+    </form-bean>       
+    <form-bean name="displayCartForm"
+      type="gov.nih.nci.ncicb.cadsr.common.struts.formbeans.CDECartFormBean"/>
+    <form-bean name="changeAssociationForm"
+      type="gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean"
+      dynamic="true">
+      <form-property name="questionIndex" type="java.lang.String"/>
+      <form-property name="moduleIndex" type="java.lang.Integer"/>
+      <form-property name="selectedText" type="java.lang.String"/>
+    </form-bean>
+    
+    <form-bean name="validValueSearchForm"
+      type="gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean"
+      dynamic="true">
+      <form-property name="publicId" type="java.lang.String"/>
+      <form-property name="version" type="java.lang.String"/>
+    </form-bean>
+  </form-beans>
+  <global-exceptions>
+    <exception type="gov.nih.nci.ncicb.cadsr.common.exception.FatalException"
+      scope="request" path="/jsp/common/systemError.jsp"
+      key="FB911"/>
+    <exception type="gov.nih.nci.ncicb.cadsr.common.exception.InvalidUserException"
+      scope="request" path="/jsp/formbuilder/formbuilder.jsp"
+      key="FB911"/>      
+  </global-exceptions>
+  <global-forwards>
+    <forward name="printerVersion" path="/jsp/formbuilder/printerVersion.jsp"
+      redirect="true"/>
+ <!--  default forword page -->
+    <forward name="framedSearchResultsPage" path="/jsp/formbuilder/formbuilder.jsp"
+      redirect="false"/>
+  </global-forwards>
+  <action-mappings>
+    <action name="searchForm" path="/formSearchAction" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormAction"
+      validate="false">
+      <forward name="success" path="/jsp/formbuilder/formResults.jsp"
+        redirect="false"/>
+    </action>
+    <action name="searchForm" path="/addFormToCartFromView" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormAction"
+      validate="false">
+      <forward name="success" path="/formDetailsAction.do?method=getFormDetails"
+        redirect="false"/>
+    </action>
+    <action name="searchForm" path="/addFormToCartFromEdit" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormAction"
+      validate="false">
+      <forward name="success" path="/formToEditAction.do?method=getFormToEdit"
+        redirect="false"/>
+    </action>
+    <action name="searchForm" path="/formSearchFramedAction" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormAction"
+      validate="false">
+      <forward name="success"
+        path="/initMessageKeysAction.do?method=initMessageKeys"
+        redirect="false"/>
+    </action>
+    <action name="searchForm" path="/initMessageKeysAction" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormAction"
+      validate="false">
+      <forward name="success" path="/jsp/formbuilder/formbuilder.jsp"
+        redirect="false"/>
+    </action>
+    <action name="searchForm" path="/setMessagesForFrameAction"
+      parameter="method" scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormAction"
+      validate="false">
+      <forward name="success" path="/jsp/formbuilder/formResults.jsp"
+        redirect="false"/>
+    </action>
+    <action name="searchForm" path="/clearFormSearchAction" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormAction"
+      validate="false">
+      <forward name="success" path="/jsp/formbuilder/formResults.jsp"
+        redirect="false"/>
+    </action> 
+    <action name="searchForm" path="/newFormSearchAction" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormAction"
+      validate="false">
+      <forward name="success" path="/jsp/formbuilder/formbuilder.jsp"
+        redirect="false"/>
+    </action>    
+    <action name="searchForm" path="/sortFormSearchAction" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormAction"
+      validate="false">
+      <forward name="success" path="/jsp/formbuilder/formbuilder.jsp"
+        redirect="false"/>
+    </action>      
+    <action name="hrefCRFForm" path="/formDetailsAction" parameter="method"
+      scope="request"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormAction"
+      validate="false">
+      <forward name="success" path="/jsp/formbuilder/formDetails.jsp"
+        redirect="false"/>
+      <forward name="setModuleCopyForm"
+        path="/formbuilder/moduleSearch.do?method=setSelectedFormAsModuleCopyForm"
+        redirect="false"/>     
+      <forward name="failure"
+        path="/formSearchFramedAction.do?method=getAllForms"
+        redirect="false"/>     
+    </action>
+    <action name="formEditForm" path="/formToEditAction" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormEditAction"
+      validate="false">
+      <forward name="success" path="/jsp/formbuilder/formEdit.jsp" redirect="false"/>
+      <forward name="failure" path="/formSearchFramedAction.do?method=getAllForms"
+        redirect="false"/>       
+      <forward name="lockedFormViewOnly" path="/formDetailsAction.do?method=getFormDetails"/>
+    </action>
+    <action name="formEditForm" path="/formSaveAction" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormEditAction"
+      validate="true"
+      input="/jsp/formbuilder/formEdit.jsp">
+      <forward name="formEdit" path="/jsp/formbuilder/formEdit.jsp" redirect="false"/>
+      <forward name="success" path="/formToEditAction.do?method=getFormToEdit" redirect="false"/>
+      <forward name="failure" path="/jsp/formbuilder/formEdit.jsp" redirect="false"/>
+      <forward name="noChanges" path="/moduleToEditAction.do?method=getModuleToEdit" redirect="false"/>
+      <forward name="moduleEdit" path="/moduleToEditAction.do?method=getModuleToEdit" redirect="false"/>
+      <forward name="manageRefDoc" path="/manageReferenceDocs.do?method=manageReferenceDocs" redirect="false"/>
+      <forward name="manageCS" path="/gotoManageClassifications.do?method=getClassifications" redirect="false"/>
+      <forward name="gotoModuleList" path="/formbuilder/copyFromModuleList.do?method=gotoCopyFromModuleList" redirect="false"/>
+      <forward name="gotoModuleSearch" path="/formbuilder/moduleSearch.do?method=goToModuleSearch" redirect="false"/>
+      <forward name="gotoModuleCreate" path="/gotoCreateModule.do?method=goToCreateModule" redirect="false"/>
+      <forward name="saveConfirm" path="/jsp/formbuilder/formSaveConfirmModuleEdit.jsp" redirect="false"/>
+      <forward name="saveConfirmDone" path="/jsp/formbuilder/formSaveConfirm.jsp" redirect="false"/>
+      <forward name="searchResults" path="/formDoneAction.do"
+        redirect="false"/>     
+    </action>
+
+    <action name="formEditForm" path="/gotoManageProtocolsFormEdit" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormEditAction"
+      validate="false">
+      <forward name="success" path="/manageProtocols.do?method=manageProtocols" redirect="false"/>
+      <forward name="failure" path="/jsp/formbuilder/formEdit.jsp"
+        redirect="false"/>       
+    </action>
+    
+ 	<action path="/formDoneAction" 
+ 		type="org.apache.struts.actions.ForwardAction" 
+		scope="session" 
+		parameter="/formSearchFramedAction.do?method=getAllForms"/>
+		
+    <action name="formEditForm" path="/saveFormModuleEditAction" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormEditAction"
+      validate="false">
+      <forward name="success" path="/moduleToEditAction.do?method=getModuleToEdit" redirect="false"/>
+      <forward name="moduleEdit" path="/moduleToEditAction.do?method=getModuleToEdit" redirect="false"/>
+      <forward name="manageRefDoc" path="/manageReferenceDocs.do?method=manageReferenceDocs" redirect="false"/>
+      <forward name="manageCS" path="/gotoManageClassifications.do?method=getClassifications" redirect="false"/>
+      <forward name="gotoModuleList" path="/formbuilder/copyFromModuleList.do?method=gotoCopyFromModuleList" redirect="false"/>
+      <forward name="gotoModuleSearch" path="/formbuilder/moduleSearch.do?method=goToModuleSearch" redirect="false"/>
+      <forward name="gotoModuleCreate" path="/gotoCreateModule.do?method=goToCreateModule" redirect="false"/>
+      <forward name="failure"  path="/jsp/formbuilder/formEdit.jsp" redirect="false"/>  
+      <forward name="formEdit" path="/jsp/formbuilder/formEdit.jsp" redirect="false"/>
+      <forward name="searchResults" path="/jsp/formbuilder/formbuilder.jsp" redirect="false"/>            
+    </action>     
+    <action name="searchForm" path="/saveFormDoneAction" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormEditAction"
+      validate="false">
+      <forward name="success"
+      	path="/formDoneAction.do"
+        redirect="false"/>
+      <forward name="failure"
+        path="/jsp/formbuilder/formEdit.jsp"
+        redirect="false"/>
+      <forward name="formEdit" path="/jsp/formbuilder/formEdit.jsp" redirect="false"/>
+      <forward name="searchResults" path="/jsp/formbuilder/formbuilder.jsp"
+        redirect="false"/>        
+    </action>      
+    <action name="formEditForm" path="/cancelFormEditAction" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormEditAction"
+      validate="false">
+      <forward name="success"
+        path="/jsp/formbuilder/formbuilder.jsp"
+        redirect="false"/>
+    </action>    
+    
+    <action name="moduleEditForm" path="/moduleToEditAction" parameter="method" scope="session" type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormModuleEditAction" validate="false">
+      <forward name="success" path="/jsp/formbuilder/moduleEdit.jsp" redirect="false"/>
+      <forward name="success-after-update" path="/jsp/formbuilder/moduleEdit.jsp?updated=true" redirect="false"/>
+      <forward name="failure" path="/jsp/formbuilder/formEdit.jsp" redirect="false"/>
+    </action>
+    <action name="moduleEditForm" path="/moduleSaveAction" parameter="method" scope="session" type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormModuleEditAction" 
+      validate="true"
+      input="/jsp/formbuilder/moduleEdit.jsp">
+      <forward name="moduleEdit" path="/jsp/formbuilder/moduleEdit.jsp" redirect="false"/>
+      <forward name="noChanges" path="/jsp/formbuilder/moduleEdit.jsp" redirect="false"/>
+      <forward name="viewSubsets" path="/jsp/formbuilder/subsettedVDs.jsp" redirect="false"/>
+      <forward name="useSubsets" path="/jsp/formbuilder/useSubsettedVDs.jsp" redirect="false"/>
+      <forward name="saveSubsets" path="/jsp/formbuilder/formEdit.jsp" redirect="false"/>
+      <forward name="success" path="/jsp/formbuilder/formEdit.jsp" redirect="false"/>
+      <forward name="failure" path="/jsp/formbuilder/moduleEdit.jsp" redirect="false"/>
+    </action> 
+    <action name="moduleEditForm" path="/cancelModuleEditAction" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormModuleEditAction"
+      validate="false">
+      <forward name="success" path="/jsp/formbuilder/formEdit.jsp" redirect="false"/>
+    </action>
+    
+    <action name="hrefCRFForm" path="/formHrefDeleteAction" parameter="method"
+      scope="request"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormEditAction"
+      validate="false">
+      <forward name="success" path="/formSearchAction.do?method=getAllForms"
+        redirect="false"/>
+      <forward name="failure" path="/formSearchAction.do?method=getAllForms"
+        redirect="false"/>        
+    </action>
+    <action name="hrefCRFForm" path="/formViewDeleteAction" parameter="method"
+      scope="request"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormEditAction"
+      validate="false">
+      <forward name="success"
+        path="/formSearchFramedAction.do?method=getAllForms"
+        redirect="false"/>
+      <forward name="failure" path="/jsp/formbuilder/formDetails.jsp"
+        redirect="false"/>
+    </action>
+    <action name="hrefCRFForm" path="/formEditDeleteAction" parameter="method"
+      scope="request"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormEditAction"
+      validate="false">
+      <forward name="success"
+        path="/formSearchFramedAction.do?method=getAllForms"
+        redirect="false"/>
+      <forward name="failure" path="/jsp/formbuilder/formEdit.jsp"
+        redirect="false"/>
+    </action>    
+    <action name="hrefCRFForm" path="/formPrinterAction" parameter="method"
+      scope="request"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormAction"
+      validate="false">
+      <forward name="success" path="/jsp/formbuilder/printerVersion.jsp"/>
+    </action>
+    <action path="/pageAction" parameter="method" scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.PaginationAction"
+      validate="false">
+      <forward name="success" path="/jsp/formbuilder/formResults.jsp"/>
+    </action>
+    <action name="protocolLOVForm" path="/formLOVAction" parameter="method"
+      scope="request"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormBuilderLOVAction"
+      validate="false">
+      <forward name="success" path="/jsp/formbuilder/protocolsLOV.jsp"/>
+    </action>
+    <action name="classificationLOVForm" path="/classificationLOVAction" parameter="method"
+      scope="request"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormBuilderLOVAction"
+      validate="false">
+      <forward name="success" path="/jsp/formbuilder/classificationsLOV.jsp"/>
+    </action>
+    <action name="displayCartForm" path="/formCDECartRedirectAction" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.SecureCDECartAction"
+      validate="false">
+      <forward name="addDeleteSuccess" path="/formCDECartAction.do?method=displayCDECart"/>
+    </action>    
+    <action name="displayCartForm" path="/formCDECartAction" parameter="method"
+      scope="request"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.SecureCDECartAction"
+      validate="false">
+      <forward name="failure" path="/jsp/formbuilder/displayCDECart.jsp"/>
+      <forward name="success" path="/jsp/formbuilder/displayCDECart.jsp"/>
+      <forward name="addDeleteSuccess" path="/formCDECartAction.do?method=displayCDECart"/>
+      
+    </action>
+    <action name="displayCartForm" path="/formsCartAction" parameter="method"
+      scope="request"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.SecureFormsCartAction"
+      validate="false">
+      <forward name="failure" path="/jsp/formbuilder/displayFormsCart.jsp"/>
+      <forward name="success" path="/jsp/formbuilder/displayFormsCart.jsp"/>
+      <forward name="addDeleteSuccess" path="/formsCartAction.do?method=displayFormsCart"/>
+      
+    </action>
+    <action name="downloadCart" path="/formCDEDownload" scope="request"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.DownloadAction"
+      validate="false">
+    </action>
+    <action name="changeAssociationForm" path="/gotoChangeAssociation" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.SecureCDECartAction"
+      validate="false">
+      <forward name="success" path="/jsp/formbuilder/changeAssociation.jsp"/>
+      <forward name="failure" path="/moduleToEditAction.do?method=getModuleToEdit"/>   
+    </action>
+    <action name="changeAssociationForm" path="/changeAssociation" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.SecureCDECartAction"
+      validate="false">
+      <forward name="success" path="/moduleToEditAction.do?method=getModuleToEdit"/>
+      <forward name="failure" path="/jsp/formbuilder/moduleEdit.jsp"/>
+      <forward name="retrieveCDEs" path="/jsp/formbuilder/changeAssociation.jsp"/>
+    </action> 
+    <action name="moduleEditForm" path="/editModuleAssociateAction" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormModuleEditAction"
+      validate="true">
+      <forward name="noChanges" path="/gotoChangeAssociation.do?method=gotoChangeDEAssociation" redirect="false"/>    
+      <forward name="failure" path="/jsp/formbuilder/moduleEdit.jsp" redirect="false"/>   
+      <forward name="changes" path="/jsp/formbuilder/moduleSaveConfirmAssociate.jsp" redirect="false"/>
+      <forward name="success" path="/gotoChangeAssociation.do?method=gotoChangeDEAssociation" redirect="false"/>       
+    </action> 
+
+    <action name="moduleEditForm" path="/showValueMeaningAlterNames" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormModuleEditAction"
+      validate="false">
+      <forward name="success" path="/jsp/formbuilder/valueMeaningAlterNames.jsp" redirect="false"/>
+    </action>
+    
+    <action name="validValueSearchForm" path="/getVVs" parameter="method"
+      scope="session"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.ValidValuesDisplayAction"
+      validate="false">
+      <forward name="success" path="/jsp/formbuilder/validValuesView.jsp" redirect="false"/>
+      <forward name="error" path="/jsp/formbuilder/validValuesView.jsp" redirect="false"/>
+    </action>
+  </action-mappings>
+ 
+  <message-resources parameter="gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.ApplicationResources"/>
+  <plug-in className="gov.nih.nci.ncicb.cadsr.formbuilder.service.ServiceDelegateFactory"/>
+  
+  <plug-in className="gov.nih.nci.ncicb.cadsr.common.struts.common.SpringWebContextPlugIn">  
+  </plug-in> 
+  
+  <plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+    <set-property 
+      property="pathnames" 
+      value="/WEB-INF/formbuilder/validator-rules.xml, 
+             /WEB-INF/formbuilder/validation.xml"/>
+  </plug-in>
+
+  <plug-in className="gov.nih.nci.ncicb.cadsr.common.struts.common.ObjectPlugIn">
+    <set-property 
+      property="applicationKey" 
+      value="ApplicationServiceLocatorClassName"/>
+    <set-property 
+      property="className" 
+      value="gov.nih.nci.ncicb.cadsr.common.servicelocator.spring.ApplicationServiceLocatorImpl"/>      
+  </plug-in>
+ 
+  
+
+</struts-config>
