@@ -87,7 +87,7 @@ function gotoClassificationsLOV() {
    </td>        
  </tr>   
  <tr>
-   <td  align="center" colspan="3"><html:img page="/i/beigedot.gif" border="0"  height="1" width="99%" align="top" /> </td>
+   <td  align="center" colspan="3"><html:img page="/i/beigedot.gif" alt="dot" border="0"  height="1" width="99%" align="top" /> </td>
   </tr> 
  </table>
  
@@ -239,10 +239,10 @@ function gotoClassificationsLOV() {
       <table align="center" >
            <tr>
         <td nowrap>
-            <a href="javascript:submitForm('<%=NavigationConstants.GET_ALL_FORMS_METHOD%>')"><img src=<%=urlPrefix%>i/searchButton.gif border=0></a>
+            <a href="javascript:submitForm('<%=NavigationConstants.GET_ALL_FORMS_METHOD%>')"><img src=<%=urlPrefix%>i/searchButton.gif alt="Search" border=0></a>
           </td>       
              <td  >
-               <a href="javascript:clearForm()"><img src=<%=urlPrefix%>i/reset.gif border=0></a>
+               <a href="javascript:clearForm()"><img src=<%=urlPrefix%>i/reset.gif alt="Reset" border=0></a>
               </td>
               <logic:present name="<%=FormConstants.FORM_SEARCH_RESULTS%>">
                 <td   nowrap>

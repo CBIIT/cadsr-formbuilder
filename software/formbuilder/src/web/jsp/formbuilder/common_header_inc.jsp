@@ -15,7 +15,7 @@
 
     <td align="left" nowrap>
 
-    <img src=i/graphic6.gif border=0>
+    <img src=i/graphic6.gif alt="Form Builder Logo" border=0>
     </td>
 
     <td align=right valign=top colspan=2 nowrap>

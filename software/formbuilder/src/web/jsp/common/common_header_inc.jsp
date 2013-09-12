@@ -18,7 +18,7 @@ System.out.println("common_header_inc.jsp:" + username);
 <TABLE width=100% valign=top Cellpadding=0 Cellspacing=0 border=0>
 	<tr>
 		<td align="left" valign=top nowrap>
-			<img src=i/cde_form_builder_banner.gif border=0>
+			<img src=i/cde_form_builder_banner.gif alt="Form Builder Banner" border=0>
 		</td>
 		<td align=right valign=top colspan=2 nowrap>
 			<TABLE Cellpadding=0 Cellspacing=0 border=0>
