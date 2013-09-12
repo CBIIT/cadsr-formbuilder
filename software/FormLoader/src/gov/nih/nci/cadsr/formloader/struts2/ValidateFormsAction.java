@@ -58,7 +58,7 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware{
 				}
 				
 			}
-        	servletRequest.getSession().putValue("selectedFormsList", selectedFormsList);
+        	servletRequest.getSession().setAttribute("selectedFormsList", selectedFormsList);
         	System.out.println(selectedFormsList.size()+" Forms selected for validation");
         	if (selectedFormsList.size() > 0)
 	        	{
@@ -84,6 +84,9 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware{
 			ContentValidationServiceImpl xmlContentValidator = (ContentValidationServiceImpl)this.applicationContext.getBean("contentValidationService");
 			try {
 					FormCollection aColl = new FormCollection(selectedFormsList);
+					aColl.setCreatedBy((String)servletRequest.getSession().getAttribute("username"));
+					aColl.setXmlFileName((String)servletRequest.getSession().getAttribute("filename"));
+					aColl.setXmlPathOnServer((String)servletRequest.getSession().getAttribute("upload.file.path"));
 					validatedFormCollection = xmlContentValidator.validateXmlContent(aColl);
 			} catch (FormLoaderServiceException e) {
 				// TODO Auto-generated catch block

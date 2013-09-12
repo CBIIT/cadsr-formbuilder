@@ -173,10 +173,14 @@ ServletRequestAware, ValidationAware{
 		
 		FormCollection aColl = new FormCollection();
 		aColl.setXmlPathOnServer(configProp.getProperty("upload.file.path") +"\\");
+		servletRequest.getSession().setAttribute("upload.file.path", configProp.getProperty("upload.file.path") +"\\");
 		aColl.setXmlFileName(this.fileName);
+		servletRequest.getSession().setAttribute("filename", this.fileName);
 		try {
 			aColl = xmlValidator.validateXml(aColl);
 			parsedFormsList = aColl.getForms();
+        	servletRequest.getSession().setAttribute("parsedFormsList", parsedFormsList);
+        	System.out.println(parsedFormsList.size()+" Parsed Forms ");
 		} catch (FormLoaderServiceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
