@@ -16,7 +16,7 @@ L--%>
 </style>
 </head>
 <body>
-<h2>Successfully parsed forms from XML File: <s:property value="xmlFileFileName"/></h2>
+<h2>Forms Passed XML Validation</h2>
 <h3>Select forms to validate the questions and <br>data elements against caDSR database</h3>
 
 <br>
@@ -52,9 +52,16 @@ L--%>
 				<td><s:property value="modules.size()" /></td>
 			</tr>
 			</s:iterator>
+<tr>
+		  	<td colspan="1" align="left" nowrap>
+<s:submit type="image" src="/FormLoader/i/validate.gif" method="execute" align="left" theme="simple" /></td>
+	  	<td colspan="1" align="left" nowrap>
+<s:submit type="image" src="/FormLoader/i/cancel.gif" method="cancel" align="left" theme="simple"/></td>
+	  	<td colspan="1" align="left" nowrap>
+<s:submit type="image" src="/FormLoader/i/reset.gif" method="reset" align="left" theme="simple"/></td>
+</tr>
 		</table>
-		</div>
-	<s:submit value="Select Forms"/>  
+		</div> 
 	</s:form>
 	</s:if>
 </body>

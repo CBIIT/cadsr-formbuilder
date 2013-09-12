@@ -26,15 +26,14 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.opensymphony.xwork2.ActionSupport;
 
 
-
 public class ValidateFormsAction extends ActionSupport implements SessionAware{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private Map<Integer, String> checkboxes;
-    //private List<FormObj> selectedFormsList = new ArrayList<FormObj>();
     private List<FormDescriptor> selectedFormsList = new ArrayList<FormDescriptor>();
+    private FormCollection validatedFormCollection;
     private HttpServletRequest servletRequest;
 	ApplicationContext applicationContext = null;
     
@@ -61,6 +60,10 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware{
 			}
         	servletRequest.getSession().putValue("selectedFormsList", selectedFormsList);
         	System.out.println(selectedFormsList.size()+" Forms selected for validation");
+        	if (selectedFormsList.size() > 0)
+	        	{
+	        		validateFormCollection();
+	        	}
         	
         } catch (Exception e) {
             e.printStackTrace();
@@ -73,20 +76,20 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware{
     }
     
     private void validateFormCollection()
-    {
-		applicationContext =
-				WebApplicationContextUtils.getRequiredWebApplicationContext(
-	                                    ServletActionContext.getServletContext()
-	                        );
-		ContentValidationServiceImpl xmlContentValidator = (ContentValidationServiceImpl)this.applicationContext.getBean("contentValidationService");
-		try {
-				FormCollection aColl = new FormCollection(selectedFormsList);
-				xmlContentValidator.validateXmlContent(aColl);
-		} catch (FormLoaderServiceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    }
+	    {
+			applicationContext =
+					WebApplicationContextUtils.getRequiredWebApplicationContext(
+		                                    ServletActionContext.getServletContext()
+		                        );
+			ContentValidationServiceImpl xmlContentValidator = (ContentValidationServiceImpl)this.applicationContext.getBean("contentValidationService");
+			try {
+					FormCollection aColl = new FormCollection(selectedFormsList);
+					validatedFormCollection = xmlContentValidator.validateXmlContent(aColl);
+			} catch (FormLoaderServiceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    }
     
     public List<FormDescriptor> getSelectedFormsList() {
 		return selectedFormsList;

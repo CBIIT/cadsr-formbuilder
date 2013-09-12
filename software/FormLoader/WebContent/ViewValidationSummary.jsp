@@ -19,7 +19,7 @@ L--%>
 <h2>View Validation Summary of Selected Forms</h2>
 <br>
 
-<s:if test="selectedFormsList.size() >= 1">
+<s:if test="validatedFormCollection.forms.size() >= 1">
 	
 	<s:form action="loadForms" theme = "simple" method="post"> 
 		<div class="content">
@@ -35,7 +35,7 @@ L--%>
 				<th># Modules</th>
 				<th>Action</th>
 			</tr>
-			<s:iterator value="selectedFormsList" id = "bean" status="status">
+			<s:iterator value="validatedFormCollection.forms" id = "bean" status="status">
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
 				<td><s:property value="publicId" /></td>
 				<td><s:property value="version" /></td>

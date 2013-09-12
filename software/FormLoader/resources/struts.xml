@@ -89,6 +89,7 @@
 			<interceptor-ref name="loggingStack"></interceptor-ref>
 				<result name="input" type="tiles">/upload.parse.tiles</result>
     			<result name="success" type="tiles">/upload.validate.tiles</result>
+    			<result name="error" type="tiles">/upload.validate.tiles</result>
 		</action>
 		
 <!-- 		<action name="loadForms" 
