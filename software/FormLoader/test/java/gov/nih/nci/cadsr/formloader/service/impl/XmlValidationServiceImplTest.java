@@ -183,4 +183,26 @@ public class XmlValidationServiceImplTest {
 		}
 	}
 	
+	@Test
+	public void testValidatexmlWith5Forms() {
+		//entirely wrong xml but with forms and form element	
+		FormCollection aColl = new FormCollection();
+		try {
+			
+			aColl.setXmlPathOnServer(".\\test\\data");
+			aColl.setXmlFileName("load_forms-5.xml");
+			aColl = this.xmlValService.validateXml(aColl);
+			List<FormDescriptor> forms = aColl.getForms();
+			assertNotNull(forms);
+			assertTrue(forms.size() == 5);
+			
+			String status = StatusFormatter.getStatusInXml(aColl);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\load_forms-5.xmlvalidationstatus.xml");
+			
+		
+		} catch (FormLoaderServiceException e) {
+			String status = StatusFormatter.getStatusInXml(aColl);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\invalid-xml.status.xml");
+		}
+	}
 }

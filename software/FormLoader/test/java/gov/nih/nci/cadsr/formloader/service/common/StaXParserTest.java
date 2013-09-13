@@ -101,6 +101,54 @@ public class StaXParserTest {
 	}
 	
 	@Test
+	public void testParseFormDetailsFor5Forms() {
+		
+		parser = new StaXParser();
+		String xmlPathName = ".\\test\\data\\load_forms-5.xml";
+		List<FormDescriptor> forms = parser.parseFormHeaders(xmlPathName);
+		assertNotNull(forms);
+		assertTrue(forms.size() == 5);
+		
+		FormDescriptor form = parser.parseFormDetails(xmlPathName, forms.get(0), 0);
+		assertNotNull(form);
+		
+		List<String> protoList = parser.getProtocolIds();
+		assertNotNull(protoList);
+		assertTrue(protoList.size() == 2);
+		assertTrue(protoList.get(0).equals("01_C_0129F"));
+		assertTrue(protoList.get(1).equals("02_C_0241E"));
+		
+		List<DesignationTransferObjectExt> desObjs = parser.getDesignations();
+		assertNotNull(desObjs);
+		assertTrue(desObjs.size() == 1);
+		
+		DesignationTransferObjectExt desig = desObjs.get(0);
+		assertTrue(desig.getName() == null || desig.getName().length() == 0);
+		assertTrue(desig.getType().equals("ABBREVIATION"));
+		assertTrue(desig.getLanguage().equals("ENGLISH"));
+		assertTrue(desig.getContextName().equals("caBIG"));
+		
+		List<RefdocTransferObjectExt> refdocs = parser.getRefdocs();
+		assertNotNull(refdocs);
+		assertTrue("Expecting 2 but get " + refdocs.size(), refdocs.size() == 2);
+		
+		RefdocTransferObjectExt refdoc = refdocs.get(1);
+		assertTrue("Image for the form".equals(refdoc.getDocName()));
+		assertTrue("IMAGE_FILE".equals(refdoc.getDocType()));
+		assertTrue("SY testing another refdoc".equals(refdoc.getDocText()));
+		assertTrue(refdoc.getUrl() == null || refdoc.getUrl().length() == 0);
+		
+		assertTrue(refdocs.get(0).getUrl().startsWith("https://"));
+		
+		parser = new StaXParser();
+		form = parser.parseFormDetails(xmlPathName, forms.get(2), 2);
+		assertNotNull(form);
+		assertTrue(parser.getRefdocs().size() == 0);
+		assertTrue(parser.getDesignations().size() == 1);
+		
+	}
+	
+	@Test
 	public void testParseFormQuestions() {
 		parser = new StaXParser();
 		String xmlPathName = ".\\test\\data\\3193449_has_valid_values.xml";
