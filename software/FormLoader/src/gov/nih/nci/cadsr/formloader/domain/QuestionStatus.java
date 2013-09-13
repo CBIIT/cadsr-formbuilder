@@ -13,7 +13,9 @@ public class QuestionStatus {
 	protected String loadStatus; //skipped or loaded
 	protected List<String> messages = new ArrayList<String>();
 	
-	public QuestionStatus() {}
+	public QuestionStatus() {
+		//Comment in comment out
+	}
 	
 	public QuestionStatus(String id) {
 		this.identifier = id;
