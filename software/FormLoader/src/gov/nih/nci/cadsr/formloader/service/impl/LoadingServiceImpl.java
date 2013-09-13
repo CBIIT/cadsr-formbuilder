@@ -123,6 +123,8 @@ public class LoadingServiceImpl implements LoadingService {
 				logger.debug("Error with User right issue");
 				continue;
 			}
+			
+			logger.debug("========  Start loading form [" + form.getFormIdString() + "] ===============");
 				
 			if (FormDescriptor.LOAD_TYPE_NEW.equals(form.getLoadType())) {
 				String seqid = this.repository.createForm(form, loggedinUser, xmlPathName, form_idx);
@@ -141,6 +143,7 @@ public class LoadingServiceImpl implements LoadingService {
 				form.setLoadStatus(FormDescriptor.STATUS_LOADED);
 			} 
 			
+			logger.debug("========== Done loading form [" + form.getFormIdString() + "] =============");
 			form_idx++;
 		}	
 	}

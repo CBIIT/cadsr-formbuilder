@@ -142,11 +142,16 @@ public class FormCollection implements java.io.Serializable {
 
 	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "FORM_COLLECTIONS")
 	
-	public List<String> getMessage() {
+	public List<String> getMessages() {
 		return messages;
 	}
+	
+	public String getMessagesInString() {		
+		return formatMessages();
+	}
 
-	private void setMessage(List<String> messages) {
+	@SuppressWarnings("unused")
+	private void setMessages(List<String> messages) {
 		this.messages.addAll(messages);
 	}
 	
@@ -197,6 +202,9 @@ public class FormCollection implements java.io.Serializable {
 	}
 	
 	public String formatMessages() {
+		if (messages == null)
+			return "";
+		
 		StringBuilder sb = new StringBuilder();
 		for (String message : messages) {
 			sb.append(message).append(";");
