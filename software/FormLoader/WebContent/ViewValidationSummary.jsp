@@ -7,6 +7,7 @@ L--%>
 
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
+<%@ taglib prefix="sx" uri="/struts-dojo-tags"%>
 <html>
 <head>
 	<title>View Validation Summary of Selected Forms</title>
@@ -18,9 +19,8 @@ L--%>
 <body>
 <h2>View Validation Summary of Selected Forms</h2>
 <br>
-
-<s:if test="validatedFormCollection.forms.size() >= 1">
-	
+<s:actionerror />
+<s:if test="validatedForms.size() >= 1">
 	<s:form action="loadForms" theme = "simple" method="post"> 
 		<div class="content">
 		<table class="fileTable" cellpadding="5px">
@@ -35,7 +35,7 @@ L--%>
 				<th># Modules</th>
 				<th>Action</th>
 			</tr>
-			<s:iterator value="validatedFormCollection.forms" id = "bean" status="status">
+			<s:iterator value="validatedForms" id = "bean" status="status">
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
 				<td><s:property value="publicId" /></td>
 				<td><s:property value="version" /></td>

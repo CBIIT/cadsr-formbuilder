@@ -33,6 +33,7 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware{
 	private static final long serialVersionUID = 1L;
 	private Map<Integer, String> checkboxes;
     private List<FormDescriptor> selectedFormsList = new ArrayList<FormDescriptor>();
+    private List<FormDescriptor> validatedForms = null;
     private FormCollection validatedFormCollection;
     private HttpServletRequest servletRequest;
 	ApplicationContext applicationContext = null;
@@ -58,8 +59,7 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware{
 				}
 				
 			}
-        	servletRequest.getSession().setAttribute("selectedFormsList", selectedFormsList);
-        	System.out.println(selectedFormsList.size()+" Forms selected for validation");
+
         	if (selectedFormsList.size() > 0)
 	        	{
 	        		validateFormCollection();
@@ -88,6 +88,9 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware{
 					aColl.setXmlFileName((String)servletRequest.getSession().getAttribute("filename"));
 					aColl.setXmlPathOnServer((String)servletRequest.getSession().getAttribute("upload.file.path"));
 					validatedFormCollection = xmlContentValidator.validateXmlContent(aColl);
+					validatedForms = validatedFormCollection.getForms();
+		        	servletRequest.getSession().setAttribute("validatedForms", validatedForms);
+		        	System.out.println(validatedForms.size()+" Forms selected for validation");
 			} catch (FormLoaderServiceException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -114,5 +117,13 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware{
 	public void setSession(Map<String, Object> arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public List<FormDescriptor> getValidatedForms() {
+		return validatedForms;
+	}
+
+	public FormCollection getValidatedFormCollection() {
+		return validatedFormCollection;
 	}
 }
