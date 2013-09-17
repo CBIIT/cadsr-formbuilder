@@ -92,12 +92,12 @@
     			<result name="error" type="tiles">/upload.validate.tiles</result>
 		</action>
 		
-<!-- 		<action name="loadForms" 
+ 		<action name="loadForms" 
 			class="gov.nih.nci.cadsr.formloader.struts2.LoadFormsAction">
 			<interceptor-ref name="loggingStack"></interceptor-ref>
 				<result  name="input" type="tiles">/upload.validate.tiles</result>
     			<result name="success" type="tiles">/upload.summary.tiles</result>
-		</action> -->
+		</action>
 		
   	<action name="search-form" 
 			class="gov.nih.nci.cadsr.formloader.struts2.SearchXMLFileAction">

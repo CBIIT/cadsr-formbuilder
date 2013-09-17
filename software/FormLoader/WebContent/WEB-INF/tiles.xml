@@ -49,6 +49,7 @@
 	
 	<definition name="/upload.summary.tiles" extends="baseLayout">
 		<put-attribute name="title" value="Summary of loading Forms" />
+		<put-attribute name="header" value="/basicHeader_inc.jsp" />
 		<put-attribute name="body" value="/SummaryLoadingForms.jsp" />
 	</definition>
 	

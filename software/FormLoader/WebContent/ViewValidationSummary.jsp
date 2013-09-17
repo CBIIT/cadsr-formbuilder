@@ -24,6 +24,7 @@ L--%>
 		<div class="content">
 		<table class="fileTable" cellpadding="5px">
 			<tr class="even">
+				<th>Select</th>
 				<th>Public Id</th>
 				<th>Version</th>
 				<th>Long Name</th>
@@ -35,21 +36,30 @@ L--%>
 			</tr>
 			<s:iterator value="validatedForms" id = "bean" status="status">
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
+				<td>
+					<s:checkbox name="checkboxes[%{#status.index}]" theme = "simple" />
+					
+				</td>
 				<td><s:property value="publicId" /></td>
 				<td><s:property value="version" /></td>
 				<td><s:property value="longName" /></td>
 				<td><s:property value="context" /></td>
 				<td><s:property value="type" /></td>
 				<td><s:property value="protocolName" /></td>
-				<td><s:property value="loadStatus" /></td>
+				<td><s:property value="workflowStatusName" /></td>
 				<td><s:property value="modules.size()" /></td>
 				<td>
 				</td>
 			</tr>
 			</s:iterator>
+				<tr>
+		 <td colspan="1" align="left" nowrap>
+<s:submit type="image" src="/FormLoader/i/load_forms.gif" method="execute" align="left" theme="simple" /></td>
+	  	<td colspan="1" align="left" nowrap>
+<s:submit type="image" src="/FormLoader/i/cancel.gif" method="cancel" align="left" theme="simple"/></td>
+</tr> 
 		</table>
 		</div>
-	<s:submit value="Load"/>  
 	</s:form>
 	</s:if>
 </body>
