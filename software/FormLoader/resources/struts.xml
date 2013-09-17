@@ -56,6 +56,12 @@
 			<result type="tiles">/upload.tiles</result>
 			<result name="error" type="tiles">/upload.tiles</result>
 		</action>
+		  	<action name="search-form" 
+			class="gov.nih.nci.cadsr.formloader.struts2.SearchLoadedCollectionAction">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+    			<result name="success" type="tiles">/search.tiles</result>
+    			<result type="tiles">/search.tiles</result>
+		</action>
 		
    		<action name="xmlFileUpload" class="gov.nih.nci.cadsr.formloader.struts2.XMLFileUploadAction">
 		    <interceptor-ref name="exception"/>
