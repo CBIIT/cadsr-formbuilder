@@ -42,7 +42,9 @@
 	
 	<definition name="/upload.validate.tiles" extends="baseLayout">
 		<put-attribute name="title" value="View Validation Summary before Loading" />
+		<put-attribute name="header" value="/basicHeader_inc.jsp" />
 		<put-attribute name="body" value="/ViewValidationSummary.jsp" />
+		<!--		<put-attribute name="body" value="/ViewParsedForms.jsp" /> -->
 	</definition>
 	
 	<definition name="/upload.summary.tiles" extends="baseLayout">

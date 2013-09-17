@@ -7,7 +7,6 @@ L--%>
 
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
-<%@ taglib prefix="sx" uri="/struts-dojo-tags"%>
 <html>
 <head>
 	<title>View Validation Summary of Selected Forms</title>
@@ -33,7 +32,6 @@ L--%>
 				<th>Protocol Name</th>
 				<th>Workflow Status</th>
 				<th># Modules</th>
-				<th>Action</th>
 			</tr>
 			<s:iterator value="validatedForms" id = "bean" status="status">
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
@@ -43,9 +41,8 @@ L--%>
 				<td><s:property value="context" /></td>
 				<td><s:property value="type" /></td>
 				<td><s:property value="protocolName" /></td>
-				<td><s:property value="workflowStatus" /></td>
-				<td><s:property value="numModules" /></td>
-				<td><s:property value="action" /></td>
+				<td><s:property value="loadStatus" /></td>
+				<td><s:property value="modules.size()" /></td>
 				<td>
 				</td>
 			</tr>
