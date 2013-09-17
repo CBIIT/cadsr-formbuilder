@@ -14,8 +14,8 @@
 	<property name="compile.debug"     value="true"/>
 	<property name="compile.deprecation"     value="false"/>
 	<property name="compile.optimize"     value="true"/>
-	<property name="JBOSS.DEPLOY.DIR"     value="C:\Jboss\jboss-5.1.0.GA\server\default\deploy"/>
-	<property name="JBOSS.HOME"     value="C:\Jboss\jboss-5.1.0.GA"/>
+	<property name="JBOSS.DEPLOY.DIR"     value="C:\Applications\jboss-5.1.0.GA\server\default\deploy"/>
+	<property name="JBOSS.HOME"     value="C:\Applications\jboss-5.1.0.GA"/>
 	<property name="jboss.lib.dir"   value= "${JBOSS.HOME}/common" />
 	<property name="dist.dir"    value="${basedir}/dist"/>
 	<property name="lib.dir"     value="${basedir}/WebContent/WEB-INF/lib"/>
