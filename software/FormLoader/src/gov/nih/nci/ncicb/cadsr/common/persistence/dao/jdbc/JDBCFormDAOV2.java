@@ -703,14 +703,72 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
      *
      * @return <b>Collection</b> List of Forms
      */
-    public Collection getAllFormsForClassification(String classificationIdSeq)
+    public Collection getAllFormsForClassification(String classificationIdSeq, String start, String size)
     {
       FormByClassificationQuery query = new FormByClassificationQuery();
       query.setDataSource(getDataSource());
-      query.setQuerySql(classificationIdSeq);
+      query.setQuerySql(classificationIdSeq, start, size);
       List forms = query.execute();
       fetchProtocols(forms);
       return forms;
+    }
+    
+    /**
+     * Gets count of all the forms that match the given criteria
+     *
+     * @param formName
+     * @param protocolIdseq
+     * @param contextIdseq
+     * @param workflow
+     * @param category
+     * @param type
+     *
+     * @return forms that match the criteria.
+     */
+    public Integer getFormCount(
+      String formLongName,
+      String protocolIdSeq,
+      String contextIdSeq,
+      String workflow,
+      String categoryName,
+      String type,
+      String classificationIdseq,
+      String contextRestriction,
+      String publicId,
+      String version,
+      String moduleLongName,
+      String cdePublicId,
+      String createdBy) {
+      FormCountQuery query = new FormCountQuery();
+      query.setDataSource(getDataSource());
+      query.setSql(
+        formLongName, protocolIdSeq, contextIdSeq, workflow, categoryName, type,
+        classificationIdseq,contextRestriction, publicId, version, moduleLongName, cdePublicId, createdBy);
+
+      Collection rs =  query.execute();
+      
+      Integer formCount = (Integer)((ArrayList) rs).get(0);
+
+      return formCount;
+    }
+    
+    /**
+     * Gets count of all the forms that has been classified by this Classification
+     *
+     * @param <b>formId</b> Idseq of the Classification
+     *
+     * @return <b>Collection</b> List of Forms
+     */
+    public Integer getFormClassificationCount(String classificationIdSeq)
+    {
+      FormCountClassificationQuery query = new FormCountClassificationQuery();
+      query.setDataSource(getDataSource());
+      query.setQuerySql(classificationIdSeq);
+      Collection rs = query.execute();
+      
+      Integer formCount = (Integer)((ArrayList) rs).get(0);
+
+      return formCount;
     }
     
     private void fetchProtocols( Collection forms){
@@ -994,6 +1052,71 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
     	      return where;
     	    }
     	  }
+    
+    /**
+     * Inner class that accesses database to get all the forms and modules that
+     * match the given criteria
+     */
+    class FormCountQuery extends FormQuery {
+    	FormCountQuery() {
+        super();
+      }
+
+      public void setSql(
+        String formLongName,
+        String protocolIdSeq,
+        String contextIdSeq,
+        String workflow,
+        String categoryName,
+        String type,
+        String classificationIdseq,
+        String contextRestriction,
+        String publicId,
+        String version,
+        String moduleName,
+        String cdePublicId,
+        String createdBy) {
+
+        String selectWhat = "SELECT COUNT(*) ";
+        StringBuffer fromWhat = new StringBuffer(" FROM FB_FORMS_VIEW f ");
+        StringBuffer initialWhere = new StringBuffer();
+        boolean hasWhere = false;
+        if (StringUtils.doesValueExist(moduleName) || StringUtils.doesValueExist(cdePublicId)){
+          fromWhat.append(", FB_QUEST_MODULE_VIEW q ");
+          initialWhere.append(" where ( f.QC_IDSEQ = q.FORM_IDSEQ )");
+          hasWhere = true;
+        }
+        if (StringUtils.doesValueExist(protocolIdSeq) || StringUtils.doesValueExist(protocolIdSeq)){
+          fromWhat.append(", protocol_qc_ext p ");
+          if (hasWhere){
+              initialWhere.append(" AND ( f.QC_IDSEQ = p.qc_idseq) and (p.proto_idseq IN (" + protocolIdSeq + ")) ");
+          }else{
+              initialWhere.append(" where ( f.QC_IDSEQ = p.qc_idseq) and (p.proto_idseq IN (" + protocolIdSeq + ")) ");
+              hasWhere = true;
+          }
+        }
+        String whereClause = makeWhereClause(
+                            formLongName, protocolIdSeq, contextIdSeq, workflow, categoryName,
+                            type, classificationIdseq,contextRestriction,
+                            publicId, version, moduleName, cdePublicId, createdBy, hasWhere);
+        String sql = selectWhat.toString() + " " + fromWhat.toString() + " "
+                      + initialWhere.toString() + whereClause;
+
+        super.setSql(sql);
+        
+        System.out.println("FRM SEARCH QRY: ["+sql+"]");
+
+      }   
+      
+      /**
+       * 3.0 Refactoring- Removed JDBCTransferObject
+       */
+       protected Object mapRow(
+         ResultSet rs,
+         int rownum) throws SQLException {
+    	   return new Integer(rs.getInt(1));
+       }
+   	  }
 
     	//Publish Change Order
 
@@ -1006,13 +1129,18 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 	      super();
 	    }
 
-	    public void setQuerySql(String csidSeq) {
-	     String querySql = " SELECT * FROM FB_FORMS_VIEW formview, sbr.cs_csi_view csc,sbr.ac_csi_view acs "
+	    public void setQuerySql(String csidSeq, String start, String size) {
+	     String querySql = " SELECT f.* FROM FB_FORMS_VIEW f, sbr.cs_csi_view csc,sbr.ac_csi_view acs "
 	        + " where  csc.cs_idseq IN ("+ csidSeq +")"
 	        + " and csc.cs_csi_idseq = acs.cs_csi_idseq "
-					+ " and acs.AC_IDSEQ=formview.QC_IDSEQ "
+					+ " and acs.AC_IDSEQ=f.QC_IDSEQ "
 	        + " ORDER BY upper(protocol_long_name), upper(context_name)";
-	      super.setSql(querySql);
+	     
+          int startRow = (Integer.parseInt(start) -1) * Integer.parseInt(size) + 1;
+          int endRow = (Integer.parseInt(start) * Integer.parseInt(size) );
+          String wrapSql1 = "SELECT * from ( SELECT /*+ FIRST_ROWS(" + size + ") */ a.*, ROWNUM rnum from ( ";
+          String wrapSql2 = " ) a where ROWNUM <=" + endRow + " ) where rnum  >= " + startRow;
+          super.setSql(wrapSql1 + querySql + wrapSql2);
 	    }
 
 
@@ -1025,6 +1153,34 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 	    }
 
 	  }  
+	  
+	  /**
+	   * Inner class that accesses database to get all the forms
+	   * match the given criteria
+	   */
+	  class FormCountClassificationQuery extends MappingSqlQuery {
+		  FormCountClassificationQuery() {
+	      super();
+	    }
+
+	    public void setQuerySql(String csidSeq) {
+	     String querySql = " SELECT COUNT(*) FROM FB_FORMS_VIEW f, sbr.cs_csi_view csc,sbr.ac_csi_view acs "
+	        + " where  csc.cs_idseq IN ("+ csidSeq +")"
+	        + " and csc.cs_csi_idseq = acs.cs_csi_idseq "
+					+ " and acs.AC_IDSEQ=f.QC_IDSEQ "
+	        + " ORDER BY upper(protocol_long_name), upper(context_name)";
+	     
+          super.setSql(querySql);
+	    }
+
+
+       protected Object mapRow(
+         ResultSet rs,
+         int rownum) throws SQLException {
+    	   return new Integer(rs.getInt(1));
+       }
+
+	  }
     	  
     		
     		
@@ -1421,7 +1577,11 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 			System.out.println("XML****");
 			System.out.println(xmlFile);   */
 			
-			Collection forms = form2Dao.getAllForms("", "'CFA642A2-2438-2400-E040-BB89AD432B4D','CFA63964-B053-288D-E040-BB89AD437F2C'", "", "", "", "", "", "", "", "", "", "", "","2","1");
+			//Collection forms = form2Dao.getAllForms("", "'CFA642A2-2438-2400-E040-BB89AD432B4D','CFA63964-B053-288D-E040-BB89AD437F2C'", "", "", "", "", "", "", "", "", "", "", "","2","1");
+	    	
+	    	Collection forms = form2Dao.getAllFormsForClassification("'3D3E3B76-50FC-45E7-E044-0003BA3F9857','2C39E82F-DEC1-6BF9-E044-0003BA3F9857'","1","1");
+	    	
+	    	//Integer total = form2Dao.getFormCount("", "'CFA642A2-2438-2400-E040-BB89AD432B4D','CFA63964-B053-288D-E040-BB89AD437F2C'", "", "", "", "", "", "", "", "", "", "", "");
 			
 			System.out.println(forms.size());
 			
