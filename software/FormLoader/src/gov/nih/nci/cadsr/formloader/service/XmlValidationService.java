@@ -8,6 +8,16 @@ import java.util.List;
 
 public interface XmlValidationService {
 	
+	/**
+	 * Validate an xml file against xsd. The xml file name and path are set in the input
+	 * FormCollection object. If successful, a list of FormDescriptors are generated and assigned
+	 * to the FormCollection.
+	 * 
+	 * @param collection xml file name and path must be set and valid
+	 * @return collection with a list of FormDescriptors generated from the xml
+	 * @throws FormLoaderServiceException thrown when xml is malformed. An error message can be retrieved
+	 * with FormCollection.getMessagesInString()
+	 */
 	public FormCollection validateXml(FormCollection collection) 
 			throws FormLoaderServiceException;
 

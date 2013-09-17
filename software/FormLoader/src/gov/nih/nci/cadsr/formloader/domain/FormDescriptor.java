@@ -226,6 +226,18 @@ public class FormDescriptor {
 	public List<String> getMessages() {
 		return messages;
 	}
+	
+	public String getMessagesInString() {
+		if (messages == null)
+			return "";
+		
+		StringBuilder sb = new StringBuilder();
+		for (String msg : messages) {
+			sb.append(msg).append(";");
+		}
+					
+		return sb.toString();
+	}
 
 	public void setMessages(List<String> messages) {
 		this.messages = messages;

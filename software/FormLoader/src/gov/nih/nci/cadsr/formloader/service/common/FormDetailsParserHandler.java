@@ -150,9 +150,9 @@ public class FormDetailsParserHandler extends ParserHandler {
 		}
 		
 		this.methodName = null;
-		if (localName.equals(StaXParser.FORM))
-			nodeQueue.clear();
-		else {
+		if (localName.equals(StaXParser.FORM)) {
+			nodeQueue.clear();this.currFormIdx++;
+		} else {
 			if (!nodeQueue.isEmpty())
 				nodeQueue.pop();
 		}

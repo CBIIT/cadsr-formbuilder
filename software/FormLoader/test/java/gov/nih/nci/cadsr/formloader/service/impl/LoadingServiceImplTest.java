@@ -121,7 +121,7 @@ public void testUserHasRight() {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void testLoadNewVersion() {
 		this.prepareCollectionToLoad(".\\.\\test\\data", "3256357_v1_0_newform-partial-newversion.xml");
 		try {
@@ -138,13 +138,9 @@ public void testUserHasRight() {
 	
 	@Test
 	public void testLoadUpdateForm() {
-		/*
-		 * To run this case, first run testLoadNewForm(), go to FB to download
-		 * the newly loaded form xml and use it as input here
-		 * 
-		 * Remember to edit the xml to have <forms>
-		 */
-		this.prepareCollectionToLoad(".\\.\\test\\data\\loading", "load-newform-update.xml");
+
+		//this.prepareCollectionToLoad(".\\test\\data", "update-form.xml");
+		this.prepareCollectionToLoad(".\\test\\data", "update-form-with-xmlval-errors.xml");
 		try {
 			FormDescriptor form = aColl.getForms().get(0);
 			assertTrue(form.getLoadType() == FormDescriptor.LOAD_TYPE_UPDATE_FORM);
@@ -153,7 +149,7 @@ public void testUserHasRight() {
 			form = aColl.getForms().get(0);
 			assertTrue(form.getLoadStatus() == FormDescriptor.STATUS_LOADED);
 			String status = StatusFormatter.getStatusInXml(aColl);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\loading\\load-newform-update.status.xml");
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\update-form.status.xml");
 		} catch (FormLoaderServiceException fle) {
 			fail("Got exception: " + fle.getMessage());
 		}
@@ -161,13 +157,8 @@ public void testUserHasRight() {
 	
 	@Test
 	public void testLoadUpdateFormWithRefdocs() {
-		/*
-		 * To run this case, first run testLoadNewForm(), go to FB to download
-		 * the newly loaded form xml and use it as input here
-		 * 
-		 * Remember to edit the xml to have <forms>
-		 */
-		this.prepareCollectionToLoad(".\\.\\test\\data\\loading", "update-with-refdocs.xml");
+		
+		this.prepareCollectionToLoad(".\\.\\test\\data", "update-with-refdocs.xml");
 		try {
 			FormDescriptor form = aColl.getForms().get(0);
 			assertTrue(form.getLoadType() == FormDescriptor.LOAD_TYPE_UPDATE_FORM);
@@ -176,7 +167,7 @@ public void testUserHasRight() {
 			form = aColl.getForms().get(0);
 			assertTrue(form.getLoadStatus() == FormDescriptor.STATUS_LOADED);
 			String status = StatusFormatter.getStatusInXml(aColl);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\loading\\load-with-refdocs.status.xml");
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\update-with-refdocs.status.xml");
 		} catch (FormLoaderServiceException fle) {
 			fail("Got exception: " + fle.getMessage());
 		}
@@ -184,13 +175,9 @@ public void testUserHasRight() {
 	
 	@Test
 	public void testLoadNewVersionFormWithRefdocs() {
-		/*
-		 * To run this case, first run testLoadNewForm(), go to FB to download
-		 * the newly loaded form xml and use it as input here
-		 * 
-		 * Remember to edit the xml to have <forms>
-		 */
-		this.prepareCollectionToLoad(".\\.\\test\\data\\loading", "update-with-refdocs.xml");
+		//new-version-3643954: has a forever non-existing version, thus making it 
+		//a new version load always.
+		this.prepareCollectionToLoad(".\\.\\test\\data\\loading", "new-version-3643954.xml");
 		try {
 			FormDescriptor form = aColl.getForms().get(0);
 			assertTrue(form.getLoadType() == FormDescriptor.LOAD_TYPE_NEW_VERSION);
@@ -199,7 +186,7 @@ public void testUserHasRight() {
 			form = aColl.getForms().get(0);
 			assertTrue(form.getLoadStatus() == FormDescriptor.STATUS_LOADED);
 			String status = StatusFormatter.getStatusInXml(aColl);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\loading\\load-with-refdocs.status.xml");
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\loading\\new-version-3643954.status.xml");
 		} catch (FormLoaderServiceException fle) {
 			fail("Got exception: " + fle.getMessage());
 		}
@@ -215,7 +202,7 @@ public void testUserHasRight() {
 			aColl = xmlValidator.validateXml(aColl);
 			List<FormDescriptor> forms = aColl.getForms();
 			assertNotNull(forms);
-			assertTrue(forms.size() == 1);
+			assertTrue(forms.size() >= 1);
 			
 			FormDescriptor form = forms.get(0);
 			String status = StatusFormatter.getStatusInXml(form);
@@ -238,7 +225,7 @@ public void testUserHasRight() {
 			
 			assertNotNull(aColl);
 			forms = aColl.getForms();
-			assertTrue(forms.size() == 1);
+			//assertTrue(forms.size() == 1);
 			status = StatusFormatter.getStatusInXml(form);
 			StatusFormatter.writeStatusToXml(status, filepath + "\\load-preparation-content.xml");
 			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_DB_VALIDATED);
@@ -247,6 +234,34 @@ public void testUserHasRight() {
 
 			//status = StatusFormatter.getStatusInXml(aColl);
 			//StatusFormatter.writeStatusToXml(status, filepath + "\\LoadService-collection.xml");
+		} catch (FormLoaderServiceException fle) {
+			fail("Got exception: " + fle.getMessage());
+		}
+	}
+	
+	@Test
+	public void testLoad5Forms() {
+		this.prepareCollectionToLoad(".\\.\\test\\data", "load_forms-5.xml");
+		try {
+			List<FormDescriptor> forms = aColl.getForms();
+			assertTrue(forms.get(0).getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW));
+			assertTrue(forms.get(1).getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW_VERSION));
+			assertTrue(forms.get(2).getLoadType().equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM));
+			assertTrue(forms.get(3).getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATION_FAILED);
+			assertTrue(forms.get(4).getLoadType().equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM));
+			
+			forms.get(0).setSelected(true);
+			forms.get(1).setSelected(true);
+			forms.get(2).setSelected(true);
+			forms.get(3).setSelected(false);
+			forms.get(4).setSelected(true);
+			
+			
+			aColl = this.loadService.loadForms(aColl);
+			FormDescriptor form = aColl.getForms().get(0);
+			assertTrue(form.getLoadStatus() == FormDescriptor.STATUS_LOADED);
+			String status = StatusFormatter.getStatusInXml(aColl);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\load_forms-5.status.xml");
 		} catch (FormLoaderServiceException fle) {
 			fail("Got exception: " + fle.getMessage());
 		}

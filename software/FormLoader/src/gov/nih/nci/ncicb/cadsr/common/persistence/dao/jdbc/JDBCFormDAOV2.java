@@ -679,12 +679,14 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
       String version,
       String moduleLongName,
       String cdePublicId,
-      String createdBy) {
+      String createdBy,
+      String start,
+      String size) {
       FormQuery query = new FormQuery();
       query.setDataSource(getDataSource());
       query.setSql(
         formLongName, protocolIdSeq, contextIdSeq, workflow, categoryName, type,
-        classificationIdseq,contextRestriction, publicId, version, moduleLongName, cdePublicId, createdBy);
+        classificationIdseq,contextRestriction, publicId, version, moduleLongName, cdePublicId, createdBy, start, size);
 
       Collection forms =  query.execute();
       //add protocols
@@ -746,7 +748,9 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
         String version,
         String moduleName,
         String cdePublicId,
-        String createdBy) {
+        String createdBy,
+        String start,
+        String size) {
 
         String selectWhat = "SELECT distinct f.qc_idseq, f.version, f.type, f.conte_idseq, f.CATEGORY_NAME, f.workflow, f.preferred_name, f.definition, " +
                             " f.long_name, f.context_name, f.public_id, latest_version_ind,  f.DATE_MODIFIED, f.DATE_CREATED ";
@@ -773,7 +777,12 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
                             publicId, version, moduleName, cdePublicId, createdBy, hasWhere);
         String sql = selectWhat.toString() + " " + fromWhat.toString() + " "
                       + initialWhere.toString() + whereClause;
-        super.setSql(sql);
+        
+        int startRow = (Integer.parseInt(start) -1) * Integer.parseInt(size) + 1;
+        int endRow = (Integer.parseInt(start) * Integer.parseInt(size) );
+        String wrapSql1 = "SELECT * from ( SELECT /*+ FIRST_ROWS(" + size + ") */ a.*, ROWNUM rnum from ( ";
+        String wrapSql2 = " ) a where ROWNUM <=" + endRow + " ) where rnum  >= " + startRow;
+        super.setSql(wrapSql1 + sql + wrapSql2);
         
         System.out.println("FRM SEARCH QRY: ["+sql+"]");
 
@@ -1396,7 +1405,7 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 	    			"FORMBUILDER", "FORMBUILDER");
 	    	
 	    	JDBCFormDAOV2 form2Dao = new JDBCFormDAOV2(ds);   	
-    	
+    	/*
 	    	FormV2 form = form2Dao.findFormV2ByPrimaryKey("BFC76B3A-AC92-45C7-E040-BB89AD430B2C");
 	    	String workflow = form.getAslName();
 	    	System.out.println("Got workflow: " + workflow);
@@ -1410,6 +1419,11 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 				System.out.println(e);
 			}
 			System.out.println("XML****");
-			System.out.println(xmlFile);   
+			System.out.println(xmlFile);   */
+			
+			Collection forms = form2Dao.getAllForms("", "'CFA642A2-2438-2400-E040-BB89AD432B4D','CFA63964-B053-288D-E040-BB89AD437F2C'", "", "", "", "", "", "", "", "", "", "", "","2","1");
+			
+			System.out.println(forms.size());
+			
 	    }
 }

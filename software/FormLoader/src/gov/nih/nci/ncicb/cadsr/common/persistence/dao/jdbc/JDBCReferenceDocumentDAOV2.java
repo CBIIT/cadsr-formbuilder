@@ -27,6 +27,7 @@ public ReferenceDocument createReferenceDoc(ReferenceDocument newRefDoc, String 
     InsertRefDoc insertQuestContent =
       new InsertRefDoc(this.getDataSource());
     String rdIdseq = generateGUID();
+    
     int res = insertQuestContent.createContent(newRefDoc, rdIdseq, acIdSeq);
 
     if (res != 1) {
