@@ -18,8 +18,8 @@ function ToggleSelectAll(e){
 </SCRIPT>
 
 <SCRIPT LANGUAGE="JavaScript1.1" SRC="js/checkbox.js"></SCRIPT>
+<%@ include file="showMessages.jsp" %>
   
-
 <!--GF32932 D.An, 20130828  -->
 <input type="hidden" id="myInputCurrentPage" name="myInputCurrentPage" value="Result" />
 <script type="text/javascript">
@@ -57,14 +57,14 @@ function ToggleSelectAll(e){
 
 <%-- Begin GF29128 fix. -D.An, 20130812 --%>       	     
 
-         <table width="100%" align="center" cellpadding="1" cellspacing="1" border="0">
-               <tr>
-<td align="left" width="50%" nowrap>
+<table width="100%" align="center" cellpadding="1" cellspacing="1" border="0">
+	<tr>
+<td align="left" width="10%">
 <a id="addForm2Cart" class="noneViewer" style="display:none"  href="javascript:document.forms[0].action=document.forms[0].action+'?method=addFormToCart';document.forms[0].submit()">
             <html:img src='<%="i/addtoformcart.gif"%>' border="0" alt="Add to Form Cart"/> 
 </a>                  
 </td>
-<td align="right" width="50%" nowrap>
+<td width="90%">
         <bean:define id="pageBean" name="<%=FormConstants.FORM_SEARCH_RESULTS_PAGINATION%>" 
         	type="gov.nih.nci.ncicb.cadsr.common.jsp.bean.PaginationBean"/>
         <cde:pagination name="top" textClassName="OraFieldText" selectClassName="LOVField" formIndex="0" pageSize="100" 
@@ -78,7 +78,7 @@ function ToggleSelectAll(e){
         	     /> 
 </td>
 <%-- GF32932. Remove Save button. end. -D.An, 20130828--%>
-</tr>
+	</tr>
 </table>
 
         <table width="100%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
