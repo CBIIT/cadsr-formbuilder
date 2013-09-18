@@ -27,6 +27,7 @@ import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormInstructionDA
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormValidValueDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormValidValueInstructionDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCModuleDAOV2;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCModuleInstructionDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCQuestionDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCQuestionInstructionDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCReferenceDocumentDAOV2;
@@ -58,6 +59,8 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	public static final String DEFAULT_FORM_TYPE = "CRF";
 	public static final	String DEFAULT_REFDOC_TYPE	= "REFERENCE";
 	
+	public static final	String FORM_LOADER_DB_USER = "FORMLOADER";
+	
 	protected static final int MARK_TO_KEEP_IN_UPDATE = 99;
 	
 	JDBCFormDAOV2 formV2Dao;
@@ -70,6 +73,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	JDBCFormValidValueInstructionDAOV2 formValidValueInstructionV2Dao;
 	JDBCCollectionDAO collectionDao;
 	JDBCReferenceDocumentDAOV2 referenceDocV2Dao;
+	JDBCModuleInstructionDAOV2 moduleInstructionV2Dao;
 	
 	//These are loaded from database for validation purposes
 	HashMap<String, String> conteNameSeqIdMap;
@@ -374,6 +378,15 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		this.referenceDocV2Dao = referenceDocV2Dao;
 	}
 
+	public JDBCModuleInstructionDAOV2 getModuleInstructionV2Dao() {
+		return moduleInstructionV2Dao;
+	}
+
+	public void setModuleInstructionV2Dao(
+			JDBCModuleInstructionDAOV2 moduleInstructionV2Dao) {
+		this.moduleInstructionV2Dao = moduleInstructionV2Dao;
+	}
+
 	@Transactional(readOnly=true)
 	public String getContextSeqIdByName(String contextName) {
 		if (conteNameSeqIdMap == null)
@@ -403,7 +416,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	 * Create new form
 	 */
 	@Transactional
-	public String createForm(FormDescriptor form, String loggedinUser, String xmlPathName, int formIdx) {
+	public String createForm(FormDescriptor form, String xmlPathName, int formIdx) {
 		
 		String formSeqid = "";
 		
@@ -432,6 +445,8 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			createModulesInForm(form, formdto);
 		} catch (DMLException dbe) {
 			logger.error(dbe.getMessage());
+			form.addMessage(dbe.getMessage());
+			form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
 		}
 		
 		return formSeqid;
@@ -483,6 +498,9 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			
 		} catch (DMLException dbe) {
 			logger.error(dbe.getMessage());
+			form.addMessage(dbe.getMessage());
+			formSeqid = null;
+			form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
 		}
 		
 		return formSeqid;
@@ -491,25 +509,32 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	@Transactional
 	public String updateForm(FormDescriptor form, String loggedinUser, String xmlPathName, int formIdx) {
 		
-		FormV2TransferObject formdto = translateIntoFormDTO(form);	
-		if (formdto == null) {
-			logger.error("Error!! Failed to translate xml form into FormTransferObject");
-			return null;
-		}
+		try {
+			FormV2TransferObject formdto = translateIntoFormDTO(form);	
+			if (formdto == null) {
+				logger.error("Error!! Failed to translate xml form into FormTransferObject");
+				return null;
+			}
 
-		int res = formV2Dao.updateFormComponent(formdto);
-		if (res != 1) {
-			logger.error("Error!! Failed to update form");
-			return null;
+			int res = formV2Dao.updateFormComponent(formdto);
+			if (res != 1) {
+				logger.error("Error!! Failed to update form");
+				return null;
+			}
+
+			createFormInstructions(form, formdto);
+
+			//designations, refdocs, definitions and contact communications
+			processFormdetails(form, xmlPathName, formIdx);
+
+			//Onto modules and questions
+			updateModulesInForm(form, formdto);
+		} catch (DMLException dbe) {
+			logger.error(dbe.getMessage());
+			form.addMessage(dbe.getMessage());
+			form.setFormSeqId("");
+			form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
 		}
-		
-		createFormInstructions(form, formdto);
-		
-		//designations, refdocs, definitions and contact communications
-		processFormdetails(form, xmlPathName, formIdx);
-		
-		//Onto modules and questions
-		updateModulesInForm(form, formdto);
 		
 		return form.getFormSeqId();
 	}
@@ -517,22 +542,28 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	protected FormV2TransferObject translateIntoFormDTO(FormDescriptor form) {
 			
 		FormV2TransferObject formdto = new FormV2TransferObject();
+		
+		//User FORMLOADER for forms, modules, questions, etc.
+		formdto.setModifiedBy(FORM_LOADER_DB_USER);
+		form.setModifiedBy(FORM_LOADER_DB_USER);
+		
+		formdto.setCreatedBy(form.getCreatedBy());
+		formdto.setChangeNote(form.getChangeNote());
+		
 		String loadType = form.getLoadType(); 
 		if (FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(loadType)) {
 			float latest = this.formV2Dao.getMaxFormVersion(Integer.parseInt(form.getPublicId()));
 			formdto.setVersion(new Float(latest + 1.0)); //TODO: is this the way to assign new version?
+			form.setVersion(String.valueOf(formdto.getVersion()));
 			formdto.setPublicId(Integer.parseInt(form.getPublicId()));
 			formdto.setFormIdseq(form.getFormSeqId());
-			formdto.setAslName("DRAFT NEW");
-			formdto.setCreatedBy(form.getCreatedBy()); 
+			formdto.setAslName("DRAFT NEW"); 
 		} else if (FormDescriptor.LOAD_TYPE_NEW.equals(loadType)) {
 			formdto.setVersion(Float.valueOf("1.0")); 
 			formdto.setAslName("DRAFT NEW");
-			formdto.setCreatedBy(form.getCreatedBy()); 
 		} else if (FormDescriptor.LOAD_TYPE_UPDATE_FORM.equals(loadType)) {
 			formdto.setVersion(Float.valueOf(form.getVersion()));
 			formdto.setAslName(form.getWorkflowStatusName()); 
-			formdto.setModifiedBy(form.getModifiedBy());
 			String seqid = form.getFormSeqId(); //we got this when we queried on form public id
 			//This should not happen
 			if (seqid == null || seqid.length() == 0) {
@@ -552,27 +583,16 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		formdto.setFormCategory(form.getCategoryName());
 		formdto.setPreferredDefinition(form.getPreferredDefinition());
 		
-		String contextName = form.getContext();
-		
-		if (contextName != null && contextName.length() > 0) {
-			Context context = new ContextTransferObject();
-		    context.setConteIdseq(this.getContextSeqIdByName(contextName));
-		    formdto.setContext(context);
-			formdto.setConteIdseq(this.getContextSeqIdByName(contextName));
-		} else {
-			String msg = "Form doesn't have a valid context name. Unable to load";
-			form.addMessage(msg);
-			form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
-			logger.error(form.getFormIdString() + ": " + msg);
-			return null; 
-		}
-		
+		Context context = new ContextTransferObject();
+	    context.setConteIdseq(form.getContextSeqid());
+	    formdto.setContext(context);
+		formdto.setConteIdseq(form.getContextSeqid()); //maynot needed
 		
 		return formdto;
 	}
 	
 	
-	
+	@Transactional
 	protected void createFormInstructions(FormDescriptor form, FormV2TransferObject formdto) {
 		logger.debug("Creating instructions for form");
 		String instructString = form.getHeaderInstruction();
@@ -591,6 +611,14 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		logger.debug("Done creating instructions for form");
 	}
 	
+	/**
+	 * Create the instruction dto for the parent admin component dto.
+	 * 
+	 * @param compdto parent admin component that the instruction belongs to
+	 * @param instructionString instruction string
+	 * 
+	 * @return InstructionTransferObject
+	 */
 	protected InstructionTransferObject createInstructionDto(AdminComponentTransferObject compdto, String instructionString) {
 			
 		InstructionTransferObject instruction = null;
@@ -608,10 +636,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		return instruction;
 	}
 	
-	protected List<String> getCdeSeqIdsFromForm(FormDescriptor form) {
-		return null;
-	}
-	
+	@Transactional
 	protected void processFormdetails(FormDescriptor form, String xmlPathName, int currFormIdx) {
 		logger.debug("Processing protocols, designations, refdocs and definitions for form");
 		StaXParser parser = new StaXParser();
@@ -791,6 +816,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	 * @param form
 	 * @param protoIds
 	 */
+	@Transactional
 	protected void processProtocols(FormDescriptor form, List<String> protoIds) {
 		String formSeqid = form.getFormSeqId();
 		if (protoIds != null && protoIds.size() > 0) {
@@ -921,6 +947,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			String vvSeqid  = 
 					formValidValueV2Dao.createValidValue(fvv,newQuestdto.getQuesIdseq(),moduledto.getCreatedBy());
 			
+			
 			if (vvSeqid != null && vvSeqid.length() > 0) {
 				formValidValueV2Dao.createValidValueAttributes(vvSeqid, vValue.getMeaningText(), vValue.getDescription(), moduledto.getCreatedBy());
 				
@@ -973,6 +1000,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	 * @param moduledto
 	 * @param instString
 	 */
+	@Transactional
 	protected void createQuestionInstruction(QuestionTransferObject newQuestdto, 
 			ModuleTransferObject moduledto, String instString) {
 		
@@ -1014,6 +1042,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	 * @param moduledto
 	 * @param instString
 	 */
+	@Transactional
 	protected void updateQuestionInstruction(QuestionTransferObject questdto, 
 			ModuleTransferObject moduledto, String instString) {
 		if (instString == null || instString.length() == 0)
@@ -1043,6 +1072,9 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	protected QuestionTransferObject translateIntoQuestionDTO(QuestionDescriptor question, FormDescriptor form) {
 		QuestionTransferObject questdto = new QuestionTransferObject();
 		
+		questdto.setCreatedBy(form.getCreatedBy());
+		questdto.setModifiedBy(FORM_LOADER_DB_USER);
+		
 		String deSeqid = question.getCdeSeqId();
 		if (deSeqid != null && deSeqid.length() > 0) {
 			DataElementTransferObject de = new DataElementTransferObject();
@@ -1050,13 +1082,12 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			questdto.setDataElement(de);
 		}
 			
-		if (!FormDescriptor.LOAD_TYPE_UPDATE_FORM.equals(form.getLoadType())) {
+		if (FormDescriptor.LOAD_TYPE_NEW.equals(form.getLoadType())) {
 			questdto.setVersion(Float.valueOf("1.0")); 
-			questdto.setCreatedBy(form.getCreatedBy());
-		}
-		else {
+		} else if (FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(form.getLoadType())) {
+			questdto.setVersion(Float.valueOf(form.getVersion()));
+		} else {
 			questdto.setVersion(Float.valueOf(question.getVersion())); 
-			questdto.setModifiedBy(form.getModifiedBy());
 		}
 		
 		String pid = question.getPublicId();
@@ -1067,7 +1098,6 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		questdto.setMandatory(question.isMandatory());
 		questdto.setDefaultValue(question.getDefaultValue());
 		questdto.setAslName("DRAFT NEW");
-		
 		
 		questdto.setLongName(question.getQuestionText());  
 		
@@ -1084,12 +1114,14 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		moduleDto.setAslName("DRAFT NEW");
 		moduleDto.setLongName(module.getLongName());
 		
-		if (!FormDescriptor.LOAD_TYPE_UPDATE_FORM.equals(form.getLoadType())) {
+		moduleDto.setCreatedBy(formdto.getCreatedBy());
+		moduleDto.setModifiedBy(FORM_LOADER_DB_USER);
+		
+		if (FormDescriptor.LOAD_TYPE_NEW.equals(form.getLoadType())) {
 				moduleDto.setVersion(Float.valueOf("1.0")); 
-				moduleDto.setCreatedBy(formdto.getCreatedBy());
-		}
-		else {
-			moduleDto.setModifiedBy(form.getModifiedBy());
+		} else if (FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(form.getLoadType())) {
+			moduleDto.setVersion(formdto.getVersion());
+		} else {
 			moduleDto.setPublicId(Integer.parseInt((module.getPublicId())));
 			moduleDto.setVersion(Float.parseFloat(module.getVersion()));
 		}
@@ -1154,6 +1186,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			String moduleSeqid = "";
 	
 			if (isExistingModule(moduledto, existingModuledtos)) {
+				//this means sampe public id and version
 				int res = moduleV2Dao.updateModuleComponent(moduledto);
 				//TODO: better understand spring sqlupdate return code
 				updateQuestionsInModule(module, moduledto, form, formdto);
@@ -1163,8 +1196,10 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 				moduleSeqid = moduleV2Dao.createModuleComponent(moduledto);
 				module.setModuleSeqId(moduleSeqid);
 				moduledto.setIdseq(moduleSeqid);
-				//Now, onto questions. Ignore version from xml. Start from 1.0
 				
+				addModuleInstructionIfNecessary(moduledto, existingModuledtos);
+				
+				//Now, onto questions. Ignore version from xml. Start from 1.0
 				resetQeustionVersionInModule(module); //
 				createQuestionsInModule(module, moduledto, form, formdto);
 			}
@@ -1173,6 +1208,47 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		
 		//Find the existing modules to be deleted
 		removeExtraModulesIfAny(existingModuledtos);
+	}
+	
+	/**
+	 * Check to see if a new module has a "similar" existing module: no match with public id and version but has the same long name. If found,
+	 * add an instruction to the module: 
+	 * 		"New Module with public id 2963886 and version 1.0 was created by Form Loader because the XML module public id value of 
+	 * 		2962822 and version 1.0 did not match an existing module. Please review modules and delete any unnecessary module, 
+	 * 		this module may have been intended to replace an existing module." 
+	 * 
+	 * This applies to update form ONLY
+	 * 
+	 * @param currModule
+	 * @param existingModuledtos
+	 */
+	@Transactional(readOnly=true)
+	protected void addModuleInstructionIfNecessary(ModuleTransferObject currModule, 
+			List<ModuleTransferObject> existingModuledtos) {
+		
+		for (ModuleTransferObject moduledto : existingModuledtos) {
+			//These are the previously marked as "matched" in isExistingModule
+			if (MARK_TO_KEEP_IN_UPDATE == moduledto.getDisplayOrder())
+				continue;
+			
+			if (currModule.getLongName().equalsIgnoreCase(moduledto.getLongName())) {
+				//get the newly added module's public id and version
+				ModuleTransferObject mod = moduleV2Dao.getModulePublicIdVersionBySeqid(currModule.getIdseq());
+				
+				String instr = "New Module with public id " + mod.getPublicId() + " and version " + mod.getVersion() + 
+						" was created by Form Loader because the XML module public id value of " +
+						currModule.getPublicId() + " and version " + currModule.getVersion() + " did not match an existing module. " +
+						"Please review modules and delete any unnecessary module, this module may have been intended to " +
+						"replace an existing module.";
+				
+				InstructionTransferObject instdto = createInstructionDto(currModule, instr);
+				moduleInstructionV2Dao.createInstruction(instdto, currModule.getIdseq());
+				
+				break;
+			}
+			
+		
+		}
 	}
 	
 	protected boolean isExistingModule(ModuleTransferObject currModule, List<ModuleTransferObject> existingModuledtos) {
@@ -1194,6 +1270,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	 * Check the list to see if any is marked with MARK_FOR_DELETE. Delete the marked ones.
 	 * @param existingmoduledtos
 	 */
+	@Transactional
 	protected void removeExtraModulesIfAny(List<ModuleTransferObject> existingmoduledtos) {
 		for (ModuleTransferObject moduledto : existingmoduledtos) {
 			if (moduledto.getDisplayOrder() != MARK_TO_KEEP_IN_UPDATE) {
@@ -1264,6 +1341,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	 * @param form
 	 * @param formdto
 	 */
+	@Transactional
 	protected void updateQuestionsInModule(ModuleDescriptor module, ModuleTransferObject moduledto, 
 			FormDescriptor form, FormV2TransferObject formdto) {
 		
@@ -1361,6 +1439,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		
 	}
 
+	@Transactional
 	protected void updateQuestionValidValues(QuestionDescriptor question, QuestionTransferObject questdto, 
 			ModuleTransferObject moduledto, FormV2TransferObject formdto) {
 
@@ -1415,6 +1494,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		return false;
 	}
 	
+	@Transactional
 	protected void updateQuestionValidValue(FormValidValueTransferObject currVV, 
 			QuestionDescriptor.ValidValue vvXml, QuestionTransferObject questdto) {
 		
@@ -1472,6 +1552,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		return collSeqid;
 	}
 	
+	@Transactional(readOnly=true)
 	public boolean hasLoadFormRight(FormDescriptor form, String userName, String contextName) {
 		String contextseqid = this.getContextSeqIdByName(contextName);
 		

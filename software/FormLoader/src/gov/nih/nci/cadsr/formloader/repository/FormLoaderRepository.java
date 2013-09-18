@@ -27,12 +27,21 @@ public interface FormLoaderRepository {
 
 	public String getContextSeqIdByName(String contextName);
 	
-	public String createForm(FormDescriptor form, String userName, String xmlPathName, int formIdx);
+	public String createForm(FormDescriptor form, String xmlPathName, int formIdx);
 	public String updateForm(FormDescriptor form, String userName, String xmlPathName, int formIdx);
 	public void setPublicIdVersionBySeqids(List<FormDescriptor> forms);
 	
 	public String createFormCollectionRecords(FormCollection coll);
 	
+	/**
+	 * Check to see if user has right to edit form (load includes create, update and delete) in the given context. Currently,
+	 * this only checks the create right, assuming it covers also update and delete as shown in Form Builder.
+	 * 
+	 * @param form form that will be edited on. 
+	 * @param userName
+	 * @param contextName
+	 * @return
+	 */
 	public boolean hasLoadFormRight(FormDescriptor form, String userName, String contextName);
 	
 	public List<FormCollection> getAllLoadedCollections();

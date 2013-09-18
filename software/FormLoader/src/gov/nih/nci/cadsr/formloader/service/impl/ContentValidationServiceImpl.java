@@ -65,13 +65,18 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 					"Input form list is null or empty. Unable to validate form content.");
 		}
 		
+		String loggedinUser = aCollection.getCreatedBy();
+		if (loggedinUser == null || loggedinUser.length() == 0) {
+			logger.error("Collection's createdBy (Form Loader's logged in user) is not set. Unable to proceed");
+			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_USER_INVALID,
+					"Collection's createdBy (Form Loader's logged in user) is not set. Unable to proceed.");
+		}
+		
 		String xmlPathName = FormLoaderHelper.checkInputFile(aCollection.getXmlPathOnServer(), aCollection.getXmlFileName());
 		
 		determineLoadType(formHeaders);
-		
-		//TODO
-		//validate context and workflow status by name, form type, designations, definitions and refdocs by type, 
-		validateFormInfo(formHeaders);
+		 
+		validateFormInfo(formHeaders, loggedinUser);
 		
 		validateQuestions(xmlPathName, formHeaders);
 		
@@ -114,7 +119,13 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		
 	}
 	
-	protected void validateFormInfo(List<FormDescriptor> formDescriptors) {
+	/**
+	 * Validate form's context name, workflow status, form type and Form Loader loggedin user's load right in 
+	 * the form's specified context. Any discrepancy will be entered as a message in the form message list
+	 *  
+	 * @param formDescriptors
+	 */
+	protected void validateFormInfo(List<FormDescriptor> formDescriptors, String loggedinUser) {
 		
 		int idx = 0;
 		for (FormDescriptor form : formDescriptors) {		
@@ -142,12 +153,27 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 				}
 			}
 			
-			//check designation types, def types and refdoc types;
-			//this check will be done at load type
-			
+			if (!this.repository.hasLoadFormRight(form, loggedinUser, form.getContext())) {
+				form.addMessage("Form Loader logged in user [" + loggedinUser + "] doesn't have load form right in context [" + 
+						form.getContext() + "]. Validation failed");
+				form.setLoadStatus(FormDescriptor.STATUS_CONTENT_VALIDATION_FAILED);
+				form.setSelected(false);
+			} else {
+				String changeNote = "Created/Updated using Form Loader by [" + loggedinUser + 
+						"], XML document contained createdBy [" + form.getCreatedBy() + "] and modifiedBy [" + form.getModifiedBy() + "]";
+				form.setCreatedBy(loggedinUser);
+				form.setChangeNote(changeNote);
+			}
 		}
 	}
 	
+	/**
+	 * If context name is null or empty, use default "NCIP". If context name is present but not matching any valid value
+	 * from database, add a message to the form and reject loading the form.
+	 * 
+	 * @param form from xml
+	 * @return true if context name in the form is valid or empty, thus, reset to default "NCIP"; false if context name invalid
+	 */
 	protected boolean validContextName(FormDescriptor form) {
 		
 		String contextName = form.getContext();
@@ -158,7 +184,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		
 		String contextSeqid = this.repository.getContextSeqIdByName(form.getContext());
 		if (contextSeqid == null || contextSeqid.length() == 0) {
-			form.addMessage("Context name in form \"" + form.getContext() + "\" is not valid. Unable to load form");
+			form.addMessage("Context name in form [" + form.getContext() + "] is not valid. Unable to load form");
 			return false;
 		} 
 		

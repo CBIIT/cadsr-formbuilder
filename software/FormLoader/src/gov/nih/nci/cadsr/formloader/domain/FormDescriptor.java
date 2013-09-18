@@ -48,12 +48,6 @@ public class FormDescriptor {
 	String categoryName;
 	//pass2
 	
-	///////////TODO
-	List definitions;
-	List designations;
-	List refdocs;
-	////
-	
 	List<ModuleDescriptor> modules = new ArrayList<ModuleDescriptor>();
 	
 	//Any error (xml, content validation, etc) will be here
@@ -288,7 +282,10 @@ public class FormDescriptor {
 	}
 
 	public void setChangeNote(String changeNote) {
-		this.changeNote = changeNote;
+		if (this.changeNote == null || this.changeNote.length() == 0)
+			this.changeNote = changeNote;
+		else
+			this.changeNote += ";" + changeNote;
 	}
 
 	public String getCategoryName() {

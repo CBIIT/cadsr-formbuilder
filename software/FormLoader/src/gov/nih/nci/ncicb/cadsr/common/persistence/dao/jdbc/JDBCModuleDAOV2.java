@@ -1,10 +1,13 @@
 package gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc;
 
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ModuleTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ValueDomainV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ModuleDAOV2;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.Module;
 import gov.nih.nci.ncicb.cadsr.common.resource.Question;
 import gov.nih.nci.ncicb.cadsr.common.util.StringUtils;
@@ -18,8 +21,10 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.object.MappingSqlQuery;
 import org.springframework.jdbc.object.SqlUpdate;
 import org.springframework.jdbc.object.StoredProcedure;
@@ -358,6 +363,30 @@ public class JDBCModuleDAOV2 extends JDBCAdminComponentDAOV2 implements ModuleDA
 		 return out;
 	 }
 
+ }
+ 
+ public ModuleTransferObject getModulePublicIdVersionBySeqid(String moduleseqid) {
+	 if (moduleseqid == null || moduleseqid.length() == 0)
+		 return null;
+	 
+	 String sql = "select QC_ID, VERSION from sbrext.quest_contents_view_ext " +
+			 "where QC_IDSEQ=:moduleseqid and QTL_NAME='MODULE'";
+	 
+	 MapSqlParameterSource params = new MapSqlParameterSource();
+     params.addValue("moduleseqid", moduleseqid);
+      
+     List<ModuleTransferObject> modules = this.namedParameterJdbcTemplate.query(sql, params, 
+     		new RowMapper<ModuleTransferObject>() {
+     	public ModuleTransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
+     		ModuleTransferObject module = new ModuleTransferObject();
+     		module.setPublicId(rs.getInt("QC_ID"));
+     		module.setVersion(rs.getFloat("VERSION"));
+         	return module;
+         }
+     });
+   
+     return (modules != null && modules.size() > 0) ? modules.get(0) : null;
+	 
  }
 }
 

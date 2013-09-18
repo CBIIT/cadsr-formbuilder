@@ -111,23 +111,16 @@ public class LoadingServiceImpl implements LoadingService {
 			if (!form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW ) &&
 					!form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW_VERSION ) &&
 					!form.getLoadType().equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)) {
-				form.addMessage("Form has undetermined loat type. Unable to load form");
+				form.addMessage("Form has undetermined loat type. Unable to load");
 				logger.debug("Form has undetermined loat type. Unable to load form");
 				form.setSelected(false);
-				continue;
-			}
-			
-			if (!userHasRight(form, loggedinUser)) {
-				form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
-				form.setSelected(false);
-				logger.debug("Error with User right issue");
 				continue;
 			}
 			
 			logger.debug("========  Start loading form [" + form.getFormIdString() + "] ===============");
 				
 			if (FormDescriptor.LOAD_TYPE_NEW.equals(form.getLoadType())) {
-				String seqid = this.repository.createForm(form, loggedinUser, xmlPathName, form_idx);
+				String seqid = this.repository.createForm(form, xmlPathName, form_idx);
 				if (seqid == null || seqid.length() == 0)
 					form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
 				else
@@ -140,7 +133,10 @@ public class LoadingServiceImpl implements LoadingService {
 					form.setLoadStatus(FormDescriptor.STATUS_LOADED);
 			} else if (FormDescriptor.LOAD_TYPE_UPDATE_FORM.equals(form.getLoadType())) {
 				this.repository.updateForm(form, loggedinUser, xmlPathName, form_idx);
-				form.setLoadStatus(FormDescriptor.STATUS_LOADED);
+				if (form.getFormSeqId() == null || form.getFormSeqId().length() == 0)
+					form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
+				else
+				 form.setLoadStatus(FormDescriptor.STATUS_LOADED);
 			} 
 			
 			logger.debug("========== Done loading form [" + form.getFormIdString() + "] =============");

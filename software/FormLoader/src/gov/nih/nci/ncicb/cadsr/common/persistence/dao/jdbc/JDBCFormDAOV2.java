@@ -423,7 +423,7 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
         return forms;
     }
     
-    public String createFormComponent(Form sourceForm) throws DMLException {
+    public String createFormComponent(FormV2 sourceForm) throws DMLException {
     	// check if the user has the privilege to create module
     	boolean create =
     			this.hasCreate(
@@ -438,9 +438,9 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
     	String contentInsertSql =
     	          " INSERT INTO sbrext.quest_contents_view_ext " +
     	          " (qc_idseq, version, preferred_name, long_name, preferred_definition, " +
-    	          "  conte_idseq, proto_idseq, asl_name, created_by, qtl_name, qcdl_name ) " +
+    	          "  conte_idseq, proto_idseq, asl_name, created_by, qtl_name, qcdl_name, change_note) " +
     	          " VALUES " + " (:qc_idseq, :version, :preferred_name, :long_name, :preferred_definition, " +
-    	          "  :conte_idseq, :proto_idseq, :asl_name, :created_by, :qtl_name, :qcdl_name ) ";
+    	          "  :conte_idseq, :proto_idseq, :asl_name, :created_by, :qtl_name, :qcdl_name, :change_note ) ";
     	
     	String protocolIdSeq = null; //bypass
     	
@@ -458,6 +458,7 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
     	namedParameters.put("created_by", sourceForm.getCreatedBy());
     	namedParameters.put("qtl_name", sourceForm.getFormType());
     	namedParameters.put("qcdl_name", sourceForm.getFormCategory());
+    	namedParameters.put("change_note", sourceForm.getChangeNote());
     	
     	int res = namedParameterJdbcTemplate.update(contentInsertSql, namedParameters);
 
@@ -575,7 +576,7 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 
     }
     
-    public int updateFormComponent(Form newForm) throws DMLException {
+    public int updateFormComponent(FormV2 newForm) throws DMLException {
 
         UpdateFormComponent  updateFormComponent  =
           new UpdateFormComponent (this.getDataSource());
@@ -610,7 +611,7 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
            " UPDATE sbrext.quest_contents_view_ext SET " +
            " qtl_name = ?, conte_idseq = ?, asl_name = ?, preferred_name = ?, " +
            " preferred_definition = ?, long_name = ?, qcdl_name = ?, " +
-           " modified_by = ? " +
+           " modified_by = ?, change_note=? " +
            " WHERE qc_idseq = ? ";        
 
         this.setDataSource(ds);
@@ -624,11 +625,12 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
         declareParameter(new SqlParameter("long_name", Types.VARCHAR));
         declareParameter(new SqlParameter("qcdl_name", Types.VARCHAR));
         declareParameter(new SqlParameter("modified_by", Types.VARCHAR));
+        declareParameter(new SqlParameter("change_note", Types.VARCHAR));
        declareParameter(new SqlParameter("qc_idseq", Types.VARCHAR));
         compile();
       }
 
-      protected int updateFormFields(Form form) {
+      protected int updateFormFields(FormV2  form) {
 
         //String protocolIdSeq = null;
         //form is now associated with mulitple forms. Form fields do not include protocols.
@@ -643,7 +645,7 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
             preferredName, form.getPreferredDefinition(),
             //protocolIdSeq, 
             form.getLongName(),
-            form.getFormCategory(), form.getModifiedBy(), form.getFormIdseq()
+            form.getFormCategory(), form.getModifiedBy(), form.getChangeNote(), form.getFormIdseq()
           };
         int res = update(obj);
 
