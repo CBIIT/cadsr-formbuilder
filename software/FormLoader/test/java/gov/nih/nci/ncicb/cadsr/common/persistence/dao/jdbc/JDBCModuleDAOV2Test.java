@@ -2,6 +2,7 @@ package gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import gov.nih.nci.ncicb.cadsr.common.dto.ModuleTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ModuleDAOV2;
 
@@ -39,5 +40,16 @@ public class JDBCModuleDAOV2Test {
 		
 		assertNotNull(questions);
 		assertTrue(questions.size() == 0);
+	}
+	
+	@Test
+	public void testGetModulePublicIdVersionBySeqid() {
+		String seqid = "E6829CE9-E105-44CA-E040-BB8921B67F31";
+		
+		ModuleTransferObject module = moduleV2Dao.getModulePublicIdVersionBySeqid(seqid);
+		assertNotNull(module);
+		assertTrue(module.getPublicId() == 3651164);
+		assertTrue(module.getVersion() == 1.0);
+		
 	}
 }

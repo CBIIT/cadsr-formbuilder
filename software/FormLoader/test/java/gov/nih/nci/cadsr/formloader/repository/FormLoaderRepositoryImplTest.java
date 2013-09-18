@@ -44,17 +44,6 @@ public class FormLoaderRepositoryImplTest {
 	public void setUp() throws Exception {
 		prepareCollectionToLoad();
 	}
-
-	@Test
-	public void testCreateForm() {
-		
-		assertNotNull(aColl);
-		assertNotNull(repository);
-		
-		FormDescriptor form = aColl.getForms().get(0);
-		repository.createForm(form, "FORMBUILDER", filepath + "\\" + testfile, 0);
-		
-	}
 	
 	@Test
 	public void testCheckWorkflowStatusName() {

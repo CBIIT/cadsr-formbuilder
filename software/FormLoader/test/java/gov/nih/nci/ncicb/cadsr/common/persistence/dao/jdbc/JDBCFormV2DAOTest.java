@@ -78,7 +78,7 @@ public class JDBCFormV2DAOTest {
 	
 	@Test
 	public void testCreateFormComponent() {
-		FormTransferObject newform = new FormTransferObject();
+		FormV2TransferObject newform = new FormV2TransferObject();
 		
 		HashMap<String, String> conteMap = formV2Dao.getAllContextSeqIds();
 		
@@ -90,6 +90,7 @@ public class JDBCFormV2DAOTest {
 		newform.setFormType("CRF");
 		newform.setPreferredDefinition("SY- CALGB: 40101 HER-2/neu TESTING FORM");
 		newform.setFormCategory("Treatment");
+		newform.setChangeNote("Adding a change note");
 		
 		String seq = formV2Dao.createFormComponent(newform);
 		

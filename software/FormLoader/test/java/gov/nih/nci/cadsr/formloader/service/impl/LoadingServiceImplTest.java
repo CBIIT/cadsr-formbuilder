@@ -241,7 +241,7 @@ public void testUserHasRight() {
 	
 	@Test
 	public void testLoad5Forms() {
-		this.prepareCollectionToLoad(".\\.\\test\\data", "load_forms-5.xml");
+		this.prepareCollectionToLoad(".\\test\\data", "load_forms-5.xml");
 		try {
 			List<FormDescriptor> forms = aColl.getForms();
 			assertTrue(forms.get(0).getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW));
@@ -258,10 +258,13 @@ public void testUserHasRight() {
 			
 			
 			aColl = this.loadService.loadForms(aColl);
-			FormDescriptor form = aColl.getForms().get(0);
-			assertTrue(form.getLoadStatus() == FormDescriptor.STATUS_LOADED);
+			
 			String status = StatusFormatter.getStatusInXml(aColl);
 			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\load_forms-5.status.xml");
+			
+			FormDescriptor form = aColl.getForms().get(0);
+			assertTrue(form.getLoadStatus() == FormDescriptor.STATUS_LOADED);
+			
 		} catch (FormLoaderServiceException fle) {
 			fail("Got exception: " + fle.getMessage());
 		}
