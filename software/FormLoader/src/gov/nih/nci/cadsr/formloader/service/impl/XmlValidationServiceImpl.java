@@ -167,7 +167,7 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 				errorHandler.getXmlErrors().get(0) : new XmlValidationError(XmlValidationError.XML_NO_ERROR, "Xml well formed", 0);
 	}
 	
-	public List<XmlValidationError> validateXml(String xmlPathName, Resource resource) 
+	protected List<XmlValidationError> validateXml(String xmlPathName, Resource resource) 
 	throws FormLoaderServiceException {
 		
 		logger.debug("Start validating xml file: " + xmlPathName);
