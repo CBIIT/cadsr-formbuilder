@@ -37,7 +37,7 @@ L--%>
 			<s:iterator value="validatedForms" id = "bean" status="status">
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
 				<td>
-					<s:checkbox name="checkboxes[%{#status.index}]" theme = "simple" />
+					<s:checkbox name="loadformcheckboxes[%{#status.index}]" theme = "simple" />
 					
 				</td>
 				<td><s:property value="publicId" /></td>
@@ -48,8 +48,6 @@ L--%>
 				<td><s:property value="protocolName" /></td>
 				<td><s:property value="workflowStatusName" /></td>
 				<td><s:property value="modules.size()" /></td>
-				<td>
-				</td>
 			</tr>
 			</s:iterator>
 				<tr>

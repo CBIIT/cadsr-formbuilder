@@ -24,7 +24,7 @@ public class LoadFormsAction extends ActionSupport implements SessionAware{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Map<Integer, String> checkboxes;
+	private Map<Integer, String> loadformcheckboxes;
 	private HttpServletRequest servletRequest;
     private List<FormDescriptor> selectedFormsList = new ArrayList<FormDescriptor>();
     private FormCollection loadedFormCollection;
@@ -38,12 +38,12 @@ public class LoadFormsAction extends ActionSupport implements SessionAware{
         try {
     	List<FormDescriptor> validatedFormsList = (List<FormDescriptor>) servletRequest.getSession().getAttribute("validatedForms");
     	
-    	if (checkboxes != null && checkboxes.size()>0){
+    	if (loadformcheckboxes != null && loadformcheckboxes.size()>0){
 			
-			for (int i=0; i<checkboxes.size();i++) {
+			for (int i=0; i<loadformcheckboxes.size();i++) {
 				Integer key = new Integer(i);
-				if (checkboxes.containsKey(key)) {
-					String checkboxValue = checkboxes.get(key).toString();
+				if (loadformcheckboxes.containsKey(key)) {
+					String checkboxValue = loadformcheckboxes.get(key).toString();
 					if (checkboxValue.equals("true")) {
 						FormDescriptor selectedForm = validatedFormsList.get(i);
 						selectedForm.setSelected(true);
@@ -82,6 +82,7 @@ public class LoadFormsAction extends ActionSupport implements SessionAware{
 				aColl.setCreatedBy((String)servletRequest.getSession().getAttribute("username"));
 				aColl.setXmlFileName((String)servletRequest.getSession().getAttribute("filename"));
 				aColl.setXmlPathOnServer((String)servletRequest.getSession().getAttribute("upload.file.path"));
+				aColl.setName("Sulas Collection");
 				loadedFormCollection = loadFormsService.loadForms(aColl);
 				loadedForms = loadedFormCollection.getForms();
 	        	servletRequest.getSession().setAttribute("loadedForms", loadedForms);
@@ -92,6 +93,26 @@ public class LoadFormsAction extends ActionSupport implements SessionAware{
 		}
     }
     
+	public Map<Integer, String> getLoadformcheckboxes() {
+		return loadformcheckboxes;
+	}
+
+	public void setLoadformcheckboxes(Map<Integer, String> loadformcheckboxes) {
+		this.loadformcheckboxes = loadformcheckboxes;
+	}
+
+	public List<FormDescriptor> getSelectedFormsList() {
+		return selectedFormsList;
+	}
+
+	public FormCollection getLoadedFormCollection() {
+		return loadedFormCollection;
+	}
+
+	public List<FormDescriptor> getLoadedForms() {
+		return loadedForms;
+	}
+
 	@Override
 	public void setSession(Map<String, Object> arg0) {
 		// TODO Auto-generated method stub

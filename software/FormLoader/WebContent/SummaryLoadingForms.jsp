@@ -17,13 +17,30 @@ L--%>
 <h2>Summary of Loading Forms
 </h2>
 <div class="content">
-	<table class="summaryTable" cellpadding="5px">	
-		<s:iterator value="loadingFormSummary" status="status">
-			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
-				<td><s:property/></td>
+		<table class="fileTable" cellpadding="5px">
+			<tr class="even">
+				<th>Public Id</th>
+				<th>Version</th>
+				<th>Long Name</th>
+				<th>Context</th>
+				<th>Type</th>
+				<th>Protocol Name</th>
+				<th># Modules</th>
+				<th>Load Status</th>
 			</tr>
-		</s:iterator>
-	</table>
+			<s:iterator value="loadedForms" id = "bean" status="status">
+			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
+				<td><s:property value="publicId" /></td>
+				<td><s:property value="version" /></td>
+				<td><s:property value="longName" /></td>
+				<td><s:property value="context" /></td>
+				<td><s:property value="type" /></td>
+				<td><s:property value="protocolName" /></td>
+				<td><s:property value="modules.size()" /></td>
+				<td><s:property value="loadStatus" /></td>
+			</tr>
+			</s:iterator>
+		</table>
 </div>
 </body>
 </html>
