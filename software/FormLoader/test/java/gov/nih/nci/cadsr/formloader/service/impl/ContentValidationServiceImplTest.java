@@ -52,12 +52,13 @@ public class ContentValidationServiceImplTest {
 	
 	@Test
 	public void testValidateXmlContentent() {
-		String xmlPathName = ".\\test\\data\\3193449_has_valid_values.xml";
+		String xmlPathName = ".\\test\\data\\contentvalidation\\3193449_has_valid_values.xml";
 		
 		try {
 			FormCollection aColl = new FormCollection();
 			aColl.setXmlPathOnServer(".\\test\\data");
 			aColl.setXmlFileName("3193449_has_valid_values.xml");
+			aColl.setCreatedBy("YANGS");
 			aColl = xmlValidator.validateXml(aColl);
 			forms = aColl.getForms();
 			assertNotNull(forms);
@@ -101,7 +102,7 @@ public class ContentValidationServiceImplTest {
 			assertTrue(question.getValidValues().get(3).isSkip());
 			
 			String status = StatusFormatter.getStatusInXml(form);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\3193449_has_valid_values_valstatus.xml");
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\contentvalidation\\3193449_has_valid_values_valstatus.xml");
 			
 		} catch (FormLoaderServiceException fle) {
 			logger.debug(fle);
@@ -115,9 +116,12 @@ public class ContentValidationServiceImplTest {
 		
 		try {
 			FormCollection aColl = new FormCollection();
-			aColl.setXmlPathOnServer(".\\test\\data");
-			aColl.setXmlFileName("3256357_v1_0_newform-partial-newversion.xml");
+			aColl.setXmlPathOnServer(".\\test\\data\\contentvalidation");
+			//aColl.setXmlFileName("3256357_v1_0_newform-partial-newversion.xml");
+			aColl.setXmlFileName("new-version-3643954.xml");
+			aColl.setCreatedBy("yangs");
 			aColl = xmlValidator.validateXml(aColl);
+			
 			forms = aColl.getForms();
 			assertNotNull(forms);
 			assertTrue(forms.size() == 1);
@@ -142,7 +146,7 @@ public class ContentValidationServiceImplTest {
 		
 			
 			String status = StatusFormatter.getStatusInXml(form);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\3256357_v1_0_newform-partial-newversion.status.xml");
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\contentvalidation\\new-version-3643954.status.xml");
 			
 		} catch (FormLoaderServiceException fle) {
 			logger.debug(fle);
@@ -152,7 +156,7 @@ public class ContentValidationServiceImplTest {
 	
 	@Test
 	public void testValidContextName() {
-		this.prepareCollectionForValidation(".\\.\\test\\data", "3256357_v1_0_newform.xml");
+		this.prepareCollectionForValidation(".\\.\\test\\data\\contentvalidation", "3256357_v1_0_newform.xml");
 		FormDescriptor form = aColl.getForms().get(0);
 		boolean valid = this.contentValidationService.validContextName(form);
 		assertTrue(valid);
@@ -171,14 +175,14 @@ public class ContentValidationServiceImplTest {
 	@Test
 	public void testValidateContentInvalidPublicid() {
 		try {
-		this.prepareCollectionForValidation(".\\.\\test\\data", "invalid-publicid.xml");
+		this.prepareCollectionForValidation(".\\.\\test\\data\\contentvalidation", "invalid-publicid.xml");
 		FormDescriptor form = aColl.getForms().get(0);
 		form.setSelected(true);
 		aColl = this.contentValidationService.validateXmlContent(aColl);
 		assertTrue(aColl.getForms().get(0).getLoadStatus() == FormDescriptor.STATUS_CONTENT_VALIDATION_FAILED);
 		
 		String status = StatusFormatter.getStatusInXml(form);
-		StatusFormatter.writeStatusToXml(status, ".\\test\\data\\invalid-publicid.status.xml");
+		StatusFormatter.writeStatusToXml(status, ".\\test\\data\\contentvalidation\\invalid-publicid.status.xml");
 		} catch (FormLoaderServiceException e) {
 			fail("Got FormLoaderServiceException: " + e.getMessage());
 		}
@@ -275,6 +279,7 @@ public class ContentValidationServiceImplTest {
 			aColl = new FormCollection();
 			aColl.setXmlPathOnServer(filepath);
 			aColl.setXmlFileName(testfile);
+			aColl.setCreatedBy("YANGS");
 			aColl = xmlValidator.validateXml(aColl);
 			
 			

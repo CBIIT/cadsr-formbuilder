@@ -60,7 +60,7 @@ public class FormLoaderRepositoryImplTest {
 	
 	@Test
 	public void testGetAllLoadedCollections() {
-		List<FormCollection> colls = repository.getAllLoadedCollections();
+		List<FormCollection> colls = repository.getAllLoadedCollectionsByUser("FORMBUILDER");
 		
 		assertNotNull(colls);
 		assertTrue(colls.size() > 0);

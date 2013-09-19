@@ -87,7 +87,7 @@ public class JDBCAdminComponentDAOV2Test {
 	@Test
 	public void testGetAllDesignationTypes() {
 		List<String> alltypes = adminComponentV2Dao.getAllDesignationTypes();
-		assertTrue(alltypes.size() > 10 && alltypes.size() < 100);
+		assertTrue(alltypes.size() > 10 && alltypes.size() < 200);
 		
 	}
 	

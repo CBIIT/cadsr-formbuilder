@@ -45,18 +45,6 @@ public class JDBCValueDomainDAOV2Test {
 		List<PermissibleValueV2TransferObject> pvs = pvMap.get("B3EB74E4-CC3A-521D-E034-0003BA12F5E7");
 		assertTrue(pvs.size() >= 3);
 		
-		for (int i = 0; i < pvs.size(); i++) {
-			PermissibleValueV2TransferObject pv = pvs.get(i);
-			String pvValueString = pv.getValue();
-			//Testing a hack
-			assertTrue(pvValueString.contains(","));
-			String [] valueElems = pvValueString.split(",");
-			assertTrue(valueElems.length == 2);
-			System.out.println("Permissible value value: " + valueElems[0]);
-			System.out.println("Permissible value seqid: " + valueElems[1]);
-		}
-		
-		
 		
 	}
 

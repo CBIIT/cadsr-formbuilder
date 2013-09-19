@@ -40,7 +40,7 @@ public class JDBCCollectionDAOTest {
 	
 	@Test
 	public void testGetAllLoadedCollections() {
-		List<FormCollection> formColls = collectionDao.getAllLoadedCollections();
+		List<FormCollection> formColls = collectionDao.getAllLoadedCollectionsByUser("FORMBUILDER");
 		assertNotNull(formColls);
 		assertTrue(formColls.size() > 10);
 		

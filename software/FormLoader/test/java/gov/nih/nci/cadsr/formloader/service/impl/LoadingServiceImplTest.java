@@ -82,6 +82,7 @@ public void testUserHasRight() {
 		try {
 			FormDescriptor form = aColl.getForms().get(0);
 			form.setSelected(true);
+			aColl.setCreatedBy("RAJAS");
 			aColl = this.loadService.loadForms(aColl);
 			form = aColl.getForms().get(0);
 			String status = StatusFormatter.getStatusInXml(form);
@@ -127,6 +128,7 @@ public void testUserHasRight() {
 		try {
 			FormDescriptor form = aColl.getForms().get(0);
 			form.setSelected(true);
+			aColl.setCreatedBy("RAJAS");
 			aColl = this.loadService.loadForms(aColl);
 			form = aColl.getForms().get(0);
 			String status = StatusFormatter.getStatusInXml(aColl);

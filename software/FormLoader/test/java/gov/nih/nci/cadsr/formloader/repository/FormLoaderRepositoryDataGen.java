@@ -424,7 +424,7 @@ public class FormLoaderRepositoryDataGen implements FormLoaderRepository {
 	}
 
 	@Override
-	public List<FormCollection> getAllLoadedCollections() {
+	public List<FormCollection> getAllLoadedCollectionsByUser(String user) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -70,7 +70,7 @@ public class JDBCFormValidValueDAOV2Test {
 			String parentQuestId = "E479549F-5D87-A01B-E040-BB8921B6711";
 			FormValidValueTransferObject vValue = new FormValidValueTransferObject();
 			vValue.setVersion(Float.valueOf("1.0"));
-			vValue.setPreferredName("Testshan8800");
+			vValue.setPreferredName("Testshan8800ASFAF");
 			vValue.setLongName("New VV LongName");
 			vValue.setPreferredDefinition("Description of the VV");
 			vValue.setAslName("DRAFT NEW");

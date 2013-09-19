@@ -31,7 +31,7 @@ public class UnloadingServiceImplTest {
 	@Test
 	public void testUnloadForms() {
 		try {
-			List<FormCollection> colls = collectionRetrievalService.getAllCollections();
+			List<FormCollection> colls = collectionRetrievalService.getAllCollectionsByUser("FORMBUILDER");
 			assertNotNull(colls);
 			assertTrue(colls.size() > 10);
 			
