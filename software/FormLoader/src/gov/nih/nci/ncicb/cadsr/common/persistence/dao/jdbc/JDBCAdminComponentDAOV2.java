@@ -48,6 +48,7 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlOutParameter;
@@ -1915,7 +1916,7 @@ public class JDBCAdminComponentDAOV2 extends JDBCBaseDAOV2
    public List<String> getAllRefdocTypes() {
 
 	   String sql = 
-			   "SELECT distinct DCTL_NAME FROM DOCUMENT_TYPES_LOV order by DCTL_NAME";
+			   "SELECT distinct DCTL_NAME FROM SBR.DOCUMENT_TYPES_LOV order by DCTL_NAME";
 
 	   List rows = this.namedParameterJdbcTemplate.getJdbcOperations().queryForList(sql);
 	   
@@ -1923,6 +1924,8 @@ public class JDBCAdminComponentDAOV2 extends JDBCBaseDAOV2
 	   for (Object row : rows) {
 		   refdocTypes.add((String)((Map)row).get("DCTL_NAME"));
 	   }
+	   
+	   logger.debug("Retreived " + refdocTypes.size() + " refdoc types from database");
 
 	   return refdocTypes;
    }

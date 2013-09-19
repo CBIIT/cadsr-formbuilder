@@ -44,7 +44,7 @@ public interface FormLoaderRepository {
 	 */
 	public boolean hasLoadFormRight(FormDescriptor form, String userName, String contextName);
 	
-	public List<FormCollection> getAllLoadedCollections();
+	public List<FormCollection> getAllLoadedCollectionsByUser(String userName);
 	
 	public void checkWorkflowStatusName(FormDescriptor form);
 	

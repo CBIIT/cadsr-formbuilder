@@ -2,6 +2,7 @@ package gov.nih.nci.cadsr.formloader.struts2;
 
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
+import gov.nih.nci.cadsr.formloader.repository.FormLoaderRepositoryImpl;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceError;
 import gov.nih.nci.cadsr.formloader.service.impl.CollectionRetrievalServiceImpl;
 
@@ -12,6 +13,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.SessionAware;
 import org.springframework.context.ApplicationContext;
@@ -22,6 +24,8 @@ import com.opensymphony.xwork2.ActionSupport;
 public class SearchLoadedCollectionAction extends ActionSupport implements
 		SessionAware {
 
+	private static Logger logger = Logger.getLogger(SearchLoadedCollectionAction.class.getName());
+	
 	private Map<Integer, String> checkboxes;
 	private HttpServletRequest servletRequest;
 	private List<FormCollection> collectionList = null;
@@ -37,9 +41,8 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 							.getServletContext());
 			CollectionRetrievalServiceImpl collectionRetrieval =
 					(CollectionRetrievalServiceImpl)this.applicationContext.getBean("collectionRetrievalService");
-			// List<FormCollection> collectionList =
-			// collectionRetrieval.getAllCollections();
-			collectionList = this.getMockCollectionList();
+			collectionList = collectionRetrieval.getAllCollectionsByUser("FORMBUILDER");
+			//collectionList = this.getMockCollectionList();
 
 			if (collectionList == null) {
 				// log or handler

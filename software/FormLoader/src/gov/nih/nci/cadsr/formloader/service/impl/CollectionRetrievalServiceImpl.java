@@ -32,13 +32,13 @@ public class CollectionRetrievalServiceImpl implements CollectionRetrievalServic
 	}
 	
 	@Override
-	public List<FormCollection> getAllCollections() throws FormLoaderServiceException {
+	public List<FormCollection> getAllCollectionsByUser(String userName) throws FormLoaderServiceException {
 		
 		//Not check user credential. Check on unload
 		
-		List<FormCollection> colls = repository.getAllLoadedCollections();
+		List<FormCollection> colls = repository.getAllLoadedCollectionsByUser(userName);
 		if (colls != null)
-			logger.debug("Retrieved " + colls.size() + " form collections from database");
+			logger.debug("Retrieved " + colls.size() + " form collections from database created by user [" + userName + "]");
 		
 		return colls;
 	}

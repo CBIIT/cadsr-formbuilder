@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface CollectionRetrievalService {
 
-	public List<FormCollection> getAllCollections() throws FormLoaderServiceException;
+	public List<FormCollection> getAllCollectionsByUser(String userName) throws FormLoaderServiceException;
 }

@@ -12,6 +12,7 @@ import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ModuleTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.util.DataSourceUtil;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 
@@ -70,10 +71,31 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 	}
 	
 	 @Override
-	public List<FormCollection> getAllLoadedCollections() {
+	public List<FormCollection> getAllLoadedCollectionsByUser(String userName) {
 		String sql = 
-		      "select * from form_collections order by date_created desc";
-
+		      "select * from SBREXT.FORM_COLLECTIONS where created_by=:user order by date_created desc";
+		
+		 MapSqlParameterSource params = new MapSqlParameterSource();
+	     params.addValue("user", userName);
+	      
+	     List<FormCollection> collections = this.namedParameterJdbcTemplate.query(sql, params, 
+	     		new RowMapper<FormCollection>() {
+	     	public FormCollection mapRow(ResultSet rs, int rowNum) throws SQLException {
+	     		FormCollection aColl = new FormCollection();
+	     		aColl.setId(rs.getString("FORM_COLLECTION_IDSEQ"));
+				aColl.setName(rs.getString("NAME"));
+				aColl.setDescription(rs.getString("DESCRIPTION"));
+				aColl.setCreatedBy(rs.getString("CREATED_BY"));
+				aColl.setDateCreated(rs.getDate("DATE_CREATED"));
+				aColl.setXmlFileName(rs.getString("XML_FILE_NAME"));
+				aColl.setXmlPathOnServer(rs.getString("XML_FILE_PATH"));
+				
+				return aColl;
+	         }
+	     });
+		
+		
+/*
 		List<FormCollection> colls = new ArrayList<FormCollection>();
 		
 		List rows = this.namedParameterJdbcTemplate.getJdbcOperations().queryForList(sql);  
@@ -89,8 +111,8 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 			
 			colls.add(aColl);
 		}
-		        
-		return colls;      
+	*/	        
+		return collections;      
 	}
 	 
 	 public List<String> getAllFormSeqidsForCollection(String collseqid) {

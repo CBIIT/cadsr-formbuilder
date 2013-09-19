@@ -253,16 +253,13 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	}
 	
 	@Transactional(readOnly=true)
-	public List<FormCollection> getAllLoadedCollections() {
+	public List<FormCollection> getAllLoadedCollectionsByUser(String userName) {
 		
 		//first get collection headers
-		List<FormCollection> colls = collectionDao.getAllLoadedCollections();
+		List<FormCollection> colls = collectionDao.getAllLoadedCollectionsByUser(userName);
 		
 		for (FormCollection coll : colls) {
-			if (coll.getId().equals("E49101B2-1B48-BA26-E040-BB8921B61DC6")) {
-				logger.debug("debug");
-				
-			}
+			
 			List<String> formseqids = collectionDao.getAllFormSeqidsForCollection(coll.getId());
 			if (formseqids == null || formseqids.size() == 0) 
 				logger.warn("Collection " + coll.getId() + " doesn't have form seqids associated with it in database");
@@ -409,7 +406,9 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		if (this.refdocTypes == null)
 			refdocTypes = this.formV2Dao.getAllRefdocTypes();
 		
-		return refdocTypes.contains(refdocType);
+		
+		
+		return (refdocTypes == null) ? false : refdocTypes.contains(refdocType);
 	}
 	
 	/**
@@ -698,12 +697,10 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			con.setConteIdseq(refdocContextSeqid);
 			refdoc.setContext(con);
 			refdoc.setDisplayOrder(idx++);
-
 			if (!this.refdocTypeExists(refdoc.getDocType())) {
 				form.addMessage("Refdoc type [" + refdoc.getDocType() + "] is invalid. Use default type [REFERENCE]");
 				refdoc.setDocType(DEFAULT_REFDOC_TYPE);
 			}
-
 			if (existings != null && isExistingRefdoc(refdoc, existings)) {
 				referenceDocV2Dao.updateReferenceDocument(refdoc);
 			} else {

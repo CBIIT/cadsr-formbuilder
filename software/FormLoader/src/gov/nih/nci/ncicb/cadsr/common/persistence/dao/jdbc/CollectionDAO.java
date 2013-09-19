@@ -10,5 +10,5 @@ public interface CollectionDAO {
 	public int createCollectionFormMappingRecord(String collectionseqid, String formseqid, 
 			int formpublicid, float formversion, String loadType);
 	
-	public List<FormCollection> getAllLoadedCollections();
+	public List<FormCollection> getAllLoadedCollectionsByUser(String userName);
 }
