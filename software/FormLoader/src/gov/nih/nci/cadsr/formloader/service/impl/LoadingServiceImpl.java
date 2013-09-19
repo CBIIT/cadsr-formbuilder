@@ -96,7 +96,7 @@ public class LoadingServiceImpl implements LoadingService {
 		
 		int form_idx = 0;
 		for (FormDescriptor form : forms) {
-			if (form.getLoadStatus() < FormDescriptor.STATUS_DB_VALIDATED) {
+			if (form.getLoadStatus() < FormDescriptor.STATUS_CONTENT_VALIDATED) {
 				form.addMessage("Form didn't pass db validation. Unable to load form");
 				logger.debug("Form didn't pass db validation. Unable to load form");
 				form.setSelected(false);

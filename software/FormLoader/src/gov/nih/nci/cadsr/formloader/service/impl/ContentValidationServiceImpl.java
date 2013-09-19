@@ -424,7 +424,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			
 			validateQuestionsInModules(modules, form, questDtos, cdeDtos, refdocDtos, pvDtos);			
 			
-			form.setLoadStatus(FormDescriptor.STATUS_DB_VALIDATED);
+			form.setLoadStatus(FormDescriptor.STATUS_CONTENT_VALIDATED);
 			
 			logger.debug("Done validating questions for form [" + form.getPublicId() + "|" + form.getVersion()  + "]");
 		}

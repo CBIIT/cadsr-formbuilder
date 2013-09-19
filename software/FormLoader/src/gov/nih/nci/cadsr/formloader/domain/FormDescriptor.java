@@ -21,7 +21,7 @@ public class FormDescriptor {
 	
 	public static final int STATUS_INITIALIZED = 0;
 	public static final int STATUS_XML_VALIDATED = 1; 
-	public static final int STATUS_DB_VALIDATED = 3;
+	public static final int STATUS_CONTENT_VALIDATED = 3;
 	public static final int STATUS_LOADED = 4;
 	public static final int STATUS_UNLOADED = 5;
 	public static final int STATUS_SKIPPED_LOADING = 6;
@@ -311,14 +311,22 @@ public class FormDescriptor {
 	public void setContextSeqid(String contextSeqid) {
 		this.contextSeqid = contextSeqid;
 	}
-
+	
+	/**
+	 * Return the current load status in string
+	 * @return
+	 */
+	public String getLoadStatusString() {
+		return getLoadStatusString(this.loadStatus);
+	}
+	
 	protected String getLoadStatusString(int statusCode) {
 		switch (statusCode) {
 		case STATUS_INITIALIZED:
 			return "Initialized";
 		case STATUS_XML_VALIDATED:
 			return "XML Validated";
-		case STATUS_DB_VALIDATED:
+		case STATUS_CONTENT_VALIDATED:
 			return "Content Validated";
 		case STATUS_LOADED:
 			return "Loaded";
