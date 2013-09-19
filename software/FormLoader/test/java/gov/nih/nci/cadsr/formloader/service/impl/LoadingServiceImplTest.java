@@ -230,7 +230,7 @@ public void testUserHasRight() {
 			//assertTrue(forms.size() == 1);
 			status = StatusFormatter.getStatusInXml(form);
 			StatusFormatter.writeStatusToXml(status, filepath + "\\load-preparation-content.xml");
-			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_DB_VALIDATED);
+			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_CONTENT_VALIDATED);
 			
 			form = forms.get(0);
 

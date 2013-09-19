@@ -117,7 +117,7 @@ public class FormLoaderRepositoryImplTest {
 			assertNotNull(aColl);
 			forms = aColl.getForms();
 			assertTrue(forms.size() == 1);
-			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_DB_VALIDATED);
+			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_CONTENT_VALIDATED);
 			
 			form = forms.get(0);
 			
