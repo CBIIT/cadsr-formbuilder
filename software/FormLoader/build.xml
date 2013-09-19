@@ -14,8 +14,8 @@
 	<property name="compile.debug"     value="true"/>
 	<property name="compile.deprecation"     value="false"/>
 	<property name="compile.optimize"     value="true"/>
-	<property name="JBOSS.DEPLOY.DIR"     value="C:\Jboss\jboss-5.1.0.GA\server\default\deploy"/>
-	<property name="JBOSS.HOME"     value="C:\Jboss\jboss-5.1.0.GA"/>
+	<property name="JBOSS.DEPLOY.DIR"     value="C:\AppServers\jboss-5.1.0.GA-FL\server\default\deploy"/>
+	<property name="JBOSS.HOME"     value="C:\AppServers\jboss-5.1.0.GA-FL"/>
 	<property name="jboss.lib.dir"   value= "${JBOSS.HOME}/common" />
 	<property name="dist.dir"    value="${basedir}/dist"/>
 	<property name="lib.dir"     value="${basedir}/WebContent/WEB-INF/lib"/>
@@ -154,6 +154,21 @@
 	    </target>
 
     <target name="clean-build" depends="clean,jar"/>
-
+	
+	<target name="javadoc" depends="clean" description="generate javadoc for services">
+		<mkdir dir="${build.dir}/javadoc"/>
+		<javadoc packagenames="gov.nih.nci.cadsr.formloader.service.impl.*"
+	           sourcepath="${source.dir}"
+	           defaultexcludes="yes"
+	           destdir="${build.dir}/javadoc"
+				overview="${build.dir}/javadoc/overview.html"
+	           author="true"
+	           version="true"
+	           use="true"
+	           windowtitle="Form Loader Services API"
+				access="public"
+			classpathref="classpath">
+	  	</javadoc>
+	</target>
 
 </project>
