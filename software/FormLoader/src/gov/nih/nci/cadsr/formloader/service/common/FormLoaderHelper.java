@@ -45,8 +45,6 @@ public class FormLoaderHelper {
 		return xmlPathName;
 	}
 
-	
-
 	public static XmlValidationError filePahtNameContainsError(String filePathName) {
 		if (filePathName == null)
 			return new XmlValidationError(XmlValidationError.XML_FILE_INVALID, "File path name is null", 0);

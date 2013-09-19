@@ -45,6 +45,12 @@ public class FormCollection implements java.io.Serializable {
 	//@Transient
 	private boolean selected;
 	
+	
+	/**
+	 * This overwrite "selected" flag in all the forms in the collection
+	 */
+	private boolean selectAllForms;
+	
 	//@OneToMany
 	//@JoinTable
 	//(
@@ -168,6 +174,14 @@ public class FormCollection implements java.io.Serializable {
 		this.forms = forms;
 	}
 	
+	public boolean isSelectAllForms() {
+		return selectAllForms;
+	}
+
+	public void setSelectAllForms(boolean selectAllForms) {
+		this.selectAllForms = selectAllForms;
+	}
+
 	public boolean isSelected() {
 		return selected;
 	}

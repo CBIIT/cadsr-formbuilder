@@ -46,20 +46,6 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 
 	public XmlValidationServiceImpl() {}
 	
-	/** 
-	 * Validate the xml file. 
-	 * 
-	 * Will FormLoaderServiceException when xml is not valid or malformed. <br>
-	 * Call FormDescriptor.getLoadStatus() to check status after <br>
-	 * If load status is not FormDescriptor.STATUS_XML_VALIDATED, FormDescriptor.getXmlValidationErrors() <br>
-	 * is available to get an error list.
-	 * 
-	 * @param xmlPathName
-	 * @return
-	 * @throws FormLoaderServiceException when xml is not valid or malformed. 
-	 * 			Call FormLoaderServiceException.getMessage() for explanation of the error
-	 * 
-	 */
 	@Override
 	public FormCollection validateXml(FormCollection collection) throws FormLoaderServiceException{
 		

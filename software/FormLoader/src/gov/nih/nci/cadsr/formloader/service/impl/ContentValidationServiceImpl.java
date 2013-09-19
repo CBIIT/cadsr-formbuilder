@@ -73,6 +73,9 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		}
 		
 		String xmlPathName = FormLoaderHelper.checkInputFile(aCollection.getXmlPathOnServer(), aCollection.getXmlFileName());
+			
+		if (aCollection.isSelectAllForms()) 
+			setSelectedToForms(formHeaders);
 		
 		determineLoadType(formHeaders);
 		 
@@ -81,6 +84,14 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		validateQuestions(xmlPathName, formHeaders);
 		
 		return aCollection;
+	}
+	
+	protected void setSelectedToForms(List<FormDescriptor> formHeaders) {
+		if (formHeaders == null)
+			return;
+		
+		for (FormDescriptor form : formHeaders)
+			form.setSelected(true);
 	}
 	
 	/**

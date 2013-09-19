@@ -32,7 +32,7 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 	ApplicationContext applicationContext = null;
 
 	public String execute() {
-		System.out.println("We are in XMLFileLoadedAction.execute()");
+		logger.debug("We are in XMLFileLoadedAction.execute()");
 		servletRequest = ServletActionContext.getRequest();
 		try {
 

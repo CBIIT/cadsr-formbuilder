@@ -12,6 +12,9 @@ public interface XmlValidationService {
 	 * Validate an xml file against xsd. The xml file name and path are set in the input
 	 * FormCollection object. If successful, a list of FormDescriptors are generated and assigned
 	 * to the FormCollection.
+	 * <br> <br>
+	 * If a form's loadStatus is not FormDescriptor.STATUS_XML_VALIDATED, FormDescriptor.getXmlValidationErrors()
+	 * is available to get an error list.
 	 * 
 	 * @param collection xml file name and path must be set and valid
 	 * @return collection with a list of FormDescriptors generated from the xml
