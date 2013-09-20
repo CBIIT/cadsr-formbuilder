@@ -1523,27 +1523,24 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	
 	@Transactional
 	public String createFormCollectionRecords(FormCollection coll) {
-		String collSeqid = collectionDao.createCollectionRecord(coll.getName(), coll.getDescription(), 
-				coll.getXmlFileName(), coll.getXmlPathOnServer(), coll.getCreatedBy());
 		
-		if (collSeqid == null || collSeqid.length() == 0) {
-			logger.error("Error!!! while creating record for collection: " + coll.getName() +
-					" Uable to create form and collection mappings.");
-			return null;
-			
-		}
+		String collSeqid = null;
 		
+		//update collection record only if at least one form in it has been loaded successfully
 		List<FormDescriptor> forms = coll.getForms();
 		for (FormDescriptor form : forms) {
 			if (form.getLoadStatus() != FormDescriptor.STATUS_LOADED)
 				continue;
+			
+			if (collSeqid == null)
+				collSeqid = collectionDao.createCollectionRecord(coll.getName(), coll.getDescription(), 
+						coll.getXmlFileName(), coll.getXmlPathOnServer(), coll.getCreatedBy());
 			
 			int res = collectionDao.createCollectionFormMappingRecord(collSeqid, form.getFormSeqId(),
 					Integer.parseInt(form.getPublicId()), Float.parseFloat(form.getVersion()), form.getLoadType());
 			
 			//TODO: check response value.
 			int loatStatus = (res > 0) ? FormDescriptor.STATUS_LOADED : FormDescriptor.STATUS_LOAD_FAILED;
-			
 		}
 		
 		return collSeqid;
