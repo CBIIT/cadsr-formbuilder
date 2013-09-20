@@ -4,7 +4,8 @@
 
 <html>
 <head>
-
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+</script>
 
 <title>Search XML Files</title>
 
@@ -22,16 +23,33 @@
 
   <table>
     <tr>
-        <td><b>Form Collection N   Name:</b></td>
+        <td><b>Form Collection Name:</b></td>
         <td>
           <input type="text" id="collection_name" name="collection_name" value="" size ="20"> 
         </td>
-        <td>
-           <s:submit type="image" src="i/search_light.gif" method="search" theme="simple" />
-        </td>
+      
+       <%--   <td>
+       
+           <img id="searchLight" src="i/search_light.gif" style="cursor:pointer" >          
+        </td> --%> 
+        	<td><input type="Text" id="collection_name" maxlength="25" size="20">
+	     <a href="javascript:SearchCollections()">            
+                <img id="searchLight"  src="i/search_light.gif" width="16" height="16" border="0">
+             <script type="text/javascript">
+             $(function(){
+          	   $(collection_name).change(function(){
+          		   $("#collectiontable td.colname:contain('" + $(this).val() + "')").parent().show();
+          		   $("#collectiontable td.colname:not(:contains('" + $(this).val() + "'))").parent().hide();
+          	   });
+          	   
+             });
+               </script>   
+         </a>
+    </td>
+        
     </tr>
     <tr>
-        <td><b>Form Collection Desc Description:</b></td>
+        <td><b>Form Collection Description:</b></td>
         <td>
           <input type="text" id="description" name="description" value="" size ="20"> 
         </td>
@@ -59,30 +77,6 @@
    </tr>
  </table>
  
-  <s:if test="collectionList != null">
-   <table>
-   <tr>
-   <td>In table forms</td>
-   </tr>
-   </table>
-  </s:if>
-  
-  <s:if test="collectionList.size() == 0">
-   <table>
-   <tr>
-   <td>0 Collection</td>
-   </tr>
-   </table>
-  </s:if>
-  
-  <s:if test="collectionList.size() > 0">
-   <table>
-   <tr>
-   <td>some Collection</td>
-   </tr>
-   </table>
-  </s:if>
- 
  <table>
    <tr> 
 	  <td colspan="1" align="center" nowrap><a href="javascript:submitForm()"><img src=<%=request.getContextPath()%>/i/search.gif border=0 alt="Logon"></a></td>
@@ -91,10 +85,10 @@
    </tr>
  </table> 
  
- <s:if test="collectionList.size() >= 0">
+ <%-- <s:if test="collectionList.size() >= 0"> --%>
  
    		<div class="content">
-		<table class="fileTable" cellpadding="5px">
+		<table id="collectiontable">
 			<tr class="even">
 				<th>Select</th>
 				<th>Collection Name</th>
@@ -109,17 +103,34 @@
 			    <td>
 			      <s:checkbox name="checkboxes[%{#status.index}]" theme = "simple" />
 			    </td>
-				<td><s:property value= "name"/></td>
+				<td class ="colname"><s:property value= "name"/></td>
 				<td><s:property value="description" /></td>
+				<td><s:property value="collectionList.size()" /></td>
 				<td><s:property value="createdBy" /></td>
-				<td><s:property value="createdBy" /></td>
-				<td><s:property value="createdBy" /></td>
+				<td><s:property value="dateCreated" /></td>
 			</tr>
 			</s:iterator>
+			<tr>
+		  	<td colspan="1" align="left" nowrap>
+<s:submit type="image" src="/FormLoader/i/View-Form-Collection.gif" method="execute" align="left" theme="simple" /></td>
+</tr>
 		</table>
 		</div>
-	<s:submit value="View Forms in Collections"/>  	
- </s:if> 
+		
+
+		
+		
+	<%-- 
+           <script>
+          
+           $("#searchLight").click(function(){
+        	   $(collection_name).change(function(){
+        		   $("#collectiontable td.colname:contain('" + $(this).val() + "')").parent().show();
+        		   $("#collectiontable td.colname:not(:contains('" + $(this).val() + "'))").parent().hide();
+        	   });
+        	   
+           });
+           </script> --%>
  
  
 </s:form>
