@@ -41,108 +41,25 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 							.getServletContext());
 			CollectionRetrievalServiceImpl collectionRetrieval =
 					(CollectionRetrievalServiceImpl)this.applicationContext.getBean("collectionRetrievalService");
-			collectionList = collectionRetrieval.getAllCollectionsByUser("FORMBUILDER");
-			//collectionList = this.getMockCollectionList();
+			String userName = (String)servletRequest.getSession().getAttribute("username");
+			collectionList = collectionRetrieval.getAllCollectionsByUser(userName);
 
 			if (collectionList == null) {
-				// log or handler
+				logger.debug("Collection list is null.");
 				return ERROR;
 			}
 
-			System.out.println(collectionList.size()
-					+ " is collectionList size");
-			servletRequest.getSession().setAttribute("collectionList",
-					collectionList);
-			// System.out.println(selectedCollectionList.size()+" Forms selected for validation");
+			logger.debug("User [" + userName + "] has previously loaded " + collectionList.size() + " collections.");
+			servletRequest.getSession().setAttribute("collectionList", collectionList);
 			return SUCCESS;
-
-			/*
-			 * if (checkboxes != null && checkboxes.size()>0){
-			 * 
-			 * for (int i=0; i<checkboxes.size();i++) { Integer key = new
-			 * Integer(i); if (checkboxes.containsKey(key)) { String
-			 * checkboxValue = checkboxes.get(key).toString(); if
-			 * (checkboxValue.equals("true")) { FormCollection
-			 * selectedCollection = collectionList.get(i);
-			 * selectedCollection.setSelected(true);
-			 * selectedCollectionList.add(selectedCollection); } } } }
-			 */
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.err.println(e.getMessage());
+			logger.error(e.getMessage());
 			addActionError(e.getMessage());
-
 		}
+		
 		return ERROR;
-	}
-
-	public FormCollection generateContentValidationData(int idx) {
-		FormCollection aColl = new FormCollection();
-		List<FormLoaderServiceError> errors = new ArrayList<FormLoaderServiceError>();
-
-		aColl.setCreatedBy("Denise");
-		aColl.setDateCreated(new Date());
-		aColl.setDescription("This is the collection from nci");
-		aColl.setId("1234567");
-		aColl.setName("Denise's Collection " + idx);
-		aColl.setXmlFileName("denise-coll.xml");
-		aColl.setXmlPathOnServer("/local/content/formloader/20130703");
-
-		// 1
-		List<FormDescriptor> forms = new ArrayList<FormDescriptor>();
-		FormDescriptor form = new FormDescriptor("443355", "1234345", "1.0");
-		form.setContext("CTRP");
-		// FormStatus status = new FormStatus(FormStatus.STATUS_DB_VALIDATED);
-		// List<String> msgs = new ArrayList<String>();
-		form.addMessage("Question 1 has no default text");
-		form.addMessage("Question 2 need work");
-		forms.add(form);
-
-		// 2
-		form = new FormDescriptor("553355", "1234346", "3.0");
-		form.setContext("NCIP");
-		form.addMessage("No error / success");
-		forms.add(form);
-
-		// 3
-		form = new FormDescriptor("663355", "1234347", "4.0");
-		form.setContext("NCIP");
-		form.setLoadType(FormDescriptor.LOAD_TYPE_UPDATE_FORM);
-		List<String> msgs3 = new ArrayList<String>();
-		form.addMessage("Question 1 has no default text");
-		form.addMessage("Question 2 need work");
-		forms.add(form);
-
-		// 4
-		form = new FormDescriptor("773355", "1234348", "2.0");
-		form.setWorkflowStatusName("RELEASED");
-		form.setContext("NCIP");
-		form.setLoadType(FormDescriptor.LOAD_TYPE_UPDATE_FORM);
-		form.addMessage("Question 3 has no default text");
-		form.addMessage("Question 4 need work");
-		forms.add(form);
-
-		// 5
-		// public id = 0
-		form = new FormDescriptor("883355", "0", "1.0");
-		forms.add(form);
-		// 6
-		forms.add(new FormDescriptor("883355", "1234349", "1.0"));
-
-		aColl.setForms(forms);
-
-		return aColl;
-	}
-
-	public List<FormCollection> getMockCollectionList() {
-		List<FormCollection> colls = new ArrayList<FormCollection>();
-		for (int i = 0; i < 10; i++) {
-			colls.add(generateContentValidationData(i));
-			System.out.println(colls);
-		}
-
-		return colls;
 	}
 
 	public List<FormCollection> getCollectionList() {
