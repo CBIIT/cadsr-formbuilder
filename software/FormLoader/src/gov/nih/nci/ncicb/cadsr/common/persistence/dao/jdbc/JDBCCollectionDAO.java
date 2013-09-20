@@ -39,7 +39,7 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 				" xml_file_name, xml_file_path, created_by) " +
 				" VALUES (:idseq, :description, :name, :xml_file_name, :xml_file_path,:created_by)";
 		
-		String idseq = generateGUID();
+		String idseq = generateGUID();		
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("idseq", idseq);
 		params.addValue("description", desc);
@@ -93,25 +93,7 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 				return aColl;
 	         }
 	     });
-		
-		
-/*
-		List<FormCollection> colls = new ArrayList<FormCollection>();
-		
-		List rows = this.namedParameterJdbcTemplate.getJdbcOperations().queryForList(sql);  
-		for (Object row : rows) {
-			FormCollection aColl = new FormCollection();
-			aColl.setId( (String) ((Map)row).get("FORM_COLLECTION_IDSEQ"));
-			aColl.setName((String) ((Map)row).get("NAME"));
-			aColl.setDescription( (String) ((Map)row).get("DESCRIPTION"));
-			aColl.setCreatedBy( (String) ((Map)row).get("CREATED_BY"));
-			aColl.setDateCreated((Date) ((Map)row).get("DATE_CREATED"));
-			aColl.setXmlFileName((String) ((Map)row).get("XML_FILE_NAME"));
-			aColl.setXmlPathOnServer((String) ((Map)row).get("XML_FILE_PATH"));
-			
-			colls.add(aColl);
-		}
-	*/	        
+ 
 		return collections;      
 	}
 	 
@@ -135,25 +117,5 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 		 return seqid;
 
 	 }
-	 
-	 //public List<FormDescriptor> getForm
-
-	public static void main(String[] args) {
-	    	
-	    	//DataSource ds = DataSourceUtil.getDriverManagerDS(
-	    	//		"oracle.jdbc.OracleDriver", 
-	    	//		"jdbc:oracle:thin:@ncidb-dsr-d:1551:DSRDEV", 
-	    	//		"FORMBUILDER", "FORMBUILDER");
-	    	
-	    	DataSource ds = new DriverManagerDataSource("jdbc:oracle:thin:@ncidb-dsr-d:1551:DSRDEV", 
-	    			"sbrext", "jjuser");
-	    	
-	    	JDBCCollectionDAO collDao = new JDBCCollectionDAO(ds);
-	    	String idseq = collDao.createCollectionRecord("collection dao unit test", 
-					"UnitTest", "SomeFile", "/opt/content/formloader", "shanyang");
-	    	System.out.println("Add a coll record");
-	    	
-	  
-	    }
 
 }
