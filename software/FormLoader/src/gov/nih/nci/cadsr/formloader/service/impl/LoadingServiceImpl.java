@@ -70,7 +70,6 @@ public class LoadingServiceImpl implements LoadingService {
 			
 		loadForms(xmlPathName, forms, loggedinuser);
 		
-		//TODO: update form loader related tables.
 		createRecordsForCollection(aCollection, loggedinuser);
 		
 		
@@ -79,9 +78,6 @@ public class LoadingServiceImpl implements LoadingService {
 	
 	protected void createRecordsForCollection(FormCollection coll, String user) {
 		List<FormDescriptor> forms = coll.getForms();
-		
-		//get generated public id for the loaded forms
-		this.repository.setPublicIdVersionBySeqids(forms);
 		
 		String collSeqid = this.repository.createFormCollectionRecords(coll);
 		coll.setId(collSeqid);
