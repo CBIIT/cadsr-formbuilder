@@ -39,7 +39,8 @@ if(confirm(message)) location.href = url;
           </td>  
           
 
-          
+<!--GF32971 Use Retired Withdrawn to take over Delete. -D.An, 20130919 -->                         
+<%--          
           <td >
 		       <cde:secureIcon  formId="<%=FormConstants.CRF%>" 
            formScope="<%=CaDSRConstants.SESSION_SCOPE%>" 
@@ -54,7 +55,21 @@ if(confirm(message)) location.href = url;
             confirmMessageKey="cadsr.formbuilder.form.delete.confirm"
 		   	   	/>		                
           </td>  
-          
+--%>          
+          <td >
+		       <cde:secureIcon  formId="<%=FormConstants.CRF%>" 
+           formScope="<%=CaDSRConstants.SESSION_SCOPE%>" 
+           activeImageSource="i/deleteFormButton.gif" 
+		       		activeUrl='<%="/formViewRetireAction.do?"
+                         +NavigationConstants.METHOD_PARAM+"=retireForm"%>'
+		   	   	role="<%=CaDSRConstants.CDE_MANAGER%>" 
+		   	   	urlPrefix="<%=urlPrefix%>"
+		   	   	paramId = "<%=FormConstants.FORM_ID_SEQ%>"
+		   	   	paramProperty="formIdseq"
+		   	   	altMessage="Retire"  
+            confirmMessageKey="cadsr.formbuilder.form.retire.confirm"
+		   	   	/>		                
+          </td>  
      
           <!-- Publish Change Request -->
           <logic:notEqual value="GUEST" name="<%=CaDSRConstants.USER_KEY%>" property="username">

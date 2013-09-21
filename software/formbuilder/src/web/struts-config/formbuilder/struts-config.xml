@@ -314,6 +314,28 @@
       validate="false">
       <forward name="success" path="/jsp/formbuilder/formEdit.jsp" redirect="false"/>
     </action>
+
+
+    <action name="formEditForm" path="/formToRetireAction" parameter="method"
+      scope="request"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormEditAction"
+      validate="false">
+      <forward name="success" path="/formSearchAction.do?method=getAllForms"
+        redirect="false"/>
+      <forward name="failure" path="/formSearchAction.do?method=getAllForms"
+        redirect="false"/>        
+    </action>
+    <action name="formEditForm" path="/formViewRetireAction" parameter="method"
+      scope="request"
+      type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormEditAction"
+      validate="false">
+      <forward name="success"
+        path="/jsp/formbuilder/formDetails.jsp"
+        redirect="false"/>
+      <forward name="failure" path="/jsp/formbuilder/formDetails.jsp"
+        redirect="false"/>
+    </action>
+
     
     <action name="hrefCRFForm" path="/formHrefDeleteAction" parameter="method"
       scope="request"
@@ -334,6 +356,7 @@
       <forward name="failure" path="/jsp/formbuilder/formDetails.jsp"
         redirect="false"/>
     </action>
+        
     <action name="hrefCRFForm" path="/formEditDeleteAction" parameter="method"
       scope="request"
       type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormEditAction"

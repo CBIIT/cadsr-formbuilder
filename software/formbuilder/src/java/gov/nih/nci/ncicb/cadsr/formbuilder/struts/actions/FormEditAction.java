@@ -523,7 +523,293 @@ System.out.println("sFormIdSeq found !!!!! -- " + sFormIdSeq );
     ActionForward forward = mapping.findForward(SUCCESS);
     return forward;
   }
+ 
+////<!--GF32971 Use Retired Withdrawn to take over Delete. -D.An, 20130919 -->
+  /** This is added for taking over delete form. -D.An, 20130918
+   * 
+   * Retire Form  -It is modified from saveForm() 
+   *
+   *
+   * @param mapping The ActionMapping used to select this instance.
+   * @param form The optional ActionForm bean for this request.
+   * @param request The HTTP Request we are processing.
+   * @param response The HTTP Response we are processing.
+   *
+   * @return
+   *
+   * @throws IOException
+   * @throws ServletException
+   */
+public ActionForward retireForm(
+	    ActionMapping mapping,
+	    ActionForm formEditForm,
+	    HttpServletRequest request,
+	    HttpServletResponse response) throws IOException, ServletException {
+		//this.logSessionData("getFormToEdit ", formEditForm.toString(), request.getSession());
+	    Form crf = null;
+	    Form clonedCrf = null;
+	    setInitLookupValues(request);
+	    
+	    DynaActionForm hrefCRFForm = (DynaActionForm) formEditForm;
+	    String showCached = (String)request.getAttribute("showCached");
 
+	    String formIdSeq = null;
+		  String sFormIdSeq = null; 
+		  
+		    if(showCached!=null&&showCached.equalsIgnoreCase(CaDSRConstants.YES))
+		    {
+		        crf = (Form) getSessionObject(request, CRF);
+		        sFormIdSeq = crf.getIdseq();
+		    }
+		    else if (hrefCRFForm != null)
+		    {
+		    	  sFormIdSeq = (String) hrefCRFForm.get(FORM_ID_SEQ);
+		    }
+
+		  		   
+	    if(showCached!=null&&showCached.equalsIgnoreCase(CaDSRConstants.YES))
+	    {
+	        crf = (Form) getSessionObject(request, CRF);
+	        formIdSeq = crf.getIdseq();
+	    }
+	      else if (hrefCRFForm != null) {
+	        formIdSeq = (String) hrefCRFForm.get(FORM_ID_SEQ);
+	    }
+	    
+	    try {
+	      crf = setFormForAction(formEditForm, request);
+	      clonedCrf = (Form) crf.clone();
+	      setSessionObject(request, CLONED_CRF, clonedCrf,true);
+	    }
+	    catch (FormBuilderException exp) {
+	      saveMessage(ERROR_FORM_RETRIEVE, request);
+	      saveMessage(ERROR_FORM_DOES_NOT_EXIST, request);    
+	      saveMessage(exp.getErrorCode(),request);
+	      if (log.isErrorEnabled()) {
+	        log.error("Exception on getFormForEdit form " + crf,exp);
+	      }
+	      
+	     cancelFormEdit( mapping, formEditForm, request, response);
+	     ActionForward forward = mapping.findForward(SUCCESS);
+	     return forward;
+	    }
+	    catch (CloneNotSupportedException clexp) {
+	      if (log.isErrorEnabled()) {
+	        log.error("Exception while colneing crf " + crf,clexp);
+	      }
+	      saveMessage(this.ERROR_FORM_RETRIEVE,request);
+		     cancelFormEdit( mapping, formEditForm, request, response);
+		     ActionForward forward = mapping.findForward(SUCCESS);
+		     return forward;
+	    }
+
+	    if ((crf != null) && (formEditForm != null)) {
+	      GenericDynaFormBean dynaFormEditForm =
+	        (GenericDynaFormBean) formEditForm;
+	      dynaFormEditForm.clear();
+	      dynaFormEditForm.set(FORM_ID_SEQ, crf.getFormIdseq());
+	      dynaFormEditForm.set(FORM_LONG_NAME, crf.getLongName());
+	      dynaFormEditForm.set(
+	        this.PREFERRED_DEFINITION, crf.getPreferredDefinition());
+	      dynaFormEditForm.set(CONTEXT_ID_SEQ, crf.getContext().getConteIdseq());
+	      
+	      /*
+	      if(crf.getProtocol()!=null)
+	      {
+	        dynaFormEditForm.set(
+	          this.PROTOCOL_ID_SEQ, crf.getProtocol().getProtoIdseq());
+	        dynaFormEditForm.set(
+	          this.PROTOCOLS_LOV_NAME_FIELD, crf.getProtocol().getLongName());
+	      }
+	      */
+	      
+	      dynaFormEditForm.set(
+	           this.PROTOCOLS_LOV_NAME_FIELD, crf.getDelimitedProtocolLongNames());
+	      
+	      dynaFormEditForm.set(CATEGORY_NAME, crf.getFormCategory());
+	      dynaFormEditForm.set(
+	        this.FORM_TYPE, crf.getFormType());
+	      dynaFormEditForm.set(CATEGORY_NAME, crf.getFormCategory());
+	      dynaFormEditForm.set(this.WORKFLOW, crf.getAslName());
+	      
+	      //Instructions
+	      if(crf.getInstruction()!=null)
+	      {
+	        dynaFormEditForm.set(this.FORM_HEADER_INSTRUCTION, crf.getInstruction().getPreferredDefinition());
+	      }
+	      if(crf.getFooterInstruction()!=null)
+	      {
+	        dynaFormEditForm.set(this.FORM_FOOTER_INSTRUCTION, crf.getFooterInstruction().getPreferredDefinition());
+	      }      
+
+	    }
+
+	    removeSessionObject(request, DELETED_MODULES);
+
+	    //clear up
+	    removeSessionObject(request,FORM_EDIT_ADDED_PROTOCOLS);
+	    removeSessionObject(request,FORM_EDIT_REMOVED_PROTOCOLS);        
+	    removeSessionObject(request,UPDATE_SKIP_PATTERN_TRIGGERS);  
+	    
+		//this.logSessionData("getFormToEdit ", formEditForm.toString(), request.getSession());
+
+	    //lock the form
+	    NCIUser user = getApplictionUser(request);
+	    boolean result = lockForm(formIdSeq, user, request.getSession().getId());    
+	    ////if (result){
+	    ////    saveMessage("cadsr.formbuilder.form.will.be.locked.by.you", request);
+	    ////    return mapping.findForward(SUCCESS);
+	    ////}else{
+	    ////    return mapping.findForward(SEARCH_RESULTS);
+	    ////}
+	  ////}
+
+	
+	
+////DynaActionForm hrefCRFForm = (DynaActionForm) form;
+		    formIdSeq = (String) hrefCRFForm.get(FORM_ID_SEQ);
+		    if (log.isDebugEnabled()) {
+		      log.info("Retire Form With Id " + formIdSeq);
+		    }
+	  
+	    
+	    crf = (Form) getSessionObject(request, CRF);
+	    
+	    String myWorkflow = "RETIRED WITHDRAWN";
+	    hrefCRFForm.set( WORKFLOW, myWorkflow );
+
+		////Begin added for monitor if the current form has been added in Form Cart for saving.  -D.An, 20130830.  
+	    String userMame = (String) request.getSession().getAttribute("myUsername");
+	    if( userMame != null && userMame.equalsIgnoreCase("viewer") != true )
+	    {
+	System.out.println("userName -- " + userMame );	
+			  request.getSession().setAttribute("myFormAdded", "n");
+	System.out.println(" " + sFormIdSeq + " not found " );	
+		
+		   CDECartOCImplExtension sessionCartV2 = (CDECartOCImplExtension) this
+					.getSessionObject(request, CaDSRConstants.FORMS_CART_V2);
+		   Collection itemsAdded = null;
+		   if( sessionCartV2 != null )
+			   if( sessionCartV2.getFormCartV2().size() >= 0 )
+				   itemsAdded = sessionCartV2.getFormCartV2().values();
+		   
+		   if ( itemsAdded != null )
+		   {
+			   for ( Object version2Form : itemsAdded ) 
+			   {
+				   if( ((FormV2TransferObject)version2Form).getFormIdseq().equals(sFormIdSeq) ) 
+				   {
+					   request.getSession().setAttribute("myFormAdded", "Y");
+	System.out.println("sFormIdSeq found !!!!! -- " + sFormIdSeq );	
+						break;
+				   }
+				}
+			}
+	    }
+	//// End. -D.An, 20130830.
+	    
+	    boolean hasUpdate  = setValuesForUpdate(mapping,hrefCRFForm,request);
+	    if(hasUpdate)
+	    {
+	      /***	if (!validate(hrefCRFForm, request, response)) {
+	    		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+	    		log.error("Validation failed while saving form ["+hrefCRFForm+"]");
+	  		  saveMessage(ERROR_FORM_SAVE_FAILED, request);
+              ActionForward forward = mapping.findForward(SUCCESS);
+              return forward;
+	  	  }***/
+	    	
+	        try {
+	          FormBuilderServiceDelegate service = getFormBuilderService();
+	          Form header = (Form)getSessionObject(request,FORM_EDIT_HEADER);
+
+	          if(header!=null)
+	          {
+	            String type = header.getFormType();
+	            if(type.equalsIgnoreCase(PersistenceConstants.FORM_TYPE_CRF))
+	            {
+	             
+	             /** 
+	              * if(header.getProtocol()==null)
+	                {
+	                   saveMessage("cadsr.formbuilder.form.edit.form.noProtocol", request);
+	                   return mapping.findForward(FAILURE);
+	                }
+	                **/
+	            }
+	            else 
+	            { 
+	              if(crf.getProtocols()!=null && !crf.getProtocols().isEmpty())
+	                {
+	                   saveMessage("cadsr.formbuilder.form.edit.form.template.protocol", request);
+	          	     cancelFormEdit( mapping, formEditForm, request, response);
+	          	    ActionForward forward = mapping.findForward(SUCCESS);
+	          	    return forward;
+	                }              
+	            }
+	          }
+	          
+	          Collection updatedModules = (Collection)getSessionObject(request,FORM_EDIT_UPDATED_MODULES);
+	          Collection deletedModules = (Collection)getSessionObject(request,FORM_EDIT_DELETED_MODULES);
+	          Collection addedModules = (Collection)getSessionObject(request,FORM_EDIT_ADDED_MODULES);
+	          FormInstructionChanges instrChanges = (FormInstructionChanges)getSessionObject(request,FORM_EDIT_INSTRUCTION_CHANGES);
+	          Collection addedProtocols = getSessionObject(request,FORM_EDIT_ADDED_PROTOCOLS)==null?
+	                                        null:(Collection)getSessionObject(request,FORM_EDIT_ADDED_PROTOCOLS);
+	          Collection removedProtocols = getSessionObject(request,FORM_EDIT_REMOVED_PROTOCOLS)==null?
+	                                        null:(Collection)getSessionObject(request,FORM_EDIT_REMOVED_PROTOCOLS);
+	            
+	           Collection protocolTriggerActionChanges = getSessionObject(
+	                    request,UPDATE_SKIP_PATTERN_TRIGGERS)==null?
+	                    null:(Collection)getSessionObject(request,UPDATE_SKIP_PATTERN_TRIGGERS);
+	           
+	          Form updatedCrf = service.updateForm(crf.getFormIdseq(),header, 
+	            updatedModules, deletedModules,addedModules,addedProtocols, 
+	            removedProtocols,protocolTriggerActionChanges, instrChanges);
+	          setSessionObject(request,CRF, updatedCrf,true);
+	           clonedCrf = (Form) updatedCrf.clone();
+	          setSessionObject(request, CLONED_CRF, clonedCrf,true);
+	        }
+	        catch (FormBuilderException exp) {
+	          if (log.isErrorEnabled()) {
+	            log.error("Exception While saving the form " + crf,exp);
+	          }
+	          saveMessage(ERROR_FORM_SAVE_FAILED, request);
+	          saveMessage(exp.getErrorCode(), request);
+	 	     cancelFormEdit( mapping, formEditForm, request, response);
+	 	    ActionForward forward = mapping.findForward(SUCCESS);
+	 	    return forward;
+	        }
+	        catch (CloneNotSupportedException exp) {
+	          saveMessage(ERROR_FORM_SAVE_FAILED, request);
+	          if (log.isErrorEnabled()) {
+	            log.error("On save, Exception on cloneing crf " + crf,exp);
+	          }
+	 	     cancelFormEdit( mapping, formEditForm, request, response);
+	 	    ActionForward forward = mapping.findForward(SUCCESS);
+	 	    return forward;
+	        }
+	        removeSessionObject(request, DELETED_MODULES);
+	        removeSessionObject(request,FORM_EDIT_ADDED_PROTOCOLS);
+	        removeSessionObject(request,FORM_EDIT_REMOVED_PROTOCOLS);        
+	        removeSessionObject(request,UPDATE_SKIP_PATTERN_TRIGGERS);        
+	        saveMessage("cadsr.formbuilder.form.retire.success", request);
+	    	//this.logSessionData("saveForm ", form.toString(), request.getSession());
+	        ActionForward forward = mapping.findForward(SUCCESS);
+	        return forward;
+	       }
+	    else
+	    {
+	      saveMessage("cadsr.formbuilder.form.edit.nochange", request);
+		     cancelFormEdit( mapping, formEditForm, request, response);
+		     ActionForward forward = mapping.findForward(SUCCESS);
+		     return forward;
+	    }
+	}
+
+  
+  
+  
+  
 
   /**
    * Save Changes

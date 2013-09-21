@@ -240,6 +240,9 @@ function ToggleSelectAll(e){
                                     target="_parent"
                     />		            
                       </td>
+                      
+<!--GF32971 begin. Use Retired Withdrawn to take over Delete. -D.An, 20130919 -->                         
+<%--
                      <td width="20"  class="OraTabledata" align=center>
                            <cde:secureIcon  formId="form" 
                     formScope="<%=CaDSRConstants.PAGE_SCOPE%>" 
@@ -255,6 +258,24 @@ function ToggleSelectAll(e){
                     confirmMessageKey="cadsr.formbuilder.form.delete.confirm"
                                     />		           	
                     </td> 
+--%>                    
+                     <td width="20"  class="OraTabledata" align=center>
+                           <cde:secureIcon  formId="form" 
+                    formScope="<%=CaDSRConstants.PAGE_SCOPE%>" 
+                    activeImageSource="i/delete.gif" 
+                                    activeUrl='<%="/formToRetireAction.do?"
+                             +NavigationConstants.METHOD_PARAM+"=retireForm"%>'
+                                    role="<%=CaDSRConstants.CDE_MANAGER%>" 
+                                    urlPrefix="<%=urlPrefix%>"
+                                    paramId = "<%=FormConstants.FORM_ID_SEQ%>"
+                                    paramProperty="formIdseq"
+                    inactiveImageSource="i/delete_inactive.gif"
+                                    altMessage="Retire"
+                    confirmMessageKey="cadsr.formbuilder.form.retire.confirm"
+                                    />		           	
+                    </td> 
+<!--GF32971 end. -D.An, 20130919 --> 
+                        
                     </tr>
                     </table>
                     </td>

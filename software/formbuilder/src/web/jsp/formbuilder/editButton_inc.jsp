@@ -33,21 +33,9 @@ if(confirm(message)) location.href = url;
             <a href="javascript:submitFormToSave('<%=NavigationConstants.CHECK_CHANGES_DONE%>')">
                <img src=<%=urlPrefix%>i/backButton.gif border=0 alt="Done">
             </a>              
-          </td>                
-          <td >
-		       <cde:secureIcon  formId="<%=FormConstants.CRF%>" 
-           formScope="<%=CaDSRConstants.SESSION_SCOPE%>" 
-           activeImageSource="i/deleteFormButton.gif" 
-		       		activeUrl='<%="/formEditDeleteAction.do?"
-                         +NavigationConstants.METHOD_PARAM+"="+NavigationConstants.DELETE_FORM%>'
-		   	   	role="<%=CaDSRConstants.CDE_MANAGER%>" 
-		   	   	urlPrefix="<%=urlPrefix%>"
-		   	   	paramId = "<%=FormConstants.FORM_ID_SEQ%>"
-		   	   	paramProperty="formIdseq"
-		   	   	altMessage="Delete"  
-            confirmMessageKey="cadsr.formbuilder.form.delete.confirm"
-		   	   	/>		                
-          </td>  
+          </td> 
+                         
+<!--GF32971 Removed Delete Button, -D,An, 20130919 -->
 
           <td > 
             <html:link action='<%="/cancelFormEditAction?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.CANCEL_FORM_EDIT%>'>

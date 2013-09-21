@@ -293,6 +293,10 @@
 </filter-mapping> 
  <filter-mapping> 
          <filter-name>FormBuilderSessionFilter</filter-name>
+      <url-pattern>/formToRetireAction.do</url-pattern>
+</filter-mapping> 
+ <filter-mapping> 
+         <filter-name>FormBuilderSessionFilter</filter-name>
        <url-pattern>/moduleRepeatAction.do</url-pattern>
 </filter-mapping> 
 
@@ -317,6 +321,10 @@
  <filter-mapping> 
          <filter-name>FormBuilderSessionFilter</filter-name>
       <url-pattern>/formViewDeleteAction.do</url-pattern>
+</filter-mapping> 
+ <filter-mapping> 
+         <filter-name>FormBuilderSessionFilter</filter-name>
+      <url-pattern>/formViewRetireAction.do</url-pattern>
 </filter-mapping> 
  <filter-mapping> 
          <filter-name>FormBuilderSessionFilter</filter-name>
@@ -611,6 +619,10 @@
 </filter-mapping> 
  <filter-mapping> 
          <filter-name>EditFormFilter</filter-name>
+      <url-pattern>/formToRetireAction.do</url-pattern>
+</filter-mapping> 
+ <filter-mapping> 
+         <filter-name>EditFormFilter</filter-name>
       <url-pattern>/moduleRepeatAction.do</url-pattern>
 </filter-mapping> 
  <filter-mapping> 
@@ -644,6 +656,10 @@
 <filter-mapping> 
          <filter-name>EditFormFilter</filter-name>
       <url-pattern>/formViewDeleteAction.do</url-pattern>
+</filter-mapping>
+<filter-mapping> 
+         <filter-name>EditFormFilter</filter-name>
+      <url-pattern>/formViewRetireAction.do</url-pattern>
 </filter-mapping>
 <filter-mapping> 
          <filter-name>EditFormFilter</filter-name>
@@ -863,6 +879,7 @@
       <url-pattern>/changeAssociation.do</url-pattern>
       <url-pattern>/formSaveAction.do</url-pattern>
       <url-pattern>/formToEditAction.do</url-pattern>
+      <url-pattern>/formToRetireAction.do</url-pattern>
       <url-pattern>/moduleRepeatAction.do</url-pattern>
       <url-pattern>/addProtocol.do</url-pattern>
       <url-pattern>/formToCopyAction.do</url-pattern>
@@ -870,6 +887,7 @@
       <url-pattern>/saveLatestVersion.do</url-pattern>
       <url-pattern>/gotoCreateNewVersion.do</url-pattern>
       <url-pattern>/formViewDeleteAction.do</url-pattern>
+      <url-pattern>/formViewRetireAction.do</url-pattern>
       <url-pattern>/excelDownload.do</url-pattern>
       <url-pattern>/xmlDownload.do</url-pattern>
       <url-pattern>/formPrinterAction.do</url-pattern>
