@@ -1,7 +1,9 @@
 Welcome to the caDSR Formbuilder Project!
 =====================================
 
-caDSR Form Builder allows users leverage CDE metadata to create Forms that replicate the content of Case Report Forms. These Forms can include complex behavior, such as repeating groups and skip patterns.
+The caDSR Form Builder allows users leverage CDE metadata to create Forms that replicate the content of Case Report Forms. These Forms can include complex behavior, such as repeating groups and skip patterns.
+
+The caDSR Form Builder is developed in Java and requires Apache Ant for building.
 
 The caDSR Formbuilder is distributed under the BSD 3-Clause License.
 Please see the NOTICE and LICENSE files for details.
