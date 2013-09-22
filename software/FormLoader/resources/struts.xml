@@ -29,6 +29,7 @@
 		<action name="login" class="gov.nih.nci.cadsr.formloader.struts2.LoginAction"> 
 			<interceptor-ref name="loggingStack"/> 
 			<result name="success" type="tiles">/home.tiles</result> 
+			<result name="input">LoginForm.jsp</result> 
 			<result name="error">LoginForm.jsp</result> 
 		</action>
 		
