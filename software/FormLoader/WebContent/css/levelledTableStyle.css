@@ -1,0 +1,79 @@
+@CHARSET "ISO-8859-1";
+
+.content {
+font-family: sans-serif;
+font-size: small;
+}
+
+
+.level1Table {
+	border-width: 0;
+	border-spacing: 2px;
+	border-style: outset outset outset outset;
+	border-color: black black black black;
+	border-collapse: collapse;
+	font-size: medium;
+}
+
+.level1Table td {
+font-size: medium;
+	border-width: 1px 1px 1px 1px;
+	border-spacing: 2px;
+	border-style: outset outset outset outset;
+	border-color: black black black black;
+	border-collapse: collapse;
+}
+
+.level1Table thead {
+	font-size: medium;
+	
+	background-color: 999966;
+}
+
+.level1Table th {
+font-size: medium;
+	border-width: 1px 1px 1px 1px;
+	border-spacing: 2px;
+	border-style: outset outset outset outset;
+	border-color: black black black black;
+	border-collapse: collapse;
+	background-color: 999966;
+}
+
+.odd {
+font-size: medium;
+background-color: #FFFFF0;
+}
+
+.even {
+font-size: medium;
+background-color: #FAF0E6;
+}
+
+.level2Table {
+	border-width: 1px 1px 1px 1px;
+	border-spacing: 2px;
+	border-style: outset outset outset outset;
+	border-color: black black black black;
+	border-collapse: collapse;
+	background-color: #F5F5DC
+}
+
+.level2Table td {
+	border-width: 1px 1px 1px 1px;
+	border-spacing: 2px;
+	border-style: outset outset outset outset;
+	border-color: black black black black;
+	border-collapse: collapse;
+font-size: small;
+}
+
+.level2Table th {
+	border-width: 1px 1px 1px 1px;
+	border-spacing: 2px;
+	border-style: outset outset outset outset;
+	border-color: black black black black;
+	border-collapse: collapse;
+	background-color: rgb(255, 255, 255);
+font-size: small;
+}
