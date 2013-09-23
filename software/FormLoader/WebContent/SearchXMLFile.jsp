@@ -4,13 +4,15 @@
 
 <html>
 <head>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
-</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+    <meta name="viewport" content="width=device-width">
+    
 
 <title>Search XML Files</title>
 
 <style type="text/css">
-@import url(css/style.css);
+@import url(css/levelledTableStyle.css)
 </style>
 
 </head>
@@ -85,11 +87,10 @@
    </tr>
  </table> 
  
- <%-- <s:if test="collectionList.size() >= 0"> --%>
- 
-   		<div class="content">
-		<table id="collectiontable">
-			<tr class="even">
+   		<!--  div class="content"> -->
+		<table class="level1Table" id="collectiontable">
+		
+			<tr>
 				<th>Select</th>
 				<th>Collection Name</th>
 				<th>Description</th>
@@ -97,19 +98,60 @@
 				<th>Loaded By</th>
 				<th>Loaded Date</th>
 			</tr>
+			
+			
             <s:iterator value="collectionList" id = "bean" status="status">
-            
-			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
-			    <td>
+            <tbody>
+			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>" id="<s:property value="id" />">
+			<!--  tr class="parent" id="<s:property value="id" />" > -->
+			    <td align="center">
 			      <s:checkbox name="checkboxes[%{#status.index}]" theme = "simple" />
 			    </td>
-				<td class ="colname"><s:property value= "name"/></td>
-				<td><s:property value="description" /></td>
-				<td><s:property value="collectionList.size()" /></td>
+			    
+				<td align="center"><s:property value= "name"/></td>
+				<td align="center"><s:property value="description" /></td>
+				<td align="center"><s:property value="forms.size()" /></td>
+				<td align="center"><s:property value="createdBy" /></td>
+				<td align="center"><s:property value="dateCreated" /></td>
+			</tr>			
+			
+			<tr class="child-<s:property value="id" />">
+			<td>&nbsp;</td>
+			<td colspan=5>
+			<table class="level2Table">
+			<tr class="even">
+				<th>&nbsp;</th>
+				<th>Public ID</th>
+				<th>Version</th>
+				<th>Long Name</th>
+				<th>Context</th>
+				<th>Protocol Name</th>
+				<th>Workflow Status</th>
+				<th>Created By</th>
+				<th>Modified By</th>
+				</tr>
+				<s:iterator value="forms" id = "form" status="status"> 
+				 <tr>
+				 <td>
+			      <!--  s:checkbox name="checkboxes[%{#status.index}]" theme = "simple" /> -->
+			      <s:checkbox name="checkboxes2[#form.formSeqId]" theme = "simple" />
+			    </td>
+				<td><s:property value="publicId" /></td>
+				<td><s:property value="version" /></td>
+				<td><div style="width: 250px;"><s:property value="longName" /></div></td>
+				<td><s:property value="context" /></td>
+				<td><div style="width: 250px;"><s:property value="protocolName" /></div></td>
+				<td><s:property value="workflowStatusName" /></td>
 				<td><s:property value="createdBy" /></td>
-				<td><s:property value="dateCreated" /></td>
+				<td><s:property value="modifiedBy" /></td>
+				</tr>
+				</s:iterator>
+			</table>
+			</td>
 			</tr>
+			</tbody>
 			</s:iterator>
+			
 			<tr>
 		  	<td colspan="1" align="left" nowrap>
 <s:submit type="image" src="/FormLoader/i/View-Form-Collection.gif" method="execute" align="left" theme="simple" /></td>
@@ -136,4 +178,32 @@
 </s:form>
 
 </body>
+
+<script type="text/javascript">
+jQuery(document).ready(function() {
+	
+	
+	$('tr.parent')
+	.css("cursor","pointer")
+	.attr("title","Click to expand/collapse")
+	.click(function(){
+		$(this).siblings('.child-'+this.id).toggle();
+	});
+	
+	$('tr.odd')
+	.css("cursor","pointer")
+	.attr("title","Click to expand/collapse")
+	.click(function(){
+		$(this).siblings('.child-'+this.id).toggle();
+	});
+	$('tr.even')
+	.css("cursor","pointer")
+	.attr("title","Click to expand/collapse")
+	.click(function(){
+		$(this).siblings('.child-'+this.id).toggle();
+	});
+	
+	$('tr[@class^=child-]').hide().children('td');});
+
+</script>
 </html>
