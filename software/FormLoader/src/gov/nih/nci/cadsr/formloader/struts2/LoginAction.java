@@ -32,6 +32,7 @@ public class LoginAction extends ActionSupport implements SessionAware, ServletR
 	private String appname; 
 	private String [] apps = {"FormBuilder", "FormLoader" };
 	SessionMap<String, String> sessionmap;
+	boolean clear = false;
 	
 	public String execute() {
 		applicationContext =
@@ -102,7 +103,7 @@ public class LoginAction extends ActionSupport implements SessionAware, ServletR
 	public String clear()
 	{
 		sessionmap.invalidate();
-		return "success";
+		return SUCCESS;
 	}
 
 	@Override
@@ -111,12 +112,19 @@ public class LoginAction extends ActionSupport implements SessionAware, ServletR
 		
 	}
 	
+	public void validateClear(){
+		clear = true;
+	}
+	
 	public void validate(){
+		if (!clear)
+		{
 		if(getUsername().isEmpty()){
 			addFieldError("username", getText("username.required"));
 		}
 		if(getPassword().isEmpty()){
 			addFieldError("password", getText("password.required"));
+		}
 		}
 	}
 }

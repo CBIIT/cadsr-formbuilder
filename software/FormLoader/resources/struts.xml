@@ -26,15 +26,17 @@
 		</interceptors>
 		
 		
-		<action name="login" class="gov.nih.nci.cadsr.formloader.struts2.LoginAction"> 
+		<action name="login" class="gov.nih.nci.cadsr.formloader.struts2.LoginAction" method="execute"> 
 			<interceptor-ref name="loggingStack"/> 
 			<result name="success" type="tiles">/home.tiles</result> 
 			<result name="input">LoginForm.jsp</result> 
 			<result name="error">LoginForm.jsp</result> 
 		</action>
 		
-		<action name="clear" class="gov.nih.nci.cadsr.formloader.struts2.LoginAction">
-			<result name="success" type="redirect">LoginForm.jsp</result>
+		<action name="clearlogin" class="gov.nih.nci.cadsr.formloader.struts2.LoginAction" method="clear"> 
+			<result>LoginForm.jsp</result>
+			<result name="input">LoginForm.jsp</result>
+			<result name="error">LoginForm.jsp</result>
 		</action>
 		
 		<action name="logout" class="gov.nih.nci.cadsr.formloader.struts2.LogoutAction">
