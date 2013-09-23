@@ -39,6 +39,10 @@
 			<result name="error">LoginForm.jsp</result>
 		</action>
 		
+		
+
+		
+		
 		<action name="logout" class="gov.nih.nci.cadsr.formloader.struts2.LogoutAction">
 			<result name="success" type="redirect">LoginForm.jsp</result>
 		</action>
@@ -57,8 +61,16 @@
 
 		<action name="upload-form" class="gov.nih.nci.cadsr.formloader.struts2.XMLFileUploadAction">
 			<result type="tiles">/upload.tiles</result>
+			<result name="input" type="tiles">/upload.tiles</result>
 			<result name="error" type="tiles">/upload.tiles</result>
 		</action>
+		
+		<action name="cancelFileUpload" class="gov.nih.nci.cadsr.formloader.struts2.XMLFileUploadAction" method="clear"> 
+			<result type="tiles">/upload.tiles</result>
+			<result name="input" type="tiles">/upload.tiles</result>
+			<result name="error" type="tiles">/upload.tiles</result>
+		</action>
+		
 		  	<action name="search-form" 
 			class="gov.nih.nci.cadsr.formloader.struts2.SearchLoadedCollectionAction">
 			<interceptor-ref name="loggingStack"></interceptor-ref>

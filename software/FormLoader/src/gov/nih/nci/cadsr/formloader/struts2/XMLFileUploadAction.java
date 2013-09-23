@@ -43,6 +43,7 @@ ServletRequestAware, ValidationAware{
     private Properties configProp;
     private File uploadedfile = null;
     private XmlValidationServiceImpl xmlValidator = null;
+    private boolean clear=false;
     
     public void loadProps() {
     	InputStream in = null;
@@ -199,5 +200,26 @@ ServletRequestAware, ValidationAware{
 	@Override
 	public void setServletRequest(HttpServletRequest arg0) {
 		this.servletRequest = arg0;
+	}
+	
+	public String clear()
+	{
+		return SUCCESS;
+	}
+	
+	public void validateClear(){
+		clear = true;
+	}
+	
+	public void validate(){
+		if (!clear)
+		{
+		if((file == null)){
+			addFieldError("file", getText("file.required"));
+		}
+		if(fileName == null || fileName.isEmpty()){
+			addFieldError("fileName", getText("fileName.required"));
+		}
+		}
 	}
 }
