@@ -52,16 +52,16 @@
   <s:actionerror />
 
  <table>
-<s:form action="login" method="post">
+<s:form  method="post" action="login">
   <tr>
 	<s:textfield name="username" key="label.username" size="20" />  </tr>
 	  <tr>
 	<s:password name="password" key="label.password" size="20" />  </tr>
 	  <tr>
 	  	<td colspan="1" align="left" nowrap>
-<s:submit type="image" src="/FormLoader/i/logon.gif" method="execute" align="left" theme="simple" /></td>
+<s:submit type="image" src="/FormLoader/i/logon.gif" value="execute" align="left" theme="simple" /></td>
 	  	<td colspan="1" align="left" nowrap>
-<s:submit type="image" src="/FormLoader/i/clear.gif" method="clear" align="left" theme="simple"/></td>
+<s:submit type="image" src="/FormLoader/i/clear.gif" value="clear" action="clearlogin" onclick="this.form.reset();"  align="left" theme="simple"/></td>
   </tr>
 </s:form>
  </table> 

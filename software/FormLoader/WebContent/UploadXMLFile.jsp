@@ -31,9 +31,9 @@ L--%>
 	  	<td colspan="1" align="left" nowrap>
 <s:submit type="image" src="/FormLoader/i/validate-XML.gif" method="execute" align="left" theme="simple" /></td>
 	  	<td colspan="1" align="left" nowrap>
-<s:submit type="image" src="/FormLoader/i/cancel.gif" method="cancel" align="left" theme="simple"/></td>
+<s:submit type="image" src="/FormLoader/i/cancel.gif" action="cancelFileUpload" onclick="this.form.reset();" align="left" theme="simple"/></td>
 	  	<td colspan="1" align="left" nowrap>
-<s:submit type="image" src="/FormLoader/i/reset.gif" method="reset" align="left" theme="simple"/></td>
+<s:submit type="image" src="/FormLoader/i/reset.gif" onclick="this.form.reset();" align="left" theme="simple"/></td>
   </tr>
 </s:form>
 </table>
