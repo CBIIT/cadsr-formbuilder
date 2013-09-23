@@ -8,8 +8,9 @@
 
 <body>
     <h5 class="OraTipText">You are logged in as: <s:property value="username" /></h5>
-    <h3 class="OraTipText"><b>Form Loader</b></h3>
-	<h5 class="OraTipText">Form Loader allows users to load form collections, search for previously loaded form collections, and unload previously loaded form collections.</h5>
+    <b>Form Loader</b>
+    <br>
+	Form Loader allows users to load form collections, search for previously loaded form collections, and unload previously loaded form collections.
     
     <p>
 
