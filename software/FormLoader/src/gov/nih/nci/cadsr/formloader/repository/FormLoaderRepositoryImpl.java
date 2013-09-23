@@ -1148,6 +1148,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			form.setPublicId(String.valueOf(dto.getPublicId()));
 			form.setVersion(String.valueOf(dto.getVersion()));
 			form.setType(dto.getFormType());
+			form.setWorkflowStatusName(dto.getAslName());
 			forms.add(form);
 		}
 		
