@@ -1,4 +1,4 @@
-Welcome to the caDSR Formbuilder Project!
+Welcome to the caDSR Form Builder Project!
 =====================================
 
 caDSR Form Builder allows users to leverage Common Data Element (CDE) metadata to create forms that replicate the content of Case Report Forms (CRFs).
@@ -6,10 +6,10 @@ These Forms can include complex behavior, such as repeating groups and skip patt
 
 The caDSR Form Builder is developed in Java and requires Apache Ant for building.
 
-The caDSR Formbuilder is distributed under the BSD 3-Clause License.
+The caDSR Form Builder is distributed under the BSD 3-Clause License.
 Please see the NOTICE and LICENSE files for details.
 
-You will find more details about the caDSR Formbuilder in the following links:
+You will find more details about the caDSR Form Builder in the following links:
 
  * [Community Wiki] (https://wiki.nci.nih.gov/x/Q4EI)
  * [Code Repository] (https://github.com/NCIP/cadsr-formbuilder)
@@ -19,4 +19,4 @@ You will find more details about the caDSR Formbuilder in the following links:
  * [NCI Instance] (https://formbuilder.nci.nih.gov) 
 
 
-Please join us in further developing and improving the caDSR Formbuilder project.
+Please join us in further developing and improving the caDSR Form Builder project.
