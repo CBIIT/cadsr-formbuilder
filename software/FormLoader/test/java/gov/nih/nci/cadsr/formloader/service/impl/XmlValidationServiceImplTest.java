@@ -36,17 +36,6 @@ public class XmlValidationServiceImplTest {
 
 	@Before
 	public void setUp() throws Exception {
-		//xmlValService = new XmlValidationServiceImpl();
-		//@SuppressWarnings("resource")
-		//ApplicationContext applicationContext = new FileSystemXmlApplicationContext(
-		//		"/applicationContext-service-test.xml");
-		//		"C:/development/workspace-formloader3/FormLoader/applicationContext-service-test.xml");
-		//ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
-		//		"/applicationContext-service-test.xml");
-		//		"/applicationContext-mock-repository-test.xml");
-
-		//xmlValService = 
-		//		(XmlValidationServiceImpl)applicationContext.getBean("xmlValidationService");
 	}
 
 	@After
@@ -75,17 +64,19 @@ public class XmlValidationServiceImplTest {
 	
 	@Test
 	public void testValidateXmlHappyPath() {
-		//This xsd has problems and, thus, good to generate "non-conformed" errors
-		//XmlValidationServiceImpl.XSD_PATH_NAME = "FormLoaderv1-testonly.xsd";
-		//((XmlValidationServiceImpl)this.xmlValService).setXSD_PATH_NAME("FormLoaderv1-testonly.xsd");
+		
 		try {
 			FormCollection aColl = new FormCollection();
 			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
-			aColl.setXmlFileName("forms.xml");
+			aColl.setXmlFileName("forms.xml"); //one of the form's module doens't have question. and got error
 			aColl = this.xmlValService.validateXml(aColl);
 			List<FormDescriptor> forms = aColl.getForms();
 			assertNotNull(forms);
 			assertTrue(forms.size() == 3);
+			
+			String xmlerror = forms.get(1).getXmlValidationErrorString();
+			logger.debug("Xml validation error: " + xmlerror);
+			//assertTrue(xmlerror.length() == 0);
 			
 			String status = StatusFormatter.getStatusInXml(aColl);
 			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\forms.HappyPath.status.xml");
@@ -110,15 +101,23 @@ public class XmlValidationServiceImplTest {
 			List<FormDescriptor> forms = aColl.getForms();
 			assertNotNull(forms);
 			FormDescriptor form = forms.get(0);
+			//assertTrue(form.getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATED);
 			assertTrue(form.getPublicId() == null || form.getPublicId().length() == 0);
+			
+			String xmlerror = form.getXmlValidationErrorString();
+			logger.debug("Xml validation error: " + xmlerror);
+			//assertTrue(xmlerror.length() == 0);
 		
 		} catch (FormLoaderServiceException e) {
 			fail("Got exception: " + e.toString());
 		}
 	}
 	
-	//@Test
+	@Test
 	public void testValidateXmlWithInvalidContext() {
+		//This works because we're using a non-finalized xsd, which has context type enumeration. 
+		//When we move to the xsd without those list, this test needs to be removed or althered. 
+		// == 09/20/2013
 		try {
 			FormCollection aColl = new FormCollection();
 			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
@@ -129,7 +128,11 @@ public class XmlValidationServiceImplTest {
 			FormDescriptor form = forms.get(0);
 			assertTrue(form.getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATION_FAILED);
 			String status = StatusFormatter.getStatusInXml(aColl);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\dat\\xmlvalidationa\\invalid-context.status.xml");
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\invalid-context.status.xml");
+			
+			String xmlerror = form.getXmlValidationErrorString();
+			assertTrue(xmlerror.length() > 0);
+			logger.debug("Concatinated xml validation error: " + xmlerror);
 			
 		
 		} catch (FormLoaderServiceException e) {
