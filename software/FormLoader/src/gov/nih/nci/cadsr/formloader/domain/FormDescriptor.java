@@ -3,6 +3,7 @@ package gov.nih.nci.cadsr.formloader.domain;
 import gov.nih.nci.cadsr.formloader.service.common.XmlValidationError;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class FormDescriptor {
@@ -48,6 +49,10 @@ public class FormDescriptor {
 	String categoryName;
 	//pass2
 	
+	Date createdDate;
+	Date modifiedDate;
+	String collectionName;
+	
 	List<ModuleDescriptor> modules = new ArrayList<ModuleDescriptor>();
 	
 	//Any error (xml, content validation, etc) will be here
@@ -77,7 +82,7 @@ public class FormDescriptor {
 	 * @return
 	 */
 	public FormStatus getStructuredStatus() {
-		FormStatus formStatus = new FormStatus(this.getFormIdString() + "|" + this.formSeqId);
+		FormStatus formStatus = new FormStatus(this.getFormIdString(), this.formSeqId, false);
 		formStatus.setLoadType(this.loadType);
 		formStatus.setLoadStatus(getLoadStatusString(this.loadStatus));
 		
@@ -94,7 +99,39 @@ public class FormDescriptor {
 		if (this.modules.size() > 0) {
 			for (int i = 0; i < this.modules.size(); i++) {
 				ModuleStatus moduleStatus = new ModuleStatus("" + (i+1));
-				moduleStatus.setQuestionStatuses(modules.get(i).getQuestionStatuses(formStatus.getLoadStatus()));
+				moduleStatus.setQuestionStatuses(modules.get(i).getQuestionStatuses(formStatus.getLoadStatus(), false));
+				formStatus.getModuleStatuses().add(moduleStatus);
+			}
+		}
+		
+		return formStatus;
+	}
+	
+	/**
+	 * If debug is true, the form and question's id string will contain their seqid in database.
+	 * 
+	 * @param debug
+	 * @return
+	 */
+	public FormStatus getStructuredStatus(boolean debug) {
+		FormStatus formStatus = new FormStatus(this.getFormIdString(), this.formSeqId, debug);
+		formStatus.setLoadType(this.loadType);
+		formStatus.setLoadStatus(getLoadStatusString(this.loadStatus));
+		
+		List<String> msgs = formStatus.getMessages();
+		if (this.xmlValidationErrors != null && this.xmlValidationErrors.size() > 0) {
+			for (XmlValidationError error : this.xmlValidationErrors)
+				msgs.add(error.toString());
+		}
+		
+		if (this.messages.size() > 0) {
+			msgs.addAll(this.messages);
+		}
+		
+		if (this.modules.size() > 0) {
+			for (int i = 0; i < this.modules.size(); i++) {
+				ModuleStatus moduleStatus = new ModuleStatus("" + (i+1));
+				moduleStatus.setQuestionStatuses(modules.get(i).getQuestionStatuses(formStatus.getLoadStatus(), debug));
 				formStatus.getModuleStatuses().add(moduleStatus);
 			}
 		}
@@ -312,6 +349,30 @@ public class FormDescriptor {
 		this.contextSeqid = contextSeqid;
 	}
 	
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public Date getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
+
+	public String getCollectionName() {
+		return collectionName;
+	}
+
+	public void setCollectionName(String collectionName) {
+		this.collectionName = collectionName;
+	}
+
 	/**
 	 * Return the current load status in string
 	 * @return
@@ -359,5 +420,21 @@ public class FormDescriptor {
 	 */
 	public String getFormIdString() {
 		return this.publicId + "|" + this.version;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public String getXmlValidationErrorString() {
+		if (this.xmlValidationErrors == null || this.xmlValidationErrors.size() == 0)
+			return "";
+		
+		StringBuilder sb = new StringBuilder();
+		for (XmlValidationError error : xmlValidationErrors) {
+			sb.append(error.toString()).append(";");
+		}
+		
+		return sb.toString();
 	}
 }

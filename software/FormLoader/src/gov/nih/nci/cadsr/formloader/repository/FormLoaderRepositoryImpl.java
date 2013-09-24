@@ -60,6 +60,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	public static final	String DEFAULT_REFDOC_TYPE	= "REFERENCE";
 	
 	public static final	String FORM_LOADER_DB_USER = "FORMLOADER";
+	public static final	String WORKFLOW_STATUS_UNLOADED = "RETIRED WITHDRAWN"; //need to change to RETIRED UNLOAD on db change
 	
 	protected static final int MARK_TO_KEEP_IN_UPDATE = 99;
 	
@@ -272,7 +273,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		}
 		
 		return colls;
-	}
+	}	
 	
 	protected void retrievePublicIdForForm(String formSeqid, FormDescriptor form) {
 		FormV2TransferObject formdto = this.formV2Dao.getFormPublicIdVersion(formSeqid);
@@ -1129,6 +1130,13 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		return moduleDto;
 	}
 	
+	/**
+	 * A form from database may have 2 rows because each additional protocol will trigger an additional form row added
+	 * to database. This method will combine multiple rows for the same form into one form object, with comma separated
+	 * protocol names.
+	 * @param formdtos
+	 * @return
+	 */
 	protected List<FormDescriptor> translateIntoFormDescriptors(List<FormV2TransferObject> formdtos) {
 		List<FormDescriptor> forms = new ArrayList<FormDescriptor>();
 		
@@ -1137,19 +1145,29 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			return forms;
 		}
 		
+		HashMap<String, FormDescriptor> processedForms = new HashMap<String, FormDescriptor>();
+		
+		FormDescriptor form = null;
 		for (FormV2TransferObject dto : formdtos) {
-			FormDescriptor form  = new FormDescriptor();
-			form.setFormSeqId(dto.getFormIdseq());
-			form.setLongName(dto.getLongName());
-			form.setContext(dto.getContextName());
-			form.setModifiedBy(dto.getModifiedBy());
-			form.setCreatedBy(dto.getCreatedBy());
-			form.setProtocolName(dto.getProtocolLongName());
-			form.setPublicId(String.valueOf(dto.getPublicId()));
-			form.setVersion(String.valueOf(dto.getVersion()));
-			form.setType(dto.getFormType());
-			form.setWorkflowStatusName(dto.getAslName());
-			forms.add(form);
+			if (processedForms.containsKey(dto.getFormIdseq())) {
+				form = processedForms.get(dto.getFormIdseq());
+				form.setProtocolName(dto.getProtocolLongName());
+			}
+			else {
+				form  = new FormDescriptor();
+				form.setFormSeqId(dto.getFormIdseq());
+				form.setLongName(dto.getLongName());
+				form.setContext(dto.getContextName());
+				form.setModifiedBy(dto.getModifiedBy());
+				form.setCreatedBy(dto.getCreatedBy());
+				form.setProtocolName(dto.getProtocolLongName());
+				form.setPublicId(String.valueOf(dto.getPublicId()));
+				form.setVersion(String.valueOf(dto.getVersion()));
+				form.setType(dto.getFormType());
+				form.setWorkflowStatusName(dto.getAslName());
+				forms.add(form);
+				processedForms.put(dto.getFormIdseq(), form);
+			}
 		}
 		
 		return forms;
@@ -1618,12 +1636,23 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			return;
 		}
 		
-		int res = formV2Dao.updateWorkflowStatus(seqid, "RETIRED WITHDRAWN");
+		if (WORKFLOW_STATUS_UNLOADED.endsWith(form.getWorkflowStatusName())) {
+			form.addMessage("Form [" + form.getFormIdString() + "] had been unloaded previously.");
+			form.setLoadStatus(FormDescriptor.STATUS_UNLOAD_FAILED);
+			return;
+		}
+		
+		int res = formV2Dao.updateWorkflowStatus(seqid, WORKFLOW_STATUS_UNLOADED, FORM_LOADER_DB_USER);
 		if (res <= 0) {
-			form.addMessage("Failed to update form's workflow status. Unload failed");
+			form.addMessage("Failed to update form's workflow status in database. Reason unknown");
 			form.setLoadStatus(FormDescriptor.STATUS_UNLOAD_FAILED);
 		} else
 			form.setLoadStatus(FormDescriptor.STATUS_UNLOADED);
+		
+		FormV2TransferObject formdto = formV2Dao.getFormHeadersBySeqid(seqid);
+		form.setModifiedBy(formdto.getModifiedBy());
+		form.setModifiedDate(formdto.getDateModified());
+		form.setWorkflowStatusName(formdto.getAslName());
 	}
 	
 }

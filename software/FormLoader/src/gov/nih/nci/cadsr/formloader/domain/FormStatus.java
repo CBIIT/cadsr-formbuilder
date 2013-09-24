@@ -10,26 +10,34 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement (namespace ="gov.nih.nci.cadsr.formloader.domain.FormStatus")
 public class FormStatus {
 	
-	protected String identifier;
+	protected String id;
 	protected String loadType;
 	protected String loadStatus;
 	protected List<String> messages = new ArrayList<String>();
+	
+	private boolean debug;
 	
 	protected List<ModuleStatus> moduleStatuses = new ArrayList<ModuleStatus>();
 	
 	public FormStatus() {}
 	
-	public FormStatus(String id) { 
-		identifier = id;
+	public FormStatus(String id, String formSeqid, boolean debug) { 
+		
+		this.debug = debug;
+		
+		if (debug)
+			this.id = id + "|" + formSeqid;
+		else 
+			this.id = id;
 	}
 	
-	public String getIdentifier() {
-		return identifier;
+	public String getId() {
+		return id;
 	}
 	
 	@XmlElement
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
+	public void setId(String identifier) {
+		this.id = identifier;
 	}
 	public String getLoadType() {
 		return loadType;
@@ -66,7 +74,5 @@ public class FormStatus {
 	 @XmlElement(name ="module")
 	public void setModuleStatuses(List<ModuleStatus> moduleStatuses) {
 		this.moduleStatuses = moduleStatuses;
-	}
-	
-	
+	}	
 }

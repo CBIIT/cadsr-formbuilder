@@ -1,5 +1,6 @@
 package gov.nih.nci.cadsr.formloader.service.impl;
 
+import org.jboss.xnio.log.Logger;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -11,6 +12,8 @@ import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 
 @Service
 public class UnloadingServiceImpl implements UnloadingService {
+	
+	private static Logger logger = Logger.getLogger(UnloadingServiceImpl.class.getName());
 	
 	FormLoaderRepository repository;
 	
@@ -37,10 +40,17 @@ public class UnloadingServiceImpl implements UnloadingService {
 					"Form collections is null. Nothing to unload");
 		
 		for (FormCollection coll : collections) {
-			unloadForms(coll.getForms(), userName);
+			try {
+				unloadForms(coll.getForms(), userName);
+			} catch (FormLoaderServiceException fle) {
+				if (fle.getErrorCode() == FormLoaderServiceException.ERROR_EMPTY_FORM_LIST)
+					logger.debug("Collection [" + coll.getName() + "] has 0 form. Nothing to unload.");
+				else if (fle.getErrorCode() == FormLoaderServiceException.ERROR_USER_INVALID)
+					logger.error("Login user name is empty or null. Unable to unload form.");
+			}
 		}
 
-		return null;
+		return collections;
 	}
 
 	@Override
@@ -51,7 +61,7 @@ public class UnloadingServiceImpl implements UnloadingService {
 			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_USER_INVALID, 
 					"Login user name is null or empty");
 		
-		if (forms == null)
+		if (forms == null) 
 			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_EMPTY_FORM_LIST, 
 					"Form list is null");
 		
@@ -60,7 +70,7 @@ public class UnloadingServiceImpl implements UnloadingService {
 				continue;
 			
 			String context = form.getContext();
-			if (repository.hasLoadFormRight(form, userName, context)) {
+			if (!repository.hasLoadFormRight(form, userName, context)) {
 				form.addMessage("Loggedin user doesn't have right to unload form with context \"" + context + "\"");
 				form.setLoadStatus(FormDescriptor.STATUS_UNLOAD_FAILED);
 				continue;
@@ -70,7 +80,7 @@ public class UnloadingServiceImpl implements UnloadingService {
 		}
 		
 		
-		return null;
+		return forms;
 	}
 
 	
