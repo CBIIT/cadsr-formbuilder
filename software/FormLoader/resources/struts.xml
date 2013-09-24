@@ -71,7 +71,7 @@
 			<result name="error" type="tiles">/upload.tiles</result>
 		</action>
 		
-		  	<action name="search-form" 
+		<action name="search-form" 
 			class="gov.nih.nci.cadsr.formloader.struts2.SearchLoadedCollectionAction">
 			<interceptor-ref name="loggingStack"></interceptor-ref>
     			<result name="success" type="tiles">/search.tiles</result>
@@ -120,12 +120,12 @@
     			<result name="success" type="tiles">/upload.summary.tiles</result>
 		</action>
 		
-  	<action name="search-form" 
-			class="gov.nih.nci.cadsr.formloader.struts2.SearchXMLFileAction">
+		<action name="unloadForms" 
+			class="gov.nih.nci.cadsr.formloader.struts2.UnloadFormsAction">
 			<interceptor-ref name="loggingStack"></interceptor-ref>
-    			<result name="success" type="tiles">/search.tiles</result>
-    			<result type="tiles">/search.tiles</result>
-		</action>
+    			<result name="success" type="tiles">/unloadSummary.tiles</result>
+    			<result type="tiles">/unloadSummary.tiles</result>
+		</action> 
 		
 <!--  		<action name="searchUploadedXMLFiles" method = "searchAction" 
 			class="gov.nih.nci.cadsr.formloader.struts2.SearchXMLFileAction">
