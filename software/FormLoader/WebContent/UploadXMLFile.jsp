@@ -21,10 +21,9 @@ L--%>
 <table>
 <s:form action="xmlFileUpload" method="post" enctype="multipart/form-data">
 <tr><td align="left">
-   <!-- <s:textfield key="Form Collection XML File" name="form_collection" /> -->
-   <s:file name="upload" label="Form Collection XML File" cols="20" rows="1"  /></td></tr>
+   <s:file name="upload" label="Form Collection XML File" required="true" cols="20" rows="1"  /></td></tr>
    <tr><td align="left">
-   <s:textfield key="Form Collection Name" name="collectionName"  /></td></tr>
+   <s:textfield label="Form Collection Name" name="collectionName" maxlength="20" required="true" /></td></tr>
    <tr><td align="left">
    <s:textarea key="Form Collection Description" name="description" cols="20" rows="5" /></td></tr>
     	  <tr>
