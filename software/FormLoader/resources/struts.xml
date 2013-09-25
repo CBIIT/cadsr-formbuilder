@@ -94,7 +94,6 @@
 	            <interceptor-ref name="workflow">
 	                <param name="excludeMethods">input,back,cancel,browse</param>
 	            </interceptor-ref>
-	 
 		    <result name="success" type="tiles">/upload.parse.tiles</result>
 		    <result name="input" type="tiles">/upload.tiles</result>
 		    <result name="error" type="tiles">/upload.tiles</result>

@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -43,6 +44,8 @@ ServletRequestAware, ValidationAware{
     private HttpServletRequest servletRequest;
     
     private List<FormDescriptor> parsedFormsList = null;
+    private List<FormDescriptor> parsedFormsNoErrorList = null;
+    private List<FormDescriptor> parsedFormsWithErrorList = null;
     private Properties configProp;
     private File uploadedfile = null;
     private XmlValidationServiceImpl xmlValidator = null;
@@ -167,6 +170,7 @@ ServletRequestAware, ValidationAware{
 		try {
 			aColl = xmlValidator.validateXml(aColl);
 			parsedFormsList = aColl.getForms();
+			sortForms();
         	servletRequest.getSession().setAttribute("parsedFormsList", parsedFormsList);
         	System.out.println(parsedFormsList.size()+" Parsed Forms ");
 		} catch (FormLoaderServiceException e) {
@@ -175,9 +179,29 @@ ServletRequestAware, ValidationAware{
 		}
 	}
 	
-	public void setUpload(File xmlFile) {
-	this.file = xmlFile;
-}
+	private void sortForms()
+		{
+		    parsedFormsNoErrorList = new ArrayList<FormDescriptor>();
+		    parsedFormsWithErrorList = new ArrayList<FormDescriptor>();
+		    for (FormDescriptor each : parsedFormsList)
+		    {
+		    	if (each.getXmlValidationErrorString().isEmpty())
+			    	{
+		    			parsedFormsNoErrorList.add(each);
+			    	}
+		    	else
+			    	{
+		    			parsedFormsWithErrorList.add(each);
+			    	}
+		    }
+	    	servletRequest.getSession().setAttribute("parsedFormsNoErrorList", parsedFormsNoErrorList);
+	    	servletRequest.getSession().setAttribute("parsedFormsWithErrorList", parsedFormsWithErrorList);
+		}
+	
+	public void setUpload(File xmlFile) 
+		{
+			this.file = xmlFile;
+		}
 	
 	public void setUploadFileName(String xmlFileName) {
 		this.fileName = xmlFileName;
@@ -228,5 +252,23 @@ ServletRequestAware, ValidationAware{
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public List<FormDescriptor> getParsedFormsNoErrorList() {
+		return parsedFormsNoErrorList;
+	}
+
+	public void setParsedFormsNoErrorList(
+			List<FormDescriptor> parsedFormsNoErrorList) {
+		this.parsedFormsNoErrorList = parsedFormsNoErrorList;
+	}
+
+	public List<FormDescriptor> getParsedFormsWithErrorList() {
+		return parsedFormsWithErrorList;
+	}
+
+	public void setParsedFormsWithErrorList(
+			List<FormDescriptor> parsedFormsWithErrorList) {
+		this.parsedFormsWithErrorList = parsedFormsWithErrorList;
 	}
 }

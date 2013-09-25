@@ -17,11 +17,12 @@ L--%>
 </head>
 <body>
 <h2>Forms Passed XML Validation</h2>
-<h3>Select forms to validate the questions and <br>data elements against caDSR database</h3>
+<br>
+Select forms to validate the questions and <br>data elements against caDSR database
 
 <br>
 <s:actionerror />	
-<s:if test="parsedFormsList.size() >= 1">
+<s:if test="parsedFormsNoErrorList.size() >= 1">
 	<s:form action="validateForms" theme = "simple" method="post"> 
 		<div class="content">
 		<table class="fileTable" cellpadding="5px">
@@ -36,11 +37,10 @@ L--%>
 				<th>Workflow Status</th>
 				<th># Module(s)</th>
 			</tr>
-			<s:iterator value="parsedFormsList" id = "bean" status="status">
+			<s:iterator value="parsedFormsNoErrorList" id = "bean" status="status">
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
 				<td>
 					<s:checkbox name="checkboxes[%{#status.index}]" theme = "simple" />
-					
 				</td>
 				<td><s:property value="publicId" /></td>
 				<td><s:property value="version" /></td>
@@ -63,6 +63,30 @@ L--%>
 		</table>
 		</div> 
 	</s:form>
+	</s:if>
+	
+	<h2>Forms Failed XML Validation</h2>
+    <br>
+
+	<s:if test="parsedFormsWithErrorList.size() >= 1">
+		<div class="content">
+		<table class="fileTable" cellpadding="5px">
+			<tr class="even">
+				<th>Public Id</th>
+				<th>Version</th>
+				<th>Long Name</th>
+				<th>Errors</th>
+			</tr>
+			<s:iterator value="parsedFormsWithErrorList" id = "bean" status="status">
+			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
+				<td><s:property value="publicId" /></td>
+				<td><s:property value="version" /></td>
+				<td><s:property value="longName" /></td>
+				<td><s:property value="getXmlValidationErrorString()" /></td>
+			</tr>
+			</s:iterator>
+		</table>
+		</div>
 	</s:if>
 </body>
 </html>
