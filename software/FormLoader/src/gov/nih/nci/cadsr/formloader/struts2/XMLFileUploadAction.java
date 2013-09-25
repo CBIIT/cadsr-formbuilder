@@ -34,8 +34,11 @@ ServletRequestAware, ValidationAware{
 	ApplicationContext applicationContext = null;
 	
 	private File file;
-    private String collectionName;
+	private String fileName;
 	private String contentType;
+	
+    private String collectionName;
+	private String description;
 	 
     private HttpServletRequest servletRequest;
     
@@ -107,22 +110,6 @@ ServletRequestAware, ValidationAware{
 	    	}
         return ERROR;
     }
- 
-//    private boolean isValidated() {
-//    	boolean isValidated = true;
-//    	for (int i=0; i<parsedFormsList.size();i++) {
-//    		FormObj one = parsedFormsList.get(i);
-//    		try {
-//   
-//    			one = ValidationMockupService.getInstance().validateForm(one);
-//    		} catch (Exception e) {
-//                e.printStackTrace();
-//               	one.setErrorMessage(e.getMessage());
-//                isValidated = false;
-//            }					
-//		}
-//    	return isValidated;
-//    }
     
     private void saveUploadedFile(File xmlFile)
     {	
@@ -133,7 +120,7 @@ ServletRequestAware, ValidationAware{
     	
     	try
 	    	{
-    			uploadedfile = new File(configProp.getProperty("upload.file.path") +"\\" + this.collectionName);
+    			uploadedfile = new File(configProp.getProperty("upload.file.path") +"\\" + this.fileName);
 	 
 	    	    inStream = new FileInputStream(xmlFile);
 	    	    outStream = new FileOutputStream(uploadedfile);
@@ -160,9 +147,7 @@ ServletRequestAware, ValidationAware{
 	    	}
     }
 
-	public void setUpload(File xmlFile) {
-		this.file = xmlFile;
-	}
+
 
 	private void validateXML()
 	{
@@ -175,8 +160,10 @@ ServletRequestAware, ValidationAware{
 		FormCollection aColl = new FormCollection();
 		aColl.setXmlPathOnServer(configProp.getProperty("upload.file.path") +"\\");
 		servletRequest.getSession().setAttribute("upload.file.path", configProp.getProperty("upload.file.path") +"\\");
-		aColl.setXmlFileName(this.collectionName);
-		servletRequest.getSession().setAttribute("filename", this.collectionName);
+		aColl.setXmlFileName(this.fileName);
+		aColl.setDescription(description);
+		aColl.setName(collectionName);
+		servletRequest.getSession().setAttribute("filename", this.fileName);
 		try {
 			aColl = xmlValidator.validateXml(aColl);
 			parsedFormsList = aColl.getForms();
@@ -188,9 +175,12 @@ ServletRequestAware, ValidationAware{
 		}
 	}
 	
+	public void setUpload(File xmlFile) {
+	this.file = xmlFile;
+}
 	
 	public void setUploadFileName(String xmlFileName) {
-		this.collectionName = xmlFileName;
+		this.fileName = xmlFileName;
 	}
 
 	public void setUploadContentType(String xmlFileContentType) {
@@ -215,11 +205,28 @@ ServletRequestAware, ValidationAware{
 		if (!clear)
 		{
 		if((file == null)){
-			addFieldError("file", getText("file.required"));
+			addFieldError("upload", getText("file is required"));
 		}
 		if(collectionName == null || collectionName.isEmpty()){
-			addFieldError("collectionName", getText("collectionName.required"));
+			addFieldError("collectionName", getText("collectionName is required"));
 		}
 		}
+	}
+
+
+	public void setCollectionName(String collectionName) {
+		this.collectionName = collectionName;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

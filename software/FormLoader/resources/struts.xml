@@ -78,7 +78,7 @@
     			<result type="tiles">/search.tiles</result>
 		</action>
 		
-   		<action name="xmlFileUpload" class="gov.nih.nci.cadsr.formloader.struts2.XMLFileUploadAction">
+   		<action name="xmlFileUpload" class="gov.nih.nci.cadsr.formloader.struts2.XMLFileUploadAction" method="execute">
 		    <interceptor-ref name="exception"/>
 	        <interceptor-ref name="i18n"/>
 	        <interceptor-ref name="fileUpload">
