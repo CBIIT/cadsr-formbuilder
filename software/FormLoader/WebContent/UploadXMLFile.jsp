@@ -24,12 +24,12 @@ L--%>
    <!-- <s:textfield key="Form Collection XML File" name="form_collection" /> -->
    <s:file name="upload" label="Form Collection XML File" cols="20" rows="1" /></td></tr>
    <tr><td>
-   <s:textfield key="Form Collection Name" name="collection_name" /></td></tr>
+   <s:textfield key="Form Collection Name" name="collectionName" /></td></tr>
    <tr><td>
    <s:textarea key="Form Collection Description" name="description" cols="20" rows="5"/></td></tr>
     	  <tr>
 	  	<td colspan="1" align="left" nowrap>
-<s:submit type="image" src="/FormLoader/i/validate-XML.gif" method="execute" align="left" theme="simple" /></td>
+<s:submit type="image" src="/FormLoader/i/validate-XML.gif" action="xmlFileUpload" align="left" theme="simple" /></td>
 	  	<td colspan="1" align="left" nowrap>
 <s:submit type="image" src="/FormLoader/i/cancel.gif" action="cancelFileUpload" onclick="this.form.reset();" align="left" theme="simple"/></td>
 	  	<td colspan="1" align="left" nowrap>

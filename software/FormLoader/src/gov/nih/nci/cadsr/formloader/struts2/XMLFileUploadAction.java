@@ -34,7 +34,7 @@ ServletRequestAware, ValidationAware{
 	ApplicationContext applicationContext = null;
 	
 	private File file;
-    private String fileName;
+    private String collectionName;
 	private String contentType;
 	 
     private HttpServletRequest servletRequest;
@@ -78,8 +78,8 @@ ServletRequestAware, ValidationAware{
 	}
 
 
-	public String getFileName() {
-		return fileName;
+	public String getCollectionName() {
+		return collectionName;
 	}
 
 
@@ -133,7 +133,7 @@ ServletRequestAware, ValidationAware{
     	
     	try
 	    	{
-    			uploadedfile = new File(configProp.getProperty("upload.file.path") +"\\" + this.fileName);
+    			uploadedfile = new File(configProp.getProperty("upload.file.path") +"\\" + this.collectionName);
 	 
 	    	    inStream = new FileInputStream(xmlFile);
 	    	    outStream = new FileOutputStream(uploadedfile);
@@ -175,8 +175,8 @@ ServletRequestAware, ValidationAware{
 		FormCollection aColl = new FormCollection();
 		aColl.setXmlPathOnServer(configProp.getProperty("upload.file.path") +"\\");
 		servletRequest.getSession().setAttribute("upload.file.path", configProp.getProperty("upload.file.path") +"\\");
-		aColl.setXmlFileName(this.fileName);
-		servletRequest.getSession().setAttribute("filename", this.fileName);
+		aColl.setXmlFileName(this.collectionName);
+		servletRequest.getSession().setAttribute("filename", this.collectionName);
 		try {
 			aColl = xmlValidator.validateXml(aColl);
 			parsedFormsList = aColl.getForms();
@@ -190,7 +190,7 @@ ServletRequestAware, ValidationAware{
 	
 	
 	public void setUploadFileName(String xmlFileName) {
-		this.fileName = xmlFileName;
+		this.collectionName = xmlFileName;
 	}
 
 	public void setUploadContentType(String xmlFileContentType) {
@@ -217,8 +217,8 @@ ServletRequestAware, ValidationAware{
 		if((file == null)){
 			addFieldError("file", getText("file.required"));
 		}
-		if(fileName == null || fileName.isEmpty()){
-			addFieldError("fileName", getText("fileName.required"));
+		if(collectionName == null || collectionName.isEmpty()){
+			addFieldError("collectionName", getText("collectionName.required"));
 		}
 		}
 	}

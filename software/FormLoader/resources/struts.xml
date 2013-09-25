@@ -59,7 +59,7 @@
 		</action>
 
 
-		<action name="upload-form" class="gov.nih.nci.cadsr.formloader.struts2.XMLFileUploadAction">
+		<action name="upload-form" class="gov.nih.nci.cadsr.formloader.struts2.XMLFileUploadInitialAction">
 			<result type="tiles">/upload.tiles</result>
 			<result name="input" type="tiles">/upload.tiles</result>
 			<result name="error" type="tiles">/upload.tiles</result>
