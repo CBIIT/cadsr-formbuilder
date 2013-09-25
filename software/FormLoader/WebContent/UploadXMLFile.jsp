@@ -20,12 +20,12 @@ L--%>
 <s:actionerror />
 <table>
 <s:form action="xmlFileUpload" method="post" enctype="multipart/form-data">
-<tr><td>
+<tr><td align="left">
    <!-- <s:textfield key="Form Collection XML File" name="form_collection" /> -->
    <s:file name="upload" label="Form Collection XML File" cols="20" rows="1" /></td></tr>
-   <tr><td>
+   <tr><td align="left">
    <s:textfield key="Form Collection Name" name="collectionName" /></td></tr>
-   <tr><td>
+   <tr><td align="left">
    <s:textarea key="Form Collection Description" name="description" cols="20" rows="5"/></td></tr>
     	  <tr>
 	  	<td colspan="1" align="left" nowrap>

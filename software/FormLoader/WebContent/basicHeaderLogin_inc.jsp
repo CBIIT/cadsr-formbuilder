@@ -17,7 +17,7 @@
         <TR>
           <TD valign="TOP" align="center" width="1%" colspan=1><A HREF="https://formbuilder.nci.nih.gov/FormBuilder/" ><IMG SRC="<%=request.getContextPath()%>/i/form_builder_icon.jpg" alt="Form Builder" border=0  width=32 height=32></A></TD>
           <TD valign="TOP" align="center" width="1%" colspan=1><A HREF="https://cdebrowser.nci.nih.gov" target="_blank"><IMG SRC="<%=request.getContextPath()%>/i/icon_cdebrowser.gif" alt="CDE Browser" border=0  width=32 height=32></A></TD>
-          <TD valign="TOP" align="left" width="1%" colspan=1><A HREF="<s:url value="https://formbuilder.nci.nih.gov/help"/>"  target="_blank"><IMG SRC="<%=request.getContextPath()%>/i/icon_help.gif" alt="Task Help" border=0  width=32 height=32></A></TD>
+          <TD valign="TOP" align="left" width="1%" colspan=1><A HREF="<s:url value=" https://wiki.nci.nih.gov/x/-gSGCQ"/>"  target="_blank"><IMG SRC="<%=request.getContextPath()%>/i/icon_help.gif" alt="Task Help" border=0  width=32 height=32></A></TD>
         </TR>
         <TR>
           <TD valign="TOP" align="center" colspan=1><font color=brown face=verdana size=1>&nbsp;Form Builder&nbsp;</font></TD>

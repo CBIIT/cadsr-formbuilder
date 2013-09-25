@@ -18,7 +18,7 @@
         <TR>
           <TD valign="TOP" align="left" width="1%" colspan=1><A HREF="https://formbuilder.nci.nih.gov/FormBuilder/" target="_blank"><IMG SRC="<%=request.getContextPath()%>/i/form_builder_icon.jpg" alt="Form Builder" border=0  width=32 height=32></A></TD>
           <TD valign="TOP" align="left" width="1%" colspan=1><A HREF="https://cdebrowser.nci.nih.gov" target="_blank"><IMG SRC="<%=request.getContextPath()%>/i/icon_cdebrowser.gif" alt="CDE Browser" border=0  width=32 height=32></A></TD>
-          <TD valign="TOP" align="left" width="1%" colspan=1><A HREF="https://formbuilder.nci.nih.gov/help" target="_blank"><IMG SRC="<%=request.getContextPath()%>/i/icon_help.gif" alt="Task Help" border=0  width=32 height=32></A></TD>
+          <TD valign="TOP" align="left" width="1%" colspan=1><A HREF=" https://wiki.nci.nih.gov/x/-gSGCQ" target="_blank"><IMG SRC="<%=request.getContextPath()%>/i/icon_help.gif" alt="Task Help" border=0  width=32 height=32></A></TD>
 		  <TD valign="TOP" align="CENTER" width="1%" colspan=1>
 		  	  <s:form action="home" method="post">
 				<s:submit type="image" src="/FormLoader/i/icon_home.gif" method="execute" alt="form loader home" align="left" />
