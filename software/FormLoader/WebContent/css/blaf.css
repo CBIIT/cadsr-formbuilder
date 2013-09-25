@@ -178,3 +178,13 @@ table, td
 {
 font-family:Arial, Helvetica, Geneva, sans-serif; font-size:10pt; color:#336699;
 }
+
+.label {
+    display: block;
+    margin: auto;
+    margin-bottom: 5px;
+    text-align: left;
+    font-size:12px;
+    width:150px;
+    font-style:normal !important;
+}
