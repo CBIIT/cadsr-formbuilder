@@ -9,8 +9,8 @@
             <param name="ConversionPattern" value="%d{ISO8601} %-5p [%c{1}] - %m%n" />
         </layout>
     </appender>
-
-    <appender name="default.file" class="org.apache.log4j.RollingFileAppender">
+    
+    <appender name="form.loader.file" class="org.apache.log4j.RollingFileAppender">
         <param name="file" value="./log/formloader.log" />
         <param name="MaxFileSize" value="5MB" />
         <param name="MaxBackupIndex" value="20"/>
@@ -20,10 +20,10 @@
             <param name="ConversionPattern" value="%d{ISO8601} %-5p [%c{1}] - %m%n" />
         </layout>
     </appender>
-
+   
     <root>
         <priority value="debug" />
-        <appender-ref ref="default.file" />
+        <appender-ref ref="form.loader.file" />
         <appender-ref ref="default.console" />
         
     </root>

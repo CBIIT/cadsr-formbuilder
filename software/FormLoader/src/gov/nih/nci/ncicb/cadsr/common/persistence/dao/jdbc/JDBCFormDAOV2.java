@@ -391,8 +391,12 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
      */
     public List<FormV2TransferObject> getFormHeadersBySeqids(List<String> seqids) {
        
-        String sql = 
-        	"SELECT * FROM FB_FORMS_VIEW where QC_IDSEQ in (:ids)";
+        //String sql = 
+        //	"SELECT * FROM FB_FORMS_VIEW where QC_IDSEQ in (:ids)";
+        
+        String sql = "SELECT qcve.*, FV.CONTEXT_NAME, FV.PROTOCOL_LONG_NAME FROM quest_contents_view_ext qcve, " +
+        		" FB_FORMS_VIEW fv where qcve.QC_IDSEQ in (:ids) " +
+        		" and QCVE.QC_IDSEQ = FV.QC_IDSEQ";
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("ids", seqids);
@@ -402,17 +406,57 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
         		new RowMapper<FormV2TransferObject>() {
         	public FormV2TransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
         		FormV2TransferObject form = new FormV2TransferObject();
-            	form.setPublicId(rs.getInt("PUBLIC_ID"));
+            	form.setPublicId(rs.getInt("QC_ID"));
             	form.setVersion(rs.getFloat("VERSION"));
             	form.setFormIdseq(rs.getString("QC_IDSEQ"));
             	
             	form.setLongName(rs.getString("LONG_NAME"));
-            	form.setAslName(rs.getString("WORKFLOW"));
+            	form.setAslName(rs.getString("ASL_NAME"));
             	form.setContextName(rs.getString("CONTEXT_NAME"));
-            	form.setProtocolLongName(rs.getString("PROTOCOL_LONG_NAME"));
-            	form.setFormType(rs.getString("TYPE"));
+            	form.setFormType(rs.getString("QTL_NAME"));
             	form.setCreatedBy(rs.getString("CREATED_BY"));
-            	//form.setModifiedBy(rs.getString("QC_IDSEQ"));
+            	form.setModifiedBy(rs.getString("MODIFIED_BY"));
+            	form.setDateCreated(rs.getTimestamp("DATE_CREATED"));
+            	form.setDateModified(rs.getTimestamp("DATE_MODIFIED"));
+            	form.setProtocolLongName(rs.getString("PROTOCOL_LONG_NAME"));
+            
+            	return form;
+            }
+        });
+        
+        return forms;
+    }
+    
+    /**
+     * Get form by a form seq id. This does NOT return protocol long name
+     * 
+     * @param publicIds
+     * @return a list of form dtos with only seqid, public id and version populated
+     */
+    public FormV2TransferObject getFormHeadersBySeqid(String seqid) {
+
+        String sql = "SELECT qcve.*, FV.CONTEXT_NAME FROM quest_contents_view_ext qcve, " +
+        		" FB_FORMS_VIEW fv where qcve.QC_IDSEQ=:seqid " +
+        		" and QCVE.QC_IDSEQ = FV.QC_IDSEQ";
+        
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("seqid", seqid);
+        
+        List<FormV2TransferObject> forms = 
+        this.namedParameterJdbcTemplate.query(sql, params, 
+        		new RowMapper<FormV2TransferObject>() {
+        	public FormV2TransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
+        		FormV2TransferObject form = new FormV2TransferObject();
+        		form.setPublicId(rs.getInt("QC_ID"));
+            	form.setVersion(rs.getFloat("VERSION"));
+            	form.setFormIdseq(rs.getString("QC_IDSEQ"));
+            	
+            	form.setLongName(rs.getString("LONG_NAME"));
+            	form.setAslName(rs.getString("ASL_NAME"));
+            	form.setContextName(rs.getString("CONTEXT_NAME"));
+            	form.setFormType(rs.getString("QTL_NAME"));
+            	form.setCreatedBy(rs.getString("CREATED_BY"));
+            	form.setModifiedBy(rs.getString("MODIFIED_BY"));
             	form.setDateCreated(rs.getTimestamp("DATE_CREATED"));
             	form.setDateModified(rs.getTimestamp("DATE_MODIFIED"));
             
@@ -420,7 +464,7 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
             }
         });
         
-        return forms;
+        return forms.get(0);
     }
     
     public String createFormComponent(FormV2 sourceForm) throws DMLException {

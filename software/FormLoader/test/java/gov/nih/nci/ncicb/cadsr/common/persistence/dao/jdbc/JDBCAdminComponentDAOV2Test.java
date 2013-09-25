@@ -117,7 +117,7 @@ public class JDBCAdminComponentDAOV2Test {
 		String formseqid = "E4910B27-8CFE-1F87-E040-BB8921B66CFF";
 		String wfName = "RETIRED DELETED";
 		
-		int res = adminComponentV2Dao.updateWorkflowStatus(formseqid, wfName);
+		int res = adminComponentV2Dao.updateWorkflowStatus(formseqid, wfName, "FORMLOADER");
 		
 		assertTrue(res >= 1);
 	}

@@ -267,6 +267,9 @@ public void testUserHasRight() {
 			FormDescriptor form = aColl.getForms().get(0);
 			assertTrue(form.getLoadStatus() == FormDescriptor.STATUS_LOADED);
 			
+			status = StatusFormatter.getStatusMessagesInXml(aColl.getForms().get(1));
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\load_forms-5-1.status.xml");
+			
 		} catch (FormLoaderServiceException fle) {
 			fail("Got exception: " + fle.getMessage());
 		}

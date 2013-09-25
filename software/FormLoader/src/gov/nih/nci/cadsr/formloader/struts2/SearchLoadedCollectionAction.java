@@ -26,10 +26,10 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 
 	private static Logger logger = Logger.getLogger(SearchLoadedCollectionAction.class.getName());
 	
-	private Map<Integer, String> checkboxes;
 	private HttpServletRequest servletRequest;
 	private List<FormCollection> collectionList = null;
 	ApplicationContext applicationContext = null;
+	private String userName;
 
 	public String execute() {
 		logger.debug("We are in XMLFileLoadedAction.execute()");
@@ -41,7 +41,7 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 							.getServletContext());
 			CollectionRetrievalServiceImpl collectionRetrieval =
 					(CollectionRetrievalServiceImpl)this.applicationContext.getBean("collectionRetrievalService");
-			String userName = (String)servletRequest.getSession().getAttribute("username");
+			userName = (String)servletRequest.getSession().getAttribute("username");
 			collectionList = collectionRetrieval.getAllCollectionsByUser(userName);
 
 			if (collectionList == null) {
@@ -70,14 +70,14 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 		this.collectionList = collectionList;
 	}
 
-	public Map<Integer, String> getCheckboxes() {
-		return checkboxes;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setCheckboxes(Map<Integer, String> checkboxes) {
-		this.checkboxes = checkboxes;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
-
+	
 	public void setSession(Map<String, Object> arg0) {
 		// TODO Auto-generated method stub
 

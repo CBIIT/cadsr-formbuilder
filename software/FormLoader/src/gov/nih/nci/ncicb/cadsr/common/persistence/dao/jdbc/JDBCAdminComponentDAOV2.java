@@ -1960,13 +1960,14 @@ public class JDBCAdminComponentDAOV2 extends JDBCBaseDAOV2
 	   return wfTypes;
    }
    
-   public int updateWorkflowStatus(String componentSeqid, String newWorkflowStatus) {
-	   String sql = "UPDATE sbrext.quest_contents_view_ext SET asl_name = :newasl " +
+   public int updateWorkflowStatus(String componentSeqid, String newWorkflowStatus, String modifiedBy) {
+	   String sql = "UPDATE sbrext.quest_contents_view_ext SET asl_name=:newasl, modified_by=:modifiedby " +
 			   " where qc_idseq=:seqid";
 
 	   MapSqlParameterSource params = new MapSqlParameterSource();
 	   params.addValue("newasl", newWorkflowStatus);
 	   params.addValue("seqid", componentSeqid);
+	   params.addValue("modifiedby", modifiedBy);
 
 	   int res = this.namedParameterJdbcTemplate.update(sql, params);
 	   return res;
