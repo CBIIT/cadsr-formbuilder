@@ -9,6 +9,7 @@
 	<constant name="struts.devMode" value="true" />
 	<constant name="struts.custom.i18n.resources"
 		value="ApplicationResources"  />
+	<constant name="struts.multipart.maxSize" value="5000000" />
 
 	<package name="default" extends="struts-default" namespace="/">
 		<result-types>
@@ -83,7 +84,7 @@
 	        <interceptor-ref name="i18n"/>
 	        <interceptor-ref name="fileUpload">
 	       		<param name="allowedTypes">text/xml</param>
-	       		<!--  <param name="maximumSize">10240</param> -->
+	       		<param name="maximumSize">5097152</param>
 	  	    </interceptor-ref> 
 	            <interceptor-ref name="params">
 	                <param name="excludeParams">dojo\..*,^struts\..*</param>
