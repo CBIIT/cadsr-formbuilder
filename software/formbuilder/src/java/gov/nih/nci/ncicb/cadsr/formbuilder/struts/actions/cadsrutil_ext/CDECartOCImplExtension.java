@@ -55,7 +55,10 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 	// This holds V2 forms temporarily until the user is ready to
 	// save the forms. Once the user is ready to save the contents
 	// in this cart will be added to the contents of the oCart. - Sula
-	private Map formCartV2;
+////	private Map formCartV2;
+	
+////change to public so the form can be updated after it is queued in form cart.  -D.An, 20130922	
+	public Map formCartV2;
 	
 	public CDECartOCImplExtension(ObjectCartClient client, String uid, String cName, FormBuilderServiceDelegate formBuilderServiceDelegate) {
 		super(client, uid, cName);
@@ -186,6 +189,16 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 			formCartV2.put(((FormV2TransferObject)form).getIdseq(), form);
 	}
 
+////Added so the form can be updated after it is queued in form cart.  -D.An, 20130922	
+	public boolean putForm(Object form) {
+		if (!formCartV2.containsKey(((FormV2TransferObject)form).getIdseq()))
+			return false;
+		else
+		{
+			formCartV2.put(((FormV2TransferObject)form).getIdseq(), form);
+			return true;
+		}
+	}
 	
 	public void removeFormV2(Object form) {
 			formCartV2.remove(form);

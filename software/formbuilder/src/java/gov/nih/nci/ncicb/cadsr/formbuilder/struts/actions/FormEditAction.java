@@ -678,35 +678,6 @@ public ActionForward retireForm(
 	    String myWorkflow = "RETIRED WITHDRAWN";
 	    hrefCRFForm.set( WORKFLOW, myWorkflow );
 
-		////Begin added for monitor if the current form has been added in Form Cart for saving.  -D.An, 20130830.  
-	    String userMame = (String) request.getSession().getAttribute("myUsername");
-	    if( userMame != null && userMame.equalsIgnoreCase("viewer") != true )
-	    {
-	System.out.println("userName -- " + userMame );	
-			  request.getSession().setAttribute("myFormAdded", "n");
-	System.out.println(" " + sFormIdSeq + " not found " );	
-		
-		   CDECartOCImplExtension sessionCartV2 = (CDECartOCImplExtension) this
-					.getSessionObject(request, CaDSRConstants.FORMS_CART_V2);
-		   Collection itemsAdded = null;
-		   if( sessionCartV2 != null )
-			   if( sessionCartV2.getFormCartV2().size() >= 0 )
-				   itemsAdded = sessionCartV2.getFormCartV2().values();
-		   
-		   if ( itemsAdded != null )
-		   {
-			   for ( Object version2Form : itemsAdded ) 
-			   {
-				   if( ((FormV2TransferObject)version2Form).getFormIdseq().equals(sFormIdSeq) ) 
-				   {
-					   request.getSession().setAttribute("myFormAdded", "Y");
-	System.out.println("sFormIdSeq found !!!!! -- " + sFormIdSeq );	
-						break;
-				   }
-				}
-			}
-	    }
-	//// End. -D.An, 20130830.
 	    
 	    boolean hasUpdate  = setValuesForUpdate(mapping,hrefCRFForm,request);
 	    if(hasUpdate)
@@ -765,6 +736,40 @@ public ActionForward retireForm(
 	          Form updatedCrf = service.updateForm(crf.getFormIdseq(),header, 
 	            updatedModules, deletedModules,addedModules,addedProtocols, 
 	            removedProtocols,protocolTriggerActionChanges, instrChanges);
+	          
+	  		////Begin added for monitor if the current form has been added in Form Cart for saving.  -D.An, 20130830.  
+	  	    String userMame = (String) request.getSession().getAttribute("myUsername");
+	  	    if( userMame != null && userMame.equalsIgnoreCase("viewer") != true )
+	  	    {
+	  	System.out.println("userName -- " + userMame );	
+	  			  request.getSession().setAttribute("myFormAdded", "n");
+	  	System.out.println(" " + sFormIdSeq + " not found " );	
+	  		
+		   CDECartOCImplExtension sessionCartV2 = (CDECartOCImplExtension) this
+					.getSessionObject(request, CaDSRConstants.FORMS_CART_V2);
+		   Collection itemsAdded = null;
+		   if( sessionCartV2 != null )
+			   if( sessionCartV2.getFormCartV2().size() >= 0 )
+				   itemsAdded = sessionCartV2.getFormCartV2().values();
+		   
+		   if ( itemsAdded != null )
+		   {
+			   for ( Object version2Form : itemsAdded ) 
+			   {
+				   if( ((FormV2TransferObject)version2Form).getFormIdseq().equals(sFormIdSeq) ) 
+				   {
+					   sessionCartV2.removeFormV2(version2Form);
+					   sessionCartV2.addForm(crf);
+					   
+					   request.getSession().setAttribute("myFormAdded", "Y");
+	System.out.println("sFormIdSeq found !!!!! -- " + sFormIdSeq );	
+						break;
+				   }
+				}
+			}
+	    }
+	  	//// End. -D.An, 20130830.
+	          
 	          setSessionObject(request,CRF, updatedCrf,true);
 	           clonedCrf = (Form) updatedCrf.clone();
 	          setSessionObject(request, CLONED_CRF, clonedCrf,true);
@@ -794,21 +799,21 @@ public ActionForward retireForm(
 	        removeSessionObject(request,UPDATE_SKIP_PATTERN_TRIGGERS);        
 	        saveMessage("cadsr.formbuilder.form.retire.success", request);
 	    	//this.logSessionData("saveForm ", form.toString(), request.getSession());
+	        
+	        /////addFormToCart( crf, request, response);	        
 	        ActionForward forward = mapping.findForward(SUCCESS);
 	        return forward;
 	       }
 	    else
 	    {
-	      saveMessage("cadsr.formbuilder.form.edit.nochange", request);
+	      saveMessage("cadsr.formbuilder.form.retire.nochange", request);
 		     cancelFormEdit( mapping, formEditForm, request, response);
 		     ActionForward forward = mapping.findForward(SUCCESS);
 		     return forward;
 	    }
 	}
 
-  
-  
-  
+    
   
 
   /**

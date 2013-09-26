@@ -59,14 +59,14 @@ if(confirm(message)) location.href = url;
           <td >
 		       <cde:secureIcon  formId="<%=FormConstants.CRF%>" 
            formScope="<%=CaDSRConstants.SESSION_SCOPE%>" 
-           activeImageSource="i/deleteFormButton.gif" 
+           activeImageSource="i/retiredDeleteFormButton.gif" 
 		       		activeUrl='<%="/formViewRetireAction.do?"
                          +NavigationConstants.METHOD_PARAM+"=retireForm"%>'
 		   	   	role="<%=CaDSRConstants.CDE_MANAGER%>" 
 		   	   	urlPrefix="<%=urlPrefix%>"
 		   	   	paramId = "<%=FormConstants.FORM_ID_SEQ%>"
 		   	   	paramProperty="formIdseq"
-		   	   	altMessage="Retire"  
+		   	   	altMessage="Retire withdraw the form"  
             confirmMessageKey="cadsr.formbuilder.form.retire.confirm"
 		   	   	/>		                
           </td>  

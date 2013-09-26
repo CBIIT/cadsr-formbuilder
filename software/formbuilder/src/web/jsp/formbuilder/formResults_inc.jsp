@@ -15,6 +15,19 @@ function ToggleSelectAll(e){
 	}
 }
 
+
+////--GF32981 fix.  -D.An, 20130926 --
+function mySubmmit()
+{
+	var ori = $("#myOriginal").val();
+	////alert(ori);
+	if( ori == "original" ) 
+	{
+		$("#myOriginal").val("N");
+		document.forms[0].action=document.forms[0].action+'?method=addFormToCart';
+		document.forms[0].submit();
+	}
+}
 </SCRIPT>
 
 <SCRIPT LANGUAGE="JavaScript1.1" SRC="js/checkbox.js"></SCRIPT>
@@ -60,9 +73,14 @@ function ToggleSelectAll(e){
 <table width="100%" align="center" cellpadding="1" cellspacing="1" border="0">
 	<tr>
 <td align="left" width="10%">
-<a id="addForm2Cart" class="noneViewer" style="display:none"  href="javascript:document.forms[0].action=document.forms[0].action+'?method=addFormToCart';document.forms[0].submit()">
-            <html:img src='<%="i/addtoformcart.gif"%>' border="0" alt="Add to Form Cart"/> 
-</a>                  
+<%--GF32981 fix.  -D.An, 20130926 --%>
+<div id="addForm2Cart" class="noneViewer" style="display:none">
+            <img src='<%="i/addtoformcart.gif"%>' alt="Add to Form Cart" onClick="mySubmmit()" 
+            Title="Add selected form/s to Form Cart queue."
+            style="cursor: pointer;" > 
+</div>
+<input type="hidden" id="myOriginal" value="original" ></input>
+                  
 </td>
 <td width="90%">
         <bean:define id="pageBean" name="<%=FormConstants.FORM_SEARCH_RESULTS_PAGINATION%>" 
@@ -262,7 +280,7 @@ function ToggleSelectAll(e){
                      <td width="20"  class="OraTabledata" align=center>
                            <cde:secureIcon  formId="form" 
                     formScope="<%=CaDSRConstants.PAGE_SCOPE%>" 
-                    activeImageSource="i/delete.gif" 
+                    activeImageSource="i/retireFormButton.gif" 
                                     activeUrl='<%="/formToRetireAction.do?"
                              +NavigationConstants.METHOD_PARAM+"=retireForm"%>'
                                     role="<%=CaDSRConstants.CDE_MANAGER%>" 
@@ -270,7 +288,7 @@ function ToggleSelectAll(e){
                                     paramId = "<%=FormConstants.FORM_ID_SEQ%>"
                                     paramProperty="formIdseq"
                     inactiveImageSource="i/delete_inactive.gif"
-                                    altMessage="Retire"
+                                    altMessage="Retire withdraw the form"
                     confirmMessageKey="cadsr.formbuilder.form.retire.confirm"
                                     />		           	
                     </td> 

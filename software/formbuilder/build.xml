@@ -123,7 +123,7 @@
 	<filter token="Tool.ds.jndi.Name" value="FormBuilderDS"/>
 	<filter token="Tool.Version" value="4.0.4 Iteration 3"/>
 	<filter token="Tool.Build" value="5"/>
-	<filter token="Tool.Support" value="ncicb@pop.nci.nih.gov"/>
+	<filter token="Tool.Support" value="ncicbiit@mail.nih.gov"/>
 	<filter token="Tool.Version.Suffix" value="4_0_4"/>
 	
 	<path id="libpath">
