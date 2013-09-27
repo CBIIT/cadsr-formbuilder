@@ -262,8 +262,10 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		for (FormCollection coll : colls) {
 			
 			List<String> formseqids = collectionDao.getAllFormSeqidsForCollection(coll.getId());
-			if (formseqids == null || formseqids.size() == 0) 
+			if (formseqids == null || formseqids.size() == 0) {
 				logger.warn("Collection " + coll.getId() + " doesn't have form seqids associated with it in database");
+				coll.setForms(new ArrayList<FormDescriptor>());
+			}
 			else {
 				List<FormV2TransferObject> formdtos = this.formV2Dao.getFormHeadersBySeqids(formseqids);
 				List<FormDescriptor> forms = translateIntoFormDescriptors(formdtos);
