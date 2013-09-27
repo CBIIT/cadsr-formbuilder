@@ -418,7 +418,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	 * Create new form
 	 */
 	@Transactional
-	public String createForm(FormDescriptor form, String xmlPathName, int formIdx) {
+	public String createForm(FormDescriptor form, String xmlPathName) {
 		
 		String formSeqid = "";
 		
@@ -441,7 +441,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			createFormInstructions(form, formdto);
 
 			//designations, refdocs, definitions and contact communications
-			processFormdetails(form, xmlPathName, formIdx);
+			processFormdetails(form, xmlPathName, form.getIndex());
 
 			//Onto modules and questions
 			createModulesInForm(form, formdto);
@@ -465,7 +465,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	 * is generated? Is it possible to insert new form row withough triggering a new public id generation.
 	 */
 	@Transactional
-	public String createFormNewVersion(FormDescriptor form, String loggedinUser, String xmlPathName, int formIdx) {
+	public String createFormNewVersion(FormDescriptor form, String loggedinUser, String xmlPathName) {
 		
 		String formSeqid = "";
 		
@@ -491,7 +491,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			createFormInstructions(form, formdto);
 			
 			//designations, refdocs, definitions and contact communications
-			processFormdetails(form, xmlPathName, formIdx);
+			processFormdetails(form, xmlPathName, form.getIndex());
 			
 			//Onto modules and questions
 			updateModulesInForm(form, formdto);
@@ -509,7 +509,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	}
 	
 	@Transactional
-	public String updateForm(FormDescriptor form, String loggedinUser, String xmlPathName, int formIdx) {
+	public String updateForm(FormDescriptor form, String loggedinUser, String xmlPathName) {
 		
 		try {
 			FormV2TransferObject formdto = translateIntoFormDTO(form);	
@@ -527,7 +527,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			createFormInstructions(form, formdto);
 
 			//designations, refdocs, definitions and contact communications
-			processFormdetails(form, xmlPathName, formIdx);
+			processFormdetails(form, xmlPathName, form.getIndex());
 
 			//Onto modules and questions
 			updateModulesInForm(form, formdto);

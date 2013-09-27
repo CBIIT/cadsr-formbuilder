@@ -114,6 +114,7 @@ public class FormParserHandler extends ParserHandler {
 			int lineNum = xmlreader.getLocation().getLineNumber();
 			logger.debug("End parsing a form at line: " + lineNum);
 			 tempForm.setXml_line_end(lineNum);
+			 tempForm.setIndex(formCount);
 			 logger.debug(tempForm.toString());
 			 
 			 //TODO

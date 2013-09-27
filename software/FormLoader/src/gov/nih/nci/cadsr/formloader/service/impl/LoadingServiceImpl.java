@@ -90,7 +90,7 @@ public class LoadingServiceImpl implements LoadingService {
 	protected void loadForms(String xmlPathName, List<FormDescriptor> forms, String loggedinUser) 
 	throws FormLoaderServiceException {
 		
-		int form_idx = 0;
+		//int form_idx = 0;
 		for (FormDescriptor form : forms) {
 			if (form.getLoadStatus() < FormDescriptor.STATUS_CONTENT_VALIDATED) {
 				form.addMessage("Form didn't pass db validation. Unable to load form");
@@ -116,19 +116,19 @@ public class LoadingServiceImpl implements LoadingService {
 			logger.debug("========  Start loading form [" + form.getFormIdString() + "] ===============");
 				
 			if (FormDescriptor.LOAD_TYPE_NEW.equals(form.getLoadType())) {
-				String seqid = this.repository.createForm(form, xmlPathName, form_idx);
+				String seqid = this.repository.createForm(form, xmlPathName);
 				if (seqid == null || seqid.length() == 0)
 					form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
 				else
 					form.setLoadStatus(FormDescriptor.STATUS_LOADED);
 			} else if (FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(form.getLoadType())) {
-				String seqid = this.repository.createFormNewVersion(form, loggedinUser, xmlPathName, form_idx);
+				String seqid = this.repository.createFormNewVersion(form, loggedinUser, xmlPathName);
 				if (seqid == null || seqid.length() == 0)
 					form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
 				else
 					form.setLoadStatus(FormDescriptor.STATUS_LOADED);
 			} else if (FormDescriptor.LOAD_TYPE_UPDATE_FORM.equals(form.getLoadType())) {
-				this.repository.updateForm(form, loggedinUser, xmlPathName, form_idx);
+				this.repository.updateForm(form, loggedinUser, xmlPathName);
 				if (form.getFormSeqId() == null || form.getFormSeqId().length() == 0)
 					form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
 				else
@@ -136,7 +136,7 @@ public class LoadingServiceImpl implements LoadingService {
 			} 
 			
 			logger.debug("========== Done loading form [" + form.getFormIdString() + "] =============");
-			form_idx++;
+			//form_idx++;
 		}	
 	}
 	

@@ -27,8 +27,8 @@ public interface FormLoaderRepository {
 
 	public String getContextSeqIdByName(String contextName);
 	
-	public String createForm(FormDescriptor form, String xmlPathName, int formIdx);
-	public String updateForm(FormDescriptor form, String userName, String xmlPathName, int formIdx);
+	public String createForm(FormDescriptor form, String xmlPathName);
+	public String updateForm(FormDescriptor form, String userName, String xmlPathName);
 	public void setPublicIdVersionBySeqids(List<FormDescriptor> forms);
 	
 	public String createFormCollectionRecords(FormCollection coll);
@@ -50,5 +50,5 @@ public interface FormLoaderRepository {
 	
 	public void unloadForm(FormDescriptor form);
 	
-	public String createFormNewVersion(FormDescriptor form, String loggedinUser, String xmlPathName, int formIdx);
+	public String createFormNewVersion(FormDescriptor form, String loggedinUser, String xmlPathName);
 }

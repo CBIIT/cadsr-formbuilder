@@ -63,6 +63,8 @@ public class FormDescriptor {
 	String loadType;
 	int loadStatus;
 	
+	int index;
+	
 	protected transient boolean selected;
 	protected transient int xml_line_begin;
 	protected transient int xml_line_end;
@@ -371,6 +373,14 @@ public class FormDescriptor {
 
 	public void setCollectionName(String collectionName) {
 		this.collectionName = collectionName;
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
 	}
 
 	/**
