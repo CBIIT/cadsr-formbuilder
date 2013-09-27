@@ -110,12 +110,13 @@ Click on a collection to view its forms. To unload, check individual forms and c
 		<table class="level1Table" id="collectiontable">
 		
 			<tr>
-				<th>Select</th>
+				<th><div style="width: 100px">Select</div></th>
 				<th>Collection Name</th>
 				<th>Description</th>
 				<th># of Forms</th>
 				<th>Loaded By</th>
 				<th>Loaded Date</th>
+				<th></th>
 			</tr>
 			
             <s:iterator value="collectionList" id = "bean" status="status">
@@ -131,12 +132,12 @@ Click on a collection to view its forms. To unload, check individual forms and c
 				<td align="center"><s:property value="forms.size()" /></td>
 				<td align="center"><s:property value="createdBy" /></td>
 				<td align="center"><s:property value="dateCreated" /></td>
+				<td><div class="arrow"></div></td>
 			</tr>			
 			
 			<tr class="child-<s:property value="id" />" style="display:none;">
 			<td>&nbsp;</td>
-			
-			<td colspan=6>
+			<td colspan=5>
 			<table class="level2Table">
 			<tr class="even">
 				<th>&nbsp;</th>
@@ -152,8 +153,7 @@ Click on a collection to view its forms. To unload, check individual forms and c
 				
 				<s:iterator value="forms" var="form" status="status"> 
 				<tr>
-				<td><s:checkbox name="selectedFormIds" fieldValue="%{formSeqId}" theme ="simple" /></td>
-				
+				<td><s:checkbox name="selectedFormIds" fieldValue="%{formSeqId}" theme = "simple" /></td>
 				<td><s:property value="publicId" /></td>
 				<td><s:property value="version" /></td>
 				<td><div style="width: 150px;"><s:property value="longName" /></div></td>
