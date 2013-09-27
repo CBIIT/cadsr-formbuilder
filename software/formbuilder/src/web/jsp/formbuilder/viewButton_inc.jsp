@@ -56,7 +56,7 @@ if(confirm(message)) location.href = url;
 		   	   	/>		                
           </td>  
 --%>          
-          <td >
+          <td title="Retire withdraw the form">
 		       <cde:secureIcon  formId="<%=FormConstants.CRF%>" 
            formScope="<%=CaDSRConstants.SESSION_SCOPE%>" 
            activeImageSource="i/retiredDeleteFormButton.gif" 
@@ -66,7 +66,7 @@ if(confirm(message)) location.href = url;
 		   	   	urlPrefix="<%=urlPrefix%>"
 		   	   	paramId = "<%=FormConstants.FORM_ID_SEQ%>"
 		   	   	paramProperty="formIdseq"
-		   	   	altMessage="Retire withdraw the form"  
+		   	   	altMessage=""  
             confirmMessageKey="cadsr.formbuilder.form.retire.confirm"
 		   	   	/>		                
           </td>  
@@ -201,7 +201,7 @@ if(confirm(message)) location.href = url;
 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 <td>&nbsp;
 <%--GF29128 remove add form cart for viewer. D.An, 20130815 --%>          
-<td class="noneViewerAddFormCart" style="display:none" >          
+<td class="noneViewerAddFormCart" style="display:none" Title="Add this form to Form Cart queue." >          
 			<html:link action='<%= "/addFormToCartFromView?method=addFormToCart" %>'
  	       		paramId = '<%= "checkedFormIds" %>'
  				paramName="<%=FormConstants.CRF%>" paramProperty="formIdseq"

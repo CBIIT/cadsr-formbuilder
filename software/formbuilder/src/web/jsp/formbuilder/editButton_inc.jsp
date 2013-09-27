@@ -46,7 +46,7 @@ if(confirm(message)) location.href = url;
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 <%--GF29128 remove add form cart for viewer. D.An, 20130815 --%>          
-<td class="noneViewerAddFormCart" style="display:none" >          
+<td class="noneViewerAddFormCart" style="display:none" Title="Add this form to Form Cart queue.">          
 				<html:link action='<%= "/addFormToCartFromEdit?method=addFormToCart" %>'
  	       		paramId = '<%= "checkedFormIds" %>'
  				paramName="<%=FormConstants.CRF%>" paramProperty="formIdseq"

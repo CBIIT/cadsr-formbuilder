@@ -184,7 +184,7 @@ function mySubmmit()
             <logic:notPresent name="<%=FormConstants.IN_PROCESS%>"> 
  
 <%-- Begin GF29128 fix. -D.An, 20130812 --%>        	                 
-<TD class="noneViewer" style="display:none" width="20" align="center">
+<TD class="noneViewer" style="display:none" width="20" align="center" title="Select the form to add to Form Cart.">
 	<html:multibox name="searchForm" property="checkedFormIds">
 		<bean:write name="form" property="formIdseq" />
                	</html:multibox>
@@ -277,7 +277,7 @@ function mySubmmit()
                                     />		           	
                     </td> 
 --%>                    
-                     <td width="20"  class="OraTabledata" align=center>
+                     <td width="20"  class="OraTabledata" align=center title="Retire withdraw the form" >
                            <cde:secureIcon  formId="form" 
                     formScope="<%=CaDSRConstants.PAGE_SCOPE%>" 
                     activeImageSource="i/retireFormButton.gif" 
@@ -288,7 +288,7 @@ function mySubmmit()
                                     paramId = "<%=FormConstants.FORM_ID_SEQ%>"
                                     paramProperty="formIdseq"
                     inactiveImageSource="i/delete_inactive.gif"
-                                    altMessage="Retire withdraw the form"
+                                    altMessage=""
                     confirmMessageKey="cadsr.formbuilder.form.retire.confirm"
                                     />		           	
                     </td> 
