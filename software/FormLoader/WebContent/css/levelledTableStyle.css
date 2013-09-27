@@ -1,13 +1,7 @@
 @CHARSET "ISO-8859-1";
 
-.content {
-font-family: sans-serif;
-font-size: small;
-}
-
-
 .level1Table {
-	border-width: 0;
+	border-width: 1px 1px 1px 1px;
 	border-spacing: 2px;
 	border-style: outset outset outset outset;
 	border-color: black black black black;
@@ -16,47 +10,37 @@ font-size: small;
 }
 
 .level1Table td {
-font-size: medium;
 	border-width: 1px 1px 1px 1px;
 	border-spacing: 2px;
 	border-style: outset outset outset outset;
 	border-color: black black black black;
 	border-collapse: collapse;
-}
-
-.level1Table thead {
-	font-size: medium;
-	
-	background-color: 999966;
 }
 
 .level1Table th {
-font-size: medium;
 	border-width: 1px 1px 1px 1px;
 	border-spacing: 2px;
 	border-style: outset outset outset outset;
 	border-color: black black black black;
 	border-collapse: collapse;
-	background-color: 999966;
+	background-color: rgb(255, 255, 255);
+	padding-right:25px;
+	padding-left: 25px
 }
-
-.odd {
-font-size: medium;
+level.odd {
 background-color: #FFFFF0;
 }
 
 .even {
-font-size: medium;
 background-color: #FAF0E6;
 }
-
 .level2Table {
 	border-width: 1px 1px 1px 1px;
 	border-spacing: 2px;
 	border-style: outset outset outset outset;
 	border-color: black black black black;
 	border-collapse: collapse;
-	background-color: #F5F5DC
+	font-size: small;
 }
 
 .level2Table td {
@@ -65,7 +49,6 @@ background-color: #FAF0E6;
 	border-style: outset outset outset outset;
 	border-color: black black black black;
 	border-collapse: collapse;
-font-size: small;
 }
 
 .level2Table th {
@@ -75,5 +58,14 @@ font-size: small;
 	border-color: black black black black;
 	border-collapse: collapse;
 	background-color: rgb(255, 255, 255);
-font-size: small;
 }
+
+.odd {
+background-color: #FFFFF0;
+}
+
+.even {
+background-color: #FAF0E6;
+}
+
+div.arrow { background:transparent url(arrows.png) no-repeat scroll 0px -16px; width:16px; height:16px; display:block;}
