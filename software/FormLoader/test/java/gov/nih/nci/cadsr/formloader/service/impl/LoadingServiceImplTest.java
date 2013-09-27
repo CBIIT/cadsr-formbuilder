@@ -213,8 +213,8 @@ public void testUserHasRight() {
 			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATED);
 	
 			//aColl.setForms(forms);
-			aColl.setName("Testing Create New Form");
-			aColl.setCreatedBy("FORMBUILDER");
+			aColl.setName("Testing Load 5 forms with FormLoaderv7.xsd");
+			aColl.setCreatedBy("YANGS");
 			aColl.setXmlFileName(testfile);
 			aColl.setXmlPathOnServer(filepath);
 			

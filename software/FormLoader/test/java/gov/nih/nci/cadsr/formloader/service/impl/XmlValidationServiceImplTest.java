@@ -118,6 +118,8 @@ public class XmlValidationServiceImplTest {
 		//This works because we're using a non-finalized xsd, which has context type enumeration. 
 		//When we move to the xsd without those list, this test needs to be removed or althered. 
 		// == 09/20/2013
+		
+		//FormLoaderv7.xsd will validate this xml == 09/26/2013
 		try {
 			FormCollection aColl = new FormCollection();
 			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
@@ -126,12 +128,14 @@ public class XmlValidationServiceImplTest {
 			List<FormDescriptor> forms = aColl.getForms();
 			assertNotNull(forms);
 			FormDescriptor form = forms.get(0);
-			assertTrue(form.getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATION_FAILED);
+			
 			String status = StatusFormatter.getStatusInXml(aColl);
 			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\invalid-context.status.xml");
 			
+			//assertTrue(form.getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATION_FAILED);
+			assertTrue(form.getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATED);
 			String xmlerror = form.getXmlValidationErrorString();
-			assertTrue(xmlerror.length() > 0);
+			//assertTrue(xmlerror.length() > 0);
 			logger.debug("Concatinated xml validation error: " + xmlerror);
 			
 		

@@ -387,14 +387,14 @@ public class FormLoaderRepositoryDataGen implements FormLoaderRepository {
 	}
 
 	@Override
-	public String createForm(FormDescriptor form, String xmlPathName, int formIdx) {
+	public String createForm(FormDescriptor form, String xmlPathName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String updateForm(FormDescriptor form, String userName,
-			String xmlPathName, int formIdx) {
+			String xmlPathName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -443,7 +443,7 @@ public class FormLoaderRepositoryDataGen implements FormLoaderRepository {
 
 	@Override
 	public String createFormNewVersion(FormDescriptor form,
-			String loggedinUser, String xmlPathName, int formIdx) {
+			String loggedinUser, String xmlPathName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
