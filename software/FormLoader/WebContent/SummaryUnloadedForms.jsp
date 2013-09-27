@@ -51,7 +51,15 @@ L--%>
             <tbody>
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>" id="<s:property value="id" />">
 				<td align="center">
-				<a href="#" title="<s:property value="getMessagesInString()" />"><s:property value="getLoadStatusString()" /></a></td>
+				<s:if test="loadStatus < 0">
+					<a href="#" title="<s:property value="getMessagesInString()" />">
+				<s:property value="getLoadStatusString()" /></a></s:if>
+				<s:elseif test="loadStatus > 0">
+				<s:property value="getLoadStatusString()" />
+				
+				</s:elseif>
+				
+				</td>
 				<td><s:property value="publicId" /></td>
 				<td><s:property value="version" /></td>
 				<td><div style="width: 150px;"><s:property value="longName" /></div></td>
