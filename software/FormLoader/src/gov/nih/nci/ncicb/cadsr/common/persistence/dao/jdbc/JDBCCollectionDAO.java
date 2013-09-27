@@ -46,7 +46,7 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 		params.addValue("name", name);
 		params.addValue("xml_file_name", fileName);
 		params.addValue("xml_file_path", filePath);
-		params.addValue("created_by", createdBy);
+		params.addValue("created_by", createdBy.toUpperCase());
 		
 		int res = this.namedParameterJdbcTemplate.update(sql, params);
 		
@@ -76,7 +76,7 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 		      "select * from SBREXT.FORM_COLLECTIONS where created_by=:user order by date_created desc";
 		
 		 MapSqlParameterSource params = new MapSqlParameterSource();
-	     params.addValue("user", userName);
+	     params.addValue("user", userName.toUpperCase());
 	      
 	     List<FormCollection> collections = this.namedParameterJdbcTemplate.query(sql, params, 
 	     		new RowMapper<FormCollection>() {
