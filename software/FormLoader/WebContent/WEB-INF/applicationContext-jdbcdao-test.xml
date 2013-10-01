@@ -59,5 +59,13 @@
 		<constructor-arg ref="dataSource"/>       
     </bean>
     
+    <bean id="referenceDocV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCReferenceDocumentDAOV2">
+		<constructor-arg ref="dataSource"/>       
+    </bean>
+   
+   <bean id="moduleInstructionV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCModuleInstructionDAOV2">
+		<constructor-arg ref="dataSource"/>       
+    </bean>
+    
 </beans>
 
