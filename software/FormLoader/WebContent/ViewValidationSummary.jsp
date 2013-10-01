@@ -33,11 +33,19 @@ L--%>
 				<th>Protocol Name</th>
 				<th>Workflow Status</th>
 				<th># Modules</th>
+				<th>Load Type</th>
+				<th>Load Status</th>
 			</tr>
 			<s:iterator value="validatedForms" id = "bean" status="status">
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
 				<td>
-					<s:checkbox name="loadformcheckboxes[%{#status.index}]" theme = "simple" />
+					<!--  s:checkbox name="loadformcheckboxes[%{#status.index}]" theme = "simple" /> -->
+					<s:if test="loadStatus >=3">
+					<s:checkbox name="selectedFormIndices" fieldValue="%{index}" theme = "simple" />
+					</s:if>
+					<s:else>
+    				<s:checkbox name="greyout" disabled="true" theme = "simple" />
+					</s:else>
 					
 				</td>
 				<td><s:property value="publicId" /></td>
@@ -48,6 +56,8 @@ L--%>
 				<td><s:property value="protocolName" /></td>
 				<td><s:property value="workflowStatusName" /></td>
 				<td><s:property value="modules.size()" /></td>
+				<td><s:property value="loadType" /></td>
+				<td><s:property value="getLoadStatusString()" /></td>
 			</tr>
 			</s:iterator>
 				<tr>
