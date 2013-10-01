@@ -83,6 +83,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		
 		validateQuestions(xmlPathName, formHeaders);
 		
+		aCollection.resetAllSelectFlag(false);
 		return aCollection;
 	}
 	

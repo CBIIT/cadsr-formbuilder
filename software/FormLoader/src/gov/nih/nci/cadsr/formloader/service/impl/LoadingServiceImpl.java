@@ -72,7 +72,7 @@ public class LoadingServiceImpl implements LoadingService {
 		
 		createRecordsForCollection(aCollection, loggedinuser);
 		
-		
+		aCollection.resetAllSelectFlag(false);
 		return aCollection;
 	}
 	
