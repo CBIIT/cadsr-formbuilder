@@ -50,8 +50,12 @@ public class FormDescriptor {
 	//pass2
 	
 	Date createdDate;
-	Date modifiedDate;
+	Date modifiedDate;	
+	
 	String collectionName;
+	String collectionSeqid;
+	
+	List<FormCollection> belongToCollections = new ArrayList<FormCollection>();
 	
 	List<ModuleDescriptor> modules = new ArrayList<ModuleDescriptor>();
 	
@@ -381,6 +385,22 @@ public class FormDescriptor {
 
 	public void setIndex(int index) {
 		this.index = index;
+	}
+
+	public String getCollectionSeqid() {
+		return collectionSeqid;
+	}
+
+	public void setCollectionSeqid(String collectionSeqid) {
+		this.collectionSeqid = collectionSeqid;
+	}
+
+	public List<FormCollection> getBelongToCollections() {
+		return belongToCollections;
+	}
+
+	public void setBelongToCollections(List<FormCollection> belongToCollections) {
+		this.belongToCollections = belongToCollections;
 	}
 
 	/**
