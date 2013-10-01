@@ -226,4 +226,12 @@ public class FormCollection implements java.io.Serializable {
 		
 		return sb.toString();
 	}
+	
+	public void resetAllSelectFlag(boolean flag) {
+		if (forms == null) return;
+		
+		for (FormDescriptor form : forms) {
+			form.setSelected(flag);
+		}
+	}
 }
