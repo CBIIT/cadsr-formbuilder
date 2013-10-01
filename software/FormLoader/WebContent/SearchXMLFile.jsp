@@ -5,22 +5,35 @@
 <html>
 <head>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<meta name="viewport" content="width=device-width">
 
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-  <link rel="stylesheet" href="/resources/demos/style.css" />
-  <script>
-  $(function() {
-    $( "#accordion" ).accordion();
-  });
-  </script>
-    
+<title>Search XML Files</title><style type="text/css">
+        body { font-family:Arial, Helvetica, Sans-Serif; font-size:0.8em;}
+        #report { border-collapse:collapse;}
+        #report h4 { margin:0px; padding:0px;}
+        #report img { float:right;}
+        #report ul { margin:10px 0 10px 40px; padding:0px;}
+        #report th { background:#fff url(i/header_bkg.png) repeat-x scroll center left; color:#fff; padding:7px 15px; text-align:left;}
+        #report td { background:#fff none repeat-x scroll center left; color:#000; padding:7px 15px; }
+        #report tr.odd td { background:#fff url(i/row_bkg.png) repeat-x scroll center left; cursor:pointer; }
+        #report div.arrow { background:transparent url(i/arrows.png) no-repeat scroll 0px -16px; width:16px; height:16px; display:block;}
+        #report div.up { background-position:0px 0px;}
+    </style>
 
-<title>Search XML Files</title>
+<script type="text/javascript">  
+        $(document).ready(function(){
+        	$('tr[id^="parent"]').addClass("odd");
+            $('tr[id="collTitle"]').show();
+            $('tr[id^="child"]').hide();
+            
+            $("#report tr.odd").click(function(){
+            	$(this).next("tr").toggle();
+                $(this).find(".arrow").toggleClass("up");
+            });
+            
+        });
+    </script>  
 
-<script type="text/javascript">
+<!--  script type="text/javascript">
 jQuery(document).ready(function() {
 	$('tr.parent')
 	.css("cursor","pointer")
@@ -32,18 +45,19 @@ jQuery(document).ready(function() {
 	$('tr[@class^=child-]').hide().children('td');});
 
 </script>
-
+-->
+<!--
 <style type="text/css">
 @import url(css/levelledTableStyle.css)
 </style>
-
+-->
 </head>
 <body>
 <h5 class="OraTipText">You are logged in as: <s:property value="userName" /></h5>
 <s:if test="collectionList.size() > 0">
-<h4>You have previously loaded <s:property value="collectionList.size()"/> form collections. You may use the input fields to narrow down the list.<br>
-Click on a collection to view its forms. To unload, check individual forms and click the unload form button.
-</h4>
+<p>You have previously loaded <s:property value="collectionList.size()"/> form collections. You may use the input fields to narrow down the list.
+Click on a collection to view its forms. <br> To unload, check individual forms and click the unload form button.
+</p>
 </s:if>
 
 <s:elseif test="collectionList.size() == 0">
@@ -107,9 +121,10 @@ Click on a collection to view its forms. To unload, check individual forms and c
    </tr>
  </table> 
 
-		<table class="level1Table" id="collectiontable">
+		<table id="report">
 		
-			<tr>
+			<thead>
+			<tr id="collTitle">
 				<th><div style="width: 100px">Select</div></th>
 				<th>Collection Name</th>
 				<th>Description</th>
@@ -118,11 +133,12 @@ Click on a collection to view its forms. To unload, check individual forms and c
 				<th>Loaded Date</th>
 				<th></th>
 			</tr>
+			</thead>
 			
             <s:iterator value="collectionList" id = "bean" status="status">
             <tbody>
 			<!--  tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>" id="<s:property value="id" />"> -->
-			<tr class="parent" id="<s:property value="id" />" >
+			<tr class="parent" id="parent-<s:property value="id" />">
 			    <td align="center">
 			      <s:checkbox name="" theme = "simple" />
 			    </td>
@@ -132,14 +148,14 @@ Click on a collection to view its forms. To unload, check individual forms and c
 				<td align="center"><s:property value="forms.size()" /></td>
 				<td align="center"><s:property value="createdBy" /></td>
 				<td align="center"><s:property value="dateCreated" /></td>
-				<td><div class="arrow"></div></td>
+				<td><div class="arrow" id="arrow"></div></td>
 			</tr>			
 			
 			<tr class="child-<s:property value="id" />" style="display:none;">
 			<td>&nbsp;</td>
 			<td colspan=5>
-			<table class="level2Table">
-			<tr class="even">
+			<table>
+			<tr>
 				<th>&nbsp;</th>
 				<th>Public ID</th>
 				<th>Version</th>
@@ -153,7 +169,7 @@ Click on a collection to view its forms. To unload, check individual forms and c
 				
 				<s:iterator value="forms" var="form" status="status"> 
 				<tr>
-				<td><s:checkbox name="selectedFormIds" fieldValue="%{formSeqId}" theme = "simple" /></td>
+				<td><s:checkbox name="selectedFormIds" fieldValue="%{collectionSeqid}-%{formSeqId}" theme = "simple" /></td>
 				<td><s:property value="publicId" /></td>
 				<td><s:property value="version" /></td>
 				<td><div style="width: 150px;"><s:property value="longName" /></div></td>
