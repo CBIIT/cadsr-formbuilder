@@ -18,7 +18,7 @@ L--%>
 <body>
 <h2>Forms Passed XML Validation</h2>
 <br>
-Select forms to validate the questions and <br>data elements against caDSR database
+Select forms to validate the questions and data elements against caDSR database
 
 <br>
 <s:actionerror />	
@@ -40,7 +40,8 @@ Select forms to validate the questions and <br>data elements against caDSR datab
 			<s:iterator value="parsedFormsNoErrorList" id = "bean" status="status">
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
 				<td>
-					<s:checkbox name="checkboxes[%{#status.index}]" theme = "simple" />
+					<!--  s:checkbox name="checkboxes[%{#status.index}]" theme = "simple" /> -->
+					<s:checkbox name="selectedFormIndices" fieldValue="%{index}" theme = "simple" />
 				</td>
 				<td><s:property value="publicId" /></td>
 				<td><s:property value="version" /></td>
