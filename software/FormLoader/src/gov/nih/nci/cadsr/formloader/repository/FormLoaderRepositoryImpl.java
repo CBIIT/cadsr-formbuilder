@@ -268,7 +268,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			}
 			else {
 				List<FormV2TransferObject> formdtos = this.formV2Dao.getFormHeadersBySeqids(formseqids);
-				List<FormDescriptor> forms = translateIntoFormDescriptors(formdtos);
+				List<FormDescriptor> forms = translateIntoFormDescriptors(coll, formdtos);
 				coll.setForms(forms);
 			}
 				
@@ -1139,7 +1139,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	 * @param formdtos
 	 * @return
 	 */
-	protected List<FormDescriptor> translateIntoFormDescriptors(List<FormV2TransferObject> formdtos) {
+	protected List<FormDescriptor> translateIntoFormDescriptors(FormCollection aColl, List<FormV2TransferObject> formdtos) {
 		List<FormDescriptor> forms = new ArrayList<FormDescriptor>();
 		
 		if (formdtos == null) {
@@ -1167,6 +1167,8 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 				form.setVersion(String.valueOf(dto.getVersion()));
 				form.setType(dto.getFormType());
 				form.setWorkflowStatusName(dto.getAslName());
+				form.setCollectionSeqid(aColl.getId());
+				form.setCollectionName(aColl.getName());
 				forms.add(form);
 				processedForms.put(dto.getFormIdseq(), form);
 			}
