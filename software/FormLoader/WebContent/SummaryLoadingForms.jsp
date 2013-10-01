@@ -26,6 +26,7 @@ L--%>
 				<th>Type</th>
 				<th>Protocol Name</th>
 				<th># Modules</th>
+				<th>Load Type</th>
 				<th>Load Status</th>
 			</tr>
 			<s:iterator value="loadedForms" id = "bean" status="status">
@@ -37,7 +38,8 @@ L--%>
 				<td><s:property value="type" /></td>
 				<td><s:property value="protocolName" /></td>
 				<td><s:property value="modules.size()" /></td>
-				<td><s:property value="loadStatus" /></td>
+				<td><s:property value="loadType" /></td>
+				<td><s:property value="getLoadStatusString()" /></td>
 			</tr>
 			</s:iterator>
 		</table>
