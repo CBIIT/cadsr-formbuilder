@@ -14,7 +14,7 @@
         #report h4 { margin:0px; padding:0px;}
         #report img { float:right;}
         #report ul { margin:10px 0 10px 40px; padding:0px;}
-        #report th { background:#fff url(i/header_bkg4.png) repeat-x scroll center left; color:#fff; padding:7px 15px; text-align:left;}
+        #report th { background:#fff url(i/header_bkg.png) repeat-x scroll center left; color:#fff; padding:7px 15px; text-align:left;}
         #report td { background:#fff none repeat-x scroll center left; color:#000; padding:7px 15px; }
         #report tr.odd td { background:#fff url(i/row_bkg.png) repeat-x scroll center left; cursor:pointer; }
         #report div.arrow { background:transparent url(i/arrows.png) no-repeat scroll 0px -16px; width:16px; height:16px; display:block;}
