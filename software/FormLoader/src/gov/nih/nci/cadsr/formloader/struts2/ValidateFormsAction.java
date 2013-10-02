@@ -18,6 +18,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.SessionAware;
 import org.springframework.context.ApplicationContext;
@@ -27,6 +28,8 @@ import com.opensymphony.xwork2.ActionSupport;
 
 
 public class ValidateFormsAction extends ActionSupport implements SessionAware{
+	
+	private static Logger logger = Logger.getLogger(ValidateFormsAction.class.getName());
 	/**
 	 * 
 	 */
@@ -37,6 +40,8 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware{
     private FormCollection validatedFormCollection;
     private HttpServletRequest servletRequest;
 	ApplicationContext applicationContext = null;
+	
+	private int[] selectedFormIndices;
     
     public String execute() {
     	System.out.println("in ValidateFormsAction.execute()");
@@ -44,6 +49,15 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware{
         try {
         	List<FormDescriptor> parsedFormsList = (List<FormDescriptor>) servletRequest.getSession().getAttribute("parsedFormsList");
         	
+        	FormCollection aColl = (FormCollection)servletRequest.getSession().getAttribute("formCollection");
+        	
+        	if (selectedFormIndices != null && selectedFormIndices.length > 0) {
+        		setSelectForFormsInCollections(aColl, selectedFormIndices);
+        		validateFormCollection(aColl);
+        	}
+        	
+        	
+        /*	
         	if (checkboxes != null && checkboxes.size()>0){
 				
 				for (int i=0; i<checkboxes.size();i++) {
@@ -64,7 +78,7 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware{
 	        	{
 	        		validateFormCollection();
 	        	}
-        	
+        	*/
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getMessage());
@@ -75,7 +89,7 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware{
         return SUCCESS;
     }
     
-    private void validateFormCollection()
+    private void validateFormCollection(FormCollection aColl)
 	    {
 			applicationContext =
 					WebApplicationContextUtils.getRequiredWebApplicationContext(
@@ -83,10 +97,10 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware{
 		                        );
 			ContentValidationServiceImpl xmlContentValidator = (ContentValidationServiceImpl)this.applicationContext.getBean("contentValidationService");
 			try {
-					FormCollection aColl = new FormCollection(selectedFormsList);
-					aColl.setCreatedBy((String)servletRequest.getSession().getAttribute("username"));
-					aColl.setXmlFileName((String)servletRequest.getSession().getAttribute("filename"));
-					aColl.setXmlPathOnServer((String)servletRequest.getSession().getAttribute("upload.file.path"));
+					//FormCollection aColl = new FormCollection(selectedFormsList);
+					//aColl.setCreatedBy((String)servletRequest.getSession().getAttribute("username"));
+					//aColl.setXmlFileName((String)servletRequest.getSession().getAttribute("filename"));
+					//aColl.setXmlPathOnServer((String)servletRequest.getSession().getAttribute("upload.file.path"));
 					validatedFormCollection = xmlContentValidator.validateXmlContent(aColl);
 					validatedForms = validatedFormCollection.getForms();
 		        	servletRequest.getSession().setAttribute("validatedForms", validatedForms);
@@ -96,6 +110,41 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware{
 				e.printStackTrace();
 			}
 	    }
+    
+    protected void setSelectForFormsInCollections(FormCollection aColl, int[] selectedFormIndices) {
+    	
+		if (aColl == null) {
+			logger.error("Collection is null. Unable to verify selection for forms.");
+			return; //TODO
+		}
+		
+		List<FormDescriptor> forms = aColl.getForms();
+		
+		if (forms == null) {
+			logger.error("Collection has null form list. Unable to verify selection for forms.");
+			return; //TODO
+		}
+	
+		for (FormDescriptor form : forms) {
+			form.setSelected(isFormSelected(form.getIndex(), selectedFormIndices));
+		}
+	}
+    
+    /**
+     * Determine whether form is selected by comparing form's index field against the list of selected indices
+     * 
+     * @param idx
+     * @param selectedFormIdx
+     * @return
+     */
+    protected boolean isFormSelected(int formIdx, int[] selectedFormIndices) {
+		for (int idx : selectedFormIndices) {
+			if (idx == formIdx)
+				return true;
+		}
+		
+		return false;
+	}
     
     public List<FormDescriptor> getSelectedFormsList() {
 		return selectedFormsList;
@@ -112,6 +161,13 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware{
 		this.checkboxes = checkboxes;
 	}
 
+	public int[] getSelectedFormIndices() {
+		return selectedFormIndices;
+	}
+
+	public void setSelectedFormIndices(int[] selectedFormIndices) {
+		this.selectedFormIndices = selectedFormIndices;
+	}
 
 	@Override
 	public void setSession(Map<String, Object> arg0) {
