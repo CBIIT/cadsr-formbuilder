@@ -160,17 +160,22 @@ ServletRequestAware, ValidationAware{
 	                        );
 		XmlValidationServiceImpl xmlValidator = (XmlValidationServiceImpl)this.applicationContext.getBean("xmlValidationService");
 		
+		String userName = (String)servletRequest.getSession().getAttribute("username");
+		
 		FormCollection aColl = new FormCollection();
 		aColl.setXmlPathOnServer(configProp.getProperty("upload.file.path") +"\\");
 		servletRequest.getSession().setAttribute("upload.file.path", configProp.getProperty("upload.file.path") +"\\");
 		aColl.setXmlFileName(this.fileName);
 		aColl.setDescription(description);
 		aColl.setName(collectionName);
+		aColl.setCreatedBy(userName.toUpperCase());
 		servletRequest.getSession().setAttribute("filename", this.fileName);
 		try {
 			aColl = xmlValidator.validateXml(aColl);
 			parsedFormsList = aColl.getForms();
 			sortForms();
+			
+			servletRequest.getSession().setAttribute("formCollection", aColl);
         	servletRequest.getSession().setAttribute("parsedFormsList", parsedFormsList);
         	System.out.println(parsedFormsList.size()+" Parsed Forms ");
 		} catch (FormLoaderServiceException e) {
