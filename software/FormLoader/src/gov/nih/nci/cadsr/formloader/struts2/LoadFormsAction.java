@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.SessionAware;
 import org.springframework.context.ApplicationContext;
@@ -19,6 +20,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class LoadFormsAction extends ActionSupport implements SessionAware{
+	
+	private static Logger logger = Logger.getLogger(LoadFormsAction.class.getName());
 
     /**
 	 * 
@@ -30,12 +33,21 @@ public class LoadFormsAction extends ActionSupport implements SessionAware{
     private FormCollection loadedFormCollection;
     private List<FormDescriptor> loadedForms = null;
 	ApplicationContext applicationContext = null;
+	
+	private int[] selectedFormIndices;
     
     public String execute() {
     	System.out.println("in LoadFormsAction.execute()");
     	servletRequest = ServletActionContext.getRequest();
     	
         try {
+        	FormCollection aColl = (FormCollection)servletRequest.getSession().getAttribute("formCollection");
+        	
+        	if (selectedFormIndices != null && selectedFormIndices.length > 0) {
+        		setSelectForFormsInCollections(aColl, selectedFormIndices);
+        		loadFormCollection(aColl);
+        	}
+        	/*
     	List<FormDescriptor> validatedFormsList = (List<FormDescriptor>) servletRequest.getSession().getAttribute("validatedForms");
     	
     	if (loadformcheckboxes != null && loadformcheckboxes.size()>0){
@@ -57,7 +69,7 @@ public class LoadFormsAction extends ActionSupport implements SessionAware{
     	if (selectedFormsList.size() > 0)
     	{
     		loadFormCollection();
-    	}
+    	}*/
         }catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getMessage());
@@ -70,7 +82,7 @@ public class LoadFormsAction extends ActionSupport implements SessionAware{
     	return SUCCESS;
     }
     
-    private void loadFormCollection()
+    private void loadFormCollection(FormCollection aColl)
     {
 		applicationContext =
 				WebApplicationContextUtils.getRequiredWebApplicationContext(
@@ -78,11 +90,11 @@ public class LoadFormsAction extends ActionSupport implements SessionAware{
 	                        );
 		LoadingServiceImpl loadFormsService = (LoadingServiceImpl)this.applicationContext.getBean("loadService");
 		try {
-				FormCollection aColl = new FormCollection(selectedFormsList);
-				aColl.setCreatedBy((String)servletRequest.getSession().getAttribute("username"));
-				aColl.setXmlFileName((String)servletRequest.getSession().getAttribute("filename"));
-				aColl.setXmlPathOnServer((String)servletRequest.getSession().getAttribute("upload.file.path"));
-				aColl.setName("Sulas Collection");
+				//FormCollection aColl = new FormCollection(selectedFormsList);
+				//aColl.setCreatedBy((String)servletRequest.getSession().getAttribute("username"));
+				//aColl.setXmlFileName((String)servletRequest.getSession().getAttribute("filename"));
+				//aColl.setXmlPathOnServer((String)servletRequest.getSession().getAttribute("upload.file.path"));
+				//aColl.setName("Sulas Collection");
 				loadedFormCollection = loadFormsService.loadForms(aColl);
 				loadedForms = loadedFormCollection.getForms();
 	        	servletRequest.getSession().setAttribute("loadedForms", loadedForms);
@@ -113,10 +125,53 @@ public class LoadFormsAction extends ActionSupport implements SessionAware{
 		return loadedForms;
 	}
 
+	public int[] getSelectedFormIndices() {
+		return selectedFormIndices;
+	}
+
+	public void setSelectedFormIndices(int[] selectedFormIndices) {
+		this.selectedFormIndices = selectedFormIndices;
+	}
+
 	@Override
 	public void setSession(Map<String, Object> arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+protected void setSelectForFormsInCollections(FormCollection aColl, int[] selectedFormIndices) {
+    	
+		if (aColl == null) {
+			logger.error("Collection is null. Unable to verify selection for forms.");
+			return; //TODO
+		}
+		
+		List<FormDescriptor> forms = aColl.getForms();
+		
+		if (forms == null) {
+			logger.error("Collection has null form list. Unable to verify selection for forms.");
+			return; //TODO
+		}
+	
+		for (FormDescriptor form : forms) {
+			form.setSelected(isFormSelected(form.getIndex(), selectedFormIndices));
+		}
+	}
+    
+    /**
+     * Determine whether form is selected by comparing form's index field against the list of selected indices
+     * 
+     * @param idx
+     * @param selectedFormIdx
+     * @return
+     */
+    protected boolean isFormSelected(int formIdx, int[] selectedFormIndices) {
+		for (int idx : selectedFormIndices) {
+			if (idx == formIdx)
+				return true;
+		}
+		
+		return false;
 	}
 
 }
