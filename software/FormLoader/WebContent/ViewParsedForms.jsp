@@ -68,7 +68,8 @@ Select forms to validate the questions and data elements against caDSR database
 		</div> 
 	</s:form>
 	</s:if>
-	
+
+<s:if test="parsedFormsWithErrorList.size() > 0">	
 	<h2>Forms Failed XML Validation</h2>
     <br>
 
@@ -91,6 +92,7 @@ Select forms to validate the questions and data elements against caDSR database
 			</s:iterator>
 		</table>
 		</div>
+	</s:if>
 	</s:if>
 </body>
 </div>
