@@ -5,23 +5,21 @@
 <html>
 <head>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-
 <title>View Loaded Forms</title>
-
 <style type="text/css">
         body { font-family:Arial, Helvetica, Sans-Serif; font-size:0.8em;}
         #report { border-collapse:collapse;}
         #report h4 { margin:0px; padding:0px;}
         #report img { float:right;}
         #report ul { margin:10px 0 10px 40px; padding:0px;}
-        #report th { background:#fff url(i/header_bkg.png) repeat-x scroll center left; color:#fff; padding:7px 15px; text-align:left;}
-        #report td { background:#fff none repeat-x scroll center left; color:#000; padding:7px 15px; }
+        #report th { background:#fff url(i/cellTableHeaderBackground.png) repeat-x scroll center left; color:#003366; padding:7px 15px; text-align:left;}
+        #report td { background:#fff none repeat-x scroll center left; color:#336699; padding:7px 15px; }
         #report tr.odd td { background:#fff url(i/row_bkg.png) repeat-x scroll center left; cursor:pointer; }
         #report div.arrow { background:transparent url(i/arrows.png) no-repeat scroll 0px -16px; width:16px; height:16px; display:block;}
         #report div.up { background-position:0px 0px;}
     </style>
-
-   <script type="text/javascript">  
+    
+<script type="text/javascript">  
         $(document).ready(function(){
         	$('tr[id^="parent"]').addClass("odd");
             $('tr[id="formHeader"]').show();
@@ -32,13 +30,51 @@
               });            
         });
     </script>  
+   <script type="text/javascript">  
+   $(document).ready(function(){
+    $("#searchInput").keyup(function () {
+    //split the current value of searchInput
+    var data = this.value.split(" ");
+    //create a jquery object of the rows
+    var jo = $("#fbody").find("tr");
+    if (this.value == "") {
+        jo.show();
+        return;
+    }
+    //hide all the rows
+    jo.hide();
 
+    //Recusively filter the jquery object to get results.
+    jo.filter(function (i, v) {
+        var $t = $(this);
+        for (var d = 0; d < data.length; ++d) {
+            if ($t.is(":contains('" + data[d] + "')")) {
+                return true;
+            }
+        }
+        return false;
+    })
+    //show the rows that match.
+    .show();
+}).focus(function () {
+    this.value = "";
+    $(this).css({
+        "color": "black"
+    });
+    $(this).unbind('focus');
+}).css({
+    "color": "#C0C0C0"
+});
+   });
+    </script>
 </head>
 <body>
 <h5 class="OraTipText">You are logged in as: <s:property value="userName" /></h5>
 <s:if test="forms.size() > 0">
-<p>You have previously loaded <s:property value="forms.size()"/> forms. You may use the input fields to narrow down the list.
-Click on a form to view the collection(s) it was loaded with. <br> To unload, check individual forms and click the Unload Forms button.
+<p>You have previously loaded <s:property value="forms.size()"/> forms. click on any form field to view collection(s) it was loaded in. <br>
+To unload, check individual forms and click the Unload Forms button.
+<br><br>
+You may also filter the form list by typing into the filter input field.
 </p>
 </s:if>
 
@@ -47,8 +83,17 @@ Click on a form to view the collection(s) it was loaded with. <br> To unload, ch
 </s:elseif>
 <s:actionerror />
 
-<s:form action="unloadForms" method="post">
+<table>
+<tr>
+<td>Filter:
+</td>
+<td><input id="searchInput" value="Type To Filter">
+</td>
+</tr>
+</table>
 
+
+<s:form action="unloadForms" method="post">
 <table id="report">
 		<tr id="formHeader">
 				<th>Select</th>
@@ -61,10 +106,10 @@ Click on a form to view the collection(s) it was loaded with. <br> To unload, ch
 				<th>Created By</th>
 				<th>Modified By</th>
 		</tr>
-
+<tbody id="fbody">
 			<s:iterator value="forms" var="form" status="status"> 
 				<tr class="parent" id="parent-<s:property value="formSeqId" />">
-				<td><s:checkbox name="selectedFormIds" fieldValue="%{formSeqId}" theme = "simple" /></td>
+				<td><div style="width: 50px;"><s:checkbox name="selectedFormIds" fieldValue="%{formSeqId}" theme = "simple" /></div></td>
 				<td id="expandable"><s:property value="publicId" /></td>
 				<td id="expandable"><s:property value="version" /></td>
 				<td id="expandable"><div style="width: 150px;"><s:property value="longName" /></div></td>
@@ -102,7 +147,7 @@ Click on a form to view the collection(s) it was loaded with. <br> To unload, ch
 				</td>
 				</tr>
 				</s:iterator>
-
+</tbody>
 			
 			<tr>
 		  	<td colspan="1" align="left" nowrap>

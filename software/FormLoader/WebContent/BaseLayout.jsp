@@ -8,7 +8,7 @@
 <title><tiles:insertAttribute name="title" ignore="true" /></title>
 </head>
 <body height ="100%" width = "100%" >
-<table height = "100%" width="100%"  border="1" cellpadding="2" cellspacing="2" align="center">
+<table height = "100%" width="100%"  border="0" cellpadding="2" cellspacing="2" align="center">
 	<tr>
 		<td height="30" colspan="2"><tiles:insertAttribute name="header" />
 		</td>

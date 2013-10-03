@@ -17,6 +17,7 @@ L--%>
 @import url(css/style.css);
 </style>
 </head>
+<div id="4b" style="padding-left: 50px; padding-right: 50px;">
 <body>
 <h2>View Uploaded Forms of Selected XML Files</h2>
 <br>
@@ -60,4 +61,5 @@ L--%>
 	</s:form>
 	</s:if>
 </body>
+</div>
 </html>

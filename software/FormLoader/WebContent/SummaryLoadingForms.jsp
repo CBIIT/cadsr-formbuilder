@@ -10,11 +10,15 @@ L--%>
 <%@ taglib prefix="sx" uri="/struts-dojo-tags"%>
 <html>
 <head>
+<style type="text/css">
+@import url(css/style.css);
+</style>
 	<title>Summary of Loading Forms</title>
 	<sx:head />
 </head>
+<div id="4b" style="padding-left: 50px; padding-right: 50px;">
 <body>
-<h2>Summary of Loading Forms
+<h2>Summary of Loaded Forms
 </h2>
 <div class="content">
 		<table class="fileTable" cellpadding="5px">
@@ -44,5 +48,7 @@ L--%>
 			</s:iterator>
 		</table>
 </div>
+
 </body>
+</div>
 </html>

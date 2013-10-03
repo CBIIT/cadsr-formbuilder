@@ -15,6 +15,7 @@ L--%>
 @import url(css/style.css);
 </style>
 </head>
+<div id="4b" style="padding-left: 50px; padding-right: 50px;">
 <body>
 <h2>View Validation Summary of Selected Forms</h2>
 <br>
@@ -53,7 +54,7 @@ L--%>
 				<td><s:property value="longName" /></td>
 				<td><s:property value="context" /></td>
 				<td><s:property value="type" /></td>
-				<td><s:property value="protocolName" /></td>
+				<td><div style="width: 250px;"><s:property value="protocolName" /></div></td>
 				<td><s:property value="workflowStatusName" /></td>
 				<td><s:property value="modules.size()" /></td>
 				<td><s:property value="loadType" /></td>
@@ -71,4 +72,5 @@ L--%>
 	</s:form>
 	</s:if>
 </body>
+</div>
 </html>

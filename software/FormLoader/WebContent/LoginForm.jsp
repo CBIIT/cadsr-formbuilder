@@ -10,7 +10,7 @@
 
  <s:head />
 </head>
-
+<div id="4b" style="padding-left: 50px; padding-right: 50px;">
 <body  height ="100%" width = "100%" text="#000000" topmargin="0">
 
    <%@ include file="basicHeaderLogin_inc.jsp"%>
@@ -69,4 +69,5 @@
 <%@ include file="common/common_bottom_border.jsp"%>
 
 </body>
+</div>
 </html>

@@ -15,7 +15,7 @@ L--%>
 <sx:head />
 </head>
  
-<body>
+<div id="4b" style="padding-left: 50px; padding-right: 50px;">
 <h2>Load Form Collection</h2>
 <s:actionerror />
 <table>

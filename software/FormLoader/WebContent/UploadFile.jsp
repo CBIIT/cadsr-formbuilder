@@ -13,9 +13,9 @@ L--%>
 <title>Upload File</title>
 <sx:head />
 </head>
- 
+ <div id="4b" style="padding-left: 50px; padding-right: 50px;">
 <body>
-<h2>Load Form Collection</h2>
+<h2>Load Form Collection SY</h2>
 <s:actionerror />
 
 <table>
@@ -40,4 +40,5 @@ L--%>
 </s:form>
 </table>
 </body>
+</div>
 </html>

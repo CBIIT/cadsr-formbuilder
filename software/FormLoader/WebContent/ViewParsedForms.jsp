@@ -15,6 +15,9 @@ L--%>
 @import url(css/style.css);
 </style>
 </head>
+
+<div id="4b" style="padding-left: 50px; padding-right: 50px;">
+
 <body>
 <h2>Forms Passed XML Validation</h2>
 <br>
@@ -48,7 +51,7 @@ Select forms to validate the questions and data elements against caDSR database
 				<td><s:property value="longName" /></td>
 				<td><s:property value="context" /></td>
 				<td><s:property value="type" /></td>
-				<td><s:property value="protocolName" /></td>
+				<td><div style="width: 250px;"><s:property value="protocolName" /></div></td>
 				<td><s:property value="workflowStatusName" /></td>
 				<td><s:property value="modules.size()" /></td>
 			</tr>
@@ -90,4 +93,5 @@ Select forms to validate the questions and data elements against caDSR database
 		</div>
 	</s:if>
 </body>
+</div>
 </html>
