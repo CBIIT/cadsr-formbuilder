@@ -14,6 +14,7 @@ L--%>
 <style type="text/css">
 @import url(css/style.css);
 </style>
+
 </head>
 <div id="4b" style="padding-left: 50px; padding-right: 50px;">
 <body>
@@ -40,7 +41,6 @@ L--%>
 			<s:iterator value="validatedForms" id = "bean" status="status">
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
 				<td>
-					<!--  s:checkbox name="loadformcheckboxes[%{#status.index}]" theme = "simple" /> -->
 					<s:if test="loadStatus >=3">
 					<s:checkbox name="selectedFormIndices" fieldValue="%{index}" theme = "simple" />
 					</s:if>
@@ -58,7 +58,14 @@ L--%>
 				<td><s:property value="workflowStatusName" /></td>
 				<td><s:property value="modules.size()" /></td>
 				<td><s:property value="loadType" /></td>
-				<td><s:property value="getLoadStatusString()" /></td>
+				<td>
+				<s:if test="loadStatus < 3">
+					<a href="#" title="<s:property value="getMessagesInString()" />">
+				<s:property value="getLoadStatusString()" /></a></s:if>
+				<s:elseif test="loadStatus >= 3">
+				<s:property value="getLoadStatusString()" />
+				</s:elseif>
+				</td>
 			</tr>
 			</s:iterator>
 				<tr>
