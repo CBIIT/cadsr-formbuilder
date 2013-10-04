@@ -1,23 +1,22 @@
 package gov.nih.nci.cadsr.formloader.service.common;
 
 
+import gov.nih.nci.cadsr.formloader.domain.FormCollection;
+import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
+
+import java.io.BufferedInputStream;
 import java.io.File;
-import java.util.ArrayList;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.List;
 
-import javax.xml.XMLConstants;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.SchemaFactory;
-
 import org.apache.log4j.Logger;
-import org.dom4j.DocumentException;
-import org.dom4j.io.SAXReader;
-import org.springframework.core.io.Resource;
-import org.xml.sax.SAXException;
 
 public class FormLoaderHelper {
 	
@@ -118,5 +117,120 @@ public class FormLoaderHelper {
 		return new String(outArr).trim();
 		
 	}
+	
+	
+	public static void saveCollectionListToFile (List<FormCollection> colls) {
+		final String fileName = "collectionList.ser";
 
+		String filePathName = fileName;
+		File objs = new File(filePathName);
+
+		try {
+			if (!objs.exists()) {
+				
+				// Serialize data object to a file
+				ObjectOutputStream out = new ObjectOutputStream(
+						new FileOutputStream(filePathName));
+				out.writeObject(colls);
+				/*
+				 * Iterator ite = pvs.keySet().iterator(); while (ite.hasNext())
+				 * { out.writeObject(pvs.get(ite.next())); }
+				 */
+				out.close();
+
+			}
+		} catch (FileNotFoundException fne) {
+			System.out.println(fne);
+		} catch (IOException ioe) {
+			System.out.println(ioe);
+		}
+
+		
+	}
+	
+	public static void saveFormListToFile (List<FormDescriptor> forms) {
+		final String fileName = "formList.ser";
+
+		String filePathName = fileName;
+		File objs = new File(filePathName);
+
+		try {
+			if (!objs.exists()) {
+				
+				// Serialize data object to a file
+				ObjectOutputStream out = new ObjectOutputStream(
+						new FileOutputStream(filePathName));
+				out.writeObject(forms);
+				/*
+				 * Iterator ite = pvs.keySet().iterator(); while (ite.hasNext())
+				 * { out.writeObject(pvs.get(ite.next())); }
+				 */
+				out.close();
+
+			}
+		} catch (FileNotFoundException fne) {
+			System.out.println(fne);
+		} catch (IOException ioe) {
+			System.out.println(ioe);
+		}
+
+		
+	}
+
+	public static List<FormDescriptor> readFormListFromFile () {
+		final String fileName = "formList.ser";
+
+		String filePathName = fileName;
+		File objs = new File(filePathName);
+		List<FormDescriptor> forms = null;
+
+		try {
+			InputStream file = new FileInputStream(filePathName);
+			InputStream buffer = new BufferedInputStream(file);
+			ObjectInput input = new ObjectInputStream (buffer);
+
+			//deserialize the List
+			forms = (List<FormDescriptor>)input.readObject();
+
+		}
+		catch(ClassNotFoundException ex){
+
+		}
+		catch(IOException ex){
+
+		}
+
+
+		return forms;
+
+	}
+	
+	public static List<FormCollection> readCollectionListFromFile () {
+		final String fileName = "collectionList.ser";
+
+		String filePathName = fileName;
+		File objs = new File(filePathName);
+		List<FormCollection> colls = null;
+
+		try {
+			InputStream file = new FileInputStream(filePathName);
+			InputStream buffer = new BufferedInputStream(file);
+			ObjectInput input = new ObjectInputStream (buffer);
+
+			//deserialize the List
+			colls = (List<FormCollection>)input.readObject();
+
+		}
+		catch(ClassNotFoundException ex){
+
+		}
+		catch(IOException ex){
+
+		}
+
+
+		return colls;
+
+	}
+	
 }
