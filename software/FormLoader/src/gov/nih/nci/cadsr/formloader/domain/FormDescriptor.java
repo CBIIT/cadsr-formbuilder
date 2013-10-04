@@ -6,7 +6,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class FormDescriptor {
+public class FormDescriptor implements java.io.Serializable {
+	
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	public static final String LOAD_TYPE_NEW = "New Form";
 	public static final String LOAD_TYPE_NEW_VERSION = "New Version";
@@ -464,7 +470,43 @@ public class FormDescriptor {
 		for (XmlValidationError error : xmlValidationErrors) {
 			sb.append(error.toString()).append(";");
 		}
+				return sb.toString();
+	}
+	
+	public String getCollectionsInFullHtml() {
+		if (this.belongToCollections == null || this.belongToCollections.size() == 0)
+			return "No collection info for this form";
 		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("<html><head><title>Collections</title></head><body> " +
+"<table><tr><th>Collection Name</th><th>Description</th><th># of Forms</th><th>Loaded By</th><th>Loaded Date</th><tr>");
+		sb.append("<td>").append(this.belongToCollections.get(0).getName()).append("</td>");
+		sb.append("<td>").append(this.belongToCollections.get(0).getDescription()).append("</td>");
+		sb.append("<td>").append(this.belongToCollections.get(0).getForms().size()).append("</td>");
+		sb.append("<td>").append(this.belongToCollections.get(0).getCreatedBy()).append("</td>");
+		sb.append("<td>").append(this.belongToCollections.get(0).getDateCreated()).append("</td>");
+		sb.append("</tr></table></body></html>");
+		
+		return sb.toString();
+	}
+	
+	public String getCollectionsInHtmlRows() {
+		if (this.belongToCollections == null || this.belongToCollections.size() == 0)
+			return "No collection info for this form";
+		
+		StringBuilder sb = new StringBuilder();
+		int idx = 1;
+		for (FormCollection coll : this.belongToCollections) {
+			String odd = (idx++ % 2 != 0) ? "odd" : "even";
+			sb.append("<tr class=\"" + odd + "\"><td>").append(coll.getName()).append("</td>");
+			sb.append("<td>").append(coll.getDescription()).append("</td>");
+			sb.append("<td>").append(coll.getForms().size()).append("</td>");
+			sb.append("<td>").append(coll.getCreatedBy()).append("</td>");
+			sb.append("<td>").append(coll.getDateCreated()).append("</td>");
+			sb.append("</tr>");
+		}
+
 		return sb.toString();
 	}
 }
