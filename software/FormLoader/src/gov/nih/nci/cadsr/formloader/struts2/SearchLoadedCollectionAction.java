@@ -3,6 +3,7 @@ package gov.nih.nci.cadsr.formloader.struts2;
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.repository.FormLoaderRepositoryImpl;
+import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceError;
 import gov.nih.nci.cadsr.formloader.service.impl.CollectionRetrievalServiceImpl;
 
@@ -30,6 +31,8 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 	private List<FormCollection> collectionList = null;
 	ApplicationContext applicationContext = null;
 	private String userName;
+	
+	private List<FormDescriptor> forms = null;
 
 	public String execute() {
 		logger.debug("We are in XMLFileLoadedAction.execute()");
@@ -41,7 +44,28 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 							.getServletContext());
 			CollectionRetrievalServiceImpl collectionRetrieval =
 					(CollectionRetrievalServiceImpl)this.applicationContext.getBean("collectionRetrievalService");
+			
 			userName = (String)servletRequest.getSession().getAttribute("username");
+			userName = userName.toUpperCase();
+			
+			
+			//collectionList = FormLoaderHelper.readCollectionListFromFile();
+			//servletRequest.getSession().setAttribute("collectionList", collectionList);
+			
+			forms = collectionRetrieval.getAllFormsByUser(userName);
+			
+			//FormLoaderHelper.saveFormListToFile(forms);
+			//forms = FormLoaderHelper.readFormListFromFile();
+			
+			if (forms == null) {
+				logger.error("Form list is null.");
+				return ERROR;
+			}
+			
+			logger.debug("User [" + userName + "] has previously loaded " + forms.size() + " forms.");
+			servletRequest.getSession().setAttribute("formList", forms);
+			
+			/*
 			collectionList = collectionRetrieval.getAllCollectionsByUser(userName);
 
 			if (collectionList == null) {
@@ -51,6 +75,7 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 
 			logger.debug("User [" + userName + "] has previously loaded " + collectionList.size() + " collections.");
 			servletRequest.getSession().setAttribute("collectionList", collectionList);
+			*/
 			return SUCCESS;
 
 		} catch (Exception e) {
@@ -82,5 +107,15 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 		// TODO Auto-generated method stub
 
 	}
+
+	public List<FormDescriptor> getForms() {
+		return forms;
+	}
+
+	public void setForms(List<FormDescriptor> forms) {
+		this.forms = forms;
+	}
+	
+	
 
 }
