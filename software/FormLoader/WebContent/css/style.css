@@ -29,6 +29,7 @@ font-size: small;
 	border-color: black black black black;
 	border-collapse: collapse;
 	background-color: rgb(255, 255, 255);
+	style: padding-top: 5px;
 }
 
 .odd {
@@ -37,4 +38,12 @@ background-color: #FFFFF0;
 
 .even {
 background-color: #FAF0E6;
+}
+
+#subTable td {
+	font-size: 9pt;
+}
+
+#subTable th {
+	font-size: 9pt;
 }
