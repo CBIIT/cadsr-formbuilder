@@ -5,19 +5,43 @@
 <html>
 <head>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type='text/javascript' src='js/jquery.simplemodal.js'></script>
+
 <title>View Loaded Forms</title>
+
+<!-- Contact Form CSS files -->
+<link type='text/css' href='css/modalview.css' rel='stylesheet' media='screen' />
+
 <style type="text/css">
-        body { font-family:Arial, Helvetica, Sans-Serif; font-size:0.8em;}
-        #report { border-collapse:collapse;}
-        #report h4 { margin:0px; padding:0px;}
-        #report img { float:right;}
-        #report ul { margin:10px 0 10px 40px; padding:0px;}
-        #report th { background:#fff url(i/cellTableHeaderBackground.png) repeat-x scroll center left; color:#003366; padding:7px 15px; text-align:left;}
-        #report td { background:#fff none repeat-x scroll center left; color:#336699; padding:7px 15px; }
-        #report tr.odd td { background:#fff url(i/row_bkg.png) repeat-x scroll center left; cursor:pointer; }
-        #report div.arrow { background:transparent url(i/arrows.png) no-repeat scroll 0px -16px; width:16px; height:16px; display:block;}
-        #report div.up { background-position:0px 0px;}
-    </style>
+@import url(css/style.css);
+</style>
+
+<script type="text/javascript"> 
+$(document).ready(function() {
+	
+	$('td[id="collectionView"]').click(function(){
+		
+		var formId = $(this).find('input').attr('id');
+		//alert(formId);
+		//alert($(this).find('input').attr('name'));
+		var d = '<html><head><title>Collections for Form</title></head>';
+		d += '<body><h4>The form [';
+		d += formId;
+		d += '] was loaded with the following collection(s):</h4><br>';
+		d += '<table><tr class="even"><th>Collection Name</th><th>Description</th><th># of Forms</th><th>Loaded By</th><th>Loaded Date</th><tr>';
+		var data = $(this).find('input').val();
+		d += data;
+		d += '</table></body></html>';
+		$.modal(d);
+      }); 
+	
+	$('input[type="button"]').click(function(){
+		var data = this.value;
+		$.modal(data);
+		//$.modal('<p><b>HTML</b> elements</p>');
+      });
+});
+</script>
     
 <script type="text/javascript">  
         $(document).ready(function(){
@@ -30,6 +54,8 @@
               });            
         });
     </script>  
+   
+   
    <script type="text/javascript">  
    $(document).ready(function(){
     $("#searchInput").keyup(function () {
@@ -68,6 +94,7 @@
    });
     </script>
 </head>
+<div id="4b" style="padding-left: 50px; padding-right: 50px;">
 <body>
 <h5 class="OraTipText">You are logged in as: <s:property value="userName" /></h5>
 <s:if test="forms.size() > 0">
@@ -91,11 +118,10 @@ You may also filter the form list by typing into the filter input field.
 </td>
 </tr>
 </table>
-
-
+<div id='content'>
 <s:form action="unloadForms" method="post">
-<table id="report">
-		<tr id="formHeader">
+<table id="fileTable">
+		<tr id="formHeader" class="even">
 				<th>Select</th>
 				<th>Public ID</th>
 				<th>Version</th>
@@ -105,10 +131,13 @@ You may also filter the form list by typing into the filter input field.
 				<th>Workflow Status</th>
 				<th>Created By</th>
 				<th>Modified By</th>
+				<th>Collections</th>
 		</tr>
 <tbody id="fbody">
+
 			<s:iterator value="forms" var="form" status="status"> 
-				<tr class="parent" id="parent-<s:property value="formSeqId" />">
+			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
+				<!--  tr class="parent" id="parent-<s:property value="formSeqId" />"> -->
 				<td><div style="width: 50px;"><s:checkbox name="selectedFormIds" fieldValue="%{formSeqId}" theme = "simple" /></div></td>
 				<td id="expandable"><s:property value="publicId" /></td>
 				<td id="expandable"><s:property value="version" /></td>
@@ -118,34 +147,13 @@ You may also filter the form list by typing into the filter input field.
 				<td id="expandable"><s:property value="workflowStatusName" /></td>
 				<td id="expandable"><s:property value="createdBy" /></td>
 				<td id="expandable"><s:property value="modifiedBy" /></td>
-				</tr>
 				
-				<tr class="child-<s:property value="formSeqId" />" style="display:none;">
-				<td>&nbsp;</td>
-				<td>&nbsp;</td>
-				<td colspan=7>
-				<table>
-		
-				<tr>
-					<th>Collection Name</th>
-					<th>Description</th>
-					<th># of Forms</th>
-					<th>Loaded By</th>
-					<th>Loaded Date</th>
-				</tr>
-				<s:iterator value="belongToCollections">
-				<tr>			    
-				<td align="center"><s:property value= "name"/></td>
-				<td align="center"><s:property value="description" /></td>
-				<td align="center"><s:property value="forms.size()" /></td>
-				<td align="center"><s:property value="createdBy" /></td>
-				<td align="center"><s:property value="dateCreated" /></td>
-			</tr>	
-				</s:iterator>
-				
-				</table>
+				<td id="collectionView">View Collection Info
+				<input type="hidden" id="<s:property value="getFormIdString()" />" value='<s:property value="getCollectionsInHtmlRows()" />'>
 				</td>
+				
 				</tr>
+				
 				</s:iterator>
 </tbody>
 			
@@ -154,9 +162,9 @@ You may also filter the form list by typing into the filter input field.
 <s:submit type="image" src="/FormLoader/i/Unload-Forms.gif" method="execute" align="left" theme="simple" /></td>
 </tr>
 		</table>
-		
- 
 </s:form>
+</div>
 
 </body>
+</div>
 </html>
