@@ -438,7 +438,7 @@
             <xsl:element name="longName">
                 <xsl:value-of select="long-name"/>
             </xsl:element>
-            <xsl:element name="shortName"/>
+            <xsl:element name="shortName">
              	<xsl:value-of select="preferred-name"/>
             </xsl:element>
             <!-- New in formCartV2  -->
