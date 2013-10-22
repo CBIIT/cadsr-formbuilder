@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Transform based on FinalFormCartTransformv26.xsl which was validated with FormCartv21.xsd -->
 <forms>
+<collectionName>Forms-2.xml</collectionName>
+<collectionDescription>From Unit test</collectionDescription>
 <form>
    <context>CTEP</context>
    <createdBy>CAMPBELB</createdBy>
@@ -10,8 +12,8 @@
    <longName>CALGB: 40101 HER-2/neu TESTING FORM</longName>
    <changeNote/>
    <preferredDefinition>CALGB: 40101 HER-2/neu TESTING FORM</preferredDefinition>
-   <publicID></publicID>
-   <version>1.0</version>
+<publicID></publicID>
+<version></version>
    <workflowStatusName>RELEASED</workflowStatusName>
    <categoryName>Treatment</categoryName>
    <disease/>
