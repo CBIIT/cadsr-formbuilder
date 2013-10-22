@@ -57,8 +57,6 @@ public class XmlValidationServiceImplTest {
 			
 			System.out.println(e.toString());
 			assertTrue(e.getErrorCode() == FormLoaderServiceError.ERROR_MALFORMED_XML);
-			//assertTrue(e.getError() instanceof XmlValidationError);
-			//assertTrue(((XmlValidationError)e.getError()).getType().equals(XmlValidationError.XML_FATAL_ERROR));
 		}
 	}
 	
@@ -68,7 +66,7 @@ public class XmlValidationServiceImplTest {
 		try {
 			FormCollection aColl = new FormCollection();
 			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
-			aColl.setXmlFileName("forms.xml"); //one of the form's module doens't have question. and got error
+			aColl.setXmlFileName("forms.xml"); //2 of the 3 forms have an empty module (doens't have question).
 			aColl = this.xmlValService.validateXml(aColl);
 			List<FormDescriptor> forms = aColl.getForms();
 			assertNotNull(forms);
@@ -81,18 +79,36 @@ public class XmlValidationServiceImplTest {
 			String status = StatusFormatter.getStatusInXml(aColl);
 			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\forms.HappyPath.status.xml");
 			
-			//Seems new xsd allows empty question modules
-			//assertTrue(forms.get(0).getErrors().size() > 0);
+			assertTrue(forms.get(1).getErrors().size() > 0);
 		
 		} catch (FormLoaderServiceException e) {
 			fail("Got exception: " + e.toString());
 		}
 	}
+	
+	@Test
+	public void testValidateXmlCollectionNameMissing() {
+		FormCollection aColl = null;
+		try {
+			aColl = new FormCollection();
+			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
+			aColl.setXmlFileName("forms-no-collectionname.xml"); 
+			aColl = this.xmlValService.validateXml(aColl);
+
+			fail("Should have thrown exception because collection name is missing in input file");
+		
+		} catch (FormLoaderServiceException e) {
+			
+			String status = StatusFormatter.getStatusInXml(aColl);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\forms-no-collectionname.status.xml");
+			assertTrue(e.getErrorCode() == FormLoaderServiceException.ERROR_COLLECTION_NAME_MISSING);
+		}
+	}
 
 	@Test
 	public void testValidateXmlWithEmptyPublicId() {
-		//XmlValidationServiceImpl.XSD_PATH_NAME = "FormLoaderv1-testonly.xsd";
-		//((XmlValidationServiceImpl)this.xmlValService).setXSD_PATH_NAME("FormLoaderv1-testonly.xsd");
+		
+		//This is to test the xsd. It should accept xmls that don't have form public id or version
 		try {
 			FormCollection aColl = new FormCollection();
 			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
@@ -101,19 +117,20 @@ public class XmlValidationServiceImplTest {
 			List<FormDescriptor> forms = aColl.getForms();
 			assertNotNull(forms);
 			FormDescriptor form = forms.get(0);
-			//assertTrue(form.getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATED);
+			assertTrue(form.getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATED);
 			assertTrue(form.getPublicId() == null || form.getPublicId().length() == 0);
 			
 			String xmlerror = form.getXmlValidationErrorString();
 			logger.debug("Xml validation error: " + xmlerror);
-			//assertTrue(xmlerror.length() == 0);
+			assertTrue(xmlerror.length() == 0);
 		
 		} catch (FormLoaderServiceException e) {
 			fail("Got exception: " + e.toString());
 		}
 	}
 	
-	@Test
+	//@Test No longer needed
+	//Context will be validation at content validation.
 	public void testValidateXmlWithInvalidContext() {
 		//This works because we're using a non-finalized xsd, which has context type enumeration. 
 		//When we move to the xsd without those list, this test needs to be removed or althered. 
