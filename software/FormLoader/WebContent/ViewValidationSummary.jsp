@@ -9,7 +9,7 @@ L--%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <html>
 <head>
-	<title>View Validation Summary of Selected Forms</title>
+	<title>DB Validation Summary</title>
 <s:head />
 <style type="text/css">
 @import url(css/style.css);
@@ -18,7 +18,7 @@ L--%>
 </head>
 <div id="4b" style="padding-left: 50px; padding-right: 50px;">
 <body>
-<h2>View Validation Summary of Selected Forms</h2>
+<h2>Summary of DB Validation for Selected Forms</h2>
 <br>
 <s:actionerror />
 <s:if test="validatedForms.size() >= 1">
@@ -27,27 +27,26 @@ L--%>
 		<table class="fileTable" cellpadding="5px">
 			<tr class="even">
 				<th>Select</th>
-				<th>Public Id</th>
-				<th>Version</th>
-				<th>Long Name</th>
-				<th>Context</th>
-				<th>Type</th>
-				<th>Protocol Name</th>
-				<th>Workflow Status</th>
-				<th># Modules</th>
+				<th>Public Id in XML</th>
+				<th>Version in XML</th>
+				<th>Long Name in XML</th>
+				<th>Context in XML</th>
+				<th>Type in XML</th>
+				<th>Protocol Name(s) in XML</th>
+				<th>Workflow Status in XML</th>
+				<th># Modules in XML</th>
 				<th>Load Type</th>
-				<th>Load Status</th>
+				<th>DB Validation Status</th>
 			</tr>
 			<s:iterator value="validatedForms" id = "bean" status="status">
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
-				<td>
-					<s:if test="loadStatus >=3">
+				<td>					
+					<s:if test="loadStatus == 4">
 					<s:checkbox name="selectedFormIndices" fieldValue="%{index}" theme = "simple" />
 					</s:if>
 					<s:else>
     				<s:checkbox name="greyout" disabled="true" theme = "simple" />
 					</s:else>
-					
 				</td>
 				<td><s:property value="publicId" /></td>
 				<td><s:property value="version" /></td>
@@ -59,10 +58,10 @@ L--%>
 				<td><s:property value="modules.size()" /></td>
 				<td><s:property value="loadType" /></td>
 				<td>
-				<s:if test="loadStatus < 3">
+				<s:if test="loadStatus != 4">
 					<a href="#" title="<s:property value="getMessagesInString()" />">
 				<s:property value="getLoadStatusString()" /></a></s:if>
-				<s:elseif test="loadStatus >= 3">
+				<s:elseif test="loadStatus == 4">
 				<s:property value="getLoadStatusString()" />
 				</s:elseif>
 				</td>

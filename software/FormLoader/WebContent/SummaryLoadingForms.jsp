@@ -13,13 +13,12 @@ L--%>
 <style type="text/css">
 @import url(css/style.css);
 </style>
-	<title>Summary of Loading Forms</title>
+	<title>Form Loading Summary</title>
 	<sx:head />
 </head>
 <div id="4b" style="padding-left: 50px; padding-right: 50px;">
 <body>
-<h2>Summary of Loaded Forms
-</h2>
+<h2>Summary of Loaded Forms</h2>
 <div class="content">
 		<table class="fileTable" cellpadding="5px">
 			<tr class="even">
@@ -28,7 +27,7 @@ L--%>
 				<th>Long Name</th>
 				<th>Context</th>
 				<th>Type</th>
-				<th>Protocol Name</th>
+				<th>Protocol Name(s)</th>
 				<th># Modules</th>
 				<th>Load Type</th>
 				<th>Load Status</th>
@@ -48,7 +47,32 @@ L--%>
 			</s:iterator>
 		</table>
 </div>
+<br>
+<s:if test="otherForms.size() > 0">	
+<hr>
+	<h3>Forms in Form Collection that were not Loaded</h3>
 
+	
+		<div class="content">
+		<table class="fileTable" cellpadding="5px">
+			<tr class="even">
+				<th>Public Id in XML</th>
+				<th>Version in XML</th>
+				<th>Long Name in XML</th>
+				<th>Reason</th>
+			</tr>
+			<s:iterator value="otherForms" id = "bean" status="status">
+			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
+				<td><s:property value="publicId" /></td>
+				<td><s:property value="version" /></td>
+				<td><s:property value="longName" /></td>
+				<td><s:property value="getLoadStatusString()" /></td>
+			</tr>
+			</s:iterator>
+		</table>
+		</div>
+	
+	</s:if>
 </body>
 </div>
 </html>

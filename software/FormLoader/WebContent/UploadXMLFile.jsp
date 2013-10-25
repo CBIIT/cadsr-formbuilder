@@ -17,22 +17,22 @@ L--%>
  
 <div id="4b" style="padding-left: 50px; padding-right: 50px;">
 <h2>Load Form Collection</h2>
-<s:actionerror />
+<s:if test="hasActionErrors()">
+   <div class="errors">
+      <s:actionerror/>
+   </div>
+</s:if>
 <table>
 <s:form action="xmlFileUpload" method="post" enctype="multipart/form-data">
 <tr><td align="left">
    <s:file name="upload" label="Form Collection XML File" required="true" cols="20" rows="1"  /></td></tr>
-   <tr><td align="left">
-   <s:textfield label="Form Collection Name" name="collectionName" maxlength="20" required="true" /></td></tr>
-   <tr><td align="left">
-   <s:textarea key="Form Collection Description" name="description" cols="20" rows="5" /></td></tr>
+ 
     	  <tr>
-	  	<td colspan="1" align="left" nowrap>
+	  	<td colspan="1" align="left" nowrap >
 <s:submit type="image" src="/FormLoader/i/validate-XML.gif" action="xmlFileUpload" align="left" theme="simple" /></td>
-	  	<td colspan="1" align="left" nowrap>
+	  	<td colspan="1" align="left" nowrap >
 <s:submit type="image" src="/FormLoader/i/cancel.gif" action="cancelFileUpload" onclick="this.form.reset();" align="left" theme="simple"/></td>
-	  	<td colspan="1" align="left" nowrap>
-<s:submit type="image" src="/FormLoader/i/reset.gif" onclick="this.form.reset();" align="left" theme="simple"/></td>
+	  
   </tr>
 </s:form>
 </table>

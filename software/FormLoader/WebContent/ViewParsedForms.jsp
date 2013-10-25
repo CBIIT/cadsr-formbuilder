@@ -19,31 +19,45 @@ L--%>
 <div id="4b" style="padding-left: 50px; padding-right: 50px;">
 
 <body>
-<h2>Forms Passed XML Validation</h2>
 <br>
-Select forms to validate the questions and data elements against caDSR database
+<table>
+<tr>
+<td align="left"><div style="height:10px; "><h3>Collection Name:</h3></div></td>
+<td>&nbsp;</td>
+<td valign="bottom"><div style="height:10px; "><b><s:property value="collectionName" /></b></div></td>
+</tr>
+<tr>
+<td align="left"><div style="height:10px; "><h3>Collection Description:</h3></div></td>
+<td>&nbsp;</td>
+<td valign="bottom"><div style="height:10px; "><b><s:property value="description" /></b></div></td>
+</tr>
+</table>
+<br><hr>
 
-<br>
-<s:actionerror />	
+<h3>Forms that passed XML Validation</h3>
+Select forms to validate the questions against caDSR database
+<br><br><br>
+
+<s:actionerror />
+	
 <s:if test="parsedFormsNoErrorList.size() >= 1">
 	<s:form action="validateForms" theme = "simple" method="post"> 
 		<div class="content">
 		<table class="fileTable" cellpadding="5px">
 			<tr class="even">
 				<th>Select</th>
-				<th>Public Id</th>
-				<th>Version</th>
-				<th>Long Name</th>
-				<th>Context</th>
-				<th>Type</th>
-				<th>Protocol Name</th>
-				<th>Workflow Status</th>
-				<th># Module(s)</th>
+				<th>Public Id in XML</th>
+				<th>Version in XML</th>
+				<th>Long Name in XML</th>
+				<th>Context in XML</th>
+				<th>Type in XML</th>
+				<th>Protocol Name(s) in XML</th>
+				<th>Workflow Status in XML</th>
+				<th># Module(s) in XML</th>
 			</tr>
 			<s:iterator value="parsedFormsNoErrorList" id = "bean" status="status">
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
 				<td>
-					<!--  s:checkbox name="checkboxes[%{#status.index}]" theme = "simple" /> -->
 					<s:checkbox name="selectedFormIndices" fieldValue="%{index}" theme = "simple" />
 				</td>
 				<td><s:property value="publicId" /></td>
@@ -54,11 +68,12 @@ Select forms to validate the questions and data elements against caDSR database
 				<td><div style="width: 250px;"><s:property value="protocolName" /></div></td>
 				<td><s:property value="workflowStatusName" /></td>
 				<td><s:property value="modules.size()" /></td>
+				
 			</tr>
 			</s:iterator>
 <tr>
 		  	<td colspan="1" align="left" nowrap>
-<s:submit type="image" src="/FormLoader/i/validate.gif" method="execute" align="left" theme="simple" /></td>
+<s:submit type="image" src="/FormLoader/i/dbvalidate.gif" method="execute" align="left" theme="simple" /></td>
 	  	<td colspan="1" align="left" nowrap>
 <s:submit type="image" src="/FormLoader/i/cancel.gif" method="cancel" align="left" theme="simple"/></td>
 	  	<td colspan="1" align="left" nowrap>
@@ -69,17 +84,20 @@ Select forms to validate the questions and data elements against caDSR database
 	</s:form>
 	</s:if>
 
+<br>
+<div id="4b" style="padding-left: 150px; padding-right: 150px;">
+<hr>
+</div>
 <s:if test="parsedFormsWithErrorList.size() > 0">	
-	<h2>Forms Failed XML Validation</h2>
-    <br>
+	<h3>Forms that failed XML Validation</h3>
 
 	<s:if test="parsedFormsWithErrorList.size() >= 1">
 		<div class="content">
 		<table class="fileTable" cellpadding="5px">
 			<tr class="even">
-				<th>Public Id</th>
-				<th>Version</th>
-				<th>Long Name</th>
+				<th>Public Id in XML</th>
+				<th>Version in XML</th>
+				<th>Long Name in XML</th>
 				<th>Errors</th>
 			</tr>
 			<s:iterator value="parsedFormsWithErrorList" id = "bean" status="status">
