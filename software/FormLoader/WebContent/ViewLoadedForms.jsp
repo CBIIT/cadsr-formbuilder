@@ -148,7 +148,7 @@ You may also filter the form list by typing into the filter input field.
 				<td id="expandable"><s:property value="createdBy" /></td>
 				<td id="expandable"><s:property value="modifiedBy" /></td>
 				
-				<td id="collectionView">View Collection Info
+				<td id="collectionView">View Collection(s)
 				<input type="hidden" id="<s:property value="getFormIdString()" />" value='<s:property value="getCollectionsInHtmlRows()" />'>
 				</td>
 				
