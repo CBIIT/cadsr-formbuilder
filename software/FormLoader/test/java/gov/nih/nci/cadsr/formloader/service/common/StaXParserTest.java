@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.QuestionDescriptor;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
@@ -27,7 +28,12 @@ public class StaXParserTest {
 	public void testParseFormCollection() {
 		parser = new StaXParser();
 		String xmlPathName = ".\\test\\data\\forms-2.xml";
-		List<FormDescriptor> forms = parser.parseFormHeaders(".\\test\\data\\forms-2.xml");
+		
+		FormCollection formCollection = new FormCollection();
+		formCollection.setXmlFileName("forms-2.xml");
+		formCollection.setXmlPathOnServer(".\\test\\data");
+		formCollection = parser.parseCollectionAndForms(formCollection, ".\\test\\data\\forms-2.xml");
+		List<FormDescriptor> forms = formCollection.getForms();
 		assertNotNull(forms);
 		assertTrue(forms.size() == 3);
 		
@@ -64,7 +70,15 @@ public class StaXParserTest {
 		
 		parser = new StaXParser();
 		String xmlPathName = ".\\test\\data\\3256357_v1_0_multi-protocols.xml";
-		List<FormDescriptor> forms = parser.parseFormHeaders(xmlPathName);
+		
+		FormCollection formCollection = new FormCollection();
+		formCollection.setXmlFileName("3256357_v1_0_multi-protocols.xml");
+		formCollection.setXmlPathOnServer(".\\test\\data");
+		formCollection = parser.parseCollectionAndForms(formCollection, xmlPathName);
+		List<FormDescriptor> forms = formCollection.getForms();
+		
+		
+		//List<FormDescriptor> forms = parser.parseFormHeaders(xmlPathName);
 		assertNotNull(forms);
 		assertTrue(forms.size() == 1);
 		
@@ -86,18 +100,6 @@ public class StaXParserTest {
 		assertTrue(desig.getType().equals("ABBREVIATION"));
 		assertTrue(desig.getLanguage().equals("ENGLISH"));
 		assertTrue(desig.getContextName().equals("caBIG"));
-		
-		List<RefdocTransferObjectExt> refdocs = parser.getRefdocs();
-		assertNotNull(refdocs);
-		assertTrue("Expecting 2 but get " + refdocs.size(), refdocs.size() == 2);
-		
-		RefdocTransferObjectExt refdoc = refdocs.get(1);
-		assertTrue("Image for the form".equals(refdoc.getDocName()));
-		assertTrue("IMAGE_FILE".equals(refdoc.getDocType()));
-		assertTrue("SY testing another refdoc".equals(refdoc.getDocText()));
-		assertTrue(refdoc.getUrl() == null || refdoc.getUrl().length() == 0);
-		
-		assertTrue(refdocs.get(0).getUrl().startsWith("https://"));
 	}
 	
 	@Test
@@ -105,7 +107,14 @@ public class StaXParserTest {
 		
 		parser = new StaXParser();
 		String xmlPathName = ".\\test\\data\\load_forms-5.xml";
-		List<FormDescriptor> forms = parser.parseFormHeaders(xmlPathName);
+		
+		FormCollection formCollection = new FormCollection();
+		formCollection.setXmlFileName("load_forms-5.xml");
+		formCollection.setXmlPathOnServer(".\\test\\data");
+		formCollection = parser.parseCollectionAndForms(formCollection, xmlPathName);
+		List<FormDescriptor> forms = formCollection.getForms();
+		
+		//List<FormDescriptor> forms = parser.parseFormHeaders(xmlPathName);
 		assertNotNull(forms);
 		assertTrue(forms.size() == 5);
 		
@@ -152,7 +161,14 @@ public class StaXParserTest {
 	public void testParseFormQuestions() {
 		parser = new StaXParser();
 		String xmlPathName = ".\\test\\data\\3193449_has_valid_values.xml";
-		List<FormDescriptor> forms = parser.parseFormHeaders(xmlPathName);
+		
+		FormCollection formCollection = new FormCollection();
+		formCollection.setXmlFileName("3193449_has_valid_values.xml");
+		formCollection.setXmlPathOnServer(".\\test\\data");
+		formCollection = parser.parseCollectionAndForms(formCollection, xmlPathName);
+		List<FormDescriptor> forms = formCollection.getForms();
+		
+		//List<FormDescriptor> forms = parser.parseFormHeaders(xmlPathName);
 		assertNotNull(forms);
 		assertTrue(forms.size() == 1);
 		

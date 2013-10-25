@@ -34,8 +34,24 @@ public class JDBCCollectionDAOTest {
 	public void testCreateCollectionRecord() {
 		assertNotNull(collectionDao);
 		String idseq = collectionDao.createCollectionRecord("collection dao unit test", 
-				"UnitTest", "SomeFile", "/opt/content/formloader", "shanyang");
+				"UnitTest", "SomeFile", "/opt/content/formloader", "shanyang", 2);
 		assertNotNull(idseq);
+	}
+	
+	@Test
+	public void testCreateCollectionFormMappingRecord() {
+		int res = collectionDao.createCollectionFormMappingRecord("E97FC0E8-782D-5937-E040-BB8921B63902", 
+				"E97FC0E8-7737-5937-E040-BB8921B63902", 0, 0, "Unknown", -3, "A Fake Record From JUnit");
+		
+		assertTrue(res == 1);
+	}
+	
+	@Test
+	public void testUpdateCollectionFormMappingRecord() {
+		int res = collectionDao.createCollectionFormMappingRecord("E97FC0E8-782D-5937-E040-BB8921B63902", 
+				"E97FC0E8-7737-5937-E040-BB8921B63902", 0, 0, "Unknown", -6, "A Fake Record From JUnit Testing Update");
+		
+		assertTrue(res == 1);
 	}
 	
 	@Test
@@ -56,5 +72,20 @@ public class JDBCCollectionDAOTest {
 		assertTrue(formids.get(0).equals("E49101B2-1B33-BA26-E040-BB8921B61DC6"));
 				
 	}
+	
+	@Test
+	public void testGetMaxNameRepeatNum() {
+		String collName = "Collection with 5 Forms";
+		int maxNum = collectionDao.getMaxNameRepeatNum(collName);
+		
+		assertTrue(maxNum > 0);
+	}
 
+	@Test
+	public void testGetMaxNameRepeatNumReturnsNull() {
+		String collName = "TestColle";
+		int maxNum = collectionDao.getMaxNameRepeatNum(collName);
+		
+		assertTrue(maxNum == 0);
+	}
 }

@@ -68,6 +68,10 @@ public class XmlValidationServiceImplTest {
 			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
 			aColl.setXmlFileName("forms.xml"); //2 of the 3 forms have an empty module (doens't have question).
 			aColl = this.xmlValService.validateXml(aColl);
+			
+			assertTrue(aColl.getName().equals("Test File Forms.xml"));
+			assertTrue(aColl.getDescription().contains("Unit"));
+			
 			List<FormDescriptor> forms = aColl.getForms();
 			assertNotNull(forms);
 			assertTrue(forms.size() == 3);
