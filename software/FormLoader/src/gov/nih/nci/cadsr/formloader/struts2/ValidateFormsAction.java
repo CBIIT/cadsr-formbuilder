@@ -35,9 +35,11 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware{
 	 */
 	private static final long serialVersionUID = 1L;
 	private Map<Integer, String> checkboxes;
-    private List<FormDescriptor> selectedFormsList = new ArrayList<FormDescriptor>();
+    //private List<FormDescriptor> selectedFormsList = new ArrayList<FormDescriptor>();
     private List<FormDescriptor> validatedForms = null;
     private FormCollection validatedFormCollection;
+    
+    
     private HttpServletRequest servletRequest;
 	ApplicationContext applicationContext = null;
 	
@@ -47,7 +49,7 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware{
     	System.out.println("in ValidateFormsAction.execute()");
     	servletRequest = ServletActionContext.getRequest();
         try {
-        	List<FormDescriptor> parsedFormsList = (List<FormDescriptor>) servletRequest.getSession().getAttribute("parsedFormsList");
+        	//List<FormDescriptor> parsedFormsList = (List<FormDescriptor>) servletRequest.getSession().getAttribute("parsedFormsList");
         	
         	FormCollection aColl = (FormCollection)servletRequest.getSession().getAttribute("formCollection");
         	
@@ -102,14 +104,26 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware{
 					//aColl.setXmlFileName((String)servletRequest.getSession().getAttribute("filename"));
 					//aColl.setXmlPathOnServer((String)servletRequest.getSession().getAttribute("upload.file.path"));
 					validatedFormCollection = xmlContentValidator.validateXmlContent(aColl);
-					validatedForms = validatedFormCollection.getForms();
-		        	servletRequest.getSession().setAttribute("validatedForms", validatedForms);
+					validatedForms = extractValidedForms(validatedFormCollection);
+		        	servletRequest.getSession().setAttribute("formCollection", aColl);
 		        	System.out.println(validatedForms.size()+" Forms selected for validation");
 			} catch (FormLoaderServiceException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	    }
+    
+    protected List<FormDescriptor> extractValidedForms(FormCollection validatedColl) {
+    	List<FormDescriptor> validated = new ArrayList<FormDescriptor>();
+    	List<FormDescriptor> forms = validatedColl.getForms();
+    	
+    	for (FormDescriptor form : forms) {
+    		if (form.getLoadStatus() == FormDescriptor.STATUS_CONTENT_VALIDATED)
+    			validated.add(form);
+    	}
+    	
+    	return validated;
+    }
     
     protected void setSelectForFormsInCollections(FormCollection aColl, int[] selectedFormIndices) {
     	
@@ -126,7 +140,10 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware{
 		}
 	
 		for (FormDescriptor form : forms) {
-			form.setSelected(isFormSelected(form.getIndex(), selectedFormIndices));
+			boolean selected = isFormSelected(form.getIndex(), selectedFormIndices);
+			form.setSelected(selected);
+			if (!selected && form.getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATED)
+				form.setLoadStatus(FormDescriptor.STATUS_SKIPPED_CONTENT_VALIDATION);
 		}
 	}
     
@@ -146,6 +163,7 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware{
 		return false;
 	}
     
+    /*
     public List<FormDescriptor> getSelectedFormsList() {
 		return selectedFormsList;
 	}
@@ -153,7 +171,7 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware{
 	public void setSelectedFormsList(List<FormDescriptor> parsedFormsList) {
 		this.selectedFormsList = parsedFormsList;
 	}
-
+*/
     public Map<Integer, String> getCheckboxes() {
 		return checkboxes;
 	}

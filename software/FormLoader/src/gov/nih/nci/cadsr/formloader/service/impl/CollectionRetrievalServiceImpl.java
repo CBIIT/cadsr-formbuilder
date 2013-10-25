@@ -21,6 +21,9 @@ public class CollectionRetrievalServiceImpl implements CollectionRetrievalServic
 	
 	FormLoaderRepository repository;
 	
+	//temp code
+	List<FormCollection> colls;
+	
 	public CollectionRetrievalServiceImpl() {}
 	
 	public CollectionRetrievalServiceImpl(FormLoaderRepository repository) {
@@ -43,7 +46,7 @@ public class CollectionRetrievalServiceImpl implements CollectionRetrievalServic
 			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_USER_INVALID, 
 					"User name is null or empty. Unable to get collections previously loader by user");
 		
-		List<FormCollection> colls = repository.getAllLoadedCollectionsByUser(userName);
+		colls = repository.getAllLoadedCollectionsByUser(userName);
 		if (colls == null || colls.size() == 0) {
 			logger.info("User [" + userName + "] doesn't seem have loaded any colleciton previously.");
 			return new ArrayList<FormCollection>();
@@ -56,7 +59,8 @@ public class CollectionRetrievalServiceImpl implements CollectionRetrievalServic
 	public List<FormDescriptor> getAllFormsByUser(String userName)
 			throws FormLoaderServiceException {
 
-		List<FormCollection> colls = getAllCollectionsByUser(userName);
+		if (colls == null)
+			colls = getAllCollectionsByUser(userName);
 		
 		List<FormDescriptor> forms = convertCollectionsToFormList(colls);
 		

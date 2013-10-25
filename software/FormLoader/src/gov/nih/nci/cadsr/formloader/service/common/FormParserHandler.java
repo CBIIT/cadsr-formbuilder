@@ -6,6 +6,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
+import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.ModuleDescriptor;
 
@@ -26,16 +27,26 @@ public class FormParserHandler extends ParserHandler {
 	ArrayDeque<String> nodeQueue;
 	int formCount = 0;
 	
-	//List<FormDescriptor> formsToWorkon;
-	
-	public FormParserHandler(List<FormDescriptor> forms) {
-		super(forms);
+	FormCollection formCollection; 
+
+	public FormCollection getFormCollection() {
+		return formCollection;
+	}
+
+	public void setFormCollection(FormCollection formCollection) {
+		this.formCollection = formCollection;
+	}
+
+
+	public FormParserHandler(FormCollection aCollection) {
+		super(new ArrayList<FormDescriptor>());
 		
+		formCollection = aCollection;
+		formCollection.setForms(this.formList);
 		formCount = 0;
 		moduleCountForForm = 0;
 		methodName = null;
 		nodeQueue = new ArrayDeque<String>();
-		//generatedForms = new ArrayList<FormDescriptor>();
 	}
 	
 
@@ -53,7 +64,11 @@ public class FormParserHandler extends ParserHandler {
 		
 		String localName = xmlreader.getLocalName();
 		
-		if (localName.equals(StaXParser.FORM)) {
+		if (localName.equals(StaXParser.COLLECTION_NAME)) {
+			this.methodName = StaXParser.COLLECTION_NAME; //quick fix. 
+		} else if (localName.equals(StaXParser.COLLECTION_DESCRIPTION)) {
+			this.methodName = StaXParser.COLLECTION_DESCRIPTION; //quick fix
+		} else if (localName.equals(StaXParser.FORM)) {
 			
 			int lineNum = xmlreader.getLocation().getLineNumber();
 			logger.debug("Got a form at line: " + lineNum);
@@ -117,14 +132,15 @@ public class FormParserHandler extends ParserHandler {
 			 tempForm.setIndex(formCount);
 			 logger.debug(tempForm.toString());
 			 
-			 //TODO
 			 this.formList.add(tempForm);
 			 
 			 logger.debug("peak: " + (String)nodeQueue.peek());
 			 logger.debug("peak first: " + (String)nodeQueue.peekFirst());
 			 logger.debug("peak last: " + (String)nodeQueue.peekLast());
 			 
-		} 
+		} else if (localName.equals(StaXParser.FORMS)) {
+			this.formCollection.setForms(this.formList);
+		}
 		
 		this.methodName = null;
 		if (localName.equals(StaXParser.FORM))
@@ -143,11 +159,20 @@ public class FormParserHandler extends ParserHandler {
 			return;
 		}
 		
-		String currNode = (nodeQueue.peek() != null) ? nodeQueue.peek().toLowerCase() : null;
+		if (methodName == null)
+			return;
 		
-		if (currNode != null && methodName != null) {
-			logger.debug("Queue head: " + nodeQueue.peek() + " | method name: " + methodName + " | value to set: " + xmlreader.getText());
-			setFormProperty(methodName, xmlreader.getText());
+		if (methodName.equals(StaXParser.COLLECTION_NAME)) {
+			this.formCollection.setName(xmlreader.getText());
+		} else if (methodName.equals(StaXParser.COLLECTION_DESCRIPTION)) {
+			this.formCollection.setDescription(xmlreader.getText());
+		} else {
+			String currNode = (nodeQueue.peek() != null) ? nodeQueue.peek().toLowerCase() : null;
+
+			if (currNode != null) {
+				logger.debug("Queue head: " + nodeQueue.peek() + " | method name: " + methodName + " | value to set: " + xmlreader.getText());
+				setFormProperty(methodName, xmlreader.getText());
+			}
 		}
 		
 	}

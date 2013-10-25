@@ -469,6 +469,12 @@ public class FormLoaderRepositoryMockup implements FormLoaderRepository {
 		return null;
 	}
 
+	@Override
+	public int getMaxNameRepeatForCollection(String collName) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	
 	
 }

@@ -5,17 +5,14 @@ import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.repository.FormLoaderRepository;
 import gov.nih.nci.cadsr.formloader.service.LoadingService;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
-import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
-import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.springframework.context.ResourceLoaderAware;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class LoadingServiceImpl implements LoadingService {
@@ -39,6 +36,7 @@ public class LoadingServiceImpl implements LoadingService {
 	}
 
 	@Override
+	@Transactional
 	public FormCollection loadForms(FormCollection aCollection) 
 		throws FormLoaderServiceException{
 
@@ -81,7 +79,7 @@ public class LoadingServiceImpl implements LoadingService {
 		
 		String collSeqid = this.repository.createFormCollectionRecords(coll);
 		coll.setId(collSeqid);
-		coll.setDateCreated(new Date()); //TODO: This probably should come from db after create
+		coll.setDateCreated(new Date()); //TODO: This should come from db after create
 		
 		logger.info("Collection \"" + coll.getName() + "\" loaded successfully, with seqid: " + collSeqid);
 		

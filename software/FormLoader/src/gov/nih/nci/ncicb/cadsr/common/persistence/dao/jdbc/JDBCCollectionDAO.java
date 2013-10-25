@@ -34,10 +34,10 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 		super(dataSource);
 	}
 	
-	public String createCollectionRecord(String name, String desc, String fileName, String filePath, String createdBy) {
+	public String createCollectionRecord(String name, String desc, String fileName, String filePath, String createdBy, int name_repeat) {
 		String sql = "INSERT into sbrext.FORM_COLLECTIONS (form_collection_idseq, description, name, " +
-				" xml_file_name, xml_file_path, created_by) " +
-				" VALUES (:idseq, :description, :name, :xml_file_name, :xml_file_path,:created_by)";
+				" xml_file_name, xml_file_path, created_by, name_repeat_num) " +
+				" VALUES (:idseq, :description, :name, :xml_file_name, :xml_file_path,:created_by, :name_repeat)";
 		
 		String idseq = generateGUID();		
 		MapSqlParameterSource params = new MapSqlParameterSource();
@@ -47,6 +47,7 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 		params.addValue("xml_file_name", fileName);
 		params.addValue("xml_file_path", filePath);
 		params.addValue("created_by", createdBy.toUpperCase());
+		params.addValue("name_repeat", name_repeat);
 		
 		int res = this.namedParameterJdbcTemplate.update(sql, params);
 		
@@ -54,9 +55,9 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 	}
 	
 	public int createCollectionFormMappingRecord(String collectionseqid, String formseqid, 
-			int formpublicid, float formversion, String loadType) {
-		String sql = "INSERT into FORMS_IN_COLLECTION (FORM_COLLECTION_IDSEQ, FORM_IDSEQ, PUBLIC_ID, VERSION, LOAD_TYPE) " +
-				" VALUES (:collectionseqid, :formseqid, :formpublicid, :formversion, :loadtype)";
+			int formpublicid, float formversion, String loadType, int loadStatus, String longName) {
+		String sql = "INSERT into FORMS_IN_COLLECTION (FORM_COLLECTION_IDSEQ, FORM_IDSEQ, PUBLIC_ID, VERSION, LOAD_TYPE, LOAD_STATUS, LONG_NAME) " +
+				" VALUES (:collectionseqid, :formseqid, :formpublicid, :formversion, :loadtype, :loadstatus, :longname)";
 		
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("collectionseqid", collectionseqid);
@@ -64,6 +65,28 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 		params.addValue("formpublicid", formpublicid);
 		params.addValue("formversion", formversion);
 		params.addValue("loadtype", loadType);
+		params.addValue("loadstatus", loadStatus);
+		params.addValue("longname", longName);
+		
+		int res = this.namedParameterJdbcTemplate.update(sql, params);
+		return res;
+		
+	}
+	
+	public int updateCollectionFormMappingRecord(String collectionseqid, String formseqid, 
+			int formpublicid, float formversion, String loadType, int loadStatus, String longName) {
+		String sql = "Update FORMS_IN_COLLECTION SET FORM_COLLECTION_IDSEQ=:collectionseqid, FORM_IDSEQ=:formseqid, PUBLIC_ID=:formpublicid, " +
+			" VERSION=:formversion, LOAD_TYPE=:loadtype, LOAD_STATUS=:loadstatus, LONG_NAME=:longname)";
+				
+		
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("collectionseqid", collectionseqid);
+		params.addValue("formseqid", formseqid);
+		params.addValue("formpublicid", formpublicid);
+		params.addValue("formversion", formversion);
+		params.addValue("loadtype", loadType);
+		params.addValue("loadstatus", loadStatus);
+		params.addValue("longname", longName);
 		
 		int res = this.namedParameterJdbcTemplate.update(sql, params);
 		return res;
@@ -116,6 +139,22 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 
 		 return seqid;
 
+	 }
+	 
+	 public int getMaxNameRepeatNum(String collectionName) {
+		 String sql = "select max(name_repeat_num) from sbrext.form_collections fc " +
+				" where FC.NAME=:collname";
+		 
+		 MapSqlParameterSource params = new MapSqlParameterSource();
+		 params.addValue("collname", collectionName);
+		 
+		 int maxNum = 
+				 this.namedParameterJdbcTemplate.queryForInt(sql, params);
+				 
+				
+
+		 return maxNum;
+		 
 	 }
 
 }

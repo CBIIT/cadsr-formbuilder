@@ -2,6 +2,7 @@ package gov.nih.nci.cadsr.formloader.service.impl;
 
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
+import gov.nih.nci.cadsr.formloader.repository.FormLoaderRepository;
 import gov.nih.nci.cadsr.formloader.service.XmlValidationService;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
@@ -38,6 +39,7 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 	private static Logger logger = Logger.getLogger(XmlValidationServiceImpl.class.getName());
 	
 	protected ResourceLoader resourceLoader;
+	FormLoaderRepository repository;
 	
 	protected String XSD_PATH_NAME = "FormLoaderv8.xsd";
 	
@@ -52,35 +54,43 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 					"Input collection object is null");
 		}
 		
-		try {
-			String xmlPathName = FormLoaderHelper.checkInputFile(collection.getXmlPathOnServer(), collection.getXmlFileName());
 
-			XmlValidationError error = checkXmlWellFormedness(xmlPathName);
-			if (error != null && error.getType() != XmlValidationError.XML_NO_ERROR) {
-				collection.addMessage(error.getMessage());
-				throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_MALFORMED_XML,
-						"Xml Malform Error", error);
-			}
+		String xmlPathName = FormLoaderHelper.checkInputFile(collection.getXmlPathOnServer(), collection.getXmlFileName());
 
-			logger.debug("XSD_PATH_NAME: " + XSD_PATH_NAME);
-			Resource resource = this.resourceLoader.getResource(
-					"classpath:gov/nih/nci/cadsr/formloader/service/impl/" + XSD_PATH_NAME);
-
-			List<XmlValidationError> errors = validateXml(xmlPathName, resource);
-
-			StaXParser parser = new StaXParser();
-			List<FormDescriptor> forms = parser.parseFormHeaders(xmlPathName);		
-
-			//match errors with a form via line number in an error
-			assignErrors(collection, forms, errors);
-
-			collection.setForms(forms);
-		} catch (FormLoaderServiceException e) {
-			//collection.addMessage(e.getMessage());
-			throw e;
+		XmlValidationError error = checkXmlWellFormedness(xmlPathName);
+		if (error != null && error.getType() != XmlValidationError.XML_NO_ERROR) {
+			collection.addMessage(error.getMessage());
+			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_MALFORMED_XML,
+					"Xml Malform Error", error);
 		}
+
+		logger.debug("XSD_PATH_NAME: " + XSD_PATH_NAME);
+		Resource resource = this.resourceLoader.getResource(
+				"classpath:gov/nih/nci/cadsr/formloader/service/impl/" + XSD_PATH_NAME);
+
+		List<XmlValidationError> errors = validateXml(xmlPathName, resource);
+
+		StaXParser parser = new StaXParser();
+		collection = parser.parseCollectionAndForms(collection, xmlPathName);		
+
+		//match errors with a form via line number in an error
+		assignErrors(collection, collection.getForms(), errors);
+		assignNameRepeatNumber(collection);
+		
 		return collection;
 	}
+	
+	/**
+	 * Collection name from xml doesn't need to be unique. However, if an existing collection has the same
+	 * name, we'll suffix the name with "_n" where n is the highest unoccupied number for the name.
+	 * 
+	 * @param collection
+	 */
+	protected void assignNameRepeatNumber(FormCollection collection) {
+		int existingMax = repository.getMaxNameRepeatForCollection(collection.getName());
+		collection.setNameRepeatNum(++existingMax);
+	}
+	
 	
 	/**
 	 * Assign errors to forms based on line number where the error was detected
@@ -258,6 +268,14 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 
 	public void setXSD_PATH_NAME(String xSD_PATH_NAME) {
 		XSD_PATH_NAME = xSD_PATH_NAME;
+	}
+
+	public FormLoaderRepository getRepository() {
+		return repository;
+	}
+
+	public void setRepository(FormLoaderRepository repository) {
+		this.repository = repository;
 	}
 	
 	

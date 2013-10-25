@@ -10,6 +10,7 @@ public class FormLoaderServiceException extends Exception {
 	public static final int ERROR_COLLECTION_NULL = 4;
 	public static final int ERROR_USER_INVALID = 5;
 	public static final int ERROR_XML_EXCEPTION = 6;
+	public static final int ERROR_COLLECTION_NAME_MISSING = 7;
 	
 	protected int errorCode;
 	

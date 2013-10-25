@@ -32,6 +32,7 @@ public interface FormLoaderRepository {
 	public void setPublicIdVersionBySeqids(List<FormDescriptor> forms);
 	
 	public String createFormCollectionRecords(FormCollection coll);
+	public int getMaxNameRepeatForCollection(String collName);
 	
 	/**
 	 * Check to see if user has right to edit form (load includes create, update and delete) in the given context. Currently,

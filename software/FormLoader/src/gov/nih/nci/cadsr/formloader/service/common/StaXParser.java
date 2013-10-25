@@ -1,5 +1,6 @@
 package gov.nih.nci.cadsr.formloader.service.common;
 
+import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
@@ -40,6 +41,11 @@ public class StaXParser {
         mapping.put("isMandatory", "mandatory");
        return Collections.unmodifiableMap(mapping);
     }
+    
+    //
+    protected static final String FORMS = "forms";
+    protected static final String COLLECTION_NAME = "collectionName";
+    protected static final String COLLECTION_DESCRIPTION = "collectionDescription";
 
 	//Mapping node name in xml
 	protected static final String FORM = "form";
@@ -90,9 +96,6 @@ public class StaXParser {
 	protected static final String DATA_ELEMENT = "dataElement";
 	protected static final String VALUE_DOMAIN = "valueDomain";
 	
-	
-	
-	
 	List<RefdocTransferObjectExt> refdocs;
 	List<DefinitionTransferObject> definitions;
 	List<String> protocolIds;
@@ -103,11 +106,25 @@ public class StaXParser {
 	 * For the first pass of the collection xml, to get the forms' basic header info
 	 * @param xmlPathName
 	 * @return
+	 * @deprecated
 	 */
-	public List<FormDescriptor> parseFormHeaders(String xmlPathName) {
-		List<FormDescriptor> forms = new ArrayList<FormDescriptor>();
-		ParserHandler handler = new FormParserHandler(forms);
+	public List<FormDescriptor> parseFormHeaders(FormCollection aColl, String xmlPathName) {
+		//List<FormDescriptor> forms = new ArrayList<FormDescriptor>();
+		ParserHandler handler = new FormParserHandler(aColl);
 		return parseFormHeaders(xmlPathName, handler);
+	}
+	
+	/**
+	 * For the first pass of the collection xml, to get the forms' basic header info
+	 * @param xmlPathName
+	 * @return
+	 */
+	public FormCollection parseCollectionAndForms(FormCollection aColl, String xmlPathName) {
+		//List<FormDescriptor> forms = new ArrayList<FormDescriptor>();
+		FormParserHandler handler = new FormParserHandler(aColl);
+		parseFormHeaders(xmlPathName, handler);
+		
+		return handler.getFormCollection();
 	}
 	
 	/**
@@ -160,7 +177,6 @@ public class StaXParser {
 			xmlreader = inputFactory.createXMLStreamReader(bReader);
 			
 			while(xmlreader.hasNext()){
-				
 			      readNext(xmlreader, handler);
 			      xmlreader.next();
 			}
@@ -205,33 +221,6 @@ public class StaXParser {
 			break;
 		case XMLStreamConstants.CHARACTERS:
 			handler.handleCharacterElement(xmlreader);
-			break;
-		case XMLStreamConstants.PROCESSING_INSTRUCTION:
-			System.out.print("Processing Instrcutions\n");
-			break;
-		case XMLStreamConstants.CDATA:
-			System.out.print("CDATA\n");
-			break;
-		case XMLStreamConstants.COMMENT:
-			System.out.print("Comment\n");
-			break;
-		case XMLStreamConstants.DTD:
-			System.out.print("DTD\n");
-			break;
-		case XMLStreamConstants.ENTITY_REFERENCE:
-			System.out.print("Entity Reference\n");
-			break;
-		case XMLStreamConstants.ENTITY_DECLARATION:
-			System.out.print("Entity Declaration\n");
-			break;
-		case XMLStreamConstants.START_DOCUMENT:
-			System.out.print("Start Document\n");
-			break;
-		case XMLStreamConstants.END_DOCUMENT:
-			System.out.print("End Document\n");
-			break;
-		case XMLStreamConstants.SPACE:
-			System.out.print("Space\n");
 			break;
 		}
 

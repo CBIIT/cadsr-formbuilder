@@ -4,11 +4,14 @@ package gov.nih.nci.cadsr.formloader.struts2;
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
+import gov.nih.nci.cadsr.formloader.service.impl.CollectionRetrievalServiceImpl;
 import gov.nih.nci.cadsr.formloader.service.impl.XmlValidationServiceImpl;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -18,6 +21,7 @@ import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.springframework.context.ApplicationContext;
@@ -28,6 +32,8 @@ import com.opensymphony.xwork2.ValidationAware;
  
 public class XMLFileUploadAction extends ActionSupport implements
 ServletRequestAware, ValidationAware{
+	
+	private static Logger logger = Logger.getLogger(XMLFileUploadAction.class.getName());
     /**
 	 * 
 	 */
@@ -84,9 +90,9 @@ ServletRequestAware, ValidationAware{
 	}
 
 
-	public String getCollectionName() {
-		return collectionName;
-	}
+	//public String getCollectionName() {
+	//	return collectionName;
+	//}
 
 
 	public String getContentType() {
@@ -105,25 +111,30 @@ ServletRequestAware, ValidationAware{
     
     public String execute() {
     	servletRequest = ServletActionContext.getRequest();
-    	if (this.file!=null)
-	    	{
-				saveUploadedFile(this.file);
-				validateXML();
-			    return SUCCESS;
-	    	}
-        return ERROR;
+    	
+    	if (this.file == null) {
+    		addActionError("Uploaded file is null");
+    		return ERROR;
+    	}
+	   
+    	if (saveUploadedFile(this.file) > 0) {
+			return validateXML();
+	    }
+       
+    	return ERROR;
     }
     
-    private void saveUploadedFile(File xmlFile)
+    private int saveUploadedFile(File xmlFile)
     {	
     	InputStream inStream = null;
     	OutputStream outStream = null;
  
     	loadProps();
-    	
+    	 	
     	try
 	    	{
-    			uploadedfile = new File(configProp.getProperty("upload.file.path") +"\\" + this.fileName);
+    		
+    		uploadedfile = new File(configProp.getProperty("upload.file.path") +"\\" + this.fileName);
 	 
 	    	    inStream = new FileInputStream(xmlFile);
 	    	    outStream = new FileOutputStream(uploadedfile);
@@ -131,28 +142,29 @@ ServletRequestAware, ValidationAware{
 	    	    byte[] buffer = new byte[1024];
 	 
 	    	    int length;
+	    	    int total = 0;
 	    	    //copy the file content in bytes 
-	    	    while ((length = inStream.read(buffer)) > 0){
-	 
+	    	    while ((length = inStream.read(buffer)) > 0) {
 	    	    	outStream.write(buffer, 0, length);
-	 
+	    	    	total += length;
 	    	    }
 	 
 	    	    inStream.close();
 	    	    outStream.close();
 	 
 	    	    System.out.println("File is copied successful!");
+	    	    return total;
 	 
 	    	}
     	catch(IOException e)
 	    	{
-	    		e.printStackTrace();
+	    		logger.error("Got IOException while saving upload file to destination: "  + e.getMessage());
+	    		return 0;
 	    	}
+	    	
     }
 
-
-
-	private void validateXML()
+	private String validateXML()
 	{
 		applicationContext =
 				WebApplicationContextUtils.getRequiredWebApplicationContext(
@@ -166,8 +178,8 @@ ServletRequestAware, ValidationAware{
 		aColl.setXmlPathOnServer(configProp.getProperty("upload.file.path") +"\\");
 		servletRequest.getSession().setAttribute("upload.file.path", configProp.getProperty("upload.file.path") +"\\");
 		aColl.setXmlFileName(this.fileName);
-		aColl.setDescription(description);
-		aColl.setName(collectionName);
+		//aColl.setDescription(description);
+		//aColl.setName(collectionName);
 		aColl.setCreatedBy(userName.toUpperCase());
 		servletRequest.getSession().setAttribute("filename", this.fileName);
 		try {
@@ -176,12 +188,31 @@ ServletRequestAware, ValidationAware{
 			sortForms();
 			
 			servletRequest.getSession().setAttribute("formCollection", aColl);
-        	servletRequest.getSession().setAttribute("parsedFormsList", parsedFormsList);
+			//servletRequest.getSession().setAttribute("collectionName",  aColl.getName());
+			this.description = aColl.getDescription();
+			this.collectionName = aColl.getNameWithRepeatIndicator();
+        	//servletRequest.getSession().setAttribute("parsedFormsList", parsedFormsList);
         	System.out.println(parsedFormsList.size()+" Parsed Forms ");
+        	
+        	return SUCCESS;
 		} catch (FormLoaderServiceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			handleFormLoaderServiceException(e);
+			return ERROR;
 		}
+	}
+	
+	protected void handleFormLoaderServiceException(FormLoaderServiceException e) {
+		String msg;
+		
+		int code = e.getErrorCode();
+		
+		if (code == FormLoaderServiceException.ERROR_MALFORMED_XML) {
+			addActionError("Your form collection xml file is malformed. Please correct it and try again.");
+		}
+		else if (code == FormLoaderServiceException.ERROR_COLLECTION_NAME_MISSING)
+			addActionError("Your form collection xml file is missing a required element. Please correct it and try again."); 
+	
+		addActionError("Error: " + e.getMessage());
 	}
 	
 	private void sortForms()
@@ -236,12 +267,16 @@ ServletRequestAware, ValidationAware{
 		if((file == null)){
 			addFieldError("upload", getText("file is required"));
 		}
-		if(collectionName == null || collectionName.isEmpty()){
-			addFieldError("collectionName", getText("collectionName is required"));
-		}
+		//if(collectionName == null || collectionName.isEmpty()){
+		//	addFieldError("collectionName", getText("collectionName is required"));
+		//}
 		}
 	}
 
+
+	public String getCollectionName() {
+		return collectionName;
+	}
 
 	public void setCollectionName(String collectionName) {
 		this.collectionName = collectionName;

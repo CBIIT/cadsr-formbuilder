@@ -277,12 +277,14 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		return colls;
 	}	
 	
+	@Transactional(readOnly=true)
 	protected void retrievePublicIdForForm(String formSeqid, FormDescriptor form) {
 		FormV2TransferObject formdto = this.formV2Dao.getFormPublicIdVersion(formSeqid);
 		form.setPublicId(String.valueOf(formdto.getPublicId()));
 		form.setVersion(String.valueOf(formdto.getVersion()));
 	}
 	
+	@Transactional(readOnly=true)
 	protected void retrievePublicIdForQuestion(String questSeqid, QuestionDescriptor quest,QuestionTransferObject questdto) {
 		QuestionTransferObject dto = this.questionV2Dao.getQuestionsPublicIdVersionBySeqid(questSeqid);
 		
@@ -412,6 +414,14 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		
 		
 		return (refdocTypes == null) ? false : refdocTypes.contains(refdocType);
+	}
+	
+	@Transactional(readOnly=true)
+	public int getMaxNameRepeatForCollection(String collName) {
+		if (collName == null || collName.length() == 0)
+			return 0;
+		
+		return this.collectionDao.getMaxNameRepeatNum(collName);
 	}
 	
 	/**
@@ -1547,20 +1557,17 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	@Transactional
 	public String createFormCollectionRecords(FormCollection coll) {
 		
-		String collSeqid = null;
+		String collSeqid = collectionDao.createCollectionRecord(coll.getName(), coll.getDescription(), 
+				coll.getXmlFileName(), coll.getXmlPathOnServer(), coll.getCreatedBy(), coll.getNameRepeatNum());
 		
-		//update collection record only if at least one form in it has been loaded successfully
-		List<FormDescriptor> forms = coll.getForms();
+		List<FormDescriptor> forms = coll.getForms();		
 		for (FormDescriptor form : forms) {
-			if (form.getLoadStatus() != FormDescriptor.STATUS_LOADED)
-				continue;
 			
-			if (collSeqid == null)
-				collSeqid = collectionDao.createCollectionRecord(coll.getName(), coll.getDescription(), 
-						coll.getXmlFileName(), coll.getXmlPathOnServer(), coll.getCreatedBy());
-			
+			int publicId = (form.getPublicId() == null || form.getPublicId().length() == 0) ? 0 : Integer.parseInt(form.getPublicId());
+			float version = (form.getVersion() == null || form.getVersion().length() == 0) ? 0 : Float.parseFloat(form.getVersion());
 			int res = collectionDao.createCollectionFormMappingRecord(collSeqid, form.getFormSeqId(),
-					Integer.parseInt(form.getPublicId()), Float.parseFloat(form.getVersion()), form.getLoadType());
+					publicId, version, form.getLoadType(),
+					form.getLoadStatus(), form.getLongName());
 			
 			//TODO: check response value.
 			int loatStatus = (res > 0) ? FormDescriptor.STATUS_LOADED : FormDescriptor.STATUS_LOAD_FAILED;

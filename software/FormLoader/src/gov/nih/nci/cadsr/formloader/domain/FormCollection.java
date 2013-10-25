@@ -40,6 +40,8 @@ public class FormCollection implements java.io.Serializable {
 	//@Column(name = "CREATED_BY", nullable = false)
 	private String createdBy;
 	
+	private int nameRepeatNum;
+	
 	private List<String> messages = new ArrayList<String>();
 	
 	//@Transient
@@ -148,6 +150,14 @@ public class FormCollection implements java.io.Serializable {
 
 	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "FORM_COLLECTIONS")
 	
+	public int getNameRepeatNum() {
+		return nameRepeatNum;
+	}
+	@XmlElement
+	public void setNameRepeatNum(int nameRepeatNum) {
+		this.nameRepeatNum = nameRepeatNum;
+	}
+
 	public List<String> getMessages() {
 		return messages;
 	}
@@ -233,5 +243,9 @@ public class FormCollection implements java.io.Serializable {
 		for (FormDescriptor form : forms) {
 			form.setSelected(flag);
 		}
+	}
+	
+	public String getNameWithRepeatIndicator() {
+		return (this.nameRepeatNum > 0) ? this.name + "_" + nameRepeatNum : this.name;
 	}
 }

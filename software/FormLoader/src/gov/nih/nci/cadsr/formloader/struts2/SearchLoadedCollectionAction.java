@@ -48,6 +48,16 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 			userName = (String)servletRequest.getSession().getAttribute("username");
 			userName = userName.toUpperCase();
 			
+			collectionList = collectionRetrieval.getAllCollectionsByUser(userName);
+
+			if (collectionList == null) {
+				logger.debug("Collection list is null.");
+				return ERROR;
+			}
+
+			logger.debug("User [" + userName + "] has previously loaded " + collectionList.size() + " collections.");
+			servletRequest.getSession().setAttribute("collectionList", collectionList);
+			
 			
 			//collectionList = FormLoaderHelper.readCollectionListFromFile();
 			//servletRequest.getSession().setAttribute("collectionList", collectionList);
@@ -65,17 +75,9 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 			logger.debug("User [" + userName + "] has previously loaded " + forms.size() + " forms.");
 			servletRequest.getSession().setAttribute("formList", forms);
 			
-			/*
-			collectionList = collectionRetrieval.getAllCollectionsByUser(userName);
-
-			if (collectionList == null) {
-				logger.debug("Collection list is null.");
-				return ERROR;
-			}
-
-			logger.debug("User [" + userName + "] has previously loaded " + collectionList.size() + " collections.");
-			servletRequest.getSession().setAttribute("collectionList", collectionList);
-			*/
+			
+			
+			
 			return SUCCESS;
 
 		} catch (Exception e) {

@@ -28,11 +28,14 @@ public class FormDescriptor implements java.io.Serializable {
 	
 	public static final int STATUS_INITIALIZED = 0;
 	public static final int STATUS_XML_VALIDATED = 1; 
-	public static final int STATUS_CONTENT_VALIDATED = 3;
-	public static final int STATUS_LOADED = 4;
-	public static final int STATUS_UNLOADED = 5;
-	public static final int STATUS_SKIPPED_LOADING = 6;
-	public static final int STATUS_SKIPPED_UNLOADING = 7;
+	public static final int STATUS_SKIPPED_CONTENT_VALIDATION = 3; 
+	public static final int STATUS_CONTENT_VALIDATED = 4;
+	public static final int STATUS_LOADED = 5;
+	public static final int STATUS_UNLOADED = 6;
+	public static final int STATUS_SKIPPED_LOADING = 7;
+	public static final int STATUS_SKIPPED_UNLOADING = 8;
+	
+	
 	
 	String formSeqId = "";
 	String publicId = "";
@@ -201,7 +204,7 @@ public class FormDescriptor implements java.io.Serializable {
 	}
 	public void setProtocolName(String protocolName) {
 		if (this.protocolName != null && protocolName.length() > 0)
-			this.protocolName += "," + protocolName;
+			this.protocolName += ";" + protocolName;
 		else
 			this.protocolName = protocolName;
 	}
@@ -418,6 +421,7 @@ public class FormDescriptor implements java.io.Serializable {
 	}
 	
 	protected String getLoadStatusString(int statusCode) {
+		
 		switch (statusCode) {
 		case STATUS_INITIALIZED:
 			return "Initialized";
@@ -430,11 +434,11 @@ public class FormDescriptor implements java.io.Serializable {
 		case STATUS_UNLOADED:
 			return "Unloaded";
 		case STATUS_SKIPPED_LOADING:
-			return "Skipped Loading";
+			return "Not selected for Load";
 		case STATUS_SKIPPED_UNLOADING:
-			return "Stipped Unloading";
+			return "Skipped Unloading";
 		case STATUS_XML_VALIDATION_FAILED:
-			return "Xml validation failed";
+			return "XML Validation failed (not eligible for DB Validation)";
 		case STATUS_LOAD_FAILED:
 			return "Load failed";
 		case STATUS_UNLOAD_FAILED:
@@ -442,7 +446,9 @@ public class FormDescriptor implements java.io.Serializable {
 		case STATUS_ERROR:
 			return "Error";
 		case STATUS_CONTENT_VALIDATION_FAILED:
-			return "Content validation failed";
+			return "DB Validation failed (not eligible for Load)";
+		case STATUS_SKIPPED_CONTENT_VALIDATION:
+			return "DB Validation not performed (not eligible for Load)";
 			
 		default: 
 			return "Status Unknown";
@@ -508,5 +514,16 @@ public class FormDescriptor implements java.io.Serializable {
 		}
 
 		return sb.toString();
+	}
+	
+	//TODO: need more thought
+	public String getUnloadedReason() {
+		if (this.loadStatus < FormDescriptor.STATUS_CONTENT_VALIDATED)
+			return getLoadStatusString();
+		
+		if (!this.selected)
+			return "This form was not selected for load";
+		
+		return "Reason unknown";
 	}
 }

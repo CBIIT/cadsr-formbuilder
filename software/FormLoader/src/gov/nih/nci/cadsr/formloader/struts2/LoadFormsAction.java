@@ -32,6 +32,7 @@ public class LoadFormsAction extends ActionSupport implements SessionAware{
     private List<FormDescriptor> selectedFormsList = new ArrayList<FormDescriptor>();
     private FormCollection loadedFormCollection;
     private List<FormDescriptor> loadedForms = null;
+    private List<FormDescriptor> otherForms = null;
 	ApplicationContext applicationContext = null;
 	
 	private int[] selectedFormIndices;
@@ -96,13 +97,42 @@ public class LoadFormsAction extends ActionSupport implements SessionAware{
 				//aColl.setXmlPathOnServer((String)servletRequest.getSession().getAttribute("upload.file.path"));
 				//aColl.setName("Sulas Collection");
 				loadedFormCollection = loadFormsService.loadForms(aColl);
-				loadedForms = loadedFormCollection.getForms();
-	        	servletRequest.getSession().setAttribute("loadedForms", loadedForms);
+				loadedForms = extractLoadedForm(loadedFormCollection);
+				otherForms = extractOtherForm(loadedFormCollection);
+	        	//servletRequest.getSession().setAttribute("loadedForms", loadedForms);
 	        	System.out.println(loadedForms.size()+" Forms loaded");
 		} catch (FormLoaderServiceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+    }
+    
+    protected List<FormDescriptor> extractLoadedForm(FormCollection aColl) {
+    	List<FormDescriptor> loaded = new ArrayList<FormDescriptor>();
+    	if (aColl == null)
+    		return loaded;
+    	
+    	List<FormDescriptor> forms = aColl.getForms();
+    	for (FormDescriptor form : forms) {
+    		if (form.getLoadStatus() == FormDescriptor.STATUS_LOADED)
+    			loaded.add(form);
+    	}
+    	
+    	return loaded;
+    }
+    
+    protected List<FormDescriptor> extractOtherForm(FormCollection aColl) {
+    	List<FormDescriptor> others = new ArrayList<FormDescriptor>();
+    	if (aColl == null)
+    		return others;
+    	
+    	List<FormDescriptor> forms = aColl.getForms();
+    	for (FormDescriptor form : forms) {
+    		if (form.getLoadStatus() != FormDescriptor.STATUS_LOADED)
+    			others.add(form);
+    	}
+    	
+    	return others;
     }
     
 	public Map<Integer, String> getLoadformcheckboxes() {
@@ -132,6 +162,19 @@ public class LoadFormsAction extends ActionSupport implements SessionAware{
 	public void setSelectedFormIndices(int[] selectedFormIndices) {
 		this.selectedFormIndices = selectedFormIndices;
 	}
+	
+
+	public List<FormDescriptor> getOtherForms() {
+		return otherForms;
+	}
+
+	public void setOtherForms(List<FormDescriptor> otherForms) {
+		this.otherForms = otherForms;
+	}
+
+	public void setLoadedForms(List<FormDescriptor> loadedForms) {
+		this.loadedForms = loadedForms;
+	}
 
 	@Override
 	public void setSession(Map<String, Object> arg0) {
@@ -154,7 +197,10 @@ protected void setSelectForFormsInCollections(FormCollection aColl, int[] select
 		}
 	
 		for (FormDescriptor form : forms) {
-			form.setSelected(isFormSelected(form.getIndex(), selectedFormIndices));
+			boolean selected = isFormSelected(form.getIndex(), selectedFormIndices);
+			form.setSelected(selected);
+			if (!selected && form.getLoadStatus() == FormDescriptor.STATUS_CONTENT_VALIDATED)
+				form.setLoadStatus(FormDescriptor.STATUS_SKIPPED_LOADING);
 		}
 	}
     
