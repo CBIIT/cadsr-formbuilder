@@ -435,7 +435,7 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
      */
     public FormV2TransferObject getFormHeadersBySeqid(String seqid) {
 
-        String sql = "SELECT qcve.*, FV.CONTEXT_NAME FROM quest_contents_view_ext qcve, " +
+        String sql = "SELECT qcve.*, FV.CONTEXT_NAME, FV.PROTOCOL_LONG_NAME FROM quest_contents_view_ext qcve, " +
         		" FB_FORMS_VIEW fv where qcve.QC_IDSEQ=:seqid " +
         		" and QCVE.QC_IDSEQ = FV.QC_IDSEQ";
         
@@ -459,6 +459,7 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
             	form.setModifiedBy(rs.getString("MODIFIED_BY"));
             	form.setDateCreated(rs.getTimestamp("DATE_CREATED"));
             	form.setDateModified(rs.getTimestamp("DATE_MODIFIED"));
+            	form.setProtocolLongName("PROTOCOL_LONG_NAME FROM");
             
             	return form;
             }
@@ -490,7 +491,7 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
     	
     	String qcIdseq = generateGUID();
     	HashMap<String, String> namedParameters = new HashMap<String, String>();
-    	
+    		
     	namedParameters.put("qc_idseq", qcIdseq);
     	namedParameters.put("version", String.valueOf(sourceForm.getVersion()));
     	namedParameters.put("preferred_name", generatePreferredName(sourceForm.getLongName()));
