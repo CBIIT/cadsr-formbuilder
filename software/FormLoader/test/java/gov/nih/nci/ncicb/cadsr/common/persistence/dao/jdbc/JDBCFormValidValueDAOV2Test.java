@@ -55,7 +55,7 @@ public class JDBCFormValidValueDAOV2Test {
 
 			vValue.setDisplayOrder(1);
 
-			validValueV2Dao.createFormValidValueComponent(vValue,  parentQuestId, "FORMBUILDER");
+			validValueV2Dao.createFormValidValueComponent(vValue,  parentQuestId, "FORMLOADER");
 		} catch (DMLException dme) {
 			System.out.println(dme.getMessage());
 		}
@@ -69,7 +69,7 @@ public class JDBCFormValidValueDAOV2Test {
 
 			String parentQuestId = "E479549F-5D87-A01B-E040-BB8921B6711";
 			FormValidValueTransferObject vValue = new FormValidValueTransferObject();
-			vValue.setVersion(Float.valueOf("1.0"));
+			vValue.setVersion(Float.valueOf("3.0"));
 			vValue.setPreferredName("Testshan8800ASFAF");
 			vValue.setLongName("New VV LongName");
 			vValue.setPreferredDefinition("Description of the VV");
@@ -80,11 +80,11 @@ public class JDBCFormValidValueDAOV2Test {
 			vValue.setContext(context);
 
 			vValue.setVpIdseq("EAA80DF9-32D1-4CDE-E034-0003BA3F9857");
-			vValue.setCreatedBy("FORMBUILDER");
+			vValue.setCreatedBy("FORMLOADER");
 
 			vValue.setDisplayOrder(2);
 
-			validValueV2Dao.createValidValue(vValue,  parentQuestId, "FORMBUILDER");
+			validValueV2Dao.createValidValue(vValue,  parentQuestId, "FORMLOADER");
 		} catch (DMLException dme) {
 			System.out.println(dme.getMessage());
 		}
