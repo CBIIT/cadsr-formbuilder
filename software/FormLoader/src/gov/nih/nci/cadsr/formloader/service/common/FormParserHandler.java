@@ -75,7 +75,6 @@ public class FormParserHandler extends ParserHandler {
 			tempForm = new FormDescriptor();
 			tempForm.setXml_line_begin(lineNum);
 			this.methodName = null;
-			formCount++;
 		} else if (localName.equals(StaXParser.LONG_NAME) || 
 				localName.equals(StaXParser.CONTEXT) || 
 				localName.equals(StaXParser.VERSION)  ||
@@ -130,6 +129,7 @@ public class FormParserHandler extends ParserHandler {
 			logger.debug("End parsing a form at line: " + lineNum);
 			 tempForm.setXml_line_end(lineNum);
 			 tempForm.setIndex(formCount);
+			 formCount++;
 			 logger.debug(tempForm.toString());
 			 
 			 this.formList.add(tempForm);
