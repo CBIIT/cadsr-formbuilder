@@ -20,8 +20,8 @@
 	
 	<bean id="dataSource" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">
     	<property name="URL" value="jdbc:oracle:thin:@ncidb-dsr-d:1551:DSRDEV"/>
-    	<property name="user" value="sbrext"/>
-    	<property name="password" value="jjuser"/>
+    	<property name="user" value="FORMLOADER"/>
+    	<property name="password" value="f0rmloader"/>
     	<property name="connectionCachingEnabled" value="true"/>
 	</bean>
 	                                
