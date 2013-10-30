@@ -131,7 +131,7 @@ public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
 	protected int createComponentValidValueMapping(String recSeqid, String compSeqid, String vvSeqid, 
 			FormValidValue newVV, String userName) 
 			throws DMLException {
-		String sql = "INSERT INTO qc_recs_ext " +
+		String sql = "INSERT INTO sbrext.qc_recs_view_ext " +
                   "(qr_idseq, p_qc_idseq, c_qc_idseq, display_order, " +
                   " rl_name, created_by " +
                   ") " +
