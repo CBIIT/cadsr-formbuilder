@@ -35,21 +35,19 @@ public class FormDescriptor implements java.io.Serializable {
 	public static final int STATUS_SKIPPED_LOADING = 7;
 	public static final int STATUS_SKIPPED_UNLOADING = 8;
 	
-	
-	
 	String formSeqId = "";
 	String publicId = "";
 	String version = "";
 	
-	String longName;
-	String context;
-	String type;
+	String longName = "";
+	String context = "";
+	String type = "";
 	String protocolName;
-	String workflowStatusName;
-	String modifiedBy;
+	String workflowStatusName = "";
+	String modifiedBy = "";
 	
 	//pass 2
-	String createdBy;
+	String createdBy = "";
 	String changeNote;
 	String preferredDefinition;
 	String registrationStatus;
@@ -58,8 +56,9 @@ public class FormDescriptor implements java.io.Serializable {
 	String categoryName;
 	//pass2
 	
-	Date createdDate;
-	Date modifiedDate;	
+	Date createdDate;  //cadsr db
+	Date modifiedDate;	//cadsr db
+	Date loadUnloadDate; //form loader table
 	
 	String collectionName;
 	String collectionSeqid;
@@ -77,6 +76,9 @@ public class FormDescriptor implements java.io.Serializable {
 	int loadStatus;
 	
 	int index;
+	
+	boolean latestVersion;
+	
 	
 	protected transient boolean selected;
 	protected transient int xml_line_begin;
@@ -380,6 +382,14 @@ public class FormDescriptor implements java.io.Serializable {
 		this.modifiedDate = modifiedDate;
 	}
 
+	public Date getLoadUnloadDate() {
+		return loadUnloadDate;
+	}
+
+	public void setLoadUnloadDate(Date loadUnloadDate) {
+		this.loadUnloadDate = loadUnloadDate;
+	}
+
 	public String getCollectionName() {
 		return collectionName;
 	}
@@ -504,13 +514,19 @@ public class FormDescriptor implements java.io.Serializable {
 		StringBuilder sb = new StringBuilder();
 		int idx = 1;
 		for (FormCollection coll : this.belongToCollections) {
-			String odd = (idx++ % 2 != 0) ? "odd" : "even";
+			String odd = (idx % 2 != 0) ? "odd" : "even";
 			sb.append("<tr class=\"" + odd + "\"><td>").append(coll.getName()).append("</td>");
 			sb.append("<td>").append(coll.getDescription()).append("</td>");
 			sb.append("<td>").append(coll.getForms().size()).append("</td>");
 			sb.append("<td>").append(coll.getCreatedBy()).append("</td>");
 			sb.append("<td>").append(coll.getDateCreated()).append("</td>");
+			if (idx == 1)
+				sb.append("<td align=\"center\">").append("<img src=\"/FormLoader/i/checked.jpg\" />").append("</td>");
+			else
+				sb.append("<td/>");
 			sb.append("</tr>");
+			
+			idx++;
 		}
 
 		return sb.toString();
