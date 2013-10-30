@@ -2,19 +2,11 @@ package gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc;
         
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+import java.sql.Timestamp;
 import java.util.List;
-import java.util.Map;
 
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
-import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.ModuleTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.util.DataSourceUtil;
-import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 
 import javax.sql.DataSource;
 
@@ -56,7 +48,7 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 	
 	public int createCollectionFormMappingRecord(String collectionseqid, String formseqid, 
 			int formpublicid, float formversion, String loadType, int loadStatus, String longName) {
-		String sql = "INSERT into FORMS_IN_COLLECTION (FORM_COLLECTION_IDSEQ, FORM_IDSEQ, PUBLIC_ID, VERSION, LOAD_TYPE, LOAD_STATUS, LONG_NAME) " +
+		String sql = "INSERT into sbrext.FORMS_IN_COLLECTION (FORM_COLLECTION_IDSEQ, FORM_IDSEQ, PUBLIC_ID, VERSION, LOAD_TYPE, LOAD_STATUS, LONG_NAME) " +
 				" VALUES (:collectionseqid, :formseqid, :formpublicid, :formversion, :loadtype, :loadstatus, :longname)";
 		
 		MapSqlParameterSource params = new MapSqlParameterSource();
@@ -75,7 +67,7 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 	
 	public int updateCollectionFormMappingRecord(String collectionseqid, String formseqid, 
 			int formpublicid, float formversion, String loadType, int loadStatus, String longName) {
-		String sql = "Update FORMS_IN_COLLECTION SET FORM_COLLECTION_IDSEQ=:collectionseqid, FORM_IDSEQ=:formseqid, PUBLIC_ID=:formpublicid, " +
+		String sql = "Update sbrext.FORMS_IN_COLLECTION SET FORM_COLLECTION_IDSEQ=:collectionseqid, FORM_IDSEQ=:formseqid, PUBLIC_ID=:formpublicid, " +
 			" VERSION=:formversion, LOAD_TYPE=:loadtype, LOAD_STATUS=:loadstatus, LONG_NAME=:longname)";
 				
 		
@@ -109,9 +101,14 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 				aColl.setName(rs.getString("NAME"));
 				aColl.setDescription(rs.getString("DESCRIPTION"));
 				aColl.setCreatedBy(rs.getString("CREATED_BY"));
-				aColl.setDateCreated(rs.getDate("DATE_CREATED"));
+				Timestamp timestamp = rs.getTimestamp("DATE_CREATED");
+				
+				aColl.setDateCreated(timestamp);
+				
+				//(rs.getTime("DATE_CREATED"));
 				aColl.setXmlFileName(rs.getString("XML_FILE_NAME"));
 				aColl.setXmlPathOnServer(rs.getString("XML_FILE_PATH"));
+				aColl.setNameRepeatNum(rs.getInt("NAME_REPEAT_NUM"));
 				
 				return aColl;
 	         }
@@ -122,7 +119,7 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 	 
 	 public List<String> getAllFormSeqidsForCollection(String collseqid) {
 		 String sql = 
-				 "select FORM_IDSEQ from forms_in_collection " +
+				 "select FORM_IDSEQ from sbrext.forms_in_collection " +
 						 " where form_collection_idseq=:collseqid";
 
 		 MapSqlParameterSource params = new MapSqlParameterSource();
@@ -138,6 +135,36 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 				 });
 
 		 return seqid;
+
+	 }
+	 
+	 public List<FormDescriptor> getAllFormInfoForCollection(String collseqid) {
+		 String sql = 
+				 "select * from sbrext.forms_in_collection " +
+						 " where form_collection_idseq=:collseqid";
+
+		 MapSqlParameterSource params = new MapSqlParameterSource();
+		 params.addValue("collseqid", collseqid);
+		 
+		 List<FormDescriptor> forms = 
+				 this.namedParameterJdbcTemplate.query(sql, params, 
+						 new RowMapper<FormDescriptor>() {
+					 public FormDescriptor mapRow(ResultSet rs, int rowNum) throws SQLException {
+						 FormDescriptor form = new FormDescriptor();
+						 form.setFormSeqId(rs.getString("FORM_IDSEQ"));
+						 form.setPublicId(rs.getString("PUBLIC_ID"));
+						 form.setVersion(rs.getString("VERSION"));
+						 form.setLoadType(rs.getString("LOAD_TYPE"));
+						 form.setLoadStatus(rs.getInt("LOAD_STATUS"));
+						 form.setLongName(rs.getString("LONG_NAME"));
+						 Timestamp timestamp = rs.getTimestamp("LOAD_UNLOAD_DATE");
+						 form.setLoadUnloadDate(timestamp);
+						 return form;
+
+					 }
+				 });
+
+		 return forms;
 
 	 }
 	 
