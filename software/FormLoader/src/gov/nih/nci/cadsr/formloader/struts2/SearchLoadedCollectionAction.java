@@ -9,6 +9,7 @@ import gov.nih.nci.cadsr.formloader.service.impl.CollectionRetrievalServiceImpl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +53,7 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 
 			if (collectionList == null) {
 				logger.debug("Collection list is null.");
+				addActionError("Unable to retrieve collection list from database for unknown reason");
 				return ERROR;
 			}
 
@@ -62,7 +64,7 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 			//collectionList = FormLoaderHelper.readCollectionListFromFile();
 			//servletRequest.getSession().setAttribute("collectionList", collectionList);
 			
-			forms = collectionRetrieval.getAllFormsByUser(userName);
+			forms = this.convertCollectionsToLoadedFormList(collectionList);
 			
 			//FormLoaderHelper.saveFormListToFile(forms);
 			//forms = FormLoaderHelper.readFormListFromFile();
@@ -73,7 +75,7 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 			}
 			
 			logger.debug("User [" + userName + "] has previously loaded " + forms.size() + " forms.");
-			servletRequest.getSession().setAttribute("formList", forms);
+			//servletRequest.getSession().setAttribute("formList", forms);
 			
 			
 			
@@ -118,6 +120,40 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 		this.forms = forms;
 	}
 	
-	
+	protected List<FormDescriptor> convertCollectionsToLoadedFormList(List<FormCollection> colls) {
+		
+		if (colls == null || colls.size() == 0) 
+			return new ArrayList<FormDescriptor>();
+		
+		Map<String, FormDescriptor> formTracker = new HashMap<String, FormDescriptor>();
+		
+		String seq = "";
+		for (FormCollection coll : colls) {
+			List<FormDescriptor> forms = coll.getForms();
+			for (FormDescriptor form : forms) {
+				if (form.getLoadStatus() != FormDescriptor.STATUS_LOADED)
+					continue;
+				
+				String key = form.getFormSeqId();
+				
+				String fpublicid = form.getPublicId();
+				if (fpublicid.equals("3643679")) {
+					int i = 0;
+					i++;
+					seq = key;
+				}
+				
+				if (!formTracker.containsKey(key)) {
+					form.getBelongToCollections().add(coll);
+					formTracker.put(key, form);
+				} else {
+					formTracker.get(key).getBelongToCollections().add(coll);
+				}
+			}
+		}
+		FormDescriptor debug = formTracker.get(seq);
+		int s = debug.getBelongToCollections().size();
+		return new ArrayList<FormDescriptor>(formTracker.values());
+	}
 
 }
