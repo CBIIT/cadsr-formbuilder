@@ -260,22 +260,73 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		List<FormCollection> colls = collectionDao.getAllLoadedCollectionsByUser(userName);
 		
 		for (FormCollection coll : colls) {
-			
-			List<String> formseqids = collectionDao.getAllFormSeqidsForCollection(coll.getId());
-			if (formseqids == null || formseqids.size() == 0) {
-				logger.warn("Collection " + coll.getId() + " doesn't have form seqids associated with it in database");
+			//form info from Form Loader table
+			List<FormDescriptor> forms = collectionDao.getAllFormInfoForCollection(coll.getId());
+			if (forms == null || forms.size() == 0) {
+				logger.warn("Collection " + coll.getId() + " doesn't have any form associated with it in database");
 				coll.setForms(new ArrayList<FormDescriptor>());
+				continue;
 			}
-			else {
-				List<FormV2TransferObject> formdtos = this.formV2Dao.getFormHeadersBySeqids(formseqids);
-				List<FormDescriptor> forms = translateIntoFormDescriptors(coll, formdtos);
-				coll.setForms(forms);
-			}
+			
+			List<FormDescriptor> cadsrforms = getFormDetailsFromCaDsr(coll, forms);
+			combineFormInfo(forms, cadsrforms);
+			coll.setForms(forms);
+			
 				
 		}
 		
 		return colls;
 	}	
+
+	protected List<FormDescriptor> getFormDetailsFromCaDsr(FormCollection coll, List<FormDescriptor> forms) {
+		List<String> formseqids = new ArrayList<String>();
+		for (FormDescriptor form : forms) {
+			String seqid = form.getFormSeqId();
+			if (seqid != null && seqid.length() > 0)
+				formseqids.add(seqid);
+		}
+		
+		List<FormV2TransferObject> formdtos = this.formV2Dao.getFormHeadersBySeqids(formseqids);
+		List<FormDescriptor> cadsrforms = translateIntoFormDescriptors(coll, formdtos);
+		
+		return cadsrforms;
+	}
+	
+	protected List<FormDescriptor> combineFormInfo(List<FormDescriptor> forms, List<FormDescriptor> cadsrforms) {
+
+		for (FormDescriptor form : forms) {
+			String formSeqid = form.getFormSeqId();
+			if (formSeqid != null && formSeqid.length() > 0
+					&& (form.getLoadStatus() == FormDescriptor.STATUS_LOADED ||
+					form.getLoadStatus() == FormDescriptor.STATUS_UNLOADED)) {
+				FormDescriptor cadsrForm = getMatchingCadsrForm(formSeqid, cadsrforms);
+				if (cadsrForm == null) continue;
+
+				form.setLongName(cadsrForm.getLongName());
+				form.setContext(cadsrForm.getContext());
+				form.setModifiedBy(cadsrForm.getModifiedBy());
+				form.setCreatedBy(cadsrForm.getCreatedBy());
+				form.setProtocolName(cadsrForm.getProtocolName());
+
+				form.setType(cadsrForm.getType());
+				form.setWorkflowStatusName(cadsrForm.getWorkflowStatusName());
+
+			} else 
+				form.setLoadUnloadDate(null);
+
+		}
+
+		return forms;
+	}
+	
+	protected FormDescriptor getMatchingCadsrForm(String targetFormSeqid, List<FormDescriptor> cadsrforms) {
+		for (FormDescriptor form : cadsrforms) {
+			if (targetFormSeqid.equals(form.getFormSeqId()))
+				return form;
+		}
+		
+		return null;
+	}
 	
 	@Transactional(readOnly=true)
 	protected void retrievePublicIdForForm(String formSeqid, FormDescriptor form) {
@@ -922,7 +973,6 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			retrievePublicIdForQuestion(seqid, question, questdto);
 			
 			createQuestionInstruction(newQuestdto, moduledto, question.getInstruction());
-			
 			createQuestionValidValues(question, form, newQuestdto, moduledto, formdto);
 		}
 		
@@ -1218,7 +1268,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			if (isExistingModule(moduledto, existingModuledtos)) {
 				//this means sampe public id and version
 				int res = moduleV2Dao.updateModuleComponent(moduledto);
-				//TODO: better understand spring sqlupdate return code
+				
 				updateQuestionsInModule(module, moduledto, form, formdto);
 			}
 			else {
@@ -1402,6 +1452,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 				//better to call createQuestionComponents, which is not implemented.
 				QuestionTransferObject newQuestdto = (QuestionTransferObject)this.questionV2Dao.createQuestionComponent(questdto);
 				createQuestionInstruction(newQuestdto, moduledto, question.getInstruction());
+				//DEBUGG
 				createQuestionValidValues(question, form, newQuestdto, moduledto, formdto);
 			}
 		}
