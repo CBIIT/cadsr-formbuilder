@@ -1,6 +1,7 @@
 package gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc;
 
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
+import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 
 import java.util.List;
 
@@ -11,4 +12,5 @@ public interface CollectionDAO {
 			int formpublicid, float formversion, String loadType, int loadStatus, String longName);
 	
 	public List<FormCollection> getAllLoadedCollectionsByUser(String userName);
+	public List<FormDescriptor> getAllFormInfoForCollection(String collseqid);
 }
