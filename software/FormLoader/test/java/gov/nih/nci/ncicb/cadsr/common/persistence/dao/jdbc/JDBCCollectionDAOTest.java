@@ -2,6 +2,7 @@ package gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc;
 
 import static org.junit.Assert.*;
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
+import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 
 import java.util.List;
 
@@ -16,20 +17,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 //@ContextConfiguration(locations = {"classpath:/applicationContext-service-test-db.xml"})
 public class JDBCCollectionDAOTest {
 	
-	//@Autowired
-	//@Resource
-	//@Qualifier("collectionDao")
 	@Autowired
 	JDBCCollectionDAO collectionDao;
-	//@Autowired
-	//JDBCFormDAOV2 collectionDao;
 	
-	
-	//@Autowired
-	//JDBCCollectionDAO anotherDao;
-	
-	
-
 	@Test
 	public void testCreateCollectionRecord() {
 		assertNotNull(collectionDao);
@@ -56,7 +46,7 @@ public class JDBCCollectionDAOTest {
 	
 	@Test
 	public void testGetAllLoadedCollections() {
-		List<FormCollection> formColls = collectionDao.getAllLoadedCollectionsByUser("FORMBUILDER");
+		List<FormCollection> formColls = collectionDao.getAllLoadedCollectionsByUser("YANGS");
 		assertNotNull(formColls);
 		assertTrue(formColls.size() > 10);
 		
@@ -87,5 +77,15 @@ public class JDBCCollectionDAOTest {
 		int maxNum = collectionDao.getMaxNameRepeatNum(collName);
 		
 		assertTrue(maxNum == 0);
+	}
+	
+	@Test
+	public void testGetAllFormInfoForCollection() {
+		String collIdseq = "E995A59F-6DFE-CA1E-E040-BB8921B602E5";
+		
+		List<FormDescriptor> forms = collectionDao.getAllFormInfoForCollection(collIdseq);
+		
+		assertNotNull(forms);
+		assertTrue(forms.size() > 4);
 	}
 }
