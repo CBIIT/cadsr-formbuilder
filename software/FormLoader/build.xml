@@ -14,8 +14,8 @@
 	<property name="compile.debug"     value="true"/>
 	<property name="compile.deprecation"     value="false"/>
 	<property name="compile.optimize"     value="true"/>
-	<property name="JBOSS.DEPLOY.DIR"     value="C:\AppServers\jboss-5.1.0.GA-FL\server\default\deploy"/>
 	<property name="JBOSS.HOME"     value="C:\AppServers\jboss-5.1.0.GA-FL"/>
+	<property name="JBOSS.DEPLOY.DIR"     value="${JBOSS.HOME}\server\default\deploy"/>
 	<property name="jboss.lib.dir"   value= "${JBOSS.HOME}/common" />
 	<property name="dist.dir"    value="${basedir}/dist"/>
 	<property name="lib.dir"     value="${basedir}/WebContent/WEB-INF/lib"/>
@@ -50,7 +50,8 @@
 
     <target name="compile-war" depends="clean" description="Compiles the project source.">
 		<mkdir dir="${build.dir}/WEB-INF/classes" />
-        <javac destdir="${build.dir}/WEB-INF/classes" classpathref="classpath"  includeantruntime="false" debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}" source="1.6" target="1.6">
+        <javac destdir="${build.dir}/WEB-INF/classes" classpathref="classpath"  includeantruntime="false" 
+        	debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}" source="1.6" target="1.6">
         	<src path="${src.dir}" />
         	 <src path="${test.src.dir}" />
         	<compilerarg value="-Xlint:unchecked"/>
@@ -105,9 +106,9 @@
 	        </copy>
 	</target>
 	
-    <target name="jar" depends="compile">
+    <target name="jar" depends="compile" description="Create the formloader-services.jar">
         <mkdir dir="${jar.dir}"/>
-        <jar destfile="${jar.dir}/${ant.project.name}-services.jar" basedir="${classes.dir}" >
+        <jar destfile="${jar.dir}/${ant.project.name}-services-v0.1.jar" basedir="${classes.dir}" >
         	<fileset dir="${classes.dir}">
         		<patternset>
         			<include name="gov/nih/nci/cadsr/formloader/domain/**,
