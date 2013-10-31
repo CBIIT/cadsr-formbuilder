@@ -21,17 +21,4 @@ public interface UnloadingService {
 	public List<FormCollection> unloadCollections(List<FormCollection> collections, String userName) 
 			throws FormLoaderServiceException;
 	
-	/**
-	 * Unload previously loaded forms. Forms will not be deleted from database but only their workflow status
-	 * will be set to RETIRED UNLOADED
-	 * <br>
-	 * @param collections forms to be unloaded
-	 * @param userName user that has right to unload forms
-	 * 
-	 * @return list of forms's with loadStatus set to latest status (STATUS_UNLOADED or STATUS_UNLOAD_FAILED)
-	 * @throws FormLoaderServiceException
-	 */
-	public List<FormDescriptor> unloadForms(List<FormDescriptor> forms, String userName) 
-			throws FormLoaderServiceException;
-
 }
