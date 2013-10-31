@@ -17,24 +17,31 @@
 	border-collapse: collapse;
 }
 
+.level1Table tr {
+background-color: #FAF0E6;
+}
+
+.level1Table tr {
+background-color: #fff;
+}
+
+
+
+.level1Table thead {
+	background-color: #C1CDCD;
+}
 .level1Table th {
 	border-width: 1px 1px 1px 1px;
 	border-spacing: 2px;
 	border-style: outset outset outset outset;
 	border-color: black black black black;
 	border-collapse: collapse;
-	background-color: rgb(255, 255, 255);
+	
 	padding-right:25px;
-	padding-left: 25px
-}
-level.odd {
-background-color: #FFFFF0;
+	padding-left: 25px	
 }
 
-.even {
-background-color: #FAF0E6;
-}
-.level2Table {
+.level1Table td table {
 	border-width: 1px 1px 1px 1px;
 	border-spacing: 2px;
 	border-style: outset outset outset outset;
@@ -43,29 +50,14 @@ background-color: #FAF0E6;
 	font-size: small;
 }
 
-.level2Table td {
-	border-width: 1px 1px 1px 1px;
-	border-spacing: 2px;
-	border-style: outset outset outset outset;
-	border-color: black black black black;
-	border-collapse: collapse;
+.level1Table td th {
+	background-color: #E0EEEE;
 }
 
-.level2Table th {
-	border-width: 1px 1px 1px 1px;
-	border-spacing: 2px;
-	border-style: outset outset outset outset;
-	border-color: black black black black;
-	border-collapse: collapse;
-	background-color: rgb(255, 255, 255);
+.level1Table td tr {
+	
+	background-color: #F5F5DC;
 }
 
-.odd {
-background-color: #FFFFF0;
-}
-
-.even {
-background-color: #FAF0E6;
-}
 
 div.arrow { background:transparent url(arrows.png) no-repeat scroll 0px -16px; width:16px; height:16px; display:block;}

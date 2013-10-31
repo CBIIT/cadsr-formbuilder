@@ -56,11 +56,10 @@
 	<definition name="/search.tiles" extends="baseLayout">
 		<put-attribute name="title" value="Search XML Files" />
 		<put-attribute name="header" value="/basicHeader_inc.jsp" />
-		<put-attribute name="body" value="/ViewLoadedForms.jsp" />
-		<!--  put-attribute name="body" value="/SearchXMLFile.jsp" /> -->
+		<put-attribute name="body" value="/ViewLoadedFormCollections.jsp" /> 
 	</definition>
 	
-	<definition name="/searchNew.tiles" extends="baseLayout">
+	<definition name="/search.col.tiles" extends="baseLayout">
 		<put-attribute name="title" value="Search XML Files" />
 		<put-attribute name="header" value="/basicHeader_inc.jsp" />
 		<put-attribute name="body" value="/SearchXMLFile.jsp" />

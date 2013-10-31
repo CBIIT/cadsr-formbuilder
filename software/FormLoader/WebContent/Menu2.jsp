@@ -19,4 +19,4 @@ L--%>
 </s:form>	 
 
 <p>
-<a href="file/FormLoaderv1.xsd" target="_blank">Download XSD</a>
+<a href="file/FormLoaderv8.xsd" target="_blank">Download XSD</a>

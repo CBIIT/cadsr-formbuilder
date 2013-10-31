@@ -14,15 +14,17 @@ font-size: small;
 	border-collapse: collapse;
 }
 
+
 .userTable td {
 	border-width: 1px 1px 1px 1px;
-	border-spacing: 2px;
+	border-spacing: 1px;
 	border-style: outset outset outset outset;
 	border-color: black black black black;
 	border-collapse: collapse;
 }
 
 .userTable th {
+	
 	border-width: 1px 1px 1px 1px;
 	border-spacing: 2px;
 	border-style: outset outset outset outset;
