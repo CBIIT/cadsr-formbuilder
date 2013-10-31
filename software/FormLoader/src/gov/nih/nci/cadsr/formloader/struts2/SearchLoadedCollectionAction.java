@@ -34,6 +34,7 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 	private String userName;
 	
 	private List<FormDescriptor> forms = null;
+	private List<FormCollection> collection1Page = new ArrayList<FormCollection>();
 
 	public String execute() {
 		logger.debug("We are in XMLFileLoadedAction.execute()");
@@ -47,8 +48,12 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 					(CollectionRetrievalServiceImpl)this.applicationContext.getBean("collectionRetrievalService");
 			
 			userName = (String)servletRequest.getSession().getAttribute("username");
-			userName = userName.toUpperCase();
+			if (userName == null || userName.length() == 0) {
+				addActionError("User name is not available. Unable to continue");
+				return ERROR;
+			}
 			
+			userName = userName.toUpperCase();
 			collectionList = collectionRetrieval.getAllCollectionsByUser(userName);
 
 			if (collectionList == null) {
@@ -56,29 +61,28 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 				addActionError("Unable to retrieve collection list from database for unknown reason");
 				return ERROR;
 			}
+			
+			int idx = 0;
+			for (FormCollection coll : collectionList) {
+				collection1Page.add(coll);
+				idx++;
+				
+				if (idx > 20)
+					break;
+			}
 
 			logger.debug("User [" + userName + "] has previously loaded " + collectionList.size() + " collections.");
 			servletRequest.getSession().setAttribute("collectionList", collectionList);
 			
-			
-			//collectionList = FormLoaderHelper.readCollectionListFromFile();
-			//servletRequest.getSession().setAttribute("collectionList", collectionList);
-			
 			forms = this.convertCollectionsToLoadedFormList(collectionList);
-			
-			//FormLoaderHelper.saveFormListToFile(forms);
-			//forms = FormLoaderHelper.readFormListFromFile();
+			//new ArrayList<FormDescriptor>();    //
 			
 			if (forms == null) {
-				logger.error("Form list is null.");
+				addActionError("Loaded form list is null.");
 				return ERROR;
 			}
 			
 			logger.debug("User [" + userName + "] has previously loaded " + forms.size() + " forms.");
-			//servletRequest.getSession().setAttribute("formList", forms);
-			
-			
-			
 			
 			return SUCCESS;
 
@@ -120,6 +124,15 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 		this.forms = forms;
 	}
 	
+	
+	public List<FormCollection> getCollection1Page() {
+		return collection1Page;
+	}
+
+	public void setCollection1Page(List<FormCollection> collection1Page) {
+		this.collection1Page = collection1Page;
+	}
+
 	protected List<FormDescriptor> convertCollectionsToLoadedFormList(List<FormCollection> colls) {
 		
 		if (colls == null || colls.size() == 0) 
