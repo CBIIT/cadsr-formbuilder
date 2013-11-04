@@ -134,7 +134,26 @@ public class JDBCFormV2DAOTest {
 		List<FormV2TransferObject> forms = formV2Dao.getFormHeadersBySeqids(seqids);
 		assertNotNull(forms);
 		assertTrue(forms.size() >= 2);
-
+	}
+	
+	@Test
+	public void testGetLatestVersionForForm() {
+		float latest = formV2Dao.getLatestVersionForForm(3643954);
 		
+		assertTrue(latest >= 67.0);
+	}
+	
+	@Test
+	public void testUpdateLatestVersionIndicator() {
+		int res = formV2Dao.updateLatestVersionIndicator("E9FA3574-4D30-3253-E040-BB8921B6498C", "Yes", "FORMLOADER");
+		
+		assertTrue(res > 0);
+	}
+	
+	@Test
+	public void testUpdateLatestVersionIndicatorByPublicIdAndVersion() {
+		int res = formV2Dao.updateLatestVersionIndicatorByPublicIdAndVersion(3643954, (float)10.0, "No", "FORMLOADER");
+		
+		assertTrue(res > 0);
 	}
 }

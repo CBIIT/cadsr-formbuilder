@@ -3,6 +3,9 @@ package gov.nih.nci.cadsr.formloader.service.impl;
 import static org.junit.Assert.*;
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
+import gov.nih.nci.cadsr.formloader.service.CollectionRetrievalService;
+import gov.nih.nci.cadsr.formloader.service.UnloadingService;
+import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 
 import java.util.List;
@@ -19,10 +22,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class UnloadingServiceImplTest {
 	
 	@Autowired
-	CollectionRetrievalServiceImpl collectionRetrievalService;
+	CollectionRetrievalService collectionRetrievalService;
 	
 	@Autowired
-	UnloadingServiceImpl unloadService;
+	UnloadingService unloadService;
 
 	@Before
 	public void setUp() throws Exception {
@@ -41,12 +44,24 @@ public class UnloadingServiceImplTest {
 					for (FormDescriptor form : forms) {
 						form.setSelected(true);
 					}
-					unloadService.unloadForms(forms, "YANGS");
+					//unloadService.unloadForms(forms, "YANGS");
 				}
 			}
 		
 		} catch (FormLoaderServiceException e) {
 			fail(e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testAdjustFormSelections() {
+		List<FormCollection> colls = FormLoaderHelper.readCollectionListFromFile();
+		
+		for (FormCollection coll : colls) {
+			List<FormDescriptor> forms = coll.getForms();
+			for (FormDescriptor form : forms) {
+				
+			}
 		}
 	}
 

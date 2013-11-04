@@ -31,7 +31,7 @@ public class JDBCCollectionDAOTest {
 	@Test
 	public void testCreateCollectionFormMappingRecord() {
 		int res = collectionDao.createCollectionFormMappingRecord("E97FC0E8-782D-5937-E040-BB8921B63902", 
-				"E97FC0E8-7737-5937-E040-BB8921B63902", 0, 0, "Unknown", -3, "A Fake Record From JUnit");
+				"E97FC0E8-7737-5937-E040-BB8921B63902", 0, 0, "Unknown", -3, "A Fake Record From JUnit", 0);
 		
 		assertTrue(res == 1);
 	}
@@ -39,7 +39,7 @@ public class JDBCCollectionDAOTest {
 	@Test
 	public void testUpdateCollectionFormMappingRecord() {
 		int res = collectionDao.createCollectionFormMappingRecord("E97FC0E8-782D-5937-E040-BB8921B63902", 
-				"E97FC0E8-7737-5937-E040-BB8921B63902", 0, 0, "Unknown", -6, "A Fake Record From JUnit Testing Update");
+				"E97FC0E8-7737-5937-E040-BB8921B63902", 0, 0, "Unknown", -6, "A Fake Record From JUnit Testing Update", 0);
 		
 		assertTrue(res == 1);
 	}
@@ -81,11 +81,11 @@ public class JDBCCollectionDAOTest {
 	
 	@Test
 	public void testGetAllFormInfoForCollection() {
-		String collIdseq = "E995A59F-6DFE-CA1E-E040-BB8921B602E5";
+		String collIdseq = "EA2614FF-2877-D7A0-E040-BB8921B619E7";
 		
 		List<FormDescriptor> forms = collectionDao.getAllFormInfoForCollection(collIdseq);
 		
 		assertNotNull(forms);
-		assertTrue(forms.size() > 4);
+		assertTrue(forms.size() >= 4);
 	}
 }
