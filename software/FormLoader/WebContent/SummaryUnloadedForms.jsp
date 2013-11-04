@@ -67,7 +67,7 @@ L--%>
 				<td><s:property value="workflowStatusName" /></td>
 				<td><s:property value="modifiedBy" /></td>
 				<td><s:property value="modifiedDate" /></td>
-				<td><s:property value="collectionName" /></td>
+				<td><s:property value="getNameWithRepeatIndicator()" /></td>
 			</tr>			
 			</tbody>
 			</s:iterator>
