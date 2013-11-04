@@ -39,6 +39,7 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.SqlParameter;
@@ -1633,4 +1634,52 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 			System.out.println(forms.size());
 			
 	    }
+	    
+	    public float getLatestVersionForForm(int publicId) {
+	    	String sql = "select VERSION from sbrext.quest_contents_view_ext " +
+	    			" where QC_ID=:publicId and LATEST_VERSION_IND='Yes'";
+	    	
+	    	 MapSqlParameterSource params = new MapSqlParameterSource();
+			 params.addValue("publicId", publicId);
+			 
+			 float latestV = 0;
+			 
+			 try {
+				 latestV = this.namedParameterJdbcTemplate.queryForInt(sql, params);
+			 } catch(DataAccessException d) {
+				 logger.error(d.getMessage());
+			 }
+			 
+			 return latestV;
+
+	    }
+	    
+	    public int updateLatestVersionIndicator(String formSeqid, String latest, String modifiedBy) {
+	 	   String sql = "UPDATE sbrext.quest_contents_view_ext SET LATEST_VERSION_IND=:latest, modified_by=:modifiedby " +
+	 			   " where qc_idseq=:formSeqid";
+
+	 	   MapSqlParameterSource params = new MapSqlParameterSource();
+	 	   params.addValue("formSeqid", formSeqid);
+	 	   params.addValue("latest", latest);
+	 	   params.addValue("modifiedby", modifiedBy);
+
+	 	   int res = this.namedParameterJdbcTemplate.update(sql, params);
+	 	   return res;
+
+	    }
+	    
+	    public int updateLatestVersionIndicatorByPublicIdAndVersion(int publicId, float version, String latest, String modifiedBy) {
+		 	   String sql = "UPDATE sbrext.quest_contents_view_ext SET LATEST_VERSION_IND=:latest, modified_by=:modifiedby " +
+		 			   "where qc_id=:publicId and version=:version";
+
+		 	   MapSqlParameterSource params = new MapSqlParameterSource();
+		 	   params.addValue("publicId", publicId);
+		 	  params.addValue("version", version);
+		 	   params.addValue("latest", latest);
+		 	   params.addValue("modifiedby", modifiedBy);
+
+		 	   int res = this.namedParameterJdbcTemplate.update(sql, params);
+		 	   return res;
+
+		    }
 }

@@ -286,6 +286,9 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 				formseqids.add(seqid);
 		}
 		
+		if (formseqids.size() == 0)
+			return new ArrayList<FormDescriptor>();
+		
 		List<FormV2TransferObject> formdtos = this.formV2Dao.getFormHeadersBySeqids(formseqids);
 		List<FormDescriptor> cadsrforms = translateIntoFormDescriptors(coll, formdtos);
 		
@@ -344,6 +347,15 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		
 		questdto.setPublicId(dto.getPublicId());
 		questdto.setVersion(dto.getVersion());
+	}
+	
+	public float getLatestVersionForForm(String publicId) {
+		if (publicId == null || publicId.length() == 0) {
+			logger.error("Input public id is null or empty. Unable to query for latest version for form.");
+			return 0;
+		}
+			
+		return this.formV2Dao.getLatestVersionForForm(Integer.parseInt(publicId));
 	}
 	
 
@@ -1618,7 +1630,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			float version = (form.getVersion() == null || form.getVersion().length() == 0) ? 0 : Float.parseFloat(form.getVersion());
 			int res = collectionDao.createCollectionFormMappingRecord(collSeqid, form.getFormSeqId(),
 					publicId, version, form.getLoadType(),
-					form.getLoadStatus(), form.getLongName());
+					form.getLoadStatus(), form.getLongName(), form.getPreviousLatestVersion());
 			
 			//TODO: check response value.
 			int loatStatus = (res > 0) ? FormDescriptor.STATUS_LOADED : FormDescriptor.STATUS_LOAD_FAILED;
@@ -1690,6 +1702,12 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	
 	@Transactional
 	public void unloadForm(FormDescriptor form) {
+		
+		if (form == null) {
+			logger.warn("Form object is null. Unable to proceed with unload");
+			return;
+		}
+			 
 		String seqid = form.getFormSeqId();
 		if (seqid == null || seqid.length() == 0) {
 			logger.debug("Form's seqid is invalid");
@@ -1704,17 +1722,52 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			return;
 		}
 		
+		logger.debug("Start unloading form: " + seqid + "|" + form.getFormSeqId());
 		int res = formV2Dao.updateWorkflowStatus(seqid, WORKFLOW_STATUS_UNLOADED, FORM_LOADER_DB_USER);
 		if (res <= 0) {
 			form.addMessage("Failed to update form's workflow status in database. Reason unknown");
 			form.setLoadStatus(FormDescriptor.STATUS_UNLOAD_FAILED);
-		} else
+		} else {
 			form.setLoadStatus(FormDescriptor.STATUS_UNLOADED);
+			logger.debug("Form: " + seqid + "|" + form.getFormSeqId() + " unloaded");
+			formV2Dao.updateLatestVersionIndicator(seqid, "No", FORM_LOADER_DB_USER);
+			logger.debug("Form: " + seqid + "|" + form.getFormSeqId() + " unloaded. Lastest version ind set to No");
+			
+			logger.debug("Form load type: " + form.getLoadType());
+			
+			//restore previous latest version
+			if (FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(form.getLoadType().trim())) {
+				float prevVersion = form.getPreviousLatestVersion();
+				logger.debug("Form: " + seqid + "|" + form.getFormSeqId() + " unloaded. Previous Lastest version was " + prevVersion);
+				if (prevVersion > 0) {
+					int r = formV2Dao.updateLatestVersionIndicatorByPublicIdAndVersion(Integer.parseInt(form.getPublicId()), 
+							prevVersion, "Yes", FORM_LOADER_DB_USER);
+					logger.debug("Previous Lastest version was restored: " + prevVersion + ". Response: " + r);
+				} else {
+					form.addMessage("No valid previous latest version with form. Unable to restore previous latest " +
+							"version after unloading a new version form");
+					logger.debug("No valid previous latest version with form");
+				}
+			}
+		}
 		
 		FormV2TransferObject formdto = formV2Dao.getFormHeadersBySeqid(seqid);
 		form.setModifiedBy(formdto.getModifiedBy());
 		form.setModifiedDate(formdto.getDateModified());
 		form.setWorkflowStatusName(formdto.getAslName());
+		form.setLoadStatus(FormDescriptor.STATUS_UNLOADED);
+		
+		logger.debug("Done unloading form: " + seqid + "|" + form.getFormSeqId());
+	}
+	
+	public void updateFormInCollectionRecord(FormCollection coll, FormDescriptor form) {
+		if (coll == null || form == null) {
+			logger.error("Invalid input on FormCollection obj or FormDescriptor obj");
+			return;
+		}
+		
+		this.collectionDao.updateCollectionFormMappingRecord(coll.getId(), form.getFormSeqId(), 
+			 form.getLoadType(), form.getLoadStatus());
 	}
 	
 }

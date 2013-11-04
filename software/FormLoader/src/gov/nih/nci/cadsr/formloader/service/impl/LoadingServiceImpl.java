@@ -113,18 +113,20 @@ public class LoadingServiceImpl implements LoadingService {
 			
 			logger.debug("========  Start loading form [" + form.getFormIdString() + "] ===============");
 				
-			if (FormDescriptor.LOAD_TYPE_NEW.equals(form.getLoadType())) {
+			if (FormDescriptor.LOAD_TYPE_NEW.equals(form.getLoadType())) {				
 				String seqid = this.repository.createForm(form, xmlPathName);
 				if (seqid == null || seqid.length() == 0)
 					form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
 				else
 					form.setLoadStatus(FormDescriptor.STATUS_LOADED);
 			} else if (FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(form.getLoadType())) {
+				float prevLatestVersion = this.repository.getLatestVersionForForm(form.getPublicId());
 				String seqid = this.repository.createFormNewVersion(form, loggedinUser, xmlPathName);
 				if (seqid == null || seqid.length() == 0)
 					form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
 				else
 					form.setLoadStatus(FormDescriptor.STATUS_LOADED);
+				form.setPreviousLatestVersion(prevLatestVersion);
 			} else if (FormDescriptor.LOAD_TYPE_UPDATE_FORM.equals(form.getLoadType())) {
 				this.repository.updateForm(form, loggedinUser, xmlPathName);
 				if (form.getFormSeqId() == null || form.getFormSeqId().length() == 0)

@@ -47,9 +47,20 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 	}
 	
 	public int createCollectionFormMappingRecord(String collectionseqid, String formseqid, 
-			int formpublicid, float formversion, String loadType, int loadStatus, String longName) {
-		String sql = "INSERT into sbrext.FORMS_IN_COLLECTION (FORM_COLLECTION_IDSEQ, FORM_IDSEQ, PUBLIC_ID, VERSION, LOAD_TYPE, LOAD_STATUS, LONG_NAME) " +
-				" VALUES (:collectionseqid, :formseqid, :formpublicid, :formversion, :loadtype, :loadstatus, :longname)";
+			int formpublicid, float formversion, String loadType, int loadStatus, String longName, float prevLatestVersion) {
+		String sql = "INSERT into sbrext.FORMS_IN_COLLECTION (FORM_COLLECTION_IDSEQ, FORM_IDSEQ, " +
+			" PUBLIC_ID, VERSION, LOAD_TYPE, LOAD_STATUS, LONG_NAME";
+		if (prevLatestVersion > 0)
+			sql += ", PREVIOUS_LATEST_VERSION) ";
+		else 
+			sql += ")";
+		
+		sql += " VALUES (:collectionseqid, :formseqid, :formpublicid, :formversion, :loadtype, :loadstatus, :longname";
+		
+		if (prevLatestVersion > 0)
+			sql += ", :prevLatestVersion)";
+		else 
+			sql += ")";
 		
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("collectionseqid", collectionseqid);
@@ -59,27 +70,26 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 		params.addValue("loadtype", loadType);
 		params.addValue("loadstatus", loadStatus);
 		params.addValue("longname", longName);
+		if (prevLatestVersion > 0)
+			params.addValue("prevLatestVersion", prevLatestVersion);
 		
 		int res = this.namedParameterJdbcTemplate.update(sql, params);
 		return res;
 		
 	}
 	
-	public int updateCollectionFormMappingRecord(String collectionseqid, String formseqid, 
-			int formpublicid, float formversion, String loadType, int loadStatus, String longName) {
-		String sql = "Update sbrext.FORMS_IN_COLLECTION SET FORM_COLLECTION_IDSEQ=:collectionseqid, FORM_IDSEQ=:formseqid, PUBLIC_ID=:formpublicid, " +
-			" VERSION=:formversion, LOAD_TYPE=:loadtype, LOAD_STATUS=:loadstatus, LONG_NAME=:longname)";
+	public int updateCollectionFormMappingRecord(String collectionseqid, String formseqid, String loadType, int loadStatus) {
+		String sql = "Update sbrext.FORMS_IN_COLLECTION SET LOAD_TYPE=:loadtype, LOAD_STATUS=:loadstatus" +
+				" where FORM_COLLECTION_IDSEQ=:collectionseqid and FORM_IDSEQ=:formseqid";
 				
-		
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("collectionseqid", collectionseqid);
 		params.addValue("formseqid", formseqid);
-		params.addValue("formpublicid", formpublicid);
-		params.addValue("formversion", formversion);
+		
 		params.addValue("loadtype", loadType);
 		params.addValue("loadstatus", loadStatus);
-		params.addValue("longname", longName);
 		
+	
 		int res = this.namedParameterJdbcTemplate.update(sql, params);
 		return res;
 		
@@ -159,6 +169,8 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 						 form.setLongName(rs.getString("LONG_NAME"));
 						 Timestamp timestamp = rs.getTimestamp("LOAD_UNLOAD_DATE");
 						 form.setLoadUnloadDate(timestamp);
+						 
+						 form.setPreviousLatestVersion(rs.getFloat("PREVIOUS_LATEST_VERSION"));
 						 return form;
 
 					 }

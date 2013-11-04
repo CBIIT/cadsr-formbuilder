@@ -1972,7 +1972,6 @@ public class JDBCAdminComponentDAOV2 extends JDBCBaseDAOV2
 	   int res = this.namedParameterJdbcTemplate.update(sql, params);
 	   return res;
 
-
    }
    
    public List<DesignationTransferObject> getDesignationsForForm(String formseqid, String desigName,

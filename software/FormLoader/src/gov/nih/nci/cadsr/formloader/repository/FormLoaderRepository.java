@@ -52,4 +52,8 @@ public interface FormLoaderRepository {
 	public void unloadForm(FormDescriptor form);
 	
 	public String createFormNewVersion(FormDescriptor form, String loggedinUser, String xmlPathName);
+	
+	public float getLatestVersionForForm(String publicId);
+	
+	public void updateFormInCollectionRecord(FormCollection coll, FormDescriptor form);
 }

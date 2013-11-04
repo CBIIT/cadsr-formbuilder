@@ -77,8 +77,9 @@ public class FormDescriptor implements java.io.Serializable {
 	
 	int index;
 	
-	boolean latestVersion;
-	
+	//If loading as a new version form, need to remember the previous latest version for possible
+	//restoration purpose
+	float previousLatestVersion;
 	
 	protected transient boolean selected;
 	protected transient int xml_line_begin;
@@ -404,6 +405,14 @@ public class FormDescriptor implements java.io.Serializable {
 
 	public void setIndex(int index) {
 		this.index = index;
+	}
+
+	public float getPreviousLatestVersion() {
+		return previousLatestVersion;
+	}
+
+	public void setPreviousLatestVersion(float previousLatestVersion) {
+		this.previousLatestVersion = previousLatestVersion;
 	}
 
 	public String getCollectionSeqid() {

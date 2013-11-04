@@ -14,6 +14,8 @@ import java.io.InputStream;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -205,6 +207,7 @@ public class FormLoaderHelper {
 
 	}
 	
+	//For testing
 	public static List<FormCollection> readCollectionListFromFile () {
 		final String fileName = "collectionList.ser";
 
@@ -233,4 +236,22 @@ public class FormLoaderHelper {
 
 	}
 	
+	public static List<FormCollection> sortCollectionsByDate(List<FormCollection> collections) {
+		
+		Collections.sort(collections, new Comparator<FormCollection>(){
+			public int compare(FormCollection o1, FormCollection o2) {
+		        return o1.getDateCreated().compareTo(o2.getDateCreated());
+		    }
+		});
+		
+		return collections;
+	}
+	
+	public static List<FormCollection> reversSortCollectionsByDate(List<FormCollection> collections) {
+		
+		List<FormCollection> colls = FormLoaderHelper.sortCollectionsByDate(collections);
+		Collections.reverse(colls);
+		
+		return colls;
+	}
 }

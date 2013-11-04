@@ -475,6 +475,19 @@ public class FormLoaderRepositoryMockup implements FormLoaderRepository {
 		return 0;
 	}
 
+	@Override
+	public float getLatestVersionForForm(String publicId) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void updateFormInCollectionRecord(FormCollection coll,
+			FormDescriptor form) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 	
 }

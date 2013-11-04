@@ -18,8 +18,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-public class UnloadFormsAction extends ActionSupport implements
-SessionAware {
+public class UnloadFormsAction extends ActionSupport implements SessionAware {
 	/**
 	 * 
 	 */
@@ -52,7 +51,7 @@ SessionAware {
 			collectionList = unloadService.unloadCollections(collectionList, userName);
 			
 			unloadedForms = extractUnloadedForms(collectionList);
-			servletRequest.getSession().setAttribute("unloadedForms", unloadedForms);
+			//servletRequest.getSession().setAttribute("unloadedForms", unloadedForms);
 			
 			return SUCCESS;
 

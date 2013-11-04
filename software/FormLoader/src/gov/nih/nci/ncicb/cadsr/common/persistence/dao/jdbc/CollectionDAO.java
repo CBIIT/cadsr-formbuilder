@@ -9,7 +9,7 @@ public interface CollectionDAO {
 	
 	public String createCollectionRecord(String name, String desc, String fileName, String filePath, String createdBy, int name_repeat);
 	public int createCollectionFormMappingRecord(String collectionseqid, String formseqid, 
-			int formpublicid, float formversion, String loadType, int loadStatus, String longName);
+			int formpublicid, float formversion, String loadType, int loadStatus, String longName, float prevLatestVersion);
 	
 	public List<FormCollection> getAllLoadedCollectionsByUser(String userName);
 	public List<FormDescriptor> getAllFormInfoForCollection(String collseqid);
