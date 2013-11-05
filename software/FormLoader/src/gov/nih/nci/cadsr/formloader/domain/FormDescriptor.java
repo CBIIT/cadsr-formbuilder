@@ -524,7 +524,7 @@ public class FormDescriptor implements java.io.Serializable {
 		int idx = 1;
 		for (FormCollection coll : this.belongToCollections) {
 			String odd = (idx % 2 != 0) ? "odd" : "even";
-			sb.append("<tr class=\"" + odd + "\"><td>").append(coll.getName()).append("</td>");
+			sb.append("<tr class=\"" + odd + "\"><td>").append(coll.getNameWithRepeatIndicator()).append("</td>");
 			sb.append("<td>").append(coll.getDescription()).append("</td>");
 			sb.append("<td>").append(coll.getForms().size()).append("</td>");
 			sb.append("<td>").append(coll.getCreatedBy()).append("</td>");
