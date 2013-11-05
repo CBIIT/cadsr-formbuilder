@@ -156,4 +156,19 @@ public class JDBCFormV2DAOTest {
 		
 		assertTrue(res > 0);
 	}
+	
+	@Test
+	public void testGetLatestVersionIndicatorForForm() {
+
+		boolean yesno = formV2Dao.isLatestVersionForForm("A7294BEF-41E2-2FCE-E034-0003BA0B1A09");
+		assertTrue(yesno);
+		
+		yesno = formV2Dao.isLatestVersionForForm("9FDEC391-8EA4-89A0-E040-BB89AD432639");
+		assertFalse(yesno);
+		
+		yesno = formV2Dao.isLatestVersionForForm("EA720B73-E5CC-2B18-E040-BB8921B62F5C");
+		assertTrue(yesno);
+		
+	}
+	
 }
