@@ -60,7 +60,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	public static final	String DEFAULT_REFDOC_TYPE	= "REFERENCE";
 	
 	public static final	String FORM_LOADER_DB_USER = "FORMLOADER";
-	public static final	String WORKFLOW_STATUS_UNLOADED = "RETIRED WITHDRAWN"; //need to change to RETIRED UNLOAD on db change
+	public static final	String WORKFLOW_STATUS_UNLOADED = "RETIRED UNLOADED"; 
 	
 	protected static final int MARK_TO_KEEP_IN_UPDATE = 99;
 	
@@ -1729,26 +1729,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			form.setLoadStatus(FormDescriptor.STATUS_UNLOAD_FAILED);
 		} else {
 			form.setLoadStatus(FormDescriptor.STATUS_UNLOADED);
-			logger.debug("Form: " + seqid + "|" + form.getFormSeqId() + " unloaded");
-			formV2Dao.updateLatestVersionIndicator(seqid, "No", FORM_LOADER_DB_USER);
-			logger.debug("Form: " + seqid + "|" + form.getFormSeqId() + " unloaded. Lastest version ind set to No");
-			
-			logger.debug("Form load type: " + form.getLoadType());
-			
-			//restore previous latest version
-			if (FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(form.getLoadType().trim())) {
-				float prevVersion = form.getPreviousLatestVersion();
-				logger.debug("Form: " + seqid + "|" + form.getFormSeqId() + " unloaded. Previous Lastest version was " + prevVersion);
-				if (prevVersion > 0) {
-					int r = formV2Dao.updateLatestVersionIndicatorByPublicIdAndVersion(Integer.parseInt(form.getPublicId()), 
-							prevVersion, "Yes", FORM_LOADER_DB_USER);
-					logger.debug("Previous Lastest version was restored: " + prevVersion + ". Response: " + r);
-				} else {
-					form.addMessage("No valid previous latest version with form. Unable to restore previous latest " +
-							"version after unloading a new version form");
-					logger.debug("No valid previous latest version with form");
-				}
-			}
+			manageFormVersionPostUnload(form);
 		}
 		
 		FormV2TransferObject formdto = formV2Dao.getFormHeadersBySeqid(seqid);
@@ -1768,6 +1749,45 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		
 		this.collectionDao.updateCollectionFormMappingRecord(coll.getId(), form.getFormSeqId(), 
 			 form.getLoadType(), form.getLoadStatus());
+	}
+	
+	/**
+	 * Post unload tasks:
+	 * 
+	 * If the form had been loaded as "New Version" AND if it was marked as the latest version prior to unload, we
+	 *    need to 1) set latest version indicator to "no" and 2) restore the previous latest version 
+	 *    (latest version form before the form was loaded).
+	 *    
+	 * @param form
+	 */
+	protected void manageFormVersionPostUnload(FormDescriptor form) {
+		String seqid = form.getFormSeqId();
+
+		logger.debug("Form: " + seqid + "|" + form.getFormSeqId() + " unloaded");
+
+		if (!formV2Dao.isLatestVersionForForm(seqid) ||
+				!FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(form.getLoadType().trim()))
+			return; 
+
+		formV2Dao.updateLatestVersionIndicator(seqid, "No", FORM_LOADER_DB_USER);
+
+		float prevVersion = form.getPreviousLatestVersion();
+		logger.debug("Form: " + seqid + "|" + form.getFormSeqId() + " unloaded. Previous Lastest version was " + prevVersion);
+		if (prevVersion > 0) {
+			int r = formV2Dao.updateLatestVersionIndicatorByPublicIdAndVersion(Integer.parseInt(form.getPublicId()), 
+					prevVersion, "Yes", FORM_LOADER_DB_USER);
+			logger.debug("Previous Lastest version was restored: " + prevVersion + ". Response: " + r);
+		} else {
+			form.addMessage("No valid previous latest version with form. Unable to restore previous latest " +
+					"version after unloading a new version form");
+			logger.debug("No valid previous latest version with form");
+		}
+
+
+
+
+
+
 	}
 	
 }
