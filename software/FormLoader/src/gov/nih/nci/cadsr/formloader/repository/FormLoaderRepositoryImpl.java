@@ -269,10 +269,8 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			}
 			
 			List<FormDescriptor> cadsrforms = getFormDetailsFromCaDsr(coll, forms);
-			combineFormInfo(forms, cadsrforms);
-			coll.setForms(forms);
-			
-				
+			forms = combineFormInfo(forms, cadsrforms);
+			coll.setForms(forms);				
 		}
 		
 		return colls;
@@ -308,6 +306,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 				form.setLongName(cadsrForm.getLongName());
 				form.setContext(cadsrForm.getContext());
 				form.setModifiedBy(cadsrForm.getModifiedBy());
+				form.setModifiedDate(cadsrForm.getModifiedDate());
 				form.setCreatedBy(cadsrForm.getCreatedBy());
 				form.setProtocolName(cadsrForm.getProtocolName());
 
@@ -1233,6 +1232,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 				form.setLongName(dto.getLongName());
 				form.setContext(dto.getContextName());
 				form.setModifiedBy(dto.getModifiedBy());
+				form.setModifiedDate(dto.getDateModified());
 				form.setCreatedBy(dto.getCreatedBy());
 				form.setProtocolName(dto.getProtocolLongName());
 				form.setPublicId(String.valueOf(dto.getPublicId()));
