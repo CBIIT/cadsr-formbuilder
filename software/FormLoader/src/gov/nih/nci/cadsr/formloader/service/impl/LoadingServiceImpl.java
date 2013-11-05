@@ -57,7 +57,7 @@ public class LoadingServiceImpl implements LoadingService {
 			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_FILE_INVALID,
 					"Xml file path or name is invalid");
 		
-		String xmlPathName = xmlPath.endsWith("\\") ? xmlPath + xmlName : xmlPath + "\\" + xmlName;
+		String xmlPathName = xmlPath.endsWith("/") ? xmlPath + xmlName : xmlPath + "/" + xmlName;
 		
 		List<FormDescriptor> forms = aCollection.getForms();
 		if (forms == null || forms.size() == 0) {
