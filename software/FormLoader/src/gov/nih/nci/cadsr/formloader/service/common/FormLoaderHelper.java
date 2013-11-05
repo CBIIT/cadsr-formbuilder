@@ -35,7 +35,7 @@ public class FormLoaderHelper {
 			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_FILE_INVALID,
 					"Input file name is null or empty. Unable to validate form content.");
 
-		String xmlPathName = xmlPath.endsWith("\\") ? xmlPath + xmlName : xmlPath + "\\" + xmlName;
+		String xmlPathName = xmlPath.endsWith("/") ? xmlPath + xmlName : xmlPath + "/" + xmlName;
 
 		File input = new File(xmlPathName);
 		if (input == null || !input.exists() || !input.canRead())
