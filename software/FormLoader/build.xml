@@ -108,7 +108,7 @@
 	
     <target name="jar" depends="compile" description="Create the formloader-services.jar">
         <mkdir dir="${jar.dir}"/>
-        <jar destfile="${jar.dir}/${ant.project.name}-services-v0.1.jar" basedir="${classes.dir}" >
+        <jar destfile="${jar.dir}/${ant.project.name}-services-v0.2.jar" basedir="${classes.dir}" >
         	<fileset dir="${classes.dir}">
         		<patternset>
         			<include name="gov/nih/nci/cadsr/formloader/domain/**,
