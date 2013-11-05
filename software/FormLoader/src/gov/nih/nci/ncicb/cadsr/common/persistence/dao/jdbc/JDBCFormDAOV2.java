@@ -1,5 +1,6 @@
 package gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc;
 
+import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.service.common.FormXMLConverter;
 import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
@@ -28,6 +29,7 @@ import gov.nih.nci.ncicb.cadsr.common.util.StringUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -1642,15 +1644,14 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 	    	 MapSqlParameterSource params = new MapSqlParameterSource();
 			 params.addValue("publicId", publicId);
 			 
-			 float latestV = 0;
+			 List<Float> latest = this.namedParameterJdbcTemplate.query(sql, params, 
+			     		new RowMapper<Float>() {
+			     	public Float mapRow(ResultSet rs, int rowNum) throws SQLException {
+			     		return rs.getFloat("version");
+			         }
+			     });
 			 
-			 try {
-				 latestV = this.namedParameterJdbcTemplate.queryForInt(sql, params);
-			 } catch(DataAccessException d) {
-				 logger.error(d.getMessage());
-			 }
-			 
-			 return latestV;
+			 return (latest.size() > 0) ? latest.get(0).floatValue() : 0;
 
 	    }
 	    
@@ -1682,4 +1683,22 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 		 	   return res;
 
 		    }
+	    
+	    public boolean isLatestVersionForForm(String formseqid) {
+	    	String sql = "select LATEST_VERSION_IND from sbrext.quest_contents_view_ext " +
+	    			" where QC_IDSEQ=:formseqid";
+	    	
+	    	 MapSqlParameterSource params = new MapSqlParameterSource();
+			 params.addValue("formseqid", formseqid);
+
+			 List<String> inds = this.namedParameterJdbcTemplate.query(sql, params, 
+			     		new RowMapper<String>() {
+			     	public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+			     		return rs.getString("LATEST_VERSION_IND");
+			         }
+			     });
+			 
+			return (inds.size() > 0 && inds.get(0).startsWith("Y"))  ? true : false;
+
+	    }
 }
