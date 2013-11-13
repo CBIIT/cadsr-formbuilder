@@ -754,7 +754,8 @@ function clearProtocol() {
                             </logic:notEmpty>    
                             <logic:empty name="question" property="validValues">                                    
 								<logic:equal name="question" property="deDerived" value="true">
-		                            <html:text property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>' readonly="true" size="70"/>
+		                            <html:hidden property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>' />
+		                            <span id="questionDefaultValues"><bean:write name="moduleEditForm" property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>' filter="false" /></span>
 		                            <a href="javascript:populateDefaultValue('','', '<%=questionIndex%>')">Clear</a>                          
 								</logic:equal>
 								<logic:notEqual name="question" property="deDerived" value="true">
