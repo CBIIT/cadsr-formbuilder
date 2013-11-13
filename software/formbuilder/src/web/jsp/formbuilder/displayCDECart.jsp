@@ -167,7 +167,7 @@ function retrieveSavedItems() {
           </a>
         </td>
         <td class="OraFieldText">
-          <bean:write name="de" property="item.longCDEName"/>
+          <bean:write name="de" property="item.longCDEName" filter="false"/>
         </td>
         <td class="OraFieldText">
           <bean:write name="de" property="item.contextName"/>

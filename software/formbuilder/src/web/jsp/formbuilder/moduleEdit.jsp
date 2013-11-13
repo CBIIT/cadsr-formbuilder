@@ -41,6 +41,8 @@ function populateDefaultValue(defaultValidValue,defaultValidValueId, index){
     objQuestionDefaultValidValueId.value = defaultValidValueId;
 
     setEditable(objQuestionDefaultValue, '<%= FormConstants.QUESTION_EDITABLES+"['+index+']"%>');
+    
+    document.getElementById("questionDefaultValues").innerHTML=defaultValidValue;  
 }
 
 
@@ -608,8 +610,7 @@ function clearProtocol() {
                                 </logic:notPresent>
                                 <logic:present name="question" property="dataElement">
                                  <td >
-                                  <html:textarea  styleClass="OraFieldText" rows="2" cols="102" property='<%=FormConstants.MODULE_QUESTIONS+"["+questionIndex+"]"%>' readonly="true" styleId="<%=FormConstants.MODULE_QUESTIONS+questionIndex %>">
-                                 </html:textarea>
+                                 <bean:write name="moduleEditForm" property='<%=FormConstants.MODULE_QUESTIONS+"["+questionIndex+"]"%>' filter="false" />
                                  </td>        
                                   <td class="OraHeaderBlack" align="center" width="70" >
                                    <html:link href='<%=params.getCdeBrowserUrl() +"/CDEBrowser/search?dataElementDetails=9&PageId=DataElementsGroup&queryDE=yes&FirstTimer=0"%>' 
@@ -743,7 +744,8 @@ function clearProtocol() {
                             </td>                      
                             <td class="OraFieldText">
                             <logic:notEmpty name="question" property="validValues">
-                            <html:text property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>' readonly="true" size="70"/>
+                            <html:hidden property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>'/>
+                            <span id="questionDefaultValues"><bean:write name="moduleEditForm" property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>' filter="false" /></span>
                             <a href="javascript:populateDefaultValue('','', '<%=questionIndex%>')">
 			               Clear
 			    </a>                          
@@ -946,7 +948,7 @@ function clearProtocol() {
                                         <table width="100%" align="right" cellpadding="0" cellspacing="0" border="0" class="OraBGAccentVeryDark">
                                           <tr class="OraHeaderBlack" >
                                            <td class="OraFieldText" width="86%">
-                                          <bean:write name="validValue" property="longName"/>
+                                          <bean:write name="validValue" property="longName" filter="false"/>
                                           <% String formattedValidValue = validValue.getLongName();
                                              if (formattedValidValue!=null){
                                              	formattedValidValue = StringUtils.getValidJSString(formattedValidValue);

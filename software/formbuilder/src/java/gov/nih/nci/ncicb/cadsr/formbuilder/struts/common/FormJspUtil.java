@@ -8,8 +8,13 @@ import gov.nih.nci.ncicb.cadsr.common.resource.Question;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue;
 import gov.nih.nci.ncicb.cadsr.common.resource.Protocol;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 public class FormJspUtil
 {
@@ -92,4 +97,40 @@ public class FormJspUtil
        }
        return false;
     }
+    
+	public static String updateDataForSpecialCharacters(String name) {
+		 name = name.replace("&#8322;", "\u2082");  //Subscript 2
+		 name = name.replace("&#945;", "\u03B1"); // Alpha
+		 name = name.replace("&#946;", "\u03B2"); // Beta
+		 name = name.replace("&#947;", "\u03B3"); // Gamma
+		 name = name.replace("&#948;", "\u03B4"); // Delta
+		 name = name.replace("&#178;", "\u00B2"); // Superscript 2
+		 name = name.replace("&#176;", "\u00B0"); // Degree
+		 name = name.replace("&#181;", "\u00B5"); // Micro
+		 name = name.replace("&#955;", "\u03BB"); // lambda
+		 name = name.replace("&#8805;", "\u2265"); // Greater than or equal to
+		 name = name.replace("&#8804;", "\u2264"); // Less than or equal to
+		 name = name.replace("&#177;", "\u00B1"); // Plus-Minus sign
+		 name = name.replace("&#954;", "\u03BA"); // Kappa Small
+		 name = name.replace("&#8495;", "\u212F"); // Small Exponent
+		 name = name.replace("&#922;", "\u03BA"); // Kappa Big
+		 
+		 return name;
+	}
+	
+	public static String updateDataForSpecialCharactersWithFile(String name) throws IOException {
+		Properties specialCharProperties = new Properties();
+		
+		FileInputStream in = new FileInputStream("/local/content/formbuilder/config/specialChar.properties");
+		specialCharProperties.load(in);
+		
+		Enumeration eProps = specialCharProperties.propertyNames();
+		while (eProps.hasMoreElements()) { 
+		    String key = (String) eProps.nextElement(); 
+		    String value = specialCharProperties.getProperty(key); 
+		    name = name.replace(key, value);
+		}
+		 
+		 return name;
+	}	
 }

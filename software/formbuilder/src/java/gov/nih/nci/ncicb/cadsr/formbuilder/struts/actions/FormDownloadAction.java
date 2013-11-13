@@ -18,6 +18,7 @@ import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.ServiceDelegateFactory;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.ServiceStartupException;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormJspUtil;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -276,7 +277,9 @@ public class FormDownloadAction extends Action {
      DataElement cde = question.getDataElement();
 
      colNumber = 3;
-     row.createCell(colNumber++).setCellValue(question.getLongName());
+     String longName = FormJspUtil.updateDataForSpecialCharacters(question.getLongName());
+     row.createCell(colNumber++).setCellValue(longName);
+     //row.createCell(colNumber++).setCellValue("test special character < 7*minutes  ß Superscript: (x2) x²  Subscript: (x2)  x\u2082(\u03BB)Plus-minus: (±)Alpha: (\u03B1)Gamma: (\u03B3)Delta: (\u03B4)");
 
      if (cde != null) {
       row.createCell(colNumber++).setCellValue(cde.getLongName());
@@ -344,7 +347,8 @@ public class FormDownloadAction extends Action {
 
        row = sheet.createRow(rowNumber++);
        colNumber = vvColNum;
-       row.createCell(colNumber++).setCellValue(validValue.getLongName());
+       longName = FormJspUtil.updateDataForSpecialCharacters(validValue.getLongName());
+       row.createCell(colNumber++).setCellValue(longName);
        row.createCell(colNumber++).setCellValue(validValue.getFormValueMeaningText());
        row.createCell(colNumber++).setCellValue(validValue.getFormValueMeaningIdVersion());
        row.createCell(colNumber++).setCellValue(validValue.getFormValueMeaningDesc());
