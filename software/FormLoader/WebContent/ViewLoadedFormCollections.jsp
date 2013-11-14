@@ -1,7 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 
-
 <html>
 <head>
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
@@ -16,7 +15,8 @@
 </style>
   
 </head>
-<div id="4b" style="padding-left: 50px; padding-right: 50px;">
+<div style="padding-left: 50px; padding-right: 50px;">
+
 <body>
 <h2>View Loaded Form Collections</h2>
 
@@ -24,7 +24,7 @@
 <p>You have previously loaded <s:property value="collectionList.size()"/> Collections. Click on any collection field to view forms in a Collection.<br>
 To Unload,  select forms in <b>Collection View</b> or <b>Loaded Form View</b> tab, and click the <b>Unload Forms</b> button.
 <br><br>
-Only forms eligible for unloading have checkboxes available for selection
+Only forms eligible for unloading have checkboxes available for selection.
 </p>
 </s:if>
 
@@ -39,16 +39,15 @@ Only forms eligible for unloading have checkboxes available for selection
 <td>Filter the Collection or Form list by typing into the filter input field</td>
 </tr></table>
 
-
-
 <div id="tabs">
 <ul>
 <li><a href="#Collection_View">Collection View</a></li>
 <li><a href="#Form_View">Loaded Form View</a></li>
 </ul>
 
-  <div id="Collection_View">
-  	
+ <div id="Collection_View">
+  	<s:form action="unloadForms" theme="simple" method="post">
+  	<div id="content">
 		<table id="collectionsTab">
 		
 			<tr id="collTitle" class="even">
@@ -58,7 +57,7 @@ Only forms eligible for unloading have checkboxes available for selection
 				<th>Loaded By</th>
 				<th>Loaded Date</th>
 			</tr>
-			<tbody id="fbody"> <!-- Mark for the filter -->
+			
             <s:iterator value="collectionList" id = "bean" status="status">
             
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>" id="parent-<s:property value="id" />"> 			    
@@ -119,14 +118,15 @@ Only forms eligible for unloading have checkboxes available for selection
 <td colspan="1" align="left" nowrap>
 <s:submit type="image" src="/FormLoader/i/reset.gif" method="reset" align="left" theme="simple"/></td>
 </tr>
-			</tbody>
 		</table>
-	
+		</div>
+	</s:form>
 		
 		</div> <!--  End Collection_View -->
 		
 <div id="Form_View">
-<s:form action="unloadForms" method="post">
+<s:form action="unloadForms" theme="simple" method="post">
+  	<div id="content">
 <table id="loadedFormsTab">
 		<tr class="even">
 				<th>Select</th>
@@ -169,26 +169,23 @@ Only forms eligible for unloading have checkboxes available for selection
 				
 				</s:iterator>
 <tr>
-		  	<td colspan="1" align="left" nowrap>
-<s:submit type="image" src="/FormLoader/i/Unload-Forms.gif" method="execute" align="left" theme="simple" /></td>
+	<td colspan="1" align="left" nowrap>
+	<s:submit type="image" src="/FormLoader/i/Unload-Forms.gif" method="execute" align="left" theme="simple" /></td>
+	<td colspan="1" align="left" nowrap>
+	<s:submit type="image" src="/FormLoader/i/reset.gif" method="reset" align="left" theme="simple"/></td>
 </tr>
 		</table>
-<!--  /s:form> -->
+		</div>
 </s:form>
+
 </div> <!-- end Form_View -->
 
 </div>  <!--  End Tabs -->
 
-
-<!--  script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>-->
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
   
-
 <script type='text/javascript' src='js/jquery.simplemodal.js'></script>
-<!--  script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>-->
-
-
 <script type='text/javascript' src='js/filter.js'></script>
   
   <script type="text/javascript"> 
@@ -229,34 +226,11 @@ $(document).ready(function() {
         });
     </script>  
    
-   
-    
   <script type="text/javascript">  
   $(document).ready(function() {
     $( "#tabs" ).tabs();
   });
   </script>
-   
-  
-  <script type="text/javascript">
- function filter2 (phrase, _id){
-	var words = phrase.value.toLowerCase().split(" ");
-	var table = document.getElementById(_id);
-	var ele;
-	for (var r = 1; r < table.rows.length; r++){
-		ele = table.rows[r].innerHTML.replace(/<[^>]+>/g,"");
-	        var displayStyle = 'none';
-	        for (var i = 0; i < words.length; i++) {
-		    if (ele.toLowerCase().indexOf(words[i])>=0)
-			displayStyle = '';
-		    else {
-			displayStyle = 'none';
-			break;
-		    }
-	        }
-		table.rows[r].style.display = displayStyle;
-	}
-} </script>
 
 </body>
 </div>
