@@ -6,9 +6,10 @@
 <LINK REL=STYLESHEET TYPE="text/css" HREF="<%=request.getContextPath()%>/css/blaf.css">
 </head>
 
-<div id="4b" style="padding-left: 50px; padding-right: 50px;">
+<div style="padding-left: 50px; padding-right: 50px;">
 <body>
-    <h5 class="OraTipText">You are logged in as: <s:property value="username" /></h5>
+<br>
+<br>
     <b>Form Loader</b>
     <br>
 	Form Loader allows users to load form collections, search for previously loaded form collections, and unload previously loaded form collections.
