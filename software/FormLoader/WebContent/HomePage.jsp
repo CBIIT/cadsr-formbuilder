@@ -38,7 +38,7 @@
 </s:form>
 </td>
 <td>
-<s:text name="<b><u>Manage Loaded Form Collections</u></b><br>Search previously loaded form collections and unload a<br>previously loaded form collection or a form within a form<br>collection."></s:text>
+<s:text name="<b><u>View/Unload Form Collections</u></b><br>View previously loaded Form Collections and unload forms<br>within a Form Collection."></s:text>
 </td></tr>
 </table>
 </body>
