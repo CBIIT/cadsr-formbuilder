@@ -307,7 +307,7 @@ public class FormDownloadAction extends Action {
          }
      }
      
-     row.createCell(colNumber++).setCellValue(questionDefaultValue);     
+     row.createCell(colNumber++).setCellValue(FormJspUtil.updateDataForSpecialCharacters(questionDefaultValue));     
      
      String vdLongName = "";
      String vdDataType = "";

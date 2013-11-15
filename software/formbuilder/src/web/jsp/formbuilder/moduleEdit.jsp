@@ -42,7 +42,8 @@ function populateDefaultValue(defaultValidValue,defaultValidValueId, index){
 
     setEditable(objQuestionDefaultValue, '<%= FormConstants.QUESTION_EDITABLES+"['+index+']"%>');
     
-    document.getElementById("questionDefaultValues").innerHTML=defaultValidValue;  
+    var nv = replaceAll(defaultValidValue,'<','&lt'); // < does not seem to display, so encode
+    document.getElementById("questionDefaultValuesSpan[" + index + "]").innerHTML=nv;  
 }
 
 
@@ -294,18 +295,38 @@ function clearProtocol() {
          var srcObj = document.getElementById(srcCompId);
          var i;
          var count = 0;
+         var newValue = '';
          for (i=0; i<srcObj.options.length; i++) {
            if (srcObj.options[i].selected) {
               targetObj.value = srcObj.options[i].value;
+              newValue = srcObj.options[i].value;
              }
            }
+           
+        var index = targetCompId.substring(15,targetCompId.length);
+        var nv = replaceAll(newValue,'<','&lt'); // < does not seem to display, so encode
+
+        document.getElementById("moduleQuestionsSpan" + index).innerHTML=nv;  
      }
   
   function refDocHyperlink(targetCompId,newValue)
     {
         var targetObj = document.getElementById(targetCompId);
         targetObj.value=newValue;
+        
+        var index = targetCompId.substring(15,targetCompId.length);
+        var nv = replaceAll(newValue,'<','&lt'); // < does not seem to display, so encode
+
+        document.getElementById("moduleQuestionsSpan" + index).innerHTML=nv;  
      }  
+     
+   function replaceAll(string, token, newtoken) {
+    if(token!=newtoken)
+    while(string.indexOf(token) > -1) {
+        string = string.replace(token, newtoken);
+    }
+    return string;
+   }  
      
   function submitChangeAsso(methodName, moduleIndex, questionIndex){
     var objForm0 = document.forms[0];
@@ -610,7 +631,8 @@ function clearProtocol() {
                                 </logic:notPresent>
                                 <logic:present name="question" property="dataElement">
                                  <td >
-                                 <bean:write name="moduleEditForm" property='<%=FormConstants.MODULE_QUESTIONS+"["+questionIndex+"]"%>' filter="false" />
+                                 <span id='<%=FormConstants.MODULE_QUESTIONS+"Span"+questionIndex%>'><bean:write name="moduleEditForm" property='<%=FormConstants.MODULE_QUESTIONS+"["+questionIndex+"]"%>' filter="false" /></span>
+                                 <html:hidden  property='<%=FormConstants.MODULE_QUESTIONS+"["+questionIndex+"]"%>' styleId="<%=FormConstants.MODULE_QUESTIONS+questionIndex %>"></html:hidden>
                                  </td>        
                                   <td class="OraHeaderBlack" align="center" width="70" >
                                    <html:link href='<%=params.getCdeBrowserUrl() +"/CDEBrowser/search?dataElementDetails=9&PageId=DataElementsGroup&queryDE=yes&FirstTimer=0"%>' 
@@ -745,10 +767,8 @@ function clearProtocol() {
                             <td class="OraFieldText">
                             <logic:notEmpty name="question" property="validValues">
                             <html:hidden property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>'/>
-                            <span id="questionDefaultValues"><bean:write name="moduleEditForm" property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>' filter="false" /></span>
-                            <a href="javascript:populateDefaultValue('','', '<%=questionIndex%>')">
-			               Clear
-			    </a>                          
+                            <span id='<%=FormConstants.QUESTION_DEFAULTVALUES+"Span["+questionIndex+"]"%>'><bean:write name="moduleEditForm" property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>' filter="false" /></span>
+                            &nbsp;&nbsp;&nbsp;<a href="javascript:populateDefaultValue('','', '<%=questionIndex%>')">Clear</a>                          
 
                             <html:hidden property='<%=FormConstants.QUESTION_DEFAULT_VALIDVALUE_IDS+"["+questionIndex+"]"%>'/>
                             </logic:notEmpty>    
@@ -756,7 +776,7 @@ function clearProtocol() {
 								<logic:equal name="question" property="deDerived" value="true">
 		                            <html:hidden property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>' />
 		                            <span id="questionDefaultValues"><bean:write name="moduleEditForm" property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>' filter="false" /></span>
-		                            <a href="javascript:populateDefaultValue('','', '<%=questionIndex%>')">Clear</a>                          
+		                            &nbsp;&nbsp;&nbsp;<a href="javascript:populateDefaultValue('','', '<%=questionIndex%>')">Clear</a>                          
 								</logic:equal>
 								<logic:notEqual name="question" property="deDerived" value="true">
 									<html:hidden property='<%=FormConstants.QUESTION_DEFAULT_VALIDVALUE_IDS+"["+questionIndex+"]"%>' />

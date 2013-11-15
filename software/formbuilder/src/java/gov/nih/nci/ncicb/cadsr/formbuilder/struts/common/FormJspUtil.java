@@ -99,6 +99,10 @@ public class FormJspUtil
     }
     
 	public static String updateDataForSpecialCharacters(String name) {
+		 if( name == null ) {
+			 return name;
+		 }
+			 
 		 name = name.replace("&#8322;", "\u2082");  //Subscript 2
 		 name = name.replace("&#945;", "\u03B1"); // Alpha
 		 name = name.replace("&#946;", "\u03B2"); // Beta

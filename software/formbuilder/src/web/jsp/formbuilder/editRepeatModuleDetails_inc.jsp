@@ -121,7 +121,8 @@
                                      </td>
                                      <td class="OraFieldText">
                                         <html:hidden property="<%=FormConstants.QUESTION_DEFAULT_VV_IDS+"["+defaultIndex+"]"%>"  />
-                                         <html:text  styleClass="OraFieldText"  property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>' readonly="true" size="70" />                                   
+                                         <html:hidden  property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>' />
+                                         <span id='<%=FormConstants.QUESTION_DEFAULTS+"Span["+defaultIndex+"]"%>'><bean:write name="moduleRepeatForm" property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>' filter="false" /></span>                                   
                                      </td>  
                                      </tr>
                                       </logic:notEmpty>
@@ -184,7 +185,8 @@
                                      </td>
                                      <td class="OraFieldText">
                                         <html:hidden property="<%=FormConstants.QUESTION_DEFAULT_VV_IDS+"["+defaultIndex+"]"%>"  />
-                                         <html:text  styleClass="OraFieldText"  property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>' readonly="true" size="70" />                                   
+                                         <html:hidden  property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>'/>
+                                         <span id='<%=FormConstants.QUESTION_DEFAULTS+"Span["+defaultIndex+"]"%>'><bean:write name="moduleRepeatForm" property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>' filter="false" /></span>                                   
                                      </td>                                    
                                       </logic:notEmpty>
                                       <logic:empty name="question" property = "validValues">
