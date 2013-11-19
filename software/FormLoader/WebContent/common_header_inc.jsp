@@ -5,12 +5,6 @@
   See http://ncip.github.com/cadsr-formbuilder/LICENSE.txt for details.
 L--%>
 
-
-
-<SCRIPT LANGUAGE="JavaScript1.1"
-	SRC='<html:rewrite page="/js/helpWinJS.js"/>'></SCRIPT>
-<SCRIPT LANGUAGE="JavaScript1.1"
-	SRC='<html:rewrite page="/js/newWinJS.js"/>'></SCRIPT>
 <TABLE width=100% valign=top Cellpadding=0 Cellspacing=0 border=0>
 	<tr>
 		<td align="left" valign=top nowrap>
