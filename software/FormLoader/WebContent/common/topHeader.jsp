@@ -8,9 +8,7 @@ L--%>
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <HTML>
-<SCRIPT LANGUAGE="JavaScript1.1"
-	SRC='<html:rewrite page="/js/helpWinJS.js"/>'></SCRIPT>
-	<BODY topmargin="0">
+<BODY topmargin="0">
 		<table width="100%" border="0" cellspacing="0" cellpadding="0">
 			<tr bgcolor="#A90101">
 				<td valign="center" align="left">
