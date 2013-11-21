@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -465,6 +466,12 @@ public class FormLoaderRepositoryDataGen implements FormLoaderRepository {
 			FormDescriptor form) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public HashMap<String, Date> getModifiedDateForForms(List<String> formSeqids) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

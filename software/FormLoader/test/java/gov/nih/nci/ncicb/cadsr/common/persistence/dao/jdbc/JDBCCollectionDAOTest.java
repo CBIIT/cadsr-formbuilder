@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
@@ -31,7 +32,7 @@ public class JDBCCollectionDAOTest {
 	@Test
 	public void testCreateCollectionFormMappingRecord() {
 		int res = collectionDao.createCollectionFormMappingRecord("E97FC0E8-782D-5937-E040-BB8921B63902", 
-				"E97FC0E8-7737-5937-E040-BB8921B63902", 0, 0, "Unknown", -3, "A Fake Record From JUnit", 0);
+				"E97FC0E8-7737-5937-E040-BB8921B63902", 0, 0, "Unknown", -3, "A Fake Record From JUnit", 0, new Date());
 		
 		assertTrue(res == 1);
 	}
@@ -39,7 +40,7 @@ public class JDBCCollectionDAOTest {
 	@Test
 	public void testUpdateCollectionFormMappingRecord() {
 		int res = collectionDao.createCollectionFormMappingRecord("E97FC0E8-782D-5937-E040-BB8921B63902", 
-				"E97FC0E8-7737-5937-E040-BB8921B63902", 0, 0, "Unknown", -6, "A Fake Record From JUnit Testing Update", 0);
+				"E97FC0E8-7737-5937-E040-BB8921B63902", 0, 0, "Unknown", -6, "A Fake Record From JUnit Testing Update", 0, new Date());
 		
 		assertTrue(res == 1);
 	}

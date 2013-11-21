@@ -10,6 +10,7 @@ import gov.nih.nci.ncicb.cadsr.common.dto.ModuleTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -169,6 +170,15 @@ public class JDBCFormV2DAOTest {
 		yesno = formV2Dao.isLatestVersionForForm("EA720B73-E5CC-2B18-E040-BB8921B62F5C");
 		assertTrue(yesno);
 		
+	}
+	
+	@Test
+	public void testGetFormModifiedDateByIds() {
+		List<String> ids = new ArrayList<String>();
+		ids.add("EBA1ACB9-78B5-726C-E040-BB8921B66A4F");
+		HashMap<String, Date> dateMap = formV2Dao.getFormModifiedDateByIds(ids);
+		
+		assertNotNull(dateMap.get("EBA1ACB9-78B5-726C-E040-BB8921B66A4F"));
 	}
 	
 }
