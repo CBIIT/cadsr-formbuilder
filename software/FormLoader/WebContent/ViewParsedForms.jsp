@@ -14,9 +14,10 @@ L--%>
 <style type="text/css">
 @import url(css/style.css);
 </style>
+
 </head>
 
-<div id="4b" style="padding-left: 50px; padding-right: 50px;">
+<div style="padding-left: 50px; padding-right: 50px;">
 
 <body>
 <br>
@@ -41,11 +42,11 @@ Select forms to validate the questions against caDSR database
 <s:actionerror />
 	
 <s:if test="parsedFormsNoErrorList.size() >= 1">
-	<s:form action="validateForms" theme = "simple" method="post"> 
+	<s:form action="validateForms" theme = "simple" method="post">
 		<div class="content">
-		<table class="fileTable" cellpadding="5px">
+		<table class="fileTable">
 			<tr class="even">
-				<th>Select</th>
+				<th>Select for <br>DB Validation</th>
 				<th>Public Id in XML</th>
 				<th>Version in XML</th>
 				<th>Long Name in XML</th>
@@ -58,7 +59,7 @@ Select forms to validate the questions against caDSR database
 			<s:iterator value="parsedFormsNoErrorList" id = "bean" status="status">
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
 				<td>
-					<s:checkbox name="selectedFormIndices" fieldValue="%{index}" theme = "simple" />
+					<s:checkbox id="mycheck" name="selectedFormIndices" fieldValue="%{index}" theme = "simple" />
 				</td>
 				<td><s:property value="publicId" /></td>
 				<td><s:property value="version" /></td>
@@ -71,13 +72,15 @@ Select forms to validate the questions against caDSR database
 				
 			</tr>
 			</s:iterator>
+
+<!-- Button row -->
 <tr>
-		  	<td colspan="1" align="left" nowrap>
-<s:submit type="image" src="/FormLoader/i/dbvalidate.gif" method="execute" align="left" theme="simple" /></td>
-	  	<td colspan="1" align="left" nowrap>
-<s:submit type="image" src="/FormLoader/i/cancel.gif" method="cancel" align="left" theme="simple"/></td>
-	  	<td colspan="1" align="left" nowrap>
-<s:submit type="image" src="/FormLoader/i/reset.gif" method="reset" align="left" theme="simple"/></td>
+	<td colspan="1" align="left" nowrap>
+<s:submit type="image" src="/FormLoader/i/dbvalidate.gif" action="validateForms" align="left" theme="simple" /></td>
+	<td colspan="1" align="left" nowrap>
+<s:submit type="image" src="/FormLoader/i/cancel.gif" action="cancelDBValidate" align="left" theme="simple"/></td>
+	<td colspan="1" align="left" nowrap>
+<input type="image" src="/FormLoader/i/reset.gif"  onClick="return resetAllCheckboxesByName('selectedFormIndices', 0);" /></input></td>
 </tr>
 		</table>
 		</div> 
@@ -85,7 +88,7 @@ Select forms to validate the questions against caDSR database
 	</s:if>
 
 <br>
-<div id="4b" style="padding-left: 150px; padding-right: 150px;">
+<div style="padding-left: 150px; padding-right: 150px;">
 <hr>
 </div>
 <s:if test="parsedFormsWithErrorList.size() > 0">	
@@ -93,7 +96,8 @@ Select forms to validate the questions against caDSR database
 
 	<s:if test="parsedFormsWithErrorList.size() >= 1">
 		<div class="content">
-		<table class="fileTable" cellpadding="5px">
+		<table class="fileTable" 
+		>
 			<tr class="even">
 				<th>Public Id in XML</th>
 				<th>Version in XML</th>
@@ -112,6 +116,7 @@ Select forms to validate the questions against caDSR database
 		</div>
 	</s:if>
 	</s:if>
+<script type='text/javascript' src='js/formloader-common.js'></script>
 </body>
 </div>
 </html>

@@ -13,6 +13,12 @@
 <style type="text/css">
 @import url(css/style.css);
 </style>
+
+ <script>
+  $(function() {
+    $( document ).tooltip();
+  });
+  </script>
   
 </head>
 <div style="padding-left: 50px; padding-right: 50px;">
@@ -24,12 +30,16 @@
 <p>You have previously loaded <s:property value="collectionList.size()"/> Collections. Click on any collection field to view forms in a Collection.<br>
 To Unload,  select forms in <b>Collection View</b> or <b>Loaded Form View</b> tab, and click the <b>Unload Forms</b> button.
 <br><br>
-Only forms eligible for unloading have checkboxes available for selection.
+Only forms eligible for unloading have checkboxes available for selection. <a href="#" title="A form is eligible for unload if
+1. it was successfully loaded previously into caDSR database
+2. its current modified date is the same as its loaded date
+
+Unload means the form will have a new workflow status RETIRED UNLOADED but the form itself will not be deleted from caDSR database." >More...</a>
 </p>
 </s:if>
 
 <s:elseif test="collectionList.size() == 0">
-   <h4>You don't have any previously loaded collection. </h4>
+   <h4>You haven't loaded any Collection previously. </h4>
 </s:elseif>
 <s:actionerror />
 
@@ -112,11 +122,12 @@ Only forms eligible for unloading have checkboxes available for selection.
 			</tr>			
 			
 			</s:iterator>
-			<tr>
+			<tr id="buttonRow">
 		  	<td colspan="1" align="left" nowrap>
 <s:submit type="image" src="/FormLoader/i/Unload-Forms.gif" method="execute" align="left" theme="simple" /></td>
 <td colspan="1" align="left" nowrap>
-<s:submit type="image" src="/FormLoader/i/reset.gif" method="reset" align="left" theme="simple"/></td>
+<input type="image" src="/FormLoader/i/reset.gif"  onClick="return resetAllCheckboxesByName('selectedFormIds', 0);" /></input>
+</td>
 </tr>
 		</table>
 		</div>
@@ -125,7 +136,7 @@ Only forms eligible for unloading have checkboxes available for selection.
 		</div> <!--  End Collection_View -->
 		
 <div id="Form_View">
-<s:form action="unloadForms" theme="simple" method="post">
+<s:form action="unloadForms" theme="simple">
   	<div id="content">
 <table id="loadedFormsTab">
 		<tr class="even">
@@ -142,16 +153,11 @@ Only forms eligible for unloading have checkboxes available for selection.
 				<th>Collections</th>
 		</tr>
 
-			<s:iterator value="forms" var="form" status="status"> 
+			<s:iterator value="unloadableForms" var="form" status="status"> 
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
 				
-				<s:if test="isUnloadable() == true ">
-				<td><div style="width: 50px;"><s:checkbox name="selectedFormIds" fieldValue="%{formSeqId}" theme = "simple" /></div></td>
-				</s:if>
-				<s:else>
-				<td><div style="width: 50px;"><s:checkbox name="selectedFormIds" disabled="true" theme = "simple" /></div></td>
-				</s:else>
 				
+				<td><div style="width: 50px;"><s:checkbox name="selectedFormIds" fieldValue="%{formSeqId}" theme = "simple" /></div></td>				
 				<td><s:property value="publicId" /></td>
 				<td><s:property value="version" /></td>
 				<td><div style="width: 150px;"><s:property value="longName" /></div></td>
@@ -161,18 +167,18 @@ Only forms eligible for unloading have checkboxes available for selection.
 				<td><s:property value="createdBy" /></td>
 				<td><s:property value="modifiedBy" /></td>
 				<td><s:property value="loadType" /></td>
-				<td id="collectionView">View Collection(s)
+				<td id="collectionView"><a href="#">View Collection(s)</a>
 				<input type="hidden" id="<s:property value="getFormIdString()" />" value='<s:property value="getCollectionsInHtmlRows()" />'>
 				</td>
 				
 				</tr>
 				
 				</s:iterator>
-<tr>
+<tr id="buttonRow">
 	<td colspan="1" align="left" nowrap>
 	<s:submit type="image" src="/FormLoader/i/Unload-Forms.gif" method="execute" align="left" theme="simple" /></td>
 	<td colspan="1" align="left" nowrap>
-	<s:submit type="image" src="/FormLoader/i/reset.gif" method="reset" align="left" theme="simple"/></td>
+	<input type="image" src="/FormLoader/i/reset.gif"  onClick="return resetAllCheckboxesByName('selectedFormIds', 0);" /></input></td>
 </tr>
 		</table>
 		</div>
@@ -196,11 +202,11 @@ $(document).ready(function() {
 		var formId = $(this).find('input').attr('id');
 		//alert(formId);
 		var d = '<html><head><title>Collections for Form</title></head>';
-		d += '<body><h4>The form [';
+		d += '<body><h4>The Form [';
 		d += formId;
 		d += '] was loaded with the following collection(s):<br><br>';
-		d += 'The Collection marked as "Most Recent Collection" will be used to unload the form</h4><br><br>';
-		d += '<table><tr class="even"><th>Collection Name</th><th>Description</th><th># of Forms</th><th>Loaded By</th><th>Loaded Date</th><th>Most Recent Collection</th><tr>';
+		d += 'The most recent Collection the Form was loaded in will be used to unload the Form</h4><br><br>';
+		d += '<table><tr class="even"><th>Collection Name</th><th>Description</th><th># of Forms</th><th>Loaded By</th><th>Loaded Date</th><th>Modified Date</th><th>Eligible for Unload</th><tr>';
 		var data = $(this).find('input').val();
 		//alert(data);
 		d += data;
@@ -231,7 +237,7 @@ $(document).ready(function() {
     $( "#tabs" ).tabs();
   });
   </script>
-
+<script type='text/javascript' src='js/formloader-common.js'></script>
 </body>
 </div>
 </html>

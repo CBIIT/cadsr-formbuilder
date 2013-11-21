@@ -17,21 +17,23 @@ L--%>
  
 
 <body>
-<div id="4b" style="padding-left: 50px; padding-right: 50px;">
+<div style="padding-left: 50px; padding-right: 50px;">
 <h2>Load Form Collection</h2>
 <s:if test="hasActionErrors()">
    <div class="errors">
       <s:actionerror/>
    </div>
 </s:if>
-<table>
+
 
 <s:form action="xmlFileUpload" method="post" enctype="multipart/form-data">
+<div id="content">
+<table>
 <tr><td align="left">
    <s:file name="upload" label="Form Collection XML File" required="true" cols="20" rows="1"  /></td>
-   <td></td>
-   <td><a href="file/FormLoaderv8.xsd" target="_blank">Download XSD</a></td>
    </tr>
+   <tr/>
+   <tr><td/><td colspan=2>You may download and review the <a href="file/FormLoaderv8.xsd" target="_blank">XSD</a> <br>against which Form Loader will validate your collection XML.</td></tr>
   <tr></tr>
   <tr></tr>
   <tr></tr>
@@ -42,8 +44,12 @@ L--%>
 <s:submit type="image" src="/FormLoader/i/cancel.gif" action="cancelFileUpload" onclick="this.form.reset();" align="left" theme="simple"/></td>
 	  <td></td>
   </tr>
+  </table>
+  </div>
 </s:form>
-</table>
+
+
+
 
 </div>
 </body>

@@ -16,17 +16,17 @@ L--%>
 </style>
 
 </head>
-<div id="4b" style="padding-left: 50px; padding-right: 50px;">
+<div style="padding-left: 50px; padding-right: 50px;">
 <body>
-<h2>Summary of DB Validation for Selected Forms</h2>
+<h2>Result of DB Validation</h2>
 <br>
 <s:actionerror />
 <s:if test="validatedForms.size() >= 1">
 	<s:form action="loadForms" theme = "simple" method="post"> 
 		<div class="content">
-		<table class="fileTable" cellpadding="5px">
+		<table class="fileTable">
 			<tr class="even">
-				<th>Select</th>
+				<th>Select to Load</th>
 				<th>Public Id in XML</th>
 				<th>Version in XML</th>
 				<th>Long Name in XML</th>
@@ -34,7 +34,7 @@ L--%>
 				<th>Type in XML</th>
 				<th>Protocol Name(s) in XML</th>
 				<th>Workflow Status in XML</th>
-				<th># Modules in XML</th>
+				<th># Module(s) in XML</th>
 				<th>Load Type</th>
 				<th>DB Validation Status</th>
 			</tr>
@@ -69,14 +69,18 @@ L--%>
 			</s:iterator>
 				<tr>
 		 <td colspan="1" align="left" nowrap>
-<s:submit type="image" src="/FormLoader/i/load_forms.gif" method="execute" align="left" theme="simple" /></td>
+<s:submit type="image" src="/FormLoader/i/load_forms.gif" align="left" theme="simple" /></td>
 	  	<td colspan="1" align="left" nowrap>
-<s:submit type="image" src="/FormLoader/i/cancel.gif" method="cancel" align="left" theme="simple"/></td>
+<s:submit type="image" src="/FormLoader/i/cancel.gif" action="cancelLoad" align="left" theme="simple"/></td>
+		<td colspan="1" align="left" nowrap>
+<input type="image" src="/FormLoader/i/reset.gif"  onClick="return resetAllCheckboxesByName('selectedFormIndices', 0);" /></input></td>
 </tr> 
 		</table>
 		</div>
 	</s:form>
 	</s:if>
+	
+	<script type='text/javascript' src='js/formloader-common.js'></script>
 </body>
 </div>
 </html>

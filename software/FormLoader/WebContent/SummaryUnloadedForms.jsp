@@ -22,7 +22,7 @@ L--%>
   </script>
   
 <style type="text/css">
-@import url(css/levelledTableStyle.css)
+@import url(css/style.css)
 </style>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
@@ -33,7 +33,7 @@ L--%>
 </h2>
 
 	<!--  div class="content"> -->
-		<table class="level2Table" id="collectiontable">
+		<table id="collectiontable">
 		
 			<tr>
 				<th>Unload Status</th>
@@ -67,7 +67,7 @@ L--%>
 				<td><s:property value="workflowStatusName" /></td>
 				<td><s:property value="modifiedBy" /></td>
 				<td><s:property value="modifiedDate" /></td>
-				<td><s:property value="getNameWithRepeatIndicator()" /></td>
+				<td><s:property value="getCollectionName()" /></td>
 			</tr>			
 			</tbody>
 			</s:iterator>

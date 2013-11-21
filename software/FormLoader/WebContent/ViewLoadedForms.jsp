@@ -38,7 +38,6 @@ $(document).ready(function() {
 	$('input[type="button"]').click(function(){
 		var data = this.value;
 		$.modal(data);
-		//$.modal('<p><b>HTML</b> elements</p>');
       });
 });
 </script>
@@ -53,46 +52,9 @@ $(document).ready(function() {
                 $(this).parents('tr').next("tr").toggle();
               });            
         });
-    </script>  
+ </script>  
    
-   
-   <script type="text/javascript">  
-   $(document).ready(function(){
-    $("#searchInput").keyup(function () {
-    //split the current value of searchInput
-    var data = this.value.split(" ");
-    //create a jquery object of the rows
-    var jo = $("#fbody").find("tr");
-    if (this.value == "") {
-        jo.show();
-        return;
-    }
-    //hide all the rows
-    jo.hide();
-
-    //Recusively filter the jquery object to get results.
-    jo.filter(function (i, v) {
-        var $t = $(this);
-        for (var d = 0; d < data.length; ++d) {
-            if ($t.is(":contains('" + data[d] + "')")) {
-                return true;
-            }
-        }
-        return false;
-    })
-    //show the rows that match.
-    .show();
-}).focus(function () {
-    this.value = "";
-    $(this).css({
-        "color": "black"
-    });
-    $(this).unbind('focus');
-}).css({
-    "color": "#C0C0C0"
-});
-   });
-    </script>
+  
 </head>
 <div id="4b" style="padding-left: 50px; padding-right: 50px;">
 <body>
@@ -160,6 +122,8 @@ You may also filter the form list by typing into the filter input field.
 			<tr>
 		  	<td colspan="1" align="left" nowrap>
 <s:submit type="image" src="/FormLoader/i/Unload-Forms.gif" method="execute" align="left" theme="simple" /></td>
+<td colspan="1" align="left" nowrap>
+<s:submit type="image" src="/FormLoader/i/reset.gif" method="reset" align="left" theme="simple"/></td>
 </tr>
 		</table>
 </s:form>

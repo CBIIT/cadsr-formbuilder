@@ -13,14 +13,18 @@ L--%>
 <style type="text/css">
 @import url(css/style.css);
 </style>
-	<title>Form Loading Summary</title>
+	<title>Load Summary</title>
 	<sx:head />
 </head>
-<div id="4b" style="padding-left: 50px; padding-right: 50px;">
+<div style="padding-left: 50px; padding-right: 50px;">
 <body>
-<h2>Summary of Loaded Forms</h2>
+<h2>Summary of Collection "<s:property value="loadedFormCollection.getNameWithRepeatIndicator()" />"</h2>
+<s:property value="loadedForms.size()" /> form(s) in the Collection were successfully loaded. <br>
+<s:property value="otherForms.size()" /> form(s) in the Collection were not loaded.
+<br><br>
+
 <div class="content">
-		<table class="fileTable" cellpadding="5px">
+		<table class="fileTable">
 			<tr class="even">
 				<th>Public Id</th>
 				<th>Version</th>
@@ -28,7 +32,7 @@ L--%>
 				<th>Context</th>
 				<th>Type</th>
 				<th>Protocol Name(s)</th>
-				<th># Modules</th>
+				<th># Module(s)</th>
 				<th>Load Type</th>
 				<th>Load Status</th>
 			</tr>
@@ -52,9 +56,8 @@ L--%>
 <hr>
 	<h3>Forms in Form Collection that were not Loaded</h3>
 
-	
 		<div class="content">
-		<table class="fileTable" cellpadding="5px">
+		<table class="fileTable">
 			<tr class="even">
 				<th>Public Id in XML</th>
 				<th>Version in XML</th>
