@@ -40,10 +40,6 @@
 			<result name="error">LoginForm.jsp</result>
 		</action>
 		
-		
-
-		
-		
 		<action name="logout" class="gov.nih.nci.cadsr.formloader.struts2.LogoutAction">
 			<result name="success" type="redirect">LoginForm.jsp</result>
 		</action>
@@ -53,7 +49,28 @@
 			<result name="success" type="tiles">/home.tiles</result>
 		</action>
 		
-
+		<action name="xmlFileUpload" class="gov.nih.nci.cadsr.formloader.struts2.XMLFileUploadAction" method="execute">
+		    <interceptor-ref name="exception"/>
+	        <interceptor-ref name="i18n"/>
+	        <interceptor-ref name="fileUpload">
+	       		<param name="allowedTypes">text/xml</param>
+	       		<param name="maximumSize">31457280</param>
+	  	    </interceptor-ref> 
+	            <interceptor-ref name="params">
+	                <param name="excludeParams">dojo\..*,^struts\..*</param>
+	            </interceptor-ref>
+	            <interceptor-ref name="validation">
+	                <param name="excludeMethods">input,back,cancel,browse</param>
+	            </interceptor-ref>
+	            <interceptor-ref name="workflow">
+	                <param name="excludeMethods">input,back,cancel,browse</param>
+	            </interceptor-ref>
+		    <result name="success" type="tiles">/upload.parse.tiles</result>
+		    <result name="input" type="tiles">/upload.tiles</result>
+		    <result name="error" type="tiles">/upload.tiles</result>
+		</action>
+		
+		
 		
 		<action name="cancelloadform" class="gov.nih.nci.cadsr.formloader.struts2.ValidateXMLAction">
 			<result name="success" type="tiles">/home.tiles</result>
@@ -79,27 +96,6 @@
     			<result type="tiles">/search.tiles</result>
 		</action>
 		
-   		<action name="xmlFileUpload" class="gov.nih.nci.cadsr.formloader.struts2.XMLFileUploadAction" method="execute">
-		    <interceptor-ref name="exception"/>
-	        <interceptor-ref name="i18n"/>
-	        <interceptor-ref name="fileUpload">
-	       		<param name="allowedTypes">text/xml</param>
-	       		<param name="maximumSize">31457280</param>
-	  	    </interceptor-ref> 
-	            <interceptor-ref name="params">
-	                <param name="excludeParams">dojo\..*,^struts\..*</param>
-	            </interceptor-ref>
-	            <interceptor-ref name="validation">
-	                <param name="excludeMethods">input,back,cancel,browse</param>
-	            </interceptor-ref>
-	            <interceptor-ref name="workflow">
-	                <param name="excludeMethods">input,back,cancel,browse</param>
-	            </interceptor-ref>
-		    <result name="success" type="tiles">/upload.parse.tiles</result>
-		    <result name="input" type="tiles">/upload.tiles</result>
-		    <result name="error" type="tiles">/upload.tiles</result>
-		</action>
-		
 		<action name="validatexml" class="gov.nih.nci.cadsr.formloader.struts2.ValidateXMLAction">
 			<result name="success" type="tiles">/upload.parse.tiles</result>
 
@@ -110,7 +106,11 @@
 			<interceptor-ref name="loggingStack"></interceptor-ref>
 				<result name="input" type="tiles">/upload.parse.tiles</result>
     			<result name="success" type="tiles">/upload.validate.tiles</result>
-    			<result name="error" type="tiles">/upload.validate.tiles</result>
+    			<result name="error" type="tiles">/upload.parse.tiles</result>
+		</action>
+		
+		<action name="cancelDBValidate" class="gov.nih.nci.cadsr.formloader.struts2.ValidateFormsAction" method="cancel">
+			<result name="success" type="tiles">/upload.tiles</result>
 		</action>
 		
  		<action name="loadForms" 
@@ -120,10 +120,21 @@
     			<result name="success" type="tiles">/upload.summary.tiles</result>
 		</action>
 		
+		<action name="cancelLoad" class="gov.nih.nci.cadsr.formloader.struts2.LoadFormsAction" method="cancel">
+			<result name="success" type="tiles">/upload.tiles</result>
+		</action>
+		
+		<action name="cancelFileUpload" class="gov.nih.nci.cadsr.formloader.struts2.LoadFormsAction" method="cancel"> 
+			<result type="tiles">/upload.tiles</result>
+			<result name="input" type="tiles">/upload.tiles</result>
+			<result name="error" type="tiles">/upload.tiles</result>
+		</action>
+		
 		<action name="unloadForms" 
 			class="gov.nih.nci.cadsr.formloader.struts2.UnloadFormsAction">
 			<interceptor-ref name="loggingStack"></interceptor-ref>
     			<result name="success" type="tiles">/unloadSummary.tiles</result>
+    			<result name="error" type="tiles">/search.tiles</result>
     			<result type="tiles">/unloadSummary.tiles</result>
 		</action> 
 		
