@@ -56,31 +56,11 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware{
         	if (selectedFormIndices != null && selectedFormIndices.length > 0) {
         		setSelectForFormsInCollections(aColl, selectedFormIndices);
         		validateFormCollection(aColl);
+        	} else {
+        		addActionError("No form has been selected. Unable to procedd.");
+        		return INPUT;
         	}
-        	
-        	
-        /*	
-        	if (checkboxes != null && checkboxes.size()>0){
-				
-				for (int i=0; i<checkboxes.size();i++) {
-					Integer key = new Integer(i);
-					if (checkboxes.containsKey(key)) {
-						String checkboxValue = checkboxes.get(key).toString();
-						if (checkboxValue.equals("true")) {
-							FormDescriptor selectedForm = parsedFormsList.get(i);
-							selectedForm.setSelected(true);
-							selectedFormsList.add(selectedForm);
-						}
-					}
-				}
-				
-			}
-
-        	if (selectedFormsList.size() > 0)
-	        	{
-	        		validateFormCollection();
-	        	}
-        	*/
+      
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getMessage());
@@ -200,4 +180,9 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware{
 	public FormCollection getValidatedFormCollection() {
 		return validatedFormCollection;
 	}
+	
+	public String cancel() {
+		return SUCCESS;
+	}
+	
 }

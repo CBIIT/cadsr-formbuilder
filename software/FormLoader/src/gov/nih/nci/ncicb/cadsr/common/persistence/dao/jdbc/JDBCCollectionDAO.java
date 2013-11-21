@@ -3,6 +3,7 @@ package gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
@@ -47,15 +48,16 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 	}
 	
 	public int createCollectionFormMappingRecord(String collectionseqid, String formseqid, 
-			int formpublicid, float formversion, String loadType, int loadStatus, String longName, float prevLatestVersion) {
+			int formpublicid, float formversion, String loadType, int loadStatus, 
+			String longName, float prevLatestVersion, Date loadDate) {
 		String sql = "INSERT into sbrext.FORMS_IN_COLLECTION (FORM_COLLECTION_IDSEQ, FORM_IDSEQ, " +
-			" PUBLIC_ID, VERSION, LOAD_TYPE, LOAD_STATUS, LONG_NAME";
+			" PUBLIC_ID, VERSION, LOAD_TYPE, LOAD_STATUS, LONG_NAME, LOAD_UNLOAD_DATE";
 		if (prevLatestVersion > 0)
 			sql += ", PREVIOUS_LATEST_VERSION) ";
 		else 
 			sql += ")";
 		
-		sql += " VALUES (:collectionseqid, :formseqid, :formpublicid, :formversion, :loadtype, :loadstatus, :longname";
+		sql += " VALUES (:collectionseqid, :formseqid, :formpublicid, :formversion, :loadtype, :loadstatus, :longname, :loadDate";
 		
 		if (prevLatestVersion > 0)
 			sql += ", :prevLatestVersion)";
@@ -70,6 +72,7 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 		params.addValue("loadtype", loadType);
 		params.addValue("loadstatus", loadStatus);
 		params.addValue("longname", longName);
+		params.addValue("loadDate", loadDate);
 		if (prevLatestVersion > 0)
 			params.addValue("prevLatestVersion", prevLatestVersion);
 		

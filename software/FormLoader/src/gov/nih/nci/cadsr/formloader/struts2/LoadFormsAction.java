@@ -47,30 +47,10 @@ public class LoadFormsAction extends ActionSupport implements SessionAware{
         	if (selectedFormIndices != null && selectedFormIndices.length > 0) {
         		setSelectForFormsInCollections(aColl, selectedFormIndices);
         		loadFormCollection(aColl);
+        	} else {
+        		addActionError("No form has been selected. Unable to procedd.");
         	}
-        	/*
-    	List<FormDescriptor> validatedFormsList = (List<FormDescriptor>) servletRequest.getSession().getAttribute("validatedForms");
-    	
-    	if (loadformcheckboxes != null && loadformcheckboxes.size()>0){
-			
-			for (int i=0; i<loadformcheckboxes.size();i++) {
-				Integer key = new Integer(i);
-				if (loadformcheckboxes.containsKey(key)) {
-					String checkboxValue = loadformcheckboxes.get(key).toString();
-					if (checkboxValue.equals("true")) {
-						FormDescriptor selectedForm = validatedFormsList.get(i);
-						selectedForm.setSelected(true);
-						selectedFormsList.add(selectedForm);
-					}
-				}
-			}
-			
-		}
-    	
-    	if (selectedFormsList.size() > 0)
-    	{
-    		loadFormCollection();
-    	}*/
+        	
         }catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getMessage());
@@ -219,5 +199,9 @@ protected void setSelectForFormsInCollections(FormCollection aColl, int[] select
 		
 		return false;
 	}
+    
+    public String cancel() {
+    	return SUCCESS;
+    }
 
 }

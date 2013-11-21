@@ -46,7 +46,11 @@ public class UnloadFormsAction extends ActionSupport implements SessionAware {
 			
 			collectionList = (List<FormCollection>)servletRequest.getSession().getAttribute("collectionList");
 			
-			setSelectForFormsInCollections(collectionList, selectedFormIds);
+			String error = setSelectForFormsInCollections(collectionList, selectedFormIds);
+			if (error.length() > 0) {
+				addActionError(error);
+				return ERROR;
+			}
 			
 			collectionList = unloadService.unloadCollections(collectionList, userName);
 			
@@ -94,10 +98,13 @@ public class UnloadFormsAction extends ActionSupport implements SessionAware {
 		this.unloadedForms = unloadedForms;
 	}
 
-	protected void setSelectForFormsInCollections(List<FormCollection>collectionList, String[] selectedFormIds) {
+	protected String setSelectForFormsInCollections(List<FormCollection>collectionList, String[] selectedFormIds) {
 	
 		if (collectionList == null) 
-			return; //TODO
+			return "Collection list is null"; 
+		
+		if (selectedFormIds == null)
+			return "No form has been selected";
 	
 		for (FormCollection aColl : collectionList) {
 			List<FormDescriptor> forms = aColl.getForms();
@@ -111,6 +118,8 @@ public class UnloadFormsAction extends ActionSupport implements SessionAware {
 				logger.debug("=== Form [" + form.getFormIdString() + "|" + seqid + "] selected to be unloaded? " + form.isSelected());
 			}
 		}
+		
+		return "";
 	}
 	
 	protected boolean setFormSelected(FormDescriptor form, String[] selectedFormIds) {
@@ -134,7 +143,7 @@ public class UnloadFormsAction extends ActionSupport implements SessionAware {
 			for (FormDescriptor form : forms) {
 				if (!form.isSelected()) continue;
 				
-				form.setCollectionName(aColl.getName());
+				form.setCollectionName(aColl.getNameWithRepeatIndicator());
 				unloaded.add(form);
 			}
 		}

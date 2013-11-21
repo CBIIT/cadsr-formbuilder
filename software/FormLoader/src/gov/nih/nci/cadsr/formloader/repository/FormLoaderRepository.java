@@ -10,6 +10,7 @@ import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.PermissibleValueV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.ReferenceDocument;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -56,4 +57,6 @@ public interface FormLoaderRepository {
 	public float getLatestVersionForForm(String publicId);
 	
 	public void updateFormInCollectionRecord(FormCollection coll, FormDescriptor form);
+	
+	public HashMap<String, Date> getModifiedDateForForms(List<String> formSeqids);
 }

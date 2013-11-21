@@ -6,7 +6,9 @@ import gov.nih.nci.cadsr.formloader.repository.FormLoaderRepository;
 import gov.nih.nci.cadsr.formloader.service.LoadingService;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -68,10 +70,34 @@ public class LoadingServiceImpl implements LoadingService {
 			
 		loadForms(xmlPathName, forms, loggedinuser);
 		
+		//We need new modified date for the form to be used in form loader table update
+		retrievModifiedDateForForms(forms);
+		
 		createRecordsForCollection(aCollection, loggedinuser);
 		
 		aCollection.resetAllSelectFlag(false);
 		return aCollection;
+	}
+	
+	protected void retrievModifiedDateForForms(List<FormDescriptor> forms) {
+		List<String> seqids = new ArrayList<String>();
+		for (FormDescriptor form : forms) {
+			String seqid = form.getFormSeqId();
+			if (seqid != null && seqid.length() > 0)
+				seqids.add(seqid);
+		}
+		
+		HashMap<String, Date> formModifiedDates = this.repository.getModifiedDateForForms(seqids);
+		assignModifiedDateForForms(forms, formModifiedDates);
+		
+	}
+	
+	protected void assignModifiedDateForForms(List<FormDescriptor> forms, HashMap<String, Date> formModifiedDates) {
+		for (FormDescriptor form : forms) {
+			String seqid = form.getFormSeqId();
+			if (seqid != null && seqid.length() > 0)
+				form.setModifiedDate(formModifiedDates.get(seqid));
+		}
 	}
 	
 	protected void createRecordsForCollection(FormCollection coll, String user) {
@@ -81,7 +107,7 @@ public class LoadingServiceImpl implements LoadingService {
 		coll.setId(collSeqid);
 		coll.setDateCreated(new Date()); //TODO: This should come from db after create
 		
-		logger.info("Collection \"" + coll.getName() + "\" loaded successfully, with seqid: " + collSeqid);
+		logger.info("Collection \"" + coll.getNameWithRepeatIndicator() + "\" loaded successfully, with seqid: " + collSeqid);
 		
 	}
 	

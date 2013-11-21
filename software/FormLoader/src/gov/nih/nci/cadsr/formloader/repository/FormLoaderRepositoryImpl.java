@@ -37,6 +37,7 @@ import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -276,6 +277,14 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		return colls;
 	}	
 
+	@Transactional(readOnly=true)
+	public HashMap<String, Date> getModifiedDateForForms(List<String> formSeqids) {
+		if (formSeqids == null || formSeqids.size() == 0)
+			return new HashMap<String, Date>();
+		
+		return this.formV2Dao.getFormModifiedDateByIds(formSeqids);
+	}
+	
 	protected List<FormDescriptor> getFormDetailsFromCaDsr(FormCollection coll, List<FormDescriptor> forms) {
 		List<String> formseqids = new ArrayList<String>();
 		for (FormDescriptor form : forms) {
@@ -1240,7 +1249,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 				form.setType(dto.getFormType());
 				form.setWorkflowStatusName(dto.getAslName());
 				form.setCollectionSeqid(aColl.getId());
-				form.setCollectionName(aColl.getName());
+				form.setCollectionName(aColl.getNameWithRepeatIndicator());
 				forms.add(form);
 				processedForms.put(dto.getFormIdseq(), form);
 			}
@@ -1630,7 +1639,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			float version = (form.getVersion() == null || form.getVersion().length() == 0) ? 0 : Float.parseFloat(form.getVersion());
 			int res = collectionDao.createCollectionFormMappingRecord(collSeqid, form.getFormSeqId(),
 					publicId, version, form.getLoadType(),
-					form.getLoadStatus(), form.getLongName(), form.getPreviousLatestVersion());
+					form.getLoadStatus(), form.getLongName(), form.getPreviousLatestVersion(), form.getModifiedDate());
 			
 			//TODO: check response value.
 			int loatStatus = (res > 0) ? FormDescriptor.STATUS_LOADED : FormDescriptor.STATUS_LOAD_FAILED;

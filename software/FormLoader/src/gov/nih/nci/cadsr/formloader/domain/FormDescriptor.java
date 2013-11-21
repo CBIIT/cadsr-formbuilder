@@ -77,8 +77,8 @@ public class FormDescriptor implements java.io.Serializable {
 	
 	int index;
 	
-	//If loading as a new version form, need to remember the previous latest version for possible
-	//restoration purpose
+	//If loading as a new version form, need to remember the previous latest version 
+	//for possible restoration purpose at unload
 	float previousLatestVersion;
 	
 	protected transient boolean selected;
@@ -475,6 +475,15 @@ public class FormDescriptor implements java.io.Serializable {
 		}
 	}
 	
+	public String getLoadTypeLoadStatusString() {
+		
+		String statusString = getLoadStatusString(loadStatus);
+		
+		return (loadStatus == FormDescriptor.STATUS_LOADED ||
+				loadStatus == FormDescriptor.STATUS_UNLOADED) ? 
+						statusString + " - " + loadType : statusString;							
+	}
+	
 	/**
 	 * Returns form's id in this format: <publicid>|<version> 
 	 * * @return
@@ -529,6 +538,7 @@ public class FormDescriptor implements java.io.Serializable {
 			sb.append("<td>").append(coll.getForms().size()).append("</td>");
 			sb.append("<td>").append(coll.getCreatedBy()).append("</td>");
 			sb.append("<td>").append(coll.getDateCreated()).append("</td>");
+			sb.append("<td>").append(this.getModifiedDate()).append("</td>");
 			if (idx == 1)
 				sb.append("<td align=\"center\">").append("<img src=\"/FormLoader/i/checked.jpg\" />").append("</td>");
 			else
@@ -541,14 +551,12 @@ public class FormDescriptor implements java.io.Serializable {
 		return sb.toString();
 	}
 	
-	//TODO: need more thought
-	public String getUnloadedReason() {
-		if (this.loadStatus < FormDescriptor.STATUS_CONTENT_VALIDATED)
-			return getLoadStatusString();
+	public boolean isUnloadable() {
 		
-		if (!this.selected)
-			return "This form was not selected for load";
+		Date loadDate = this.loadUnloadDate;
+		Date modDate = this.modifiedDate;
 		
-		return "Reason unknown";
+		return (loadDate != null && modDate != null) ? loadDate.getTime() == modDate.getTime() : false;
+		
 	}
 }

@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -486,6 +487,12 @@ public class FormLoaderRepositoryMockup implements FormLoaderRepository {
 			FormDescriptor form) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public HashMap<String, Date> getModifiedDateForForms(List<String> formSeqids) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

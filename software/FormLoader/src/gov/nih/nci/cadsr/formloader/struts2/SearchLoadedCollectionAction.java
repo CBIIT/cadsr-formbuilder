@@ -33,7 +33,7 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 	ApplicationContext applicationContext = null;
 	private String userName;
 	
-	private List<FormDescriptor> forms = null;
+	private List<FormDescriptor> unloadableForms = null;
 	private List<FormCollection> collection1Page = new ArrayList<FormCollection>();
 
 	public String execute() {
@@ -61,28 +61,18 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 				addActionError("Unable to retrieve collection list from database for unknown reason");
 				return ERROR;
 			}
-			
-			int idx = 0;
-			for (FormCollection coll : collectionList) {
-				collection1Page.add(coll);
-				idx++;
-				
-				if (idx > 20)
-					break;
-			}
 
 			logger.debug("User [" + userName + "] has previously loaded " + collectionList.size() + " collections.");
 			servletRequest.getSession().setAttribute("collectionList", collectionList);
 			
-			forms = this.convertCollectionsToLoadedFormList(collectionList);
-			//new ArrayList<FormDescriptor>();    //
+			unloadableForms = this.convertCollectionsToUnloadedFormList(collectionList);
 			
-			if (forms == null) {
-				addActionError("Loaded form list is null.");
-				return ERROR;
-			}
+//			if (unloadableForms == null) {
+//				addActionError("Loaded form list is null.");
+//				return ERROR;
+//			}
 			
-			logger.debug("User [" + userName + "] has previously loaded " + forms.size() + " forms.");
+			logger.debug("User [" + userName + "] has previously loaded and unloadable " + unloadableForms.size() + " forms.");
 			
 			return SUCCESS;
 
@@ -114,17 +104,16 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 	public void setSession(Map<String, Object> arg0) {
 		// TODO Auto-generated method stub
 
+	}	
+	
+	public List<FormDescriptor> getUnloadableForms() {
+		return unloadableForms;
 	}
 
-	public List<FormDescriptor> getForms() {
-		return forms;
+	public void setUnloadableForms(List<FormDescriptor> unloadableForms) {
+		this.unloadableForms = unloadableForms;
 	}
 
-	public void setForms(List<FormDescriptor> forms) {
-		this.forms = forms;
-	}
-	
-	
 	public List<FormCollection> getCollection1Page() {
 		return collection1Page;
 	}
@@ -133,7 +122,7 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 		this.collection1Page = collection1Page;
 	}
 
-	protected List<FormDescriptor> convertCollectionsToLoadedFormList(List<FormCollection> colls) {
+	protected List<FormDescriptor> convertCollectionsToUnloadedFormList(List<FormCollection> colls) {
 		
 		if (colls == null || colls.size() == 0) 
 			return new ArrayList<FormDescriptor>();
@@ -147,14 +136,10 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 				if (form.getLoadStatus() != FormDescriptor.STATUS_LOADED)
 					continue;
 				
-				String key = form.getFormSeqId();
+				if (form.isUnloadable() == false)
+					continue;
 				
-				String fpublicid = form.getPublicId();
-				if (fpublicid.equals("3643679")) {
-					int i = 0;
-					i++;
-					seq = key;
-				}
+				String key = form.getFormSeqId();
 				
 				if (!formTracker.containsKey(key)) {
 					form.getBelongToCollections().add(coll);
@@ -164,8 +149,7 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 				}
 			}
 		}
-		FormDescriptor debug = formTracker.get(seq);
-		int s = debug.getBelongToCollections().size();
+		
 		return new ArrayList<FormDescriptor>(formTracker.values());
 	}
 

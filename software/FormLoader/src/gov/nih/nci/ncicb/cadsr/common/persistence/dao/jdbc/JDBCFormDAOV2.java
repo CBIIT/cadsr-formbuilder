@@ -33,6 +33,7 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -1700,5 +1701,34 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 			 
 			return (inds.size() > 0 && inds.get(0).startsWith("Y"))  ? true : false;
 
+	    }
+	    
+	    public HashMap<String, Date> getFormModifiedDateByIds(List<String> formSeqids) {
+	    	String sql = "select QC_IDSEQ, DATE_MODIFIED from sbrext.fb_formS_view " +
+	    			" where QC_IDSEQ in (:formSeqids)";
+
+	    	final HashMap<String, Date> dateMap = 
+	    			new HashMap<String, Date>();
+
+	    	MapSqlParameterSource params = new MapSqlParameterSource();
+	    	params.addValue("formSeqids", formSeqids);
+
+	    	List<String> des = 
+	    			this.namedParameterJdbcTemplate.query(sql, params, 
+	    					new RowMapper<String>() {
+	    				public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+	    					String seqid = rs.getString("QC_IDSEQ");
+	    					Timestamp timestamp = rs.getTimestamp("DATE_MODIFIED");
+	    					
+	    					dateMap.put(seqid, new Date(timestamp.getTime()));
+	    					
+	    					
+
+	    					//Not really using this
+	    					return seqid;
+	    				}
+	    			});
+
+	    	  return dateMap;
 	    }
 }
