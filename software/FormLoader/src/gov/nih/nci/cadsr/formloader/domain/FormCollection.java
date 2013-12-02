@@ -246,6 +246,6 @@ public class FormCollection implements java.io.Serializable {
 	}
 	
 	public String getNameWithRepeatIndicator() {
-		return (this.nameRepeatNum > 0) ? this.name + "_" + nameRepeatNum : this.name;
+		return (this.nameRepeatNum > 0) ? this.name + " (" + nameRepeatNum + ")" : this.name;
 	}
 }
