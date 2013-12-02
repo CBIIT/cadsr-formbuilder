@@ -1,4 +1,4 @@
-<project name="FormLoader" basedir="." default="compile">
+<project name="FormLoader" basedir="." default="compile-service-jar">
 
     <property name="build.dir"   value="build"/>
     <property name="classes.dir" value="${build.dir}/classes"/>
@@ -38,7 +38,7 @@
         <delete dir="${build.dir}" failonerror="false"/>
     </target>
 	
-    <target name="compile" depends="clean">
+    <target name="compile-service-jar" depends="clean" description="Compile for formloader-services jar excluding struts classes">
         <mkdir dir="${classes.dir}"/>
         <javac destdir="${classes.dir}" classpathref="classpath"  includeantruntime="false">
         	<src path="${src.dir}" />
@@ -106,9 +106,9 @@
 	        </copy>
 	</target>
 	
-    <target name="jar" depends="compile" description="Create the formloader-services.jar">
+    <target name="jar-services" depends="compile-service-jar" description="Create the formloader-services.jar">
         <mkdir dir="${jar.dir}"/>
-        <jar destfile="${jar.dir}/${ant.project.name}-services-v0.2.jar" basedir="${classes.dir}" >
+        <jar destfile="${jar.dir}/${ant.project.name}-services-v0.3.jar" basedir="${classes.dir}" >
         	<fileset dir="${classes.dir}">
         		<patternset>
         			<include name="gov/nih/nci/cadsr/formloader/domain/**,
@@ -131,7 +131,7 @@
         </jar>
     </target>
 	
-	 <target name="junit" depends="jar">
+	 <target name="junit" depends="jar-services">
 	 	<mkdir dir="${report.dir}"/>
 	 	
 	 	<junit printsummary="true" failureproperty="junit.failure" haltonfailure='false'> 
@@ -154,7 +154,7 @@
 	        </junitreport>
 	    </target>
 
-    <target name="clean-build" depends="clean,jar"/>
+    <target name="clean-build" depends="clean,jar-services"/>
 	
 	<target name="javadoc" depends="clean" description="generate javadoc for services">
 		<mkdir dir="${build.dir}/javadoc"/>
