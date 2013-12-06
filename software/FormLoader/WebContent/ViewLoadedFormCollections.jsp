@@ -61,28 +61,32 @@ Unload means the form will have a new workflow status RETIRED UNLOADED but the f
 		<table id="collectionsTab">
 		
 			<tr id="collTitle" class="even">
-				<th>Collection Name</th>
+				<th>
+				<a href="<s:url action="sortCollectionListByName"/>">Collection Name</a>
+				</th>
 				<th>Description</th>
 				<th># of Forms</th>
 				<th>Loaded By</th>
-				<th>Loaded Date</th>
+				<th><a href="<s:url action="sortCollectionListByDate"/>">Loaded Date</a></th>
 			</tr>
 			
             <s:iterator value="collectionList" id = "bean" status="status">
             
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>" id="parent-<s:property value="id" />"> 			    
-				<td id="expandable"><div style="width: 250px;"><s:property value= "getNameWithRepeatIndicator()"/></div></td>
-				<td id="expandable"><div style="width: 250px;"><s:property value="description" /></div></td>
-				<td id="expandable" align="center"><div style="width: 100px;"><s:property value="forms.size()" /></div></td>
-				<td id="expandable" ><div style="width: 150px;"><s:property value="createdBy" /></div></td>
-				<td id="expandable"><div style="width: 250px;"><s:date name="dateCreated" format="dd/MM/yyyy h:mm:ss a"/></div></td>
+				<td id="expandable"><div style="width: 250px;"><img id="imgparent-<s:property value="id" />" src="/FormLoader/i/small_plus.gif" alt="plus">&nbsp;<s:property value= "getNameWithRepeatIndicator()"/></div>
+				
+				</td>
+				<td><div style="width: 250px;"><s:property value="description" /></div></td>
+				<td align="center"><div style="width: 100px;"><s:property value="forms.size()" /></div></td>
+				<td><div style="width: 150px;"><s:property value="createdBy" /></div></td>
+				<td><div style="width: 250px;"><s:date name="dateCreated" format="dd/MM/yyyy h:mm:ss a"/></div></td>
 			</tr>
 			<!-- row for form table -->
 			<tr class="child-<s:property value="id" />" id="child-<s:property value="id" />" style="display:none;">
 			<td colspan=5 bgcolor="#FFE6CE" >
 			<table>
 			<tr>
-				<th>&nbsp;</th>
+				<th>Select to Unload</th>
 				<th>Public ID</th>
 				<th>Version</th>
 				<th>Long Name</th>
@@ -97,7 +101,7 @@ Unload means the form will have a new workflow status RETIRED UNLOADED but the f
 				<s:iterator value="forms" var="form" status="status"> 
 				<tr>
 				<s:if test="isUnloadable() == true ">
-				<td><div style="width: 50px;"><s:checkbox name="selectedFormIds" fieldValue="%{formSeqId}" theme = "simple" /></div></td>
+				<td><div style="width: 50px;"><s:checkbox name="selectedFormIds" fieldValue="%{formSeqId}" value="false" theme = "simple" /></div></td>
 				</s:if>
 				<s:else><td><div style="width: 50px;">&nbsp;</div></td></s:else>
 				
@@ -140,7 +144,7 @@ Unload means the form will have a new workflow status RETIRED UNLOADED but the f
   	<div id="content">
 <table id="loadedFormsTab">
 		<tr class="even">
-				<th>Select</th>
+				<th>Select to Unload</th>
 				<th>Public ID</th>
 				<th>Version</th>
 				<th>Long Name</th>
@@ -157,7 +161,7 @@ Unload means the form will have a new workflow status RETIRED UNLOADED but the f
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
 				
 				
-				<td><div style="width: 50px;"><s:checkbox name="selectedFormIds" fieldValue="%{formSeqId}" theme = "simple" /></div></td>				
+				<td><div style="width: 50px;"><s:checkbox name="selectedFormIds" fieldValue="%{formSeqId}" value="false" theme = "simple" /></div></td>				
 				<td><s:property value="publicId" /></td>
 				<td><s:property value="version" /></td>
 				<td><div style="width: 150px;"><s:property value="longName" /></div></td>
@@ -226,8 +230,16 @@ $(document).ready(function() {
 
             $('td[id="expandable"]').click(function(){
             	//alert($(this).parents('tr').attr('id'));
+            	var id = "img" + $(this).parents('tr').attr('id');
+            	var src = $(this).find('img').attr('src');
+            	if (src == '/FormLoader/i/small_minus.gif') {
+            		document.getElementById(id).src="/FormLoader/i/small_plus.gif";
+            	}
+            	else {
+            		document.getElementById(id).src="/FormLoader/i/small_minus.gif";
+            	}
+            	
                 $(this).parents('tr').next("tr").toggle();
-                //$('tr[id="child-EA0EFF9D-55ED-73E0-E040-BB8921B66692"]').show();
               });            
         });
     </script>  

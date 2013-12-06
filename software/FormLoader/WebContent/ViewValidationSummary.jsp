@@ -38,11 +38,11 @@ L--%>
 				<th>Load Type</th>
 				<th>DB Validation Status</th>
 			</tr>
-			<s:iterator value="validatedForms" id = "bean" status="status">
+			<s:iterator value="validatedForms" var="form" status="status">
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
 				<td>					
 					<s:if test="loadStatus == 4">
-					<s:checkbox name="selectedFormIndices" fieldValue="%{index}" theme = "simple" />
+					<s:checkbox id="myCheck" name="selectedFormIndices" fieldValue="%{index}" value="false" theme = "simple" />
 					</s:if>
 					<s:else>
     				<s:checkbox name="greyout" disabled="true" theme = "simple" />

@@ -59,7 +59,8 @@ Select forms to validate the questions against caDSR database
 			<s:iterator value="parsedFormsNoErrorList" id = "bean" status="status">
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
 				<td>
-					<s:checkbox id="mycheck" name="selectedFormIndices" fieldValue="%{index}" theme = "simple" />
+					<s:checkbox id="mycheck" name="selectedFormIndices" fieldValue="%{index}" value="false" 
+					onClick="toggleActionButton('selectedFormIndices', 'action:validateForms')" theme = "simple" />
 				</td>
 				<td><s:property value="publicId" /></td>
 				<td><s:property value="version" /></td>
@@ -76,7 +77,8 @@ Select forms to validate the questions against caDSR database
 <!-- Button row -->
 <tr>
 	<td colspan="1" align="left" nowrap>
-<s:submit type="image" src="/FormLoader/i/dbvalidate.gif" action="validateForms" align="left" theme="simple" /></td>
+<s:submit type="image" src="/FormLoader/i/dbvalidate.gif" title="Select at least one form and you may proceed..." 
+	action="validateForms" disabled="true" align="left" theme="simple" /></td>
 	<td colspan="1" align="left" nowrap>
 <s:submit type="image" src="/FormLoader/i/cancel.gif" action="cancelDBValidate" align="left" theme="simple"/></td>
 	<td colspan="1" align="left" nowrap>
@@ -116,7 +118,18 @@ Select forms to validate the questions against caDSR database
 		</div>
 	</s:if>
 	</s:if>
+	
+	
+	
 <script type='text/javascript' src='js/formloader-common.js'></script>
+
+
+
+ <script>
+  $(function() {
+    $( document ).tooltip();
+  });
+  </script>
 </body>
 </div>
 </html>
