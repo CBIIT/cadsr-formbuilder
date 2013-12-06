@@ -181,4 +181,14 @@ public class JDBCFormV2DAOTest {
 		assertNotNull(dateMap.get("EBA1ACB9-78B5-726C-E040-BB8921B66A4F"));
 	}
 	
+	@Test
+	public void testGetFormModifiedDateByIdsReturnsNull() {
+		List<String> ids = new ArrayList<String>();
+		ids.add("D7D63DD6-67D3-59E5-E040-BB89A7B45DE7");
+		HashMap<String, Date> dateMap = formV2Dao.getFormModifiedDateByIds(ids);
+		
+		//assertNull(dateMap.get("D7D63DD6-67D3-59E5-E040-BB89A7B45DE7"));
+		Date d = dateMap.get("EBA1ACB9-78B5-726C-E040-BB8921B66A4F");
+	}
+	
 }
