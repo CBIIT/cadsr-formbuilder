@@ -1720,9 +1720,8 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 	    					String seqid = rs.getString("QC_IDSEQ");
 	    					Timestamp timestamp = rs.getTimestamp("DATE_MODIFIED");
 	    					
-	    					dateMap.put(seqid, new Date(timestamp.getTime()));
-	    					
-	    					
+	    					if (timestamp != null)
+	    						dateMap.put(seqid, new Date(timestamp.getTime()));
 
 	    					//Not really using this
 	    					return seqid;

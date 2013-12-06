@@ -1637,9 +1637,12 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			
 			int publicId = (form.getPublicId() == null || form.getPublicId().length() == 0) ? 0 : Integer.parseInt(form.getPublicId());
 			float version = (form.getVersion() == null || form.getVersion().length() == 0) ? 0 : Float.parseFloat(form.getVersion());
+			Date loadDate = form.getModifiedDate();
+			if (loadDate == null)
+				loadDate = new Date();
 			int res = collectionDao.createCollectionFormMappingRecord(collSeqid, form.getFormSeqId(),
 					publicId, version, form.getLoadType(),
-					form.getLoadStatus(), form.getLongName(), form.getPreviousLatestVersion(), form.getModifiedDate());
+					form.getLoadStatus(), form.getLongName(), form.getPreviousLatestVersion(), loadDate);
 			
 			//TODO: check response value.
 			int loatStatus = (res > 0) ? FormDescriptor.STATUS_LOADED : FormDescriptor.STATUS_LOAD_FAILED;

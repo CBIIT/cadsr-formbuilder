@@ -35,7 +35,7 @@ public class LoadFormsAction extends ActionSupport implements SessionAware{
     private List<FormDescriptor> otherForms = null;
 	ApplicationContext applicationContext = null;
 	
-	private int[] selectedFormIndices;
+	private String[] selectedFormIndices;
     
     public String execute() {
     	System.out.println("in LoadFormsAction.execute()");
@@ -135,11 +135,11 @@ public class LoadFormsAction extends ActionSupport implements SessionAware{
 		return loadedForms;
 	}
 
-	public int[] getSelectedFormIndices() {
+	public String[] getSelectedFormIndices() {
 		return selectedFormIndices;
 	}
 
-	public void setSelectedFormIndices(int[] selectedFormIndices) {
+	public void setSelectedFormIndices(String[] selectedFormIndices) {
 		this.selectedFormIndices = selectedFormIndices;
 	}
 	
@@ -162,7 +162,7 @@ public class LoadFormsAction extends ActionSupport implements SessionAware{
 		
 	}
 	
-protected void setSelectForFormsInCollections(FormCollection aColl, int[] selectedFormIndices) {
+protected void setSelectForFormsInCollections(FormCollection aColl, String[] selectedFormIndices) {
     	
 		if (aColl == null) {
 			logger.error("Collection is null. Unable to verify selection for forms.");
@@ -191,10 +191,15 @@ protected void setSelectForFormsInCollections(FormCollection aColl, int[] select
      * @param selectedFormIdx
      * @return
      */
-    protected boolean isFormSelected(int formIdx, int[] selectedFormIndices) {
-		for (int idx : selectedFormIndices) {
-			if (idx == formIdx)
+    protected boolean isFormSelected(int formIdx, String[] selectedFormIndices) {
+		for (String idx : selectedFormIndices) {
+			try {
+			int numIdx = Integer.parseInt(idx);
+			if (numIdx == formIdx)
 				return true;
+			} catch(NumberFormatException e) {
+				return false;
+			}
 		}
 		
 		return false;

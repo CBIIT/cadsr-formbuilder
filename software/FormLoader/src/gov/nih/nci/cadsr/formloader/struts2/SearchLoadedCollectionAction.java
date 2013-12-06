@@ -26,6 +26,11 @@ import com.opensymphony.xwork2.ActionSupport;
 public class SearchLoadedCollectionAction extends ActionSupport implements
 		SessionAware {
 
+	public static final String SORT_BY_NAME = "name";
+	public static final String SORT_BY_NAME_REVERSE = "name-rev";
+	public static final String SORT_BY_DATE = "date";
+	public static final String SORT_BY_DATE_REVERSE = "date-rev";
+	
 	private static Logger logger = Logger.getLogger(SearchLoadedCollectionAction.class.getName());
 	
 	private HttpServletRequest servletRequest;
@@ -54,6 +59,7 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 			}
 			
 			userName = userName.toUpperCase();
+			
 			collectionList = collectionRetrieval.getAllCollectionsByUser(userName);
 
 			if (collectionList == null) {
@@ -83,6 +89,44 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 		}
 		
 		return ERROR;
+	}
+	
+	public String sortCollectionsByName() {
+		servletRequest = ServletActionContext.getRequest();
+		collectionList = (List<FormCollection>) servletRequest.getSession().getAttribute("collectionList");
+		unloadableForms = this.convertCollectionsToUnloadedFormList(collectionList);
+		
+		String sorted = (String) servletRequest.getSession().getAttribute("sortField");
+		if (sorted == null || sorted.length() == 0 || sorted.equals(SearchLoadedCollectionAction.SORT_BY_NAME_REVERSE)) {
+			collectionList = FormLoaderHelper.sortCollectionsByName(collectionList);
+			sorted = SearchLoadedCollectionAction.SORT_BY_NAME;
+		} else {
+			collectionList = FormLoaderHelper.reverseSortCollectionsByName(collectionList);
+			sorted = SearchLoadedCollectionAction.SORT_BY_NAME_REVERSE;
+		}
+		
+		servletRequest.getSession().setAttribute("collectionList", collectionList);
+		servletRequest.getSession().setAttribute("sortField", sorted);
+		return SUCCESS;
+	}
+	
+	public String sortCollectionsByDate() {
+		servletRequest = ServletActionContext.getRequest();
+		collectionList = (List<FormCollection>) servletRequest.getSession().getAttribute("collectionList");
+		unloadableForms = this.convertCollectionsToUnloadedFormList(collectionList);
+		
+		String sorted = (String) servletRequest.getSession().getAttribute("sortField");
+		if (sorted == null || sorted.length() == 0 || sorted.equals(SearchLoadedCollectionAction.SORT_BY_DATE_REVERSE)) {
+			collectionList = FormLoaderHelper.sortCollectionsByName(collectionList);
+			sorted = SearchLoadedCollectionAction.SORT_BY_DATE;
+		} else {
+			collectionList = FormLoaderHelper.reverseSortCollectionsByName(collectionList);
+			sorted = SearchLoadedCollectionAction.SORT_BY_DATE_REVERSE;
+		}
+		
+		servletRequest.getSession().setAttribute("collectionList", collectionList);
+		servletRequest.getSession().setAttribute("sortField", sorted);
+		return SUCCESS;
 	}
 
 	public List<FormCollection> getCollectionList() {

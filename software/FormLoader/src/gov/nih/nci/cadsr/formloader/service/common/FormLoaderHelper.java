@@ -254,4 +254,23 @@ public class FormLoaderHelper {
 		
 		return colls;
 	}
+	
+	public static List<FormCollection> sortCollectionsByName(List<FormCollection> collections) {
+
+		Collections.sort(collections, new Comparator<FormCollection>(){
+			public int compare(FormCollection o1, FormCollection o2) {
+				return o1.getNameWithRepeatIndicator().compareTo(o2.getNameWithRepeatIndicator());
+			}
+		});
+
+		return collections;
+	}
+	
+	public static List<FormCollection> reverseSortCollectionsByName(List<FormCollection> collections) {
+
+		List<FormCollection> colls = FormLoaderHelper.sortCollectionsByName(collections);
+		Collections.reverse(colls);
+
+		return collections;
+	}
 }
