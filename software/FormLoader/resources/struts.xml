@@ -96,6 +96,20 @@
     			<result type="tiles">/search.tiles</result>
 		</action>
 		
+		<action name="sortCollectionListByName" 
+			class="gov.nih.nci.cadsr.formloader.struts2.SearchLoadedCollectionAction" method="sortCollectionsByName">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+    			<result name="success" type="tiles">/search.tiles</result>
+    			<result type="tiles">/search.tiles</result>
+		</action>
+		
+		<action name="sortCollectionListByDate" 
+			class="gov.nih.nci.cadsr.formloader.struts2.SearchLoadedCollectionAction" method="sortCollectionsByDate">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
+    			<result name="success" type="tiles">/search.tiles</result>
+    			<result type="tiles">/search.tiles</result>
+		</action>
+		
 		<action name="validatexml" class="gov.nih.nci.cadsr.formloader.struts2.ValidateXMLAction">
 			<result name="success" type="tiles">/upload.parse.tiles</result>
 
