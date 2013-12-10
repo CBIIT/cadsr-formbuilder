@@ -583,6 +583,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			logger.error(dbe.getMessage());
 			form.addMessage(dbe.getMessage());
 			formSeqid = null;
+			form.setVersion("0.0");
 			form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
 		}
 		
