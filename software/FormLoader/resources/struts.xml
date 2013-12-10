@@ -123,6 +123,12 @@
     			<result name="error" type="tiles">/upload.parse.tiles</result>
 		</action>
 		
+		<action name="showValidationMessages" 
+			class="gov.nih.nci.cadsr.formloader.struts2.ShowValidationMessagesAction">
+				<result name="success">ViewDBValidationMessages.jsp</result>
+    			<result name="error">ViewDBValidationMessages.jsp</result>
+		</action>
+		
 		<action name="cancelDBValidate" class="gov.nih.nci.cadsr.formloader.struts2.ValidateFormsAction" method="cancel">
 			<result name="success" type="tiles">/upload.tiles</result>
 		</action>
