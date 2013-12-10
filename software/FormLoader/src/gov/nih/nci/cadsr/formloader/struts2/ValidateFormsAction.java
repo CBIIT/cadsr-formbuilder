@@ -27,7 +27,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.opensymphony.xwork2.ActionSupport;
 
 
-public class ValidateFormsAction extends ActionSupport implements SessionAware{
+public class ValidateFormsAction extends ActionSupport implements SessionAware {
 	
 	private static Logger logger = Logger.getLogger(ValidateFormsAction.class.getName());
 	/**

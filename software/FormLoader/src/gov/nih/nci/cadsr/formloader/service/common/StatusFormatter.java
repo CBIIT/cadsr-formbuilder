@@ -39,7 +39,7 @@ public class StatusFormatter {
 		return StatusFormatter.transformStatus(formStatus);
 	}
 	
-	private static String transformStatus(FormStatus formStatus) {
+	public static String transformStatus(FormStatus formStatus) {
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(FormStatus.class);
 			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
@@ -61,7 +61,7 @@ public class StatusFormatter {
 	 * @param formStatus
 	 * @return
 	 */
-	private static boolean messagesExistInFormStatus(FormStatus formStatus) {
+	public static boolean messagesExistInFormStatus(FormStatus formStatus) {
 		if (formStatus == null)
 			return false;
 	

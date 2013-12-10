@@ -1,5 +1,6 @@
 package gov.nih.nci.cadsr.formloader.domain;
 
+import gov.nih.nci.cadsr.formloader.service.common.StatusFormatter;
 import gov.nih.nci.cadsr.formloader.service.common.XmlValidationError;
 
 import java.util.ArrayList;
@@ -155,6 +156,37 @@ public class FormDescriptor implements java.io.Serializable {
 		}
 		
 		return formStatus;
+	}
+	
+	public List<String> getFormLevelMessages(FormStatus status) {
+		return status.getMessages();
+	}
+	
+	public List<String> getQuestionMessages(FormStatus status) {
+		
+		List<String> messages = new ArrayList<String>();
+		List<ModuleStatus> modStatuses = status.getModuleStatuses();
+		
+		int mIdx = 0;
+		for (ModuleStatus modStatus : modStatuses) {
+						
+			List<QuestionStatus> questStatuese = modStatus.getQuestionStatuses();
+			int qIdx = 0;
+			for (QuestionStatus questStatus : questStatuese) {
+				List<String> questMessages = questStatus.getMessages();
+				for (String qMeg : questMessages) {
+					if (qMeg.length() > 0) {
+						messages.add("[Module " + mIdx + " Qestion " + qIdx + "]: " + qMeg);
+					}
+				}
+				
+				qIdx++;
+			}
+			
+			mIdx++;
+		}
+		
+		return messages;
 	}
 	
 	public FormDescriptor(String id, String publicId, String version) {
