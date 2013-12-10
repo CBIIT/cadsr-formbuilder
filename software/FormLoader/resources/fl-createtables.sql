@@ -1,4 +1,10 @@
--- Request new login user "FORMLOADER"
+-- Request new login user "FORMLOADER":
+--	1). Needs same rights as "FORMBUILDER"
+--  2). Needs read/write access to tables sbrext.FORM_COLLECTIONS
+--											sbrext.FORMS_IN_COLLECTION
+-- 	3). Needs read right to these tables: sbr.DOCUMENT_TYPES_LOV
+--											sbrext.DEFINITION_TYPES_LOV_EXT 
+--											sbr.contexts_view 
 
 
 --
@@ -24,7 +30,7 @@ CREATE TABLE SBREXT.FORMS_IN_COLLECTION (
   PUBLIC_ID NUMBER, 
   VERSION NUMBER(4,2),
   LONG_NAME VARCHAR2(4000) NOT NULL,
-  LOAD_TYPE CHAR(36)
+  LOAD_TYPE CHAR(36),
   LOAD_STATUS NUMBER,
   LOAD_UNLOAD_DATE DATE default sysdate
 );
@@ -32,14 +38,17 @@ CREATE TABLE SBREXT.FORMS_IN_COLLECTION (
 alter table SBREXT.FORMS_IN_COLLECTION 
 add foreign key (FORM_COLLECTION_IDSEQ) 
 references SBREXT.FORM_COLLECTIONS(FORM_COLLECTION_IDSEQ);
+commit;
 
-
-
-insert into DESIGNATION_TYPES_LOV_VIEW (DETL_NAME) values ('Form Loader')
+insert into sbrext.DESIGNATION_TYPES_LOV_VIEW (DETL_NAME) values ('Form Loader')
 insert into sbrext.DEFINITION_TYPES_LOV_EXT (DEFL_NAME) values ('Form Loader')
 
 
-rem ALTER TABLE FORM_COLLECTIONS MODIFY date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+-- RETIRED UNLOADEED
+
+
+-- rem ALTER TABLE FORM_COLLECTIONS MODIFY date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
 ALTER TABLE SBREXT.FORMS_IN_COLLECTION ADD LOAD_TYPE CHAR(36);
 
