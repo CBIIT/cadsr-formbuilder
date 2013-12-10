@@ -87,8 +87,10 @@ public class LoadingServiceImpl implements LoadingService {
 				seqids.add(seqid);
 		}
 		
-		HashMap<String, Date> formModifiedDates = this.repository.getModifiedDateForForms(seqids);
-		assignModifiedDateForForms(forms, formModifiedDates);
+		if (seqids.size() > 0) {
+			HashMap<String, Date> formModifiedDates = this.repository.getModifiedDateForForms(seqids);
+			assignModifiedDateForForms(forms, formModifiedDates);
+		}
 		
 	}
 	
