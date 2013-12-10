@@ -123,8 +123,6 @@ Select forms to validate the questions against caDSR database
 	
 <script type='text/javascript' src='js/formloader-common.js'></script>
 
-
-
  <script>
   $(function() {
     $( document ).tooltip();

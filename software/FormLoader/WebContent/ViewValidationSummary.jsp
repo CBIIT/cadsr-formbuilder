@@ -42,7 +42,8 @@ L--%>
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
 				<td>					
 					<s:if test="loadStatus == 4">
-					<s:checkbox id="myCheck" name="selectedFormIndices" fieldValue="%{index}" value="false" theme = "simple" />
+					<s:checkbox id="myCheck" name="selectedFormIndices" fieldValue="%{index}" value="false" 
+					onClick="toggleActionButton('selectedFormIndices', 'action:loadForms')" theme = "simple" />
 					</s:if>
 					<s:else>
     				<s:checkbox name="greyout" disabled="true" theme = "simple" />
@@ -59,17 +60,30 @@ L--%>
 				<td><s:property value="loadType" /></td>
 				<td>
 				<s:if test="loadStatus != 4">
+				
 					<a href="#" title="<s:property value="getMessagesInString()" />">
 				<s:property value="getLoadStatusString()" /></a></s:if>
+				
 				<s:elseif test="loadStatus == 4">
-				<s:property value="getLoadStatusString()" />
+				
+				<a href="#" onClick=
+				"return popupvalidationMessages('showValidationMessages.action?formIndexInCollection=<s:property value="index" />')"><s:property value="getLoadStatusString()" /> </a>
+				
+				
+				
+				<!--  a href="#"><s:property value="getLoadStatusString()" /></a>
+				<input type="hidden" id="<s:property value="getFormIdString()" />" value='<s:property value="getStructuredStatusInHtml(false)" />'> -->
 				</s:elseif>
+				
+				
+				
 				</td>
 			</tr>
 			</s:iterator>
 				<tr>
 		 <td colspan="1" align="left" nowrap>
-<s:submit type="image" src="/FormLoader/i/load_forms.gif" align="left" theme="simple" /></td>
+<s:submit type="image" src="/FormLoader/i/load_forms.gif" title="Select at least one form and you may proceed..." 
+	action="loadForms" disabled="true" align="left" theme="simple" /></td>
 	  	<td colspan="1" align="left" nowrap>
 <s:submit type="image" src="/FormLoader/i/cancel.gif" action="cancelLoad" align="left" theme="simple"/></td>
 		<td colspan="1" align="left" nowrap>
@@ -80,7 +94,35 @@ L--%>
 	</s:form>
 	</s:if>
 	
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+  
+<script type='text/javascript' src='js/jquery.simplemodal.js'></script>
+	
 	<script type='text/javascript' src='js/formloader-common.js'></script>
+	
+<script type="text/javascript"> 
+$(document).ready(function() {
+	
+	$('td[id="valStatus"]').click(function(){
+		
+		var data = $(this).find('input').val();
+		//alert(data);
+		
+		$.modal(data);
+      }); 
+	
+	
+});
+</script>
+	
+	
+	<script>
+  $(function() {
+    $( document ).tooltip();
+  });
+  </script>
+
 </body>
 </div>
 </html>
