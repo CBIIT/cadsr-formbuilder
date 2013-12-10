@@ -14,21 +14,20 @@
     <!--  jee:jndi-lookup id="dataSource" jndi-name="jdbc/FormBuilderDS" resource-ref="false" /> -->
     
     <tx:annotation-driven transaction-manager = "transactionManager" />
+    <tx:annotation-driven proxy-target-class="true"/>
     
-    <!--  bean id="dataSource" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">
+    <bean id="dataSource" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">
     	<property name="URL" value="jdbc:oracle:thin:@ncidb-dsr-d:1551:DSRDEV"/>
-    	<property name="user" value="FORMBUILDER"/>
-    	<property name="password" value="FORMBUILDER"/>
+    	<property name="user" value="FORMLOADER"/>
+    	<property name="password" value="f0rmloader"/>
     	<property name="connectionCachingEnabled" value="true"/>
-	</bean> -->
+	</bean>
 	
-	<!--  bean id="loadingService"
-		class="gov.nih.nci.cadsr.formloader.service.impl.LoadingServiceImpl"> 
-		<property name="repository">
-			<ref local="repository" />
-		</property>
-	</bean> -->
-	
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
 	<bean id="unloadService"
 		class="gov.nih.nci.cadsr.formloader.service.impl.UnloadingServiceImpl">
 		<property name="repository">
@@ -59,11 +58,9 @@
 	
 	<bean id="xmlValidationService"
 		class="gov.nih.nci.cadsr.formloader.service.impl.XmlValidationServiceImpl">
-	</bean>
-	
-	<bean id="transactionManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource" />
+		<property name="repository">
+			<ref local="repository" />
+		</property>
 	</bean>
 	
 	<bean id="repository"
@@ -103,8 +100,6 @@
 		</property>
 		
 	</bean>
-	
-	
 	
 	<import resource="applicationContext-jdbcdao-test.xml" />
 
