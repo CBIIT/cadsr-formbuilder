@@ -471,6 +471,17 @@ public class FormDescriptor implements java.io.Serializable {
 		return getLoadStatusString(this.loadStatus);
 	}
 	
+	public String getLoadStatusStringWithMessages() {
+		String status = getLoadStatusString(this.loadStatus);
+		
+		if (this.messages.size() > 0) {
+			status += " - ";
+			for (String message : messages) 
+				status += message + ";";
+		}
+		return status;
+	}
+	
 	protected String getLoadStatusString(int statusCode) {
 		
 		switch (statusCode) {
