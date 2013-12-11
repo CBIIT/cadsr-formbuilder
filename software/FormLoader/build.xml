@@ -62,6 +62,7 @@
 		<copy todir="${build.dir}">
 			<fileset dir="${web.dir}" excludes="CVS,**/*.class" />
 		</copy>
+    	<copy file="${web.dir}/WEB-INF/formloader.properties" todir="${build.dir}/classes" overwrite="true"/>
     </target>
 	
 	<target name="archive" depends="build" description="Create binary archive of all files in dist.home">
