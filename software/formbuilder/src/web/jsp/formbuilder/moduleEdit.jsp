@@ -41,6 +41,9 @@ function populateDefaultValue(defaultValidValue,defaultValidValueId, index){
     objQuestionDefaultValidValueId.value = defaultValidValueId;
 
     setEditable(objQuestionDefaultValue, '<%= FormConstants.QUESTION_EDITABLES+"['+index+']"%>');
+    
+    var nv = replaceAll(defaultValidValue,'<','&lt'); // < does not seem to display, so encode
+    document.getElementById("questionDefaultValuesSpan[" + index + "]").innerHTML=nv;  
 }
 
 
@@ -292,18 +295,38 @@ function clearProtocol() {
          var srcObj = document.getElementById(srcCompId);
          var i;
          var count = 0;
+         var newValue = '';
          for (i=0; i<srcObj.options.length; i++) {
            if (srcObj.options[i].selected) {
               targetObj.value = srcObj.options[i].value;
+              newValue = srcObj.options[i].value;
              }
            }
+           
+        var index = targetCompId.substring(15,targetCompId.length);
+        var nv = replaceAll(newValue,'<','&lt'); // < does not seem to display, so encode
+
+        document.getElementById("moduleQuestionsSpan" + index).innerHTML=nv;  
      }
   
   function refDocHyperlink(targetCompId,newValue)
     {
         var targetObj = document.getElementById(targetCompId);
         targetObj.value=newValue;
+        
+        var index = targetCompId.substring(15,targetCompId.length);
+        var nv = replaceAll(newValue,'<','&lt'); // < does not seem to display, so encode
+
+        document.getElementById("moduleQuestionsSpan" + index).innerHTML=nv;  
      }  
+     
+   function replaceAll(string, token, newtoken) {
+    if(token!=newtoken)
+    while(string.indexOf(token) > -1) {
+        string = string.replace(token, newtoken);
+    }
+    return string;
+   }  
      
   function submitChangeAsso(methodName, moduleIndex, questionIndex){
     var objForm0 = document.forms[0];
@@ -608,8 +631,8 @@ function clearProtocol() {
                                 </logic:notPresent>
                                 <logic:present name="question" property="dataElement">
                                  <td >
-                                  <html:textarea  styleClass="OraFieldText" rows="2" cols="102" property='<%=FormConstants.MODULE_QUESTIONS+"["+questionIndex+"]"%>' readonly="true" styleId="<%=FormConstants.MODULE_QUESTIONS+questionIndex %>">
-                                 </html:textarea>
+                                 <span id='<%=FormConstants.MODULE_QUESTIONS+"Span"+questionIndex%>'><bean:write name="moduleEditForm" property='<%=FormConstants.MODULE_QUESTIONS+"["+questionIndex+"]"%>' filter="false" /></span>
+                                 <html:hidden  property='<%=FormConstants.MODULE_QUESTIONS+"["+questionIndex+"]"%>' styleId="<%=FormConstants.MODULE_QUESTIONS+questionIndex %>"></html:hidden>
                                  </td>        
                                   <td class="OraHeaderBlack" align="center" width="70" >
                                    <html:link href='<%=params.getCdeBrowserUrl() +"/CDEBrowser/search?dataElementDetails=9&PageId=DataElementsGroup&queryDE=yes&FirstTimer=0"%>' 
@@ -743,17 +766,17 @@ function clearProtocol() {
                             </td>                      
                             <td class="OraFieldText">
                             <logic:notEmpty name="question" property="validValues">
-                            <html:text property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>' readonly="true" size="70"/>
-                            <a href="javascript:populateDefaultValue('','', '<%=questionIndex%>')">
-			               Clear
-			    </a>                          
+                            <html:hidden property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>'/>
+                            <span id='<%=FormConstants.QUESTION_DEFAULTVALUES+"Span["+questionIndex+"]"%>'><bean:write name="moduleEditForm" property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>' filter="false" /></span>
+                            &nbsp;&nbsp;&nbsp;<a href="javascript:populateDefaultValue('','', '<%=questionIndex%>')">Clear</a>                          
 
                             <html:hidden property='<%=FormConstants.QUESTION_DEFAULT_VALIDVALUE_IDS+"["+questionIndex+"]"%>'/>
                             </logic:notEmpty>    
                             <logic:empty name="question" property="validValues">                                    
 								<logic:equal name="question" property="deDerived" value="true">
-		                            <html:text property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>' readonly="true" size="70"/>
-		                            <a href="javascript:populateDefaultValue('','', '<%=questionIndex%>')">Clear</a>                          
+		                            <html:hidden property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>' />
+		                            <span id="questionDefaultValues"><bean:write name="moduleEditForm" property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>' filter="false" /></span>
+		                            &nbsp;&nbsp;&nbsp;<a href="javascript:populateDefaultValue('','', '<%=questionIndex%>')">Clear</a>                          
 								</logic:equal>
 								<logic:notEqual name="question" property="deDerived" value="true">
 									<html:hidden property='<%=FormConstants.QUESTION_DEFAULT_VALIDVALUE_IDS+"["+questionIndex+"]"%>' />
@@ -946,7 +969,7 @@ function clearProtocol() {
                                         <table width="100%" align="right" cellpadding="0" cellspacing="0" border="0" class="OraBGAccentVeryDark">
                                           <tr class="OraHeaderBlack" >
                                            <td class="OraFieldText" width="86%">
-                                          <bean:write name="validValue" property="longName"/>
+                                          <bean:write name="validValue" property="longName" filter="false"/>
                                           <% String formattedValidValue = validValue.getLongName();
                                              if (formattedValidValue!=null){
                                              	formattedValidValue = StringUtils.getValidJSString(formattedValidValue);

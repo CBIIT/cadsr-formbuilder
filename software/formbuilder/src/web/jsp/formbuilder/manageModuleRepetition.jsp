@@ -127,6 +127,13 @@ function submitModuleListEdit(methodName) {
         }
   }
   
+   function replaceAll(string, token, newtoken) {
+    if(token!=newtoken)
+    while(string.indexOf(token) > -1) {
+        string = string.replace(token, newtoken);
+    }
+    return string;
+   }  
   
 
 function populateDefaultValue(defaultValidValue,defaultValidValueId, index){
@@ -137,6 +144,9 @@ function populateDefaultValue(defaultValidValue,defaultValidValueId, index){
     objQuestionDefaultValidValueId.value = defaultValidValueId;
 
     setEditable(objQuestionDefaultValue, '<%= FormConstants.QUESTION_EDITABLES+"['+index+']"%>');
+    
+    var nv = replaceAll(defaultValidValue,'<','&lt'); // < does not seem to display, so encode
+    document.getElementById("questionDefaultsSpan[" + index + "]").innerHTML=nv;  
 }
 
 function setEditable(defValElem, editableFld) {

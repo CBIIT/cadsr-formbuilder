@@ -569,7 +569,7 @@ $.cookie( 'currentPageIs', $("#myInputCurrentPage").val() );
                             <tr class="OraTabledata">
                               <td class="OraFieldText" width="7%">&nbsp;</td>
                               <td class="UnderlineOraFieldText" >
-                                <bean:write name="question" property="longName"/>
+                                <bean:write name="question" property="longName" filter="false"/>
                               </td>
                               <td class="OraTabledata" width="15%" align="right" >
                                <table width="100%" align="right" cellpadding="0" cellspacing="0" border="0" class="OraTabledata">
@@ -655,7 +655,7 @@ $.cookie( 'currentPageIs', $("#myInputCurrentPage").val() );
                                         <bean:message key="cadsr.formbuilder.form.questionDefaultValue"/>
                                      </td>
                                      <td class="OraFieldTextInstruction">
-                                       <bean:write  name="question" property="defaultValidValue.longName"/>
+                                       <bean:write  name="question" property="defaultValidValue.longName" filter="false"/>
                                      </td>
                                     </tr>
                                    </table>                                                            
@@ -674,7 +674,7 @@ $.cookie( 'currentPageIs', $("#myInputCurrentPage").val() );
                                         <bean:message key="cadsr.formbuilder.form.questionDefaultValue"/>
                                      </td>
                                      <td class="OraFieldTextInstruction">
-                                       <bean:write  name="question" property="defaultValue"/>
+                                       <bean:write  name="question" property="defaultValue" filter="false"/>
                                      </td>
                                     </tr>
                                    </table>                                                            
@@ -760,7 +760,7 @@ class="OraBGAccentVeryDark" >
                                       <tr   class="OraTabledata">
                                         <td class="OraFieldText" width="50">&nbsp;</td>
                                         <td class="OraFieldText">
-                                          <bean:write name="validValue" property="longName"/>
+                                          <bean:write name="validValue" property="longName" filter="false"/>
                                         </td>
                                       </tr>                                       
                                       <tr   class="OraTabledata">
