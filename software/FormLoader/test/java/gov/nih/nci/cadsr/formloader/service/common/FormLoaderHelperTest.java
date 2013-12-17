@@ -59,4 +59,32 @@ public class FormLoaderHelperTest {
 		assertTrue(colls.get(0) == c4);
 		
 	}
+	@Test
+	public void testGetPropertyFromAppPath() {
+		
+	}
+	
+	@Test
+	public void testGetPropertyFromClasspath() {
+		String prop = FormLoaderHelper.getProperty("", "upload.file.path");
+		
+		assertNotNull(prop);
+	}
+	
+	@Test
+	public void testFormatVersion() {
+		float ver = 1;
+		String str = FormLoaderHelper.formatVersion(ver);
+		
+		assertTrue(str.indexOf(".") == str.length() - 2);
+		
+		double verd = 2.3;
+		str = FormLoaderHelper.formatVersion((float)verd);
+		assertTrue(str.indexOf(".") == str.length() - 2);
+		
+		ver = 0;
+		str = FormLoaderHelper.formatVersion(ver);
+		assertTrue(str.indexOf(".") == str.length() - 2);
+		ver = 4;
+	}
 }
