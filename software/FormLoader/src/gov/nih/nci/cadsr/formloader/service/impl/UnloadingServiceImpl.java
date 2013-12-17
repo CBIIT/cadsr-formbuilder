@@ -90,8 +90,9 @@ public class UnloadingServiceImpl implements UnloadingService {
 				form.addMessage("Loggedin user doesn't have right to unload form with context \"" + context + "\"");
 				form.setLoadStatus(FormDescriptor.STATUS_UNLOAD_FAILED);
 				continue;
-			}
+			} 
 			
+			form.setChangeNote("Unloaded using Form Loader by [" + userName + "]");
 			repository.unloadForm(form);
 			
 			if (form.getLoadStatus() == FormDescriptor.STATUS_UNLOADED) {

@@ -308,7 +308,7 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
     public List<FormV2> getExistingVersionsForPublicIds(List<String> publicIds) {
        
         String sql = 
-        	"SELECT FV.QC_IDSEQ, FV.PUBLIC_ID, FV.VERSION FROM FB_FORMS_VIEW fv WHERE FV.PUBLIC_ID in (:ids) " +
+        	"SELECT FV.QC_IDSEQ, FV.PUBLIC_ID, FV.VERSION, FV.WORKFLOW FROM FB_FORMS_VIEW fv WHERE FV.PUBLIC_ID in (:ids) " +
         			"ORDER BY FV.PUBLIC_ID, FV.VERSION";
 
         MapSqlParameterSource params = new MapSqlParameterSource();
@@ -321,9 +321,10 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
         		new RowMapper<FormV2>() {
         	public FormV2 mapRow(ResultSet rs, int rowNum) throws SQLException {
             	FormV2 form = new FormV2TransferObject();
-            	form.setIdseq(rs.getString(1));
-            	form.setPublicId(rs.getInt(2));
-            	form.setVersion(rs.getFloat(3));
+            	form.setIdseq(rs.getString("QC_IDSEQ"));
+            	form.setPublicId(rs.getInt("PUBLIC_ID"));
+            	form.setVersion(rs.getFloat("VERSION"));
+            	form.setAslName(rs.getString("WORKFLOW"));
             	return form;
             }
         });

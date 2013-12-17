@@ -60,6 +60,9 @@ public class FormDescriptor implements java.io.Serializable {
 	
 	Date createdDate;  //cadsr db
 	Date modifiedDate;	//cadsr db
+	String workflowStatusCadsr; //currently in cadsr
+	String versionCadsr;		//currently in cadsr
+	
 	Date loadUnloadDate; //form loader table
 	
 	String collectionName;
@@ -463,6 +466,23 @@ public class FormDescriptor implements java.io.Serializable {
 	public void setBelongToCollections(List<FormCollection> belongToCollections) {
 		this.belongToCollections = belongToCollections;
 	}
+	
+
+	public String getWorkflowStatusCadsr() {
+		return workflowStatusCadsr;
+	}
+
+	public void setWorkflowStatusCadsr(String workflowStatusCadsr) {
+		this.workflowStatusCadsr = workflowStatusCadsr;
+	}
+
+	public String getVersionCadsr() {
+		return versionCadsr;
+	}
+
+	public void setVersionCadsr(String versionCadsr) {
+		this.versionCadsr = versionCadsr;
+	}
 
 	/**
 	 * Return the current load status in string
@@ -599,6 +619,9 @@ public class FormDescriptor implements java.io.Serializable {
 		
 		Date loadDate = this.loadUnloadDate;
 		Date modDate = this.modifiedDate;
+		
+		if (modDate == null && FormDescriptor.LOAD_TYPE_NEW.equals(this.loadType))
+			return true;
 		
 		return (loadDate != null && modDate != null) ? loadDate.getTime() == modDate.getTime() : false;
 		

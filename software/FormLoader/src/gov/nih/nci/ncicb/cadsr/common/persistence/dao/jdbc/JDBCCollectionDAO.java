@@ -167,7 +167,7 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 						 form.setFormSeqId(rs.getString("FORM_IDSEQ"));
 						 form.setPublicId(rs.getString("PUBLIC_ID"));
 						 form.setVersion(rs.getString("VERSION"));
-						 form.setLoadType(rs.getString("LOAD_TYPE"));
+						 form.setLoadType(rs.getString("LOAD_TYPE").trim());
 						 form.setLoadStatus(rs.getInt("LOAD_STATUS"));
 						 form.setLongName(rs.getString("LONG_NAME"));
 						 Timestamp timestamp = rs.getTimestamp("LOAD_UNLOAD_DATE");

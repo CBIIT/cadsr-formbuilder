@@ -127,6 +127,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 
 			//extra info we want from the dtos, eg. seq id for update form and new version
 			transferFormSeqids(formDtos, formDescriptors);
+			transferFormCurrentWorkflow(formDtos, formDescriptors);
 		}
 		
 	}
@@ -171,10 +172,13 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 				form.setLoadStatus(FormDescriptor.STATUS_CONTENT_VALIDATION_FAILED);
 				form.setSelected(false);
 			} else {
-				String changeNote = "Created/Updated using Form Loader by [" + loggedinUser + 
-						"], XML document contained createdBy [" + form.getCreatedBy() + "] and modifiedBy [" + form.getModifiedBy() + "]";
 				form.setCreatedBy(loggedinUser);
-				form.setChangeNote(changeNote);
+				
+				if (form.getChangeNote() == null || form.getChangeNote().length() == 0) {
+					String changeNote = "Created/Updated using Form Loader by [" + loggedinUser + 
+						"], XML document contained createdBy [" + form.getCreatedBy() + "] and modifiedBy [" + form.getModifiedBy() + "]";
+					form.setChangeNote(changeNote);
+				}
 			}
 		}
 	}
@@ -249,12 +253,30 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 				form.addMessage(
 					"Form public id from xml doesn't have a match in database. Please correct or it'll be skipped loading");
 				form.setLoadStatus(FormDescriptor.STATUS_CONTENT_VALIDATION_FAILED);
-			} else 
+			} else {
+				String existingVersForForm = formatVersionList(existingVersions.get(publicid));
+				form.setVersionCadsr(existingVersForForm);
 				determineLoadTypeForForm(form, existingVersions.get(publicid));
+			}
 	
 			checkDuplicate(processed, publicid, version, form);
 		}
 		
+	}
+	
+	protected String formatVersionList(List<Float> versions) {
+		if (versions == null)
+			return "";
+		
+		StringBuilder sb = new StringBuilder();
+		for (Float version : versions) {
+			String v = FormLoaderHelper.formatVersion(version.floatValue());
+			if (sb.length() > 0) 
+				sb.append(",");
+			sb.append(v);
+		}
+		
+		return sb.toString();
 	}
 	
 	/**
@@ -308,6 +330,23 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			FormV2 match = findMatchingFormDto(formDtos, formDesc);
 			if (match != null)
 				formDesc.setFormSeqId(match.getIdseq());
+		}
+	}
+	
+	/**
+	 * If a form is determined to be a Update Form or New Version, set the currently existing 
+	 * workflow status
+	 * @param formDtos
+	 * @param forms
+	 */
+	protected void transferFormCurrentWorkflow(List<FormV2>formDtos, List<FormDescriptor> forms) {
+		for (FormDescriptor formDesc : forms) {
+			if (formDesc.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW)) 
+				continue;
+			
+			FormV2 match = findMatchingFormDto(formDtos, formDesc);
+			if (match != null) 
+				formDesc.setWorkflowStatusCadsr(match.getAslName());
 		}
 	}
 	

@@ -1740,7 +1740,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		}
 		
 		logger.debug("Start unloading form: " + seqid + "|" + form.getFormSeqId());
-		int res = formV2Dao.updateWorkflowStatus(seqid, WORKFLOW_STATUS_UNLOADED, FORM_LOADER_DB_USER);
+		int res = formV2Dao.updateWorkflowStatus(seqid, WORKFLOW_STATUS_UNLOADED, FORM_LOADER_DB_USER, form.getChangeNote());
 		if (res <= 0) {
 			form.addMessage("Failed to update form's workflow status in database. Reason unknown");
 			form.setLoadStatus(FormDescriptor.STATUS_UNLOAD_FAILED);
