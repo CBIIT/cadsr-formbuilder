@@ -29,11 +29,13 @@ L--%>
 				<th>Select to Load</th>
 				<th>Public Id in XML</th>
 				<th>Version in XML</th>
+				<th>Existing Versions in DB</th>
 				<th>Long Name in XML</th>
 				<th>Context in XML</th>
 				<th>Type in XML</th>
 				<th>Protocol Name(s) in XML</th>
 				<th>Workflow Status in XML</th>
+				<th>Workflow Status in DB</th>
 				<th># Module(s) in XML</th>
 				<th>Load Type</th>
 				<th>DB Validation Status</th>
@@ -51,11 +53,14 @@ L--%>
 				</td>
 				<td><s:property value="publicId" /></td>
 				<td><s:property value="version" /></td>
+				<td style="word-wrap: break-word"><div style="width: 250px;"><s:property value="versionCadsr" /></div></td>
 				<td><s:property value="longName" /></td>
 				<td><s:property value="context" /></td>
 				<td><s:property value="type" /></td>
 				<td><div style="width: 250px;"><s:property value="protocolName" /></div></td>
 				<td><s:property value="workflowStatusName" /></td>
+				<td><s:property value="workflowStatusCadsr" /></td>
+				
 				<td><s:property value="modules.size()" /></td>
 				<td>
 				<s:if test="loadType.equals('Update Form')">
