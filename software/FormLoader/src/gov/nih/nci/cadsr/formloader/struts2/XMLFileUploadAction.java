@@ -3,6 +3,7 @@ package gov.nih.nci.cadsr.formloader.struts2;
 
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
+import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 import gov.nih.nci.cadsr.formloader.service.impl.CollectionRetrievalServiceImpl;
 import gov.nih.nci.cadsr.formloader.service.impl.XmlValidationServiceImpl;
@@ -52,38 +53,11 @@ ServletRequestAware, ValidationAware{
     private List<FormDescriptor> parsedFormsList = null;
     private List<FormDescriptor> parsedFormsNoErrorList = null;
     private List<FormDescriptor> parsedFormsWithErrorList = null;
-    private Properties configProp;
+    //private Properties configProp;
     private File uploadedfile = null;
     private XmlValidationServiceImpl xmlValidator = null;
     private boolean clear=false;
-    
-    public void loadProps() {
-    	InputStream in = null;
-        configProp = new Properties();
-    	
-    	servletRequest = ServletActionContext.getRequest();
-    	String filePath = servletRequest.getSession().getServletContext().getRealPath("/");
-    	System.out.println("Server path:" + filePath);
-    	
-        try {
-            File f = new File(filePath+"/WEB-INF/config.properties");
-            in = new FileInputStream( f );
-            configProp.load(in);
-            System.out.println(configProp.getProperty("upload.file.path"));
-        }
-        catch ( Exception e ) { in = null; }
-               
-        try {
-            if ( in == null ) {
-                // Try loading from classpath
-            	in = this.getClass().getResourceAsStream(filePath+"/WEB-INF/config.properties");
-                // Try loading properties from the file (if found)
-                configProp.load(in);
-                System.out.println(configProp.getProperty("upload.file.path"));
-            }
-        }
-        catch ( Exception e ) { }
-    }
+   
     
     public File getFile() {
 		return file;
@@ -129,12 +103,14 @@ ServletRequestAware, ValidationAware{
     	InputStream inStream = null;
     	OutputStream outStream = null;
  
-    	loadProps();
+    	String filePath = servletRequest.getSession().getServletContext().getRealPath("/");
+    	String uploadFilePath = FormLoaderHelper.getProperty(filePath, "upload.file.path");
+    	//loadProps();
     	 	
     	try
 	    	{
     		
-    		uploadedfile = new File(configProp.getProperty("upload.file.path") +"\\" + this.fileName);
+    		uploadedfile = new File(uploadFilePath +"\\" + this.fileName);
 	 
 	    	    inStream = new FileInputStream(xmlFile);
 	    	    outStream = new FileOutputStream(uploadedfile);
@@ -175,8 +151,8 @@ ServletRequestAware, ValidationAware{
 		String userName = (String)servletRequest.getSession().getAttribute("username");
 		
 		FormCollection aColl = new FormCollection();
-		aColl.setXmlPathOnServer(configProp.getProperty("upload.file.path") +"\\");
-		servletRequest.getSession().setAttribute("upload.file.path", configProp.getProperty("upload.file.path") +"\\");
+		aColl.setXmlPathOnServer(FormLoaderHelper.getProperty("", "upload.file.path") +"\\");
+		servletRequest.getSession().setAttribute("upload.file.path", FormLoaderHelper.getProperty("", "upload.file.path") +"\\");
 		aColl.setXmlFileName(this.fileName);
 		//aColl.setDescription(description);
 		//aColl.setName(collectionName);

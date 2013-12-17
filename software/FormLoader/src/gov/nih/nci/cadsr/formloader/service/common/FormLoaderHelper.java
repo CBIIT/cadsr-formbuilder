@@ -14,15 +14,67 @@ import java.io.InputStream;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 
 public class FormLoaderHelper {
 	
 	private static Logger logger = Logger.getLogger(FormLoaderHelper.class.getName());
+	
+	private static Properties properties = null;
+	
+	public static String getProperty(String filepathBase, String key) {
+		
+		if (properties == null)
+			properties = loadProperties(filepathBase);
+		
+		return (properties == null) ? "" : properties.getProperty(key);	    
+	}
+	
+	private static Properties loadProperties(String filePathBase) {
+		InputStream in = null;
+		Properties props = new Properties();
+    	String fileNamePath = "";
+    	
+        try {
+        	fileNamePath = filePathBase +"/WEB-INF/formloader.properties";
+            File f = new File(fileNamePath);
+            in = new FileInputStream( f );
+            props.load(in);
+            
+        } catch ( Exception e ) { 
+        	logger.error("Unable to open property file at " + filePathBase);
+        	logger.error(e.getMessage());
+        	in = null; 
+        }
+               
+        try {
+            if ( in == null ) {
+                // Try loading from classpath
+            	//Class cls = (Class) Class.forName("gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper");
+            	//ClassLoader cloader = cls.getClassLoader();
+            	//in = cloader.getClass().getResourceAsStream("config.properties");
+            	in = 
+            		    FormLoaderHelper.class.getClassLoader().getResourceAsStream("config.properties");
+                // Try loading properties from the file (if found)
+            	props.load(in);
+            }
+        }
+        catch ( Exception e ) {
+        	logger.error("Unable to open property file from classpath");
+        }
+        
+        return props;
+	}
 	
 	public static String checkInputFile(String xmlPath, String xmlName) 
 			throws FormLoaderServiceException
@@ -272,5 +324,15 @@ public class FormLoaderHelper {
 		Collections.reverse(colls);
 
 		return collections;
+	}
+	
+	/**
+	 * Format version number into #0.0 form
+	 * @param versionNumber
+	 * @return
+	 */
+	public static String formatVersion(float versionNumber) {
+		NumberFormat formatter = new DecimalFormat("#0.0");
+		return formatter.format(versionNumber);
 	}
 }

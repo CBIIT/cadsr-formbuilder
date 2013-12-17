@@ -9,6 +9,7 @@ package gov.nih.nci.cadsr.formloader.struts2;
 
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
+import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 import gov.nih.nci.cadsr.formloader.service.impl.ContentValidationServiceImpl;
 
@@ -39,11 +40,12 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware {
     private List<FormDescriptor> validatedForms = null;
     private FormCollection validatedFormCollection;
     
-    
     private HttpServletRequest servletRequest;
 	ApplicationContext applicationContext = null;
 	
 	private int[] selectedFormIndices;
+	
+	private String versioningRulesUrl;
     
     public String execute() {
     	System.out.println("in ValidateFormsAction.execute()");
@@ -184,5 +186,16 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware {
 	public String cancel() {
 		return SUCCESS;
 	}
+
+	public String getVersioningRulesUrl() {
+		if (versioningRulesUrl == null)
+			this.versioningRulesUrl = FormLoaderHelper.getProperty("", "formbuilder.versioning.url");
+		return versioningRulesUrl;
+	}
+
+	public void setVersioningRulesUrl(String versioningRulesUrl) {
+		this.versioningRulesUrl = versioningRulesUrl;
+	}
+	
 	
 }

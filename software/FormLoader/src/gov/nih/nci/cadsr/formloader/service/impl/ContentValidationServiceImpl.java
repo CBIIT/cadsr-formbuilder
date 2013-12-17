@@ -243,7 +243,6 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			
 			if (publicid == null || publicid.length() == 0) {
 				form.setLoadType(FormDescriptor.LOAD_TYPE_NEW);
-				form.setVersion("1.0");
 			} else if (!existingVersions.containsKey(publicid)) {// invalid public id from xml
 				form.setLoadType(FormDescriptor.LOAD_TYPE_UNKNOWN);
 				form.setSelected(false);
@@ -976,18 +975,12 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		if (refDocs == null || refDocs.size() == 0) {
 			question.addInstruction("Unable to load any reference document with CDE public id and version [" + 
 				matchingCde.getPublicId() +
-				"|" + matchingCde.getVersion() + "] in xml");
+				"|" + matchingCde.getVersion() + "] in xml. Unable to verify question text.");
 			return;
 		}
 		String questionText = question.getQuestionText();
 		String cdePublicId = question.getCdePublicId();
 		String cdeVersion = question.getCdeVersion();
-		
-		//DEBUG
-		if (question.getPublicId().equals("3193451")) {
-			int i = 10;
-			i++;
-		}
 		
 		//refdoc list is ordered by type, preferred first
 		if (questionText == null || questionText.length() == 0) {

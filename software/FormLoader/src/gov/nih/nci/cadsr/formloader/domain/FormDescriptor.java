@@ -1,5 +1,6 @@
 package gov.nih.nci.cadsr.formloader.domain;
 
+import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.StatusFormatter;
 import gov.nih.nci.cadsr.formloader.service.common.XmlValidationError;
 
@@ -601,5 +602,12 @@ public class FormDescriptor implements java.io.Serializable {
 		
 		return (loadDate != null && modDate != null) ? loadDate.getTime() == modDate.getTime() : false;
 		
+	}
+	//<a href="https://formbuilder-dev.nci.nih.gov/FormBuilder/formDetailsAction.do?method=getFormDetails&formIdSeq=BC2E08B3-C5B7-4C7A-E040-BB89AD43061F" target="_blank"> 3421713 </a>
+	public String getLinkToFormBuilder() {
+		String urlBase = FormLoaderHelper.getProperty(null, "formbuilder.detailsAction.url");
+		
+		
+		return urlBase + this.formSeqId;
 	}
 }

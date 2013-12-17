@@ -4,6 +4,7 @@ import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.ModuleDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.QuestionDescriptor;
+import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
 import gov.nih.nci.ncicb.cadsr.common.dto.AdminComponentTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
@@ -312,6 +313,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 				FormDescriptor cadsrForm = getMatchingCadsrForm(formSeqid, cadsrforms);
 				if (cadsrForm == null) continue;
 
+				form.setVersion(cadsrForm.getVersion());
 				form.setLongName(cadsrForm.getLongName());
 				form.setContext(cadsrForm.getContext());
 				form.setModifiedBy(cadsrForm.getModifiedBy());
@@ -1246,7 +1248,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 				form.setCreatedBy(dto.getCreatedBy());
 				form.setProtocolName(dto.getProtocolLongName());
 				form.setPublicId(String.valueOf(dto.getPublicId()));
-				form.setVersion(String.valueOf(dto.getVersion()));
+				form.setVersion(FormLoaderHelper.formatVersion(dto.getVersion()));
 				form.setType(dto.getFormType());
 				form.setWorkflowStatusName(dto.getAslName());
 				form.setCollectionSeqid(aColl.getId());
@@ -1558,6 +1560,8 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		int idx = 0;
 		for (QuestionDescriptor.ValidValue vValue : validValues) {
 			
+			if (vValue.isSkip()) continue;
+			
 			FormValidValueTransferObject fvvdto = translateIntoValidValueDto(vValue, questdto, moduledto,
 					formdto, idx);
 			
@@ -1789,6 +1793,8 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		if (prevVersion > 0) {
 			int r = formV2Dao.updateLatestVersionIndicatorByPublicIdAndVersion(Integer.parseInt(form.getPublicId()), 
 					prevVersion, "Yes", FORM_LOADER_DB_USER);
+			form.addMessage("After unload, the latest version for the form with pulbic id [" + form.getPublicId() +
+					"] is reset to " + prevVersion);
 			logger.debug("Previous Lastest version was restored: " + prevVersion + ". Response: " + r);
 		} else {
 			form.addMessage("No valid previous latest version with form. Unable to restore previous latest " +
