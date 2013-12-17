@@ -38,7 +38,9 @@ L--%>
 			</tr>
 			<s:iterator value="loadedForms" id = "bean" status="status">
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
-				<td><s:property value="publicId" /></td>
+				<td>
+				<a href="<s:property value="getLinkToFormBuilder()" />" target="_blank"><s:property value="publicId" /></a>
+				</td>
 				<td><s:property value="version" /></td>
 				<td><s:property value="longName" /></td>
 				<td><s:property value="context" /></td>
@@ -69,7 +71,7 @@ L--%>
 				<td><s:property value="publicId" /></td>
 				<td><s:property value="version" /></td>
 				<td><s:property value="longName" /></td>
-				<td><s:property value="getLoadStatusString()" /></td>
+				<td><s:property value="getLoadStatusStringWithMessages()" /></td>
 			</tr>
 			</s:iterator>
 		</table>

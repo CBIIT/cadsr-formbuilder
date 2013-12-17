@@ -101,7 +101,9 @@ Unload means the form will have a new workflow status RETIRED UNLOADED but the f
 				<s:iterator value="forms" var="form" status="status"> 
 				<tr>
 				<s:if test="isUnloadable() == true ">
-				<td><div style="width: 50px;"><s:checkbox name="selectedFormIds" fieldValue="%{formSeqId}" value="false" theme = "simple" /></div></td>
+				<td><div style="width: 50px;">
+				<s:checkbox name="selectedFormIds" fieldValue="%{formSeqId}" value="false" 
+				onClick="toggleActionButton('selectedFormIds', 'action:unloadForms')" theme = "simple" /></div></td>
 				</s:if>
 				<s:else><td><div style="width: 50px;">&nbsp;</div></td></s:else>
 				
@@ -128,7 +130,7 @@ Unload means the form will have a new workflow status RETIRED UNLOADED but the f
 			</s:iterator>
 			<tr id="buttonRow">
 		  	<td colspan="1" align="left" nowrap>
-<s:submit type="image" src="/FormLoader/i/Unload-Forms.gif" method="execute" align="left" theme="simple" /></td>
+<s:submit type="image" src="/FormLoader/i/Unload-Forms.gif" action="unloadForms" align="left" theme="simple" /></td>
 <td colspan="1" align="left" nowrap>
 <input type="image" src="/FormLoader/i/reset.gif"  onClick="return resetAllCheckboxesByName('selectedFormIds', 0);" /></input>
 </td>
@@ -161,7 +163,9 @@ Unload means the form will have a new workflow status RETIRED UNLOADED but the f
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
 				
 				
-				<td><div style="width: 50px;"><s:checkbox name="selectedFormIds" fieldValue="%{formSeqId}" value="false" theme = "simple" /></div></td>				
+				<td><div style="width: 50px;">
+				<s:checkbox name="selectedFormIds" fieldValue="%{formSeqId}" value="false" 
+				onClick="toggleActionButton('selectedFormIds', 'action:unloadForms')" theme = "simple" /></div></td>				
 				<td><s:property value="publicId" /></td>
 				<td><s:property value="version" /></td>
 				<td><div style="width: 150px;"><s:property value="longName" /></div></td>
@@ -180,7 +184,7 @@ Unload means the form will have a new workflow status RETIRED UNLOADED but the f
 				</s:iterator>
 <tr id="buttonRow">
 	<td colspan="1" align="left" nowrap>
-	<s:submit type="image" src="/FormLoader/i/Unload-Forms.gif" method="execute" align="left" theme="simple" /></td>
+	<s:submit type="image" src="/FormLoader/i/Unload-Forms.gif" action="unloadForms"align="left" theme="simple" /></td>
 	<td colspan="1" align="left" nowrap>
 	<input type="image" src="/FormLoader/i/reset.gif"  onClick="return resetAllCheckboxesByName('selectedFormIds', 0);" /></input></td>
 </tr>

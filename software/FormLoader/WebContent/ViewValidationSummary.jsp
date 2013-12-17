@@ -57,7 +57,17 @@ L--%>
 				<td><div style="width: 250px;"><s:property value="protocolName" /></div></td>
 				<td><s:property value="workflowStatusName" /></td>
 				<td><s:property value="modules.size()" /></td>
-				<td><s:property value="loadType" /></td>
+				<td>
+				<s:if test="loadType.equals('Update Form')">
+					<b><s:property value="loadType" /> </b>
+				</s:if>
+				  <s:if test="loadType.equals('New Version')">
+					<b><a href="<s:property value="versioningRulesUrl" />" target="_blank"><s:property value="loadType" /></a></b>
+				</s:if>  
+				<s:else>
+					<s:property value="loadType" />
+				</s:else>
+				</td>
 				<td>
 				<s:if test="loadStatus != 4">
 				

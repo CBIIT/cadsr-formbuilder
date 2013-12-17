@@ -45,6 +45,7 @@ L--%>
 				<th>Modified By</th>
 				<th>Modified Date</th>
 				<th>Collection Name</th>
+				<th>Comment</th>
 			</tr>
 			
             <s:iterator value="unloadedForms" id = "bean" status="status">
@@ -62,12 +63,13 @@ L--%>
 				</td>
 				<td><s:property value="publicId" /></td>
 				<td><s:property value="version" /></td>
-				<td><div style="width: 150px;"><s:property value="longName" /></div></td>
+				<td align="center"><div style="width: 150px;"><s:property value="longName" /></div></td>
 				<td><s:property value="context" /></td>
 				<td><s:property value="workflowStatusName" /></td>
 				<td><s:property value="modifiedBy" /></td>
 				<td><s:property value="modifiedDate" /></td>
 				<td><s:property value="getCollectionName()" /></td>
+				<td><s:property value="getMessagesInString()" /></td>
 			</tr>			
 			</tbody>
 			</s:iterator>
