@@ -2,18 +2,13 @@ package gov.nih.nci.cadsr.formloader.struts2;
 
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
-import gov.nih.nci.cadsr.formloader.repository.FormLoaderRepositoryImpl;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
-import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceError;
 import gov.nih.nci.cadsr.formloader.service.impl.CollectionRetrievalServiceImpl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
@@ -33,17 +28,19 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 	
 	private static Logger logger = Logger.getLogger(SearchLoadedCollectionAction.class.getName());
 	
-	private HttpServletRequest servletRequest;
+	//private HttpServletRequest servletRequest;
 	private List<FormCollection> collectionList = null;
 	ApplicationContext applicationContext = null;
 	private String userName;
+	
+	private Map<String, Object> sessionMap;
 	
 	private List<FormDescriptor> unloadableForms = null;
 	private List<FormCollection> collection1Page = new ArrayList<FormCollection>();
 
 	public String execute() {
 		logger.debug("We are in XMLFileLoadedAction.execute()");
-		servletRequest = ServletActionContext.getRequest();
+		//servletRequest = ServletActionContext.getRequest();
 		try {
 
 			applicationContext = WebApplicationContextUtils
@@ -52,7 +49,7 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 			CollectionRetrievalServiceImpl collectionRetrieval =
 					(CollectionRetrievalServiceImpl)this.applicationContext.getBean("collectionRetrievalService");
 			
-			userName = (String)servletRequest.getSession().getAttribute("username");
+			userName = (String)sessionMap.get("username");
 			if (userName == null || userName.length() == 0) {
 				addActionError("User name is not available. Unable to continue");
 				return ERROR;
@@ -69,7 +66,7 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 			}
 
 			logger.debug("User [" + userName + "] has previously loaded " + collectionList.size() + " collections.");
-			servletRequest.getSession().setAttribute("collectionList", collectionList);
+			sessionMap.put("collectionList", collectionList);
 			
 			unloadableForms = this.convertCollectionsToUnloadedFormList(collectionList);
 			
@@ -92,11 +89,11 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 	}
 	
 	public String sortCollectionsByName() {
-		servletRequest = ServletActionContext.getRequest();
-		collectionList = (List<FormCollection>) servletRequest.getSession().getAttribute("collectionList");
+		//servletRequest = ServletActionContext.getRequest();
+		collectionList = (List<FormCollection>) sessionMap.get("collectionList");
 		unloadableForms = this.convertCollectionsToUnloadedFormList(collectionList);
 		
-		String sorted = (String) servletRequest.getSession().getAttribute("sortField");
+		String sorted = (String) sessionMap.get("sortField");
 		if (sorted == null || sorted.length() == 0 || sorted.equals(SearchLoadedCollectionAction.SORT_BY_NAME_REVERSE)) {
 			collectionList = FormLoaderHelper.sortCollectionsByName(collectionList);
 			sorted = SearchLoadedCollectionAction.SORT_BY_NAME;
@@ -105,17 +102,17 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 			sorted = SearchLoadedCollectionAction.SORT_BY_NAME_REVERSE;
 		}
 		
-		servletRequest.getSession().setAttribute("collectionList", collectionList);
-		servletRequest.getSession().setAttribute("sortField", sorted);
+		sessionMap.put("collectionList", collectionList);
+		sessionMap.put("sortField", sorted);
 		return SUCCESS;
 	}
 	
 	public String sortCollectionsByDate() {
-		servletRequest = ServletActionContext.getRequest();
-		collectionList = (List<FormCollection>) servletRequest.getSession().getAttribute("collectionList");
+		//servletRequest = ServletActionContext.getRequest();
+		collectionList = (List<FormCollection>) sessionMap.get("collectionList");
 		unloadableForms = this.convertCollectionsToUnloadedFormList(collectionList);
 		
-		String sorted = (String) servletRequest.getSession().getAttribute("sortField");
+		String sorted = (String) sessionMap.get("sortField");
 		if (sorted == null || sorted.length() == 0 || sorted.equals(SearchLoadedCollectionAction.SORT_BY_DATE_REVERSE)) {
 			collectionList = FormLoaderHelper.sortCollectionsByName(collectionList);
 			sorted = SearchLoadedCollectionAction.SORT_BY_DATE;
@@ -124,8 +121,8 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 			sorted = SearchLoadedCollectionAction.SORT_BY_DATE_REVERSE;
 		}
 		
-		servletRequest.getSession().setAttribute("collectionList", collectionList);
-		servletRequest.getSession().setAttribute("sortField", sorted);
+		sessionMap.put("collectionList", collectionList);
+		sessionMap.put("sortField", sorted);
 		return SUCCESS;
 	}
 
@@ -145,11 +142,14 @@ public class SearchLoadedCollectionAction extends ActionSupport implements
 		this.userName = userName;
 	}
 	
+	
+	@Override
 	public void setSession(Map<String, Object> arg0) {
 		// TODO Auto-generated method stub
+		this.sessionMap = arg0;
+		
+	}
 
-	}	
-	
 	public List<FormDescriptor> getUnloadableForms() {
 		return unloadableForms;
 	}
