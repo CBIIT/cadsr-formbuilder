@@ -27,14 +27,15 @@ public class UnloadFormsAction extends ActionSupport implements SessionAware {
 	private static Logger logger = Logger.getLogger(UnloadFormsAction.class.getName());
 	
 	private String[] selectedFormIds;
-	private HttpServletRequest servletRequest;
+	
 	private List<FormCollection> collectionList = null;
 	private List<FormDescriptor> unloadedForms = null;
 	ApplicationContext applicationContext = null;
+	private Map<String, Object> sessionMap;
 	
 	public String execute() {
 		logger.debug("We are in UnloadFormsAction.execute()");
-		servletRequest = ServletActionContext.getRequest();
+		
 		try {
 
 			applicationContext = WebApplicationContextUtils
@@ -42,9 +43,9 @@ public class UnloadFormsAction extends ActionSupport implements SessionAware {
 							.getServletContext());
 			UnloadingServiceImpl unloadService =
 					(UnloadingServiceImpl)this.applicationContext.getBean("unloadService");
-			String userName = (String)servletRequest.getSession().getAttribute("username");
+			String userName = (String)sessionMap.get("username");
 			
-			collectionList = (List<FormCollection>)servletRequest.getSession().getAttribute("collectionList");
+			collectionList = (List<FormCollection>)sessionMap.get("collectionList");
 			
 			String error = setSelectForFormsInCollections(collectionList, selectedFormIds);
 			if (error.length() > 0) {
@@ -70,7 +71,7 @@ public class UnloadFormsAction extends ActionSupport implements SessionAware {
 	
 	@Override
 	public void setSession(Map<String, Object> arg0) {
-		// TODO Auto-generated method stub
+		sessionMap = arg0;
 		
 	}
 	
