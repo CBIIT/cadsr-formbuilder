@@ -628,9 +628,9 @@ public class FormDescriptor implements java.io.Serializable {
 	}
 	//<a href="https://formbuilder-dev.nci.nih.gov/FormBuilder/formDetailsAction.do?method=getFormDetails&formIdSeq=BC2E08B3-C5B7-4C7A-E040-BB89AD43061F" target="_blank"> 3421713 </a>
 	public String getLinkToFormBuilder() {
+		
 		String urlBase = FormLoaderHelper.getProperty(null, "formbuilder.detailsAction.url");
-		
-		
 		return urlBase + this.formSeqId;
+		
 	}
 }
