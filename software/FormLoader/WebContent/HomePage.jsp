@@ -21,12 +21,12 @@
 <table>
 <tr>
 <td>
-<s:form action="upload-form" theme = 'css_xhtml' > 
+<s:form action="uploadForm" theme = 'css_xhtml' > 
 <s:submit type="image" src="/FormLoader/i/load.jpg" method="execute" alt="Load Forms" align="left" />
 </s:form>
 </td>
 <td>
-<a href="<s:url action="upload-form"/>"><s:text name="<b><u>Load Form Collection</u></b><br>Load a form collection in XML format based on the Form<br>Collection XSD."></s:text></a>
+<a href="<s:url action="uploadForm"/>"><s:text name="<b><u>Load Form Collection</u></b><br>Load a form collection in XML format based on the Form<br>Collection XSD."></s:text></a>
 
 
 
@@ -37,11 +37,11 @@
 <tr></tr>
 <tr>
 <td>
-<s:form action="search-form" theme = 'css_xhtml'>   
+<s:form action="searchFormCollections" theme = 'css_xhtml'>   
 <s:submit type="image" src="/FormLoader/i/unload.jpg" method="execute" alt="Unload Forms" align="left" />
 </s:form>
 </td>
-<td><a href="<s:url action="search-form"/>">
+<td><a href="<s:url action="searchFormCollections"/>">
 <s:text name="<b><u>View/Unload Form Collections</u></b><br>View previously loaded Form Collections and unload forms<br>within a Form Collection."></s:text></a>
 </td></tr>
 </table>

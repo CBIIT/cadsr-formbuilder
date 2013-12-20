@@ -67,7 +67,7 @@ L--%>
 					<b><s:property value="loadType" /> </b>
 				</s:if>
 				  <s:if test="loadType.equals('New Version')">
-					<b><a href="<s:property value="versioningRulesUrl" />" target="_blank"><s:property value="loadType" /></a></b>
+					<b><a href="<s:property value="versioningRulesUrl" />" target="_top"><s:property value="loadType" /></a></b>
 				</s:if>  
 				<s:else>
 					<s:property value="loadType" />
