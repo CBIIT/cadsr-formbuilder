@@ -272,7 +272,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		for (Float version : versions) {
 			String v = FormLoaderHelper.formatVersion(version.floatValue());
 			if (sb.length() > 0) 
-				sb.append(",");
+				sb.append(", ");
 			sb.append(v);
 		}
 		
