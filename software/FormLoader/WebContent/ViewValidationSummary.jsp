@@ -19,14 +19,17 @@ L--%>
 <div style="padding-left: 50px; padding-right: 50px;">
 <body>
 <h2>Result of DB Validation</h2>
-<br>
+* Changes made to forms with Load Type = "Update Form" cannot be "Undone". The "Unload" feature will only change <br>
+the workflow status to "Retired Deleted". Users must use Form Builder application to edit the form after loading.
+<br><br>
 <s:actionerror />
 <s:if test="validatedForms.size() >= 1">
 	<s:form action="loadForms" theme = "simple" method="post"> 
 		<div class="content">
 		<table class="fileTable">
 			<tr class="even">
-				<th>Select to Load</th>
+				<th>Select <br>to Load</th>
+				<th>Load Type</th>
 				<th>Public Id in XML</th>
 				<th>Version in XML</th>
 				<th>Existing Versions in DB</th>
@@ -37,7 +40,6 @@ L--%>
 				<th>Workflow Status in XML</th>
 				<th>Workflow Status in DB</th>
 				<th># Module(s) in XML</th>
-				<th>Load Type</th>
 				<th>DB Validation Status</th>
 			</tr>
 			<s:iterator value="validatedForms" var="form" status="status">
@@ -51,6 +53,18 @@ L--%>
     				<s:checkbox name="greyout" disabled="true" theme = "simple" />
 					</s:else>
 				</td>
+				<td>
+				<s:if test="loadType.equals('Update Form')">
+					<b>*<s:property value="loadType" /> </b>
+				</s:if>
+				 <s:elseif test="loadType.equals('New Version')">
+					<b><a href="<s:property value="versioningRulesUrl" />" title="Click to view Form Versioning Rules..." 
+						target="_blank"><s:property value="loadType" /></a></b>
+				</s:elseif>  
+				<s:else>
+					<s:property value="loadType" />
+				</s:else>
+				</td>
 				<td><s:property value="publicId" /></td>
 				<td><s:property value="version" /></td>
 				<td style="word-wrap: break-word"><div style="width: 250px;"><s:property value="versionCadsr" /></div></td>
@@ -62,17 +76,7 @@ L--%>
 				<td><s:property value="workflowStatusCadsr" /></td>
 				
 				<td><s:property value="modules.size()" /></td>
-				<td>
-				<s:if test="loadType.equals('Update Form')">
-					<b><s:property value="loadType" /> </b>
-				</s:if>
-				  <s:if test="loadType.equals('New Version')">
-					<b><a href="<s:property value="versioningRulesUrl" />" target="_top"><s:property value="loadType" /></a></b>
-				</s:if>  
-				<s:else>
-					<s:property value="loadType" />
-				</s:else>
-				</td>
+				
 				<td>
 				<s:if test="loadStatus != 4">
 				
