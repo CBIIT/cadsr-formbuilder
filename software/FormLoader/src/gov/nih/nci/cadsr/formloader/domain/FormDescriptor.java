@@ -495,10 +495,21 @@ public class FormDescriptor implements java.io.Serializable {
 	public String getLoadStatusStringWithMessages() {
 		String status = getLoadStatusString(this.loadStatus);
 		
-		if (this.messages.size() > 0) {
+		
+		int msgSize = this.messages.size();
+		if (msgSize > 0) {
 			status += " - ";
-			for (String message : messages) 
-				status += message + ";";
+			
+			if (msgSize == 1)
+				status += messages.get(0);
+			else {
+				StringBuilder sb = new StringBuilder();
+				sb.append(status);
+				for (int i = 0; i < msgSize; i++) {
+					sb.append(" ").append(i+1).append(") ").append(messages.get(i));
+				}
+				status = sb.toString();
+			}
 		}
 		return status;
 	}
