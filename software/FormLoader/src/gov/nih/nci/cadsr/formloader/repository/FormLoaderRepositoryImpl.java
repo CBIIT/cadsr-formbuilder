@@ -54,7 +54,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	
 	public static final String COMPONENT_TYPE_FORM = "QUEST_CONTENT";
 	
-	public static final String DEFAULT_WORKFLOW_STATUS = "DRAFT NEW";
+	
 	public static final String DEFAULT_DEFINITION_TYPE = "Form Loader";
 	public static final String DEFAULT_DESIGNATION_TYPE = "Form Loader";
 	public static final String DEFAULT_CONTEXT_NAME = "NCIP";
@@ -341,6 +341,11 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		return null;
 	}
 	
+	/**
+	 * Public id is created when new component is created. Need to go back to db for it
+	 * @param formSeqid
+	 * @param form
+	 */
 	@Transactional(readOnly=true)
 	protected void retrievePublicIdForForm(String formSeqid, FormDescriptor form) {
 		FormV2TransferObject formdto = this.formV2Dao.getFormPublicIdVersion(formSeqid);
@@ -513,21 +518,17 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			formSeqid = formV2Dao.createFormComponent(formdto);		
 			logger.debug("Created form. Seqid: " + formSeqid);
 			
-			//public id is created when new component is created
-			//Need to go back to db for it
 			retrievePublicIdForForm(formSeqid, form);
 
 			formdto.setFormIdseq(formSeqid);
 			form.setFormSeqId(formSeqid);
 
-			//instructions
 			createFormInstructions(form, formdto);
 
-			//designations, refdocs, definitions and contact communications
 			processFormdetails(form, xmlPathName, form.getIndex());
 
-			//Onto modules and questions
 			createModulesInForm(form, formdto);
+			
 		} catch (DMLException dbe) {
 			logger.error(dbe.getMessage());
 			form.addMessage(dbe.getMessage());
@@ -572,11 +573,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			}
 			
 			createFormInstructions(form, formdto);
-			
-			//designations, refdocs, definitions and contact communications
 			processFormdetails(form, xmlPathName, form.getIndex());
-			
-			//Onto modules and questions
 			updateModulesInForm(form, formdto);
 			
 			return form.getFormSeqId();
@@ -638,8 +635,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		
 		String loadType = form.getLoadType(); 
 		if (FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(loadType)) {
-			float latest = this.formV2Dao.getMaxFormVersion(Integer.parseInt(form.getPublicId()));
-			formdto.setVersion(new Float(latest + 1.0)); //TODO: is this the way to assign new version?
+			formdto.setVersion(Float.parseFloat(form.getVersion()));
 			form.setVersion(String.valueOf(formdto.getVersion()));
 			formdto.setPublicId(Integer.parseInt(form.getPublicId()));
 			formdto.setFormIdseq(form.getFormSeqId());
@@ -672,7 +668,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		Context context = new ContextTransferObject();
 	    context.setConteIdseq(form.getContextSeqid());
 	    formdto.setContext(context);
-		formdto.setConteIdseq(form.getContextSeqid()); //maynot needed
+		formdto.setConteIdseq(form.getContextSeqid());
 		
 		return formdto;
 	}
@@ -722,6 +718,12 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		return instruction;
 	}
 	
+	/**
+	 * Process designations, refdocs, definitions and contact communications for a form
+	 * @param form
+	 * @param xmlPathName
+	 * @param currFormIdx
+	 */
 	@Transactional
 	protected void processFormdetails(FormDescriptor form, String xmlPathName, int currFormIdx) {
 		logger.debug("Processing protocols, designations, refdocs and definitions for form");
@@ -894,8 +896,12 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	}
 	
 	/**
-	 * 1. New form : add all listed protocols from xml to new form.
-	 * 2. New version and update form: add only if a protocol in xml doesn't already exist with the form.
+	 * First, check if a protoId is valid (has a match in db)
+	 * 
+	 * Second, for those that are valid, do the following:
+	 * 
+	 * 1. New form and new version form: add all listed protocols from xml to form.
+	 * 2. update form: replace what's in db for the form with the set from xml.
 	 * 
 	 * @param form
 	 * @param protoIds
@@ -908,12 +914,15 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			List<String> protoSeqIds = markNoMatchProtoIds(form, protoIds, protoIdMap);
 
 			for (String protoSeqid : protoSeqIds) {
-				if (FormDescriptor.LOAD_TYPE_NEW.equals(form.getLoadType())) {
+				if (FormDescriptor.LOAD_TYPE_NEW.equals(form.getLoadType())
+						|| FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(form.getLoadType())) {
 					formV2Dao.addFormProtocol(formSeqid, protoSeqid, form.getCreatedBy());
 				} else  {
+					//TODO: requirement changed. Need work here 1/17/2014
+					//TODO: requirement changed. Need work here 1/17/2014
 					if (!formV2Dao.formProtocolExists(formSeqid, protoSeqid))
 						formV2Dao.addFormProtocol(formSeqid, protoSeqid, form.getModifiedBy());
-
+					//TODO: requirement changed. Need work here 1/17/2014
 				} 
 			}
 			
@@ -923,18 +932,23 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	protected List<String> markNoMatchProtoIds(FormDescriptor form, List<String> protoIds, HashMap<String, String> protoIdMap) {
 		List<String> protoSeqIds = new ArrayList<String>();
 		String nomatchids = "";
+		
+		int cnt = 0;
 		for (String protoId : protoIds) {
 			String seqid = protoIdMap.get(protoId);
-			if (seqid == null)
+			if (seqid == null) {
 				nomatchids = (nomatchids.length() > 0) ? "," + protoId : protoId;
+				cnt++;
+			}
 			else
 				protoSeqIds.add(seqid);
 			
 		}
 		
-		if (nomatchids.length() > 0)
-			form.addMessage("Protocol ids [" + nomatchids + "] with the form has no match in database.");
-		
+		if (cnt == 1)
+			form.addMessage("Protocol " + nomatchids + " has not registered in caDSR. Not loaded");
+		else if (cnt > 1)
+			form.addMessage("Protocols " + nomatchids + " have not registered in caDSR. Not loaded");
 		return protoSeqIds;
 	}
 	
@@ -1706,14 +1720,14 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	
 	@Transactional(readOnly=true)
 	public void checkWorkflowStatusName(FormDescriptor form) {
-		if (workflowNames == null) {
+		if (this.workflowNames == null) {
 			workflowNames = this.formV2Dao.getAllWorkflowNames();
 		}
 		
 		String formWfName = form.getWorkflowStatusName();
 		if (!workflowNames.contains(formWfName)) {
-			form.addMessage("Form's workflow status name invalid. Use default value Draft New");
-			form.setWorkflowStatusName(DEFAULT_WORKFLOW_STATUS);
+			form.addMessage("Form's workflow status name in xml is invalid. Use default value DRAFT NEW or DRAFT MOD");
+			form.setDefaultWorkflowName();
 		}
 	}
 	

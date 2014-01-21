@@ -21,10 +21,22 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
 
+//import javax.xml.transform.Source;
+//import javax.xml.transform.stream.StreamSource;
+//import javax.xml.validation.Schema;
+//import javax.xml.validation.SchemaFactory;
+//import javax.xml.validation.Validator;
+
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
+
+import org.xml.sax.SAXException;
+
 import org.apache.log4j.Logger;
-import org.apache.struts2.ServletActionContext;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
+
 
 public class FormLoaderHelper {
 	
@@ -64,7 +76,7 @@ public class FormLoaderHelper {
             	//ClassLoader cloader = cls.getClassLoader();
             	//in = cloader.getClass().getResourceAsStream("config.properties");
             	in = 
-            		    FormLoaderHelper.class.getClassLoader().getResourceAsStream("config.properties");
+            		    FormLoaderHelper.class.getClassLoader().getResourceAsStream("formloader.properties");
                 // Try loading properties from the file (if found)
             	props.load(in);
             }
@@ -335,4 +347,40 @@ public class FormLoaderHelper {
 		NumberFormat formatter = new DecimalFormat("#0.0");
 		return formatter.format(versionNumber);
 	}
+	
+	
+	public static List<XmlValidationError> validateFile(File xmlFile, File xsdFile) 
+			throws SAXException, IOException
+	{
+	    // 1. Lookup a factory for the W3C XML Schema language
+	    SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/XML/XMLSchema/v1.1");
+
+	    // 2. Compile the schema.
+	    File schemaLocation = xsdFile;
+	    Schema schema = factory.newSchema(schemaLocation);
+
+	    // 3. Get a validator from the schema.
+	    Validator validator = schema.newValidator();
+	    XmlValidationErrorHandler handler = new XmlValidationErrorHandler();
+	    validator.setErrorHandler(handler);
+	    
+	    
+
+	    // 4. Parse the document you want to check.
+	    Source source = new StreamSource(xmlFile);
+
+	    // 5. Check the document
+	    try
+	    {
+	        validator.validate(source);
+	        System.out.println(xmlFile.getName() + " is valid.");
+	    }
+	    catch (SAXException ex)
+	    {
+	        System.out.println(xmlFile.getName() + " is not valid because ");
+	        System.out.println(ex.getMessage());
+	    }
+	    
+	    return handler.getXmlErrors();
+	} 
 }

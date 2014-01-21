@@ -11,18 +11,27 @@ import gov.nih.nci.cadsr.formloader.service.common.XmlValidationError;
 import gov.nih.nci.cadsr.formloader.service.common.XmlValidationErrorHandler;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import javax.xml.XMLConstants;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
+
+//import javax.xml.XMLConstants;
+//import javax.xml.parsers.ParserConfigurationException;
+//import javax.xml.parsers.SAXParser;
+//import javax.xml.parsers.SAXParserFactory;
+//import javax.xml.transform.Source;
+//import javax.xml.transform.stream.StreamSource;
+//import javax.xml.validation.Schema;
+//import javax.xml.validation.SchemaFactory;
+//import javax.xml.validation.Validator;
 
 import org.apache.log4j.Logger;
 import org.dom4j.DocumentException;
@@ -33,6 +42,10 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 
+import org.apache.xerces.impl.Constants;
+//import org.apache.xerces;
+
+
 @Service
 public class XmlValidationServiceImpl implements XmlValidationService, ResourceLoaderAware {
 	
@@ -41,7 +54,7 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 	protected ResourceLoader resourceLoader;
 	FormLoaderRepository repository;
 	
-	protected String XSD_PATH_NAME = "FormLoaderv8.xsd";
+	protected String XSD_PATH_NAME = "FormLoaderv12-revised-sy.xsd";
 	
 
 	public XmlValidationServiceImpl() {}
@@ -75,6 +88,7 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 
 		//match errors with a form via line number in an error
 		assignErrors(collection, collection.getForms(), errors);
+		
 		assignNameRepeatNumber(collection);
 		
 		return collection;
@@ -195,62 +209,105 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 	 * @return
 	 * @throws FormLoaderServiceException
 	 */
-	protected List<XmlValidationError> validateXml(String xmlPathName, Resource resource) 
-	throws FormLoaderServiceException {
-		
-		logger.debug("Start validating xml file: " + xmlPathName);
-		XmlValidationErrorHandler handler = new XmlValidationErrorHandler();
-		InputStream is = null;
-		BufferedReader bufferredReader = null;
-		try {
-			is = resource.getInputStream();
-			bufferredReader = new BufferedReader(new InputStreamReader(is));
-			
-            SAXParserFactory factory = SAXParserFactory.newInstance();
-            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            factory.setSchema(schemaFactory.newSchema(new Source[] {new StreamSource(bufferredReader)}));
+	public static List<XmlValidationError> validateXml(String xmlPathName, Resource resource) 
+	throws FormLoaderServiceException  {
+	    
+	    try {
+	    	// 1. Lookup a factory for the W3C XML Schema language
+		    //SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/XML/XMLSchema/v1.1");
+	    	SchemaFactory factory = SchemaFactory.newInstance(Constants.W3C_XML_SCHEMA11_NS_URI);
+		     
+		    // 2. Compile the schema.
+		    File schemaLocation = resource.getFile();
+		    Schema schema = factory.newSchema(schemaLocation);
 
-            SAXParser parser = factory.newSAXParser();
-
-            SAXReader reader = new SAXReader(parser.getXMLReader());
-            reader.setValidation(true);  //TODO: check on this
-            reader.setErrorHandler(handler);
-            reader.read(xmlPathName);
-            
-        } catch (IOException e) { 
+		    // 3. Get a validator from the schema.
+		    Validator validator = schema.newValidator();
+		    XmlValidationErrorHandler handler = new XmlValidationErrorHandler();
+		    validator.setErrorHandler(handler);
+		    
+		    // 4. Parse the document you want to check.
+		    Source source = new StreamSource(new File(xmlPathName));
+		    
+		 // 5. Check the document
+	        validator.validate(source);
+	        System.out.println(xmlPathName + " is valid.");
+	        
+	        return handler.getXmlErrors();
+	    }catch (IOException e) { 
             logger.error("IOException while validing xml: " + e.getMessage());
             throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_XML_EXCEPTION,
 					"Xml validation Error: " + e.getMessage());
-        } catch (ParserConfigurationException e) {
-        	logger.error("ParserConfigurationException while validing xml:" + e.getMessage());
-        	throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_XML_EXCEPTION,
-					"Xml validation Error: " + e.getMessage());
-        } catch (SAXException e) {
+        }  catch (SAXException e) {
         	logger.error("SAXException while validing xml: " + e.getMessage());
         	throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_XML_EXCEPTION,
 					"Xml validation Error: " + e.getMessage());
-        } catch (DocumentException e) {
-        	logger.error("DocumentException while validing xml: " + e.getMessage());
-        	throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_XML_EXCEPTION,
-					"Xml validation Error: " + e.getMessage());
-        } finally {
-        	try {
-        		if (is != null)
-        			is.close();
-        	
-        		if (bufferredReader != null)
-        			bufferredReader.close();
-        	} catch (IOException ioe) {
-        		logger.error("Error while closing xsd fileresource");
-        	}
-        		
-        }
-		
-		logger.debug("Done validating xml file: " + xmlPathName);
-		return handler.getXmlErrors();
-	}
-
-
+        } 
+	    
+	    
+	} 
+	
+	
+	
+//	protected List<XmlValidationError> validateXmlx(String xmlPathName, Resource resource) 
+//	throws FormLoaderServiceException {
+//		
+//		logger.debug("Start validating xml file: " + xmlPathName);
+//		XmlValidationErrorHandler handler = new XmlValidationErrorHandler();
+//		InputStream is = null;
+//		BufferedReader bufferredReader = null;
+//		try {
+//			is = resource.getInputStream();
+//			
+//		
+//			
+//			bufferredReader = new BufferedReader(new InputStreamReader(is));
+//			
+//            SAXParserFactory factory = SAXParserFactory.newInstance();
+//            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+//            //SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/XML/XMLSchema/v1.1");
+//            
+//            factory.setSchema(schemaFactory.newSchema(new Source[] {new StreamSource(bufferredReader)}));
+//
+//            SAXParser parser = factory.newSAXParser();
+//
+//            SAXReader reader = new SAXReader(parser.getXMLReader());
+//            reader.setValidation(true);  //TODO: check on this
+//            reader.setErrorHandler(handler);
+//            reader.read(xmlPathName);
+//            
+//        } catch (IOException e) { 
+//            logger.error("IOException while validing xml: " + e.getMessage());
+//            throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_XML_EXCEPTION,
+//					"Xml validation Error: " + e.getMessage());
+//        } catch (ParserConfigurationException e) {
+//        	logger.error("ParserConfigurationException while validing xml:" + e.getMessage());
+//        	throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_XML_EXCEPTION,
+//					"Xml validation Error: " + e.getMessage());
+//        } catch (SAXException e) {
+//        	logger.error("SAXException while validing xml: " + e.getMessage());
+//        	throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_XML_EXCEPTION,
+//					"Xml validation Error: " + e.getMessage());
+//        } catch (DocumentException e) {
+//        	logger.error("DocumentException while validing xml: " + e.getMessage());
+//        	throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_XML_EXCEPTION,
+//					"Xml validation Error: " + e.getMessage());
+//        } finally {
+//        	try {
+//        		if (is != null)
+//        			is.close();
+//        	
+//        		if (bufferredReader != null)
+//        			bufferredReader.close();
+//        	} catch (IOException ioe) {
+//        		logger.error("Error while closing xsd fileresource");
+//        	}
+//        		
+//        }
+//		
+//		logger.debug("Done validating xml file: " + xmlPathName);
+//		return handler.getXmlErrors();
+//	}
 
 	@Override
 	public void setResourceLoader(ResourceLoader resourceLoader) {

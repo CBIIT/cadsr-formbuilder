@@ -21,6 +21,7 @@ import oracle.jdbc.OracleCallableStatement;
 
 
 import org.apache.log4j.Logger;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.object.MappingSqlQuery;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlOutParameter;
@@ -75,7 +76,7 @@ public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
 	 * @return
 	 */
 	public String createValidValue(FormValidValue newVV, String parentId, String userName)
-			throws DMLException {
+			throws DataAccessException {
 		
 		String vvidseq = generateGUID();
 		String recidseq = generateGUID();
@@ -90,7 +91,7 @@ public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
 	}
 	
 	protected int createtValidValue(FormValidValue newVV, String vvidseq) 
-			throws DMLException {
+			throws DataAccessException {
 		
 		String sql = "INSERT INTO quest_contents_ext " +
                   "(qc_idseq, VERSION, preferred_name, long_name, " +
@@ -111,6 +112,10 @@ public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
 		logger.debug(newVV.getPreferredName());
 		params.addValue("p_long_name", newVV.getLongName());
 		logger.debug(newVV.getLongName());
+		
+//		String prefDef =  newVV.getPreferredDefinition();
+//		if (prefDef == null || prefDef.length() == 0)
+//			prefDef = "Form Loader Testing";
 		params.addValue("p_preferred_definition", newVV.getPreferredDefinition());
 		logger.debug(newVV.getPreferredDefinition());
 		params.addValue("p_conte_idseq", newVV.getContext().getConteIdseq());
@@ -123,8 +128,14 @@ public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
 		logger.debug( newVV.getVpIdseq());
 		params.addValue("p_created_by", newVV.getCreatedBy());		
 		logger.debug(newVV.getCreatedBy());
-		int res = this.namedParameterJdbcTemplate.update(sql, params);
-		return res;
+		try {
+			int res = this.namedParameterJdbcTemplate.update(sql, params);
+			return res;
+		} catch (DataAccessException de) {
+			logger.debug(de.getMessage());
+			throw de;
+		}
+		
 		
 	}
 	

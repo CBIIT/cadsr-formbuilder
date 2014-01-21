@@ -16,6 +16,7 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.object.MappingSqlQuery;
@@ -152,18 +153,32 @@ public abstract class JDBCInstructionDAOV2 extends JDBCAdminComponentDAOV2
     protected int createContent(
       Instruction instruction,
       String qcIdseq,String instructionType) {
+    	
+    	String longName = instruction.getLongName();
+//    	if (longName.length() > 255)
+//    		longName = longName.substring(0,254);
+    	String prefDef = instruction.getPreferredDefinition();
+//    	if (prefDef.length() > 255) {
+//    		prefDef = prefDef.substring(0,254);
+//    	}
       Object[] obj =
         new Object[] {
           qcIdseq, instruction.getVersion().toString(),
-          generatePreferredName(instruction.getLongName()), instruction.getLongName(),
-          instruction.getPreferredDefinition(), instruction.getContext().getConteIdseq(),
+          generatePreferredName(instruction.getLongName()), longName,
+          prefDef, instruction.getContext().getConteIdseq(),
           instruction.getAslName(), instruction.getCreatedBy(),
           instructionType
         };
 
+      try {
       int res = update(obj);
-
       return res;
+      } catch (DataAccessException de) {
+    	  logger.debug(de.getMessage());
+    	  throw de;
+      }
+
+      
     }
   }
 

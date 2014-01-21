@@ -197,14 +197,20 @@ ServletRequestAware, ValidationAware{
 		    parsedFormsWithErrorList = new ArrayList<FormDescriptor>();
 		    for (FormDescriptor each : parsedFormsList)
 		    {
-		    	if (each.getXmlValidationErrorString().isEmpty())
-			    	{
-		    			parsedFormsNoErrorList.add(each);
-			    	}
-		    	else
-			    	{
-		    			parsedFormsWithErrorList.add(each);
-			    	}
+		    	if (each.getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATED)
+		    		parsedFormsNoErrorList.add(each);
+		    	else if (!each.getXmlValidationErrorString().isEmpty())
+		    		parsedFormsWithErrorList.add(each);
+		    		
+		    	
+//		    	if (each.getXmlValidationErrorString().isEmpty())
+//			    	{
+//		    			parsedFormsNoErrorList.add(each);
+//			    	}
+//		    	else
+//			    	{
+//		    			parsedFormsWithErrorList.add(each);
+//			    	}
 		    }
 	    	servletRequest.getSession().setAttribute("parsedFormsNoErrorList", parsedFormsNoErrorList);
 	    	servletRequest.getSession().setAttribute("parsedFormsWithErrorList", parsedFormsWithErrorList);

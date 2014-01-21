@@ -68,10 +68,12 @@ public class LoadingServiceImpl implements LoadingService {
 			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_EMPTY_FORM_LIST,
 					"Input form list is null or empty. Unable to validate form content.");
 		}
+		
+		if (aCollection.isSelectAllForms()) 
+			aCollection.resetAllSelectFlag(true);
 			
 		loadForms(xmlPathName, forms, loggedinuser);
 		
-		//We need new modified date for the form to be used in form loader table update
 		retrievModifiedDateForForms(forms);
 		
 		createRecordsForCollection(aCollection, loggedinuser);
@@ -80,6 +82,12 @@ public class LoadingServiceImpl implements LoadingService {
 		return aCollection;
 	}
 	
+	/**
+	 * Get the modified date in db for the just loaded forms, to be used in Form Loader
+	 * related tables.
+	 * 
+	 * @param forms
+	 */
 	protected void retrievModifiedDateForForms(List<FormDescriptor> forms) {
 		List<String> seqids = new ArrayList<String>();
 		for (FormDescriptor form : forms) {
@@ -117,7 +125,6 @@ public class LoadingServiceImpl implements LoadingService {
 	protected void loadForms(String xmlPathName, List<FormDescriptor> forms, String loggedinUser) 
 	throws FormLoaderServiceException {
 		
-		//int form_idx = 0;
 		for (FormDescriptor form : forms) {
 			if (form.getLoadStatus() < FormDescriptor.STATUS_CONTENT_VALIDATED) {
 				form.addMessage("Form didn't pass db validation. Unable to load form");
