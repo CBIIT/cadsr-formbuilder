@@ -15,6 +15,8 @@ public class FormDescriptor implements java.io.Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public static final String DEFAULT_WORKFLOW_STATUS = "DRAFT NEW";
+	public static final String DEFAULT_WORKFLOW_STATUS_MOD = "DRAFT MOD";
 	
 	public static final String LOAD_TYPE_NEW = "New Form";
 	public static final String LOAD_TYPE_NEW_VERSION = "New Version";
@@ -36,6 +38,8 @@ public class FormDescriptor implements java.io.Serializable {
 	public static final int STATUS_UNLOADED = 6;
 	public static final int STATUS_SKIPPED_LOADING = 7;
 	public static final int STATUS_SKIPPED_UNLOADING = 8;
+	
+	//public static final int MAX_LENGTH =255;
 	
 	String formSeqId = "";
 	String publicId = "";
@@ -643,5 +647,12 @@ public class FormDescriptor implements java.io.Serializable {
 		String urlBase = FormLoaderHelper.getProperty(null, "formbuilder.detailsAction.url");
 		return urlBase + this.formSeqId;
 		
+	}
+	
+	public void setDefaultWorkflowName() {
+		if (FormDescriptor.LOAD_TYPE_UPDATE_FORM.equals(this.loadType))
+			this.workflowStatusName = FormDescriptor.DEFAULT_WORKFLOW_STATUS_MOD;
+		else
+			this.workflowStatusName = FormDescriptor.DEFAULT_WORKFLOW_STATUS;
 	}
 }
