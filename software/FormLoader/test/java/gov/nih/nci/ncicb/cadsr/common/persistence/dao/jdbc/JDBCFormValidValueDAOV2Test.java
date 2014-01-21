@@ -96,7 +96,7 @@ public class JDBCFormValidValueDAOV2Test {
 		
 	}
 
-	//Test
+	@Test
 	public void testGetValidValueSeqidsByQuestionSeqid() {
 		String questionSeqid = "F07EC184-FF20-F9EE-E040-BB89A7B433A4";
 		
