@@ -37,7 +37,7 @@ public class FormLoaderRepositoryImplTest {
 	
 	String testfile = "3256357_v1_0_newform-partial.xml";
 	//String testfile = "3256357_v1_0_multi-protocols-newform.xml";
-	String filepath = ".\\test\\data";
+	String filepath = ".\\test\\data\\xmlvalidation";
 
 
 	@Before
@@ -60,7 +60,7 @@ public class FormLoaderRepositoryImplTest {
 	
 	@Test
 	public void testGetAllLoadedCollections() {
-		List<FormCollection> colls = repository.getAllLoadedCollectionsByUser("FORMBUILDER");
+		List<FormCollection> colls = repository.getAllLoadedCollectionsByUser("yangs");
 		
 		assertNotNull(colls);
 		assertTrue(colls.size() > 0);
@@ -106,13 +106,16 @@ public class FormLoaderRepositoryImplTest {
 		
 			//aColl.setForms(forms);
 			aColl.setName("Testing Create New Form");
-			aColl.setCreatedBy("jjuser");
+			aColl.setCreatedBy("yangs");
 			aColl.setXmlFileName(testfile);
 			aColl.setXmlPathOnServer(filepath);
 			
 			assertNotNull(contentValidationService);
 			form.setSelected(true);
 			aColl = contentValidationService.validateXmlContent(aColl);
+			
+			String status = StatusFormatter.getStatusInXml(form);
+			StatusFormatter.writeStatusToXml(status, filepath + "\\LoadServiceTest-content.xml");
 			
 			assertNotNull(aColl);
 			forms = aColl.getForms();
@@ -126,7 +129,7 @@ public class FormLoaderRepositoryImplTest {
 			assertTrue(questions.get(1).getPublicId() != null);
 			assertTrue(questions.get(1).getCdePublicId().equals("2341940"));
 
-			String status = StatusFormatter.getStatusInXml(form);
+			status = StatusFormatter.getStatusInXml(form);
 			StatusFormatter.writeStatusToXml(status, filepath + "\\LoadService-before.xml");
 		} catch (FormLoaderServiceException fle) {
 			fail("Got exception: " + fle.getMessage());

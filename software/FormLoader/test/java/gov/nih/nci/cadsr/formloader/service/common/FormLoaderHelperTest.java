@@ -2,6 +2,8 @@ package gov.nih.nci.cadsr.formloader.service.common;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +12,7 @@ import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
 public class FormLoaderHelperTest {
 
@@ -64,7 +67,7 @@ public class FormLoaderHelperTest {
 		
 	}
 	
-	@Test
+//Test
 	public void testGetPropertyFromClasspath() {
 		String prop = FormLoaderHelper.getProperty("", "upload.file.path");
 		
@@ -86,5 +89,26 @@ public class FormLoaderHelperTest {
 		str = FormLoaderHelper.formatVersion(ver);
 		assertTrue(str.indexOf(".") == str.length() - 2);
 		ver = 4;
+	}
+	
+	@Test
+	public void testValidateFile() {
+		//String xml = "C:\\development\\workspace-formloader-git\\cadsr-formbuilder\\software\\FormLoader\\test\\data\\xmlvalidation\\FourTheradexMedidataRaveFormsMinimumFields_01-11-2014.xml";
+		String xsd = "C:\\development\\doc\\FormLoader\\xsds\\FormLoaderv12-0120.xsd";
+		
+		String xml = "C:\\development\\workspace-formloader-git\\cadsr-formbuilder\\software\\FormLoader\\test\\data\\xmlvalidation\\load_forms-5.xml";
+		
+		try {
+			List<XmlValidationError> errors = FormLoaderHelper.validateFile(new File(xml), new File(xsd));
+			
+			if (errors != null) {
+				for (XmlValidationError error : errors) 
+					System.out.println(error.getMessage());
+			}
+		} catch (SAXException s) {
+			System.out.println(s.getStackTrace());
+		} catch (IOException s) {
+			System.out.println(s.getStackTrace());
+		}
 	}
 }

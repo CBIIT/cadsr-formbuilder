@@ -15,8 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:/applicationContext-jdbcdao-test.xml"})
-//@ContextConfiguration(locations = {"classpath:/applicationContext-service-test-db.xml"})
+@ContextConfiguration(locations = {"classpath:/applicationContext-service-test-db.xml"})
 public class JDBCModuleDAOV2Test {
 
 	@Autowired
@@ -44,12 +43,12 @@ public class JDBCModuleDAOV2Test {
 	
 	@Test
 	public void testGetModulePublicIdVersionBySeqid() {
-		String seqid = "E6829CE9-E105-44CA-E040-BB8921B67F31";
+		String seqid = "DE3366B5-706B-3BBE-E034-0003BA12F5E7";
 		
 		ModuleTransferObject module = moduleV2Dao.getModulePublicIdVersionBySeqid(seqid);
 		assertNotNull(module);
-		assertTrue(module.getPublicId() == 3651164);
-		assertTrue(module.getVersion() == 1.0);
+		assertTrue(module.getPublicId() == 2265272);
+		assertTrue(module.getVersion() == 3.0);
 		
 	}
 }

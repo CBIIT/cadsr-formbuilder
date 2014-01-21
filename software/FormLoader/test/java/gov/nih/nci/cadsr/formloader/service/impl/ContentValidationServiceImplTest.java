@@ -42,24 +42,24 @@ public class ContentValidationServiceImplTest {
 	@Autowired
 	XmlValidationServiceImpl xmlValidator;
 	
-	FormCollection aColl = new FormCollection();
+	FormCollection aColl;
 	List<FormDescriptor> forms;
+	
 	
 	@Before
 	public void setUp() throws Exception {
-		aColl.setName("TestCollection");
+		aColl = new FormCollection();
 	}
 	
 	@Test
 	public void testValidateXmlContentent() {
-		String xmlPathName = ".\\test\\data\\contentvalidation\\3193449_has_valid_values.xml";
 		
 		try {
-			FormCollection aColl = new FormCollection();
-			aColl.setXmlPathOnServer(".\\test\\data");
+			aColl.setXmlPathOnServer(".\\test\\data\\contentvalidation");
 			aColl.setXmlFileName("3193449_has_valid_values.xml");
 			aColl.setCreatedBy("YANGS");
 			aColl = xmlValidator.validateXml(aColl);
+			
 			forms = aColl.getForms();
 			assertNotNull(forms);
 			assertTrue(forms.size() == 1);
@@ -112,12 +112,10 @@ public class ContentValidationServiceImplTest {
 	
 	@Test
 	public void testValidateXmlContententNewVersion() {
-		//String xmlPathName = ".\\test\\data\\3193449_has_valid_values.xml";
+		
 		
 		try {
-			FormCollection aColl = new FormCollection();
 			aColl.setXmlPathOnServer(".\\test\\data\\contentvalidation");
-			//aColl.setXmlFileName("3256357_v1_0_newform-partial-newversion.xml");
 			aColl.setXmlFileName("new-version-3643954.xml");
 			aColl.setCreatedBy("yangs");
 			aColl = xmlValidator.validateXml(aColl);
@@ -137,16 +135,62 @@ public class ContentValidationServiceImplTest {
 			assertNotNull(aColl);
 			forms = aColl.getForms();
 			assertTrue(forms.size() == 1);
-			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_CONTENT_VALIDATED);
+			
+			//Data changed due to db data refresh
+			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_CONTENT_VALIDATION_FAILED);
+			//assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_CONTENT_VALIDATED);
 			
 			FormDescriptor form = forms.get(0);
-			assertTrue(form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW_VERSION));
-			assertTrue(form.getFormSeqId() != null && form.getFormSeqId().length() > 0);
+			assertTrue(form.getLoadType().equals(FormDescriptor.LOAD_TYPE_UNKNOWN));
+			//assertTrue(form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW_VERSION));
+			//assertTrue(form.getFormSeqId() != null && form.getFormSeqId().length() > 0);
 			
 		
 			
 			String status = StatusFormatter.getStatusInXml(form);
 			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\contentvalidation\\new-version-3643954.status.xml");
+			
+		} catch (FormLoaderServiceException fle) {
+			logger.debug(fle);
+			fail("Got exception: " + fle.getMessage());
+		}
+	}
+	
+	//@Test
+	public void testValidateXmlContententRave() {
+		
+		
+		try {
+			aColl.setXmlPathOnServer(".\\test\\data\\contentvalidation");
+			aColl.setXmlFileName("FourTheradexMedidataRaveFormsMinimumFields_01-11-2014.xml");
+			aColl.setCreatedBy("yangs");
+			aColl = xmlValidator.validateXml(aColl);
+			
+			forms = aColl.getForms();
+			assertNotNull(forms);
+			//assertTrue(forms.size() == 1);
+			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATED);
+			
+			for (FormDescriptor form : forms) {
+				form.setSelected(true);
+			}
+			
+			assertNotNull(contentValidationService);
+			aColl = contentValidationService.validateXmlContent(aColl);
+			
+			assertNotNull(aColl);
+			forms = aColl.getForms();
+			//assertTrue(forms.size() == 1);
+			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_CONTENT_VALIDATED);
+			
+			FormDescriptor form = forms.get(0);
+			//assertTrue(form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW_VERSION));
+			//assertTrue(form.getFormSeqId() != null && form.getFormSeqId().length() > 0);
+			
+		
+			
+			String status = StatusFormatter.getStatusInXml(form);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\contentvalidation\\FourTheradexMedidataRaveForms.status.xml");
 			
 		} catch (FormLoaderServiceException fle) {
 			logger.debug(fle);
@@ -199,7 +243,7 @@ public class ContentValidationServiceImplTest {
 		//1234349, (float)1.0
 		FormCollection aColl = generateContentValidationData();
 		
-		List<FormDescriptor> forms = aColl.getForms();
+		forms = aColl.getForms();
 		HashMap<String, List<Float>> versions = new HashMap<String, List<Float>>();
 		List<Float> vers = new ArrayList<Float>();
 		vers.add(Float.parseFloat("4.0"));
@@ -225,52 +269,70 @@ public class ContentValidationServiceImplTest {
 		assertTrue(FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(forms.get(2).getLoadType()));
 		assertTrue(FormDescriptor.LOAD_TYPE_UNKNOWN.equals(forms.get(3).getLoadType()));
 		assertTrue(FormDescriptor.LOAD_TYPE_UNKNOWN.equals(forms.get(4).getLoadType()));
-		
-		/*
-		Denise:
-			if public ID exists but no version element in the form, skip loading.
-			If public ID is null, and no version, default to version 1.0
-			If public ID does not exist, skip loading.
-			If public id exist and version does not exist, create new version
-			If public id exists and version exists, update existing version
-	*/
 	}
 	
-	//@Test
-	/*
-	public void testDetermineLoadTypeOnVersions() {
+	@Test
+	public void testDetermineLoadTypeForFormNoVersion() {
 		
-		//Setup test
-		List<FormHeader> formHeaders = new ArrayList<FormHeader>();
-		HashMap<String, String> existingVersions = new HashMap<String, String>();
+		FormCollection coll = this.generateContentValidationData();
+		List<FormDescriptor> forms = coll.getForms();
 		
-		int id = 2321849;
-		for (int i = 0; i < 5; i++) {
-			id++;
-			String vers = (i % 2 == 0) ? "2.0" : "3.0";
-			FormHeader form = new FormHeader("", "" + id, vers);
-			formHeaders.add(form);
-		}
+		FormDescriptor form = forms.get(2);
+		form.setVersion(null);
 		
-		formHeaders.add(new FormHeader("", "", null));
+		List<Float> existingVersions = new ArrayList<Float>();
+		existingVersions.add(new Float(1.0));
+		existingVersions.add(new Float(4.3));
+		existingVersions.add(new Float(5.0));
 		
-		existingVersions.put("2321850", "1.0,2.0");
-		existingVersions.put("2321851", "1.0,2.0");
-		existingVersions.put("2321853", null);
-		existingVersions.put("2321854", "2.0");
+		contentValidationService.determineLoadTypeForForm(form, existingVersions);
+		assertTrue(FormDescriptor.LOAD_TYPE_UNKNOWN.equals(form.getLoadType()));
 		
-		contentValidationService.determineLoadTypeOnVersions(formHeaders, existingVersions);
-		
-		assertTrue(formHeaders.get(0).getLoadType().equals(FormHeader.LOAD_TYPE_UPDATE_FORM));
-		
-		assertTrue(formHeaders.get(1).getLoadType().equals(FormHeader.LOAD_TYPE_NEW_VERSION));
-		assertTrue(formHeaders.get(2).getLoadType().equals(FormHeader.LOAD_TYPE_NEW));
-		assertTrue(formHeaders.get(3).getLoadType().equals(FormHeader.LOAD_TYPE_NEW_VERSION));
-		assertTrue(formHeaders.get(4).getLoadType().equals(FormHeader.LOAD_TYPE_UPDATE_FORM));
-		assertTrue(formHeaders.get(5).getLoadType().equals(FormHeader.LOAD_TYPE_NEW));
-	
+		form.setVersion("");
+		contentValidationService.determineLoadTypeForForm(form, existingVersions);
+		assertTrue(FormDescriptor.LOAD_TYPE_UNKNOWN.equals(form.getLoadType()));
 	}
-	*/
+	
+	@Test
+	public void testDetermineLoadTypeForFormVersionMatched() {
+		
+		FormCollection coll = this.generateContentValidationData();
+		List<FormDescriptor> forms = coll.getForms();
+		
+		FormDescriptor form = forms.get(2);
+		form.setVersion("5.0");
+		
+		List<Float> existingVersions = new ArrayList<Float>();
+		existingVersions.add(new Float(1.0));
+		existingVersions.add(new Float(4.3));
+		existingVersions.add(new Float(5.0));
+		
+		contentValidationService.determineLoadTypeForForm(form, existingVersions);
+		assertTrue(FormDescriptor.LOAD_TYPE_UPDATE_FORM.equals(form.getLoadType()));
+	}
+	
+	@Test
+	public void testDetermineLoadTypeForFormVersionNotMatched() {
+		
+		FormCollection coll = this.generateContentValidationData();
+		List<FormDescriptor> forms = coll.getForms();
+		
+		FormDescriptor form = forms.get(2);
+		form.setVersion("2.0");
+		
+		List<Float> existingVersions = new ArrayList<Float>();
+		existingVersions.add(new Float(1.0));
+		existingVersions.add(new Float(4.3));
+		existingVersions.add(new Float(5.0));
+		
+		contentValidationService.determineLoadTypeForForm(form, existingVersions);
+		assertTrue(FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(form.getLoadType()));
+		
+		form.setVersion("7.0");
+		form.setLoadType(FormDescriptor.LOAD_TYPE_UNKNOWN);
+		contentValidationService.determineLoadTypeForForm(form, existingVersions);
+		assertTrue(FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(form.getLoadType()));
+	}
 	
 	protected void prepareCollectionForValidation (String filepath, String testfile) {
 		assertNotNull(contentValidationService);
@@ -295,6 +357,7 @@ public class ContentValidationServiceImplTest {
 	}
 	
 	public FormCollection generateContentValidationData() {
+		
 		FormCollection aColl = new FormCollection();
 		List<FormLoaderServiceError> errors = new ArrayList<FormLoaderServiceError>();
 		  
@@ -361,5 +424,21 @@ public class ContentValidationServiceImplTest {
 		  aColl.setForms(forms);
 		  
 		  return aColl;
+	}
+	
+	@Test
+	public void testVerifyCredential() {
+		FormCollection coll = this.generateContentValidationData();
+		List<FormDescriptor> forms = coll.getForms();
+		
+		FormDescriptor form = forms.get(0);
+		form.setCreatedBy("ShanYang");
+		form.setContext("TEST");
+		
+		this.contentValidationService.verifyCredential(form, "FORMLOADER");
+		
+		assertTrue("FORMLOADER".equals(form.getCreatedBy()));
+		assertTrue("FORMLOADER".equals(form.getModifiedBy()));
+		assertTrue(form.getChangeNote().contains("ShanYang"));
 	}
 }

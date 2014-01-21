@@ -26,7 +26,7 @@ import org.junit.After;
 import org.junit.Before;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:/applicationContext-service-test.xml"})
+@ContextConfiguration(locations = {"classpath:/applicationContext-service-test-db.xml"})
 public class XmlValidationServiceImplTest {
 	
 	private static Logger logger = Logger.getLogger(XmlValidationServiceImplTest.class.getName());
@@ -46,14 +46,14 @@ public class XmlValidationServiceImplTest {
 	public void testValidateXmlMalformed() {
 		FormCollection aColl = new FormCollection();
 		try {			
-			aColl.setXmlPathOnServer(".\\test\\data");
+			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
 			aColl.setXmlFileName("forms-malformed.xml");
 			aColl = this.xmlValService.validateXml(aColl);
 			fail("Exception not thrown as expected");
 		} catch (FormLoaderServiceException e) {
 			
 			String status = StatusFormatter.getStatusInXml(aColl);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlValService-malformed.xml");
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\forms-malformed-status.xml");
 			
 			System.out.println(e.toString());
 			assertTrue(e.getErrorCode() == FormLoaderServiceError.ERROR_MALFORMED_XML);
@@ -69,7 +69,7 @@ public class XmlValidationServiceImplTest {
 			aColl.setXmlFileName("forms.xml"); //2 of the 3 forms have an empty module (doens't have question).
 			aColl = this.xmlValService.validateXml(aColl);
 			
-			assertTrue(aColl.getName().equals("Test File Forms.xml"));
+			assertTrue(aColl.getName().equals("Forms.xml"));
 			assertTrue(aColl.getDescription().contains("Unit"));
 			
 			List<FormDescriptor> forms = aColl.getForms();
@@ -231,6 +231,56 @@ public class XmlValidationServiceImplTest {
 		} catch (FormLoaderServiceException e) {
 			String status = StatusFormatter.getStatusInXml(aColl);
 			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\invalid-xml.status.xml");
+			fail("Got exception in testValidatexmlWith5Forms");
+		}
+	}
+	
+	
+	@Test
+	public void testValidatexmlWithOneForm() {
+		//entirely wrong xml but with forms and form element	
+		FormCollection aColl = new FormCollection();
+		try {
+			
+			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
+			aColl.setXmlFileName("3193449_has_valid_values.xml");
+			aColl = this.xmlValService.validateXml(aColl);
+			List<FormDescriptor> forms = aColl.getForms();
+			assertNotNull(forms);
+			assertTrue(forms.size() == 1);
+			
+			String status = StatusFormatter.getStatusInXml(aColl);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\3193449_has_valid_values-status.xml");
+			
+		
+		} catch (FormLoaderServiceException e) {
+			String status = StatusFormatter.getStatusInXml(aColl);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\3193449_has_valid_values.status.xml");
+			fail("Got exception in testValidatexmlWith5Forms");
+		}
+	}
+	
+	@Test
+	public void testValidatexmlFromRave() {
+		//entirely wrong xml but with forms and form element	
+		FormCollection aColl = new FormCollection();
+		try {
+			
+			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
+			aColl.setXmlFileName("FourTheradexMedidataRaveFormsMinimumFields_01-11-2014.xml");
+			aColl = this.xmlValService.validateXml(aColl);
+			List<FormDescriptor> forms = aColl.getForms();
+			assertNotNull(forms);
+			assertTrue(forms.size() == 4);
+			
+			String status = StatusFormatter.getStatusInXml(aColl);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\rave-status.xml");
+			
+		
+		} catch (FormLoaderServiceException e) {
+			String status = StatusFormatter.getStatusInXml(aColl);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\rave-status-error.xml");
+			fail("Got exception in testValidatexmlWith5Forms: " + e.getMessage());
 		}
 	}
 }

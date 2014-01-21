@@ -34,12 +34,12 @@ public class UnloadingServiceImplTest {
 	@Test
 	public void testUnloadForms() {
 		try {
-			List<FormCollection> colls = collectionRetrievalService.getAllCollectionsByUser("FORMBUILDER");
+			List<FormCollection> colls = collectionRetrievalService.getAllCollectionsByUser("YANGS");
 			assertNotNull(colls);
 			assertTrue(colls.size() > 10);
 			
 			for (FormCollection coll : colls) {
-				if (coll.getId().equals("E49101B2-1BAA-BA26-E040-BB8921B61DC6")) {
+				if (coll.getId().equals("F07CAD98-127E-3BD3-E040-BB89A7B4176E")) {
 					List<FormDescriptor> forms = coll.getForms();
 					for (FormDescriptor form : forms) {
 						form.setSelected(true);

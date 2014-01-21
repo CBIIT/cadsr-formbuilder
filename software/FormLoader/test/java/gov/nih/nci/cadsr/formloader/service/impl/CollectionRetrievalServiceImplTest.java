@@ -28,9 +28,9 @@ public class CollectionRetrievalServiceImplTest {
 	@Test
 	public void testGetAllCollections() {
 		try {
-			List<FormCollection> colls = collectionRetrievalService.getAllCollectionsByUser("FORMBUILDER");
+			List<FormCollection> colls = collectionRetrievalService.getAllCollectionsByUser("yangs");
 			assertNotNull(colls);
-			assertTrue(colls.size() > 10);
+			assertTrue(colls.size() > 5);
 		
 		} catch (FormLoaderServiceException e) {
 			fail(e.getMessage());
