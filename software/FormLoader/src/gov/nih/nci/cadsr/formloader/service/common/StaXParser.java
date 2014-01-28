@@ -108,11 +108,11 @@ public class StaXParser {
 	 * @return
 	 * @deprecated
 	 */
-	public List<FormDescriptor> parseFormHeaders(FormCollection aColl, String xmlPathName) {
-		//List<FormDescriptor> forms = new ArrayList<FormDescriptor>();
-		ParserHandler handler = new FormParserHandler(aColl);
-		return parseFormHeaders(xmlPathName, handler);
-	}
+//	public List<FormDescriptor> parseFormHeaders(FormCollection aColl, String xmlPathName) {
+//		//List<FormDescriptor> forms = new ArrayList<FormDescriptor>();
+//		ParserHandler handler = new FormParserHandler(aColl);
+//		return parseFormHeaders(xmlPathName, handler);
+//	}
 	
 	/**
 	 * For the first pass of the collection xml, to get the forms' basic header info
