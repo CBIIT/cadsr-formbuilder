@@ -54,7 +54,7 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 	protected ResourceLoader resourceLoader;
 	FormLoaderRepository repository;
 	
-	protected String XSD_PATH_NAME = "FormLoaderv12-revised-sy.xsd";
+	protected String XSD_PATH_NAME = "FormLoaderv13.xsd";
 	
 
 	public XmlValidationServiceImpl() {}

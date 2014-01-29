@@ -15,6 +15,7 @@ import gov.nih.nci.ncicb.cadsr.common.dto.PermissibleValueV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ValueMeaningV2TransferObject;
+import gov.nih.nci.ncicb.cadsr.common.resource.Definition;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.PermissibleValueV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.ReferenceDocument;
@@ -380,22 +381,22 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		
 		for (FormV2 formdto : formDtos) {
 			try {
-			int publicId = Integer.parseInt(form.getPublicId());
-			float version = Float.parseFloat(form.getVersion());
-			
-			if (formdto.getPublicId() == publicId) {
-				if (form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW_VERSION))
-					return formdto;
-				else if (form.getLoadType().equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)
-						&& formdto.getVersion().floatValue() == version) 
-					return formdto;
-			} 
-			
-		} catch (NumberFormatException ne) {
+				int publicId = Integer.parseInt(form.getPublicId());
+				float version = Float.parseFloat(form.getVersion());
+
+				if (formdto.getPublicId() == publicId) {
+					if (form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW_VERSION))
+						return formdto;
+					else if (form.getLoadType().equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)
+							&& formdto.getVersion().floatValue() == version) 
+						return formdto;
+				} 
+
+			} catch (NumberFormatException ne) {
 				logger.debug("Error while converting string to number: >" + form.getPublicId() + "< and >" + form.getVersion() + "<");
 				continue;
-		}
-			
+			}
+
 		}
 		
 		return null;
@@ -451,7 +452,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			if (!formLoadType.equals(FormDescriptor.LOAD_TYPE_NEW_VERSION)
 					&& !formLoadType.equals(FormDescriptor.LOAD_TYPE_NEW) 
 					&& !formLoadType.equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)) {
-				//TODO: We should not get here. Check code if we see this message.
+				//We should not get here. Check code if we see this message.
 				form.addMessage("The form has undetermined load type. Unable to validate its questions.");
 				form.setSelected(false);
 				continue;
@@ -490,23 +491,29 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 	
 	protected void validateQuestionsInModules(List<ModuleDescriptor> modules, FormDescriptor form, 
 			List<QuestionTransferObject> questDtos, List<DataElementTransferObject> cdeDtos, 
-			HashMap<String, List<ReferenceDocumentTransferObject>> refdocDtos, HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos) {
+			HashMap<String, List<ReferenceDocumentTransferObject>> refdocDtos, HashMap<String, 
+			List<PermissibleValueV2TransferObject>> pvDtos) {
 		if (modules == null) {
 			logger.debug("Module list is null. Unable to validate questions.");
 			return;
 		}
 		
 		for (ModuleDescriptor module : modules) {
-			logger.debug("Start validating questions for module [" + module.getPublicId() + "|" + module.getVersion() + "|" + module.getModuleSeqId()  + "]");
+			logger.debug("Start validating questions for module [" + module.getPublicId() + "|" + 
+					module.getVersion() + "|" + module.getModuleSeqId()  + "]");
+			
+			//TODO: waiting on Denise to answer the question about "existing module" - 2014-01-27
 			
 			List<QuestionDescriptor> questions = module.getQuestions();		
 			for (QuestionDescriptor question : questions) {
 				
-				logger.debug("Start validating question [" + question.getPublicId() + "|" + question.getVersion() + "|" + question.getQuestionSeqId()  + "]");
+				logger.debug("Start validating question [" + question.getPublicId() + "|" + question.getVersion() + 
+						"|" + question.getQuestionSeqId()  + "]");
 				validateQuestion(question, form, questDtos, cdeDtos, refdocDtos, pvDtos);
 			}
 			
-			logger.debug("Done validating questions for module [" + module.getPublicId() + "|" + module.getVersion() + "|" + module.getModuleSeqId()  + "]");
+			logger.debug("Done validating questions for module [" + module.getPublicId() + "|" + module.getVersion() + 
+					"|" + module.getModuleSeqId()  + "]");
 		}
 	}
 	
@@ -590,11 +597,11 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		//////TODO: Requirement slightly changed. Should check only if 1) update form and 2) existing module
 		// Otherwise, question public id and version should be ignored
 		
-		//This is from Denise: If Question in existing Module, and Question id version do not match Question in existing Module, 
+		//Denise: If Question in existing Module, and Question id version do not match Question in existing Module, 
 		//add new Question.  If Question in New Module, ignore Question ID/Version
 		
 		if (loadType.equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)) {
-			if (questDtos != null || publicId != null && publicId.length() > 0 && 
+			if (questDtos != null && publicId != null && publicId.length() > 0 && 
 					version != null && version.length() > 0) {
 				
 				int match = 0;
@@ -626,58 +633,6 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 	}
 	
 	/**
-	 * @deprecated
-	 * @param question
-	 * @param form
-	 */
-	protected void verifyQuestionPublicIdVersion(QuestionDescriptor question, FormDescriptor form) {
-		
-		String publicId = question.getPublicId();
-		String version = question.getVersion();
-		String loadType = form.getLoadType();
-		
-		if (loadType.equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)) {
-			if (publicId != null && publicId.length() > 0 && 
-					version != null && version.length() > 0) {
-				//check db
-				int match = checkMatchInDatabase(question);
-				if (match > 0) {
-					question.setSkip(true);
-					if (match == 1)
-						form.addMessage("Question [" + publicId + "|" + version + "] will not be loaded because public id has no match in db");
-					else if (match == 2)
-						form.addMessage("Question [" + publicId + "|" + version + "] will not be loaded because version has no match in db");
-
-				}
-			} else {
-				//question's public id and version will be generated at load time
-				question.setPublicId("");
-				question.setVersion("");
-			}
-		}
-		
-	}
-	
-	protected int checkMatchInDatabase(QuestionDescriptor question) {
-		String publicId = question.getPublicId();
-		String version = question.getVersion();
-	
-		List<QuestionTransferObject> qDtos = repository.getQuestionsByPublicId(publicId);
-		
-		//TODO: need contants for returns
-		if (qDtos == null || qDtos.size() == 0) 
-			return 1; //public id no match
-			
-		for (QuestionTransferObject qDto : qDtos) {
-			if (qDto.getVersion().floatValue() == Float.parseFloat(version))
-				return 0; //match found
-		}
-		
-		//if we get here, no match found in version
-		return 2;
-	}
-	
-	/**
 	 * 
 	 * @param question
 	 * @param form
@@ -689,29 +644,21 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			List<DataElementTransferObject> cdeDtos,
 			HashMap<String, List<ReferenceDocumentTransferObject>> refdocDtos, 
 			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos) {
-		
+		String msg;
 		String cdePublicId = question.getCdePublicId();
 		String cdeVersion = question.getCdeVersion();
 		
 		String errField = verifyPublicIdAndVersion(cdePublicId, cdeVersion); 
 		if (errField.length() > 0) {
-			//TODO: Denise to check with Diana to see where we should add messages.
-			String msg = "Question in xml doesn't contain valid CDE " + errField + ". Unable to validate question in xml.";
-			question.addInstruction(msg);
-			question.addMessage(msg);
-			
-			form.setDefaultWorkflowName();
+			msg = "Question in xml doesn't contain valid CDE " + errField + ". Unable to validate question in xml.";
+			prepareQuestionForLoadWithoutValidation(form, question, msg);
 			return;
 		}
 		
 		DataElementTransferObject matchingCde = getMatchingDataElement(cdePublicId, cdeVersion, question, cdeDtos);
 		if (matchingCde == null) {
-			String msg = "Unable to load a Date Element with [" + cdePublicId + "|" + cdeVersion + "] from database. Unable to validate question content.";
-			logger.debug(msg);
-			question.addMessage(msg);
-			question.addInstruction(msg);
-			
-			form.setDefaultWorkflowName();
+			msg = "Unable to load a Date Element with [" + cdePublicId + "|" + cdeVersion + "] from database. Unable to validate question content.";
+			prepareQuestionForLoadWithoutValidation(form, question, msg);
 			return; 
 		}
 		
@@ -726,103 +673,95 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		logger.debug("Done validating question against CDE");
 	}
 	
+	protected void prepareQuestionForLoadWithoutValidation(FormDescriptor form, QuestionDescriptor question, String message) {
+		logger.debug(message);
+		question.addMessage(message);
+		question.addInstruction(message);
+		form.setDefaultWorkflowName();
+		checkQuestionValidValueFieds(question);
+	}
+	
 	protected String verifyPublicIdAndVersion(String publicid, String version) {
 		String errField = "";
 		if (publicid == null || publicid.length() == 0 ) {
 			errField = "public id";
+		} else {
+			try {
+				int num = Integer.parseInt(publicid);
+			} catch (NumberFormatException ne) {
+				errField = "public id";
+			}
 		}
-		
+
 		if (version == null || version.length() == 0) {
 			errField += (errField.length() > 0) ? " and version" : "version";
+		} else {
+			try {
+				float ver = Float.parseFloat(version); 
+			} catch (NumberFormatException ne) {
+				errField += (errField.length() > 0) ? " and version" : "version";
+			}
 		}
-		
+
 		return errField;
 	}
 	
 	/**
-	 * Get the data element obj from database, that have the same public id and version as those associated with a question in xml
+	 * 
 	 * @param cdePublicId
 	 * @param cdeVersion
 	 * @param question
-	 * 
-	 * @deprecated
+	 * @param cdeDtos
 	 * @return
 	 */
-	protected DataElementTransferObject getDataElementFromDB(String cdePublicId, String cdeVersion, QuestionDescriptor question) {
-		
-		List<DataElementTransferObject> cdes = repository.getCDEByPublicId(cdePublicId);
-		if (cdes == null || cdes.size() ==0) {
-			question.addInstruction(
-					"Question in xml contains CDE public id but it has no match in database. Unable to validate question.");
-			return null;
-		} else {
-			for (DataElementTransferObject cde : cdes) {
-				if (Float.parseFloat(cdeVersion) == cde.getVersion().floatValue()) {
-					return cde;
-				}
-			}
-
-			question.addInstruction(
-					"Question in xml contains CDE public id and verion but the version has no match in database. Unable to validate question.");
-			return null;
-			
-		}
-	}
-	
 	protected DataElementTransferObject getMatchingDataElement(String cdePublicId, String cdeVersion, 
 		QuestionDescriptor question, List<DataElementTransferObject> cdeDtos) {
 		
-		if (cdeDtos == null || cdeDtos.size() ==0) {
-			question.addInstruction(
+		if (cdeDtos == null || cdeDtos.size() == 0) {
+			question.addInstructionAndMessage(
 					"Question in xml contains CDE public id but it has no match in database. Unable to validate question.");
 			return null;
 		} 
 		
-		int cdePubIdNum = Integer.parseInt(cdePublicId);
-		float cdeVerNum = Float.parseFloat(cdeVersion);
 		boolean pidMatched = false;
-		for (DataElementTransferObject cde : cdeDtos) {
-			if (cde.getPublicId() == cdePubIdNum)
-				pidMatched = true;
-			else
-				continue;
+		try {
+			int cdePubIdNum = Integer.parseInt(cdePublicId);
+			float cdeVerNum = Float.parseFloat(cdeVersion);
+			
+			for (DataElementTransferObject cde : cdeDtos) {
+				if (cde.getPublicId() == cdePubIdNum)
+					pidMatched = true;
+				else
+					continue;
 
-			if (cdeVerNum == cde.getVersion().floatValue()) {
-				question.setCdeSeqId(cde.getDeIdseq());
-				return cde;
+				if (cdeVerNum == cde.getVersion().floatValue()) {
+					
+					//TODO
+					//cde.getValueDomain().g
+					
+					question.setCdeSeqId(cde.getDeIdseq());
+					
+					return cde;
+				}
 			}
+		} catch (NumberFormatException ne) {
+			question.addInstructionAndMessage(
+					"Question in xml contains malformatted CDE public id or version. Unable to validate question.");
+			return null;
 		}
 
 		if (pidMatched)
-			question.addInstruction(
+			question.addInstructionAndMessage(
 				"Question in xml contains CDE public id and verion but the version has no match in database. Unable to validate question.");
 		else
-			question.addInstruction(
+			question.addInstructionAndMessage(
 				"Question in xml contains CDE public id and verion but the public id has no match in database. Unable to validate question.");
+		
 		return null;
 			
 		
 	}
-	
-	protected List<PermissibleValueV2TransferObject> getPermissibleValueListFromDB(
-			DataElementTransferObject cde, QuestionDescriptor question) {
-		
-		List<PermissibleValueV2TransferObject> pValues = null;
-		String vdSeqId = cde.getVdIdseq();
-        
-		if (vdSeqId != null && vdSeqId.length() > 0) {
-			pValues = repository.getValueDomainPermissibleValuesByVdId(vdSeqId);
 
-			if (pValues == null || pValues.size() == 0) {
-				logger.debug("The value domain associated with data Element [" + 
-						cde.getLongName() + 
-						"] does not have permissible values. Will not be able to verify question's default value and valid values");
-			}
-		}
-		 
-		return pValues;
-	}
-	
 	protected List<ReferenceDocumentTransferObject> getReferenceDocsForCdeFromDB(String cdePublicId, String cdeVersion,
 			QuestionDescriptor question) {
 		
@@ -856,7 +795,6 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 					"] does not have permissible values. Unable to verify question's default value";
 			question.addInstruction(msg);
 			question.addMessage(msg);
-			
 			form.setDefaultWorkflowName();
 			return;
 		} 	 
@@ -874,7 +812,6 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 				question.addInstruction("Question's default value [" + 
 						defaultValue + "] doesn't match any of the associated CDE's permissible values");
 				question.setDefaultValue("");
-				
 				form.setDefaultWorkflowName();
 			}
 		} 
@@ -896,8 +833,8 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 	 * To validate a question's valid value's meaningText field -
 	 * 
 	 * 1. See if it matches the pv's value meaning's longName, if not ->
-	 * 2. see if it matches the pv's designation's name, if not -
-	 * 3. see if it machtes the pv's definition's text
+	 * 2. see if it matches the pv's value meaning's designation's name, if not -
+	 * 3. see if it machtes the pv's value meaning's definition's text
 	 * If not match found, skip loading the valid value
 	 * 
 	 * To validate a question's valid value's description field -
@@ -917,22 +854,16 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 	protected void verifyQuestionValidValues(FormDescriptor form, QuestionDescriptor question, List<PermissibleValueV2TransferObject> pValues,
 			DataElementTransferObject matchingCde) {
 		
-		String msg;	
-		
 		List<QuestionDescriptor.ValidValue> validValues = question.getValidValues();
 		if (validValues == null || validValues.size() == 0)
 			 return; 
 		 
 		if (pValues == null || pValues.size() == 0) {
 			
-			msg = "Question not associated with data element [" + matchingCde.getPublicId() + " " + matchingCde.getVersion() +
+			String msg = "Question not associated with data element [" + matchingCde.getPublicId() + " " + matchingCde.getVersion() +
 					"] because the value domain associated with data Element [" + matchingCde.getLongName() +
 					" is non-enumerated. Unable to verify question's valid values";
-	
-			question.addInstruction(msg);
-			question.addMessage(msg);
-			
-			form.setDefaultWorkflowName();
+			prepareQuestionForLoadWithoutValidation(form, question, msg);	
 			return;
 		} 	
 		
@@ -942,65 +873,122 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		 
 	}
 	
+	/**
+	 * Make sure valid values have valid required field values. Otherwise, db will 
+	 * complain
+	 * 
+	 * This is especially important for questions that don't have an associated CDE in xml
+	 * @param question
+	 */
+	protected void checkQuestionValidValueFieds(QuestionDescriptor question) {
+		if (question == null) return;
+		
+		List<QuestionDescriptor.ValidValue> vvs = question.getValidValues();
+		if (vvs == null || vvs.size() == 0) return;
+		
+		for (QuestionDescriptor.ValidValue vv : vvs) {
+			if (vv.getValue() == null || vv.getValue().length() == 0) {
+				vv.setSkip(true);
+				continue;
+			}
+			
+			if (vv.getMeaningText() == null || vv.getMeaningText().length() == 0) {
+				vv.setSkip(true);
+				continue;
+			}
+				
+			if (vv.getDescription() == null || vv.getDescription().length() == 0)
+				vv.setDescription(vv.getMeaningText());
+		}
+	}
+	
 	protected void validateQuestionValidValue(QuestionDescriptor question, QuestionDescriptor.ValidValue vVal,
 			List<PermissibleValueV2TransferObject> pValues, DataElementTransferObject matchingCde) {
 		 
-		////TODO: Need work here!!
-		////  1/17/2014
 		String msg;	
-		boolean valValidated = false;
-		boolean meaningValidated = false;
-		boolean meaningDescValidated = false;
-
 		String val = vVal.getValue();
 		String valMeaning = FormLoaderHelper.normalizeSpace(vVal.getMeaningText());
 		String valDesc = FormLoaderHelper.normalizeSpace(vVal.getDescription());
 
+		PermissibleValueV2TransferObject matchedPv = null;
 		for (PermissibleValueV2TransferObject pVal : pValues) {
 			String pValStr = pVal.getValue().trim();
-			if (val.equals(pValStr)) {
-				valValidated = true;
-				ValueMeaningV2TransferObject valMeaningDto = (ValueMeaningV2TransferObject)pVal.getValueMeaningV2();
-
-				String valMeaningLongName = FormLoaderHelper.normalizeSpace(valMeaningDto.getLongName());
-				String valMeaningDescription = FormLoaderHelper.normalizeSpace(valMeaningDto.getDescription());
-
-				if (valMeaning.equals(valMeaningLongName)) {
-					meaningValidated = true; 
-
-					////This will be used as the first part of the valid value preferred name
-					// vVal.setPreferredName(String.valueOf(valMeaningDto.getPublicId()));
-
-					//if (valMeaningDescription.equalsIgnoreCase(valDesc)) {
-					meaningDescValidated = true;
-					vVal.setVdPermissibleValueSeqid(pVal.getIdseq());
-
-					//This will be used as the first part of the valid value preferred name
-					vVal.setPreferredName(String.valueOf(valMeaningDto.getPublicId()));
-					// } 
-					if (valDesc == null || valDesc.length() == 0)
-						vVal.setDescription(valMeaning);
-				}
+			if (val.equals(pValStr)) { //question vv's value field
+				matchedPv = pVal;
+				break;
 			}
-		}
-
-		msg = "";
-		if (!valValidated)
+		}	
+		
+		if (matchedPv == null) {
 			msg = "Valid value [" + val + "] doesn't match any of the associated CDE's permissible values. Valid Value/ValueMeaning not loaded.";
-		else if (!meaningValidated)
-			msg = "Valid value meaning text [" + valMeaning + "] doesn't match any of the associated CDE's permissible value meaning.  Valid Value/ValueMeaning not loaded.";
-		else if (!meaningDescValidated)
-			msg = "Valid value description [" + vVal.getDescription() + 
-			"] doesn't match any of the associated CDE's permissible value's value meaning description.  Valid Value/ValueMeaning not loaded.";
-
-		if (msg.length() > 0) {
 			vVal.setSkip(true);
 			question.addInstruction(msg);
 			question.addMessage(msg);
+			return;
 		}
-		else {
-			String debug = " stop";
+
+		ValueMeaningV2TransferObject valMeaningDto = (ValueMeaningV2TransferObject)matchedPv.getValueMeaningV2();	
+		String valMeaningLongName = FormLoaderHelper.normalizeSpace(valMeaningDto.getLongName());
+
+		if (!valMeaning.equalsIgnoreCase(valMeaningLongName)) { //question vv's meantingText field
+			//2. see if it matches the pv's value meaning's designation's name, if not -
+			//3. see if it matches the pv's value meaning's definition's text
+			//  * If no match found, skip loading the valid value
+			if (!ableToValidateByAlternatives(valMeaningLongName, valMeaningDto.getIdseq())) {
+				msg = "Valid value meaning text [" + valMeaning + "] doesn't match any of the associated CDE's permissible value meaning.  Valid Value/ValueMeaning not loaded.";
+				vVal.setSkip(true);
+				question.addInstruction(msg);
+				question.addMessage(msg);
+				return;
+			}	
 		}
+
+		String valMeaningPreferredDefinition = FormLoaderHelper.normalizeSpace(valMeaningDto.getPreferredDefinition());
+		if (valDesc == null || valDesc.length() == 0) {
+			vVal.setDescription(valMeaningPreferredDefinition);
+			return;
+		}	
+
+		if (!valDesc.equals(valMeaningPreferredDefinition)) {
+			//see if it matches the pv's value meaning's definition's text
+			if (!matchMeaningDefinitions(valDesc, valMeaningDto.getDefinitions()))
+				vVal.setDescription(valMeaningPreferredDefinition);
+		}
+	}
+	
+	protected boolean ableToValidateByAlternatives(String valMeaningLongName, String vmSeqid) {
+
+		List<String> desNames = this.repository.getDesignationNamesByVmIds(vmSeqid);
+		if (desNames != null && desNames.size() > 0) {
+			for (String desName : desNames) {
+				desName = FormLoaderHelper.normalizeSpace(desName);
+				if (valMeaningLongName.equalsIgnoreCase(desName)) 
+					return true;
+			}
+		}
+		
+		List<String> defTexts = this.repository.getDefinitionTextsByVmIds(vmSeqid);
+		if (defTexts != null && defTexts.size() > 0) {
+			for (String defTest : defTexts) {
+				defTest = FormLoaderHelper.normalizeSpace(defTest);
+				if (valMeaningLongName.equalsIgnoreCase(defTest)) 
+					return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	protected boolean matchMeaningDefinitions(String valDesc, List<Definition> definitions) {
+		if (definitions == null)
+			return false;
+		
+		for (Definition def : definitions) {
+			if (valDesc.equals(def.getDefinition()))
+				return true;
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -1069,26 +1057,4 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		}
 		question.setQuestionText(questionText);
 	}
-	
-	//default: CRF
-	protected void validateFormType() {
-		
-	}
-	
-	//default: Form Loader (create new in db)
-	protected void validateDesignationTypes() {
-		
-	}
-	
-	//default: ??
-	protected void validateRefdocTypes() {
-		
-	}
-	
-	//default: Form Loader (create new in db)
-	protected void validateDefinitionTypes() {
-		
-	}
-	
-
 }

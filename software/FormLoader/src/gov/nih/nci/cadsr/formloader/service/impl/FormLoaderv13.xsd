@@ -57,6 +57,10 @@
     Version 12 
     Changed referenceDocumentdate modified to optional
   </xs:documentation>
+  <xs:documentation>
+    Version 13 
+    Change minOccurs to 0 for valueDomain and instructionType
+  </xs:documentation>
 </xs:annotation>
   <xs:element name="forms">
     <xs:annotation>
@@ -85,7 +89,6 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
-
 
   <xs:complexType name="formType" mixed="true">
     <xs:all>
