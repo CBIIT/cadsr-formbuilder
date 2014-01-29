@@ -30,6 +30,7 @@ public class StaXParser {
 	protected static final Map<String, String> MAP_XML_ELEM_TO_DTO_PROPERTY = createMap();
 	
 	protected static final String PREFIX_CDE = "cde";
+	protected static final String PREFIX_CDE_VD = "cdeVd";
 
 	//Method names that are not in this format: set<NodeName>
     protected static Map<String, String> createMap() {
@@ -39,6 +40,8 @@ public class StaXParser {
         mapping.put(PREFIX_CDE+"version", "cdeVersion");
         mapping.put("isEditable", "editable");
         mapping.put("isMandatory", "mandatory");
+        mapping.put(PREFIX_CDE_VD +"publicID", "cdeVdPublicId");
+        mapping.put(PREFIX_CDE_VD +"version", "cdeVdVersion");
        return Collections.unmodifiableMap(mapping);
     }
     

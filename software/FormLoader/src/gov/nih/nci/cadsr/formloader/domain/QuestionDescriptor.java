@@ -14,6 +14,8 @@ public class QuestionDescriptor {
 	String cdeSeqId;
 	String cdePublicId;
 	String cdeVersion;
+	String cdeVdPublicId;
+	String cdeVdVersion;
 	
 	List<ValidValue> validValues = new ArrayList<ValidValue>();
 	String defaultValue;
@@ -26,6 +28,22 @@ public class QuestionDescriptor {
 	boolean skip = false;
 	List<String> messages = new ArrayList<String>();
 	
+	public String getCdeVdPublicId() {
+		return cdeVdPublicId;
+	}
+
+	public void setCdeVdPublicId(String cdeVdPublicId) {
+		this.cdeVdPublicId = cdeVdPublicId;
+	}
+
+	public String getCdeVdVersion() {
+		return cdeVdVersion;
+	}
+
+	public void setCdeVdVersion(String cdeVdVersion) {
+		this.cdeVdVersion = cdeVdVersion;
+	}
+
 	public void addMessage(String msg) {
 		messages.add(msg);
 	}
@@ -151,10 +169,10 @@ public class QuestionDescriptor {
 	}
 
 	public void addInstruction(String newInstruction) {
-		if (instruction == null)
+		if (instruction == null || instruction.length() == 0)
 			instruction = "[FormLoader]:" + newInstruction;
 		else
-			instruction += "; [FormLoader]:" + newInstruction;
+			instruction += "; " + newInstruction;
 	}
 
 	public boolean isSkip() {
@@ -201,7 +219,10 @@ public class QuestionDescriptor {
 		setMandatory(yesno);
 	}
 
-
+	public void addInstructionAndMessage(String message) {
+		this.addInstruction(message);
+		this.addMessage(message);
+	}
 
 
 
@@ -252,22 +273,6 @@ public class QuestionDescriptor {
 			this.preferredName = preferredName;
 		}
 		
-		/*
-		public String getPerferredDefinition() {
-			return perferredDefinition;
-		}
-		public void setPerferredDefinition(String perferredDefinition) {
-			this.perferredDefinition = perferredDefinition;
-		}
-		*/
-		/*
-		public String getLongName() {
-			return longName;
-		}
-		public void setLongName(String longName) {
-			this.longName = longName;
-		}
-		*/
 		public String getInstruction() {
 			return instruction;
 		}

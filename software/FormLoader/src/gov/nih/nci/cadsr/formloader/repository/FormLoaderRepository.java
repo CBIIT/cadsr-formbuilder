@@ -19,7 +19,7 @@ public interface FormLoaderRepository {
 	public List<QuestionTransferObject> getQuestionsByPublicId(String publicId);
 	public List<DataElementTransferObject> getCDEByPublicId(String cdePublicId);
 	public List<ReferenceDocumentTransferObject> getReferenceDocsForQuestionCde(String cdePublicId, String cdeVersion);
-	public List<PermissibleValueV2TransferObject> getValueDomainPermissibleValuesByVdId(String vdSeqId);
+	//public List<PermissibleValueV2TransferObject> getValueDomainPermissibleValuesByVdId(String vdSeqId);
 	
 	public List<QuestionTransferObject> getQuestionsByPublicIds(List<String> publicIds);
 	public List<DataElementTransferObject> getCDEsByPublicIds(List<String> cdePublicIds);
@@ -59,4 +59,7 @@ public interface FormLoaderRepository {
 	public void updateFormInCollectionRecord(FormCollection coll, FormDescriptor form);
 	
 	public HashMap<String, Date> getModifiedDateForForms(List<String> formSeqids);
+	
+	public List<String> getDefinitionTextsByVmIds(String vmSeqid);
+	public List<String> getDesignationNamesByVmIds(String vmSeqid);
 }

@@ -185,46 +185,6 @@ public class FormLoaderRepositoryMockup implements FormLoaderRepository {
 		return deRefDocs;
 	}
 
-	@Override
-	public List<PermissibleValueV2TransferObject> getValueDomainPermissibleValuesByVdId(
-			String vdSeqId) {
-		final String fileName =  "permisVals- " + vdSeqId + ".ser";
-
-		String filePathName = mockRepoPath + fileName;
-		File objs = new File(filePathName);
-		
-		List<PermissibleValueV2TransferObject> pvs = null;
-		
-		try {
-			if (!objs.exists()) 
-				return null;
-			
-				pvs = new ArrayList<PermissibleValueV2TransferObject>();
-				FileInputStream fis = new FileInputStream(filePathName);
-				//Create new ObjectInputStream object to read object from file
-				ObjectInputStream obj = new ObjectInputStream(fis);
-
-				while (fis.available() != -1) {
-					//Read object from file
-					PermissibleValueV2TransferObject acc = (PermissibleValueV2TransferObject) obj.readObject();
-					pvs.add(acc);
-				}
-				fis.close();
-			
-			}catch (ClassNotFoundException fne) {
-				System.out.println(fne);
-			}catch (FileNotFoundException fne) {
-				System.out.println(fne);
-			} catch (IOException ioe) {
-				System.out.println(ioe);
-			}
-
-
-		
-		return pvs;
-	}
-	
-	
 	
 	@Override
 	public String getContextSeqIdByName(String contextName) {
@@ -491,6 +451,18 @@ public class FormLoaderRepositoryMockup implements FormLoaderRepository {
 
 	@Override
 	public HashMap<String, Date> getModifiedDateForForms(List<String> formSeqids) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> getDefinitionTextsByVmIds(String vmSeqid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> getDesignationNamesByVmIds(String vmSeqid) {
 		// TODO Auto-generated method stub
 		return null;
 	}

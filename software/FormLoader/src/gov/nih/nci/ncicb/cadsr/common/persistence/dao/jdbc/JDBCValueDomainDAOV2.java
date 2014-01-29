@@ -10,8 +10,10 @@ import gov.nih.nci.ncicb.cadsr.common.resource.PermissibleValueV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.ValueMeaningV2;
 import gov.nih.nci.ncicb.cadsr.common.dto.ConceptDerivationRuleTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.PermissibleValueV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ValueMeaningV2TransferObject;
+import gov.nih.nci.ncicb.cadsr.common.resource.Definition;
 
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
@@ -191,9 +193,9 @@ public class JDBCValueDomainDAOV2 extends JDBCAdminComponentDAOV2 implements
 	
 	public HashMap<String, List<PermissibleValueV2TransferObject>> getPermissibleValuesByVdIds(List<String> vdSeqIds) {
 		
-		//TODO: this query returns almost identical rows. Need fine tuning
-    	String sql = 
-    			"select vdpv.vd_idseq, vdpv.vp_idseq, pv.VALUE, vm.PUBLIC_ID, vm.VERSION, vm.PREFERRED_DEFINITION, vm.LONG_NAME, vm.DESCRIPTION " +
+		String sql = 
+    			"select vdpv.vd_idseq, vdpv.vp_idseq, pv.VALUE, vm.PUBLIC_ID, vm.VERSION, " +
+    					" vm.PREFERRED_DEFINITION, vm.LONG_NAME, vm.DESCRIPTION, VM.VM_IDSEQ " +
     					" from CABIO31_VD_PV_VIEW vdpv, CABIO31_PV_VIEW pv, CABIO31_VM_VIEW vm " +
     					" where vdpv.pv_idseq = pv.pv_idseq and pv.vm_idseq = vm.vm_idseq and vdpv.vd_idseq in (:seqIds) " +
     					" order by vdpv.vd_idseq";
@@ -213,7 +215,7 @@ public class JDBCValueDomainDAOV2 extends JDBCAdminComponentDAOV2 implements
     					
     					PermissibleValueV2TransferObject pv = new PermissibleValueV2TransferObject();
     					
-    					pv.setValue(rs.getString("VALUE"));
+    					pv.setValue(rs.getString("VALUE")); 
     					pv.setIdseq(rs.getString("VP_IDSEQ"));
 
     					ValueMeaningV2TransferObject vm = new ValueMeaningV2TransferObject();
@@ -222,10 +224,9 @@ public class JDBCValueDomainDAOV2 extends JDBCAdminComponentDAOV2 implements
     					vm.setPreferredDefinition(rs.getString("PREFERRED_DEFINITION"));
     					vm.setLongName(rs.getString("LONG_NAME"));
     					vm.setDescription(rs.getString("DESCRIPTION").trim());
+    					vm.setIdseq(rs.getString("VM_IDSEQ"));
     					
-
     					pv.setValueMeaningV2(vm);
-    					
     					
     					if (!pvsMap.containsKey(vdSeqId)) 
     						pvsMap.put(vdSeqId, new ArrayList<PermissibleValueV2TransferObject>());
@@ -237,8 +238,56 @@ public class JDBCValueDomainDAOV2 extends JDBCAdminComponentDAOV2 implements
     			});
     	
 
-    	//return des;
     	return pvsMap;
+    }
+
+
+	public List<String> getDefinitionTextByVMId(String vmSeqId) {
+		
+		String sql = 
+    			"select * from  CABIO31_DEFINITIONS_VIEW def where def.AC_IDSEQ =:vmSeqId";
+
+    	MapSqlParameterSource params = new MapSqlParameterSource();
+    	params.addValue("vmSeqId", vmSeqId);
+    	
+    	final HashMap<String, List<PermissibleValueV2TransferObject>> pvsMap = 
+    			new HashMap<String, List<PermissibleValueV2TransferObject>>();
+    	
+    	List<String> defTexts = 
+    			this.namedParameterJdbcTemplate.query(sql, params, 
+    					new RowMapper<String>() {
+    				public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+    					
+    					 return rs.getString("DEFINITION");
+    				}
+    			});
+    	
+
+    	return defTexts;
+    }
+	
+public List<String> getDesignationNamesByVMId(String vmSeqId) {
+		
+	String sql = 
+    			"select * from  CABIO31_DESIGNATIONS_VIEW def where def.AC_IDSEQ =:vmSeqId";
+
+    	MapSqlParameterSource params = new MapSqlParameterSource();
+    	params.addValue("vmSeqId", vmSeqId);
+    	
+    	final HashMap<String, List<PermissibleValueV2TransferObject>> pvsMap = 
+    			new HashMap<String, List<PermissibleValueV2TransferObject>>();
+    	
+    	List<String> desNames = 
+    			this.namedParameterJdbcTemplate.query(sql, params, 
+    					new RowMapper<String>() {
+    				public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+    					
+    					 return rs.getString("NAME");
+    				}
+    			});
+    	
+
+    	return desNames;
     }
 
 }

@@ -87,6 +87,11 @@ public class FormQuestionParserHandler extends ParserHandler {
 				if (localName.equalsIgnoreCase(StaXParser.PUBLIC_ID) && currQuestion.getCdePublicId() == null 
 						||localName.equalsIgnoreCase(StaXParser.VERSION) && currQuestion.getCdeVersion() == null )
 					this.methodName = getMethodName(StaXParser.PREFIX_CDE + localName);
+			} else if (nodeQueue.peek().equals(StaXParser.VALUE_DOMAIN)) {
+				this.objToSetProperty = currQuestion;
+				if (localName.equalsIgnoreCase(StaXParser.PUBLIC_ID) && currQuestion.getCdeVdPublicId() == null 
+						||localName.equalsIgnoreCase(StaXParser.VERSION) && currQuestion.getCdeVdVersion() == null )
+					this.methodName = getMethodName(StaXParser.PREFIX_CDE_VD + localName);
 			}
 
 		} else if  (localName.equalsIgnoreCase(StaXParser.QUESTION_TEXT)

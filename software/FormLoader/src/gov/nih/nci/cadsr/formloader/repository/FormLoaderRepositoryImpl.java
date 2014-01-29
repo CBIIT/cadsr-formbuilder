@@ -192,23 +192,23 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		return deRefDocs;
 	}
 	
-	@Transactional(readOnly=true)
-	public List<PermissibleValueV2TransferObject> getValueDomainPermissibleValuesByVdId(String vdSeqId) {
-		if (vdSeqId == null || vdSeqId.length() == 0) {
-			logger.debug("getValueDomainBySeqId(): Value domain seq id is null or empty. Unable to querry db.");
-			return null;
-		}
-		
-		List<PermissibleValueV2TransferObject> pValues = valueDomainV2Dao.getPermissibleValuesByVdId(vdSeqId);
-		String msg = "getValueDomainPermissibleValuesByVdId(): Dao returns ";
-		if (pValues == null || pValues.size() == 0)
-			msg += "a value domain obj with 0 permissible value.";
-		else
-			msg += "a value domain obj with " + pValues.size() + " permissible values";
-		
-		logger.debug("msg");
-		return pValues;
-	}
+//	@Transactional(readOnly=true)
+//	public List<PermissibleValueV2TransferObject> getValueDomainPermissibleValuesByVdId(String vdSeqId) {
+//		if (vdSeqId == null || vdSeqId.length() == 0) {
+//			logger.debug("getValueDomainBySeqId(): Value domain seq id is null or empty. Unable to querry db.");
+//			return null;
+//		}
+//		
+//		List<PermissibleValueV2TransferObject> pValues = valueDomainV2Dao.getPermissibleValuesByVdId(vdSeqId);
+//		String msg = "getValueDomainPermissibleValuesByVdId(): Dao returns ";
+//		if (pValues == null || pValues.size() == 0)
+//			msg += "a value domain obj with 0 permissible value.";
+//		else
+//			msg += "a value domain obj with " + pValues.size() + " permissible values";
+//		
+//		logger.debug("msg");
+//		return pValues;
+//	}
 	
 	@Transactional(readOnly=true)
 	public HashMap<String, List<PermissibleValueV2TransferObject>> getPermissibleValuesByVdIds(List<String> vdSeqIds) {
@@ -284,6 +284,30 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			return new HashMap<String, Date>();
 		
 		return this.formV2Dao.getFormModifiedDateByIds(formSeqids);
+	}
+	
+	@Transactional(readOnly=true)
+	public List<String> getDefinitionTextsByVmIds(String vmSeqid) {
+		if (vmSeqid == null || vmSeqid.length() == 0) {
+			logger.debug("Input vmSeqid is not valid in getDefinitionTextsByVmIds()");
+			return null;
+		}
+		
+		return this.valueDomainV2Dao.getDefinitionTextByVMId(vmSeqid);
+		
+		
+	}
+	
+	@Transactional(readOnly=true)
+	public List<String> getDesignationNamesByVmIds(String vmSeqid) {
+		if (vmSeqid == null || vmSeqid.length() == 0) {
+			logger.debug("Input vmSeqid is not valid in getDesignationNamessByVmIds()");
+			return null;
+		}
+		
+		return this.valueDomainV2Dao.getDesignationNamesByVMId(vmSeqid);
+		
+		
 	}
 	
 	protected List<FormDescriptor> getFormDetailsFromCaDsr(FormCollection coll, List<FormDescriptor> forms) {
@@ -923,6 +947,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 					if (!formV2Dao.formProtocolExists(formSeqid, protoSeqid))
 						formV2Dao.addFormProtocol(formSeqid, protoSeqid, form.getModifiedBy());
 					//TODO: requirement changed. Need work here 1/17/2014
+					//TODO: Need to remove protocols that exist in db but not in xml
 				} 
 			}
 			
@@ -976,7 +1001,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			moduledto.setIdseq(moduleSeqid);
 			moduledto.setContext(formdto.getContext());
 			
-			//TODO: do we need to go back to db to get module's public id?
+			//do we need to go back to db to get module's public id?
 			
 			//Now, onto questions
 			createQuestionsInModule(module, moduledto, form, formdto);
@@ -1040,6 +1065,11 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			FormValidValueTransferObject fvv = translateIntoValidValueDto(vValue, newQuestdto, moduledto, formdto, idx);
 			
 			fvv.setDisplayOrder(idx);
+			
+			if (fvv.getPreferredDefinition() == null || fvv.getPreferredDefinition().length() == 0) {
+				String stop = "debug";
+				stop = "stop";
+			}
 			
 			String vvSeqid  = 
 					formValidValueV2Dao.createValidValue(fvv,newQuestdto.getQuesIdseq(),moduledto.getCreatedBy());
@@ -1663,7 +1693,6 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 					publicId, version, form.getLoadType(),
 					form.getLoadStatus(), form.getLongName(), form.getPreviousLatestVersion(), loadDate);
 			
-			//TODO: check response value.
 			int loatStatus = (res > 0) ? FormDescriptor.STATUS_LOADED : FormDescriptor.STATUS_LOAD_FAILED;
 		}
 		

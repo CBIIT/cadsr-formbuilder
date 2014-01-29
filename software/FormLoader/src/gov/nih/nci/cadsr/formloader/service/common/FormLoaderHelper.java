@@ -5,15 +5,18 @@ import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Collections;
@@ -21,21 +24,19 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
 
-//import javax.xml.transform.Source;
-//import javax.xml.transform.stream.StreamSource;
-//import javax.xml.validation.Schema;
-//import javax.xml.validation.SchemaFactory;
-//import javax.xml.validation.Validator;
-
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
-import org.xml.sax.SAXException;
-
 import org.apache.log4j.Logger;
+import org.xml.sax.SAXException;
+//import javax.xml.transform.Source;
+//import javax.xml.transform.stream.StreamSource;
+//import javax.xml.validation.Schema;
+//import javax.xml.validation.SchemaFactory;
+//import javax.xml.validation.Validator;
 
 
 public class FormLoaderHelper {
@@ -98,9 +99,11 @@ public class FormLoaderHelper {
 		if (xmlName == null || xmlName.length() == 0)
 			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_FILE_INVALID,
 					"Input file name is null or empty. Unable to validate form content.");
-
+		
 		String xmlPathName = xmlPath.endsWith("/") ? xmlPath + xmlName : xmlPath + "/" + xmlName;
-
+		
+		//xmlPath = FormLoaderHelper.resolveWindowsPathIfNecessary(xmlPath);
+		
 		File input = new File(xmlPathName);
 		if (input == null || !input.exists() || !input.canRead())
 			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_FILE_INVALID,
@@ -108,6 +111,33 @@ public class FormLoaderHelper {
 
 
 		return xmlPathName;
+	}
+	
+	public static String resolveWindowsPathIfNecessary(String pathName) {
+		
+		if (pathName == null) 
+			return pathName;
+		
+		String osName = System.getProperty("os.name");;
+		
+		if (osName == null || !osName.startsWith("Windows"))
+			return pathName;
+		
+		if (pathName.contains(":")) 
+			return pathName;
+		
+		String workingDir = System.getProperty("user.dir");
+	
+		if (!workingDir.endsWith("/"))
+			workingDir += "/";
+		
+		if (pathName.startsWith("."))
+			pathName = pathName.substring(1);
+		
+		if (pathName.startsWith("/") || pathName.startsWith("\\"))
+			pathName = pathName.substring(1);
+		
+		return workingDir + pathName;
 	}
 
 	public static XmlValidationError filePahtNameContainsError(String filePathName) {

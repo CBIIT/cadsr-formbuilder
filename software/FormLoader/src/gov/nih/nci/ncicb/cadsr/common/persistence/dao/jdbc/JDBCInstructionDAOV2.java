@@ -155,12 +155,13 @@ public abstract class JDBCInstructionDAOV2 extends JDBCAdminComponentDAOV2
       String qcIdseq,String instructionType) {
     	
     	String longName = instruction.getLongName();
-//    	if (longName.length() > 255)
-//    		longName = longName.substring(0,254);
+    	if (longName.length() > 255)
+    		longName = longName.substring(0,254);
     	String prefDef = instruction.getPreferredDefinition();
-//    	if (prefDef.length() > 255) {
-//    		prefDef = prefDef.substring(0,254);
-//    	}
+    	if (prefDef.length() > 255) {
+    		prefDef = prefDef.substring(0,254);
+    	}
+    	
       Object[] obj =
         new Object[] {
           qcIdseq, instruction.getVersion().toString(),
