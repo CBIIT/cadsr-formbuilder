@@ -23,11 +23,11 @@ public class JDBCModuleDAOV2Test {
 	
 	@Test
 	public void testGetQuestionsInAModuleV2() {
-		String moduleSeqId = "9D1F6BBF-433F-0B69-E040-BB89AD436323";
+		String moduleSeqId = "D7BA1894-9852-2123-E040-BB89AD431FD9";
 		List<QuestionTransferObject> questions = moduleV2Dao.getQuestionsInAModuleV2(moduleSeqId);
 		
 		assertNotNull(questions);
-		assertTrue(questions.size() == 6);
+		assertTrue(questions.size() == 4);
 		
 		QuestionTransferObject aQuestion = questions.get(3);
 		assertNotNull(aQuestion.getDataElement());

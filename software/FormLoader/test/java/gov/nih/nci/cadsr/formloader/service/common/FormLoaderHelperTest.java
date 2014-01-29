@@ -111,4 +111,71 @@ public class FormLoaderHelperTest {
 			System.out.println(s.getStackTrace());
 		}
 	}
+	
+	@Test 
+	public void testCheckInputFileNullPath() {
+		try {
+			FormLoaderHelper.checkInputFile(null, "afafa");
+			fail("Should have thrown exceptio");
+		} catch (FormLoaderServiceException fse) {
+			assertTrue(fse.getErrorCode() == FormLoaderServiceException.ERROR_FILE_INVALID);
+		}
+	}
+	
+	@Test 
+	public void testCheckInputFileEmptyPath() {
+		try {
+			FormLoaderHelper.checkInputFile("", "afafa");
+			fail("Should have thrown exceptio");
+		} catch (FormLoaderServiceException fse) {
+			assertTrue(fse.getErrorCode() == FormLoaderServiceException.ERROR_FILE_INVALID);
+		}
+	}
+	
+	@Test 
+	public void testCheckInputFileNullFileName() {
+		try {
+			FormLoaderHelper.checkInputFile("dfafa", null);
+			fail("Should have thrown exceptio");
+		} catch (FormLoaderServiceException fse) {
+			assertTrue(fse.getErrorCode() == FormLoaderServiceException.ERROR_FILE_INVALID);
+		}
+	}
+	
+	@Test 
+	public void testResolveWindowsPathNull() {
+	
+		String path = FormLoaderHelper.resolveWindowsPathIfNecessary(null);
+		assertNull(path);
+		
+	}
+	
+	@Test 
+	public void testResolveWindowsPathAbsolutePath() {
+	
+		String inpath = "c://developemnt/path";
+		String path = FormLoaderHelper.resolveWindowsPathIfNecessary(inpath);
+		assertTrue(path.equals(inpath));
+		
+	}
+	
+	@Test 
+	public void testResolveWindowsPathPathWithDot() {
+	
+		String inpath = ".\\test\\data\\xmlvalidation\\3256357_v1_0_newform-partial.xml";
+		String path = FormLoaderHelper.resolveWindowsPathIfNecessary(inpath);
+		assertTrue(path.contains(":"));
+		//assertTrue(!path.contains("."));
+		
+	}
+	
+//	@Test 
+//	public void testCheckInputFileEmptyFileName() {
+//		try {
+//			FormLoaderHelper.checkInputFile("fafea", "");
+//			fail("Should have thrown exceptio");
+//		} catch (FormLoaderServiceException fse) {
+//			assertTrue(fse.getErrorCode() == FormLoaderServiceException.ERROR_FILE_INVALID);
+//		}
+//	}
 }

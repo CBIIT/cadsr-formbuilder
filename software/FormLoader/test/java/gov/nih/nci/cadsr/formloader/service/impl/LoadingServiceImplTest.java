@@ -93,10 +93,11 @@ public void testUserHasRight() {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void testLoadNewFormRave() {
-		//this.prepareCollectionToLoad(".\\.\\test\\data\\loading", "load_newform.xml");
-		this.prepareCollectionToLoad(".\\.\\test\\data\\contentvalidation", "FourTheradexMedidataRaveForms.xml");
+		
+		this.prepareCollectionToLoad(".\\.\\test\\data\\loading", "FourTheradexMedidataRaveFormsMinimumFields_01-11-2014.xml");
+		
 		try {
 			FormDescriptor form = aColl.getForms().get(0);
 			form.setSelected(true);
@@ -104,7 +105,7 @@ public void testUserHasRight() {
 			aColl = this.loadService.loadForms(aColl);
 			form = aColl.getForms().get(0);
 			String status = StatusFormatter.getStatusInXml(form);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\loading\\load_newform-jim.status.xml");
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\loading\\FourTheradexMedidataRaveFormsMinimumFields_01-11-2014.status.xml");
 		} catch (FormLoaderServiceException fle) {
 			fail("Got exception: " + fle.getMessage());
 		}
@@ -246,7 +247,7 @@ public void testUserHasRight() {
 			assertNotNull(aColl);
 			forms = aColl.getForms();
 			//assertTrue(forms.size() == 1);
-			status = StatusFormatter.getStatusInXml(form);
+			status = StatusFormatter.getStatusInXml(aColl);
 			StatusFormatter.writeStatusToXml(status, filepath + "\\load-preparation-content.xml");
 			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_CONTENT_VALIDATED);
 			

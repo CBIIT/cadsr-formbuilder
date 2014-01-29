@@ -52,6 +52,61 @@ public class ContentValidationServiceImplTest {
 	}
 	
 	@Test
+	public void testValidateXmlContentNullCollection() {
+		try {
+			contentValidationService.validateXmlContent(null);
+			fail("This should throw an excemption but didn't.");
+		} catch (FormLoaderServiceException fe) {
+			assertTrue(fe.getErrorCode() == FormLoaderServiceException.ERROR_COLLECTION_NULL);
+		}
+	}
+	
+	@Test
+	public void testValidateXmlContentWith0Form() {
+		try {
+			aColl.setForms(new ArrayList<FormDescriptor>());
+			contentValidationService.validateXmlContent(aColl);
+			fail("This should throw an excemption but didn't.");
+		} catch (FormLoaderServiceException fe) {
+			assertTrue(fe.getErrorCode() == FormLoaderServiceException.ERROR_EMPTY_FORM_LIST);
+		}
+	}
+	
+	@Test
+	public void testValidateXmlContentWithNullFormList() {
+		try {
+			contentValidationService.validateXmlContent(aColl);
+			fail("This should throw an excemption but didn't.");
+		} catch (FormLoaderServiceException fe) {
+			assertTrue(fe.getErrorCode() == FormLoaderServiceException.ERROR_EMPTY_FORM_LIST);
+		}
+	}
+	
+	@Test
+	public void testValidateXmlContentWithNullLoggedinUser() {
+		try {
+			FormCollection aColl = this.generateContentValidationData();
+			aColl.setCreatedBy(null);
+			contentValidationService.validateXmlContent(aColl);
+			fail("This should throw an excemption but didn't.");
+		} catch (FormLoaderServiceException fe) {
+			assertTrue(fe.getErrorCode() == FormLoaderServiceException.ERROR_USER_INVALID);
+		}
+	}
+	
+	@Test
+	public void testValidateXmlContentWithEmptyLoggedinUser() {
+		try {
+			FormCollection aColl = this.generateContentValidationData();
+			aColl.setCreatedBy("");
+			contentValidationService.validateXmlContent(aColl);
+			fail("This should throw an excemption but didn't.");
+		} catch (FormLoaderServiceException fe) {
+			assertTrue(fe.getErrorCode() == FormLoaderServiceException.ERROR_USER_INVALID);
+		}
+	}
+	
+	@Test
 	public void testValidateXmlContentent() {
 		
 		try {
@@ -156,7 +211,7 @@ public class ContentValidationServiceImplTest {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void testValidateXmlContententRave() {
 		
 		
@@ -187,8 +242,6 @@ public class ContentValidationServiceImplTest {
 			//assertTrue(form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW_VERSION));
 			//assertTrue(form.getFormSeqId() != null && form.getFormSeqId().length() > 0);
 			
-		
-			
 			String status = StatusFormatter.getStatusInXml(form);
 			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\contentvalidation\\FourTheradexMedidataRaveForms.status.xml");
 			
@@ -197,6 +250,88 @@ public class ContentValidationServiceImplTest {
 			fail("Got exception: " + fle.getMessage());
 		}
 	}
+	
+	@Test
+	public void testCheckQuestionValidValueFiedsWithTheredexFile() {
+		
+		
+		try {
+			aColl.setXmlPathOnServer(".\\test\\data\\contentvalidation");
+			aColl.setXmlFileName("FourTheradexMedidataRaveFormsMinimumFields_01-11-2014.xml");
+			aColl.setCreatedBy("yangs");
+			aColl = xmlValidator.validateXml(aColl);
+			
+			forms = aColl.getForms();
+			assertNotNull(forms);
+			//assertTrue(forms.size() == 1);
+			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATED);
+			
+			aColl.resetAllSelectFlag(true);
+			
+			assertNotNull(contentValidationService);
+			
+			aColl = contentValidationService.validateXmlContent(aColl);
+			
+			assertNotNull(aColl);
+			forms = aColl.getForms();
+			assertTrue(forms.size() == 4);
+			
+			//Only 1st is validatated. The other 3 are not because of context "THEREDEX"
+			//1st form: module 1 question 3 has valid values.
+			
+			assertTrue(FormDescriptor.STATUS_CONTENT_VALIDATION_FAILED == forms.get(1).getLoadStatus());
+			
+			FormDescriptor form = forms.get(0);
+			assertTrue(form.getLoadStatus() == FormDescriptor.STATUS_CONTENT_VALIDATED);
+			
+			List<QuestionDescriptor> questions = form.getModules().get(0).getQuestions();
+			QuestionDescriptor question = questions.get(2);
+			List<QuestionDescriptor.ValidValue> vvs = question.getValidValues();
+			
+			assertTrue(vvs.get(0).getDescription() != null && vvs.get(0).getDescription().length() > 0);
+			assertTrue(vvs.get(0).getDescription().startsWith("A person who belongs to the sex"));
+			
+			// ==========Setup fields to run the real target test ==============
+			contentValidationService.checkQuestionValidValueFieds(null); //should not break
+			
+			vvs.get(0).setDescription(null);
+			vvs.get(1).setDescription("");
+			
+			contentValidationService.checkQuestionValidValueFieds(question);
+			assertTrue(question.getValidValues().get(0).getDescription().equals("Female"));
+			assertTrue(question.getValidValues().get(1).getDescription().equals("Male"));
+			
+			vvs.get(0).setMeaningText(null);
+			vvs.get(1).setMeaningText("");
+			vvs.get(0).setSkip(false);
+			vvs.get(1).setSkip(false);
+			contentValidationService.checkQuestionValidValueFieds(question);
+			assertTrue(question.getValidValues().get(0).isSkip());
+			assertTrue(question.getValidValues().get(1).isSkip());
+			
+			vvs.get(0).setValue(null);
+			vvs.get(1).setValue("");
+			vvs.get(0).setSkip(false);
+			vvs.get(1).setSkip(false);
+			contentValidationService.checkQuestionValidValueFieds(question);
+			assertTrue(question.getValidValues().get(0).isSkip());
+			assertTrue(question.getValidValues().get(1).isSkip());
+			
+			question.setValidValues(new ArrayList<QuestionDescriptor.ValidValue>());
+			contentValidationService.checkQuestionValidValueFieds(question); //should not break
+			question.setValidValues(null);
+			contentValidationService.checkQuestionValidValueFieds(question); //should not break
+			
+			//String status = StatusFormatter.getStatusInXml(form);
+			//StatusFormatter.writeStatusToXml(status, ".\\test\\data\\contentvalidation\\FourTheradexMedidataRaveForms.status.xml");
+			
+		} catch (FormLoaderServiceException fle) {
+			logger.debug(fle);
+			fail("Got exception: " + fle.getMessage());
+		}
+	}
+	
+	
 	
 	@Test
 	public void testValidContextName() {
@@ -334,6 +469,41 @@ public class ContentValidationServiceImplTest {
 		assertTrue(FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(form.getLoadType()));
 	}
 	
+	@Test
+	public void testVerifyFormTypeNullForm() {
+		contentValidationService.verifyFormType(null);
+	}
+	
+	@Test
+	public void testVerifyFormTypeNullFormType() {
+		
+		aColl = this.generateContentValidationData();
+		FormDescriptor form = aColl.getForms().get(0);
+		form.setType(null);
+		contentValidationService.verifyFormType(form);
+		assertTrue("CRF".equals(form.getType()));
+	}
+	
+	@Test
+	public void testVerifyFormTypeEmptyFormType() {
+		
+		aColl = this.generateContentValidationData();
+		FormDescriptor form = aColl.getForms().get(0);
+		form.setType("");
+		contentValidationService.verifyFormType(form);
+		assertTrue("CRF".equals(form.getType()));
+	}
+	
+	@Test
+	public void testVerifyFormTypeInvalidFormType() {
+		
+		aColl = this.generateContentValidationData();
+		FormDescriptor form = aColl.getForms().get(0);
+		form.setType("1234");
+		contentValidationService.verifyFormType(form);
+		assertTrue("CRF".equals(form.getType()));
+	}
+	
 	protected void prepareCollectionForValidation (String filepath, String testfile) {
 		assertNotNull(contentValidationService);
 		
@@ -440,5 +610,43 @@ public class ContentValidationServiceImplTest {
 		assertTrue("FORMLOADER".equals(form.getCreatedBy()));
 		assertTrue("FORMLOADER".equals(form.getModifiedBy()));
 		assertTrue(form.getChangeNote().contains("ShanYang"));
+	}
+	
+	@Test
+	public void testAbleToValidateByAlternatives() {
+		// VM seqid: A4499CFB-7A3A-DD4D-E040-BB89AD4307BF     doesn't have definition  nor designation  
+				//     68A1E96E-6F15-619E-E040-BB89AD437847     has definiation but no designation
+		
+		String meaningLongName = "Not public; kept secret or restricted.: A mechanism for guarding against financial aspects of risk by making payments in the form of premiums to an insurance company, which pays an agreed-upon sum to the insured in the event of loss.";
+		boolean validated = this.contentValidationService.ableToValidateByAlternatives(meaningLongName, "A4499CFB-7A3A-DD4D-E040-BB89AD4307BF");
+		assertFalse(validated);
+		
+		
+		validated = this.contentValidationService.ableToValidateByAlternatives(meaningLongName, "68A1E96E-6F15-619E-E040-BB89AD437847");
+		assertTrue(validated);
+	}
+	
+	@Test
+	public void testVerifyPublicIdAndVersion() {
+		String mes = contentValidationService.verifyPublicIdAndVersion(null, "");
+		assertTrue(mes.contains("public"));
+		
+		mes = contentValidationService.verifyPublicIdAndVersion("", "");
+		assertTrue(mes.contains("public"));
+		
+		mes = contentValidationService.verifyPublicIdAndVersion("232424", null);
+		assertTrue(mes.contains("version"));
+		
+		mes = contentValidationService.verifyPublicIdAndVersion("232424", "");
+		assertTrue(mes.contains("version"));
+		
+		mes = contentValidationService.verifyPublicIdAndVersion("", null);
+		assertTrue(mes.contains("public") && mes.contains("version"));
+		
+		mes = contentValidationService.verifyPublicIdAndVersion("--232424", "");
+		assertTrue(mes.contains("public"));
+		
+		mes = contentValidationService.verifyPublicIdAndVersion("--232424", "2.4fafa");
+		assertTrue(mes.contains("public") && mes.contains("version"));
 	}
 }

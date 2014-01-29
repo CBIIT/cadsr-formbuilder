@@ -2,6 +2,7 @@ package gov.nih.nci.cadsr.formloader.service.common;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
@@ -103,6 +104,14 @@ public class StaXParserTest {
 	}
 	
 	@Test
+	public void testParseFormDetailsWithNullForm() {
+		parser = new StaXParser();
+		FormDescriptor form = parser.parseFormDetails("afafa", null, 0);
+		assertNull(form);
+	}
+	
+	
+	@Test
 	public void testParseFormDetailsFor5Forms() {
 		
 		parser = new StaXParser();
@@ -181,6 +190,23 @@ public class StaXParserTest {
 		assertTrue(vvs.get(0).getDescription().length() > 0);
 		assertTrue(vvs.get(0).getInstruction().startsWith("SY"));
 		
+		String cdevdPublicId = forms.get(0).getModules().get(2).getQuestions().get(1).getCdeVdPublicId();
+		String cdevdversion = forms.get(0).getModules().get(2).getQuestions().get(1).getCdeVdVersion();
+		assertTrue("2018550".equals(cdevdPublicId));
+		assertTrue("1.0".equals(cdevdversion));
+	}
+	
+	@Test
+	public void testParseFormQuestionsWithNullForm() {
+		parser = new StaXParser();
+		List<FormDescriptor> forms = parser.parseFormQuestions("afaf", null);
+		assertNull(forms);
 	}
 
+	@Test
+	public void testParseFormQuestionsWith0Form() {
+		parser = new StaXParser();
+		List<FormDescriptor> forms = parser.parseFormQuestions("afaf", new ArrayList<FormDescriptor>());
+		assertNull(forms);
+	}
 }

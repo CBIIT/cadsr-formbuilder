@@ -169,38 +169,6 @@ public class FormLoaderRepositoryDataGen implements FormLoaderRepository {
 		return deRefDocs;
 	}
 
-	@Override
-	public List<PermissibleValueV2TransferObject> getValueDomainPermissibleValuesByVdId(
-			String vdSeqId) {
-		final String fileName = "permisVals- " + vdSeqId + ".ser";
-
-		String filePathName = mockRepoPath + fileName;
-		File objs = new File(filePathName);
-
-		List<PermissibleValueV2TransferObject> pvs = null;
-
-		try {
-			if (!objs.exists()) {
-				pvs = valueDomainV2Dao.getPermissibleValuesByVdId(vdSeqId);
-
-				// Serialize data object to a file
-				ObjectOutputStream out = new ObjectOutputStream(
-						new FileOutputStream(filePathName));
-				for (PermissibleValueV2 cde : pvs) {
-					out.writeObject(cde);
-				}
-				out.close();
-
-			}
-		} catch (FileNotFoundException fne) {
-			System.out.println(fne);
-		} catch (IOException ioe) {
-			System.out.println(ioe);
-		}
-
-		return pvs;
-	}
-
 	public List<QuestionTransferObject> getQuestionsByPublicIds(
 			List<String> publicIds) {
 		final String fileName = "Question-" + publicIds.get(0) + ".ser";
@@ -473,7 +441,17 @@ public class FormLoaderRepositoryDataGen implements FormLoaderRepository {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	
+
+	@Override
+	public List<String> getDefinitionTextsByVmIds(String vmSeqid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> getDesignationNamesByVmIds(String vmSeqid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
