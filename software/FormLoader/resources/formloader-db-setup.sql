@@ -2,13 +2,12 @@
 --	1). Needs same rights as "FORMBUILDER"
 --  2). Needs read/write access to tables sbrext.FORM_COLLECTIONS
 --											sbrext.FORMS_IN_COLLECTION
+--											sbrext.qc_recs_ext
 -- 	3). Needs read right to these tables: sbr.DOCUMENT_TYPES_LOV
 --											sbrext.DEFINITION_TYPES_LOV_EXT 
 --	 										sbr.contexts_view 
 --	4). Use the Admin Tool and create a new user account - FORMLOADER. The associated user groups should 
 --		be setup similar to FORMBUILDER account
-
-
 
 --
 -- CRM DDL
@@ -35,7 +34,8 @@ CREATE TABLE SBREXT.FORMS_IN_COLLECTION (
   LONG_NAME VARCHAR2(4000) NOT NULL,
   LOAD_TYPE CHAR(36),
   LOAD_STATUS NUMBER,
-  LOAD_UNLOAD_DATE DATE default sysdate
+  LOAD_UNLOAD_DATE DATE default sysdate,
+  PREVIOUS_LATEST_VERSION NUMBER(4,2)
 );
 
 alter table SBREXT.FORMS_IN_COLLECTION 
