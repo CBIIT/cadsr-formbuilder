@@ -129,7 +129,7 @@ function details(linkParms ){
         </a>
         </td>
         <td class="OraFieldText">
-          <bean:write name="de" property="item.longCDEName"/>
+          <bean:write name="de" property="item.longCDEName" filter="false"/>
           <%--
           <logic:notEmpty name="de" property="item.longCDEName">
             <html:radio property="selectedText" value="<%= itemId + \",\" + ((gov.nih.nci.ncicb.cadsr.common.resource.DataElement)de.getItem()).getLongCDEName() %>"/>

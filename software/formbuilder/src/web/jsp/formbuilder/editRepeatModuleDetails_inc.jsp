@@ -39,7 +39,7 @@
                                 &nbsp;
                               </td>
                               <td class="UnderlineOraFieldText" >
-                                <bean:write name="question" property="longName"/>
+                                <bean:write name="question" property="longName" filter="false"/>
                               </td>
                               <td class="OraTabledata" width="15%" align="right" >
                                <table width="100%" align="right" cellpadding="0" cellspacing="0" border="0" class="OraTabledata">
@@ -121,7 +121,8 @@
                                      </td>
                                      <td class="OraFieldText">
                                         <html:hidden property="<%=FormConstants.QUESTION_DEFAULT_VV_IDS+"["+defaultIndex+"]"%>"  />
-                                         <html:text  styleClass="OraFieldText"  property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>' readonly="true" size="70" />                                   
+                                         <html:hidden  property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>' />
+                                         <span id='<%=FormConstants.QUESTION_DEFAULTS+"Span["+defaultIndex+"]"%>'><bean:write name="moduleRepeatForm" property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>' filter="false" /></span>                                   
                                      </td>  
                                      </tr>
                                       </logic:notEmpty>
@@ -184,7 +185,8 @@
                                      </td>
                                      <td class="OraFieldText">
                                         <html:hidden property="<%=FormConstants.QUESTION_DEFAULT_VV_IDS+"["+defaultIndex+"]"%>"  />
-                                         <html:text  styleClass="OraFieldText"  property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>' readonly="true" size="70" />                                   
+                                         <html:hidden  property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>'/>
+                                         <span id='<%=FormConstants.QUESTION_DEFAULTS+"Span["+defaultIndex+"]"%>'><bean:write name="moduleRepeatForm" property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>' filter="false" /></span>                                   
                                      </td>                                    
                                       </logic:notEmpty>
                                       <logic:empty name="question" property = "validValues">
@@ -220,7 +222,7 @@
                                       <tr   class="OraTabledata">
                                         <td class="OraFieldText" width="50">&nbsp;</td>
                                         <td class="OraFieldText">
-                                          <bean:write name="validValue" property="longName"/>
+                                          <bean:write name="validValue" property="longName" filter="false"/>
                                           <% String formattedValidValue = validValue.getLongName();
                                              formattedValidValue = StringUtils.getValidJSString(formattedValidValue);
                                            %>  

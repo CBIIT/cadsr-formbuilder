@@ -915,6 +915,7 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
      * @inheritDoc
      */
     public int removeFormClassification(String cscsiIdseq, String acId)
+    public int removeFFormClassification(String cscsiIdseq, String acId)
     {
         FormDAO myDAO = daoFactory.getFormDAO();
 
@@ -925,6 +926,7 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
             List<TriggerActionChanges> triggerChangesList){
         updateTriggerActions(triggerChangesList);
         removeFormClassification(cscsiIdseq, acId);
+        removeFFormClassification(cscsiIdseq, acId);
     
     }
 

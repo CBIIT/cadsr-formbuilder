@@ -438,7 +438,9 @@
             <xsl:element name="longName">
                 <xsl:value-of select="long-name"/>
             </xsl:element>
-            <xsl:element name="shortName"/>
+            <xsl:element name="shortName">
+             	<xsl:value-of select="preferred-name"/>
+            </xsl:element>
             <!-- New in formCartV2  -->
             <xsl:element name="publicID">
                 <xsl:value-of select="@public-id"/>
@@ -516,6 +518,7 @@
                     <xsl:value-of select="normalize-space(./instruction/preferred-definition)"/>
                 </xsl:element>
             </xsl:element>
+            <!-- copied value-meaning from value-meaning-v2 definition  SULA -->
             <xsl:apply-templates select="value-meaning"/>
             <xsl:apply-templates select="trigger-actions"/>
         </xsl:element>
@@ -593,6 +596,57 @@
             </xsl:element>
         </xsl:element>
     </xsl:template>
+    
+    <xsl:template match="value-meaning">
+        <xsl:element name="valueMeaning">
+            <xsl:element name="publicID">
+                <xsl:choose>
+                <!--  Note: this test was changed in v24 but I'm ignoring that change, probably shouldn't test at all -->
+                    <xsl:when test="./@public-id">
+                        <xsl:value-of select="./@public-id"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$FILLPUBLICID"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:element>
+            <xsl:element name="version">
+                <xsl:choose>
+                    <xsl:when test="./version">
+                        <xsl:value-of select="./version"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$FILLVERSION"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:element>
+            <xsl:element name="longName">
+                <xsl:value-of select="./long-name"/>
+            </xsl:element>
+            <xsl:choose>
+                <xsl:when test="designations">
+                    <xsl:apply-templates select="designations"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:call-template name="Designation"/>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:choose>
+                <xsl:when test="definitions">
+                    <xsl:apply-templates select="definitions"/>
+                    <!-- Added in V22 -->
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:call-template name="Definition"/>
+                    <!-- Added V22 -->
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:element name="preferredDefinition">
+                <!-- Added in V22 -->
+                <xsl:value-of select="preferred-definition"/>
+            </xsl:element>
+        </xsl:element>
+    </xsl:template>
 
     <xsl:template match="designations" name="Designations">
         <xsl:element name="designation">
@@ -602,18 +656,22 @@
                 <!-- Added in formCartV2  -->
                 <xsl:value-of select="$FILLDATE"/>
             </xsl:element>
-            <xsl:element name="dateModified">
-                <!-- Added in formCartV2  -->
-                <xsl:value-of select="$FILLDATE"/>
-            </xsl:element>
+	                <!-- Added in formCartV2  -->
+	           <xsl:element name="dateModified">
+	                <xsl:value-of select="$FILLDATE"/>
+	           </xsl:element>
+	        <xsl:if test="modifiedBy">
             <xsl:element name="modifiedBy"/>
+            </xsl:if>
             <!-- Added in formCartV2 -->
             <xsl:element name="languageName">
                 <xsl:value-of select="language"/>
             </xsl:element>
-            <xsl:element name="name">
-                <xsl:value-of select="name"/>
-            </xsl:element>
+            <xsl:if test="name">
+	            <xsl:element name="name">
+	                <xsl:value-of select="name"/>
+	            </xsl:element>
+            </xsl:if>
             <xsl:element name="type">
                 <xsl:value-of select="type"/>
             </xsl:element>

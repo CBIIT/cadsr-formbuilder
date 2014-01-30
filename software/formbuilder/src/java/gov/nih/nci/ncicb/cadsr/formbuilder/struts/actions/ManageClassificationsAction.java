@@ -179,7 +179,7 @@ public class ManageClassificationsAction
       }
 
       FormBuilderServiceDelegate service = getFormBuilderService();
-      service.removeFormClassification(cscsiId, crf.getFormIdseq());
+      service.removeFFormClassification(cscsiId, crf.getFormIdseq());
       
       Collection classifications =
         service.retrieveFormClassifications(crf.getFormIdseq());

@@ -18,6 +18,7 @@ import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.ServiceDelegateFactory;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.ServiceStartupException;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormJspUtil;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -42,12 +43,12 @@ import org.apache.struts.action.ActionMapping;
 public class FormDownloadAction extends Action {
 	private static Log log = LogFactory.getLog(FormDownloadAction.class.getName());
 
-	
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                           HttpServletResponse response) throws IOException, ServletException {
 
   String formIdSeq = (String)request.getParameter(FormConstants.FORM_ID_SEQ);
-  
+
   FormBuilderServiceDelegate service = getFormBuilderService();
   Form crf = null;
 
@@ -91,7 +92,7 @@ public class FormDownloadAction extends Action {
   cell.setCellValue("Context");
   cell.setCellStyle(boldCellStyle);
   row.createCell((short)1).setCellValue(crf.getContext().getName());
-  
+
   //for multiple protocols.
   List protocols = crf.getProtocols();
   if (protocols!=null && !protocols.isEmpty()){
@@ -105,7 +106,7 @@ public class FormDownloadAction extends Action {
         row.createCell((short)1).setCellValue(p.getLongName());
     }
   }
-  
+
   row = sheet.createRow(rowNumber++);
   cell = row.createCell((short)0);
   cell.setCellValue("Workflow");
@@ -123,7 +124,7 @@ public class FormDownloadAction extends Action {
   cell.setCellValue("Public ID");
   cell.setCellStyle(boldCellStyle);
   row.createCell((short)1).setCellValue(crf.getPublicId());
-  
+
   row = sheet.createRow(rowNumber++);
   cell = row.createCell((short)0);
   cell.setCellValue("Version");
@@ -160,18 +161,18 @@ public class FormDownloadAction extends Action {
    cell = row.createCell(colNumber++);
    cell.setCellValue("Module Long Name");
    cell.setCellStyle(boldCellStyle);
-   
-   
-   
-   
+
+
+
+
    cell = row.createCell(colNumber++);
    cell.setCellValue("Module Instructions");
    cell.setCellStyle(boldCellStyle);
-   
+
    cell = row.createCell(colNumber++);
    cell.setCellValue("Number of Repetitions");
    cell.setCellStyle(boldCellStyle);
-   
+
    cell = row.createCell(colNumber++);
    cell.setCellValue("Question");
    cell.setCellStyle(boldCellStyle);
@@ -188,7 +189,7 @@ public class FormDownloadAction extends Action {
    cell.setCellValue("Question Instructions");
    cell.setCellStyle(boldCellStyle);
 
-//question mandatory   
+//question mandatory
    cell = row.createCell(colNumber++);
    cell.setCellValue("Answer is Mandatory");
    cell.setCellStyle(boldCellStyle);
@@ -230,8 +231,8 @@ public class FormDownloadAction extends Action {
 	   cell = row.createCell(colNumber++);
 	   cell.setCellValue("Valid Value Instructions");
 	   cell.setCellStyle(boldCellStyle);
-	   
-	   
+
+
 	   cell = row.createCell(colNumber++);
 	   cell.setCellValue("Module Preferred Name");
 	   cell.setCellStyle(boldCellStyle);
@@ -253,10 +254,10 @@ public class FormDownloadAction extends Action {
 
     row = sheet.createRow(rowNumber++);
     row.createCell((short)0).setCellValue(module.getLongName());
-    
+
 
     if (module.getInstruction() != null)
-     row.createCell((short)1).setCellValue(module.getInstruction().getPreferredDefinition());     
+     row.createCell((short)1).setCellValue(module.getInstruction().getPreferredDefinition());
 
     row.createCell((short)2).setCellValue(""+module.getNumberOfRepeats());
 
@@ -265,7 +266,7 @@ public class FormDownloadAction extends Action {
     row.createCell((short)22).setCellValue(module.getPublicId());
     row.createCell((short)23).setCellValue(module.getVersion());
     row.createCell((short)24).setCellValue(module.getDisplayOrder());
-    
+
     //export question related info
     List questions = module.getQuestions();
 
@@ -276,7 +277,9 @@ public class FormDownloadAction extends Action {
      DataElement cde = question.getDataElement();
 
      colNumber = 3;
-     row.createCell(colNumber++).setCellValue(question.getLongName());
+     String longName = FormJspUtil.updateDataForSpecialCharacters(question.getLongName());
+     row.createCell(colNumber++).setCellValue(longName);
+     //row.createCell(colNumber++).setCellValue("test special character < 7*minutes  ß Superscript: (x2) x²  Subscript: (x2)  x\u2082(\u03BB)Plus-minus: (±)Alpha: (\u03B1)Gamma: (\u03B3)Delta: (\u03B4)");
 
      if (cde != null) {
       row.createCell(colNumber++).setCellValue(cde.getLongName());
@@ -303,15 +306,14 @@ public class FormDownloadAction extends Action {
              questionDefaultValue = fvv.getLongName();
          }
      }
-     
-     row.createCell(colNumber++).setCellValue(questionDefaultValue);     
-     
+
+     row.createCell(colNumber++).setCellValue(FormJspUtil.updateDataForSpecialCharacters(questionDefaultValue));
      String vdLongName = "";
      String vdDataType = "";
      String vdUnitOfMeasure="";
      String vdDisplayFormat = "";
      String vdConcepts = "";
-     
+
      DataElement de = question.getDataElement();
      if (de!=null){
          ValueDomain vd = de.getValueDomain();
@@ -320,20 +322,20 @@ public class FormDownloadAction extends Action {
              vdDataType = vd.getDatatype();
              vdDisplayFormat = vd.getDisplayFormat();
              vdUnitOfMeasure = vd.getUnitOfMeasure();
-             vdConcepts = 
+             vdConcepts =
                 CDEDetailsUtils.getConceptCodesUrl(
                     vd.getConceptDerivationRule(),
                     CDEBrowserParams.getInstance(),"link",",");
          }
      }
-     
-    row.createCell(colNumber++).setCellValue(vdLongName);     
-    row.createCell(colNumber++).setCellValue(vdDataType);            
-    row.createCell(colNumber++).setCellValue(vdUnitOfMeasure);     
-    row.createCell(colNumber++).setCellValue(vdDisplayFormat);     
-    row.createCell(colNumber++).setCellValue(vdConcepts);     
 
-     //export valid value related info  
+    row.createCell(colNumber++).setCellValue(vdLongName);
+    row.createCell(colNumber++).setCellValue(vdDataType);
+    row.createCell(colNumber++).setCellValue(vdUnitOfMeasure);
+    row.createCell(colNumber++).setCellValue(vdDisplayFormat);
+    row.createCell(colNumber++).setCellValue(vdConcepts);
+
+     //export valid value related info
      List validValues = question.getValidValues();
 
      if (validValues.size() > 0) {
@@ -344,7 +346,8 @@ public class FormDownloadAction extends Action {
 
        row = sheet.createRow(rowNumber++);
        colNumber = vvColNum;
-       row.createCell(colNumber++).setCellValue(validValue.getLongName());
+       longName = FormJspUtil.updateDataForSpecialCharacters(validValue.getLongName());
+       row.createCell(colNumber++).setCellValue(longName);
        row.createCell(colNumber++).setCellValue(validValue.getFormValueMeaningText());
        row.createCell(colNumber++).setCellValue(validValue.getFormValueMeaningIdVersion());
        row.createCell(colNumber++).setCellValue(validValue.getFormValueMeaningDesc());
@@ -356,7 +359,7 @@ public class FormDownloadAction extends Action {
     }
    }
   }
-  
+
   CDEBrowserParams params = CDEBrowserParams.getInstance();
   String excelFilename ="Form"  + crf.getPublicId() + "_v" + crf.getVersion();
   excelFilename = excelFilename.replace('/', '_').replace('.', '_');
@@ -389,5 +392,5 @@ public class FormDownloadAction extends Action {
 
 	    return svcDelegate;
 	  }
-	
+
 }
