@@ -135,7 +135,6 @@ public interface FormBuilderServiceRemote {
     public int removeFormClassification(String acCsiId)
         throws RemoteException;
 
-    public int removeFormClassification(String cscsiIdseq, String acId)
     public int removeFFormClassification(String cscsiIdseq, String acId)
         throws RemoteException;
     public void removeFormClassificationUpdateTriggerActions(
