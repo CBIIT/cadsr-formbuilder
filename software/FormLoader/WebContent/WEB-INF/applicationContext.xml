@@ -101,7 +101,7 @@
 		
 	</bean>
 	
-	<import resource="applicationContext-jdbcdao-test.xml" />
+	<import resource="applicationContext-jdbcdao.xml" />
 
 </beans>
 
