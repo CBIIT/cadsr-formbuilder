@@ -2,7 +2,7 @@
 <!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
 <web-app>
   <description>web.xml file for Form Builder</description>
-  
+
 <context-param>
 <param-name>org.jboss.jbossfaces.WAR_BUNDLES_JSF_IMPL</param-name>
 <param-value>true</param-value>
@@ -685,10 +685,12 @@
          <filter-name>EditFormFilter</filter-name>
       <url-pattern>/formPublishAction.do</url-pattern>
 </filter-mapping>
-<!--end of form edit filter-->
- <listener>
-  <listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>
-   </listener>  
+<!--end of form edit filter--> 
+   
+   <listener>
+    <listener-class>com.sun.faces.config.ConfigureListener</listener-class>
+</listener>
+   
   <listener>
      <listener-class>gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormLockerSessionListener</listener-class>
     </listener>
@@ -789,7 +791,7 @@
 
 
   <session-config>
-    <session-timeout>300</session-timeout>
+     <session-timeout>300</session-timeout>
   </session-config>
   <mime-mapping>
     <extension>html</extension>
