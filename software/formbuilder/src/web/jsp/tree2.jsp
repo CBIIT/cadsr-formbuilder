@@ -207,7 +207,7 @@
                            <t:graphicImage alt="Container" title="Container"
                                             value="/i/container.png"
                                             border="0"/>
-                            <h:outputLink id="csLink"
+                            <h:outputLink id="cLink"
                                           value="#{node.action}">
                                 <h:outputText value="#{node.description}"
                                  styleClass="treeNode" title="#{node.toolTip}"/>
