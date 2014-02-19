@@ -6,7 +6,7 @@
   <tr>
     <td align="left" nowrap>
 
-    <img src="<%=request.getContextPath()%>/i/cde_form_builder_banner_full.gif" border=0>
+    <img src="<%=request.getContextPath()%>/i/cde_form_builder_banner_full.gif" alt="CDE Form Builder" border=0>
     </td>
 
     <td align=right valign=top nowrap>

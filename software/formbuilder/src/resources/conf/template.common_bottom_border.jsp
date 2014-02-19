@@ -1,8 +1,8 @@
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams"%>
 <TABLE width=100% cellspacing=0 cellpadding=0 border=0>
 <TR>
-<TD valign=bottom width=99%><html:img page="/i/bottom_shade.gif" height="6" width="100%" /></TD>
-<TD valign=bottom width="1%" align=right><html:img page="/i/bottomblueright.gif" /></TD>
+<TD valign=bottom width=99%><html:img page="/i/bottom_shade.gif" alt="shade" height="6" width="100%" /></TD>
+<TD valign=bottom width="1%" align=right><html:img page="/i/bottomblueright.gif" alt="image"/></TD>
 </TR>
 </TABLE>
 <TABLE width=100% cellspacing=0 cellpadding=0 bgcolor="#336699" border=0>
@@ -38,6 +38,6 @@
 </td>
 </TR>
 <TR>
-<TD colspan=4><html:img page="/i/bottom_middle.gif" height="6" width="100%" /></TD>
+<TD colspan=4><html:img page="/i/bottom_middle.gif" height="6" width="100%" alt="image"/></TD>
 </TR>
 </TABLE>

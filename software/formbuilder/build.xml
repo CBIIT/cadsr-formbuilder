@@ -100,6 +100,9 @@
 	<property name="tabProp.dir" location="${basedir}/src/web/tab-properties" />
 	<property name="conf.dir" location="${basedir}/src/resources/conf" />
 	<property name="war.dir" location="${artifacts.dir}/jboss/" />
+	
+	<property name="formloader.dir" location="../FormLoader" />
+	
 	<condition property="check.test">
 		<equals arg1="${TEST}" arg2="true" trim="true" />
 	</condition>
@@ -209,6 +212,12 @@
 		<copy tofile="${web.dir}/spring/applicationContext-domainDao.xml" filtering="true">
 			<fileset file="${conf.dir}/template.applicationContext-domainDao.xml" />
 		</copy>
+		
+		
+		<copy tofile="${web.dir}/jboss-classloading.xml" filtering="true">
+							<fileset file="${conf.dir}/jboss-classloading.xml" />
+						</copy>
+		
 		<copy tofile="${artifacts.dir}/sql/load_options.sql" filtering="true">
 			<fileset file="${conf.dir}/template.load_options.sql" />
 		</copy>
@@ -300,7 +309,8 @@
 	</target>
 
     <target name="-jar_common" depends="-compile" description="builds common jar.">
-        <jar jarfile="${artifacts.dir}/jboss/common.jar">
+        <!-- jar jarfile="${artifacts.dir}/jboss/common.jar"> -->
+        	<jar jarfile="${root.dir}/WEB-INF/lib/common.jar">
           <fileset dir="${temp.classes.dir}">
             <patternset>
               <include name="gov/nih/nci/ncicb/cadsr/common/resource/*"/>
@@ -330,7 +340,8 @@
     </target>
 
     <target name="-jar_persistence_form" depends="-compile" description="builds persistence jar.">
-        <jar jarfile="${artifacts.dir}/jboss/persistence_form.jar">
+        <!-- jar jarfile="${artifacts.dir}/jboss/persistence_form.jar"> -->
+        	<jar jarfile="${root.dir}/WEB-INF/lib/persistence_form.jar">
           <fileset dir="${temp.classes.dir}">
             <patternset>
               <include name="gov/nih/nci/ncicb/cadsr/common/persistence/base/**"/> 
@@ -349,7 +360,8 @@
   		<fileset file="${conf.dir}/template.jboss.xml" />
   	  </copy>
     
-      <jar jarfile="${artifacts.dir}/jboss/formbuilder-ejb.jar">
+      <!-- jar jarfile="${artifacts.dir}/jboss/formbuilder-ejb.jar"> -->
+      	<jar jarfile="${root.dir}/WEB-INF/lib/formbuilder-ejb.jar">
          <fileset dir="${temp.classes.dir}">
             <patternset>
               <include name="gov/nih/nci/ncicb/cadsr/formbuilder/ejb/**/*.*"/>
@@ -366,6 +378,12 @@
           </manifest>  	    
        </jar>         
     </target>
+	
+	<target name="-build-formloader-war">
+			<ant antfile="build.xml" target="archive" dir="${formloader.dir}" inheritall="false">
+
+			</ant>
+	</target>
 
 	<target name="-build-war" depends="-cjsp,-prop-check" description="Builds the project WAR file.">
 		<echo>Building deployable WAR file ...</echo>
@@ -417,7 +435,7 @@
 		<delete file="${jsp.dir}/cvsdeploy.txt" />
 	</target>
 
-    <target name="-build-ear" depends="-jar_ejb,-build-war" description="builds formbuilder ear.">            
+    <target name="-build-ear" depends="-jar_ejb,-build-war, -build-formloader-war" description="builds formbuilder ear.">            
 	  <copy tofile="${artifacts.dir}/META-INF/application.xml" filtering="true">
 		<fileset file="${conf.dir}/template.application.xml" />
 	  </copy>
@@ -426,14 +444,23 @@
         <fileset dir="${artifacts.dir}/jboss">
           <patternset>
             <include name="*.war"/>
-            <include name="*.jar"/>
+            <!-- include name="*.jar"/> -->
           </patternset>
         </fileset>
-        <fileset dir="${wlib.dir}">
+      	
+      	<fileset dir="${formloader.dir}/dist">
+      		<patternset>
+      	    	<include name="*.war"/>
+      	    </patternset>
+      	</fileset>
+       
+      	<!--
+      	<fileset dir="${wlib.dir}">
           <patternset>
             <include name="spring.jar"/>
           </patternset>
-        </fileset>	        
+        </fileset>	 
+        -->       
       </ear>
     </target>
 	

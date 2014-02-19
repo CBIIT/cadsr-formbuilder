@@ -81,7 +81,7 @@ function clearForm()
 <div>  
   <TABLE width=100% Cellpadding=0 Cellspacing=0 border=0>
   <TR>
-  <td align=left valign=top width="1%" bgcolor="#336699"><img src="<%=request.getContextPath()%>/i/top_left.gif" width=4 height="25"></td>
+  <td align=left valign=top width="1%" bgcolor="#336699"><img src="<%=request.getContextPath()%>/i/top_left.gif" alt="bar" width=4 height="25"></td>
   <td nowrap align=left valign=top width="5%" bgcolor="#336699"><b><font size="3" face="Arial" color="#FFFFFF">&nbsp; &nbsp;Please Login</font></b></td>
 
   <td align=left valign=top width="5%" bgcolor="#336699">&nbsp;</td>
@@ -92,9 +92,9 @@ function clearForm()
   
   <table  width=100% Cellpadding=0 Cellspacing=0 border=0>
   <tr>
-  <td align=right valign=top width=49 height=21 bgcolor="#336699"><img src="<%=request.getContextPath()%>/i/left_end_bottom.gif" height=21 width=49></td>
-  <TD align=right valign=top bgcolor="#FFFFFF" height=21 width="100%"><img src="<%=request.getContextPath()%>/i/bottom_middle.gif" height=6 width=100%></TD>
-  <td align="LEFT" valign=top height=21 width=5  bgcolor="#FFFFFF"><img src="<%=request.getContextPath()%>/i/right_end_bottom.gif" height=7 width=5></td>
+  <td align=right valign=top width=49 height=21 bgcolor="#336699"><img src="<%=request.getContextPath()%>/i/left_end_bottom.gif" alt="bar" height=21 width=49></td>
+  <TD align=right valign=top bgcolor="#FFFFFF" height=21 width="100%"><img src="<%=request.getContextPath()%>/i/bottom_middle.gif" alt="image" height=6 width=100%></TD>
+  <td align="LEFT" valign=top height=21 width=5  bgcolor="#FFFFFF"><img src="<%=request.getContextPath()%>/i/right_end_bottom.gif" alt="bar" height=7 width=5></td>
   </TR>
   </table>
   
@@ -122,13 +122,17 @@ function clearForm()
     </tr>
     <% } %>
     <tr>
-        <td class="OraFieldtitlebold" nowrap>Username:</td>
+        <td class="OraFieldtitlebold" nowrap>
+        	<label for="j_username">Username:</label> 
+		</td>
         <td class="OraFieldText" nowrap>
           <input type="text" id="j_username" name="j_username" value="" size ="20"> 
         </td>
     </tr>
     <tr>
-        <td class="OraFieldtitlebold" nowrap>Password:</td>
+        <td class="OraFieldtitlebold" nowrap>
+        	<label for="j_password">Password:</label>
+        </td>
         <td class="OraFieldText" nowrap>
           <input type="password" id="j_password" name="j_password" value="" size ="20"> 
         </td>

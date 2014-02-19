@@ -6,14 +6,14 @@
 		<table width="100%" border="0" cellspacing="0" cellpadding="0">
 			<tr bgcolor="#A90101">
 				<td valign="center" align="left">
-					<a href="http://www.cancer.gov" target="_blank" alt="NCI Logo">
-						<img src="<%=request.getContextPath()%>/i/brandtype.gif"
-							border="0"> </a>
+					<a href="http://www.cancer.gov" target="_blank">
+						<img src="<%=request.getContextPath()%>/i/brandtype.gif" 
+							alt="NCI Logo" border="0"> </a>
 				</td>
 				<td valign="center" align="right">
-					<a href="http://www.cancer.gov" target="_blank" alt="NCI Logo">
-						<img src="<%=request.getContextPath()%>/i/tagline_nologo.gif"
-							border="0">
+					<a href="http://www.cancer.gov" target="_blank">
+						<img src="<%=request.getContextPath()%>/i/tagline_nologo.gif" 
+							alt="NCI Logo" border="0">
 					</a>
 				</td>
 			</tr>

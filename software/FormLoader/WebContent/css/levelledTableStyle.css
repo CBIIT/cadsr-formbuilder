@@ -1,0 +1,63 @@
+@CHARSET "ISO-8859-1";
+
+.level1Table {
+	border-width: 1px 1px 1px 1px;
+	border-spacing: 2px;
+	border-style: outset outset outset outset;
+	border-color: black black black black;
+	border-collapse: collapse;
+	font-size: medium;
+}
+
+.level1Table td {
+	border-width: 1px 1px 1px 1px;
+	border-spacing: 2px;
+	border-style: outset outset outset outset;
+	border-color: black black black black;
+	border-collapse: collapse;
+}
+
+.level1Table tr {
+background-color: #FAF0E6;
+}
+
+.level1Table tr {
+background-color: #fff;
+}
+
+
+
+.level1Table thead {
+	background-color: #C1CDCD;
+}
+.level1Table th {
+	border-width: 1px 1px 1px 1px;
+	border-spacing: 2px;
+	border-style: outset outset outset outset;
+	border-color: black black black black;
+	border-collapse: collapse;
+	
+	padding-right:25px;
+	padding-left: 25px	
+}
+
+.level1Table td table {
+	border-width: 1px 1px 1px 1px;
+	border-spacing: 2px;
+	border-style: outset outset outset outset;
+	border-color: black black black black;
+	border-collapse: collapse;
+	font-size: small;
+}
+
+.level1Table td th {
+	background-color: #E0EEEE;
+}
+
+.level1Table td tr {
+	
+	background-color: #F5F5DC;
+}
+
+
+div.arrow { background:transparent url(arrows.png) no-repeat scroll 0px -16px; width:16px; height:16px; display:block;}

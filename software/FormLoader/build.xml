@@ -1,0 +1,256 @@
+<project name="FormLoader" basedir="." default="junit" 
+	xmlns:jacoco="antlib:org.jacoco.ant">
+
+    <property name="build.dir"   value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="jar.dir"     value="${build.dir}/jar"/>
+	<property name="test.dir"     value="test"/>
+	 <property name="src.dir"     value="src"/>
+	 <property name="test.src.dir"     value="${test.dir}/java"/>
+	<property name="resources.dir"     value="${basedir}/resources"/>
+	<property name="source.dir"     value="${basedir}/src"/>
+    <property name="web.dir"   value="${basedir}/WebContent"/>
+	<property name="dist.home" value="dist"/>
+	<property name="app.name" value="FormLoader"/>
+	<property name="compile.debug"     value="true"/>
+	<property name="compile.deprecation"     value="false"/>
+	<property name="compile.optimize"     value="true"/>
+	<property name="JBOSS.HOME"     value="C:\AppServers\jboss-5.1.0.GA-FL"/>
+	<property name="JBOSS.DEPLOY.DIR"     value="${JBOSS.HOME}\server\default\deploy"/>
+	<property name="jboss.lib.dir"   value= "${JBOSS.HOME}/common" />
+	<property name="dist.dir"    value="${basedir}/dist"/>
+	<property name="lib.dir"     value="${basedir}/WebContent/WEB-INF/lib"/>
+	<property name="report.dir"  value="${build.dir}/junitreport"/>
+
+	<path id="classpath">
+		<fileset dir="${lib.dir}" includes="**/*.jar"/>
+		<fileset dir="${jboss.lib.dir}" includes="**/*.jar"/>
+		<fileset dir="${test.dir}/lib" includes="**/*.jar"/>
+	</path>
+	
+	 <path id="test.classpath">
+		<fileset dir="${lib.dir}" includes="**/*.jar"/>
+		<fileset dir="${test.dir}/lib" includes="**/*.jar"/>
+	 	
+	</path>
+	
+	<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+		        <classpath path="${test.dir}/lib/jacocoant.jar"/>
+		    </taskdef>
+
+    <target name="clean">
+        <delete dir="${build.dir}" failonerror="false"/>
+    	<delete dir="${dist.dir}" failonerror="false"/>
+    </target>
+	
+    <target name="compile-service-jar" depends="clean" description="Compile for formloader-services jar excluding struts classes">
+        <mkdir dir="${classes.dir}"/>
+        <javac destdir="${classes.dir}" classpathref="classpath"  includeantruntime="false">
+        	<src path="${src.dir}" />
+        	 <src path="${test.src.dir}" />
+        	<exclude name="gov/nih/nci/cadsr/formloader/struts2/*.java" />
+        	<compilerarg value="-Xlint:unchecked"/>
+        </javac>
+    	
+    	<copy todir="${classes.dir}/gov/nih/nci/cadsr/formloader/service/impl">
+    		 <fileset dir="${src.dir}/gov/nih/nci/cadsr/formloader/service/impl">
+    		         <include name="**/*.xsd" />
+    		  </fileset>
+    	</copy>
+    	
+    </target>
+	
+	<target name="jacoco-junit" depends="compile-service-jar">
+		<mkdir dir="${report.dir}"/>
+		<jacoco:coverage destfile="${report.dir}/jacoco.exec">
+		 	<junit fork="true" forkmode="once"> 
+		 	     <classpath>
+		 	     	<path refid="test.classpath"/>
+		 	     	<path refid="classpath"/>
+		 	     	<!-- Do not put the following inside test.classpath-->
+		 	     	<pathelement path="${classes.dir}"/>
+		 	     	<pathelement path="${basedir}/WebContent/WEB-INF"/>
+		 	     	<pathelement path="${resources.dir}"/>
+		 	     	
+		 		</classpath>
+		 	     
+		 		<batchtest fork="yes" todir="${report.dir}">
+		 			 <fileset dir="${test.src.dir}" includes="**/*Test.java"
+		 			 	excludes="gov/nih/nci/cadsr/formloader/struts2/*Test.java"/>
+		 		</batchtest>
+		 		<formatter type="xml"/> 
+		 	 </junit>
+		</jacoco:coverage>
+		
+		<mkdir dir="${report.dir}/test-results" />
+			<junitreport todir="${report.dir}/test-results">
+				      <fileset dir="${report.dir}">
+				        <include name="TEST-*.xml"/>
+				      </fileset>
+				      <report format="frames" todir="${report.dir}/test-results/html"/>
+		</junitreport>
+	</target>
+	
+	<target name="coverageReport" depends="jacoco-junit">
+		    <jacoco:report>                
+		        <executiondata>
+		            <file file="${report.dir}/jacoco.exec"/>  
+		        </executiondata>
+		                           
+		    <structure name="Code Annotation Project"> 
+		      <classfiles>
+		        <fileset dir="${classes.dir}"/>
+		        <!--fileset dir="target/test-classes"/> -->
+		      </classfiles>
+		      <sourcefiles encoding="UTF-8">
+		        <fileset dir="${src.dir}"/>
+		        <fileset dir="${test.src.dir}"/>
+		      </sourcefiles>
+		        </structure>
+		                           
+		        <html destdir="${report.dir}/coverageReport"/>   
+		                           
+		    </jacoco:report>
+			</target>
+	
+
+    <target name="compile-war" depends="clean" description="Compiles the project source.">
+		<mkdir dir="${build.dir}/WEB-INF/classes" />
+        <javac destdir="${build.dir}/WEB-INF/classes" classpathref="classpath"  includeantruntime="false" 
+        	debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}" source="1.6" target="1.6">
+        	<src path="${src.dir}" />
+        	<compilerarg value="-Xlint:unchecked"/>
+        </javac>
+    </target>
+	
+    <target name="build" depends="compile-war">
+		<copy todir="${build.dir}">
+			<fileset dir="${web.dir}" excludes="CVS,**/*.class" />
+		</copy>
+    	<copy file="${web.dir}/WEB-INF/formloader.properties" todir="${build.dir}/classes" overwrite="true"/>
+    </target>
+	
+	<target name="archive" depends="build" description="Create binary archive of all files in dist.home">
+		
+		<mkdir dir="${dist.home}"/>
+		
+		<!-- Create application WAR file -->
+	    <jar jarfile="${dist.home}/${app.name}.war"
+				basedir="${build.dir}" />
+
+	</target>
+	
+	<target name="-deploy-war-local" depends="archive"  description="Deploys the war file">
+	        <echo>Deploying war ...</echo>
+<!--	        <copy todir="${JBOSS.DEPLOY.DIR}">
+	            <fileset dir="${artifacts.dir}/jboss">
+	                <include name="**/*-oracle-ds.xml" />
+	            </fileset>
+	        </copy> 
+	        <copy todir="${JBOSS.DEPLOY.DIR}">
+	            <fileset dir="${artifacts.dir}/jboss">
+	                <include name="**/*-login-config-service.xml" />
+	            </fileset>
+	        </copy>
+	        <copy todir="${JBOSS.CONF.DIR}">
+	            <fileset dir="${artifacts.dir}/jboss">
+	                <include name="**/*-login-config.xml" />
+	            </fileset>
+	        </copy> 
+	        <copy todir="${JBOSS.CONF.DIR}/log4j">
+	            <fileset dir="${artifacts.dir}/jboss">
+	                <include name="**/formbuilder-log4j-*.xml" />
+	            </fileset>
+	        </copy>
+	        <copy todir="${JBOSS.CONF.DIR}/log4j">
+	            <fileset dir="${artifacts.dir}/jboss">
+	                <include name="**/cadsrutil-log4j-*.xml" />
+	            </fileset>
+	        </copy> -->
+	        <copy tofile="${JBOSS.DEPLOY.DIR}/FormLoader.war">
+	            <fileset file="${dist.dir}/FormLoader.war" />
+	        </copy>
+	</target>
+	
+    <target name="jar-services" depends="compile-service-jar" description="Create the formloader-services.jar">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${ant.project.name}-services-v0.4.jar" basedir="${classes.dir}" >
+        	<fileset dir="${classes.dir}">
+        		<patternset>
+        			<include name="gov/nih/nci/cadsr/formloader/domain/**,
+        			        		gov/nih/nci/cadsr/formloader/repository/**,
+        			        	gov/nih/nci/cadsr/formloader/service/**,
+        			        	gov/nih/nci/ncicb/cadsr/common/persistence/**,
+        			        	 gov/nih/nci/ncicb/cadsr/common/persistence/**,
+        			        	gov/nih/nci/ncicb/cadsr/common/security/jboss/**"/>
+        		 </patternset>
+        	</fileset>  
+        	
+        	<fileset dir="${src.dir}">
+        	     <patternset>
+        	         <include name="gov/nih/nci/cadsr/formloader/service/*.xml"/>
+        	         <include name="gov/nih/nci/cadsr/formloader/service/impl/*.xsd"/>
+        	     	 <include name="gov/nih/nci/cadsr/formloader/service/common/*.xsl"/>
+        	           
+        	     </patternset>
+        	</fileset>  
+        
+        </jar>
+    </target>
+	
+	 <target name="junit" depends="compile-service-jar">
+	 	<mkdir dir="${report.dir}"/>
+	 	
+	 	<echo message="Current dir is ${basedir}"/>
+	 	
+	 	<junit printsummary="true" failureproperty="junit.failure" haltonfailure='false'> 
+	 	     <classpath>
+	 	     	<path refid="test.classpath"/>
+	 	     	<path refid="classpath"/>
+	 	     	<!-- Do not put the following inside test.classpath-->
+	 	     	<pathelement path="${classes.dir}"/>
+	 	     	<pathelement path="${basedir}/WebContent/WEB-INF"/>
+	 	     	<pathelement path="${resources.dir}"/>
+	 	     	
+	 		</classpath>
+	 	     
+	 		<batchtest fork="yes" todir="${report.dir}">
+	 			 <fileset dir="${test.src.dir}" includes="**/*Test.java"
+	 			 	excludes="gov/nih/nci/cadsr/formloader/struts2/*Test.java"/>
+	 		</batchtest>
+	 		<formatter type="xml"/> 
+	 	 </junit>
+	  </target>
+	
+	
+	
+	
+	
+	
+	
+	 <target name="junitreport" depends="">
+	        <junitreport todir="${report.dir}">
+	            <fileset dir="${report.dir}" includes="TEST-*.xml"/>
+	            <report todir="${report.dir}"/>
+	        </junitreport>
+	    </target>
+
+    <target name="clean-build" depends="clean,jar-services"/>
+	
+	<target name="javadoc" depends="clean" description="generate javadoc for services">
+		<mkdir dir="${build.dir}/javadoc"/>
+		<javadoc packagenames="gov.nih.nci.cadsr.formloader.service.impl.*"
+	           sourcepath="${source.dir}"
+	           defaultexcludes="yes"
+	           destdir="${build.dir}/javadoc"
+				overview="${build.dir}/javadoc/overview.html"
+	           author="true"
+	           version="true"
+	           use="true"
+	           windowtitle="Form Loader Services API"
+				access="public"
+			classpathref="classpath">
+	  	</javadoc>
+	</target>
+
+</project>

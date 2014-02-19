@@ -21,7 +21,7 @@ System.out.println("in_process_common_header_inc.jsp:" + username);
 
     <td valign="top" align="left" nowrap="nowrap">
 
-    <html:img page="/i/cde_form_builder_banner_full.gif" border="0" />
+    <html:img page="/i/cde_form_builder_banner_full.gif" alt="Form builder Banner" border="0" />
     </td>
 
     <td align=right valign="top" colspan=2 nowrap>
