@@ -1360,8 +1360,12 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 	        }
 
 	        myForm.setModules(modules);
-	        //Context caBIG = cdao.getContextByName(CaDSRConstants.CONTEXT_CABIG);
-	        Context caBIG = cdao.getContextByName(CaDSRConstants.CONTEXT_NCIP);
+	        Context caBIG = null;
+	        caBIG = cdao.getContextByName(CaDSRConstants.CONTEXT_CABIG);
+	        if( caBIG == null ){
+	        	caBIG = cdao.getContextByName(CaDSRConstants.CONTEXT_NCIP);
+	        }
+
 	        myForm
 	        .setPublished(fdao.isFormPublished(myForm.getIdseq(), caBIG.getConteIdseq()));
 
@@ -1608,8 +1612,8 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 	    	//		"jdbc:oracle:thin:@ncidb-dsr-d:1551:DSRDEV", 
 	    	//		"FORMBUILDER", "FORMBUILDER");
 	    	
-	    	DataSource ds = new DriverManagerDataSource("jdbc:oracle:thin:@ncidb-dsr-d:1551:DSRDEV", 
-	    			"FORMBUILDER", "FORMBUILDER");
+	    	DataSource ds = new DriverManagerDataSource("jdbc:oracle:thin:@ncidb-dsr-q.nci.nih.gov:1551:dsrqa", 
+	    			"formloader", "F0rmloader");
 	    	
 	    	JDBCFormDAOV2 form2Dao = new JDBCFormDAOV2(ds);   	
     	/*
@@ -1630,11 +1634,13 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 			
 			//Collection forms = form2Dao.getAllForms("", "'CFA642A2-2438-2400-E040-BB89AD432B4D','CFA63964-B053-288D-E040-BB89AD437F2C'", "", "", "", "", "", "", "", "", "", "", "","2","1");
 	    	
-	    	Collection forms = form2Dao.getAllFormsForClassification("'3D3E3B76-50FC-45E7-E044-0003BA3F9857','2C39E82F-DEC1-6BF9-E044-0003BA3F9857'","1","1");
+	    	//Collection forms = form2Dao.getAllFormsForClassification("'3D3E3B76-50FC-45E7-E044-0003BA3F9857','2C39E82F-DEC1-6BF9-E044-0003BA3F9857'","1","1");
 	    	
 	    	//Integer total = form2Dao.getFormCount("", "'CFA642A2-2438-2400-E040-BB89AD432B4D','CFA63964-B053-288D-E040-BB89AD437F2C'", "", "", "", "", "", "", "", "", "", "", "");
+	    	
+	    	FormV2 form = form2Dao.getFormDetailsV2("B6FE2275-F5E5-0321-E040-BB89AD43405B");
 			
-			System.out.println(forms.size());
+			System.out.println(form.getPublicId());
 			
 	    }
 	    
