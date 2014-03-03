@@ -42,7 +42,7 @@ Select forms to validate the questions against caDSR database
 <s:actionerror />
 	
 <s:if test="parsedFormsNoErrorList.size() >= 1">
-	<s:form action="validateForms" theme = "simple" method="post">
+	<s:form action="validateForms" id="validateForms" theme = "simple" method="post">
 		<div class="content">
 		<table class="fileTable">
 			<tr class="even">
@@ -78,7 +78,7 @@ Select forms to validate the questions against caDSR database
 <tr>
 	<td colspan="1" align="left" nowrap>
 <s:submit type="image" src="/FormLoader/i/dbvalidate.gif" title="Select at least one form and you may proceed..." 
-	action="validateForms" disabled="true" align="left" theme="simple" /></td>
+	action="validateForms" disabled="true" align="left" theme="simple" onclick="submitFormSetWaitCursor('validateForms')" /></td>
 	<td colspan="1" align="left" nowrap>
 <s:submit type="image" src="/FormLoader/i/cancel.gif" action="cancelDBValidate" align="left" theme="simple"/></td>
 	<td colspan="1" align="left" nowrap>
@@ -128,6 +128,7 @@ Select forms to validate the questions against caDSR database
     $( document ).tooltip();
   });
   </script>
+  
 </body>
 </div>
 </html>

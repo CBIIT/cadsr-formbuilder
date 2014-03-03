@@ -19,7 +19,7 @@ L--%>
 <div style="padding-left: 50px; padding-right: 50px;">
 <body>
 <h2>Result of DB Validation</h2>
-The feature for Loading forms with Load Type "Update Form" will be available in version 4.2.
+The feature for loading forms with Load Type "Update Form" will be available in version 4.2.
 <!-- Temp disable loading update form. 3 changes in this file
 * Changes made to forms with Load Type = "Update Form" cannot be "Undone". The "Unload" feature will only change <br>
 the workflow status to "Retired Deleted". Users must use Form Builder application to edit the form after loading.
@@ -27,7 +27,7 @@ the workflow status to "Retired Deleted". Users must use Form Builder applicatio
 <br><br>
 <s:actionerror />
 <s:if test="validatedForms.size() >= 1">
-	<s:form action="loadForms" theme = "simple" method="post"> 
+	<s:form action="loadForms" id="loadForms" theme = "simple" method="post"> 
 		<div class="content">
 		<table class="fileTable">
 			<tr class="even">
@@ -107,7 +107,7 @@ the workflow status to "Retired Deleted". Users must use Form Builder applicatio
 				<tr>
 		 <td colspan="1" align="left" nowrap>
 <s:submit type="image" src="/FormLoader/i/load_forms.gif" title="Select at least one form and you may proceed..." 
-	action="loadForms" disabled="true" align="left" theme="simple" /></td>
+	action="loadForms" disabled="true" align="left" theme="simple" onclick="submitFormSetWaitCursor('loadForms')" /></td>
 	  	<td colspan="1" align="left" nowrap>
 <s:submit type="image" src="/FormLoader/i/cancel.gif" action="cancelLoad" align="left" theme="simple"/></td>
 		<td colspan="1" align="left" nowrap>
