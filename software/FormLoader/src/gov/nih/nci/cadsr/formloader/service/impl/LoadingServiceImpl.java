@@ -138,6 +138,11 @@ public class LoadingServiceImpl implements LoadingService {
 				continue;
 			}
 			
+			//Until v4.2, we're not loading update form
+			if (FormDescriptor.LOAD_TYPE_UPDATE_FORM.equals(form.getLoadType()))
+				continue;
+			//Until v4.2, we're not loading update form
+			
 			if (!form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW ) &&
 					!form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW_VERSION ) &&
 					!form.getLoadType().equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)) {
