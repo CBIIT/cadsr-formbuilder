@@ -3,6 +3,7 @@ package gov.nih.nci.cadsr.formloader.service.impl;
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.repository.FormLoaderRepository;
+import gov.nih.nci.cadsr.formloader.repository.LoadServiceRepositoryImpl;
 import gov.nih.nci.cadsr.formloader.service.LoadingService;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 
@@ -21,21 +22,29 @@ public class LoadingServiceImpl implements LoadingService {
 	
 	private static Logger logger = Logger.getLogger(LoadingServiceImpl.class.getName());
 	
-	FormLoaderRepository repository;
+	LoadServiceRepositoryImpl loadRepository;
 	
 	public LoadingServiceImpl() {}
 	
-	public LoadingServiceImpl(FormLoaderRepository repository) {
-		this.repository = repository;
+	public LoadServiceRepositoryImpl getLoadRepository() {
+		return loadRepository;
 	}
 
-	public FormLoaderRepository getRepository() {
-		return repository;
+	public void setLoadRepository(LoadServiceRepositoryImpl loadRepository) {
+		this.loadRepository = loadRepository;
 	}
 
-	public void setRepository(FormLoaderRepository repository) {
-		this.repository = repository;
+	public LoadingServiceImpl(LoadServiceRepositoryImpl repository) {
+		this.loadRepository = repository;
 	}
+
+//	public LoadServiceRepositoryImpl getRepository() {
+//		return repository;
+//	}
+//
+//	public void setRepository(LoadServiceRepositoryImpl repository) {
+//		this.repository = repository;
+//	}
 
 	@Override
 	//Transactional -- push this back to FormLoaderRepository so that a transactional unit is a form
@@ -97,7 +106,7 @@ public class LoadingServiceImpl implements LoadingService {
 		}
 		
 		if (seqids.size() > 0) {
-			HashMap<String, Date> formModifiedDates = this.repository.getModifiedDateForForms(seqids);
+			HashMap<String, Date> formModifiedDates = this.loadRepository.getModifiedDateForForms(seqids);
 			assignModifiedDateForForms(forms, formModifiedDates);
 		}
 		
@@ -114,7 +123,7 @@ public class LoadingServiceImpl implements LoadingService {
 	protected void createRecordsForCollection(FormCollection coll, String user) {
 		List<FormDescriptor> forms = coll.getForms();
 		
-		String collSeqid = this.repository.createFormCollectionRecords(coll);
+		String collSeqid = this.loadRepository.createFormCollectionRecords(coll);
 		coll.setId(collSeqid);
 		coll.setDateCreated(new Date()); //TODO: This should come from db after create
 		
@@ -155,21 +164,21 @@ public class LoadingServiceImpl implements LoadingService {
 			logger.debug("========  Start loading form [" + form.getFormIdString() + "] ===============");
 				
 			if (FormDescriptor.LOAD_TYPE_NEW.equals(form.getLoadType())) {				
-				String seqid = this.repository.createForm(form, xmlPathName);
+				String seqid = this.loadRepository.createForm(form, xmlPathName);
 				if (seqid == null || seqid.length() == 0)
 					form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
 				else
 					form.setLoadStatus(FormDescriptor.STATUS_LOADED);
 			} else if (FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(form.getLoadType())) {
-				float prevLatestVersion = this.repository.getLatestVersionForForm(form.getPublicId());
-				String seqid = this.repository.createFormNewVersion(form, loggedinUser, xmlPathName);
+				float prevLatestVersion = this.loadRepository.getLatestVersionForForm(form.getPublicId());
+				String seqid = this.loadRepository.createFormNewVersion(form, loggedinUser, xmlPathName);
 				if (seqid == null || seqid.length() == 0)
 					form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
 				else
 					form.setLoadStatus(FormDescriptor.STATUS_LOADED);
 				form.setPreviousLatestVersion(prevLatestVersion);
 			} else if (FormDescriptor.LOAD_TYPE_UPDATE_FORM.equals(form.getLoadType())) {
-				this.repository.updateForm(form, loggedinUser, xmlPathName);
+				this.loadRepository.updateForm(form, loggedinUser, xmlPathName);
 				if (form.getFormSeqId() == null || form.getFormSeqId().length() == 0)
 					form.setLoadStatus(FormDescriptor.STATUS_LOAD_FAILED);
 				else
@@ -224,11 +233,11 @@ public class LoadingServiceImpl implements LoadingService {
 	}
 	
 	protected boolean checkUserRight(FormDescriptor form, String formUser, String loggedinUser, String context) {
-		if (!this.repository.hasLoadFormRight(form, formUser, context)) {
+		if (!this.loadRepository.hasLoadFormRight(form, formUser, context)) {
 			form.addMessage("User [" + formUser + "] has no right to load form in context [" + context + 
 					"]. Will load with Form Loader logged-in user [" + loggedinUser + "]");
 			
-			if (!this.repository.hasLoadFormRight(form, loggedinUser, context)) {
+			if (!this.loadRepository.hasLoadFormRight(form, loggedinUser, context)) {
 				form.addMessage("Form Loader loggedin user has right to load form. Form load failed");
 				return false;
 			}

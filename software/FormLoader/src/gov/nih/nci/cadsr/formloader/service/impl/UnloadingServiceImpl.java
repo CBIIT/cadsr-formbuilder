@@ -12,6 +12,7 @@ import java.util.List;
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.repository.FormLoaderRepository;
+import gov.nih.nci.cadsr.formloader.repository.LoadServiceRepositoryImpl;
 import gov.nih.nci.cadsr.formloader.service.UnloadingService;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
@@ -21,21 +22,30 @@ public class UnloadingServiceImpl implements UnloadingService {
 	
 	private static Logger logger = Logger.getLogger(UnloadingServiceImpl.class.getName());
 	
-	FormLoaderRepository repository;
+	LoadServiceRepositoryImpl loadRepository;
 	
 	public UnloadingServiceImpl() {}
 	
-	public UnloadingServiceImpl(FormLoaderRepository repository) {
-		this.repository = repository;
+	public UnloadingServiceImpl(LoadServiceRepositoryImpl repository) {
+		this.loadRepository = repository;
+	}
+	
+
+	public LoadServiceRepositoryImpl getLoadRepository() {
+		return loadRepository;
 	}
 
-	public FormLoaderRepository getRepository() {
-		return repository;
+	public void setLoadRepository(LoadServiceRepositoryImpl loadRepository) {
+		this.loadRepository = loadRepository;
 	}
 
-	public void setRepository(FormLoaderRepository repository) {
-		this.repository = repository;
-	}
+//	public LoadServiceRepositoryImpl getRepository() {
+//		return repository;
+//	}
+//
+//	public void setRepository(LoadServiceRepositoryImpl repository) {
+//		this.repository = repository;
+//	}
 
 	@Override
 	@Transactional
@@ -86,17 +96,17 @@ public class UnloadingServiceImpl implements UnloadingService {
 				continue;
 			
 			String context = form.getContext();
-			if (!repository.hasLoadFormRight(form, userName, context)) {
+			if (!loadRepository.hasLoadFormRight(form, userName, context)) {
 				form.addMessage("Loggedin user doesn't have right to unload form with context \"" + context + "\"");
 				form.setLoadStatus(FormDescriptor.STATUS_UNLOAD_FAILED);
 				continue;
 			} 
 			
 			form.setChangeNote("Unloaded using Form Loader by [" + userName + "]");
-			repository.unloadForm(form);
+			loadRepository.unloadForm(form);
 			
 			if (form.getLoadStatus() == FormDescriptor.STATUS_UNLOADED) {
-				repository.updateFormInCollectionRecord(coll, form);
+				loadRepository.updateFormInCollectionRecord(coll, form);
 			}
 		}
 		
