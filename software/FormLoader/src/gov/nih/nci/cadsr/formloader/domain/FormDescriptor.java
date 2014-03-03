@@ -497,8 +497,14 @@ public class FormDescriptor implements java.io.Serializable {
 	}
 	
 	public String getLoadStatusStringWithMessages() {
-		String status = getLoadStatusString(this.loadStatus);
 		
+		//temp disabling loading of update form
+		if (FormDescriptor.LOAD_TYPE_UPDATE_FORM.equals(this.loadType)) {
+			return "Update Form - (load feature unavailable until version 4.2)";
+		}
+		//temp disabling loading of update form
+
+		String status = getLoadStatusString(this.loadStatus);
 		
 		int msgSize = this.messages.size();
 		if (msgSize > 0) {
