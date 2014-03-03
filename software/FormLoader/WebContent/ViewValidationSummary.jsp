@@ -19,8 +19,11 @@ L--%>
 <div style="padding-left: 50px; padding-right: 50px;">
 <body>
 <h2>Result of DB Validation</h2>
+The feature for Loading forms with Load Type "Update Form" will be available in version 4.2.
+<!-- Temp disable loading update form. 3 changes in this file
 * Changes made to forms with Load Type = "Update Form" cannot be "Undone". The "Unload" feature will only change <br>
 the workflow status to "Retired Deleted". Users must use Form Builder application to edit the form after loading.
+-->
 <br><br>
 <s:actionerror />
 <s:if test="validatedForms.size() >= 1">
@@ -44,18 +47,20 @@ the workflow status to "Retired Deleted". Users must use Form Builder applicatio
 			</tr>
 			<s:iterator value="validatedForms" var="form" status="status">
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
-				<td>					
-					<s:if test="loadStatus == 4">
+				<td>			
+				<!-- Temp disable loading update form added: && !loadType.equals('Update Form') -->		
+					<s:if test="loadStatus == 4 && !loadType.equals('Update Form') ">
 					<s:checkbox id="myCheck" name="selectedFormIndices" fieldValue="%{index}" value="false" 
 					onClick="toggleActionButton('selectedFormIndices', 'action:loadForms')" theme = "simple" />
 					</s:if>
-					<s:else>
-    				<s:checkbox name="greyout" disabled="true" theme = "simple" />
-					</s:else>
+					
 				</td>
 				<td>
 				<s:if test="loadType.equals('Update Form')">
+					<s:property value="loadType" /> (Unavailable)
+				<!-- Temp disable loading update form
 					<b>*<s:property value="loadType" /> </b>
+					-->
 				</s:if>
 				 <s:elseif test="loadType.equals('New Version')">
 					<b><a href="<s:property value="versioningRulesUrl" />" title="Click to view Form Versioning Rules..." 
