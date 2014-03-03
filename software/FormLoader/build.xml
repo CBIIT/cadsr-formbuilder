@@ -15,7 +15,7 @@
 	<property name="compile.debug"     value="true"/>
 	<property name="compile.deprecation"     value="false"/>
 	<property name="compile.optimize"     value="true"/>
-	<property name="JBOSS.HOME"     value="C:\AppServers\jboss-5.1.0.GA-FL"/>
+	<property name="JBOSS.HOME"     value="C:\AppServers\jboss-5.1.0.GA-0218"/>
 	<property name="JBOSS.DEPLOY.DIR"     value="${JBOSS.HOME}\server\default\deploy"/>
 	<property name="jboss.lib.dir"   value= "${JBOSS.HOME}/common" />
 	<property name="dist.dir"    value="${basedir}/dist"/>
@@ -39,8 +39,8 @@
 		    </taskdef>
 
     <target name="clean">
-        <delete dir="${build.dir}" failonerror="false"/>
-    	<delete dir="${dist.dir}" failonerror="false"/>
+        <delete dir="${build.dir}" failonerror="true"/>
+    	<delete dir="${dist.dir}" failonerror="true"/>
     </target>
 	
     <target name="compile-service-jar" depends="clean" description="Compile for formloader-services jar excluding struts classes">
@@ -121,12 +121,21 @@
         	<src path="${src.dir}" />
         	<compilerarg value="-Xlint:unchecked"/>
         </javac>
+    	
+    	<copy todir="${build.dir}/WEB-INF/classes/gov/nih/nci/cadsr/formloader/service/impl">
+    		<fileset dir="${src.dir}/gov/nih/nci/cadsr/formloader/service/impl">
+    	    	  <include name="**/*.xsd" />
+    	     </fileset>
+    	</copy>
     </target>
 	
     <target name="build" depends="compile-war">
 		<copy todir="${build.dir}">
 			<fileset dir="${web.dir}" excludes="CVS,**/*.class" />
 		</copy>
+    	<copy todir="${build.dir}/WEB-INF/classes">
+    				<fileset dir="${resources.dir}" includes="**/*.xml" />
+    			</copy>
     	<copy file="${web.dir}/WEB-INF/formloader.properties" todir="${build.dir}/classes" overwrite="true"/>
     </target>
 	
