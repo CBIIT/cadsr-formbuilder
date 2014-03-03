@@ -30,8 +30,8 @@
 
 	<bean id="unloadService"
 		class="gov.nih.nci.cadsr.formloader.service.impl.UnloadingServiceImpl">
-		<property name="repository">
-			<ref local="repository" />
+		<property name="loadRepository">
+			<ref local="loadRepository" />
 		</property>
 	</bean>
 	
@@ -44,8 +44,8 @@
 	
 	<bean id="loadService"
 		class="gov.nih.nci.cadsr.formloader.service.impl.LoadingServiceImpl"> 
-		<property name="repository">
-			<ref local="repository" />
+		<property name="loadRepository">
+			<ref local="loadRepository" />
 		</property>
 	</bean>
 
@@ -65,6 +65,44 @@
 	
 	<bean id="repository"
 		class="gov.nih.nci.cadsr.formloader.repository.FormLoaderRepositoryImpl"> 
+		<property name="formV2Dao">
+			<ref bean="formV2Dao" />
+		</property>
+		<property name="moduleV2Dao">
+			<ref bean="moduleV2Dao" />
+		</property>
+		<property name="questionV2Dao">
+			<ref bean="questionV2Dao" />
+		</property>
+		<property name="valueDomainV2Dao">
+			<ref bean="valueDomainV2Dao" />
+		</property>
+		<property name="formInstructionV2Dao">
+			<ref bean="formInstructionV2Dao" />
+		</property>
+		<property name="questInstructionV2Dao">
+			<ref bean="questInstructionV2Dao" />
+		</property>
+		<property name="formValidValueV2Dao">
+			<ref bean="formValidValueV2Dao" />
+		</property>
+		<property name="formValidValueInstructionV2Dao">
+			<ref bean="formValidValueInstructionV2Dao" />
+		</property>
+		<property name="collectionDao">
+			<ref bean="collectionDao" />
+		</property>
+		<property name="referenceDocV2Dao">
+			<ref bean="referenceDocV2Dao" />
+		</property>
+		<property name="moduleInstructionV2Dao">
+			<ref bean="moduleInstructionV2Dao" />
+		</property>
+		
+	</bean>
+	
+	<bean id="loadRepository"
+		class="gov.nih.nci.cadsr.formloader.repository.LoadServiceRepositoryImpl"> 
 		<property name="formV2Dao">
 			<ref bean="formV2Dao" />
 		</property>
