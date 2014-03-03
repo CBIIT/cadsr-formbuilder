@@ -33,4 +33,10 @@ function popupvalidationMessages(url) {
 	var left = (screen.width/2)-(w/2);
 	return window.open(url, 'Form DB Validation Messages', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, copyhistory=no, width='+w+', height='+h+', top=30, left='+left);
     //window.open(url, "Form DB Validation Messages", "status = 1, height=700, width='+w+', top='+top+', resizable = 1, scrollbars=1, titlebar=1" );  
-  }  ;
+  };
+  
+  function submitFormSetWaitCursor(formId) {
+	  document.body.style.cursor  = 'wait';
+	  var form = document.getElementById(formId);
+	  form.submit();
+  }
