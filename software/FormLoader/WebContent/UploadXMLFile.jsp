@@ -33,7 +33,7 @@ L--%>
    <s:file name="upload" label="Form Collection XML File" required="true" cols="20" rows="1"  /></td>
    </tr>
    <tr/>
-   <tr><td/><td colspan=2>You may download and review the <a href="file/FormLoaderv8.xsd" target="_blank">XSD</a> <br>against which Form Loader will validate your collection XML.</td></tr>
+   <tr><td/><td colspan=2>You may download and review the <a href="file/FormLoaderv13.xsd" target="_blank">XSD</a> <br>against which Form Loader will validate your collection XML.</td></tr>
   <tr></tr>
   <tr></tr>
   <tr></tr>
