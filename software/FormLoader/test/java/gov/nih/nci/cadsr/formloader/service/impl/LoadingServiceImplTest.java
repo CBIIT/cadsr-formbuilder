@@ -22,7 +22,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:/applicationContext-service-test-db.xml"})
+@ContextConfiguration(locations = {"classpath:/applicationContext.xml"})
 public class LoadingServiceImplTest {
 	
 	@Autowired
@@ -78,8 +78,8 @@ public void testUserHasRight() {
 	
 	@Test
 	public void testLoadNewForm() {
-		//this.prepareCollectionToLoad(".\\.\\test\\data\\loading", "load_newform.xml");
-		this.prepareCollectionToLoad(".\\.\\test\\data\\loading", "newForm-jim.xml");
+		this.prepareCollectionToLoad(".\\.\\test\\data\\loading", "load_newform.xml");
+		
 		try {
 			FormDescriptor form = aColl.getForms().get(0);
 			form.setSelected(true);
