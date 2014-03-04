@@ -449,6 +449,14 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 				continue;
 			
 			String formLoadType = form.getLoadType();
+			
+			//Temp disabling Update form for v4.1
+			if (formLoadType.equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)) {
+				form.setLoadStatus(FormDescriptor.STATUS_CONTENT_VALIDATED);
+				continue;
+			}
+			//Temp disabling Update form for v4.1
+			
 			if (!formLoadType.equals(FormDescriptor.LOAD_TYPE_NEW_VERSION)
 					&& !formLoadType.equals(FormDescriptor.LOAD_TYPE_NEW) 
 					&& !formLoadType.equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)) {
