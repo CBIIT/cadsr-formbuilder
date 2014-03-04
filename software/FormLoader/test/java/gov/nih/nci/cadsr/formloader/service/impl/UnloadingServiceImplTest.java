@@ -18,7 +18,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:/applicationContext-service-test-db.xml"})
+@ContextConfiguration(locations = {"classpath:/applicationContext.xml"})
 public class UnloadingServiceImplTest {
 	
 	@Autowired
@@ -56,6 +56,9 @@ public class UnloadingServiceImplTest {
 	@Test
 	public void testAdjustFormSelections() {
 		List<FormCollection> colls = FormLoaderHelper.readCollectionListFromFile();
+		
+		if (colls == null)
+			return; 
 		
 		for (FormCollection coll : colls) {
 			List<FormDescriptor> forms = coll.getForms();
