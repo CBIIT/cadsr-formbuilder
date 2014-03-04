@@ -116,15 +116,4 @@ public class LoginAction extends ActionSupport implements SessionAware, ServletR
 		clear = true;
 	}
 	
-	public void validate(){
-		if (!clear)
-		{
-		if(getUsername().isEmpty()){
-			addFieldError("username", getText("username.required"));
-		}
-		if(getPassword().isEmpty()){
-			addFieldError("password", getText("password.required"));
-		}
-		}
-	}
 }
