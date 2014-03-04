@@ -134,7 +134,7 @@
 			<fileset dir="${web.dir}" excludes="CVS,**/*.class" />
 		</copy>
     	<copy todir="${build.dir}/WEB-INF/classes">
-    				<fileset dir="${resources.dir}" includes="**/*.xml" />
+    				<fileset dir="${resources.dir}" includes="**/*.properties,**/*.xml" />
     			</copy>
     	<copy file="${web.dir}/WEB-INF/formloader.properties" todir="${build.dir}/classes" overwrite="true"/>
     </target>
