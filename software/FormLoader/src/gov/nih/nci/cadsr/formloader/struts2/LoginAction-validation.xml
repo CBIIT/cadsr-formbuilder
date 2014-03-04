@@ -14,9 +14,6 @@
 		<field-validator type="requiredstring">
 			<message key="errors.required" />
 		</field-validator>
-		<field-validator type="password">
-			<message key="errors.invalid" />
-		</field-validator>
 	</field>
-	
+ 
 </validators>
