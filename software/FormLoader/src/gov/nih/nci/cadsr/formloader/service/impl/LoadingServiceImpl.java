@@ -38,13 +38,6 @@ public class LoadingServiceImpl implements LoadingService {
 		this.loadRepository = repository;
 	}
 
-//	public LoadServiceRepositoryImpl getRepository() {
-//		return repository;
-//	}
-//
-//	public void setRepository(LoadServiceRepositoryImpl repository) {
-//		this.repository = repository;
-//	}
 
 	@Override
 	//Transactional -- push this back to FormLoaderRepository so that a transactional unit is a form
