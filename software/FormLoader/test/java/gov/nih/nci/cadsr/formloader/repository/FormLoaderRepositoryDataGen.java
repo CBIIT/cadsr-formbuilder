@@ -17,6 +17,7 @@ import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCQuestionDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCValueDomainDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.PermissibleValueV2;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomainV2;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -450,6 +451,12 @@ public class FormLoaderRepositoryDataGen implements FormLoaderRepository {
 
 	@Override
 	public List<String> getDesignationNamesByVmIds(String vmSeqid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ValueDomainV2 getValueDomainBySeqid(String vdseqid) {
 		// TODO Auto-generated method stub
 		return null;
 	}
