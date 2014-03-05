@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import gov.nih.nci.ncicb.cadsr.common.dto.PermissibleValueV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ValueMeaningV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.resource.Definition;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomainV2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -86,5 +87,22 @@ public class JDBCValueDomainDAOV2Test {
 		defs = valueDomainV2Dao.getDesignationNamesByVMId("2509CE87-E735-5C23-E044-0003BA3F9857");
 		assertNotNull(defs);
 		assertTrue(defs.size() == 2);
+	}
+	
+	@Test
+	public void testGetValueDomainV2ById() {
+		String vdid = "B3A8191F-BCD8-233F-E034-0003BA12F5E7";
+		ValueDomainV2 vd = valueDomainV2Dao.getValueDomainV2ById(vdid);
+		
+		assertTrue(vd.getPublicId() == 2018389);
+		assertTrue(vd.getVersion() == 1.0);
+		assertTrue("CHARACTER".equals(vd.getDatatype()));
+		assertTrue(vd.getMaxLength().equals("35"));
+		assertTrue(vd.getMinLength().equals("1"));
+		assertTrue(vd.getUnitOfMeasure() == null);
+		assertTrue(vd.getDecimalPlace() == null);
+		assertTrue(vd.getDisplayFormat() == null);
+		assertTrue(vd.getHighValue() == null);
+		assertTrue(vd.getLowValue() == null);
 	}
 }
