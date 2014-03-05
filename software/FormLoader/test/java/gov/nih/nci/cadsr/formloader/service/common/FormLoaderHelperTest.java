@@ -91,27 +91,6 @@ public class FormLoaderHelperTest {
 		ver = 4;
 	}
 	
-	@Test
-	public void testValidateFile() {
-		//String xml = "C:\\development\\workspace-formloader-git\\cadsr-formbuilder\\software\\FormLoader\\test\\data\\xmlvalidation\\FourTheradexMedidataRaveFormsMinimumFields_01-11-2014.xml";
-		String xsd = "C:\\development\\doc\\FormLoader\\xsds\\FormLoaderv12-0120.xsd";
-		
-		String xml = "C:\\development\\workspace-formloader-git\\cadsr-formbuilder\\software\\FormLoader\\test\\data\\xmlvalidation\\load_forms-5.xml";
-		
-		try {
-			List<XmlValidationError> errors = FormLoaderHelper.validateFile(new File(xml), new File(xsd));
-			
-			if (errors != null) {
-				for (XmlValidationError error : errors) 
-					System.out.println(error.getMessage());
-			}
-		} catch (SAXException s) {
-			System.out.println(s.getStackTrace());
-		} catch (IOException s) {
-			System.out.println(s.getStackTrace());
-		}
-	}
-	
 	@Test 
 	public void testCheckInputFileNullPath() {
 		try {
@@ -169,13 +148,18 @@ public class FormLoaderHelperTest {
 		
 	}
 	
-//	@Test 
-//	public void testCheckInputFileEmptyFileName() {
-//		try {
-//			FormLoaderHelper.checkInputFile("fafea", "");
-//			fail("Should have thrown exceptio");
-//		} catch (FormLoaderServiceException fse) {
-//			assertTrue(fse.getErrorCode() == FormLoaderServiceException.ERROR_FILE_INVALID);
-//		}
-//	}
+	@Test
+	public void testSamePublicIdVersion() {
+		assertFalse(FormLoaderHelper.samePublicIdVersions(null, "2.0", 1234567, (float)2.0));
+		assertFalse(FormLoaderHelper.samePublicIdVersions("", "2.0", 1234567, (float)2.0));
+		
+		assertFalse(FormLoaderHelper.samePublicIdVersions("1234567", null, 1234567, (float)2.0));
+		assertFalse(FormLoaderHelper.samePublicIdVersions("1234567", "", 1234567, (float)2.0));
+		
+		assertFalse(FormLoaderHelper.samePublicIdVersions("1234567", "2.0", -1, (float)2.0));
+		assertFalse(FormLoaderHelper.samePublicIdVersions("1234567", "2.0", 1234567, (float)0.0));
+		
+		assertTrue(FormLoaderHelper.samePublicIdVersions("1234567", "2.0", 1234567, (float)2.0));
+	}
+	
 }
