@@ -36,6 +36,7 @@ import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCValueDomainDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomainV2;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -687,6 +688,15 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			form.addMessage("Form's workflow status name in xml is invalid. Use default value DRAFT NEW or DRAFT MOD");
 			form.setDefaultWorkflowName();
 		}
+	}
+	
+	public ValueDomainV2 getValueDomainBySeqid(String vdseqid) {
+		if (vdseqid == null || vdseqid.length() == 0) {
+			logger.error("Invalid vd seqid passed to getValueDomainBySeqid()");
+			return null;
+		}
+			
+		return this.valueDomainV2Dao.getValueDomainV2ById(vdseqid);
 	}
 
 	@Override

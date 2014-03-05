@@ -14,6 +14,7 @@ import gov.nih.nci.ncicb.cadsr.common.dto.PermissibleValueV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomainV2;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -463,6 +464,12 @@ public class FormLoaderRepositoryMockup implements FormLoaderRepository {
 
 	@Override
 	public List<String> getDesignationNamesByVmIds(String vmSeqid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ValueDomainV2 getValueDomainBySeqid(String vdseqid) {
 		// TODO Auto-generated method stub
 		return null;
 	}

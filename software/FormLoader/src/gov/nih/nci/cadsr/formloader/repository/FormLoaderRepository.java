@@ -9,6 +9,7 @@ import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.PermissibleValueV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.ReferenceDocument;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomainV2;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -62,4 +63,6 @@ public interface FormLoaderRepository {
 	
 	public List<String> getDefinitionTextsByVmIds(String vmSeqid);
 	public List<String> getDesignationNamesByVmIds(String vmSeqid);
+	
+	public ValueDomainV2 getValueDomainBySeqid(String vdseqid);
 }
