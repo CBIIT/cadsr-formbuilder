@@ -134,7 +134,23 @@ public class FormQuestionParserHandler extends ParserHandler {
 				this.objToSetProperty = currModule;
 				this.methodName = getMethodName(localName);
 			}
-		}  
+		} else if (localName.equals(StaXParser.DATATYPE_NAME) 
+				||localName.equals(StaXParser.DECIMAL_PLACE) 
+				||localName.equals(StaXParser.FORMAT_NAME) 
+				||localName.equals(StaXParser.HIGH_VALUE_NUMBER) 
+				||localName.equals(StaXParser.LOW_VALUE_NUMBER) 
+				||localName.equals(StaXParser.MAXIMUM_LENGTH_NUMBER) 
+				||localName.equals(StaXParser.MINIMUM_LENGTH_NUMBER)  
+				||localName.equals(StaXParser.UOM_NAME) ) {
+			if (nodeQueue.peek().equals(StaXParser.VALUE_DOMAIN)) {
+				this.objToSetProperty = this.currQuestion;
+				this.methodName = getMethodName(localName);
+			}
+
+		}
+		
+		
+		
 		this.nodeQueue.push(localName);
 
 	}

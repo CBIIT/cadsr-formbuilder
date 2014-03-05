@@ -378,39 +378,24 @@ public class FormLoaderHelper {
 		return formatter.format(versionNumber);
 	}
 	
+	public static boolean samePublicIdVersions(String publicId, String version, int publicIdInt, float versionInFloat) {
+		if (publicId == null && publicIdInt > 0)
+			return false;
+		
+		if (version == null && versionInFloat > 0)
+			return false;
+		
+		try {
+			if (Integer.parseInt(publicId) != publicIdInt)
+				return false;
+			
+			if (Float.parseFloat(version) != versionInFloat)
+				return false;
+		} catch (NumberFormatException ne) {
+			return false;
+		}
+		
+		return true;
+	}
 	
-	public static List<XmlValidationError> validateFile(File xmlFile, File xsdFile) 
-			throws SAXException, IOException
-	{
-	    // 1. Lookup a factory for the W3C XML Schema language
-	    SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/XML/XMLSchema/v1.1");
-
-	    // 2. Compile the schema.
-	    File schemaLocation = xsdFile;
-	    Schema schema = factory.newSchema(schemaLocation);
-
-	    // 3. Get a validator from the schema.
-	    Validator validator = schema.newValidator();
-	    XmlValidationErrorHandler handler = new XmlValidationErrorHandler();
-	    validator.setErrorHandler(handler);
-	    
-	    
-
-	    // 4. Parse the document you want to check.
-	    Source source = new StreamSource(xmlFile);
-
-	    // 5. Check the document
-	    try
-	    {
-	        validator.validate(source);
-	        System.out.println(xmlFile.getName() + " is valid.");
-	    }
-	    catch (SAXException ex)
-	    {
-	        System.out.println(xmlFile.getName() + " is not valid because ");
-	        System.out.println(ex.getMessage());
-	    }
-	    
-	    return handler.getXmlErrors();
-	} 
 }

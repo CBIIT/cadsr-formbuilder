@@ -17,6 +17,16 @@ public class QuestionDescriptor {
 	String cdeVdPublicId;
 	String cdeVdVersion;
 	
+	//value domain fields that we need to check
+	String datatypeName;
+	String decimalPlace;
+	String formatName;
+	String highValueNumber;
+	String lowValueNumber;
+	String maximumLengthNumber;
+	String minimumLengthNumber;
+	String UOMName;
+	
 	List<ValidValue> validValues = new ArrayList<ValidValue>();
 	String defaultValue;
 	String instruction;
@@ -224,6 +234,70 @@ public class QuestionDescriptor {
 		this.addMessage(message);
 	}
 
+	public String getDatatypeName() {
+		return datatypeName;
+	}
+
+	public void setDatatypeName(String datatypeName) {
+		this.datatypeName = datatypeName;
+	}
+
+	public String getDecimalPlace() {
+		return decimalPlace;
+	}
+
+	public void setDecimalPlace(String decimalPlace) {
+		this.decimalPlace = decimalPlace;
+	}
+
+	public String getFormatName() {
+		return formatName;
+	}
+
+	public void setFormatName(String formatName) {
+		this.formatName = formatName;
+	}
+
+	public String getHighValueNumber() {
+		return highValueNumber;
+	}
+
+	public void setHighValueNumber(String highValueNumber) {
+		this.highValueNumber = highValueNumber;
+	}
+
+	public String getLowValueNumber() {
+		return lowValueNumber;
+	}
+
+	public void setLowValueNumber(String lowValueNumber) {
+		this.lowValueNumber = lowValueNumber;
+	}
+
+	public String getMaximumLengthNumber() {
+		return maximumLengthNumber;
+	}
+
+	public void setMaximumLengthNumber(String maximumLengthNumber) {
+		this.maximumLengthNumber = maximumLengthNumber;
+	}
+
+	public String getMinimumLengthNumber() {
+		return minimumLengthNumber;
+	}
+
+	public void setMinimumLengthNumber(String minimumLengthNumber) {
+		this.minimumLengthNumber = minimumLengthNumber;
+	}
+
+	public String getUOMName() {
+		return UOMName;
+	}
+
+	public void setUOMName(String uOMName) {
+		UOMName = uOMName;
+	}
+
 
 
 	public class ValidValue {
@@ -286,7 +360,59 @@ public class QuestionDescriptor {
 			this.description = description;
 		}
 		
-		
 	}
 
+	public boolean hasVDValueInDE() {
+		
+		return cdeVdPublicId != null && cdeVdPublicId.length() > 0
+				|| cdeVdVersion != null && cdeVdVersion.length() > 0
+				|| datatypeName != null && datatypeName.length() > 0
+				|| decimalPlace != null && decimalPlace.length() > 0
+				|| formatName != null && formatName.length() > 0
+				|| highValueNumber != null && highValueNumber.length() > 0
+				|| lowValueNumber != null && lowValueNumber.length() > 0
+				|| maximumLengthNumber != null && maximumLengthNumber.length() > 0
+				|| minimumLengthNumber != null && minimumLengthNumber.length() > 0
+				|| UOMName != null && UOMName.length() > 0;
+				
+	}
+	
+	public boolean allPresentedVdFieldsMatched(String datatypeName, String decimalPlace, String formatName,
+			String highValueNumber, String lowValueNumber, String maximumLengthNumber, 
+			String minimumLengthNumber, String UOMName) {
+		
+		if (this.datatypeName != null && this.datatypeName.length() > 0 
+				&& !this.datatypeName.equals(datatypeName))
+			return false;
+		
+		if (this.decimalPlace != null && this.decimalPlace.length() > 0 
+				&& !this.decimalPlace.equals(decimalPlace))
+			return false;
+		
+		if (this.formatName != null && this.formatName.length() > 0 
+				&& !this.formatName.equals(formatName))
+			return false;
+		
+		if (this.highValueNumber != null && this.highValueNumber.length() > 0 
+				&& !this.highValueNumber.equals(highValueNumber))
+			return false;
+		
+		if (this.lowValueNumber != null && this.lowValueNumber.length() > 0 
+				&& !this.lowValueNumber.equals(highValueNumber))
+			return false;
+		
+		if (this.maximumLengthNumber != null && this.maximumLengthNumber.length() > 0 
+				&& !this.maximumLengthNumber.equals(maximumLengthNumber))
+			return false;
+		
+		if (this.minimumLengthNumber != null && this.minimumLengthNumber.length() > 0 
+				&& !this.minimumLengthNumber.equals(minimumLengthNumber))
+			return false;
+		
+		if (this.UOMName != null && this.UOMName.length() > 0 
+				&& !this.UOMName.equals(UOMName))
+			return false;
+		
+		return true;
+	}
 }

@@ -99,6 +99,16 @@ public class StaXParser {
 	protected static final String DATA_ELEMENT = "dataElement";
 	protected static final String VALUE_DOMAIN = "valueDomain";
 	
+	protected static final String DATATYPE_NAME = "datatypeName";
+	protected static final String DECIMAL_PLACE = "decimalPlace";
+	protected static final String FORMAT_NAME = "formatName";
+	protected static final String HIGH_VALUE_NUMBER = "highValueNumber";
+	protected static final String LOW_VALUE_NUMBER = "lowValueNumber";
+	protected static final String MAXIMUM_LENGTH_NUMBER = "maximumLengthNumber";
+	protected static final String MINIMUM_LENGTH_NUMBER = "minimumLengthNumber";
+	protected static final String UOM_NAME = "UOMName";
+	
+	
 	List<RefdocTransferObjectExt> refdocs;
 	List<DefinitionTransferObject> definitions;
 	List<String> protocolIds;

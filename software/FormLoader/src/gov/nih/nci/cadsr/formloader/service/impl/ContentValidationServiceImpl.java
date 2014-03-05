@@ -17,37 +17,34 @@ import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ValueMeaningV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.resource.Definition;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
-import gov.nih.nci.ncicb.cadsr.common.resource.PermissibleValueV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.ReferenceDocument;
-import gov.nih.nci.ncicb.cadsr.common.resource.ValueMeaningV2;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomainV2;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
-//import gov.nih.nci.cadsr.formloader.repository.FormLoaderRepositoryImpl;
 
 @Service
 public class ContentValidationServiceImpl implements ContentValidationService {
 	
 	private static Logger logger = Logger.getLogger(ContentValidationServiceImpl.class.getName());
 	
-	FormLoaderRepository repository;
+	FormLoaderRepositoryImpl repository;
 	
 	public ContentValidationServiceImpl() {}
 	
-	public ContentValidationServiceImpl(FormLoaderRepository repository) {
+	public ContentValidationServiceImpl(FormLoaderRepositoryImpl repository) {
 		this.repository = repository;
 	}
 
-	public FormLoaderRepository getRepository() {
+	public FormLoaderRepositoryImpl getRepository() {
 		return repository;
 	}
 
-	public void setRepository(FormLoaderRepository repository) {
+	public void setRepository(FormLoaderRepositoryImpl repository) {
 		this.repository = repository;
 	}
 
@@ -55,6 +52,26 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 	public FormCollection validateXmlContent(FormCollection aCollection) 
 			throws FormLoaderServiceException {
 		
+		quickCheckOnCollection(aCollection);
+		
+		String xmlPathName = FormLoaderHelper.checkInputFile(aCollection.getXmlPathOnServer(), aCollection.getXmlFileName());
+			
+		if (aCollection.isSelectAllForms()) 
+			aCollection.resetAllSelectFlag(true);
+		
+		List<FormDescriptor> formHeaders = aCollection.getForms();
+		determineLoadType(formHeaders);
+		 
+		validateFormInfo(formHeaders, aCollection.getCreatedBy());
+		
+		validateQuestions(xmlPathName, formHeaders);
+		
+		aCollection.resetAllSelectFlag(false);
+		return aCollection;
+	}
+	
+	protected void quickCheckOnCollection(FormCollection aCollection) 
+			throws FormLoaderServiceException {
 		if (aCollection == null)
 			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_COLLECTION_NULL,
 					"Input collection is null");
@@ -72,20 +89,6 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_USER_INVALID,
 					"Collection's createdBy (Form Loader's logged in user) is not set. Unable to proceed.");
 		}
-		
-		String xmlPathName = FormLoaderHelper.checkInputFile(aCollection.getXmlPathOnServer(), aCollection.getXmlFileName());
-			
-		if (aCollection.isSelectAllForms()) 
-			aCollection.resetAllSelectFlag(true);
-		
-		determineLoadType(formHeaders);
-		 
-		validateFormInfo(formHeaders, loggedinUser);
-		
-		validateQuestions(xmlPathName, formHeaders);
-		
-		aCollection.resetAllSelectFlag(false);
-		return aCollection;
 	}
 	
 	/**
@@ -330,7 +333,6 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			
 			if (!matched) {
 				form.setLoadType(FormDescriptor.LOAD_TYPE_NEW_VERSION);
-				//form.getMessages().add("Form version in xml doesn't match any existing version in database and is less than the highest version in database. Will load as new version");
 			}
 			
 		}
@@ -581,8 +583,6 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		verifyQuestionAgainstCde(question, form, cdeDtos, refdocDtos, pvDtos);
 	}
 	
-	
-	
 	/**
 	 * Concerns only questions in an "update" form.
 	 * 1) use same public id + version if they have a match in db
@@ -665,10 +665,18 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		
 		DataElementTransferObject matchingCde = getMatchingDataElement(cdePublicId, cdeVersion, question, cdeDtos);
 		if (matchingCde == null) {
-			msg = "Unable to load a Date Element with [" + cdePublicId + "|" + cdeVersion + "] from database. Unable to validate question content.";
+			msg = "Unable to load a Data Element with [" + cdePublicId + "|" + cdeVersion + "] from database. Unable to validate question content.";
 			prepareQuestionForLoadWithoutValidation(form, question, msg);
 			return; 
 		}
+		
+		if (!isAssociatedVdValid(question, matchingCde)) {
+			msg = "Question is disassocited with CDE [" + matchingCde.getPublicId() + "|" + matchingCde.getVersion() + 
+					" in xml because the valueDomain fields have no match in database.";
+			prepareQuestionForLoadWithoutValidation(form, question, msg);
+			return; 
+		}
+			
 		
 		List<PermissibleValueV2TransferObject> pValDtos = pvDtos.get(matchingCde.getVdIdseq());	
 		List<ReferenceDocumentTransferObject> rdDtos = refdocDtos.get(
@@ -680,6 +688,50 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			
 		logger.debug("Done validating question against CDE");
 	}
+	
+	
+	protected boolean isAssociatedVdValid(QuestionDescriptor question, DataElementTransferObject matchingCde) {
+		
+		//TODO: New req. for validating valueDomain inside DataElement
+		String vdseqid = matchingCde.getVdIdseq();
+		if (vdseqid == null || vdseqid.length() == 0) {
+			if (question.hasVDValueInDE())
+				question.setCdeSeqId(""); 
+				return false;
+		}
+			
+		//1. get vd from db with vdseqid
+		ValueDomainV2 vd = repository.getValueDomainBySeqid(vdseqid);
+		if (vd == null) {
+			if (question.hasVDValueInDE())
+				question.setCdeSeqId(""); 
+				return false;
+		}
+		
+		//2. compare what's from xml and what's from db
+		String vdPublicId = question.getCdeVdPublicId();
+		String vdVersion = question.getCdeVdVersion();
+		if (vdPublicId != null && vdPublicId.length() > 0 || vdVersion != null && vdVersion.length() > 0) {
+		
+			if (!FormLoaderHelper.samePublicIdVersions(question.getCdeVdPublicId(), question.getCdeVdVersion(), 
+					vd.getPublicId(), vd.getVersion())) {
+				if (question.hasVDValueInDE())
+					question.setCdeSeqId(""); 
+					return false;
+			}
+		}
+		
+		if (!question.allPresentedVdFieldsMatched(vd.getDatatype(), vd.getDecimalPlace(), vd.getDisplayFormat(),
+				vd.getHighValue(), vd.getLowValue(), vd.getMaxLength(), vd.getMinLength(), vd.getUnitOfMeasure())) {
+			question.setCdeSeqId("");
+			return false;
+		}
+				
+		return true;
+	}
+	
+	 
+	
 	
 	protected void prepareQuestionForLoadWithoutValidation(FormDescriptor form, QuestionDescriptor question, String message) {
 		logger.debug(message);
@@ -744,7 +796,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 
 				if (cdeVerNum == cde.getVersion().floatValue()) {
 					
-					//TODO
+					//TODO: validate valueDomain inside DataElement
 					//cde.getValueDomain().g
 					
 					question.setCdeSeqId(cde.getDeIdseq());
