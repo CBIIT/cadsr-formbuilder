@@ -25,6 +25,8 @@ import gov.nih.nci.objectCart.client.ObjectCartException;
 import gov.nih.nci.objectCart.domain.Cart;
 import gov.nih.nci.objectCart.domain.CartObject;
 import gov.nih.nci.ncicb.cadsr.objectCart.CDECart;
+import gov.nih.nci.ncicb.cadsr.objectCart.FormDisplayCartTransferObject;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext.FormDisplayCartOCIImpl;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,14 +54,18 @@ import org.apache.struts.action.DynaActionForm;
 
 import java.util.LinkedList;
 import java.io.StringWriter;
+
 import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.ValidationException;
+
 import javax.xml.transform.*;
 import javax.xml.transform.stream.*;
+
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.StringReader;
+
 import javax.servlet.ServletContext; 
 
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormCartOptionsUtil;
@@ -372,62 +378,14 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
     HttpServletRequest request,
     HttpServletResponse response) throws IOException, ServletException {
     setInitLookupValues(request);
-        
-    DynaActionForm hrefCRFForm = (DynaActionForm) form;
-    Form crf2 = null;
-////    String showCached = (String)request.getAttribute("showCached");
-
-	int formsInQueue = 0;
- 	  String sFormIdSeq = (String)request.getParameter(FormConstants.FORM_ID_SEQ);  
- 	  if( sFormIdSeq == null || sFormIdSeq.length() < 8 )
-	////    if(showCached!=null&&showCached.equalsIgnoreCase(CaDSRConstants.YES))
-	    {
-	        crf2 = (Form) getSessionObject(request, CRF);
-	        sFormIdSeq = crf2.getIdseq();
-	    }
-	    
-    try 
-    {
+    try {
        Object displayOrderToCopy = getSessionObject(request,MODULE_DISPLAY_ORDER_TO_COPY);
        
        if (displayOrderToCopy != null) {
           return mapping.findForward("setModuleCopyForm");
        }
       setFormForAction(form, request);
-      
-//// Begin added for monitor if the current form has been added in Form Cart for saving.  D.An, 20130830.  
-      String userMame = (String) request.getSession().getAttribute("myUsername");
-      if( userMame != null && userMame.equalsIgnoreCase("viewer") != true && sFormIdSeq.length() > 8 )
-      {
-System.out.println("userName -- " + userMame );	
-		  ////request.getSession().setAttribute("myFormAdded", "n");
-System.out.println(" " + sFormIdSeq + " not found " );	
-  	
-  	   CDECartOCImplExtension sessionCartV2 = (CDECartOCImplExtension) this
-  				.getSessionObject(request, CaDSRConstants.FORMS_CART_V2);
-  	   Collection itemsAdded = null;
-  	   if( sessionCartV2 != null )
-  		   if( sessionCartV2.getFormCartV2().size() >= 0 )
-  			   itemsAdded = sessionCartV2.getFormCartV2().values();
-  	   
-  	   if ( itemsAdded != null )
-  	   {
-  		   for ( Object version2Form : itemsAdded ) 
-  		   {
-  			   if( ((FormV2TransferObject)version2Form).getFormIdseq().equals(sFormIdSeq) ) 
-  			   {
-  				   formsInQueue = 1;
-System.out.println("sFormIdSeq found !!!!! -- " + sFormIdSeq );	
-					break;
-  			   }
-  			}
-  		}
-  	   if( formsInQueue == 0 )
-  			   request.getSession().setAttribute("myFormAdded", "n");
-  	   else
-			   request.getSession().setAttribute("myFormAdded", "Y");  		   
-//// End. 	D.An, 20130830.	
-      }
+
     }
     catch (FormBuilderException exp) {
       if (log.isErrorEnabled()) {
@@ -650,105 +608,84 @@ System.out.println( "Forms Queued in Cart : " + request.getSession().getAttribut
 		return mapping.findForward("success");
 	}
   
+	public FormDisplayCartTransferObject convertToDisplayItem(FormV2 crf)
+	{
+		FormDisplayCartTransferObject displayObject = new FormDisplayCartTransferObject();
+		displayObject.setAslName(crf.getAslName());
+		displayObject.setContextName(crf.getContext().getName());
+		displayObject.setFormType(crf.getFormType());
+		displayObject.setIdseq(crf.getIdseq());
+		displayObject.setLongName(crf.getLongName());
+		displayObject.setProtocols(crf.getProtocols());
+		displayObject.setPublicId(crf.getPublicId());
+		displayObject.setVersion(crf.getVersion());
+		return displayObject;
+	}
+	
+	
 	public ActionForward addFormToCart(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 
 		FormBuilderServiceDelegate service = getFormBuilderService();
-		
-	    DynaActionForm dynaBean2 = (DynaActionForm) form;
-	    Form crf2 = null;
-	    String showCached = (String)request.getAttribute("showCached");
 		int formsInQueue = 0;
-		String[] formIds = null;
-     	
-		try 
-		{
+		
+		try {
 
 			ensureSessionCarts(request);
 
 			DynaActionForm dynaBean = (DynaActionForm) form;
 			boolean clearCheckedFormIds = false;
 
-			if (true)
-			{ 
+			if (true) { 
+
 				log.debug("add-to-cart in memory - creating objects");
 				Collection itemsToAdd = new ArrayList();
+				Collection displayItemsToAdd = new ArrayList();
 
 				CDECartOCImplExtension sessionCart = (CDECartOCImplExtension) this
 						.getSessionObject(request, CaDSRConstants.FORMS_CART_V2);
+				
+				// add to form display cart now
+				FormDisplayCartOCIImpl userFormDisplayCart = (FormDisplayCartOCIImpl) this
+						.getSessionObject(request, CaDSRConstants.FORMS_DISPLAY_CART);
 
-				////String[] formIds = (String[]) dynaBean.get("checkedFormIds");
-				formIds = (String[]) dynaBean.get("checkedFormIds");
+				String[] formIds = (String[]) dynaBean.get("checkedFormIds");
 								
 				if (formIds != null) {
 					for (String formId : formIds) {
 						FormV2 crf = service.getFormDetailsV2(formId);
 						itemsToAdd.add(crf);
+						displayItemsToAdd.add(convertToDisplayItem(crf));
 					}
 					sessionCart.addFormsV2(itemsToAdd);
+					// create FormDisplayCartTransferObject for this cart
+					userFormDisplayCart.addForms(itemsToAdd);
 					log.debug("done");
 					
 					clearCheckedFormIds = true;
 				}
 				this.setSessionObject(request, CaDSRConstants.FORMS_CART_V2, sessionCart);
+				this.setSessionObject(request, CaDSRConstants.FORMS_DISPLAY_CART, userFormDisplayCart);
 				formsInQueue = sessionCart.getFormCartV2().size();
 			}
-//// GF32932  D.An, 20130825.  
+//// GF32932  D.An, 20130825.    
 		      request.getSession().setAttribute("myFormCartInfo", new Integer(formsInQueue).toString());
+		      request.getSession().setAttribute("myFormAdded", "Y");
 System.out.println( "Forms Queued in Cart : " + request.getSession().getAttribute("myFormCartInfo") );
+System.out.println( "Forms Added : " + request.getSession().getAttribute("myFormAdded") );
+			
+			saveMessage("cadsr.common.formcart.add.success", request, new Integer(formsInQueue).toString());
 
-		saveMessage("cadsr.common.formcart.add.success", request, new Integer(formsInQueue).toString());
-		
-		
-		dynaBean.set("cartAddFormId", "");
-		if (clearCheckedFormIds)
-			dynaBean.set("checkedFormIds", new String[] {});
+
+			dynaBean.set("cartAddFormId", "");
+			if (clearCheckedFormIds)
+				dynaBean.set("checkedFormIds", new String[] {});
 		} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-	    
-	  		  
-////Begin added for monitor if the current form has been added in Form Cart for saving.  -D.An, 20130830. 
-		formsInQueue = 0;
-	    String userMame = (String) request.getSession().getAttribute("myUsername");
-	    if( userMame != null && userMame.equalsIgnoreCase("viewer") != true && formIds != null )
-	    {
-System.out.println("userName -- " + userMame );	
-			  ////request.getSession().setAttribute("myFormAdded", "n");
-System.out.println(" " + formIds + " not found " );	
-		
-		   CDECartOCImplExtension sessionCartV2 = (CDECartOCImplExtension) this
-					.getSessionObject(request, CaDSRConstants.FORMS_CART_V2);
-		   Collection itemsAdded = null;
-		   if( sessionCartV2 != null )
-			   if( sessionCartV2.getFormCartV2().size() >= 0 )
-				   itemsAdded = sessionCartV2.getFormCartV2().values();
-		   
-		   if ( itemsAdded != null )
-		   {
-			   for ( Object version2Form : itemsAdded ) 
-			   {
-				   if( ((FormV2TransferObject)version2Form).getFormIdseq().equals(formIds) ) 
-				   {
-					   formsInQueue = 1;
-					  //// request.getSession().setAttribute("myFormAdded", "Y");
-System.out.println("sFormIdSeq found !!!!! -- " + formIds );	
-						break;
-				   }
-				}
-			}
-	    }
-	   if( formsInQueue == 0 )
-  			   request.getSession().setAttribute("myFormAdded", "n");
-  	   else
-			   request.getSession().setAttribute("myFormAdded", "Y");  		   
-	    
-//// End. -D.An, 20130830.
-		
-				return mapping.findForward("success");
+		return mapping.findForward("success");
 	}
 
   

@@ -130,10 +130,10 @@ $(document).ready(function()
 <html:hidden property="<%= FormConstants.QUESTION_INDEX %>"/>
 <html:hidden property="<%= FormConstants.MODULE_INDEX %>"/>
 <html:hidden property="<%= FormConstants.DE_SEARCH_SRC %>"/>
-<logic:present name="<%=CaDSRConstants.FORMS_CART_V2%>">
+<logic:present name="<%=CaDSRConstants.FORMS_DISPLAY_CART%>">
   <table width="80%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
     <tr class="OraTableColumnHeader">
-    <logic:notEmpty name="<%=CaDSRConstants.FORMS_CART_V2%>" property = "formDisplayObjects">
+    <logic:notEmpty name="<%=CaDSRConstants.FORMS_DISPLAY_CART%>" property = "formDisplayObjects">
       <th><center>Save<br/><input type="checkbox" name="saveAllChk" value="yes" onClick="ToggleSaveAll(this)"/></center></th>
       <th><center>Delete<br/><input type="checkbox" name="deleteAllChk" value="yes" onClick="ToggleDeleteAll(this)"/></center></th>
 	<th><center>Action</center></th>
@@ -146,16 +146,16 @@ $(document).ready(function()
       <th>Public Id</th>
       <th>Version</th>
     </tr>
-  <logic:empty name="<%=CaDSRConstants.FORMS_CART_V2%>" property = "formDisplayObjects">
+  <logic:empty name="<%=CaDSRConstants.FORMS_DISPLAY_CART%>" property = "formDisplayObjects">
     <tr class="OraTabledata">
         <td class="OraFieldText" colspan="7">
           Form Cart is empty. 
         </td>
     </tr>
   </logic:empty>
-  <logic:notEmpty name="<%=CaDSRConstants.FORMS_CART_V2%>" property = "formDisplayObjects">
-	<bean:size id="noOfItems" name="<%=CaDSRConstants.FORMS_CART_V2%>" property="formDisplayObjects" />
-    <logic:iterate id="form" name="<%=CaDSRConstants.FORMS_CART_V2%>" type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormCartDisplayObjectPersisted" property="formDisplayObjects">
+  <logic:notEmpty name="<%=CaDSRConstants.FORMS_DISPLAY_CART%>" property = "formDisplayObjects">
+	<bean:size id="noOfItems" name="<%=CaDSRConstants.FORMS_DISPLAY_CART%>" property="formDisplayObjects" />
+    <logic:iterate id="form" name="<%=CaDSRConstants.FORMS_DISPLAY_CART%>" type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormCartDisplayObjectPersisted" property="formDisplayObjects">
 <%
       String formId = form.getIdseq();
       String detailsURL = "javascript:details('"+formId+"')";
@@ -240,7 +240,7 @@ $(document).ready(function()
         <td>&nbsp;</td>
       </TR>
       <tr>
-		<logic:notEmpty name="<%=CaDSRConstants.FORMS_CART_V2%>" property = "formDisplayObjects">
+		<logic:notEmpty name="<%=CaDSRConstants.FORMS_DISPLAY_CART%>" property = "formDisplayObjects">
         <td>
           <center><a href="javascript:deleteItems()">
             <html:img src='<%="i/deleteButton.gif"%>' border="0" alt="Delete"/> 
@@ -261,7 +261,7 @@ $(document).ready(function()
  </table>
 </logic:present>
 
-<logic:notPresent name="<%=CaDSRConstants.FORMS_CART_V2%>">
+<logic:notPresent name="<%=CaDSRConstants.FORMS_DISPLAY_CART%>">
 <table width="10%" align="center" cellpadding="1" cellspacing="1" border="0" >
   <tr>
      <td><center>

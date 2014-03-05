@@ -2,6 +2,7 @@ package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext.CDECartOCImplExtension;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext.FormDisplayCartOCIImpl;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormCartDisplayObject;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormCartDisplayObjectPersisted;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConverterUtil;
@@ -13,6 +14,7 @@ import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.CDECartFormBean;
 import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
 import gov.nih.nci.ncicb.cadsr.objectCart.CDECart;
 import gov.nih.nci.ncicb.cadsr.objectCart.CDECartItem;
+import gov.nih.nci.ncicb.cadsr.objectCart.FormDisplayCartTransferObject;
 import gov.nih.nci.ncicb.cadsr.objectCart.impl.CDECartOCImpl;
 import gov.nih.nci.objectCart.client.ObjectCartClient;
 import gov.nih.nci.objectCart.domain.CartObject;
@@ -68,8 +70,8 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchActionWi
 	     
 	    try {	    	
 	    	ensureSessionCarts(request);
-	    	CDECartOCImplExtension extendedCart = (CDECartOCImplExtension)this.getSessionObject(request, CaDSRConstants.FORMS_CART_V2);
-	    	extendedCart.setFormDisplayObjects();	    		      
+	    	FormDisplayCartOCIImpl displayCart = (FormDisplayCartOCIImpl)this.getSessionObject(request, CaDSRConstants.FORMS_DISPLAY_CART);
+	    	displayCart.setFormDisplayObjects();	 
 	    }
 	    catch (Exception exp) {
 	      if (log.isErrorEnabled()) {
@@ -80,6 +82,20 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchActionWi
 	    }
 	    return SUCCESS;
   	}
+  
+	public FormDisplayCartTransferObject convertToDisplayItem(Form crf)
+	{
+		FormDisplayCartTransferObject displayObject = new FormDisplayCartTransferObject();
+		displayObject.setAslName(crf.getAslName());
+		displayObject.setContextName(crf.getContext().getName());
+		displayObject.setFormType(crf.getFormType());
+		displayObject.setIdseq(crf.getIdseq());
+		displayObject.setLongName(crf.getLongName());
+		displayObject.setProtocols(crf.getProtocols());
+		displayObject.setPublicId(crf.getPublicId());
+		displayObject.setVersion(crf.getVersion());
+		return displayObject;
+	}
   
   /**
    * Adds items to Form Cart.
@@ -111,20 +127,34 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchActionWi
     try {  	
 	if (FormCartOptionsUtil.instance().writeInV1Format()) {
 		Collection itemsToMerge = new ArrayList();
+		Collection displayItemsToMerge = new ArrayList();
 		CDECart sessionCart = (CDECart) this.getSessionObject(request,
 				CaDSRConstants.FORMS_CART);
+		FormDisplayCartOCIImpl userFormDisplayCart = (FormDisplayCartOCIImpl) this
+				.getSessionObject(request, CaDSRConstants.FORMS_DISPLAY_CART);
 		
 		if (selectedSaveItems != null) {
 			for (Object version1FormId : selectedSaveItems) {
 				Form crf = service.getFormDetails((String)version1FormId);
 				log.debug("adding V1 form objects to cart (No Save)");
 				itemsToMerge.add(crf);
+				displayItemsToMerge.add(convertToDisplayItem(crf));
 			}
 			log.debug("merging V1 form objects");
 			sessionCart.mergeElements(itemsToMerge);
 			log.debug("done merging V1 form objects");
+			
+			log.debug("merging display form objects");
+			userFormDisplayCart.mergeElements(displayItemsToMerge);
+			log.debug("done merging display form objects");
+			
+			// Remove the saved forms from cart in memory
+			for (Object version2FormId : selectedSaveItems) {
+				userFormDisplayCart.removeFormDisplayCart((String)version2FormId);
+			}
 		}
 		this.setSessionObject(request, CaDSRConstants.FORMS_CART, sessionCart);
+		this.setSessionObject(request, CaDSRConstants.FORMS_DISPLAY_CART, userFormDisplayCart);
 	}
 
 	if (true) { // we always write the formCartV2 cart now
@@ -138,6 +168,7 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchActionWi
 				itemsToRemove.add((String)version2FormId);
 				FormV2 crf = service.getFormDetailsV2((String)version2FormId);
 				itemsToAdd.add(translateCartObject((FormV2) crf));
+				// TODO add saving to FormDisplayCart as well
 			}
 
 			// remove from cart before adding (so that we'll update), removing non-existent doesn't hurt
@@ -175,6 +206,9 @@ System.out.println( "Forms Queued in Cart : " + request.getSession().getAttribut
 
 
   }
+  
+  
+
   
   private CartObject translateCartObject(FormV2 crf) throws Exception {
 		CartObject ob = new CartObject();

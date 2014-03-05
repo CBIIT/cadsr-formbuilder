@@ -1,14 +1,26 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext;
 
+import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.util.logging.Log;
 import gov.nih.nci.ncicb.cadsr.common.util.logging.LogFactory;
+import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
+import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormCartOptionsUtil;
+import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormCartDisplayObject;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormCartDisplayObjectPersisted;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConverterUtil;
 import gov.nih.nci.ncicb.cadsr.objectCart.FormDisplayCartTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
 import gov.nih.nci.objectCart.client.ObjectCartClient;
 import gov.nih.nci.objectCart.client.ObjectCartException;
 import gov.nih.nci.objectCart.domain.Cart;
 import gov.nih.nci.objectCart.domain.CartObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -18,6 +30,17 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+
+import org.exolab.castor.xml.MarshalException;
+import org.exolab.castor.xml.Unmarshaller;
+import org.exolab.castor.xml.ValidationException;
 
 public class FormDisplayCartOCIImpl implements
 		Serializable {
@@ -38,26 +61,34 @@ public class FormDisplayCartOCIImpl implements
 	// in this cart will be added to the contents of the oCart. - Sula
 	private Map formDisplayCart;
 	
-
+	protected Collection formDisplayObjects;
+	
+	public static final String transformToConvertCartToDisplayObject = "/transforms/ConvertFormCartV2ToDisplayObject.xsl";
+	public static final String formNotInDatabaseLongNamePrefix = "NOT IN DATABASE: "; 
+	protected FormBuilderServiceDelegate formBuilderService;
+	
     private static Log log = LogFactory.getLog(FormDisplayCartOCIImpl.class.getName());
 
     
-	public static ArrayList<FormDisplayCartOCIImpl> getAllCarts(ObjectCartClient client, String uid) {
-		ArrayList<FormDisplayCartOCIImpl> ret = new ArrayList<FormDisplayCartOCIImpl>();
-		try {
-			List<Cart> carts = client.retrieveUserCarts(uid);
-			for (Cart c: carts) {
-				FormDisplayCartOCIImpl retCart = new FormDisplayCartOCIImpl(client, uid, c.getName());
-				ret.add(retCart);
-			}
-		} catch (ObjectCartException oce) {
-			throw new RuntimeException("Constructor: Error creating the Object Cart ", oce);
-		}
+//	public static ArrayList<FormDisplayCartOCIImpl> getAllCarts(ObjectCartClient client, String uid) {
+//		ArrayList<FormDisplayCartOCIImpl> ret = new ArrayList<FormDisplayCartOCIImpl>();
+//		try {
+//			List<Cart> carts = client.retrieveUserCarts(uid);
+//			for (Cart c: carts) {
+//				FormDisplayCartOCIImpl retCart = new FormDisplayCartOCIImpl(client, uid, c.getName());
+//				ret.add(retCart);
+//			}
+//		} catch (ObjectCartException oce) {
+//			throw new RuntimeException("Constructor: Error creating the Object Cart ", oce);
+//		}
+//		
+//		return ret;
+//	}
 		
-		return ret;
-	}
-
-	public FormDisplayCartOCIImpl(ObjectCartClient client, String uid, String cName) {
+		
+	public FormDisplayCartOCIImpl(ObjectCartClient client, String uid, String cName, FormBuilderServiceDelegate formBuilderServiceDelegate) {
+		
+		formBuilderService = formBuilderServiceDelegate;
 		oCart = new Cart();
 		//itemComparator = new CDECartItemComparator();
 		userId = uid;
@@ -212,14 +243,14 @@ public class FormDisplayCartOCIImpl implements
 	}
 	
 	public void addForm(Object form) {
-		if (!formDisplayCart.containsKey(((FormDisplayCartTransferObject)form).getIdseq()))
-			formDisplayCart.put(((FormDisplayCartTransferObject)form).getIdseq(), form);
+		if (!formDisplayCart.containsKey(((FormV2TransferObject)form).getIdseq()))
+			formDisplayCart.put(((FormV2TransferObject)form).getIdseq(), form);
 	}
 
 	public void addForms(Collection forms) {
 		Iterator itemIter = forms.iterator();
 		while (itemIter.hasNext()) {
-		    addForm((FormDisplayCartTransferObject)itemIter.next());
+		    addForm((FormV2TransferObject)itemIter.next());
 		}
 	}
 
@@ -251,6 +282,96 @@ public class FormDisplayCartOCIImpl implements
 		} catch (ObjectCartException oce) {
 			throw new RuntimeException("mergeElements: Error restoring the POJO Collection", oce);
 		}
+	}
+	
+	public Collection getFormDisplayObjects() {
+		log.debug("getFormDisplayObjects " + formDisplayObjects.size() + " objects");		
+		return formDisplayObjects;
+	}
+	
+	public void setFormDisplayObjects() {
+		log.debug("setFormDisplayObjects");
+		log.debug("cartClient " + cartClient + " oCart " + oCart);
+		log.debug("cart id " + oCart.getId());
+		try {//Serialized:class gov.nih.nci.ncicb.cadsr.objectCart.FormDisplayCartTransferObject
+			Collection<CartObject> newFormCartElements = cartClient.getObjectsByType(oCart, CDECartObjectType);
+
+			log.debug("newFormCartElements has " + newFormCartElements.size() + " elements");
+			
+			log.debug("Form Cart has " + formDisplayCart.size() + " new elements");
+
+			List itemList = new ArrayList();
+
+
+			for (CartObject f: newFormCartElements) {
+
+				// exception handling is arranged so loading will continue for other objects if there are bad objects
+				try {
+					// convert the serialized FormCartDisplayObject into an actual FormCartDisplayObject
+					Object pOb = new Object();
+					StringReader reader = new StringReader(f.getData());
+					pOb = Unmarshaller.unmarshal(FormCartDisplayObject.class, reader);		
+	
+					log.debug("Trying to convert object pointer to FormCartDisplayObject...");		
+					FormCartDisplayObject FCDO = (FormCartDisplayObject)pOb;
+					if (FormCartOptionsUtil.instance().dumpXMLDuringDebug())
+						log.debug("FormCartDisplayObject: " + FCDO.toString());
+	
+					// new form cart data doesn't include idseq, get it from the cart native id
+					String idseq = f.getNativeId();
+					FCDO.setIdseq(idseq);
+					// check whether the form exists in database and show a warning prefix on the name if it doesn't 
+//					String databaseidseq = formBuilderService.getIdseq(FCDO.getPublicId(), FCDO.getVersion());
+//					if (databaseidseq.length() == 0) {
+//			    		log.info("Form " + FCDO.getPublicId() + " " + FCDO.getVersion() + " in cart not found in database");
+//			    		FCDO.setLongName(formNotInDatabaseLongNamePrefix + FCDO.getLongName());   		
+//					}
+					//FCDO.setProtocols(formBuilderService.getFormDetailsV2(FCDO.getIdseq()).getProtocols());
+					itemList.add(new FormCartDisplayObjectPersisted(FCDO, true));
+					log.debug("Loaded " + FCDO.getIdseq());
+					
+				} catch (MarshalException e) {
+					log.error("MarshalException loading forms", e);	
+				} catch (ValidationException e) {
+					log.error("ValidationException loading forms", e);	
+				}
+//				} catch (FormBuilderException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+				
+			}
+			
+			for (Object crf: formDisplayCart.values()) {
+				FormCartDisplayObject FCDO = new FormCartDisplayObject();
+				FormV2 formVersion2 = ((FormV2)crf);
+				FCDO.setAslName(formVersion2.getAslName());
+				FCDO.setContextName(formVersion2.getContext().getName());
+				FCDO.setFormType(formVersion2.getFormType());
+				FCDO.setIdseq(formVersion2.getIdseq());
+				FCDO.setLongName(formVersion2.getLongName());
+				FCDO.setProtocols(formVersion2.getProtocols());
+				FCDO.setPublicId(formVersion2.getPublicId());
+				FCDO.setVersion(formVersion2.getVersion());
+				itemList.add(new FormCartDisplayObjectPersisted(FCDO, false));
+			}
+
+			formDisplayObjects = itemList;		
+
+		} catch (ObjectCartException oce) {
+			oce.printStackTrace();
+			throw new RuntimeException("getForms: Error loading forms", oce);
+		}
+	}
+	
+	public void removeFormDisplayCart(Object formKey) {
+		if (formDisplayCart.containsKey(formKey))
+			formDisplayCart.remove(formKey);
+    }
+
+    public void clearFormV2()
+	{
+	    formDisplayCart.clear();
 	}
 
 }

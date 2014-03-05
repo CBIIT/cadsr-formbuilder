@@ -7,6 +7,7 @@ import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
 import gov.nih.nci.ncicb.cadsr.objectCart.CDECart;
 import gov.nih.nci.ncicb.cadsr.objectCart.impl.CDECartOCImpl;
 import gov.nih.nci.objectCart.client.ObjectCartClient;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext.FormDisplayCartOCIImpl;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -55,13 +56,22 @@ public class FormBuilderSecureBaseDispatchActionWithCarts extends
 					log.debug("setSessionObject "
 							+ CaDSRConstants.FORMS_CART_V2 + " " + userCartV2);
 				}
+				
+				if (true) { // we always write FORMS_DISPLAY_CART  now
+					FormDisplayCartOCIImpl userFormDisplayCart = new FormDisplayCartOCIImpl(cartClient,
+							user.getUsername(), CaDSRConstants.FORMS_DISPLAY_CART,
+							getFormBuilderService());
+					this.setSessionObject(request,
+							CaDSRConstants.FORMS_DISPLAY_CART, userFormDisplayCart);
+					log.debug("setSessionObject "
+							+ CaDSRConstants.FORMS_DISPLAY_CART + " " + userFormDisplayCart);
+				}
 			}
 		} catch (Exception exp) {
 			if (log.isErrorEnabled()) {
 				log.error("Exception creating session form carts", exp);
 			}
 		}
-
 	}
 
 }
