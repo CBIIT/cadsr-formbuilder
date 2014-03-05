@@ -6,22 +6,16 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
-import gov.nih.nci.cadsr.formloader.domain.FormStatus;
 import gov.nih.nci.cadsr.formloader.domain.QuestionDescriptor;
-import gov.nih.nci.cadsr.formloader.service.ContentValidationService;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceError;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 import gov.nih.nci.cadsr.formloader.service.common.StatusFormatter;
+import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
 
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 
 import org.apache.log4j.Logger;
 import org.junit.Before;
@@ -654,4 +648,145 @@ public class ContentValidationServiceImplTest {
 		mes = contentValidationService.verifyPublicIdAndVersion("--232424", "2.4fafa");
 		assertTrue(mes.contains("public") && mes.contains("version"));
 	}
+	
+	@Test
+	public void testQuickCheckOnCollectionNull() {
+		try {
+			contentValidationService.quickCheckOnCollection(null);
+			fail("Null collection objc should have triggered an exception");
+		} catch (FormLoaderServiceException fse) {
+			assertTrue(FormLoaderServiceException.ERROR_COLLECTION_NULL == fse.getErrorCode());
+		}
+	}
+	
+	@Test
+	public void testQuickCheckOnCollectionNullForms() {
+		FormCollection aColl = this.generateContentValidationData();
+		try {
+			aColl.setForms(null);
+			contentValidationService.quickCheckOnCollection(aColl);
+			fail("Null form list should have triggered an exception");
+		} catch (FormLoaderServiceException fse) {
+			assertTrue(FormLoaderServiceException.ERROR_EMPTY_FORM_LIST == fse.getErrorCode());
+		}
+	}
+	
+	@Test
+	public void testQuickCheckOnCollectionEmptyForms() {
+		FormCollection aColl = this.generateContentValidationData();
+		try {
+			aColl.setForms(new ArrayList<FormDescriptor>());
+			contentValidationService.quickCheckOnCollection(aColl);
+			fail("Empty form list should have triggered an exception");
+		} catch (FormLoaderServiceException fse) {
+			assertTrue(FormLoaderServiceException.ERROR_EMPTY_FORM_LIST == fse.getErrorCode());
+		}
+	}
+	
+	@Test
+	public void testQuickCheckOnCollectionNullCreatedBy() {
+		FormCollection aColl = this.generateContentValidationData();
+		aColl.setCreatedBy(null);
+		try {
+			contentValidationService.quickCheckOnCollection(aColl);
+			fail("Null createdBy should have triggered an exception");
+		} catch (FormLoaderServiceException fse) {
+			assertTrue(FormLoaderServiceException.ERROR_USER_INVALID == fse.getErrorCode());
+		}
+	}
+	
+	@Test
+	public void testQuickCheckOnCollectionEmptyCreatedBy() {
+		FormCollection aColl = this.generateContentValidationData();
+		aColl.setCreatedBy("");
+		try {
+			contentValidationService.quickCheckOnCollection(aColl);
+			fail("Null createdBy should have triggered an exception");
+		} catch (FormLoaderServiceException fse) {
+			assertTrue(FormLoaderServiceException.ERROR_USER_INVALID == fse.getErrorCode());
+		}
+	}
+	
+	@Test
+	public void testIsAssociatedVdValid() {
+		try {
+			aColl.setXmlPathOnServer(".\\test\\data\\contentvalidation");
+			aColl.setXmlFileName("3193449_has_valid_values.xml");
+			aColl.setCreatedBy("YANGS");
+			aColl = xmlValidator.validateXml(aColl);
+
+			aColl = contentValidationService.validateXmlContent(aColl);
+			forms = aColl.getForms();
+			assertNotNull(forms);
+
+			QuestionDescriptor question = forms.get(0).getModules().get(0).getQuestions().get(0);
+			assertNotNull(question);
+			
+			DataElementTransferObject cde = new DataElementTransferObject();
+			assertFalse(contentValidationService.isAssociatedVdValid(question, cde));
+			
+			cde.setVdIdseq("B3A8191F-BCD8-233F-E034-0003BA12F5E7");
+			assertTrue(contentValidationService.isAssociatedVdValid(question, cde));
+			
+			question.setDatatypeName("CAHR");
+			assertFalse(contentValidationService.isAssociatedVdValid(question, cde));
+			
+			//restore match
+			question.setDatatypeName("CHARACTER");
+			
+			question.setUOMName("Meter");
+			assertFalse(contentValidationService.isAssociatedVdValid(question, cde));
+			//restore match
+			question.setUOMName(null);
+			
+			question.setCdeVdVersion("2.0");
+			assertFalse(contentValidationService.isAssociatedVdValid(question, cde));
+			
+			question.setCdeVdVersion(null);
+			assertFalse(contentValidationService.isAssociatedVdValid(question, cde));
+		} catch (FormLoaderServiceException e) {
+
+		}
+	}
+	
+	@Test
+	public void testValidateXmlContententWithInvalidVd() {
+		
+		try {
+			aColl.setXmlPathOnServer(".\\test\\data\\contentvalidation");
+			aColl.setXmlFileName("RaveFormsMinimumFields_with_invalidVD.xml");
+			aColl.setCreatedBy("YANGS");
+			aColl = xmlValidator.validateXml(aColl);
+			
+			forms = aColl.getForms();
+			assertNotNull(forms);
+			assertTrue(forms.size() == 4);
+			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATED);
+			
+			for (FormDescriptor form : forms) {
+				form.setSelected(true);
+			}
+			
+			assertNotNull(contentValidationService);
+			aColl = contentValidationService.validateXmlContent(aColl);
+			
+			assertNotNull(aColl);
+			forms = aColl.getForms();
+			assertTrue(forms.size() == 4);
+			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_CONTENT_VALIDATED);
+			
+			FormDescriptor form = forms.get(3);			
+			//VD for this question has: <valueDomain>
+            // <datatypeName>CHARACTE</datatypeName>    ===Missing a letter at the end
+			//</valueDomain>
+			QuestionDescriptor question = form.getModules().get(0).getQuestions().get(1);
+			assertNotNull(question);
+			assertTrue(question.getCdeSeqId().length() == 0);
+			
+		} catch (FormLoaderServiceException fle) {
+			logger.debug(fle);
+			fail("Got exception: " + fle.getMessage());
+		}
+	}
+	
 }
