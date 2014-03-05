@@ -209,4 +209,34 @@ public class StaXParserTest {
 		List<FormDescriptor> forms = parser.parseFormQuestions("afaf", new ArrayList<FormDescriptor>());
 		assertNull(forms);
 	}
+	
+	@Test
+	public void testParseFormQuestionsWithValueDomainFields() {
+		
+		parser = new StaXParser();
+		String xmlPathName = ".\\test\\data\\xmlvalidation\\3193449_has_valueDomain_values.xml";
+		
+		FormCollection formCollection = new FormCollection();
+		formCollection.setXmlFileName("3193449_has_valueDomain_values.xml");
+		formCollection.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
+		formCollection = parser.parseCollectionAndForms(formCollection, xmlPathName);
+		List<FormDescriptor> forms = formCollection.getForms();
+		
+		//List<FormDescriptor> forms = parser.parseFormHeaders(xmlPathName);
+		assertNotNull(forms);
+		assertTrue(forms.size() == 1);
+		
+		forms = parser.parseFormQuestions(xmlPathName, forms);
+		assertNotNull(forms);
+		
+		QuestionDescriptor question = forms.get(0).getModules().get(0).getQuestions().get(0);
+		String vdPublicId = question.getCdeVdPublicId();
+		String vdversion = question.getCdeVdVersion();
+		assertTrue("2018389".equals(vdPublicId));
+		assertTrue("1.0".equals(vdversion));
+		
+		assertTrue(question.getDatatypeName().equals("CHARACTER"));
+		assertTrue(question.getDecimalPlace() == null || question.getDecimalPlace().length() == 0);
+		assertTrue(question.getMaximumLengthNumber().equals("35"));
+	}
 }
