@@ -9,6 +9,7 @@ import gov.nih.nci.cadsr.formloader.service.XmlValidationService;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 import gov.nih.nci.cadsr.formloader.service.common.StatusFormatter;
 import gov.nih.nci.cadsr.formloader.service.impl.LoadingServiceImpl;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomainV2;
 
 import java.util.List;
 
@@ -72,5 +73,18 @@ public class FormLoaderRepositoryImplTest {
 		}
 	}
 	
-	
+	@Test
+	public void testGetValueDomainBySeqid() {
+		ValueDomainV2 vd = this.repository.getValueDomainBySeqid(null);
+		assertNull(vd);
+		
+		vd = this.repository.getValueDomainBySeqid("");
+		assertNull(vd);
+		
+		vd = this.repository.getValueDomainBySeqid("B3A8191F-BCD8-233F-E034-0003BA12F5E7");
+		assertNotNull(vd);
+		
+		vd = this.repository.getValueDomainBySeqid("fake");
+		assertNull(vd);
+	}
 }
