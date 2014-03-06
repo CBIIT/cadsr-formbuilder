@@ -3,6 +3,7 @@ package gov.nih.nci.cadsr.formloader.repository;
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.PermissibleValueV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
@@ -65,4 +66,8 @@ public interface FormLoaderRepository {
 	public List<String> getDesignationNamesByVmIds(String vmSeqid);
 	
 	public ValueDomainV2 getValueDomainBySeqid(String vdseqid);
+	
+	public List<FormDescriptor> getAllFormsWithCollectionId(String collectionSeqid);
+	
+	public List<FormV2TransferObject> getFormsInCadsrBySeqids(List<String> formSeqids);
 }

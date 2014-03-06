@@ -29,6 +29,7 @@ public class FormDescriptor implements java.io.Serializable {
 	public static final int STATUS_CONTENT_VALIDATION_FAILED = -3;
 	public static final int STATUS_LOAD_FAILED = -4;
 	public static final int STATUS_UNLOAD_FAILED = -5;
+	public static final int STATUS_NO_LONGER_EXISTS = -6;
 	
 	public static final int STATUS_INITIALIZED = 0;
 	public static final int STATUS_XML_VALIDATED = 1; 
@@ -553,7 +554,8 @@ public class FormDescriptor implements java.io.Serializable {
 			return "DB Validation failed (not eligible for Load)";
 		case STATUS_SKIPPED_CONTENT_VALIDATION:
 			return "DB Validation not performed (not eligible for Load)";
-			
+		case STATUS_NO_LONGER_EXISTS:
+			return "Form no longer exists (not eligible to unload)";
 		default: 
 			return "Status Unknown";
 			
@@ -638,6 +640,9 @@ public class FormDescriptor implements java.io.Serializable {
 	
 	public boolean isUnloadable() {
 		
+		if (this.loadStatus != FormDescriptor.STATUS_LOADED)
+			return false;
+		
 		Date loadDate = this.loadUnloadDate;
 		Date modDate = this.modifiedDate;
 		
@@ -650,7 +655,7 @@ public class FormDescriptor implements java.io.Serializable {
 	//<a href="https://formbuilder-dev.nci.nih.gov/FormBuilder/formDetailsAction.do?method=getFormDetails&formIdSeq=BC2E08B3-C5B7-4C7A-E040-BB89AD43061F" target="_blank"> 3421713 </a>
 	public String getLinkToFormBuilder() {
 		
-		String urlBase = FormLoaderHelper.getProperty(null, "formbuilder.detailsAction.url");
+		String urlBase = FormLoaderHelper.getProperty("formbuilder.detailsAction.url");
 		return urlBase + this.formSeqId;
 		
 	}

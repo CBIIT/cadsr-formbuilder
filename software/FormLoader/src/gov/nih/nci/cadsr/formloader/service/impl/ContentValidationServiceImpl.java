@@ -730,9 +730,6 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		return true;
 	}
 	
-	 
-	
-	
 	protected void prepareQuestionForLoadWithoutValidation(FormDescriptor form, QuestionDescriptor question, String message) {
 		logger.debug(message);
 		question.addMessage(message);

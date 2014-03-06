@@ -2,26 +2,14 @@ package gov.nih.nci.cadsr.formloader.repository;
 
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
-import gov.nih.nci.cadsr.formloader.domain.ModuleDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.QuestionDescriptor;
-import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
-import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
-import gov.nih.nci.ncicb.cadsr.common.dto.AdminComponentTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormValidValueTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.InstructionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ModuleTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.PermissibleValueV2TransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.QuestionChangeTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.RefdocTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCCollectionDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormInstructionDAOV2;
@@ -33,9 +21,7 @@ import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCQuestionDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCQuestionInstructionDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCReferenceDocumentDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCValueDomainDAOV2;
-import gov.nih.nci.ncicb.cadsr.common.resource.Context;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
-import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
 import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomainV2;
 
 import java.util.ArrayList;
@@ -260,85 +246,29 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		
 		//first get collection headers
 		List<FormCollection> colls = collectionDao.getAllLoadedCollectionsByUser(userName);
-		
-		for (FormCollection coll : colls) {
-			//form info from Form Loader table
-			List<FormDescriptor> forms = collectionDao.getAllFormInfoForCollection(coll.getId());
-			if (forms == null || forms.size() == 0) {
-				logger.warn("Collection " + coll.getId() + " doesn't have any form associated with it in database");
-				coll.setForms(new ArrayList<FormDescriptor>());
-				continue;
-			}
-			
-			List<FormDescriptor> cadsrforms = getFormDetailsFromCaDsr(coll, forms);
-			forms = combineFormInfo(forms, cadsrforms);
-			coll.setForms(forms);				
-		}
-		
+		if (colls != null)
+			logger.debug("User [" + userName + "] has loaded " + colls.size() + " collections");
 		return colls;
 	}	
 	
-	protected List<FormDescriptor> getFormDetailsFromCaDsr(FormCollection coll, List<FormDescriptor> forms) {
-		List<String> formseqids = new ArrayList<String>();
-		for (FormDescriptor form : forms) {
-			String seqid = form.getFormSeqId();
-			if (seqid != null && seqid.length() > 0)
-				formseqids.add(seqid);
-		}
+	@Transactional(readOnly=true)
+	public List<FormDescriptor> getAllFormsWithCollectionId(String collectionSeqid) {
+		if (collectionSeqid == null || collectionSeqid.length() == 0)
+			return null;
 		
-		if (formseqids.size() == 0)
-			return new ArrayList<FormDescriptor>();
-		
-		List<FormV2TransferObject> formdtos = this.formV2Dao.getFormHeadersBySeqids(formseqids);
-		List<FormDescriptor> cadsrforms = translateIntoFormDescriptors(coll, formdtos);
-		
-		return cadsrforms;
-	}
-	
-	/**
-	 * A form from database may have 2 rows because each additional protocol will trigger an additional form row added
-	 * to database. This method will combine multiple rows for the same form into one form object, with comma separated
-	 * protocol names.
-	 * @param formdtos
-	 * @return
-	 */
-	protected List<FormDescriptor> translateIntoFormDescriptors(FormCollection aColl, List<FormV2TransferObject> formdtos) {
-		List<FormDescriptor> forms = new ArrayList<FormDescriptor>();
-		
-		if (formdtos == null) {
-			logger.debug("Form dtos is null. Can't translater list into FormDescriptors");
-			return forms;
-		}
-		
-		HashMap<String, FormDescriptor> processedForms = new HashMap<String, FormDescriptor>();
-		
-		FormDescriptor form = null;
-		for (FormV2TransferObject dto : formdtos) {
-			if (processedForms.containsKey(dto.getFormIdseq())) {
-				form = processedForms.get(dto.getFormIdseq());
-				form.setProtocolName(dto.getProtocolLongName());
-			}
-			else {
-				form  = new FormDescriptor();
-				form.setFormSeqId(dto.getFormIdseq());
-				form.setLongName(dto.getLongName());
-				form.setContext(dto.getContextName());
-				form.setModifiedBy(dto.getModifiedBy());
-				form.setModifiedDate(dto.getDateModified());
-				form.setCreatedBy(dto.getCreatedBy());
-				form.setProtocolName(dto.getProtocolLongName());
-				form.setPublicId(String.valueOf(dto.getPublicId()));
-				form.setVersion(FormLoaderHelper.formatVersion(dto.getVersion()));
-				form.setType(dto.getFormType());
-				form.setWorkflowStatusName(dto.getAslName());
-				form.setCollectionSeqid(aColl.getId());
-				form.setCollectionName(aColl.getNameWithRepeatIndicator());
-				forms.add(form);
-				processedForms.put(dto.getFormIdseq(), form);
-			}
-		}
+		List<FormDescriptor> forms = collectionDao.getAllFormInfoForCollection(collectionSeqid);
+		if (forms != null)
+			logger.debug("Collection " + collectionSeqid + " returns " + forms.size() + " forms");
 		
 		return forms;
+	}
+	
+	@Transactional(readOnly=true)
+	public List<FormV2TransferObject> getFormsInCadsrBySeqids(List<String> formSeqids) {
+		if (formSeqids == null || formSeqids.size() == 0)
+			return null;
+		
+		return this.formV2Dao.getFormHeadersBySeqids(formSeqids);
 	}
 	
 	protected FormValidValueTransferObject translateIntoValidValueDto(QuestionDescriptor.ValidValue vValue,
@@ -400,50 +330,6 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		return this.valueDomainV2Dao.getDesignationNamesByVMId(vmSeqid);
 		
 		
-	}
-	
-	
-	protected List<FormDescriptor> combineFormInfo(List<FormDescriptor> forms, List<FormDescriptor> cadsrforms) {
-
-		for (FormDescriptor form : forms) {
-			String formSeqid = form.getFormSeqId();
-			if (formSeqid != null && formSeqid.length() > 0
-					&& (form.getLoadStatus() == FormDescriptor.STATUS_LOADED ||
-					form.getLoadStatus() == FormDescriptor.STATUS_UNLOADED)) {
-				FormDescriptor cadsrForm = getMatchingCadsrForm(formSeqid, cadsrforms);
-				if (cadsrForm == null) {
-					//TODO: this means the form has a record in FL tables but doesn't in cadsr tables
-					//This could mean the form has been deleted. We need a way to tell user that
-			
-					continue;
-				}
-
-				form.setVersion(cadsrForm.getVersion());
-				form.setLongName(cadsrForm.getLongName());
-				form.setContext(cadsrForm.getContext());
-				form.setModifiedBy(cadsrForm.getModifiedBy());
-				form.setModifiedDate(cadsrForm.getModifiedDate());
-				form.setCreatedBy(cadsrForm.getCreatedBy());
-				form.setProtocolName(cadsrForm.getProtocolName());
-
-				form.setType(cadsrForm.getType());
-				form.setWorkflowStatusName(cadsrForm.getWorkflowStatusName());
-
-			} else 
-				form.setLoadUnloadDate(null);
-
-		}
-
-		return forms;
-	}
-	
-	protected FormDescriptor getMatchingCadsrForm(String targetFormSeqid, List<FormDescriptor> cadsrforms) {
-		for (FormDescriptor form : cadsrforms) {
-			if (targetFormSeqid.equals(form.getFormSeqId()))
-				return form;
-		}
-		
-		return null;
 	}
 	
 	/**
@@ -659,19 +545,6 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		
 		return false;
 	}
-	
-	//@Transactional(readOnly=true)
-	/*
-	public void validateDesignationType(FormDescriptor form) {
-		if (designationTypes == null) {
-			designationTypes = this.formV2Dao.getAllDesignationTypes();
-		}
-		
-		if (designationTypeExists(form)
-		
-		return false;		//return (designationTypes == null) ? false : designationTypes.contains(form.getd);
-	}
-	*/
 	
 	@Transactional(readOnly=true)
 	public boolean refDocTypeValid(FormDescriptor form) {

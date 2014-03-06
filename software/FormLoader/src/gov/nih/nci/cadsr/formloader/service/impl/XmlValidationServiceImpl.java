@@ -45,7 +45,7 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 	public XmlValidationServiceImpl() {}
 	
 	@Override
-	public FormCollection validateXml(FormCollection collection) throws FormLoaderServiceException{
+	public FormCollection validateXml(FormCollection collection) throws FormLoaderServiceException {
 		
 		if (collection == null) {
 			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_COLLECTION_NULL,
@@ -70,10 +70,36 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 		StaXParser parser = new StaXParser();
 		collection = parser.parseCollectionAndForms(collection, xmlPathName);		
 
-		assignErrors(collection, collection.getForms(), errors);
-		assignNameRepeatNumber(collection);
+		if (checkOnCollectionOK(collection, errors)) {
+			assignErrors(collection, collection.getForms(), errors);
+			assignNameRepeatNumber(collection);
+		}
 		
 		return collection;
+	}
+	
+	/**
+	 * A quick sanity check on the collection 
+	 * @param coll
+	 * @return
+	 */
+	protected boolean checkOnCollectionOK(FormCollection coll, List<XmlValidationError> errors) 
+			throws FormLoaderServiceException{
+		if (coll == null)
+			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_COLLECTION_NULL, 
+					"Unable to construct a valid form collection from xml. Please check your input file.");
+		
+		String collName = coll.getName();
+		if (collName == null || collName.length() == 0)
+			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_COLLECTION_NULL, 
+					"Collection name is missing in the xml. Please check your input file.");
+		
+		List<FormDescriptor> forms = coll.getForms();
+		if (forms == null || forms.size() == 0)
+			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_EMPTY_FORM_LIST, 
+					"There is 0 form in the xml. Please check your input file.");
+		
+		return true;
 	}
 	
 	/**
@@ -131,6 +157,10 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 		if (errorString.contains("collectionName"))
 			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_COLLECTION_NAME_MISSING, 
 					"Collection name is required in xml");
+		
+		if (errorString.contains("Cannot find the declaration of element 'form'"))
+			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_FORMS_ELEMENT_MISSING, 
+					"Xml doesn't have a \"forms\" element. Suspected to be a wrong file");
 	}
 	
 	/**

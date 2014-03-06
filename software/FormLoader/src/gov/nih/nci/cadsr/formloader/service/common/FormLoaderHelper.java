@@ -32,12 +32,6 @@ import javax.xml.validation.Validator;
 
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
-//import javax.xml.transform.Source;
-//import javax.xml.transform.stream.StreamSource;
-//import javax.xml.validation.Schema;
-//import javax.xml.validation.SchemaFactory;
-//import javax.xml.validation.Validator;
-
 
 public class FormLoaderHelper {
 	
@@ -45,45 +39,22 @@ public class FormLoaderHelper {
 	
 	private static Properties properties = null;
 	
-	public static String getProperty(String filepathBase, String key) {
+	public static String getProperty(String key) {
 		
 		if (properties == null)
-			properties = loadProperties(filepathBase);
+			properties = FormLoaderHelper.loadPropertiesFromClassPath();
 		
 		return (properties == null) ? "" : properties.getProperty(key);	    
 	}
 	
-	private static Properties loadProperties(String filePathBase) {
-		InputStream in = null;
+	public static Properties loadPropertiesFromClassPath() {
 		Properties props = new Properties();
-    	String fileNamePath = "";
-    	
-        try {
-        	fileNamePath = filePathBase +"/WEB-INF/formloader.properties";
-            File f = new File(fileNamePath);
-            in = new FileInputStream( f );
-            props.load(in);
-            
-        } catch ( Exception e ) { 
-        	logger.error("Unable to open property file at " + filePathBase);
-        	logger.error(e.getMessage());
-        	in = null; 
-        }
                
-        try {
-            if ( in == null ) {
-                // Try loading from classpath
-            	//Class cls = (Class) Class.forName("gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper");
-            	//ClassLoader cloader = cls.getClassLoader();
-            	//in = cloader.getClass().getResourceAsStream("config.properties");
-            	in = 
-            		    FormLoaderHelper.class.getClassLoader().getResourceAsStream("formloader.properties");
-                // Try loading properties from the file (if found)
-            	props.load(in);
-            }
-        }
-        catch ( Exception e ) {
-        	logger.error("Unable to open property file from classpath");
+        try { 
+        	InputStream	in = FormLoaderHelper.class.getClassLoader().getResourceAsStream("formloader.properties");
+            props.load(in);
+        } catch ( Exception e ) {
+        	logger.error("Error!! Unable to open property file from classpath");
         }
         
         return props;

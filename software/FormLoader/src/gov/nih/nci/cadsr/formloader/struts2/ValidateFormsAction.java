@@ -81,17 +81,16 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware {
 		                        );
 			ContentValidationServiceImpl xmlContentValidator = (ContentValidationServiceImpl)this.applicationContext.getBean("contentValidationService");
 			try {
-					//FormCollection aColl = new FormCollection(selectedFormsList);
-					//aColl.setCreatedBy((String)servletRequest.getSession().getAttribute("username"));
-					//aColl.setXmlFileName((String)servletRequest.getSession().getAttribute("filename"));
-					//aColl.setXmlPathOnServer((String)servletRequest.getSession().getAttribute("upload.file.path"));
-					validatedFormCollection = xmlContentValidator.validateXmlContent(aColl);
-					validatedForms = extractValidedForms(validatedFormCollection);
-		        	servletRequest.getSession().setAttribute("formCollection", aColl);
-		        	System.out.println(validatedForms.size()+" Forms selected for validation");
+				validatedFormCollection = xmlContentValidator.validateXmlContent(aColl);
+				validatedForms = extractValidedForms(validatedFormCollection);
+				
+				if (validatedForms.size() == 0)
+					addActionError("All your forms failed DB validation");
+				
+				servletRequest.getSession().setAttribute("formCollection", aColl);
+				logger.debug(validatedForms.size()+" Forms selected for validation");
 			} catch (FormLoaderServiceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				addActionError("Got FormLoaderServiceException: " + e.getMessage());
 			}
 	    }
     
@@ -145,15 +144,6 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware {
 		return false;
 	}
     
-    /*
-    public List<FormDescriptor> getSelectedFormsList() {
-		return selectedFormsList;
-	}
-
-	public void setSelectedFormsList(List<FormDescriptor> parsedFormsList) {
-		this.selectedFormsList = parsedFormsList;
-	}
-*/
     public Map<Integer, String> getCheckboxes() {
 		return checkboxes;
 	}
@@ -189,7 +179,7 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware {
 
 	public String getVersioningRulesUrl() {
 		if (versioningRulesUrl == null)
-			this.versioningRulesUrl = FormLoaderHelper.getProperty("", "formbuilder.versioning.url");
+			this.versioningRulesUrl = FormLoaderHelper.getProperty("formbuilder.versioning.url");
 		return versioningRulesUrl;
 	}
 

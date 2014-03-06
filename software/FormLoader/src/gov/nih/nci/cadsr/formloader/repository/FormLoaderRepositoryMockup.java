@@ -474,6 +474,20 @@ public class FormLoaderRepositoryMockup implements FormLoaderRepository {
 		return null;
 	}
 
+	@Override
+	public List<FormDescriptor> getAllFormsWithCollectionId(
+			String collectionSeqid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<FormV2TransferObject> getFormsInCadsrBySeqids(
+			List<String> formSeqids) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 	
 }
