@@ -134,9 +134,9 @@
 			<fileset dir="${web.dir}" excludes="CVS,**/*.class" />
 		</copy>
     	<copy todir="${build.dir}/WEB-INF/classes">
-    				<fileset dir="${resources.dir}" includes="**/*.properties,**/*.xml" />
-    			</copy>
-    	<copy file="${web.dir}/WEB-INF/formloader.properties" todir="${build.dir}/classes" overwrite="true"/>
+    		<fileset dir="${resources.dir}" includes="**/*.properties,**/*.xml" />
+    	</copy>
+
     </target>
 	
 	<target name="archive" depends="build" description="Create binary archive of all files in dist.home">
