@@ -26,6 +26,7 @@ the workflow status to "Retired Deleted". Users must use Form Builder applicatio
 -->
 <br><br>
 <s:actionerror />
+
 <s:if test="validatedForms.size() >= 1">
 	<s:form action="loadForms" id="loadForms" theme = "simple" method="post"> 
 		<div class="content">

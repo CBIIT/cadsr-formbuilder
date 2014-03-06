@@ -25,7 +25,6 @@ L--%>
    </div>
 </s:if>
 
-
 <s:form action="xmlFileUpload" method="post" enctype="multipart/form-data">
 <div id="content">
 <table>

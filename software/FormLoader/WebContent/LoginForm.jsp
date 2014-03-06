@@ -49,8 +49,6 @@
 
   <p>
 
-  <s:actionerror />
-
  <table>
 <s:form  method="post" action="login">
   <tr>
