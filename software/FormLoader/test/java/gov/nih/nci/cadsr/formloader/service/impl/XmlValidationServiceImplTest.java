@@ -283,4 +283,46 @@ public class XmlValidationServiceImplTest {
 			fail("Got exception in testValidatexmlWith5Forms: " + e.getMessage());
 		}
 	}
+	
+	@Test
+	public void testValidatexmlWithoutFormsElement() {
+		//entirely wrong xml but with forms and form element	
+		FormCollection aColl = new FormCollection();
+		try {
+			
+			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
+			aColl.setXmlFileName("3256357_v1_0_multi-protocols.xml");
+			aColl = this.xmlValService.validateXml(aColl);
+			List<FormDescriptor> forms = aColl.getForms();
+			
+			fail("Xml doesn't have forms element. Should have thrown exception");
+			
+		
+		} catch (FormLoaderServiceException e) {
+			String status = StatusFormatter.getStatusInXml(aColl);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\3256357_v1_0_multi-protocols-status-error.xml");
+			assertTrue(e.getErrorCode() == FormLoaderServiceException.ERROR_FORMS_ELEMENT_MISSING);
+		}
+	}
+	
+	@Test
+	public void testValidatexmlWithZeroForm() {
+		//entirely wrong xml but with forms and form element	
+		FormCollection aColl = new FormCollection();
+		try {
+			
+			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
+			aColl.setXmlFileName("load_forms-0.xml");
+			aColl = this.xmlValService.validateXml(aColl);
+			List<FormDescriptor> forms = aColl.getForms();
+			
+			fail("Xml doesn't have forms element. Should have thrown exception");
+			
+		
+		} catch (FormLoaderServiceException e) {
+			String status = StatusFormatter.getStatusInXml(aColl);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\load_forms-0-status.xml");
+			assertTrue(e.getErrorCode() == FormLoaderServiceException.ERROR_EMPTY_FORM_LIST);
+		}
+	}
 }

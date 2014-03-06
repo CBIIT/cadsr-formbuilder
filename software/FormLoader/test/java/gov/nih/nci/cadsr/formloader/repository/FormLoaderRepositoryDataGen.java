@@ -8,6 +8,7 @@ import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 import gov.nih.nci.cadsr.formloader.service.impl.ContentValidationServiceImpl;
 import gov.nih.nci.cadsr.formloader.service.impl.XmlValidationServiceImpl;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.PermissibleValueV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
@@ -457,6 +458,20 @@ public class FormLoaderRepositoryDataGen implements FormLoaderRepository {
 
 	@Override
 	public ValueDomainV2 getValueDomainBySeqid(String vdseqid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<FormDescriptor> getAllFormsWithCollectionId(
+			String collectionSeqid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<FormV2TransferObject> getFormsInCadsrBySeqids(
+			List<String> formSeqids) {
 		// TODO Auto-generated method stub
 		return null;
 	}

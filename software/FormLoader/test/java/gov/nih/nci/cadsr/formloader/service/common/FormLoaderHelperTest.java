@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 
@@ -61,17 +62,6 @@ public class FormLoaderHelperTest {
 		
 		assertTrue(colls.get(0) == c4);
 		
-	}
-	@Test
-	public void testGetPropertyFromAppPath() {
-		
-	}
-	
-//Test
-	public void testGetPropertyFromClasspath() {
-		String prop = FormLoaderHelper.getProperty("", "upload.file.path");
-		
-		assertNotNull(prop);
 	}
 	
 	@Test
@@ -162,4 +152,11 @@ public class FormLoaderHelperTest {
 		assertTrue(FormLoaderHelper.samePublicIdVersions("1234567", "2.0", 1234567, (float)2.0));
 	}
 	
+	@Test
+	public void testLoadPropertiesFromClassPath() {
+		Properties props = FormLoaderHelper.loadPropertiesFromClassPath();
+		String val = (String) props.get("formbuilder.detailsAction.url");
+		assertNotNull(val);
+		assertTrue(val.startsWith("https:"));
+	}
 }
