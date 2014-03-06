@@ -411,7 +411,12 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 					&& (form.getLoadStatus() == FormDescriptor.STATUS_LOADED ||
 					form.getLoadStatus() == FormDescriptor.STATUS_UNLOADED)) {
 				FormDescriptor cadsrForm = getMatchingCadsrForm(formSeqid, cadsrforms);
-				if (cadsrForm == null) continue;
+				if (cadsrForm == null) {
+					//TODO: this means the form has a record in FL tables but doesn't in cadsr tables
+					//This could mean the form has been deleted. We need a way to tell user that
+			
+					continue;
+				}
 
 				form.setVersion(cadsrForm.getVersion());
 				form.setLongName(cadsrForm.getLongName());
