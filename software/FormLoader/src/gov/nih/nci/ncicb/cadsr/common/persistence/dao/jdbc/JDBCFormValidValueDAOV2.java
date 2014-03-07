@@ -1,62 +1,48 @@
 package gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc;
 
-import gov.nih.nci.cadsr.formloader.repository.FormLoaderRepositoryImpl;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormValidValueTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ModuleTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
 import gov.nih.nci.ncicb.cadsr.common.exception.FatalException;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.FormValidValueDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.jdbc.oracle.ObjectTransformer;
 import gov.nih.nci.ncicb.cadsr.common.persistence.jdbc.oracle.OracleFormValidvalueList;
 import gov.nih.nci.ncicb.cadsr.common.persistence.jdbc.spring.OracleJBossNativeJdbcExtractor;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue;
+import gov.nih.nci.ncicb.cadsr.common.resource.Module;
 import gov.nih.nci.ncicb.cadsr.common.resource.Protocol;
-import gov.nih.nci.ncicb.cadsr.common.util.TimeUtils;
-import java.sql.Connection;
+import gov.nih.nci.ncicb.cadsr.common.resource.Question;
+import gov.nih.nci.ncicb.cadsr.common.util.StringUtils;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import oracle.jdbc.OracleTypes;
-import oracle.jdbc.driver.OracleConnection;
+import javax.sql.DataSource;
+
 import oracle.jdbc.OracleCallableStatement;
-
-//import oracle.jdbc.OracleConnection;
-//import oracle.jdbc.OracleCallableStatement;
-
+import oracle.jdbc.driver.OracleConnection;
 
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.object.MappingSqlQuery;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.object.StoredProcedure;
 import org.springframework.jdbc.object.SqlUpdate;
-
-import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.ModuleTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.FormValidValueTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.QuestionDAO;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.FormValidValueDAO;
-
-import gov.nih.nci.ncicb.cadsr.common.resource.Question;
-import gov.nih.nci.ncicb.cadsr.common.resource.Module;
-import gov.nih.nci.ncicb.cadsr.common.resource.Form;
-import gov.nih.nci.ncicb.cadsr.common.resource.DataElement;
-import gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue;
-import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocator;
-import gov.nih.nci.ncicb.cadsr.common.servicelocator.SimpleServiceLocator;
-import gov.nih.nci.ncicb.cadsr.common.util.StringUtils;
-
-import java.util.Collection;
-import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
+import org.springframework.jdbc.object.StoredProcedure;
+//import oracle.jdbc.OracleConnection;
+//import oracle.jdbc.OracleCallableStatement;
 
 public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
   implements FormValidValueDAO {
