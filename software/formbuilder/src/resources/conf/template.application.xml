@@ -6,10 +6,4 @@
          <context-root>FormBuilder</context-root>
       </web>
    </module>
-   <module>
-      <web>
-         <web-uri>FormLoader.war</web-uri>
-         <context-root>FormLoader</context-root>
-      </web>
-   </module>
 </application>
