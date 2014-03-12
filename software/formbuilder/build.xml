@@ -453,14 +453,6 @@
       	    	<include name="*.war"/>
       	    </patternset>
       	</fileset>
-      
-      	<!--
-      	<fileset dir="${wlib.dir}">
-          <patternset>
-            <include name="spring.jar"/>
-          </patternset>
-        </fileset>	 
-        -->       
       </ear>
     </target>
 	
