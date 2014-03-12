@@ -435,7 +435,7 @@
 		<delete file="${jsp.dir}/cvsdeploy.txt" />
 	</target>
 
-    <target name="-build-ear" depends="-jar_ejb,-build-war" description="builds formbuilder ear.">            
+    <target name="-build-ear" depends="-jar_ejb,-build-war,-build-formloader-war" description="builds formbuilder ear.">            
 	  <copy tofile="${artifacts.dir}/META-INF/application.xml" filtering="true">
 		<fileset file="${conf.dir}/template.application.xml" />
 	  </copy>
@@ -448,13 +448,12 @@
           </patternset>
         </fileset>
       	
-      	<!--
       	<fileset dir="${formloader.dir}/dist">
       		<patternset>
       	    	<include name="*.war"/>
       	    </patternset>
       	</fileset>
-       -->
+      
       	<!--
       	<fileset dir="${wlib.dir}">
           <patternset>
