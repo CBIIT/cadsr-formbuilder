@@ -276,7 +276,10 @@ $(document).ready(function()
 <table width="10%" align="center" cellpadding="1" cellspacing="1" border="0" >
   <tr>
     <td>
-      <a href='<%=params.getFormBuilderUrl() %>' target="_blank"><html:img src="i/add_more_forms.gif" border="0" alt="Add more forms"/></a>
+      <%--<a href='<%=params.getFormBuilderUrl() %>' target="_blank"><html:img src="i/add_more_forms.gif" border="0" alt="Add more forms"/></a>--%>
+          <CENTER><html:link href="<%=doneURL%>">				
+            <html:img src='<%="i/add_more_forms.gif"%>' border="0" alt="add more forms"/>
+          </html:link></CENTER>  
     </td>
   </tr>
 </table> 
