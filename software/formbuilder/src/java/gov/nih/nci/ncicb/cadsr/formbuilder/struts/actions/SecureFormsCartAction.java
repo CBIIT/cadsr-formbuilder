@@ -246,6 +246,7 @@ System.out.println( "Forms Queued in Cart : " + request.getSession().getAttribut
       Collection savedItems = new ArrayList();
 
       //Collection unsavedItems = new ArrayList();
+      FormBuilderServiceDelegate service = getFormBuilderService();
  
       
       if (FormCartOptionsUtil.instance().writeInV1Format()){
@@ -270,16 +271,27 @@ System.out.println( "Forms Queued in Cart : " + request.getSession().getAttribut
       if (true){ // we always write the formCartV2 cart now
     	  try {
     		  Collection items = new ArrayList();
+    		  Collection displayItemsToRemove = new ArrayList();
 
     		  //Get the cart in the session
     		  CDECart sessionCart =
     			  (CDECart) this.getSessionObject(request, CaDSRConstants.FORMS_CART_V2);
     		  CDECartItem item = null;
+    		  
+    		  FormDisplayCartOCIImpl userFormDisplayCart = (FormDisplayCartOCIImpl) this
+    					.getSessionObject(request, CaDSRConstants.FORMS_DISPLAY_CART);
 
     		  for (int i = 0; i < selectedDeleteItems.length; i++) {
     			  items.add(selectedDeleteItems[i]);
     		  }
+	  		  for (Object version1FormId : selectedDeleteItems) {
+					Form crf = service.getFormDetails((String)version1FormId);
+					displayItemsToRemove.add(convertToDisplayItem(crf));
+					userFormDisplayCart.removeFormDisplayCart((String)version1FormId);
+			  }
     		  sessionCart.removeDataElements(items);  // (removeDataElements works on native id and doesn't care about element type)
+    		  userFormDisplayCart.removeElements(displayItemsToRemove);
+    		  
     	  }
     	  catch (Exception exp) {
     		  log.error("Exception on removeItems from " + CaDSRConstants.FORMS_CART_V2 + " ", exp);
