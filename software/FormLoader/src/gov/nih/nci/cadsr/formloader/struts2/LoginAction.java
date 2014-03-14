@@ -31,6 +31,7 @@ public class LoginAction extends ActionSupport implements SessionAware, ServletR
 	private String password;
 	private String appname; 
 	private String [] apps = {"FormBuilder", "FormLoader" };
+	
 	SessionMap<String, String> sessionmap;
 	boolean clear = false;
 	
@@ -42,11 +43,13 @@ public class LoginAction extends ActionSupport implements SessionAware, ServletR
 		UserManagerDAO userManagerDAOV2 = (UserManagerDAO)applicationContext.getBean("userManagerDAO");
 
 		if (userManagerDAOV2.validUser(username, password)==true) {
-			Map session = ActionContext.getContext().getSession();
-			setSession(session);
+			//Map session = ActionContext.getContext().getSession();
+			//setSession(session);
+			this.sessionmap.put(FormLoaderActionConstants.KEY_LOGIN, "true");
+			this.sessionmap.put(FormLoaderActionConstants.KEY_USER_NAME, username);
 			return SUCCESS;
-		} else
-		{
+		} else {
+			addActionError("Invalid login. Please try again.");
 			return ERROR;
 		}
 
@@ -96,9 +99,9 @@ public class LoginAction extends ActionSupport implements SessionAware, ServletR
 	@Override
 	public void setSession(Map<String, Object> map) {
 		sessionmap = (SessionMap)map;
-		sessionmap.put("login","true");
-		sessionmap.put("username",getUsername());
 	}
+	
+	
 	
 	public String clear()
 	{
