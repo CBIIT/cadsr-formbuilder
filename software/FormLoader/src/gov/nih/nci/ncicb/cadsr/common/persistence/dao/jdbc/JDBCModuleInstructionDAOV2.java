@@ -4,9 +4,7 @@ import gov.nih.nci.ncicb.cadsr.common.dto.InstructionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ModuleInstructionDAO;
 import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
-import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocator;
-import gov.nih.nci.ncicb.cadsr.common.servicelocator.SimpleServiceLocator;
-import java.util.Collection;
+
 import java.util.List;
 
 import javax.sql.DataSource;
