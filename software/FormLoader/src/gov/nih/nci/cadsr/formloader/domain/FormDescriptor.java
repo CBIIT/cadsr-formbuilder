@@ -3,6 +3,8 @@ package gov.nih.nci.cadsr.formloader.domain;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.StatusFormatter;
 import gov.nih.nci.cadsr.formloader.service.common.XmlValidationError;
+import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,6 +64,9 @@ public class FormDescriptor implements java.io.Serializable {
 	String footerInstruction;
 	String categoryName;
 	//pass2
+	
+	List<DesignationTransferObjectExt> designations;
+	List<DefinitionTransferObject> definitions;
 	
 	Date createdDate;  //cadsr db
 	Date modifiedDate;	//cadsr db
@@ -487,6 +492,22 @@ public class FormDescriptor implements java.io.Serializable {
 
 	public void setVersionCadsr(String versionCadsr) {
 		this.versionCadsr = versionCadsr;
+	}
+	
+	public List<DesignationTransferObjectExt> getDesignations() {
+		return designations;
+	}
+
+	public void setDesignations(List<DesignationTransferObjectExt> designations) {
+		this.designations = designations;
+	}
+
+	public List<DefinitionTransferObject> getDefinitions() {
+		return definitions;
+	}
+
+	public void setDefinitions(List<DefinitionTransferObject> definitions) {
+		this.definitions = definitions;
 	}
 
 	/**
