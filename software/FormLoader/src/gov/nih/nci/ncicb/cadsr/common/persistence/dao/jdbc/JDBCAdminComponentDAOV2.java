@@ -488,6 +488,18 @@ public class JDBCAdminComponentDAOV2 extends JDBCBaseDAOV2
         }
         return desigs;
     }
+    
+//    public List<Designation> getDesignationsByNames(List<String> designNames) {
+//        DesignationQuery query = new DesignationQuery();
+//        query.setDataSource(this.dataSource);
+//        query.setSql(type);
+//        List<Designation> desigs = query.getDesignations(acIdSeq, type);
+//        for (Designation designation:desigs){
+//            List<ClassSchemeItem> cscsiList = getAcAttrCSCSIByAcAttrId(designation.getDesigIDSeq());
+//            ((DesignationTransferObject)designation).setCsCsis(cscsiList);
+//        }
+//        return desigs;
+//    }
 
     public List<Definition> getDefinitions(String acIdSeq){
         DefinitionQuery query = new DefinitionQuery();
