@@ -70,4 +70,7 @@ public interface FormLoaderRepository {
 	public List<FormDescriptor> getAllFormsWithCollectionId(String collectionSeqid);
 	
 	public List<FormV2TransferObject> getFormsInCadsrBySeqids(List<String> formSeqids);
+	
+	public boolean designationTypeExists(String designName);
+	public boolean definitionTypeValid(String definitionType);
 }
