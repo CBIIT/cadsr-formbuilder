@@ -1,38 +1,29 @@
 package gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc;
 
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ValueDomainDAOV2;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ValueDomainV2DAO;
-import gov.nih.nci.ncicb.cadsr.common.dto.ValueDomainV2TransferObject;
-import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomainV2;
-import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomain;
-import gov.nih.nci.ncicb.cadsr.common.resource.ConceptDerivationRule;
-import gov.nih.nci.ncicb.cadsr.common.resource.PermissibleValueV2;
-import gov.nih.nci.ncicb.cadsr.common.resource.ValueMeaningV2;
 import gov.nih.nci.ncicb.cadsr.common.dto.ConceptDerivationRuleTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.PermissibleValueV2TransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ValueDomainV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ValueMeaningV2TransferObject;
-import gov.nih.nci.ncicb.cadsr.common.resource.Definition;
-
-import org.apache.log4j.Logger;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.object.MappingSqlQuery;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.SqlParameter;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ValueDomainDAOV2;
+import gov.nih.nci.ncicb.cadsr.common.resource.ConceptDerivationRule;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomain;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomainV2;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValueMeaningV2;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.sql.DataSource;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Iterator;
 
-import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocator;
-import gov.nih.nci.ncicb.cadsr.common.servicelocator.SimpleServiceLocator;
+import javax.sql.DataSource;
+
+import org.apache.log4j.Logger;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.object.MappingSqlQuery;
 
 /**
  * Mod. from JDBCValueDomainV2DAO
