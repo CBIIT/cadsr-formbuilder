@@ -86,7 +86,7 @@ public class JDBCValueDomainDAOV2Test {
 		
 		defs = valueDomainV2Dao.getDesignationNamesByVMId("2509CE87-E735-5C23-E044-0003BA3F9857");
 		assertNotNull(defs);
-		assertTrue(defs.size() == 2);
+		assertTrue(defs.size() > 0);
 	}
 	
 	@Test

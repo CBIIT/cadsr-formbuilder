@@ -34,6 +34,12 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class FormLoaderRepositoryDataGen implements FormLoaderRepository {
 
+	@Override
+	public boolean definitionTypeValid(String definitionType) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	String mockRepoPath = ".\\test\\data\\serializedDtos\\";
 
 	JDBCFormDAOV2 formV2Dao;
@@ -474,6 +480,12 @@ public class FormLoaderRepositoryDataGen implements FormLoaderRepository {
 			List<String> formSeqids) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean designationTypeExists(String designName) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

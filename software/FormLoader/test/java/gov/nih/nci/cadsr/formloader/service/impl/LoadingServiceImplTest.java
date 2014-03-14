@@ -141,7 +141,7 @@ public void testUserHasRight() {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void testLoadNewVersion() {
 		this.prepareCollectionToLoad(".\\.\\test\\data", "3256357_v1_0_newform-partial-newversion.xml");
 		try {

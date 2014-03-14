@@ -87,4 +87,30 @@ public class FormLoaderRepositoryImplTest {
 		vd = this.repository.getValueDomainBySeqid("fake");
 		assertNull(vd);
 	}
+	
+	@Test
+	public void testDesignationTypeExists() {
+		boolean exist = this.repository.designationTypeExists("sfafa");
+		assertFalse(exist);
+		
+		exist = this.repository.designationTypeExists("ABBREVIATION");
+		assertTrue(exist);
+		
+		//should be case sensitive
+		exist = this.repository.designationTypeExists("abbrviation");
+		assertFalse(exist);
+	}
+	
+	@Test
+	public void testDefinitionTypeValid() {
+		boolean exist = this.repository.definitionTypeValid(null);
+		assertFalse(exist);
+		
+		exist = this.repository.definitionTypeValid("NCI");
+		assertTrue(exist);
+		
+		//should be case sensitive
+		exist = this.repository.definitionTypeValid("nci");
+		assertFalse(exist);
+	}
 }
