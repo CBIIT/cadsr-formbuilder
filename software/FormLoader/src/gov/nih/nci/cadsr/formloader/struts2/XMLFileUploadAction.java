@@ -102,7 +102,7 @@ ServletRequestAware, ValidationAware{
     	 	
     	try {
 
-    		uploadedfile = new File(uploadFilePath +"\\" + this.fileName);
+    		uploadedfile = new File(uploadFilePath +"/" + this.fileName);
 
     		inStream = new FileInputStream(xmlFile);
     		outStream = new FileOutputStream(uploadedfile);
@@ -142,8 +142,8 @@ ServletRequestAware, ValidationAware{
 		String userName = (String)servletRequest.getSession().getAttribute("username");
 		
 		FormCollection aColl = new FormCollection();
-		aColl.setXmlPathOnServer(FormLoaderHelper.getProperty("upload.file.path") +"\\");
-		servletRequest.getSession().setAttribute("upload.file.path", FormLoaderHelper.getProperty("upload.file.path") +"\\");
+		aColl.setXmlPathOnServer(FormLoaderHelper.getProperty("upload.file.path") +"/");
+		servletRequest.getSession().setAttribute("upload.file.path", FormLoaderHelper.getProperty("upload.file.path") +"/");
 		aColl.setXmlFileName(this.fileName);
 		//aColl.setDescription(description);
 		//aColl.setName(collectionName);
