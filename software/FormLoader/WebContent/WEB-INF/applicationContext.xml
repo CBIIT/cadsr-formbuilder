@@ -64,7 +64,7 @@
 	</bean>
 	
 	<bean id="repository"
-		class="gov.nih.nci.cadsr.formloader.repository.FormLoaderRepositoryImpl"> 
+		class="gov.nih.nci.cadsr.formloader.repository.impl.FormLoaderRepositoryImpl"> 
 		<property name="formV2Dao">
 			<ref bean="formV2Dao" />
 		</property>
@@ -102,7 +102,7 @@
 	</bean>
 	
 	<bean id="loadRepository"
-		class="gov.nih.nci.cadsr.formloader.repository.LoadServiceRepositoryImpl"> 
+		class="gov.nih.nci.cadsr.formloader.repository.impl.LoadServiceRepositoryImpl"> 
 		<property name="formV2Dao">
 			<ref bean="formV2Dao" />
 		</property>

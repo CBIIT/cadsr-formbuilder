@@ -12,7 +12,7 @@ import java.util.List;
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.repository.FormLoaderRepository;
-import gov.nih.nci.cadsr.formloader.repository.LoadServiceRepositoryImpl;
+import gov.nih.nci.cadsr.formloader.repository.impl.LoadServiceRepositoryImpl;
 import gov.nih.nci.cadsr.formloader.service.UnloadingService;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
@@ -38,14 +38,6 @@ public class UnloadingServiceImpl implements UnloadingService {
 	public void setLoadRepository(LoadServiceRepositoryImpl loadRepository) {
 		this.loadRepository = loadRepository;
 	}
-
-//	public LoadServiceRepositoryImpl getRepository() {
-//		return repository;
-//	}
-//
-//	public void setRepository(LoadServiceRepositoryImpl repository) {
-//		this.repository = repository;
-//	}
 
 	@Override
 	@Transactional

@@ -5,12 +5,14 @@ import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.ModuleDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.QuestionDescriptor;
 import gov.nih.nci.cadsr.formloader.repository.FormLoaderRepository;
-import gov.nih.nci.cadsr.formloader.repository.FormLoaderRepositoryImpl;
+import gov.nih.nci.cadsr.formloader.repository.impl.FormLoaderRepositoryImpl;
 import gov.nih.nci.cadsr.formloader.service.ContentValidationService;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.PermissibleValueV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
@@ -62,7 +64,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		List<FormDescriptor> formHeaders = aCollection.getForms();
 		determineLoadType(formHeaders);
 		 
-		validateFormInfo(formHeaders, aCollection.getCreatedBy());
+		validateFormInfo(xmlPathName, formHeaders, aCollection.getCreatedBy());
 		
 		validateQuestions(xmlPathName, formHeaders);
 		
@@ -135,7 +137,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 	 *  
 	 * @param formDescriptors
 	 */
-	protected void validateFormInfo(List<FormDescriptor> formDescriptors, String loggedinUser) {
+	protected void validateFormInfo(String xmlPathName, List<FormDescriptor> formDescriptors, String loggedinUser) {
 		
 		for (FormDescriptor form : formDescriptors) {		
 			if (!form.isSelected()) 
@@ -151,8 +153,90 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			
 			verifyFormType(form);
 			verifyCredential(form, loggedinUser);
+		
+			StaXParser parser = new StaXParser();
+			parser.parseFormDetails(xmlPathName, form, form.getIndex());
+			verifyDesignations(form, parser.getDesignations());
+			verifyDefinitions(form, parser.getDefinitions());
 			
 		}
+	}
+	
+	/**
+	 * Check on the designations for a form from the input xml.
+	 * 
+	 * 1. designation name can't be empty and type has to match one in db
+	 * 2. languageName could be invalid and be defaulted to ENGLISH
+	 * 3. If <classification> is present, use its publicid+version AND the classificationSchemaName's publicid_version to validate
+	 * 4. If exist, create associate between form and designation
+	 * 5. If not, create then create association (for update form)
+	 * 
+	 * If the context in the designation block is valid, use that. Otherwise, use the form's
+	 * 
+	 * @param form
+	 * @param designations
+	 */
+	protected void verifyDesignations(FormDescriptor form, List<DesignationTransferObjectExt> designations) {
+		
+		List<DesignationTransferObjectExt> desigs = new ArrayList<DesignationTransferObjectExt>();
+		
+		if (designations == null || designations.size() == 0)
+			return;
+		
+		for (DesignationTransferObjectExt des : designations) {
+			if (des.getName() == null || des.getName().length() == 0) 
+				continue;  //how to report that?
+			
+			if (!repository.designationTypeExists(des.getType())) {
+				continue;
+			}
+			
+			//TODO: check classification
+			
+			//if good, add to the form
+			desigs.add(des);
+		}		
+		
+		if (desigs.size() > 0)
+			form.setDesignations(designations);
+	}
+	
+	/**
+	 * Check on definitions to the form from xml
+	 * 
+	 * 1. Definition text can't be empty and type has to match one in db
+	 * 2. languageName could be invalid and be defaulted to ENGLISH
+	 * 3. If <classification> is present, use its publicid+version AND the classificationSchemaName's publicid_version to validate
+	 * 4. If exist, create associate between form and designation
+	 * 5. If not, create then create association (for update form)
+	 * 
+	 * If the context in the designation block is valid, use that. Otherwise, use the form's
+	 * @param form
+	 * @param designations
+	 */
+	protected void verifyDefinitions(FormDescriptor form, List<DefinitionTransferObject> definitions) {
+		
+		List<DefinitionTransferObject> defs = new ArrayList<DefinitionTransferObject>();
+		
+		if (definitions == null || definitions.size() == 0)
+			return;
+		
+		for (DefinitionTransferObject def : definitions) {
+			if (def.getDefinition() == null || def.getDefinition().length() == 0) 
+				continue;  //how to report that?
+			
+			if (!repository.definitionTypeValid(def.getType())) {
+				continue;
+			}
+			
+			//TODO: check classification
+			
+			//if good, add to the form
+			defs.add(def);
+		}		
+		
+		if (defs.size() > 0)
+			form.setDefinitions(defs);
 	}
 	
 	/**

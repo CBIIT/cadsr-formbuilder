@@ -35,11 +35,11 @@
 		</action>
 		
 		<action name="clearlogin" class="gov.nih.nci.cadsr.formloader.struts2.LoginAction" method="clear"> 
-			<result>LoginForm.jsp</result>
+			<result name="success">LoginForm.jsp</result>
 			<result name="input">LoginForm.jsp</result>
 			<result name="error">LoginForm.jsp</result>
 		</action>
-		
+				
 		<action name="logout" class="gov.nih.nci.cadsr.formloader.struts2.LogoutAction">
 			<result name="success" type="redirect">LoginForm.jsp</result>
 		</action>
@@ -47,6 +47,7 @@
 		<action name="home" class="gov.nih.nci.cadsr.formloader.struts2.HomeAction">
 			<interceptor-ref name="loggingStack"/> 
 			<result name="success" type="tiles">/home.tiles</result>
+			<result name="backToLogin">sessionExpired.jsp</result>
 		</action>
 		
 		<action name="xmlFileUpload" class="gov.nih.nci.cadsr.formloader.struts2.XMLFileUploadAction" method="execute">
@@ -65,28 +66,31 @@
 	            <interceptor-ref name="workflow">
 	                <param name="excludeMethods">input,back,cancel,browse</param>
 	            </interceptor-ref>
+	        <interceptor-ref name="loggingStack"/>
 		    <result name="success" type="tiles">/upload.parse.tiles</result>
 		    <result name="input" type="tiles">/upload.tiles</result>
 		    <result name="error" type="tiles">/upload.tiles</result>
+		    <result name="backToLogin">sessionExpired.jsp</result>
 		</action>
 		
 		
 		
 		<action name="cancelloadform" class="gov.nih.nci.cadsr.formloader.struts2.ValidateXMLAction">
+			<interceptor-ref name="loggingStack"/>
 			<result name="success" type="tiles">/home.tiles</result>
+			<result name="backToLogin">sessionExpired.jsp</result>
 		</action>
-
 
 		<action name="uploadForm" class="gov.nih.nci.cadsr.formloader.struts2.XMLFileUploadInitialAction">
-			<result type="tiles">/upload.tiles</result>
-			<result name="input" type="tiles">/upload.tiles</result>
-			<result name="error" type="tiles">/upload.tiles</result>
+			<result name="success" type="tiles">/upload.tiles</result>
 		</action>
-		
+ 	
 		<action name="cancelFileUpload" class="gov.nih.nci.cadsr.formloader.struts2.XMLFileUploadAction" method="clear"> 
+			<interceptor-ref name="loggingStack"/>
 			<result type="tiles">/upload.tiles</result>
 			<result name="input" type="tiles">/upload.tiles</result>
 			<result name="error" type="tiles">/upload.tiles</result>
+			<result name="backToLogin">sessionExpired.jsp</result>
 		</action>
 		
 		<action name="searchFormCollections" 
@@ -94,20 +98,25 @@
 			<interceptor-ref name="loggingStack"></interceptor-ref>
     			<result name="success" type="tiles">/search.tiles</result>
     			<result type="tiles">/search.tiles</result>
+    			<result name="backToLogin">sessionExpired.jsp</result>
 		</action>
 		
 		<action name="sortCollectionListByName" 
 			class="gov.nih.nci.cadsr.formloader.struts2.SearchLoadedCollectionAction" method="sortCollectionsByName">
+			<interceptor-ref name="loggingStack"/>
 			<interceptor-ref name="loggingStack"></interceptor-ref>
     			<result name="success" type="tiles">/search.tiles</result>
     			<result type="tiles">/search.tiles</result>
+    			<result name="backToLogin">sessionExpired.jsp</result>
 		</action>
 		
 		<action name="sortCollectionListByDate" 
 			class="gov.nih.nci.cadsr.formloader.struts2.SearchLoadedCollectionAction" method="sortCollectionsByDate">
+			<interceptor-ref name="loggingStack"/>
 			<interceptor-ref name="loggingStack"></interceptor-ref>
     			<result name="success" type="tiles">/search.tiles</result>
     			<result type="tiles">/search.tiles</result>
+    			<result name="backToLogin">sessionExpired.jsp</result>
 		</action>
 		
  		<action name="validateForms" 
@@ -116,16 +125,21 @@
 				<result name="input" type="tiles">/upload.parse.tiles</result>
     			<result name="success" type="tiles">/upload.validate.tiles</result>
     			<result name="error" type="tiles">/upload.parse.tiles</result>
+    			<result name="backToLogin">sessionExpired.jsp</result>
 		</action>
 		
 		<action name="showValidationMessages" 
 			class="gov.nih.nci.cadsr.formloader.struts2.ShowValidationMessagesAction">
+			<interceptor-ref name="loggingStack"/>
 				<result name="success">ViewDBValidationMessages.jsp</result>
     			<result name="error">ViewDBValidationMessages.jsp</result>
+    			<result name="backToLogin">sessionExpired.jsp</result>
 		</action>
 		
 		<action name="cancelDBValidate" class="gov.nih.nci.cadsr.formloader.struts2.ValidateFormsAction" method="cancel">
+			<interceptor-ref name="loggingStack"/>
 			<result name="success" type="tiles">/upload.tiles</result>
+			<result name="backToLogin">sessionExpired.jsp</result>
 		</action>
 		
  		<action name="loadForms" 
@@ -133,16 +147,21 @@
 			<interceptor-ref name="loggingStack"></interceptor-ref>
 				<result  name="input" type="tiles">/upload.validate.tiles</result>
     			<result name="success" type="tiles">/upload.summary.tiles</result>
+    			<result name="backToLogin">sessionExpired.jsp</result>
 		</action>
 		
 		<action name="cancelLoad" class="gov.nih.nci.cadsr.formloader.struts2.LoadFormsAction" method="cancel">
+			<interceptor-ref name="loggingStack"></interceptor-ref>
 			<result name="success" type="tiles">/upload.tiles</result>
+			<result name="backToLogin">sessionExpired.jsp</result>
 		</action>
 		
 		<action name="cancelFileUpload" class="gov.nih.nci.cadsr.formloader.struts2.LoadFormsAction" method="cancel"> 
+		<interceptor-ref name="loggingStack"></interceptor-ref>
 			<result type="tiles">/upload.tiles</result>
 			<result name="input" type="tiles">/upload.tiles</result>
 			<result name="error" type="tiles">/upload.tiles</result>
+			<result name="backToLogin">sessionExpired.jsp</result>
 		</action>
 		
 		<action name="unloadForms" 
@@ -151,6 +170,7 @@
     			<result name="success" type="tiles">/unloadSummary.tiles</result>
     			<result name="error" type="tiles">/search.tiles</result>
     			<result type="tiles">/unloadSummary.tiles</result>
+    			<result name="backToLogin">sessionExpired.jsp</result>
 		</action> 
 		
 	</package>
