@@ -488,6 +488,18 @@ public class FormLoaderRepositoryMockup implements FormLoaderRepository {
 		return null;
 	}
 
+	@Override
+	public boolean designationTypeExists(String designName) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean definitionTypeValid(String definitionType) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	
 	
 }
