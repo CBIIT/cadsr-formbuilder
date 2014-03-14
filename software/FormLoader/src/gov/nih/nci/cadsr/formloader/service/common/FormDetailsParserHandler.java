@@ -4,6 +4,7 @@ import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.RefdocTransferObjectExt;
+import gov.nih.nci.ncicb.cadsr.common.resource.ClassSchemeItem;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -32,7 +33,7 @@ public class FormDetailsParserHandler extends ParserHandler {
 	List<String> protocolIds = new ArrayList<String>();
 	List<DesignationTransferObjectExt> designations = new ArrayList<DesignationTransferObjectExt>();
 	
-	DesignationTransferObjectExt currDesignation;
+	DesignationTransferObjectExt currDesignation;	
 	RefdocTransferObjectExt currRefDoc;
 	DefinitionTransferObject currDefinition;
 	
@@ -71,6 +72,9 @@ public class FormDetailsParserHandler extends ParserHandler {
 				if (nodeQueue.peek().equals(StaXParser.FORM)) {
 					this.currDesignation = new DesignationTransferObjectExt();
 					currClassName = "DesignationTransferObject";
+					
+					//ClassSchemeItem csi = currDesignation.getCsCsis().get(0);
+					//csi.get
 				}
 				
 			} else if (localName.equals(StaXParser.DEFINITION)) {
