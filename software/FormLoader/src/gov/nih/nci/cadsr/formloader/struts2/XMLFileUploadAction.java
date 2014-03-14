@@ -63,12 +63,6 @@ ServletRequestAware, ValidationAware{
 		return file;
 	}
 
-
-	//public String getCollectionName() {
-	//	return collectionName;
-	//}
-
-
 	public String getContentType() {
 		return contentType;
 	}
