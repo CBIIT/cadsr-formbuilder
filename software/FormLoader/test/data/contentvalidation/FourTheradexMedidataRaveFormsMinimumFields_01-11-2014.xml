@@ -1277,7 +1277,7 @@
       </module>
    </form>
    <form num="2">
-      <context>Theradex</context>
+      <context>TheradexX</context>
       <dateCreated>2014-01-11T11:42:24.2-05:00</dateCreated>
       <dateModified>2014-01-11T11:42:24.2-05:00</dateModified>
       <longName>Histology and Disease</longName>
@@ -1557,7 +1557,7 @@
       </module>
    </form>
    <form num="3">
-      <context>Theradex</context>
+      <context>TheradexX</context>
       <dateCreated>2014-01-11T11:42:24.2-05:00</dateCreated>
       <dateModified>2014-01-11T11:42:24.2-05:00</dateModified>
       <longName>Administrative Enrollment</longName>
@@ -2935,7 +2935,7 @@
       </module>
    </form>
    <form num="4">
-      <context>Theradex</context>
+      <context>TheradexX</context>
       <dateCreated>2014-01-11T11:42:24.2-05:00</dateCreated>
       <dateModified>2014-01-11T11:42:24.2-05:00</dateModified>
       <longName>Eligibility Checklist</longName>
