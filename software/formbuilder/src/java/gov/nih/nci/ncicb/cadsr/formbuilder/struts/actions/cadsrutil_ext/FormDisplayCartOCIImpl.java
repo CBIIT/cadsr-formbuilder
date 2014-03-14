@@ -284,6 +284,28 @@ public class FormDisplayCartOCIImpl implements
 		}
 	}
 	
+	public void removeElements(Collection items) {
+		Map<String, String> objectDisplayNames = new HashMap<String, String> ();
+		Map<String, Object>  objects = new HashMap<String, Object>();
+		HashSet<CartObject> forRemoval = new HashSet<CartObject>();
+		
+		for(Object o: items) {
+			FormDisplayCartTransferObject item = (FormDisplayCartTransferObject) o;
+			CartObject co = getNativeObject(item.getIdseq());
+			
+			objectDisplayNames.put(item.getIdseq(), item.getLongName());
+			objects.put(item.getIdseq(), item);
+			
+			if(co != null)
+				forRemoval.add(co);
+		}
+		try {
+			oCart = cartClient.removeObjectCollection(oCart, forRemoval);
+		} catch (ObjectCartException oce) {
+			throw new RuntimeException("mergeElements: Error restoring the POJO Collection", oce);
+		}
+	}
+	
 	public Collection getFormDisplayObjects() {
 		log.debug("getFormDisplayObjects " + formDisplayObjects.size() + " objects");		
 		return formDisplayObjects;

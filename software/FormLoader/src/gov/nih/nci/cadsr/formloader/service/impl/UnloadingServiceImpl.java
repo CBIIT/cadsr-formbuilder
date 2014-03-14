@@ -1,6 +1,5 @@
 package gov.nih.nci.cadsr.formloader.service.impl;
-
-import org.jboss.xnio.log.Logger;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
