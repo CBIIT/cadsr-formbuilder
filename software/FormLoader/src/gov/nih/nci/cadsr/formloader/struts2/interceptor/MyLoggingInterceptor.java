@@ -27,7 +27,7 @@ public class MyLoggingInterceptor implements Interceptor{
 		} else if (isLoginSessionActive()) {
 			result = invocation.invoke();
 		} else {
-			return "loginPage";
+			return "backToLogin";
 		}
 
 		long endTime = System.currentTimeMillis();
@@ -46,6 +46,8 @@ public class MyLoggingInterceptor implements Interceptor{
 	}
 	
 	private boolean isLoginAction(ActionInvocation arg0) {
+		String name = arg0.getInvocationContext().getName();
+		
 		return "login".equals(arg0.getInvocationContext().getName())
 				|| "actionLogin".equals(arg0.getInvocationContext().getName())
 				|| "loginPage".equals(arg0.getInvocationContext().getName())
