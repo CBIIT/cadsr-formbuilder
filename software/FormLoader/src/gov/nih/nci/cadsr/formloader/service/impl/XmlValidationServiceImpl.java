@@ -91,7 +91,7 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 		
 		String collName = coll.getName();
 		if (collName == null || collName.length() == 0)
-			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_COLLECTION_NULL, 
+			throw new FormLoaderServiceException(FormLoaderServiceException.ERROR_COLLECTION_NAME_MISSING, 
 					"Collection name is missing in the xml. Please check your input file.");
 		
 		List<FormDescriptor> forms = coll.getForms();
