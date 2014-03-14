@@ -337,6 +337,10 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			if (form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW)) {
 				designateForm(formSeqid, contextSeqId, form.getCreatedBy(), desig);
 			} else {
+				
+				//TODO: this block is for update form only
+				
+				
 				//Check context name in designation elem from xml. If that's not valid, use form's
 				String desigContext = desig.getContextName();
 				String desgContextSeqid = this.getContextSeqIdByName(desigContext);

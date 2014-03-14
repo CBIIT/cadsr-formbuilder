@@ -518,22 +518,23 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	}
 	
 	@Transactional(readOnly=true)
-	public boolean definitionTypeValid(FormDescriptor form) {
+	public boolean definitionTypeValid(String definitionType) {
+		
 		if (definitionTypes == null) {
 			definitionTypes = this.formV2Dao.getAllDefinitionTypes();
 		}
 		
-		return false;
+		return (definitionTypes == null || definitionType == null) ? false : definitionTypes.contains(definitionType);
 	}
 	
-	@Transactional(readOnly=true)
-	public boolean refDocTypeValid(FormDescriptor form) {
-		if (refdocTypes == null) {
-			refdocTypes = this.formV2Dao.getAllRefdocTypes();
-		}
-		
-		return false;
-	}
+//	@Transactional(readOnly=true)
+//	public boolean refDocTypeValid(FormDescriptor form) {
+//		if (refdocTypes == null) {
+//			refdocTypes = this.formV2Dao.getAllRefdocTypes();
+//		}
+//		
+//		return false;
+//	}
 	
 	@Transactional(readOnly=true)
 	public void checkWorkflowStatusName(FormDescriptor form) {
