@@ -98,7 +98,9 @@
 		<property name="moduleInstructionV2Dao">
 			<ref bean="moduleInstructionV2Dao" />
 		</property>
-		
+		<property name="protocolV2Dao">
+			<ref bean="protocolV2Dao" />
+		</property>
 	</bean>
 	
 	<bean id="loadRepository"
