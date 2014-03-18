@@ -538,6 +538,12 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
     	return qcIdseq;
     }
     
+    /**
+     * Due to the fact that protocol id is a required in table, this methode should be deprecated
+     * 
+     * @param protocolIds
+     * @return
+     */
     public HashMap<String, String> getProtocolSeqidsByIds(List<String> protocolIds) {
     	String sql = 
     			"select proto_idseq, protocol_Id, conte_idseq, long_name from sbrext.protocols_view_ext " +

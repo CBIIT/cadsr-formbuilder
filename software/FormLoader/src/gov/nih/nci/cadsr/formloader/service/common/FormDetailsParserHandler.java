@@ -3,6 +3,7 @@ package gov.nih.nci.cadsr.formloader.service.common;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
+import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.RefdocTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.resource.ClassSchemeItem;
 
@@ -30,12 +31,14 @@ public class FormDetailsParserHandler extends ParserHandler {
 	
 	List<RefdocTransferObjectExt> refdocs = new ArrayList<RefdocTransferObjectExt>();
 	List<DefinitionTransferObject> definitions = new ArrayList<DefinitionTransferObject>();
-	List<String> protocolIds = new ArrayList<String>();
+	//List<String> protocolIds = new ArrayList<String>();
+	List<ProtocolTransferObjectExt> protocols = new ArrayList<ProtocolTransferObjectExt>();
 	List<DesignationTransferObjectExt> designations = new ArrayList<DesignationTransferObjectExt>();
 	
 	DesignationTransferObjectExt currDesignation;	
 	RefdocTransferObjectExt currRefDoc;
 	DefinitionTransferObject currDefinition;
+	ProtocolTransferObjectExt currProtocol;
 	
 	String currClassName;
 	String methodName;
@@ -66,7 +69,6 @@ public class FormDetailsParserHandler extends ParserHandler {
 		
 		
 		if (this.startFormIdx == this.currFormIdx) {
-				
 
 			if (localName.equals(StaXParser.DESIGNATION)) {
 				if (nodeQueue.peek().equals(StaXParser.FORM)) {
@@ -88,7 +90,13 @@ public class FormDetailsParserHandler extends ParserHandler {
 					this.currRefDoc = new RefdocTransferObjectExt();
 					currClassName = "RefdocTransferObjectExt";
 				}
-			}  else if (localName.equals(StaXParser.NAME)) {
+			}  else if (localName.equals(StaXParser.PROTOCOL)) {
+				if (nodeQueue.peek().equals(StaXParser.FORM)) {
+					this.currProtocol = new ProtocolTransferObjectExt();
+					currClassName = "ProtocolTransferObjectExt";
+				}
+				
+			} else if (localName.equals(StaXParser.NAME)) {
 				if (nodeQueue.peek().equals(StaXParser.DESIGNATION))
 					this.methodName = "setName";
 				else if (nodeQueue.peek().equals(StaXParser.REFERENCE_DOCUMENT)) 
@@ -104,12 +112,16 @@ public class FormDetailsParserHandler extends ParserHandler {
 				this.methodName = "setLanguage";
 			} else if (localName.equals(StaXParser.CONTEXT)) {
 				if (nodeQueue.peek().equals(StaXParser.DESIGNATION) || 
-						nodeQueue.peek().equals(StaXParser.REFERENCE_DOCUMENT))
+						nodeQueue.peek().equals(StaXParser.REFERENCE_DOCUMENT) ||
+								nodeQueue.peek().equals(StaXParser.PROTOCOL))
 					this.methodName = "setContextName";
 			} else if (localName.equals(StaXParser.URL) && nodeQueue.peek().equals(StaXParser.REFERENCE_DOCUMENT)) {
 				this.methodName = "setUrl";
 			} else if (localName.equals(StaXParser.DOCTEXT) && nodeQueue.peek().equals(StaXParser.REFERENCE_DOCUMENT)) {
 				this.methodName = "setDocText";
+			}  else if (localName.equals(StaXParser.SHORT_NAME)) {
+				if (nodeQueue.peek().equals(StaXParser.PROTOCOL))
+					this.methodName = "setPreferredName";						
 			}
 				
 		}
@@ -150,6 +162,11 @@ public class FormDetailsParserHandler extends ParserHandler {
 					this.refdocs.add(this.currRefDoc);
 					this.currClassName = null;
 				}				
+			} else if (localName.equals(StaXParser.PROTOCOL)) {
+				if ( this.currClassName != null && this.currClassName.equals("ProtocolTransferObjectExt")) {
+					this.protocols.add(this.currProtocol);
+					this.currClassName = null;
+				}				
 			}
 		}
 		
@@ -175,8 +192,12 @@ public class FormDetailsParserHandler extends ParserHandler {
 			if (peek == null)
 				return;
 					
-			if (peek.equals(StaXParser.PROTOCOL_ID)) 
-				this.protocolIds.add(xmlreader.getText());
+			if (peek.equals(StaXParser.SHORT_NAME)) {
+				if (this.currClassName != null && this.currClassName.equals("ProtocolTransferObjectExt") &&
+						this.methodName != null) {
+					setPropertyForObject(this.currProtocol, methodName, xmlreader.getText());
+				}
+			}
 			else if (peek.equals(StaXParser.NAME) || peek.equals(StaXParser.TYPE) 
 					|| peek.equals(StaXParser.LANGUAGE_NAME) || peek.equals(StaXParser.CONTEXT)
 					||  peek.equals(StaXParser.URL) || peek.equals(StaXParser.DOCTEXT)) {
@@ -186,6 +207,9 @@ public class FormDetailsParserHandler extends ParserHandler {
 				} else if (this.currClassName != null && this.currClassName.equals("RefdocTransferObjectExt") &&
 						this.methodName != null) {
 					setPropertyForObject(this.currRefDoc, methodName, xmlreader.getText());
+				} else if (this.currClassName != null && this.currClassName.equals("ProtocolTransferObjectExt") &&
+						this.methodName != null) {
+					setPropertyForObject(this.currProtocol, methodName, xmlreader.getText());
 				}
 			}
 		}
@@ -213,13 +237,23 @@ public class FormDetailsParserHandler extends ParserHandler {
 	}
 
 
-	public List<String> getProtocolIds() {
-		return protocolIds;
+//	public List<String> getProtocolIds() {
+//		return protocolIds;
+//	}
+//
+//
+//	public void setProtocolIds(List<String> protocolIds) {
+//		this.protocolIds = protocolIds;
+//	}
+
+
+	public List<ProtocolTransferObjectExt> getProtocols() {
+		return protocols;
 	}
 
 
-	public void setProtocolIds(List<String> protocolIds) {
-		this.protocolIds = protocolIds;
+	public void setProtocols(List<ProtocolTransferObjectExt> protocols) {
+		this.protocols = protocols;
 	}
 
 

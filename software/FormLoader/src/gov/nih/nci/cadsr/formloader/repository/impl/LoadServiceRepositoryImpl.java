@@ -17,6 +17,7 @@ import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormValidValueTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.InstructionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ModuleTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionChangeTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.RefdocTransferObjectExt;
@@ -222,11 +223,13 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 	@Transactional
 	protected void processFormdetails(FormDescriptor form, String xmlPathName, int currFormIdx) {
 		logger.debug("Processing protocols, designations, refdocs and definitions for form");
+		
+		
 		StaXParser parser = new StaXParser();
 		parser.parseFormDetails(xmlPathName, form, currFormIdx);
 		
-		List<String> protoIds = parser.getProtocolIds();
-		processProtocols(form, protoIds);
+		List<ProtocolTransferObjectExt> protos = form.getProtocols();
+		processProtocols(form, protos);
 		
 		List<DesignationTransferObjectExt> designations = parser.getDesignations();
 		processDesignations(form, designations);
@@ -383,27 +386,31 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 	 * @param protoIds
 	 */
 	@Transactional
-	protected void processProtocols(FormDescriptor form, List<String> protoIds) {
+	protected void processProtocols(FormDescriptor form, List<ProtocolTransferObjectExt> protos) {
+		
+		if (protos == null || protos.size() == 0)
+			return; 
+		
 		String formSeqid = form.getFormSeqId();
-		if (protoIds != null && protoIds.size() > 0) {
-			HashMap<String, String> protoIdMap = formV2Dao.getProtocolSeqidsByIds(protoIds);
-			List<String> protoSeqIds = markNoMatchProtoIds(form, protoIds, protoIdMap);
-
-			for (String protoSeqid : protoSeqIds) {
-				if (FormDescriptor.LOAD_TYPE_NEW.equals(form.getLoadType())
-						|| FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(form.getLoadType())) {
-					formV2Dao.addFormProtocol(formSeqid, protoSeqid, form.getCreatedBy());
-				} else  {
-					//TODO: requirement changed. Need work here 1/17/2014
-					//TODO: requirement changed. Need work here 1/17/2014
-					if (!formV2Dao.formProtocolExists(formSeqid, protoSeqid))
-						formV2Dao.addFormProtocol(formSeqid, protoSeqid, form.getModifiedBy());
-					//TODO: requirement changed. Need work here 1/17/2014
-					//TODO: Need to remove protocols that exist in db but not in xml
-				} 
-			}
-			
+		
+		for (ProtocolTransferObjectExt proto :protos) {
+			if (FormDescriptor.LOAD_TYPE_NEW.equals(form.getLoadType())
+					|| FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(form.getLoadType())) {
+				formV2Dao.addFormProtocol(formSeqid, proto.getIdseq(), form.getCreatedBy());
+			} else  {
+				
+				//Update form will be handle for v4.2
+				
+				//TODO: requirement changed. Need work here 1/17/2014
+				//TODO: requirement changed. Need work here 1/17/2014
+//				if (!formV2Dao.formProtocolExists(formSeqid, protoSeqid))
+//					formV2Dao.addFormProtocol(formSeqid, protoSeqid, form.getModifiedBy());
+				//TODO: requirement changed. Need work here 1/17/2014
+				//TODO: Need to remove protocols that exist in db but not in xml
+			} 
 		}
+		
+		
 	}
 	
 	protected List<String> markNoMatchProtoIds(FormDescriptor form, List<String> protoIds, HashMap<String, String> protoIdMap) {

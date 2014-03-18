@@ -13,6 +13,7 @@ import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.PermissibleValueV2TransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ValueMeaningV2TransferObject;
@@ -161,10 +162,44 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		
 			StaXParser parser = new StaXParser();
 			parser.parseFormDetails(xmlPathName, form, form.getIndex());
+			
+			verifyProtocols(form, parser.getProtocols());
+			
 			verifyDesignations(form, parser.getDesignations());
 			verifyDefinitions(form, parser.getDefinitions());
 			
 		}
+	}
+	
+	protected void verifyProtocols(FormDescriptor form, List<ProtocolTransferObjectExt> protocols) {
+		if (protocols == null || protocols.size() == 0)
+			return;
+		
+		List<ProtocolTransferObjectExt> protos = new ArrayList<ProtocolTransferObjectExt>();
+		
+		int idx = 1;
+		for (ProtocolTransferObjectExt proto : protocols) {
+			String preferredName = proto.getPreferredName();
+			
+			if (preferredName == null || preferredName.length() == 0) {
+				form.addMessage("Protocol " + idx + " has null or empty shortName value. Unable to load it.");
+				continue;
+			}
+			
+			String contextSeqid = this.repository.getContextSeqIdByName(proto.getContextName());
+			if (contextSeqid == null || contextSeqid.length() == 0)
+				contextSeqid = form.getContextSeqid();
+			
+			String protoSeqid = this.repository.getProtocolSeqidByPreferredName(preferredName, contextSeqid);
+			if (protoSeqid != null && protoSeqid.length() > 0) {
+				proto.setConteIdseq(contextSeqid);
+				proto.setIdseq(protoSeqid);
+				protos.add(proto);
+			}
+		}
+		
+		if (protos.size() > 0) 
+			form.setProtocols(protos);
 	}
 	
 	/**
@@ -183,10 +218,10 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 	 */
 	protected void verifyDesignations(FormDescriptor form, List<DesignationTransferObjectExt> designations) {
 		
-		List<DesignationTransferObjectExt> desigs = new ArrayList<DesignationTransferObjectExt>();
-		
 		if (designations == null || designations.size() == 0)
 			return;
+		
+		List<DesignationTransferObjectExt> desigs = new ArrayList<DesignationTransferObjectExt>();
 		
 		for (DesignationTransferObjectExt des : designations) {
 			if (des.getName() == null || des.getName().length() == 0) 

@@ -4,6 +4,7 @@ import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
+import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.RefdocTransferObjectExt;
 
 import java.io.BufferedReader;
@@ -108,10 +109,11 @@ public class StaXParser {
 	protected static final String MINIMUM_LENGTH_NUMBER = "minimumLengthNumber";
 	protected static final String UOM_NAME = "UOMName";
 	
+	protected static final String SHORT_NAME = "shortName";
 	
 	List<RefdocTransferObjectExt> refdocs;
 	List<DefinitionTransferObject> definitions;
-	List<String> protocolIds;
+	List<ProtocolTransferObjectExt> protocols;
 	List<DesignationTransferObjectExt> designations;
 	
 	
@@ -171,7 +173,7 @@ public class StaXParser {
 		ParserHandler handler = new FormDetailsParserHandler(currForm, currFormIdx);
 		parseFormHeaders(xmlPathName, handler);
 		//get the generatted list
-		this.setProtocolIds(((FormDetailsParserHandler)handler).getProtocolIds());
+		this.setProtocols(((FormDetailsParserHandler)handler).getProtocols());
 		this.setRefdocs(((FormDetailsParserHandler)handler).getRefdocs());
 		this.setDefinitions(((FormDetailsParserHandler)handler).getDefinitions());
 		this.setDesignations(((FormDetailsParserHandler)handler).getDesignations());
@@ -255,12 +257,20 @@ public class StaXParser {
 		this.definitions = definitions;
 	}
 
-	public List<String> getProtocolIds() {
-		return protocolIds;
+//	public List<String> getProtocolIds() {
+//		return protocolIds;
+//	}
+//
+//	public void setProtocolIds(List<String> protocolIds) {
+//		this.protocolIds = protocolIds;
+//	}
+
+	public List<ProtocolTransferObjectExt> getProtocols() {
+		return protocols;
 	}
 
-	public void setProtocolIds(List<String> protocolIds) {
-		this.protocolIds = protocolIds;
+	public void setProtocols(List<ProtocolTransferObjectExt> protocols) {
+		this.protocols = protocols;
 	}
 
 	public List<DesignationTransferObjectExt> getDesignations() {

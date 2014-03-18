@@ -12,11 +12,14 @@ import gov.nih.nci.ncicb.cadsr.common.resource.Protocol;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.object.MappingSqlQuery;
 
 
@@ -131,5 +134,27 @@ public class JDBCProtocolDAOV2 extends JDBCBaseDAOV2 implements ProtocolDAO {
 
     }  
 
+    public String getProtocolSeqidByPreferredName(String shortName, String contextseqid) {
+    	
+    	String sql = 
+    			"select proto_idseq, protocol_Id, conte_idseq, long_name from sbrext.protocols_view_ext pv " +
+    					" where PV.PREFERRED_NAME=:shortName and conte_idseq=:contextseqid";
+
+    	MapSqlParameterSource params = new MapSqlParameterSource();
+    	params.addValue("shortName", shortName);
+    	params.addValue("contextseqid", contextseqid);
+
+    	List<String> des = 
+    			this.namedParameterJdbcTemplate.query(sql, params, 
+    					new RowMapper<String>() {
+    				public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+    					
+    					return rs.getString("proto_idseq");
+    				}
+    			});
+
+    	return (des == null || des.size() == 0) ? "" : des.get(0);
+
+    }
 
 }

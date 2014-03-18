@@ -18,6 +18,7 @@ import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormValidValueDAO
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormValidValueInstructionDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCModuleDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCModuleInstructionDAOV2;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCProtocolDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCQuestionDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCQuestionInstructionDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCReferenceDocumentDAOV2;
@@ -61,6 +62,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	JDBCCollectionDAO collectionDao;
 	JDBCReferenceDocumentDAOV2 referenceDocV2Dao;
 	JDBCModuleInstructionDAOV2 moduleInstructionV2Dao;
+	JDBCProtocolDAOV2 protocolV2Dao;
 	
 	//These are loaded from database for validation purposes
 	HashMap<String, String> conteNameSeqIdMap;
@@ -557,6 +559,10 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			
 		return this.valueDomainV2Dao.getValueDomainV2ById(vdseqid);
 	}
+	
+	public String getProtocolSeqidByPreferredName(String preferredName, String contextSeqid) {
+		return this.protocolV2Dao.getProtocolSeqidByPreferredName(preferredName, contextSeqid);
+	}
 
 	@Override
 	public String createForm(FormDescriptor form, String xmlPathName) {
@@ -595,6 +601,14 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			FormDescriptor form) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public JDBCProtocolDAOV2 getProtocolV2Dao() {
+		return protocolV2Dao;
+	}
+
+	public void setProtocolV2Dao(JDBCProtocolDAOV2 protocolV2Dao) {
+		this.protocolV2Dao = protocolV2Dao;
 	}
 	
 }
