@@ -11,6 +11,7 @@ import gov.nih.nci.cadsr.formloader.domain.QuestionDescriptor;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
+import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.RefdocTransferObjectExt;
 
 import org.junit.Before;
@@ -86,11 +87,11 @@ public class StaXParserTest {
 		FormDescriptor form = parser.parseFormDetails(xmlPathName, forms.get(0), 0);
 		assertNotNull(form);
 		
-		List<String> protoList = parser.getProtocolIds();
+		List<ProtocolTransferObjectExt> protoList = parser.getProtocols();
 		assertNotNull(protoList);
 		assertTrue(protoList.size() == 2);
-		assertTrue(protoList.get(0).equals("01_C_0129F"));
-		assertTrue(protoList.get(1).equals("02_C_0241E"));
+		assertTrue(protoList.get(0).getContextName().equals("CCR"));
+		assertTrue(protoList.get(1).getPreferredName().equals("02_C_0241E"));
 		
 		List<DesignationTransferObjectExt> desObjs = parser.getDesignations();
 		assertNotNull(desObjs);
@@ -129,13 +130,7 @@ public class StaXParserTest {
 		
 		FormDescriptor form = parser.parseFormDetails(xmlPathName, forms.get(0), 0);
 		assertNotNull(form);
-		
-		List<String> protoList = parser.getProtocolIds();
-		assertNotNull(protoList);
-		assertTrue(protoList.size() == 2);
-		assertTrue(protoList.get(0).equals("01_C_0129F"));
-		assertTrue(protoList.get(1).equals("02_C_0241E"));
-		
+	
 		List<DesignationTransferObjectExt> desObjs = parser.getDesignations();
 		assertNotNull(desObjs);
 		assertTrue(desObjs.size() == 1);

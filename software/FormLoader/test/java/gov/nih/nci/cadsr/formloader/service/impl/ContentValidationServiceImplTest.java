@@ -11,6 +11,7 @@ import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceError;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 import gov.nih.nci.cadsr.formloader.service.common.StatusFormatter;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObjectExt;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -789,4 +790,40 @@ public class ContentValidationServiceImplTest {
 		}
 	}
 	
+	
+	public void testVerifyProtocols() {
+		try {
+			aColl.setXmlPathOnServer(".\\test\\data\\contentvalidation");
+			aColl.setXmlFileName("3193449_has_valid_values.xml");
+			aColl.setCreatedBy("YANGS");
+			aColl = xmlValidator.validateXml(aColl);
+			
+			forms = aColl.getForms();
+			assertNotNull(forms);
+			assertTrue(forms.size() == 1);
+			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATED);
+			
+			for (FormDescriptor form : forms) {
+				form.setSelected(true);
+			}
+			
+			assertNotNull(contentValidationService);
+			aColl = contentValidationService.validateXmlContent(aColl);
+			
+			assertNotNull(aColl);
+			forms = aColl.getForms();
+			assertTrue(forms.size() == 1);
+			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_CONTENT_VALIDATED);
+			
+			FormDescriptor form = forms.get(0);			
+			List<ProtocolTransferObjectExt> protos = form.getProtocols();
+			
+			assertTrue(protos != null && protos.size() == 1);
+			assertTrue(protos.get(0).getProtoIdseq() != null && protos.get(0).getProtoIdseq().length() > 0);
+			
+		} catch (FormLoaderServiceException fle) {
+			logger.debug(fle);
+			fail("Got exception: " + fle.getMessage());
+		}
+	}
 }
