@@ -4,7 +4,6 @@ import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.ModuleDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.QuestionDescriptor;
-import gov.nih.nci.cadsr.formloader.repository.FormLoaderRepository;
 import gov.nih.nci.cadsr.formloader.repository.impl.FormLoaderRepositoryImpl;
 import gov.nih.nci.cadsr.formloader.service.ContentValidationService;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
@@ -72,6 +71,12 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		return aCollection;
 	}
 	
+	/**
+	 * Quick sanity check to make sure the collection has necessary elements.
+	 * 
+	 * @param aCollection
+	 * @throws FormLoaderServiceException
+	 */
 	protected void quickCheckOnCollection(FormCollection aCollection) 
 			throws FormLoaderServiceException {
 		if (aCollection == null)
@@ -650,6 +655,13 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		
 	}
 	
+	/**
+	 * Parse questions in module for all the forms in xml
+	 * 
+	 * @param xmlPathName
+	 * @param formHeaders
+	 * @return
+	 */
 	protected List<FormDescriptor> getFormQuestionsFromXml(String xmlPathName, List<FormDescriptor> formHeaders) {
 		StaXParser parser = new StaXParser();
 		List<FormDescriptor> forms = parser.parseFormQuestions(xmlPathName, formHeaders);
@@ -725,6 +737,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 	}
 	
 	/**
+	 * Check question's question text, valid values and default value against matching CDE.
 	 * 
 	 * @param question
 	 * @param form
@@ -768,7 +781,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		
 		verifyQuestionDefaultValue(form, question, pValDtos, matchingCde);
 		verifyQuestionValidValues(form, question, pValDtos, matchingCde);
-		verifyQuestionText(question, rdDtos, matchingCde);		
+		verifyQuestionText(form, question, rdDtos, matchingCde);		
 			
 		logger.debug("Done validating question against CDE");
 	}
@@ -814,10 +827,19 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		return true;
 	}
 	
+	/**
+	 * In the case where no valid cde can be used to validate question data against, make sure question's requirement fields are there
+	 * for load.
+	 * 
+	 * @param form
+	 * @param question
+	 * @param message
+	 */
 	protected void prepareQuestionForLoadWithoutValidation(FormDescriptor form, QuestionDescriptor question, String message) {
 		logger.debug(message);
 		question.addMessage(message);
 		question.addInstruction(message);
+		question.setCdeSeqId(""); //disassociate cde if it's there.
 		form.setDefaultWorkflowName();
 		checkQuestionValidValueFieds(question);
 	}
@@ -931,12 +953,10 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			DataElementTransferObject matchingCde) {
 		String msg;
 		if (pValues == null || pValues.size() == 0) {
-			msg = "The value domain associated with data Element [" + 
+			msg = "The value domain associated with data Element [" + matchingCde.getPublicId() + " " + matchingCde.getVersion() + " " +
 					matchingCde.getLongName() + 
 					"] does not have permissible values. Unable to verify question's default value";
-			question.addInstruction(msg);
-			question.addMessage(msg);
-			form.setDefaultWorkflowName();
+			prepareQuestionForLoadWithoutValidation(form,  question, msg);
 			return;
 		} 	 
 		
@@ -950,9 +970,12 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			}
 
 			if (!validated) {
-				question.addInstruction("Question's default value [" + 
-						defaultValue + "] doesn't match any of the associated CDE's permissible values");
+				msg = "Question's default value [" + 
+						defaultValue + "] doesn't match any of the associated CDE's permissible values";
+				question.addInstruction(msg);
+				question.addMessage(msg);
 				question.setDefaultValue("");
+				question.setCdeSeqId("");
 				form.setDefaultWorkflowName();
 			}
 		} 
@@ -1009,7 +1032,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		} 	
 		
 		for (QuestionDescriptor.ValidValue vVal : validValues) {
-			 validateQuestionValidValue(question, vVal, pValues, matchingCde);
+			 validateQuestionValidValue(form, question, vVal, pValues, matchingCde);
 		}
 		 
 	}
@@ -1043,7 +1066,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		}
 	}
 	
-	protected void validateQuestionValidValue(QuestionDescriptor question, QuestionDescriptor.ValidValue vVal,
+	protected void validateQuestionValidValue(FormDescriptor form, QuestionDescriptor question, QuestionDescriptor.ValidValue vVal,
 			List<PermissibleValueV2TransferObject> pValues, DataElementTransferObject matchingCde) {
 		 
 		String msg;	
@@ -1061,10 +1084,12 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		}	
 		
 		if (matchedPv == null) {
-			msg = "Valid value [" + val + "] doesn't match any of the associated CDE's permissible values. Valid Value/ValueMeaning not loaded.";
-			vVal.setSkip(true);
-			question.addInstruction(msg);
-			question.addMessage(msg);
+			msg = "Valid value [" + val + "] doesn't match any of permissible values of the associated CDE [" + 
+					matchingCde.getPublicId() + "|" + matchingCde.getVersion() + "]. Unable to validate Valid Value/ValueMeaning.";
+			//vVal.setSkip(true);
+			//question.addInstruction(msg);
+			//question.addMessage(msg);
+			prepareQuestionForLoadWithoutValidation(form, question, msg);
 			return;
 		}
 
@@ -1077,9 +1102,10 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			//  * If no match found, skip loading the valid value
 			if (!ableToValidateByAlternatives(valMeaningLongName, valMeaningDto.getIdseq())) {
 				msg = "Valid value meaning text [" + valMeaning + "] doesn't match any of the associated CDE's permissible value meaning.  Valid Value/ValueMeaning not loaded.";
-				vVal.setSkip(true);
-				question.addInstruction(msg);
-				question.addMessage(msg);
+//				vVal.setSkip(true);
+//				question.addInstruction(msg);
+//				question.addMessage(msg);
+				prepareQuestionForLoadWithoutValidation(form, question, msg);
 				return;
 			}	
 		}
@@ -1147,15 +1173,18 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 	 * @param refDocs
 	 * @param matchingCde
 	 */
-	protected void verifyQuestionText(QuestionDescriptor question, List<ReferenceDocumentTransferObject> refDocs, 
+	protected void verifyQuestionText(FormDescriptor form, QuestionDescriptor question, List<ReferenceDocumentTransferObject> refDocs, 
 			DataElementTransferObject matchingCde) {
 		
 		if (refDocs == null || refDocs.size() == 0) {
 			question.addInstruction("Unable to load any reference document with CDE public id and version [" + 
 				matchingCde.getPublicId() +
 				"|" + matchingCde.getVersion() + "] in xml. Unable to verify question text.");
+			form.setDefaultWorkflowName();
+			question.setCdeSeqId(""); //disassociate cde from question
 			return;
 		}
+		
 		String questionText = question.getQuestionText();
 		String cdePublicId = question.getCdePublicId();
 		String cdeVersion = question.getCdeVersion();
@@ -1187,6 +1216,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			}
 			
 			if (!matched) {
+				question.setCdeSeqId(""); 
 				if (preferredText != null && preferredText.length() > 0)
 					questionText = preferredText;
 				else {
