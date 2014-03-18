@@ -67,5 +67,8 @@
 		<constructor-arg ref="dataSource"/>       
     </bean>
     
+    <bean id="protocolV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCProtocolDAOV2">
+		<constructor-arg ref="dataSource"/>       
+    </bean>
 </beans>
 
