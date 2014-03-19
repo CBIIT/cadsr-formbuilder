@@ -138,7 +138,9 @@
 		<property name="moduleInstructionV2Dao">
 			<ref bean="moduleInstructionV2Dao" />
 		</property>
-		
+		<property name="designationDao">
+			<ref bean="designationDao" />
+		</property>
 	</bean>
 	
 	<import resource="applicationContext-jdbcdao.xml" />
