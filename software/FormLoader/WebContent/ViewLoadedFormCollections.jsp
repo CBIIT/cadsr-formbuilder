@@ -3,7 +3,7 @@
 
 <html>
 <head>
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
 
 <title>View Loaded Form Collections</title>
 
@@ -13,13 +13,6 @@
 <style type="text/css">
 @import url(css/style.css);
 </style>
-
- <script>
-  $(function() {
-    $( document ).tooltip();
-  });
-  </script>
-  
 </head>
 <div style="padding-left: 50px; padding-right: 50px;">
 
@@ -196,7 +189,7 @@ Unload means the form will have a new workflow status RETIRED UNLOADED but the f
 
 </div>  <!--  End Tabs -->
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
   
 <script type='text/javascript' src='js/jquery.simplemodal.js'></script>
@@ -247,7 +240,12 @@ $(document).ready(function() {
               });            
         });
     </script>  
-   
+   <script>
+  $(function() {
+    $( document ).tooltip();
+  });
+  </script>
+  
   <script type="text/javascript">  
   $(document).ready(function() {
     $( "#tabs" ).tabs();
