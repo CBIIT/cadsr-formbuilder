@@ -74,7 +74,7 @@ public class FormDetailsParserHandler extends ParserHandler {
 				if (nodeQueue.peek().equals(StaXParser.FORM)) {
 					this.currDesignation = new DesignationTransferObjectExt();
 					currClassName = "DesignationTransferObject";
-					
+		
 					//ClassSchemeItem csi = currDesignation.getCsCsis().get(0);
 					//csi.get
 				}

@@ -163,8 +163,8 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			StaXParser parser = new StaXParser();
 			parser.parseFormDetails(xmlPathName, form, form.getIndex());
 			
-			verifyProtocols(form, parser.getProtocols());
-			
+			form.setRefdocs(parser.getRefdocs());
+			verifyProtocols(form, parser.getProtocols());		
 			verifyDesignations(form, parser.getDesignations());
 			verifyDefinitions(form, parser.getDefinitions());
 			
@@ -223,11 +223,16 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		
 		List<DesignationTransferObjectExt> desigs = new ArrayList<DesignationTransferObjectExt>();
 		
+		int idx = 0;
 		for (DesignationTransferObjectExt des : designations) {
-			if (des.getName() == null || des.getName().length() == 0) 
+			idx++;
+			if (des.getName() == null || des.getName().length() == 0) {
+				form.addMessage("Designation #" + idx + " has invalid name. Skip loading.");
 				continue;  //how to report that?
+			}
 			
 			if (!repository.designationTypeExists(des.getType())) {
+				form.addMessage("Designation #" + idx + " has invalid type \"" + des.getType() + "\". Skip loading.");
 				continue;
 			}
 			
@@ -261,11 +266,16 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		if (definitions == null || definitions.size() == 0)
 			return;
 		
+		int idx = 0;
 		for (DefinitionTransferObject def : definitions) {
-			if (def.getDefinition() == null || def.getDefinition().length() == 0) 
+			idx++;
+			if (def.getDefinition() == null || def.getDefinition().length() == 0) {
+				form.addMessage("Definition #" + idx + " has invalid text value. Skip loading.");
 				continue;  //how to report that?
+			}
 			
 			if (!repository.definitionTypeValid(def.getType())) {
+				form.addMessage("Definition #" + idx + " has invalid type \"" + def.getType() + "\". Skip loading.");
 				continue;
 			}
 			

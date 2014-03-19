@@ -225,20 +225,20 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 		logger.debug("Processing protocols, designations, refdocs and definitions for form");
 		
 		
-		StaXParser parser = new StaXParser();
-		parser.parseFormDetails(xmlPathName, form, currFormIdx);
+//		StaXParser parser = new StaXParser();
+//		parser.parseFormDetails(xmlPathName, form, currFormIdx);
 		
 		List<ProtocolTransferObjectExt> protos = form.getProtocols();
 		processProtocols(form, protos);
 		
-		List<DesignationTransferObjectExt> designations = parser.getDesignations();
+		List<DesignationTransferObjectExt> designations = form.getDesignations();
 		processDesignations(form, designations);
 		
-		List<RefdocTransferObjectExt> refdocs = parser.getRefdocs();
+		List<RefdocTransferObjectExt> refdocs = form.getRefdocs();
 		processRefdocs(form, refdocs);
 		
 		//TODO
-		List<DefinitionTransferObject> definitions = parser.getDefinitions();
+		List<DefinitionTransferObject> definitions = form.getDefinitions();
 		
 		
 		//TODO
@@ -329,7 +329,7 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 	protected void processDesignations(FormDescriptor form, List<DesignationTransferObjectExt> designations) {
 		
 		if (designations == null) {
-			logger.error("Null designation list passed in to processDesignations(). Do nothing");
+			logger.debug("Null designation list passed in to processDesignations(). Do nothing");
 			return;
 		}
 		
@@ -338,40 +338,60 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 		
 		for (DesignationTransferObjectExt desig : designations) {
 			if (form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW)) {
-				designateForm(formSeqid, contextSeqId, form.getCreatedBy(), desig);
+				createFormDesignation(formSeqid, contextSeqId, form.getCreatedBy(), desig);
 			} else {
 				
 				//TODO: this block is for update form only
 				
-				
-				//Check context name in designation elem from xml. If that's not valid, use form's
-				String desigContext = desig.getContextName();
-				String desgContextSeqid = this.getContextSeqIdByName(desigContext);
-				if (desgContextSeqid == null || desgContextSeqid.length() == 0)
-					desgContextSeqid = contextSeqId;
-				
-				//validate the type, use default if neccessary
-				String desigType = desig.getType();
-				if (!this.designationTypeExists(desigType)) {
-					form.addMessage("Designation type [" + desigType + "] is invalid. Use default type [Form Loader]");
-					desig.setType(DEFAULT_DESIGNATION_TYPE);
-				}
-				
-				List<DesignationTransferObject> existing = formV2Dao.getDesignationsForForm(
-						formSeqid, desig.getName(), desig.getType(), desig.getLanguage());
-				if (existing == null || existing.size() == 0) {
-					designateForm(formSeqid, contextSeqId, form.getCreatedBy(), desig);
-				}
+//				
+//				//Check context name in designation elem from xml. If that's not valid, use form's
+//				String desigContext = desig.getContextName();
+//				String desgContextSeqid = this.getContextSeqIdByName(desigContext);
+//				if (desgContextSeqid == null || desgContextSeqid.length() == 0)
+//					desgContextSeqid = contextSeqId;
+//				
+//				//validate the type, use default if neccessary
+//				String desigType = desig.getType();
+//				if (!this.designationTypeExists(desigType)) {
+//					form.addMessage("Designation type [" + desigType + "] is invalid. Use default type [Form Loader]");
+//					desig.setType(DEFAULT_DESIGNATION_TYPE);
+//				}
+//				
+//				List<DesignationTransferObject> existing = formV2Dao.getDesignationsForForm(
+//						formSeqid, desig.getName(), desig.getType(), desig.getLanguage());
+//				if (existing == null || existing.size() == 0) {
+//					designateForm(formSeqid, contextSeqId, form.getCreatedBy(), desig);
+//				}
 			} 
 		}
 	}
 	
-	@Transactional
+
+	/**
+	 * Deprecated.
+	 * @param formSeqid
+	 * @param contextSeqid
+	 * @param createdby
+	 * @param desig
+	 * 
+	 * @deprecated
+	 * @return
+	 */
 	protected int designateForm(String formSeqid, String contextSeqid, String createdby,
 			DesignationTransferObjectExt desig) {
 		List<String> ac_seqids = new ArrayList<String>();
 		ac_seqids.add(formSeqid);
 		return formV2Dao.designate(contextSeqid, ac_seqids, createdby);
+	}
+	
+	@Transactional
+	protected int createFormDesignation(String formSeqid, String contextSeqid, String createdBy,
+			DesignationTransferObjectExt desig) {
+		
+		if (desig == null)
+			return 0;
+		
+		return this.designationDao.createDesignationForComponent(formSeqid, contextSeqid, createdBy, desig);
 	}
 	
 	/**

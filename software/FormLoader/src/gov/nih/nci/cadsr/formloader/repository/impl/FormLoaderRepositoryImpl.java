@@ -12,6 +12,7 @@ import gov.nih.nci.ncicb.cadsr.common.dto.PermissibleValueV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCCollectionDAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCDesignationDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormInstructionDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormValidValueDAOV2;
@@ -63,6 +64,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	JDBCReferenceDocumentDAOV2 referenceDocV2Dao;
 	JDBCModuleInstructionDAOV2 moduleInstructionV2Dao;
 	JDBCProtocolDAOV2 protocolV2Dao;
+	JDBCDesignationDAO designationDao;
 	
 	//These are loaded from database for validation purposes
 	HashMap<String, String> conteNameSeqIdMap;
@@ -609,6 +611,14 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 
 	public void setProtocolV2Dao(JDBCProtocolDAOV2 protocolV2Dao) {
 		this.protocolV2Dao = protocolV2Dao;
+	}
+
+	public JDBCDesignationDAO getDesignationDao() {
+		return designationDao;
+	}
+
+	public void setDesignationDao(JDBCDesignationDAO designationDao) {
+		this.designationDao = designationDao;
 	}
 	
 }

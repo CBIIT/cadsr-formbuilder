@@ -6,6 +6,7 @@ import gov.nih.nci.cadsr.formloader.service.common.XmlValidationError;
 import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObjectExt;
+import gov.nih.nci.ncicb.cadsr.common.dto.RefdocTransferObjectExt;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -69,6 +70,7 @@ public class FormDescriptor implements java.io.Serializable {
 	List<DesignationTransferObjectExt> designations;
 	List<DefinitionTransferObject> definitions;
 	List<ProtocolTransferObjectExt> protocols;
+	List<RefdocTransferObjectExt> refdocs;
 	
 	Date createdDate;  //cadsr db
 	Date modifiedDate;	//cadsr db
@@ -696,6 +698,14 @@ public class FormDescriptor implements java.io.Serializable {
 
 	public void setProtocols(List<ProtocolTransferObjectExt> protocols) {
 		this.protocols = protocols;
+	}
+
+	public List<RefdocTransferObjectExt> getRefdocs() {
+		return refdocs;
+	}
+
+	public void setRefdocs(List<RefdocTransferObjectExt> refdocs) {
+		this.refdocs = refdocs;
 	}
 	
 	
