@@ -1,6 +1,7 @@
 package gov.nih.nci.cadsr.formloader.struts2;
 
 
+import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.UserManagerDAO;
 
 import java.util.Arrays;
@@ -47,6 +48,9 @@ public class LoginAction extends ActionSupport implements SessionAware, ServletR
 			//setSession(session);
 			this.sessionmap.put(FormLoaderActionConstants.KEY_LOGIN, "true");
 			this.sessionmap.put(FormLoaderActionConstants.KEY_USER_NAME, username);
+			
+			FormLoaderHelper.OutputJaxpImplementationInfo();
+			
 			return SUCCESS;
 		} else {
 			addActionError("Invalid login. Please try again.");

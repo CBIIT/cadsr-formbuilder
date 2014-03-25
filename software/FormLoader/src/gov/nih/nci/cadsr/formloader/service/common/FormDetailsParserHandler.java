@@ -1,7 +1,7 @@
 package gov.nih.nci.cadsr.formloader.service.common;
 
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
-import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.RefdocTransferObjectExt;
@@ -11,6 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.stream.XMLStreamReader;
@@ -30,15 +31,20 @@ public class FormDetailsParserHandler extends ParserHandler {
 	int currFormIdx;
 	
 	List<RefdocTransferObjectExt> refdocs = new ArrayList<RefdocTransferObjectExt>();
-	List<DefinitionTransferObject> definitions = new ArrayList<DefinitionTransferObject>();
+	List<DefinitionTransferObjectExt> definitions = new ArrayList<DefinitionTransferObjectExt>();
 	//List<String> protocolIds = new ArrayList<String>();
 	List<ProtocolTransferObjectExt> protocols = new ArrayList<ProtocolTransferObjectExt>();
 	List<DesignationTransferObjectExt> designations = new ArrayList<DesignationTransferObjectExt>();
 	
 	DesignationTransferObjectExt currDesignation;	
 	RefdocTransferObjectExt currRefDoc;
-	DefinitionTransferObject currDefinition;
+	DefinitionTransferObjectExt currDefinition;
 	ProtocolTransferObjectExt currProtocol;
+	
+	List<String> csPublicIdVersionPairs;
+	
+	String csPublicId;
+	String csVersion;
 	
 	String currClassName;
 	String methodName;
@@ -73,7 +79,7 @@ public class FormDetailsParserHandler extends ParserHandler {
 			if (localName.equals(StaXParser.DESIGNATION)) {
 				if (nodeQueue.peek().equals(StaXParser.FORM)) {
 					this.currDesignation = new DesignationTransferObjectExt();
-					currClassName = "DesignationTransferObject";
+					currClassName = "DesignationTransferObjectExt";
 		
 					//ClassSchemeItem csi = currDesignation.getCsCsis().get(0);
 					//csi.get
@@ -81,8 +87,8 @@ public class FormDetailsParserHandler extends ParserHandler {
 				
 			} else if (localName.equals(StaXParser.DEFINITION)) {
 				if (nodeQueue.peek().equals(StaXParser.FORM)) {
-					this.currDefinition = new DefinitionTransferObject();
-					currClassName = "DefinitionTransferObject";
+					this.currDefinition = new DefinitionTransferObjectExt();
+					currClassName = "DefinitionTransferObjectExt";
 				}
 				
 			} else if (localName.equals(StaXParser.REFERENCE_DOCUMENT)) {
@@ -103,7 +109,7 @@ public class FormDetailsParserHandler extends ParserHandler {
 					this.methodName = "setDocName";
 						
 			} else if (localName.equals(StaXParser.TYPE)) {
-				if (nodeQueue.peek().equals(StaXParser.DESIGNATION))
+				if (nodeQueue.peek().equals(StaXParser.DESIGNATION) || nodeQueue.peek().equals(StaXParser.DEFINITION))
 						this.methodName = "setType";
 				else if (nodeQueue.peek().equals(StaXParser.REFERENCE_DOCUMENT)) 
 					this.methodName = "setDocType";
@@ -113,7 +119,8 @@ public class FormDetailsParserHandler extends ParserHandler {
 			} else if (localName.equals(StaXParser.CONTEXT)) {
 				if (nodeQueue.peek().equals(StaXParser.DESIGNATION) || 
 						nodeQueue.peek().equals(StaXParser.REFERENCE_DOCUMENT) ||
-								nodeQueue.peek().equals(StaXParser.PROTOCOL))
+								nodeQueue.peek().equals(StaXParser.PROTOCOL) ||
+								nodeQueue.peek().equals(StaXParser.DEFINITION))
 					this.methodName = "setContextName";
 			} else if (localName.equals(StaXParser.URL) && nodeQueue.peek().equals(StaXParser.REFERENCE_DOCUMENT)) {
 				this.methodName = "setUrl";
@@ -122,7 +129,29 @@ public class FormDetailsParserHandler extends ParserHandler {
 			}  else if (localName.equals(StaXParser.SHORT_NAME)) {
 				if (nodeQueue.peek().equals(StaXParser.PROTOCOL))
 					this.methodName = "setPreferredName";						
-			}
+			} else if (localName.equals(StaXParser.TEXT)) {
+				if (nodeQueue.peek().equals(StaXParser.DEFINITION))
+					this.methodName = "setDefinition";
+			} else if (localName.equals(StaXParser.CLASSFINICATION)) {
+				if (this.currDefinition != null)
+					this.csPublicIdVersionPairs = this.currDefinition.getClassficationPublicIdVersionPairs();
+				else if (this.currDesignation != null)
+					this.csPublicIdVersionPairs = this.currDesignation.getClassficationPublicIdVersionPairs();
+					
+			} 
+			
+//			else if (localName.equals(StaXParser.PUBLIC_ID) || 
+//					localName.equals(StaXParser.VALID_VALUE)) {
+//				
+//				if ((nodeQueue.peek().equals(StaXParser.CLASSFINICATION))) {
+//					if (this.currDefinition != null)
+//						this.csPublicIdVersionPairs = this.currDefinition.getClassficationPublicIdVersionPairs();
+//					else if (this.currDesignation != null)
+//						this.csPublicIdVersionPairs = this.currDesignation.getClassficationPublicIdVersionPairs();
+//				}
+//			}		
+						
+					
 				
 		}
 		
@@ -148,28 +177,55 @@ public class FormDetailsParserHandler extends ParserHandler {
 		if (this.startFormIdx == this.currFormIdx) {
 			
 			if (localName.equals(StaXParser.DESIGNATION)) {
-				if ( this.currClassName != null && this.currClassName.startsWith("Designation")) {
+				//if ( this.currClassName != null && this.currClassName.startsWith("Designation")) {
+				if (this.currDesignation != null) {
 					this.designations.add(this.currDesignation);
 					this.currClassName = null;
+					this.currDesignation = null;
 				}
 			} else if (localName.equals(StaXParser.DEFINITION)) {
-				if ( this.currClassName != null && this.currClassName.equals("DefinitionTransferObject")) {
+				//if ( this.currClassName != null && this.currClassName.equals("DefinitionTransferObjectExt")) {
+				if (this.currDefinition != null) {
 					this.definitions.add(this.currDefinition);
 					this.currClassName = null;
+					this.currDefinition = null;
 				}
 			} else if (localName.equals(StaXParser.REFERENCE_DOCUMENT)) {
-				if ( this.currClassName != null && this.currClassName.equals("RefdocTransferObjectExt")) {
+				//if ( this.currClassName != null && this.currClassName.equals("RefdocTransferObjectExt")) {
+				if (this.currRefDoc != null) {
 					this.refdocs.add(this.currRefDoc);
 					this.currClassName = null;
+					this.currRefDoc = null;
 				}				
-			} else if (localName.equals(StaXParser.PROTOCOL)) {
-				if ( this.currClassName != null && this.currClassName.equals("ProtocolTransferObjectExt")) {
+			} else if (localName.equals(StaXParser.PROTOCOL)) {				
+				if (this.currProtocol != null) {
 					this.protocols.add(this.currProtocol);
 					this.currClassName = null;
+					this.currProtocol = null;
 				}				
-			}
-		}
+			} else if ((localName.equals(StaXParser.CLASSFINICATION))) {
+				if (this.currDefinition != null) {
+					this.currDefinition.setClassficationPublicIdVersionPairs(this.csPublicIdVersionPairs);
+					this.csPublicIdVersionPairs = null;
+				}
+			    else if (this.currDesignation != null) {
+					this.currDesignation.setClassficationPublicIdVersionPairs(this.csPublicIdVersionPairs);
+					this.csPublicIdVersionPairs = null;
+			    }
+				 
+			} else if (localName.equals(StaXParser.PUBLIC_ID) ||
+					localName.equals(StaXParser.VERSION)) {
+				if (this.csPublicIdVersionPairs != null && 
+						this.csPublicId != null && this.csPublicId.length() > 0 &&
+						this.csVersion != null && this.csVersion.length() > 0) {
+					this.csPublicIdVersionPairs.add(this.csPublicId + "," + this.csVersion);
+					this.csPublicId = null;
+					this.csVersion = null;
+						
+				}
+			} 
 		
+		}
 		this.methodName = null;
 		if (localName.equals(StaXParser.FORM)) {
 			nodeQueue.clear();this.currFormIdx++;
@@ -197,11 +253,10 @@ public class FormDetailsParserHandler extends ParserHandler {
 						this.methodName != null) {
 					setPropertyForObject(this.currProtocol, methodName, xmlreader.getText());
 				}
-			}
-			else if (peek.equals(StaXParser.NAME) || peek.equals(StaXParser.TYPE) 
+			} else if (peek.equals(StaXParser.NAME) || peek.equals(StaXParser.TYPE) 
 					|| peek.equals(StaXParser.LANGUAGE_NAME) || peek.equals(StaXParser.CONTEXT)
 					||  peek.equals(StaXParser.URL) || peek.equals(StaXParser.DOCTEXT)) {
-				if (this.currClassName != null && this.currClassName.equals("DesignationTransferObject") &&
+				if (this.currClassName != null && this.currClassName.equals("DesignationTransferObjectExt") &&
 						this.methodName != null) {
 					setPropertyForObject(this.currDesignation, methodName, xmlreader.getText());
 				} else if (this.currClassName != null && this.currClassName.equals("RefdocTransferObjectExt") &&
@@ -210,8 +265,22 @@ public class FormDetailsParserHandler extends ParserHandler {
 				} else if (this.currClassName != null && this.currClassName.equals("ProtocolTransferObjectExt") &&
 						this.methodName != null) {
 					setPropertyForObject(this.currProtocol, methodName, xmlreader.getText());
+				} else if (this.currClassName != null && this.currClassName.equals("DefinitionTransferObjectExt") &&
+						this.methodName != null) {
+					setPropertyForObject(this.currDefinition, methodName, xmlreader.getText());
 				}
-			}
+			} else if (peek.equals(StaXParser.TEXT)) {
+				if (this.currClassName != null && this.currClassName.equals("DefinitionTransferObjectExt") &&
+						this.methodName != null) {
+					setPropertyForObject(this.currDefinition, methodName, xmlreader.getText());
+				} 
+			} else if (peek.equals(StaXParser.PUBLIC_ID)) {
+				if (this.csPublicIdVersionPairs != null)
+					this.csPublicId = xmlreader.getText().trim();
+			} else if (peek.equals(StaXParser.VERSION)) {
+				if (this.csPublicIdVersionPairs != null)
+					this.csVersion = xmlreader.getText().trim();
+			} 
 		}
 		
 	}
@@ -227,25 +296,14 @@ public class FormDetailsParserHandler extends ParserHandler {
 	}
 
 
-	public List<DefinitionTransferObject> getDefinitions() {
+	public List<DefinitionTransferObjectExt> getDefinitions() {
 		return definitions;
 	}
 
 
-	public void setDefinitions(List<DefinitionTransferObject> definitions) {
+	public void setDefinitions(List<DefinitionTransferObjectExt> definitions) {
 		this.definitions = definitions;
 	}
-
-
-//	public List<String> getProtocolIds() {
-//		return protocolIds;
-//	}
-//
-//
-//	public void setProtocolIds(List<String> protocolIds) {
-//		this.protocolIds = protocolIds;
-//	}
-
 
 	public List<ProtocolTransferObjectExt> getProtocols() {
 		return protocols;
@@ -313,7 +371,5 @@ public class FormDetailsParserHandler extends ParserHandler {
     	}
 
 	}
-	
-	
 	
 }

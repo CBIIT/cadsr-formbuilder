@@ -73,4 +73,6 @@ public interface FormLoaderRepository {
 	
 	public boolean designationTypeExists(String designName);
 	public boolean definitionTypeValid(String definitionType);
+	public boolean validClassificationScheme(String publicId, String version);
+	public boolean validClassificationSchemeItem(String publicId, String version);
 }

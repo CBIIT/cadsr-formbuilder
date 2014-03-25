@@ -17,18 +17,22 @@ import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.security.CodeSource;
 import java.text.DecimalFormat;
+import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
 
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Schema;
 import javax.xml.validation.Validator;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
@@ -367,6 +371,22 @@ public class FormLoaderHelper {
 		}
 		
 		return true;
+	}
+	
+	public static void OutputJaxpImplementationInfo() {
+	    //logger.error(getJaxpImplementationInfo("DocumentBuilderFactory", DocumentBuilderFactory.newInstance().getClass()));
+	    logger.error(getJaxpImplementationInfo("XPathFactory", XPathFactory.newInstance().getClass()));
+	    //logger.error(getJaxpImplementationInfo("TransformerFactory", TransformerFactory.newInstance().getClass()));
+	    logger.error(getJaxpImplementationInfo("SAXParserFactory", SAXParserFactory.newInstance().getClass()));
+	}
+
+	private static String getJaxpImplementationInfo(String componentName, Class componentClass) {
+	    CodeSource source = componentClass.getProtectionDomain().getCodeSource();
+	    return MessageFormat.format(
+	            "{0} implementation: {1} loaded from: {2}",
+	            componentName,
+	            componentClass.getName(),
+	            source == null ? "Java Runtime" : source.getLocation());
 	}
 	
 }

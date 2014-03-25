@@ -11,7 +11,9 @@ import gov.nih.nci.ncicb.cadsr.common.dto.ModuleTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.PermissibleValueV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCClassificationSchemeDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCCollectionDAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCDefinitionDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCDesignationDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormInstructionDAOV2;
@@ -65,6 +67,8 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	JDBCModuleInstructionDAOV2 moduleInstructionV2Dao;
 	JDBCProtocolDAOV2 protocolV2Dao;
 	JDBCDesignationDAO designationDao;
+	JDBCDefinitionDAO definitionDao;
+	JDBCClassificationSchemeDAOV2 classificationSchemeDao;
 	
 	//These are loaded from database for validation purposes
 	HashMap<String, String> conteNameSeqIdMap;
@@ -531,14 +535,53 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		return (definitionTypes == null || definitionType == null) ? false : definitionTypes.contains(definitionType);
 	}
 	
-//	@Transactional(readOnly=true)
-//	public boolean refDocTypeValid(FormDescriptor form) {
-//		if (refdocTypes == null) {
-//			refdocTypes = this.formV2Dao.getAllRefdocTypes();
-//		}
-//		
-//		return false;
-//	}
+	@Transactional(readOnly=true)
+	public boolean validClassificationScheme(String publicId, String version) {
+		if (publicId == null || publicId.length() == 0)
+			return false;
+		
+		if (version == null || version.length() == 0)
+			return false;
+		
+		try {
+			int pId = Integer.parseInt(publicId);
+			if (pId == 0)
+				return false;
+			
+			float vers = Float.parseFloat(version);
+			if (vers == (float)0.0)
+				return false;
+			
+			int count = this.classificationSchemeDao.getClassificationSchemeCountByPublicIdVersion(pId, vers);
+			return (count > 0) ? true : false;
+		} catch (NumberFormatException ne) {
+			return false;
+		}
+	}
+	
+	@Transactional(readOnly=true)
+	public boolean validClassificationSchemeItem(String publicId, String version) {
+		if (publicId == null || publicId.length() == 0)
+			return false;
+		
+		if (version == null || version.length() == 0)
+			return false;
+		
+		try {
+			int pId = Integer.parseInt(publicId);
+			if (pId == 0)
+				return false;
+			
+			float vers = Float.parseFloat(version);
+			if (vers == (float)0.0)
+				return false;
+			
+			int count = this.classificationSchemeDao.getClassificationSchemeItemCountByPublicIdVersion(pId, vers);
+			return (count > 0) ? true : false;
+		} catch (NumberFormatException ne) {
+			return false;
+		}
+	}
 	
 	@Transactional(readOnly=true)
 	public void checkWorkflowStatusName(FormDescriptor form) {
@@ -619,6 +662,23 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 
 	public void setDesignationDao(JDBCDesignationDAO designationDao) {
 		this.designationDao = designationDao;
+	}
+
+	public JDBCDefinitionDAO getDefinitionDao() {
+		return definitionDao;
+	}
+
+	public void setDefinitionDao(JDBCDefinitionDAO definitionDao) {
+		this.definitionDao = definitionDao;
+	}
+
+	public JDBCClassificationSchemeDAOV2 getClassificationSchemeDao() {
+		return classificationSchemeDao;
+	}
+
+	public void setClassificationSchemeDao(
+			JDBCClassificationSchemeDAOV2 classificationSchemeDao) {
+		this.classificationSchemeDao = classificationSchemeDao;
 	}
 	
 }

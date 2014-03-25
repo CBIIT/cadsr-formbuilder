@@ -11,6 +11,7 @@ import gov.nih.nci.ncicb.cadsr.common.dto.AdminComponentTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
@@ -224,10 +225,6 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 	protected void processFormdetails(FormDescriptor form, String xmlPathName, int currFormIdx) {
 		logger.debug("Processing protocols, designations, refdocs and definitions for form");
 		
-		
-//		StaXParser parser = new StaXParser();
-//		parser.parseFormDetails(xmlPathName, form, currFormIdx);
-		
 		List<ProtocolTransferObjectExt> protos = form.getProtocols();
 		processProtocols(form, protos);
 		
@@ -237,11 +234,8 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 		List<RefdocTransferObjectExt> refdocs = form.getRefdocs();
 		processRefdocs(form, refdocs);
 		
-		//TODO
-		List<DefinitionTransferObject> definitions = form.getDefinitions();
-		
-		
-		//TODO
+		List<DefinitionTransferObjectExt> definitions = form.getDefinitions();
+		processDefinitions(form, definitions);
 		
 		//processContactCommunications()
 		
@@ -333,12 +327,10 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			return;
 		}
 		
-		String formSeqid = form.getFormSeqId();
-		String contextSeqId = this.getContextSeqIdByName(form.getContext());
-		
 		for (DesignationTransferObjectExt desig : designations) {
-			if (form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW)) {
-				createFormDesignation(formSeqid, contextSeqId, form.getCreatedBy(), desig);
+			if (form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW) ||
+					form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW_VERSION)) {
+				createFormDesignation(form, form.getCreatedBy(), desig);
 			} else {
 				
 				//TODO: this block is for update form only
@@ -366,6 +358,25 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 		}
 	}
 	
+	@Transactional
+	protected void processDefinitions(FormDescriptor form, List<DefinitionTransferObjectExt> definitions) {
+		if (definitions == null) {
+			logger.debug("Null definiion list passed in to processDefinitions(). Do nothing");
+			return;
+		}
+		
+		String formSeqid = form.getFormSeqId();
+		//String contextSeqId = this.getContextSeqIdByName(d)
+		//		this.getContextSeqIdByName(form.getContext());
+		
+		for (DefinitionTransferObjectExt desig : definitions) {
+			if (form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW) ||
+					form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW_VERSION)) {
+				createFormDefinition(form, form.getCreatedBy(), desig);
+			} 
+		}
+	}
+	
 
 	/**
 	 * Deprecated.
@@ -385,13 +396,30 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 	}
 	
 	@Transactional
-	protected int createFormDesignation(String formSeqid, String contextSeqid, String createdBy,
+	protected int createFormDesignation(FormDescriptor form, String createdBy,
 			DesignationTransferObjectExt desig) {
 		
 		if (desig == null)
 			return 0;
 		
-		return this.designationDao.createDesignationForComponent(formSeqid, contextSeqid, createdBy, desig);
+		String formSeqid = form.getFormSeqId();
+		String contextSeqId = this.getContextSeqIdByName(desig.getContextName());
+		if (contextSeqId == null || contextSeqId.length() == 0)
+			contextSeqId = this.getContextSeqIdByName(form.getContext());
+		return this.designationDao.createDesignationForComponent(formSeqid, contextSeqId, createdBy, desig);
+	}
+	
+	@Transactional
+	protected int createFormDefinition(FormDescriptor form, String createdBy,
+			DefinitionTransferObjectExt def) {
+		
+		if (def == null)
+			return 0;
+		
+		String contextSeqid = this.getContextSeqIdByName(def.getContextName());
+		if (contextSeqid == null || contextSeqid.length() == 0)
+			contextSeqid = this.getContextSeqIdByName(form.getContext());
+		return this.definitionDao.createDefinitionForComponent(form.getFormSeqId(), contextSeqid, createdBy, def);
 	}
 	
 	/**

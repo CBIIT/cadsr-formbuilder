@@ -3,7 +3,7 @@ package gov.nih.nci.cadsr.formloader.domain;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.StatusFormatter;
 import gov.nih.nci.cadsr.formloader.service.common.XmlValidationError;
-import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.RefdocTransferObjectExt;
@@ -68,7 +68,7 @@ public class FormDescriptor implements java.io.Serializable {
 	//pass2
 	
 	List<DesignationTransferObjectExt> designations;
-	List<DefinitionTransferObject> definitions;
+	List<DefinitionTransferObjectExt> definitions;
 	List<ProtocolTransferObjectExt> protocols;
 	List<RefdocTransferObjectExt> refdocs;
 	
@@ -506,11 +506,11 @@ public class FormDescriptor implements java.io.Serializable {
 		this.designations = designations;
 	}
 
-	public List<DefinitionTransferObject> getDefinitions() {
+	public List<DefinitionTransferObjectExt> getDefinitions() {
 		return definitions;
 	}
 
-	public void setDefinitions(List<DefinitionTransferObject> definitions) {
+	public void setDefinitions(List<DefinitionTransferObjectExt> definitions) {
 		this.definitions = definitions;
 	}
 

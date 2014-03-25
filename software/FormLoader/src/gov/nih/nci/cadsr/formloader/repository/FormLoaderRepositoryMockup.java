@@ -500,6 +500,18 @@ public class FormLoaderRepositoryMockup implements FormLoaderRepository {
 		return false;
 	}
 
+	@Override
+	public boolean validClassificationScheme(String publicId, String version) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean validClassificationSchemeItem(String publicId, String version) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	
 	
 }

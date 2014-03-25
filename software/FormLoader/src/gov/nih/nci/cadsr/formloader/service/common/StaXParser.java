@@ -2,7 +2,7 @@ package gov.nih.nci.cadsr.formloader.service.common;
 
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
-import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.RefdocTransferObjectExt;
@@ -11,7 +11,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -110,9 +109,11 @@ public class StaXParser {
 	protected static final String UOM_NAME = "UOMName";
 	
 	protected static final String SHORT_NAME = "shortName";
+	protected static final String CLASSFINICATION = "classification";
+	protected static final String CLASSFINICATION_SCHEME_ITEM = "classificationSchemeItem";
 	
 	List<RefdocTransferObjectExt> refdocs;
-	List<DefinitionTransferObject> definitions;
+	List<DefinitionTransferObjectExt> definitions;
 	List<ProtocolTransferObjectExt> protocols;
 	List<DesignationTransferObjectExt> designations;
 	
@@ -177,6 +178,11 @@ public class StaXParser {
 		this.setRefdocs(((FormDetailsParserHandler)handler).getRefdocs());
 		this.setDefinitions(((FormDetailsParserHandler)handler).getDefinitions());
 		this.setDesignations(((FormDetailsParserHandler)handler).getDesignations());
+		
+		currForm.setProtocols(((FormDetailsParserHandler)handler).getProtocols());
+		currForm.setRefdocs(((FormDetailsParserHandler)handler).getRefdocs());
+		currForm.setDefinitions(((FormDetailsParserHandler)handler).getDefinitions());
+		currForm.setDesignations(((FormDetailsParserHandler)handler).getDesignations());
 		return currForm;
 	}
 
@@ -249,11 +255,11 @@ public class StaXParser {
 		this.refdocs = refdocs;
 	}
 
-	public List<DefinitionTransferObject> getDefinitions() {
+	public List<DefinitionTransferObjectExt> getDefinitions() {
 		return definitions;
 	}
 
-	public void setDefinitions(List<DefinitionTransferObject> definitions) {
+	public void setDefinitions(List<DefinitionTransferObjectExt> definitions) {
 		this.definitions = definitions;
 	}
 
