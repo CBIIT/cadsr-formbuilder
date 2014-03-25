@@ -101,6 +101,9 @@
 		<property name="protocolV2Dao">
 			<ref bean="protocolV2Dao" />
 		</property>
+		<property name="classificationSchemeDao">
+			<ref bean="classificationSchemeDao" />
+		</property>
 	</bean>
 	
 	<bean id="loadRepository"
@@ -140,6 +143,9 @@
 		</property>
 		<property name="designationDao">
 			<ref bean="designationDao" />
+		</property>
+		<property name="definitionDao">
+			<ref bean="definitionDao" />
 		</property>
 	</bean>
 	

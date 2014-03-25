@@ -73,5 +73,11 @@
     <bean id="designationDao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCDesignationDAO">
 		<constructor-arg ref="dataSource"/>       
     </bean>
+    <bean id="definitionDao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCDefinitionDAO">
+		<constructor-arg ref="dataSource"/>       
+    </bean>
+    <bean id="classificationSchemeDao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCClassificationSchemeDAOV2">
+		<constructor-arg ref="dataSource"/>       
+    </bean>
 </beans>
 
