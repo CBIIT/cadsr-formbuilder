@@ -23,12 +23,12 @@ public class JDBCDesignationDAOTest {
 
 	@Test
 	public void testCreateDesignationForComponent() {
-		String formSeqid = "F4E8EEE7-2DDB-0476-E040-BB8921B676BA";
+		String formSeqid = "F46DF5A5-B830-FC46-E040-BB8921B6210C";
 		String createdBy = "FORMLOADER";
 		String contextSeqid = "29A8FB18-0AB1-11D6-A42F-0010A4C1E842"; //"test" context
 		DesignationTransferObjectExt desig = new DesignationTransferObjectExt();
 		desig.setLanguage("ENGLISH");
-		desig.setName("SY Testing");
+		desig.setName("SY Testing2"); //this has to be unique for a form
 		desig.setType("ABBREVIATION");
 		
 		int res = designationV2Dao.createDesignationForComponent(formSeqid, contextSeqid, createdBy, desig);

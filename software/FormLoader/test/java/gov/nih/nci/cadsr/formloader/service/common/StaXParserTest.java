@@ -4,11 +4,13 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.QuestionDescriptor;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
+import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObjectExt;
@@ -206,6 +208,53 @@ public class StaXParserTest {
 	}
 	
 	@Test
+	public void testParseFormDesigAndDefClassification() {
+		
+		parser = new StaXParser();
+		String xmlPathName = ".\\test\\data\\xmlvalidation\\3193449_has_valid_values.xml";
+		
+		FormCollection formCollection = new FormCollection();
+		formCollection.setXmlFileName("3193449_has_valid_values.xml");
+		formCollection.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
+		
+		formCollection = parser.parseCollectionAndForms(formCollection, xmlPathName);
+		List<FormDescriptor> forms = formCollection.getForms();
+		
+		assertNotNull(forms);
+		assertTrue(forms.size() == 1);
+		
+		try {
+			String pathName = FormLoaderHelper.checkInputFile(formCollection.getXmlPathOnServer(), formCollection.getXmlFileName());
+			FormDescriptor form  = parser.parseFormDetails(pathName, formCollection.getForms().get(0), 
+					formCollection.getForms().get(0).getIndex());
+			
+			List<DesignationTransferObjectExt> designations = form.getDesignations();
+			List<DefinitionTransferObjectExt> definitions = form.getDefinitions();
+			
+			assertNotNull(designations);
+			assertNotNull(definitions);
+			
+			List<String> desig_csids = designations.get(0).getClassficationPublicIdVersionPairs();
+			assertNotNull(desig_csids);
+			assertTrue(desig_csids.size() == 2);
+			
+			assertTrue(desig_csids.get(0).equals("1234567,3.0"));
+			assertTrue(desig_csids.get(1).equals("7654321,2.0"));
+			
+			
+			List<String> def_csids = definitions.get(0).getClassficationPublicIdVersionPairs();
+			assertNotNull(def_csids);
+			assertTrue(def_csids.size() == 2);
+			
+			assertTrue(def_csids.get(0).equals("7890123,1.0"));
+			assertTrue(def_csids.get(1).equals("3210987,4.0"));
+			
+		} catch (FormLoaderServiceException e) {
+			fail("Got exception in testParseFormDesigAndDefClassification: " + e.getMessage());
+		}
+	}
+	
+	@Test
 	public void testParseFormQuestionsWithValueDomainFields() {
 		
 		parser = new StaXParser();
@@ -234,4 +283,8 @@ public class StaXParserTest {
 		assertTrue(question.getDecimalPlace() == null || question.getDecimalPlace().length() == 0);
 		assertTrue(question.getMaximumLengthNumber().equals("35"));
 	}
+	
+	
+	
+	
 }

@@ -35,6 +35,18 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class FormLoaderRepositoryDataGen implements FormLoaderRepository {
 
 	@Override
+	public boolean validClassificationScheme(String publicId, String version) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean validClassificationSchemeItem(String publicId, String version) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
 	public boolean definitionTypeValid(String definitionType) {
 		// TODO Auto-generated method stub
 		return false;
