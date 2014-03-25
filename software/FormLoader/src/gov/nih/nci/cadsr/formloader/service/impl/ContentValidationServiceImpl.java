@@ -10,7 +10,7 @@ import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.PermissibleValueV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObjectExt;
@@ -228,7 +228,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			idx++;
 			if (des.getName() == null || des.getName().length() == 0) {
 				form.addMessage("Designation #" + idx + " has invalid name. Skip loading.");
-				continue;  //how to report that?
+				continue;  
 			}
 			
 			if (!repository.designationTypeExists(des.getType())) {
@@ -236,14 +236,33 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 				continue;
 			}
 			
-			//TODO: check classification
-			
-			//if good, add to the form
-			desigs.add(des);
+			if (classificationValid(des.getClassficationPublicIdVersionPairs())) {
+				//if good, add to the form
+				desigs.add(des);
+			} else
+				form.addMessage("Form's designation #" + idx + " has invalid ClassificationScheme or ClassificationSchemeItem");
 		}		
 		
-		if (desigs.size() > 0)
-			form.setDesignations(designations);
+		form.setDesignations(desigs);
+	}
+	
+	protected boolean classificationValid(List<String> classificationPublicIdVersionPairs) {
+		if (classificationPublicIdVersionPairs == null || classificationPublicIdVersionPairs.size() == 0)
+			return true;
+		
+		for (int i = 0; i < classificationPublicIdVersionPairs.size(); i++) {
+			String[] pair = classificationPublicIdVersionPairs.get(i).split(",");
+			
+			if (i == 0) {
+				if (!this.repository.validClassificationScheme(pair[0], pair[1]))
+					return false;
+			} else {
+				if (!this.repository.validClassificationSchemeItem(pair[0], pair[1]))
+					return false;
+			}
+		}
+		
+		return true;
 	}
 	
 	/**
@@ -259,19 +278,19 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 	 * @param form
 	 * @param designations
 	 */
-	protected void verifyDefinitions(FormDescriptor form, List<DefinitionTransferObject> definitions) {
-		
-		List<DefinitionTransferObject> defs = new ArrayList<DefinitionTransferObject>();
+	protected void verifyDefinitions(FormDescriptor form, List<DefinitionTransferObjectExt> definitions) {
 		
 		if (definitions == null || definitions.size() == 0)
 			return;
 		
+		List<DefinitionTransferObjectExt> defs = new ArrayList<DefinitionTransferObjectExt>();
+		
 		int idx = 0;
-		for (DefinitionTransferObject def : definitions) {
+		for (DefinitionTransferObjectExt def : definitions) {
 			idx++;
 			if (def.getDefinition() == null || def.getDefinition().length() == 0) {
 				form.addMessage("Definition #" + idx + " has invalid text value. Skip loading.");
-				continue;  //how to report that?
+				continue; 
 			}
 			
 			if (!repository.definitionTypeValid(def.getType())) {
@@ -279,14 +298,14 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 				continue;
 			}
 			
-			//TODO: check classification
-			
-			//if good, add to the form
-			defs.add(def);
+			if (classificationValid(def.getClassficationPublicIdVersionPairs())) {
+				//if good, add to the form
+				defs.add(def);
+			} else
+				form.addMessage("Form's definition #" + idx + " has invalid ClassificationScheme or ClassificationSchemeItem. Skip loading");
 		}		
 		
-		if (defs.size() > 0)
-			form.setDefinitions(defs);
+		form.setDefinitions(defs);
 	}
 	
 	/**

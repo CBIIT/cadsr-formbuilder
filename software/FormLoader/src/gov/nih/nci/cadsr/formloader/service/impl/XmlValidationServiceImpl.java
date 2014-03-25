@@ -39,7 +39,7 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 	protected ResourceLoader resourceLoader;
 	FormLoaderRepository repository;
 	
-	protected String XSD_PATH_NAME = "FormLoaderv13.xsd";
+	protected String XSD_PATH_NAME = "FormLoaderv14.xsd";
 	
 
 	public XmlValidationServiceImpl() {}
@@ -224,8 +224,10 @@ public class XmlValidationServiceImpl implements XmlValidationService, ResourceL
 	throws FormLoaderServiceException  {
 	    
 	    try {
+	    	
+	    	//String sch = Constants.W3C_XML_SCHEMA11_NS_URI;
 	    	// 1. Lookup a factory for the W3C XML Schema language
-		    SchemaFactory factory = SchemaFactory.newInstance(Constants.W3C_XML_SCHEMA11_NS_URI);
+	    	SchemaFactory factory = SchemaFactory.newInstance(Constants.W3C_XML_SCHEMA11_NS_URI);
 		     
 		    // 2. Compile the schema.
 		    File schemaLocation = resource.getFile();
