@@ -25,10 +25,17 @@ System.out.println("common_header_inc.jsp:" + username);
 				<TR>
 					<TD valign="TOP" align="CENTER" width="1%" colspan=1>
 						<A HREF="<%="formsCartAction.do?method=displayFormsCart"%>"
-							TARGET="_top"><IMG SRC="i/cde_cart.gif" alt="Form Cart"
+							TARGET="_top"><IMG SRC="i/cde_cart.gif" alt="Form Cart 1"
 								border=0> </A>
 						<br>
-						<font color=brown face=verdana size=1>&nbsp;Form &nbsp;Cart</font>
+						<font color=brown face=verdana size=1>&nbsp;Form &nbsp;Cart 1</font>
+					</TD>
+					<TD valign="TOP" align="CENTER" width="1%" colspan=1>
+						<A HREF="<%="formsCartAction.do?method=displayFormsCartV2"%>"
+							TARGET="_top"><IMG SRC="i/cde_cart.gif" alt="Form Cart 2"
+								border=0> </A>
+						<br>
+						<font color=brown face=verdana size=1>&nbsp;Form &nbsp;Cart 2</font>
 					</TD>
 					<TD valign="TOP" align="CENTER" width="1%" colspan=1>
 						<A HREF="<%="formCDECartAction.do?method=displayCDECart"%>"

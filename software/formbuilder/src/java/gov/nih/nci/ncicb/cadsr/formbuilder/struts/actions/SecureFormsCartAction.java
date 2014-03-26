@@ -71,7 +71,9 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchActionWi
 	    try {	    	
 	    	ensureSessionCarts(request);
 	    	FormDisplayCartOCIImpl displayCart = (FormDisplayCartOCIImpl)this.getSessionObject(request, CaDSRConstants.FORMS_DISPLAY_CART);
-	    	displayCart.setFormDisplayObjects();	 
+	    	displayCart.setFormDisplayObjects();
+	    	this.setSessionObject(request, CaDSRConstants.DISPLAY_CART1, CaDSRConstants.FORMS_DISPLAY_CART);
+	    	this.removeSessionObject(request, CaDSRConstants.DISPLAY_CART2);
 	    }
 	    catch (Exception exp) {
 	      if (log.isErrorEnabled()) {
@@ -80,7 +82,44 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchActionWi
 	      saveMessage(exp.getMessage(), request);
 	      return FAILURE;
 	    }
-	    return SUCCESS;
+	    //return SUCCESS;
+	    return "displayV1cart";
+
+  	}
+  
+  public ActionForward displayFormsCartV2(
+		    ActionMapping mapping,
+		    ActionForm form,
+		    HttpServletRequest request,
+		    HttpServletResponse response) throws IOException, ServletException {
+		     
+		    return mapping.findForward(retrieveItemsV2(mapping, form, request, response));
+		  }
+
+  public String retrieveItemsV2(
+	    ActionMapping mapping,
+	    ActionForm form,
+	    HttpServletRequest request,
+	    HttpServletResponse response) throws IOException, ServletException {
+	     
+	    try {	    	
+	    	ensureSessionCarts(request);
+	    	FormDisplayCartOCIImpl displayCart = (FormDisplayCartOCIImpl)this.getSessionObject(request, CaDSRConstants.FORMS_DISPLAY_CART2);
+	    	displayCart.setFormDisplayObjects();
+	    	this.setSessionObject(request, CaDSRConstants.DISPLAY_CART2, CaDSRConstants.FORMS_DISPLAY_CART2);
+	    	this.removeSessionObject(request, CaDSRConstants.DISPLAY_CART1);
+	    	
+	    	
+	    }
+	    catch (Exception exp) {
+	      if (log.isErrorEnabled()) {
+	        log.error("Exception on displayFormCart", exp);
+	      }
+	      saveMessage(exp.getMessage(), request);
+	      return FAILURE;
+	    }
+	    //return SUCCESS;
+	    return "displayV2cart";
   	}
   
 	public FormDisplayCartTransferObject convertToDisplayItem(Form crf)

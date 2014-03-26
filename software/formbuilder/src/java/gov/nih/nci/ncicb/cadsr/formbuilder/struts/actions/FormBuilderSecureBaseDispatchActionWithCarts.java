@@ -57,7 +57,7 @@ public class FormBuilderSecureBaseDispatchActionWithCarts extends
 							+ CaDSRConstants.FORMS_CART_V2 + " " + userCartV2);
 				}
 				
-				if (true) { // we always write FORMS_DISPLAY_CART  now
+				if (this.getSessionObject(request,	CaDSRConstants.FORMS_DISPLAY_CART) == null) { 
 					FormDisplayCartOCIImpl userFormDisplayCart = new FormDisplayCartOCIImpl(cartClient,
 							user.getUsername(), CaDSRConstants.FORMS_DISPLAY_CART,
 							getFormBuilderService());
@@ -65,6 +65,15 @@ public class FormBuilderSecureBaseDispatchActionWithCarts extends
 							CaDSRConstants.FORMS_DISPLAY_CART, userFormDisplayCart);
 					log.debug("setSessionObject "
 							+ CaDSRConstants.FORMS_DISPLAY_CART + " " + userFormDisplayCart);
+				}
+				if (this.getSessionObject(request,	CaDSRConstants.FORMS_DISPLAY_CART2) == null) { 
+					FormDisplayCartOCIImpl userFormDisplayCart = new FormDisplayCartOCIImpl(cartClient,
+							user.getUsername(), CaDSRConstants.FORMS_DISPLAY_CART2,
+							getFormBuilderService());
+					this.setSessionObject(request,
+							CaDSRConstants.FORMS_DISPLAY_CART2, userFormDisplayCart);
+					log.debug("setSessionObject "
+							+ CaDSRConstants.FORMS_DISPLAY_CART2 + " " + userFormDisplayCart);
 				}
 			}
 		} catch (Exception exp) {
