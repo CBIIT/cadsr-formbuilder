@@ -120,7 +120,7 @@ public class JDBCProtocolDAOV2 extends JDBCBaseDAOV2 implements ProtocolDAO {
       }
 
       public void setSql(String longName){
-        super.setSql("SELECT proto_idseq from sbrext.protocols_view_ext where long_name  = '" + longName + "'");
+        super.setSql("SELECT proto_idseq from sbrext.protocols_view_ext where upper(long_name)  = '" + longName.toUpperCase() + "'");
        }
      /**
       * 

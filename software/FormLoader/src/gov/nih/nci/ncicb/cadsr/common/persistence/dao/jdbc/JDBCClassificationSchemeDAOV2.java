@@ -377,7 +377,7 @@ public class JDBCClassificationSchemeDAOV2 extends JDBCAdminComponentDAOV2
       }
 
       public void setSql(String longName){
-        super.setSql("select cs_idseq from sbr.classification_Schemes_view where long_name  = '" + longName + "'");
+        super.setSql("select cs_idseq from sbr.classification_Schemes_view where upper(long_name)  = '" + longName.toUpperCase() + "'");
        }
      /**
       * 

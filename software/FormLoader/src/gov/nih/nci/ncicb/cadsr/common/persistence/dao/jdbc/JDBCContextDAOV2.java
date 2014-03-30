@@ -119,7 +119,7 @@ public class JDBCContextDAOV2 extends JDBCBaseDAOV2 implements ContextDAO {
     }
 
     public void _setSql(String name){
-      super.setSql("select conte_idseq, name from sbr.contexts_view where name = '" + name + "'");
+      super.setSql("select conte_idseq, name from sbr.contexts_view where upper(name) = '" + name.toUpperCase() + "'");
     }
    /**
     * 3.0 Refactoring- Removed JDBCTransferObject
