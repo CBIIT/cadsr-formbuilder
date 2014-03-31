@@ -1,6 +1,7 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.ejb.impl;
 
 import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
+import gov.nih.nci.ncicb.cadsr.common.CaDSRUtil;
 import gov.nih.nci.ncicb.cadsr.common.dto.CSITransferObject;
 import gov.nih.nci.ncicb.cadsr.common.ejb.common.SessionBeanAdapter;
 import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
@@ -60,6 +61,7 @@ import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocator;
 import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocatorFactory;
 import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderServiceRemote;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -320,7 +322,14 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
 
         myForm.setModules(modules);
         //Context caBIG = cdao.getContextByName(CaDSRConstants.CONTEXT_CABIG);
-        Context caBIG = cdao.getContextByName(CaDSRConstants.CONTEXT_NCIP);
+        //Context caBIG = cdao.getContextByName(CaDSRConstants.CONTEXT_NCIP);
+        String defaultContextName = null;
+        try {
+        	defaultContextName = CaDSRUtil.getDefaultContextName();
+        } catch (IOException ioe) {
+        	defaultContextName = CaDSRConstants.CONTEXT_NCIP; //fall back on hardcoded string
+        }
+        Context caBIG = cdao.getContextByName(defaultContextName);
         myForm
         .setPublished(fdao.isFormPublished(myForm.getIdseq(), caBIG.getConteIdseq()));
 
@@ -459,7 +468,14 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
 
         myForm.setModules(modules);
         //Context caBIG = cdao.getContextByName(CaDSRConstants.CONTEXT_CABIG);
-        Context caBIG = cdao.getContextByName(CaDSRConstants.CONTEXT_NCIP);
+        //Context caBIG = cdao.getContextByName(CaDSRConstants.CONTEXT_NCIP);
+        String defaultContextName = null;
+        try {
+        	defaultContextName = CaDSRUtil.getDefaultContextName();
+        } catch (IOException ioe) {
+        	defaultContextName = CaDSRConstants.CONTEXT_NCIP; //fall back on hardcoded string
+        }
+        Context caBIG = cdao.getContextByName(defaultContextName);
         myForm
         .setPublished(fdao.isFormPublished(myForm.getIdseq(), caBIG.getConteIdseq()));
 
