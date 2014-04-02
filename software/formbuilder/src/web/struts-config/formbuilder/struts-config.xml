@@ -386,11 +386,15 @@
       scope="request"
       type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.SecureFormsCartAction"
       validate="false">
-      <forward name="failure" path="/jsp/formbuilder/displayFormsCart.jsp"/>
-      <forward name="success" path="/jsp/formbuilder/displayFormsCart.jsp"/>
+      <!--   <forward name="failure" path="/jsp/formbuilder/displayFormsCart.jsp"/> -->
+      <forward name="failureV1" path="/jsp/formbuilder/displayFormsCartV1.jsp"/>
+      <forward name="failureV2" path="/jsp/formbuilder/displayFormsCartV2.jsp"/>
+      <!--  <forward name="success" path="/jsp/formbuilder/displayFormsCart.jsp"/> -->
       <forward name="displayV1cart" path="/jsp/formbuilder/displayFormsCartV1.jsp"/>
       <forward name="displayV2cart" path="/jsp/formbuilder/displayFormsCartV2.jsp"/>
-      <forward name="addDeleteSuccess" path="/formsCartAction.do?method=displayFormsCart"/>
+      <!--  <forward name="addDeleteSuccess" path="/formsCartAction.do?method=displayFormsCart"/> -->
+      <forward name="addDeleteSuccessV1" path="/formsCartAction.do?method=displayFormsCartV1"/>
+      <forward name="addDeleteSuccessV2" path="/formsCartAction.do?method=displayFormsCartV2"/>
       
     </action>
     <action name="downloadCart" path="/formCDEDownload" scope="request"

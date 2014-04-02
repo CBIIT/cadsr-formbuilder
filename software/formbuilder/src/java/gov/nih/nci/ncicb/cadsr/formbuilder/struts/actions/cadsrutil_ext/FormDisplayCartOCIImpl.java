@@ -61,6 +61,14 @@ public class FormDisplayCartOCIImpl implements
 	// in this cart will be added to the contents of the oCart. - Sula
 	private Map formDisplayCart;
 	
+	public Map getFormDisplayCart() {
+		return formDisplayCart;
+	}
+
+	public void setFormDisplayCart(Map formDisplayCart) {
+		this.formDisplayCart = formDisplayCart;
+	}
+
 	protected Collection formDisplayObjects;
 	
 	public static final String transformToConvertCartToDisplayObject = "/transforms/ConvertFormCartV2ToDisplayObject.xsl";
@@ -253,6 +261,18 @@ public class FormDisplayCartOCIImpl implements
 		    addForm((FormV2TransferObject)itemIter.next());
 		}
 	}
+	
+	public void addDisplayForm(Object form) {
+		if (!formDisplayCart.containsKey(((FormDisplayCartTransferObject)form).getIdseq()))
+			formDisplayCart.put(((FormDisplayCartTransferObject)form).getIdseq(), form);
+	}
+
+	public void addDisplayForms(Collection forms) {
+		Iterator itemIter = forms.iterator();
+		while (itemIter.hasNext()) {
+		    addDisplayForm((FormDisplayCartTransferObject)itemIter.next());
+		}
+	}
 
 	public void mergeFormCart() {
 		Collection formColl = formDisplayCart.values();
@@ -366,15 +386,15 @@ public class FormDisplayCartOCIImpl implements
 			
 			for (Object crf: formDisplayCart.values()) {
 				FormCartDisplayObject FCDO = new FormCartDisplayObject();
-				FormV2 formVersion2 = ((FormV2)crf);
-				FCDO.setAslName(formVersion2.getAslName());
-				FCDO.setContextName(formVersion2.getContext().getName());
-				FCDO.setFormType(formVersion2.getFormType());
-				FCDO.setIdseq(formVersion2.getIdseq());
-				FCDO.setLongName(formVersion2.getLongName());
-				FCDO.setProtocols(formVersion2.getProtocols());
-				FCDO.setPublicId(formVersion2.getPublicId());
-				FCDO.setVersion(formVersion2.getVersion());
+				FormDisplayCartTransferObject formdisplayObject = ((FormDisplayCartTransferObject)crf);
+				FCDO.setAslName(formdisplayObject.getAslName());
+				FCDO.setContextName(formdisplayObject.getContextName());
+				FCDO.setFormType(formdisplayObject.getFormType());
+				FCDO.setIdseq(formdisplayObject.getIdseq());
+				FCDO.setLongName(formdisplayObject.getLongName());
+				FCDO.setProtocols(formdisplayObject.getProtocols());
+				FCDO.setPublicId(formdisplayObject.getPublicId());
+				FCDO.setVersion(formdisplayObject.getVersion());
 				itemList.add(new FormCartDisplayObjectPersisted(FCDO, false));
 			}
 

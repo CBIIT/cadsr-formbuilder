@@ -53,7 +53,7 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchActionWi
    * @throws IOException
    * @throws ServletException
    */
-  public ActionForward displayFormsCart(
+  public ActionForward displayFormsCartV1(
     ActionMapping mapping,
     ActionForm form,
     HttpServletRequest request,
@@ -149,11 +149,33 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchActionWi
    * @throws IOException
    * @throws ServletException
    */
+	
+	
+	
+  public ActionForward addItemsV2(
+		    ActionMapping mapping,
+		    ActionForm form,
+		    HttpServletRequest request,
+		    HttpServletResponse response) throws IOException, ServletException {
+	  return addItems(mapping, form, request, response, CaDSRConstants.FORMS_DISPLAY_CART2, CaDSRConstants.FORMS_CART_V2);
+  }
+	
+  public ActionForward addItemsV1(
+		    ActionMapping mapping,
+		    ActionForm form,
+		    HttpServletRequest request,
+		    HttpServletResponse response) throws IOException, ServletException {
+	  return addItems(mapping, form, request, response, CaDSRConstants.FORMS_DISPLAY_CART, CaDSRConstants.FORMS_CART);
+  }
+
+	
   public ActionForward addItems(
     ActionMapping mapping,
     ActionForm form,
     HttpServletRequest request,
-    HttpServletResponse response) throws IOException, ServletException {
+    HttpServletResponse response,
+    String displayCartId,
+    String formCartId) throws IOException, ServletException {
 	     
    FormBuilderServiceDelegate service = getFormBuilderService();
 	
@@ -164,86 +186,101 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchActionWi
    int formsInQueue = 0;
    
     try {  	
-	if (FormCartOptionsUtil.instance().writeInV1Format()) {
-		Collection itemsToMerge = new ArrayList();
-		Collection displayItemsToMerge = new ArrayList();
-		CDECart sessionCart = (CDECart) this.getSessionObject(request,
-				CaDSRConstants.FORMS_CART);
-		FormDisplayCartOCIImpl userFormDisplayCart = (FormDisplayCartOCIImpl) this
-				.getSessionObject(request, CaDSRConstants.FORMS_DISPLAY_CART);
+		CDECart sessionCart = (CDECart) this.getSessionObject(request, formCartId);
+		FormDisplayCartOCIImpl userFormDisplayCart = (FormDisplayCartOCIImpl) this.getSessionObject(request, displayCartId);
 		
 		if (selectedSaveItems != null) {
-			for (Object version1FormId : selectedSaveItems) {
-				Form crf = service.getFormDetails((String)version1FormId);
-				log.debug("adding V1 form objects to cart (No Save)");
-				itemsToMerge.add(crf);
-				displayItemsToMerge.add(convertToDisplayItem(crf));
-			}
-			log.debug("merging V1 form objects");
-			sessionCart.mergeElements(itemsToMerge);
-			log.debug("done merging V1 form objects");
-			
-			log.debug("merging display form objects");
-			userFormDisplayCart.mergeElements(displayItemsToMerge);
-			log.debug("done merging display form objects");
-			
-			// Remove the saved forms from cart in memory
-			for (Object version2FormId : selectedSaveItems) {
-				userFormDisplayCart.removeFormDisplayCart((String)version2FormId);
-			}
+
+				if (formCartId.equals(CaDSRConstants.FORMS_CART))
+					{
+						Collection itemsToMerge = new ArrayList();
+						Collection displayItemsToMerge = new ArrayList();
+						for (Object version1FormId : selectedSaveItems) {
+	
+							Form crf = service.getFormDetails((String)version1FormId);
+							log.debug("adding V1 form objects to cart (No Save)");
+							itemsToMerge.add(crf);
+							displayItemsToMerge.add(convertToDisplayItem(crf));
+						}
+	
+							log.debug("merging V1 form objects");
+							sessionCart.mergeElements(itemsToMerge);
+							log.debug("done merging V1 form objects");
+							
+							log.debug("merging display form objects");
+							userFormDisplayCart.mergeElements(displayItemsToMerge);
+							log.debug("done merging display form objects");
+
+						
+						// Remove the saved forms from cart in memory
+						for (Object version2FormId : selectedSaveItems) {
+							userFormDisplayCart.removeFormDisplayCart((String)version2FormId);
+						}
+					}
+				else if (formCartId.equals(CaDSRConstants.FORMS_CART_V2))
+					{
+						Collection itemsToRemove = new ArrayList();
+						Collection itemsToAdd = new ArrayList();
+						Collection displayItemsToMerge = new ArrayList();
+						for (Object version2FormId : selectedSaveItems) {
+							itemsToRemove.add((String)version2FormId);
+							FormV2 crf = service.getFormDetailsV2((String)version2FormId);
+							itemsToAdd.add(translateCartObject((FormV2) crf));
+							// TODO add saving to FormDisplayCart as well
+							displayItemsToMerge.add(convertToDisplayItem(crf));
+						}
+
+						// remove from cart before adding (so that we'll update), removing non-existent doesn't hurt
+						// (wonder if that is really needed)
+						log.debug("removing re-used objects");
+						((CDECartOCImplExtension)sessionCart).removeDataElements(itemsToRemove);
+						// (removeDataElements works on native id and doesn't care
+						// about element type)
+						log.debug("adding new objects");
+						((CDECartOCImplExtension)sessionCart).addObjectCollection(itemsToAdd);
+						log.debug("done");
+						
+						log.debug("merging display form objects");
+						userFormDisplayCart.mergeElements(displayItemsToMerge);
+						log.debug("done merging display form objects");
+
+					
+						// Remove the saved forms from cart in memory
+						for (Object version2FormId : selectedSaveItems) {
+							userFormDisplayCart.removeFormDisplayCart((String)version2FormId);
+						}
+						
+						// Remove the saved forms from cart in memory
+						for (Object version2FormId : selectedSaveItems) {
+							((CDECartOCImplExtension)sessionCart).removeFormV2((String)version2FormId);
+						}
+						formsInQueue = ((CDECartOCImplExtension)sessionCart).getFormCartV2().size();
+					}
+				this.setSessionObject(request, formCartId, sessionCart);
+				this.setSessionObject(request, displayCartId, userFormDisplayCart);
 		}
-		this.setSessionObject(request, CaDSRConstants.FORMS_CART, sessionCart);
-		this.setSessionObject(request, CaDSRConstants.FORMS_DISPLAY_CART, userFormDisplayCart);
+
+		
+	    request.getSession().setAttribute("myFormCartInfo", new Integer(formsInQueue).toString());
+	    System.out.println( "Forms Queued in Cart : " + request.getSession().getAttribute("myFormCartInfo") );
+		saveMessage("cadsr.common.formcart.save.success",request);
 	}
-
-	if (true) { // we always write the formCartV2 cart now
-		log.debug("Starting new add-to-cart - creating objects");
-		Collection itemsToRemove = new ArrayList();
-		Collection itemsToAdd = new ArrayList();
-		CDECartOCImplExtension sessionCart = (CDECartOCImplExtension) this
-				.getSessionObject(request, CaDSRConstants.FORMS_CART_V2);
-		if (selectedSaveItems != null) {
-			for (Object version2FormId : selectedSaveItems) {
-				itemsToRemove.add((String)version2FormId);
-				FormV2 crf = service.getFormDetailsV2((String)version2FormId);
-				itemsToAdd.add(translateCartObject((FormV2) crf));
-				// TODO add saving to FormDisplayCart as well
-			}
-
-			// remove from cart before adding (so that we'll update), removing non-existent doesn't hurt
-			// (wonder if that is really needed)
-			log.debug("removing re-used objects");
-			sessionCart.removeDataElements(itemsToRemove);
-			// (removeDataElements works on native id and doesn't care
-			// about element type)
-			log.debug("adding new objects");
-			sessionCart.addObjectCollection(itemsToAdd);
-			log.debug("done");
-			
-			// Remove the saved forms from cart in memory
-			for (Object version2FormId : selectedSaveItems) {
-				sessionCart.removeFormV2((String)version2FormId);
-			}
-		}
-		formsInQueue = sessionCart.getFormCartV2().size();
-
-		this.setSessionObject(request, CaDSRConstants.FORMS_CART_V2, sessionCart);
-	}
-	//// GF32932  D.An, 20130825.
-    request.getSession().setAttribute("myFormCartInfo", new Integer(formsInQueue).toString());
-System.out.println( "Forms Queued in Cart : " + request.getSession().getAttribute("myFormCartInfo") );
-
-	      saveMessage("cadsr.common.formcart.save.success",request);
-    }
     catch (Exception exp) {
       if (log.isErrorEnabled()) {
         log.error("Exception on addItems " , exp);
       }
     }
 
-    return mapping.findForward("addDeleteSuccess");
-
-
+    if (formCartId.equals(CaDSRConstants.FORMS_CART))
+	    {
+	    	return mapping.findForward("addDeleteSuccessV1");
+	    }
+    else  if (formCartId.equals(CaDSRConstants.FORMS_CART_V2))
+	    {
+	    	return mapping.findForward("addDeleteSuccessV2");
+	    }
+    else
+    	return mapping.findForward("addDeleteSuccessV2");
   }
   
   
@@ -274,11 +311,32 @@ System.out.println( "Forms Queued in Cart : " + request.getSession().getAttribut
    * @throws IOException
    * @throws ServletException
    */
+  
+  
+	public ActionForward removeItemsV2(
+			    ActionMapping mapping,
+			    ActionForm form,
+			    HttpServletRequest request,
+			    HttpServletResponse response) throws IOException, ServletException {
+		return removeItems(mapping, form, request, response, CaDSRConstants.FORMS_DISPLAY_CART2, CaDSRConstants.FORMS_CART_V2);
+	}
+		
+	public ActionForward removeItemsV1(
+			    ActionMapping mapping,
+			    ActionForm form,
+			    HttpServletRequest request,
+			    HttpServletResponse response) throws IOException, ServletException {
+		return removeItems(mapping, form, request, response, CaDSRConstants.FORMS_DISPLAY_CART, CaDSRConstants.FORMS_CART);
+	}
+  
+  
   public ActionForward removeItems(
     ActionMapping mapping,
     ActionForm form,
     HttpServletRequest request,
-    HttpServletResponse response) throws IOException, ServletException {
+    HttpServletResponse response,
+    String displayCartId,
+    String formCartId) throws IOException, ServletException {
     try {
       CDECartFormBean myForm = (CDECartFormBean) form;
       String[] selectedDeleteItems = myForm.getSelectedDeleteItems();
@@ -346,6 +404,15 @@ System.out.println( "Forms Queued in Cart : " + request.getSession().getAttribut
       }
     }
 
-    return mapping.findForward("addDeleteSuccess");
+    if (formCartId.equals(CaDSRConstants.FORMS_CART))
+	    {
+	    	return mapping.findForward("addDeleteSuccessV1");
+	    }
+	else  if (formCartId.equals(CaDSRConstants.FORMS_CART_V2))
+	    {
+	    	return mapping.findForward("addDeleteSuccessV2");
+	    }
+	else
+		return mapping.findForward("addDeleteSuccessV2");
   }  
 }
