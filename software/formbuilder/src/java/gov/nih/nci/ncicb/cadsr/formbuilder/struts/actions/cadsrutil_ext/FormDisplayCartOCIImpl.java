@@ -326,6 +326,28 @@ public class FormDisplayCartOCIImpl implements
 		}
 	}
 	
+	public void removeDataElement(String itemId) {
+		CartObject co = getNativeObject(itemId);
+		if (co != null) {
+			try {	
+				oCart = cartClient.removeObject(oCart, co);			
+			} catch (ObjectCartException oce) {
+				throw new RuntimeException("removeDataElement: Error removing object with native ID:"+itemId, oce);
+			}			
+		}		
+	}
+	
+	public void removeDataElements(Collection items) {
+		List<CartObject> cList = getNativeObjects(items);
+		if (!cList.isEmpty()) {
+			try {	
+				oCart = cartClient.removeObjectCollection(oCart, cList);
+			} catch (ObjectCartException oce) {
+				throw new RuntimeException("removeDataElements: Error removing collection of objects", oce);
+			}	
+		}
+	}
+	
 	public Collection getFormDisplayObjects() {
 		log.debug("getFormDisplayObjects " + formDisplayObjects.size() + " objects");		
 		return formDisplayObjects;

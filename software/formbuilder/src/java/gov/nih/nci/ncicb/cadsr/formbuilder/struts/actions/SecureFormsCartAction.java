@@ -344,54 +344,50 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchActionWi
 
       //Collection unsavedItems = new ArrayList();
       FormBuilderServiceDelegate service = getFormBuilderService();
- 
       
-      if (FormCartOptionsUtil.instance().writeInV1Format()){
+	  FormDisplayCartOCIImpl userFormDisplayCart = (FormDisplayCartOCIImpl) this
+				.getSessionObject(request, displayCartId);
+	  CDECart sessionCart =
+			  (CDECart) this.getSessionObject(request, formCartId);
+ 
+      if (formCartId.equals(CaDSRConstants.FORMS_CART))
+		{
     	  try {
     		  Collection items = new ArrayList();
-
-    		  //Get the cart in the session
-    		  CDECart sessionCart =
-    			  (CDECart) this.getSessionObject(request, CaDSRConstants.FORMS_CART);
+       		  Collection displayItemsToRemove = new ArrayList();
     		  CDECartItem item = null;
+
 
     		  for (int i = 0; i < selectedDeleteItems.length; i++) {
     			  items.add(selectedDeleteItems[i]);
+    			  userFormDisplayCart.removeFormDisplayCart(selectedDeleteItems[i]);
     		  }
     		  sessionCart.removeDataElements(items);  // (removeDataElements works on native id and doesn't care about element type)
+    		  userFormDisplayCart.removeDataElements(items);
     	  }
     	  catch (Exception exp) {
-    		  log.error("Exception on removeItems from " + CaDSRConstants.FORMS_CART + " ", exp);
+    		  log.error("Exception on removeItems from " + formCartId + " ", exp);
     	  }
-      }      
-      
-      if (true){ // we always write the formCartV2 cart now
+      }
+      else if (formCartId.equals(CaDSRConstants.FORMS_CART_V2)){ // we always write the formCartV2 cart now
     	  try {
     		  Collection items = new ArrayList();
     		  Collection displayItemsToRemove = new ArrayList();
-
-    		  //Get the cart in the session
-    		  CDECart sessionCart =
-    			  (CDECart) this.getSessionObject(request, CaDSRConstants.FORMS_CART_V2);
     		  CDECartItem item = null;
     		  
-    		  FormDisplayCartOCIImpl userFormDisplayCart = (FormDisplayCartOCIImpl) this
-    					.getSessionObject(request, CaDSRConstants.FORMS_DISPLAY_CART);
-
     		  for (int i = 0; i < selectedDeleteItems.length; i++) {
     			  items.add(selectedDeleteItems[i]);
     		  }
 	  		  for (Object version1FormId : selectedDeleteItems) {
-					Form crf = service.getFormDetails((String)version1FormId);
-					displayItemsToRemove.add(convertToDisplayItem(crf));
+					//Form crf = service.getFormDetails((String)version1FormId);
+					//displayItemsToRemove.add(convertToDisplayItem(crf));
 					userFormDisplayCart.removeFormDisplayCart((String)version1FormId);
 			  }
     		  sessionCart.removeDataElements(items);  // (removeDataElements works on native id and doesn't care about element type)
-    		  userFormDisplayCart.removeElements(displayItemsToRemove);
-    		  
+    		  userFormDisplayCart.removeDataElements(items);
     	  }
     	  catch (Exception exp) {
-    		  log.error("Exception on removeItems from " + CaDSRConstants.FORMS_CART_V2 + " ", exp);
+    		  log.error("Exception on removeItems from " + formCartId + " ", exp);
     	  }
     		  
       }      
