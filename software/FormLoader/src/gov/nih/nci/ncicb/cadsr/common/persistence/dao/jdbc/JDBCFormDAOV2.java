@@ -2,6 +2,7 @@ package gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc;
 
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
+import gov.nih.nci.ncicb.cadsr.common.CaDSRUtil;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
@@ -26,6 +27,7 @@ import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomain;
 import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomainV2;
 import gov.nih.nci.ncicb.cadsr.common.util.StringUtils;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -1366,14 +1368,17 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 	        }
 
 	        myForm.setModules(modules);
-	        Context caBIG = null;
-	        caBIG = cdao.getContextByName(CaDSRConstants.CONTEXT_CABIG);
-	        if( caBIG == null ){
-	        	caBIG = cdao.getContextByName(CaDSRConstants.CONTEXT_NCIP);
+	        Context context = null;
+	        try
+	        {
+	        	context = cdao.getContextByName(CaDSRUtil.getDefaultContextName());
+	        }
+	        catch ( IOException e) {
+	        	context = cdao.getContextByName(CaDSRConstants.CONTEXT_NCIP);
 	        }
 
 	        myForm
-	        .setPublished(fdao.isFormPublished(myForm.getIdseq(), caBIG.getConteIdseq()));
+	        .setPublished(fdao.isFormPublished(myForm.getIdseq(), context.getConteIdseq()));
 
 	        //Collection formCSIs = fdao.retrieveClassifications(formPK);
 	        //myForm.setClassifications(formCSIs);
