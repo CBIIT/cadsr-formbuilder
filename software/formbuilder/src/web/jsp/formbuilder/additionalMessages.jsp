@@ -19,7 +19,7 @@ System.out.println("additionalMessages.jsp :  " + formCartInfo);
 
 <!-- <p id="marqueeAdditionalMessage" style="display:none">&nbsp</p>-->
 
-<marquee class="marqeeMessages" width="600" height="28" style="font-family:arial;color:green;font-size:18px;" scrollamount="1" direction="up" behavior="scroll">
+<marquee class="marqeeMessages" width="600" height="28" style="font-family:arial;color:green;font-size:12px;" scrollamount="1" direction="up" behavior="scroll">
 <p class="marqeeMessages" id="p1Message">&nbsp</p>
 <p class="marqeeMessages" id="p2Message">&nbsp</p>
 </marquee>
