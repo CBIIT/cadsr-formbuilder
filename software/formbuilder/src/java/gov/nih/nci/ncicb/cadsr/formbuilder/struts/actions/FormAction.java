@@ -622,6 +622,29 @@ System.out.println( "Forms Queued in Cart : " + request.getSession().getAttribut
 		return displayObject;
 	}
 	
+	public FormDisplayCartTransferObject getSelectedForm(String formId, List forms)
+		{
+			FormDisplayCartTransferObject displayObject = new FormDisplayCartTransferObject();
+			for (Object eachform : forms)
+			{
+				FormTransferObject item = ((FormTransferObject)eachform);
+				if (formId.equals(item.getIdseq()))
+				{
+					displayObject.setAslName(item.getAslName());
+					displayObject.setContextName(item.getContext().getName());
+					displayObject.setFormType(item.getFormType());
+					displayObject.setIdseq(item.getIdseq());
+					displayObject.setLongName(item.getLongName());
+					displayObject.setProtocols(item.getProtocols());
+					displayObject.setPublicId(item.getPublicId());
+					displayObject.setVersion(item.getVersion());
+					return displayObject;
+				}
+			}
+	
+			return displayObject;  // return empty object
+		}
+	
 	
 	public ActionForward addFormToCart(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
@@ -636,6 +659,7 @@ System.out.println( "Forms Queued in Cart : " + request.getSession().getAttribut
 
 			DynaActionForm dynaBean = (DynaActionForm) form;
 			boolean clearCheckedFormIds = false;
+			List forms = (List)getSessionObject(request,this.FORM_SEARCH_RESULTS);
 
 			if (true) { 
 
@@ -649,25 +673,32 @@ System.out.println( "Forms Queued in Cart : " + request.getSession().getAttribut
 				// add to form display cart now
 				FormDisplayCartOCIImpl userFormDisplayCart = (FormDisplayCartOCIImpl) this
 						.getSessionObject(request, CaDSRConstants.FORMS_DISPLAY_CART);
+				
+				FormDisplayCartOCIImpl userFormDisplayCartV2 = (FormDisplayCartOCIImpl) this
+						.getSessionObject(request, CaDSRConstants.FORMS_DISPLAY_CART2);
 
 				String[] formIds = (String[]) dynaBean.get("checkedFormIds");
 								
 				if (formIds != null) {
 					for (String formId : formIds) {
-						FormV2 crf = service.getFormDetailsV2(formId);
-						itemsToAdd.add(crf);
-						displayItemsToAdd.add(convertToDisplayItem(crf));
+						//FormV2 crf = service.getFormDetailsV2(formId);
+						//itemsToAdd.add(crf);
+						//displayItemsToAdd.add(convertToDisplayItem(crf));
+						displayItemsToAdd.add(getSelectedForm(formId, forms));
 					}
-					sessionCart.addFormsV2(itemsToAdd);
+					//sessionCart.addFormsV2(itemsToAdd);
 					// create FormDisplayCartTransferObject for this cart
-					userFormDisplayCart.addForms(itemsToAdd);
+					userFormDisplayCart.addDisplayForms(displayItemsToAdd);
+					userFormDisplayCartV2.addDisplayForms(displayItemsToAdd);
 					log.debug("done");
 					
 					clearCheckedFormIds = true;
 				}
-				this.setSessionObject(request, CaDSRConstants.FORMS_CART_V2, sessionCart);
+				//this.setSessionObject(request, CaDSRConstants.FORMS_CART_V2, sessionCart);
 				this.setSessionObject(request, CaDSRConstants.FORMS_DISPLAY_CART, userFormDisplayCart);
-				formsInQueue = sessionCart.getFormCartV2().size();
+				this.setSessionObject(request, CaDSRConstants.FORMS_DISPLAY_CART2, userFormDisplayCartV2);
+				//formsInQueue = sessionCart.getFormCartV2().size();
+				formsInQueue = userFormDisplayCart.getFormDisplayCart().size();
 			}
 //// GF32932  D.An, 20130825.    
 		      request.getSession().setAttribute("myFormCartInfo", new Integer(formsInQueue).toString());

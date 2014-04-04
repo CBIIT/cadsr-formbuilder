@@ -28,7 +28,7 @@ function submitForm() {
 
 function saveItems() {
   if (validateSelection('selectedSaveItems','Please select at least one data element to save to your Form Cart.')) {
-   document.forms[0].method.value = 'addItems'
+   document.forms[0].method.value = 'addItemsV2'
    submitForm();
    return true;
   }
@@ -36,7 +36,7 @@ function saveItems() {
 
 function deleteItems() {
   if (validateSelection('selectedDeleteItems','Please select at least one form to delete from your Form Cart.')) {
-    document.forms[0].method.value = 'removeItems'
+    document.forms[0].method.value = 'removeItemsV2'
     submitForm();
   }
 }
@@ -65,7 +65,7 @@ function details(formIdSeq ){
 }
 
 function retrieveSavedItems() {
-  document.location.href = "formsCartAction.do?method=displayFormsCart";
+  document.location.href = "formsCartAction.do?method=displayFormsCartV2";
 }
 
 -->
@@ -130,139 +130,7 @@ $(document).ready(function()
 <html:hidden property="<%= FormConstants.QUESTION_INDEX %>"/>
 <html:hidden property="<%= FormConstants.MODULE_INDEX %>"/>
 <html:hidden property="<%= FormConstants.DE_SEARCH_SRC %>"/>
-<logic:present name="<%=CaDSRConstants.DISPLAY_CART1%>">
-  <table width="80%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
-    <tr class="OraTableColumnHeader">
-    <logic:notEmpty name="<%=CaDSRConstants.FORMS_DISPLAY_CART%>" property = "formDisplayObjects">
-      <th><center>Save<br/><input type="checkbox" name="saveAllChk" value="yes" onClick="ToggleSaveAll(this)"/></center></th>
-      <th><center>Delete<br/><input type="checkbox" name="deleteAllChk" value="yes" onClick="ToggleDeleteAll(this)"/></center></th>
-	<th><center>Action</center></th>
-    </logic:notEmpty>
-      <th>Long Name</th>
-      <th>Context</th>
-		<th>Type</th>
-      <th>Protocol Long Name(s)</th>
-      <th>Workflow Status</th>
-      <th>Public Id</th>
-      <th>Version</th>
-    </tr>
-  <logic:empty name="<%=CaDSRConstants.FORMS_DISPLAY_CART%>" property = "formDisplayObjects">
-    <tr class="OraTabledata">
-        <td class="OraFieldText" colspan="7">
-          Form Cart is empty. 
-        </td>
-    </tr>
-  </logic:empty>
-  <logic:notEmpty name="<%=CaDSRConstants.FORMS_DISPLAY_CART%>" property = "formDisplayObjects">
-	<bean:size id="noOfItems" name="<%=CaDSRConstants.FORMS_DISPLAY_CART%>" property="formDisplayObjects" />
-    <logic:iterate id="form" name="<%=CaDSRConstants.FORMS_DISPLAY_CART%>" type="gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormCartDisplayObjectPersisted" property="formDisplayObjects">
-<%
-      String formId = form.getIdseq();
-      String detailsURL = "javascript:details('"+formId+"')";
-      boolean ISPERSISTED = form.getIsPersisted();
-%>
-      <tr class="OraTabledata">
-      	<td class="OraFieldText"><center>
-			<logic:equal name="form" property="isPersisted" value="true">
-              	&nbsp;       
-            </logic:equal>
-			<logic:notEqual name="form" property="isPersisted" value="true">
-				<input type="checkbox" name="selectedSaveItems" value="<%= formId %>" />
-			</logic:notEqual></center>
-		</td>
-<!--GF32932. -D.An, 20130830  -->		
-        <td><center>
-<logic:equal name="form" property="isPersisted" value="true">
-    <input type="checkbox" name="selectedDeleteItems" value="<%= formId %>"/></center>
-</logic:equal>
-        </td>
-		<td>
-			<table>
-                    <tr>               
-                    	<td width="20" class="OraTabledata" align=center>                  
-					<html:link action='<%="/formExcelDownload.do?"%>' 
-      			            paramId = "<%=FormConstants.FORM_ID_SEQ%>"
-            	      		paramName="form" paramProperty="idseq"
-		      	            target="_blank" >
-	             			<html:img src='<%=urlPrefix+"i/excel-icon.jpg"%>' border="0" alt="Excel Download"/>
-	      		      </html:link>
-				</td>
-                    	<td width="20" class="OraTabledata" align=center>                  
-					<html:link action='<%="/formXMLDownload.do?"%>' 
-            			      paramId = "<%=FormConstants.FORM_ID_SEQ%>"
-			                  paramName="form" paramProperty="idseq"
-			                  target="_blank" >
-               				<html:img src='<%=urlPrefix+"i/xml-icon.gif"%>' border="0" alt="XML Download"/>
-			            </html:link>
-	                    </td> 
-                    </tr>
-                    </table>
-		</td>
-        <td class="OraFieldText">
-          <a href="<%=detailsURL%>">
-            <bean:write name="form" property="longName"/>
-          </a>
-        </td>
-        <td class="OraFieldText">
-          <bean:write name="form" property="contextName"/>
-        </td>
-        <td class="OraFieldText">
-          <bean:write name="form" property="formType"/>
-        </td>
-        <td class="OraFieldText">
-		<logic:notEmpty name="form" property="protocols">
-		<logic:iterate id="proto" name="form" type="gov.nih.nci.ncicb.cadsr.common.resource.Protocol" property="protocols">
-			<bean:write name="proto" property="longName"/><br/>
-		</logic:iterate>
-	  </logic:notEmpty>
-        </td>
-        <td class="OraFieldText">
-          <bean:write name="form" property="aslName"/>
-        </td>
-        <td class="OraFieldText">
-	  <bean:write name="form" property="publicId"/>
-        </td>
-        <td class="OraFieldText">
-	  <bean:write name="form" property="version"/>
-        </td>
-      </tr>
-    </logic:iterate>
-		<tr class="OraTabledata">
-			<td class="OraFieldText" colspan="9">
-	  			<br/>Total items in cart: <b><bean:write name="noOfItems" /></b>
-        	</td>
-		</tr>
-  </logic:notEmpty>
-   </table>
-    <br>
-    <table width="30%" align="center" cellpadding="1" cellspacing="1" border="0">  
-      <TR>
-        <td>&nbsp;</td>
-      </TR>
-      <tr>
-		<logic:notEmpty name="<%=CaDSRConstants.FORMS_DISPLAY_CART%>" property = "formDisplayObjects">
-        <td>
-          <center><a href="javascript:deleteItems()">
-            <html:img src='<%="i/deleteButton.gif"%>' border="0" alt="Delete"/> 
-          </a></center>
-        </td> 
-		</logic:notEmpty>  
-		<td>
-          <center><a href="javascript:saveItems()">
-            <html:img src='<%="i/save.gif"%>' border="0" alt="Save"/> 
-          </a></center>
-        </td>       
-        <td>
-          <CENTER><html:link href="<%=doneURL%>">				
-            <html:img src='<%="i/backButton.gif"%>' border="0" alt="Back"/>
-          </html:link></CENTER>             
-        </td> 
-      </tr>
- </table>
-</logic:present>
-
-
-<logic:present name="<%=CaDSRConstants.DISPLAY_CART2%>">
+<logic:present name="<%=CaDSRConstants.FORMS_DISPLAY_CART2%>">
   <table width="80%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
     <tr class="OraTableColumnHeader">
     <logic:notEmpty name="<%=CaDSRConstants.FORMS_DISPLAY_CART2%>" property = "formDisplayObjects">

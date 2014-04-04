@@ -24,7 +24,7 @@ System.out.println("common_header_inc.jsp:" + username);
 			<TABLE Cellpadding=0 Cellspacing=0 border=0>
 				<TR>
 					<TD valign="TOP" align="CENTER" width="1%" colspan=1>
-						<A HREF="<%="formsCartAction.do?method=displayFormsCart"%>"
+						<A HREF="<%="formsCartAction.do?method=displayFormsCartV1"%>"
 							TARGET="_top"><IMG SRC="i/cde_cart.gif" alt="Form Cart 1"
 								border=0> </A>
 						<br>
