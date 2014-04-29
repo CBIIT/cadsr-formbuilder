@@ -448,13 +448,15 @@
             <xsl:element name="version">
                 <xsl:value-of select="version"/>
             </xsl:element>
+            
             <xsl:element name="type">
                 <!-- New in formCartV2  - not a database field - derived from the presence of permissible values -->
                 <xsl:choose>
-                    <xsl:when test="ancestor::questions/valid-values">Enumerated</xsl:when>
+                    <xsl:when test="permissible-value-v2">Enumerated</xsl:when>
                     <xsl:otherwise>NonEnumerated</xsl:otherwise>
-                </xsl:choose>
+                </xsl:choose>  
             </xsl:element>
+           
             <xsl:element name="context">TEST</xsl:element>
             <!-- New in formCartV2 -->
             <xsl:element name="workflowStatusName">
@@ -486,7 +488,8 @@
             </xsl:element>
             <xsl:apply-templates select="concept-derivation-rule/component-concepts"/>
             <!-- new in formCartV2 - complex element -->
-            <xsl:apply-templates select="permissible-value-v2"/>
+            <xsl:apply-templates select="permissible-value-v2"/>                      
+                         
             <!-- new in formCartV2 - complex element -->
             <xsl:element name="referenceDocument"/> <!-- New - empty node for 4.0.4 - in Version 26 of xsl --> 
         </xsl:element>
@@ -497,7 +500,6 @@
             <xsl:value-of select="long-name"/>
         </xsl:element>
     </xsl:template>
-
 
     <xsl:template match="valid-values">
         <xsl:element name="validValue">
