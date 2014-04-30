@@ -61,7 +61,7 @@ function ToggleSelectAll(e){
                <tr>
 <td align="left" width="50%" nowrap>
 <a id="addForm2Cart" class="noneViewer" style="display:none"  href="javascript:document.forms[0].action=document.forms[0].action+'?method=addFormToCart';document.forms[0].submit()">
-            <html:img src='<%="i/addtoformcart.gif"%>' border="0" alt="Add to Form Cart"/> 
+            <html:img src='<%="i/queue_for_saving.gif"%>' border="0" alt="Add to Form Cart"/> 
 </a>                  
 </td>
 <td align="right" width="50%" nowrap>
