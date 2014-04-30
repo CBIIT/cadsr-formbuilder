@@ -63,7 +63,7 @@
   </xs:documentation>
   <xs:documentation>
     Version 14 
-    Change minOccurs to 0 for contactComminunication's organizationRAI
+    Change minOccurs to 0 for module's question, designation's name, definiation's type and contactComminunication's organizationRAI
   </xs:documentation>
 </xs:annotation>
   <xs:element name="forms">
@@ -314,7 +314,7 @@
         <xs:element ref="publicID" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="version" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="usageCategory" minOccurs="0" maxOccurs="1"/>
-        <xs:element ref="question" minOccurs="1" maxOccurs="unbounded"/>
+        <xs:element ref="question" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element ref="triggerAction" minOccurs="0" maxOccurs="1"/>
       </xs:all>
     </xs:complexType>
@@ -584,13 +584,13 @@
 
   <xs:element name="designation">
     <xs:complexType>
-      <xs:all minOccurs="0">
+      <xs:all>
         <xs:element ref="createdBy" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="dateCreated" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="dateModified" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="modifiedBy" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="languageName" minOccurs="0" maxOccurs="1"/>
-        <xs:element ref="name" minOccurs="1" maxOccurs="1"/>
+        <xs:element ref="name" minOccurs="0" maxOccurs="1"/>
         <xs:element name="type" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="context" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="classification" minOccurs="0" maxOccurs="unbounded"/>
@@ -724,8 +724,8 @@
         <xs:element ref="dateModified" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="modifiedBy" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="languageName" minOccurs="0" maxOccurs="1"/>
-        <xs:element ref="text" minOccurs="1" maxOccurs="1"/>
-        <xs:element name="type" minOccurs="1" maxOccurs="1">
+        <xs:element ref="text" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="type" minOccurs="0" maxOccurs="1">
           <xs:annotation>
             <xs:documentation>The kind of definition represetned by the text.  A validation of the type is preformed against current valid definitions types in caDSR when the form is loaded.</xs:documentation>
           </xs:annotation>
