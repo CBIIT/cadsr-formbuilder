@@ -602,8 +602,10 @@
     <xsl:template match="value-meaning">
         <xsl:element name="valueMeaning">
             <xsl:element name="publicID">
+            	<xsl:value-of select="./@public-id"/>
+            	<!--  
                 <xsl:choose>
-                <!--  Note: this test was changed in v24 but I'm ignoring that change, probably shouldn't test at all -->
+                  Note: this test was changed in v24 but I'm ignoring that change, probably shouldn't test at all
                     <xsl:when test="./@public-id">
                         <xsl:value-of select="./@public-id"/>
                     </xsl:when>
@@ -611,8 +613,11 @@
                         <xsl:value-of select="$FILLPUBLICID"/>
                     </xsl:otherwise>
                 </xsl:choose>
+                -->
             </xsl:element>
             <xsl:element name="version">
+            	<xsl:value-of select="./version"/>
+            	<!-- 
                 <xsl:choose>
                     <xsl:when test="./version">
                         <xsl:value-of select="./version"/>
@@ -621,32 +626,9 @@
                         <xsl:value-of select="$FILLVERSION"/>
                     </xsl:otherwise>
                 </xsl:choose>
+                 -->
             </xsl:element>
-            <xsl:element name="longName">
-                <xsl:value-of select="./long-name"/>
-            </xsl:element>
-            <xsl:choose>
-                <xsl:when test="designations">
-                    <xsl:apply-templates select="designations"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:call-template name="Designation"/>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:choose>
-                <xsl:when test="definitions">
-                    <xsl:apply-templates select="definitions"/>
-                    <!-- Added in V22 -->
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:call-template name="Definition"/>
-                    <!-- Added V22 -->
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:element name="preferredDefinition">
-                <!-- Added in V22 -->
-                <xsl:value-of select="preferred-definition"/>
-            </xsl:element>
+            
         </xsl:element>
     </xsl:template>
 
