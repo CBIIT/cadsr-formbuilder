@@ -1477,7 +1477,8 @@ public class JDBCAdminComponentDAOV2 extends JDBCBaseDAOV2
       public void setSql(String type) {
        if (type== null){
         super.setSql(
-          "select des.desig_idseq, des.name, des.detl_name, des.lae_name, con.CONTE_IDSEQ, con.NAME, con.PAL_NAME "+
+          "select des.desig_idseq, des.name, des.detl_name, des.lae_name, con.CONTE_IDSEQ, con.NAME, con.PAL_NAME, "+
+        		  " DES.DATE_CREATED, DES.DATE_MODIFIED " +
             " from sbr.contexts_view con, sbr.designations_view des "+
             " where des.CONTE_IDSEQ = con.CONTE_IDSEQ "+
             " and des.ac_idseq = ?");
@@ -1485,7 +1486,8 @@ public class JDBCAdminComponentDAOV2 extends JDBCBaseDAOV2
         declareParameter(new SqlParameter("AC_IDSEQ", Types.VARCHAR));
        }else{
            super.setSql(
-             "select des.desig_idseq, des.name, des.detl_name, des.lae_name, con.CONTE_IDSEQ, con.NAME, con.PAL_NAME "+
+             "select des.desig_idseq, des.name, des.detl_name, des.lae_name, con.CONTE_IDSEQ, con.NAME, con.PAL_NAME, "+
+            		 " DES.DATE_CREATED, DES.DATE_MODIFIED " +
            " from sbr.contexts_view con, sbr.designations_view des "+
            " where des.CONTE_IDSEQ = con.CONTE_IDSEQ "+
            " and des.ac_idseq = ? and des.detl_name=?");
@@ -1518,6 +1520,9 @@ public class JDBCAdminComponentDAOV2 extends JDBCBaseDAOV2
         cto.setConteIdseq(rs.getString(5));
         cto.setName(rs.getString(6));
         dto.setContext(cto);
+        
+        dto.setDateCreated(rs.getTimestamp("DATE_CREATED"));
+        dto.setDateModified(rs.getTimestamp("DATE_MODIFIED"));
 
         return dto;
       }
@@ -1532,7 +1537,7 @@ public class JDBCAdminComponentDAOV2 extends JDBCBaseDAOV2
       public void setSql() {
         super.setSql(
           " select def.defin_idseq, def.definition,  def.defl_name, " +
-          " def.lae_name, con.CONTE_IDSEQ, con.NAME, con.PAL_NAME " +
+          " def.lae_name, con.CONTE_IDSEQ, con.NAME, con.PAL_NAME, DEF.DATE_CREATED, DEF.DATE_MODIFIED " +
           " from sbr.contexts_view con, sbr.definitions_view def " +
           " where def.CONTE_IDSEQ = con.CONTE_IDSEQ " +
           " and def.ac_idseq = ? ");
@@ -1549,7 +1554,7 @@ public class JDBCAdminComponentDAOV2 extends JDBCBaseDAOV2
       protected Object mapRow(
         ResultSet rs,
         int rownum) throws SQLException {
-        Definition dto = new DefinitionTransferObject();
+    	  DefinitionTransferObject dto = new DefinitionTransferObject();
         //fixing
         dto.setId(rs.getString(1));
         dto.setDefinition(rs.getString(2));
@@ -1560,6 +1565,9 @@ public class JDBCAdminComponentDAOV2 extends JDBCBaseDAOV2
         cto.setConteIdseq(rs.getString(5));
         cto.setName(rs.getString(6));
         dto.setContext(cto);
+        
+        dto.setDateCreated(rs.getTimestamp("DATE_CREATED"));
+        dto.setDateModified(rs.getTimestamp("DATE_MODIFIED"));
 
         return dto;
       }
