@@ -486,7 +486,8 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
           contextTransferObject.setConteIdseq(rs.getString(4)); //CONTE_IDSEQ
           fvv.setContext(contextTransferObject);
           
-          vm = retrieveValueMeaningAttr(vm);
+          //No need to get designations and definitions for vm anymore
+          //vm = retrieveValueMeaningAttr(vm);
           
           fvv.setValueMeaning(vm);
           
