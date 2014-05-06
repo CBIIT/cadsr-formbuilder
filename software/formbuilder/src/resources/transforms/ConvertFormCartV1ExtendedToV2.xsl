@@ -114,8 +114,7 @@
                 <xsl:choose>
                     <xsl:when test="date-modified != ''">
                 <xsl:value-of
-                    select="concat(substring(date-modified, 1, 10), 'T', substring(date-modified, 12, 10))"
-                />
+                    select="concat(substring(date-modified, 1, 10), 'T', substring(date-modified, 12, 10))"/>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:value-of select="$FILLDATE"/>
@@ -598,12 +597,16 @@
             <!-- Added in formCartV2  -->
             <xsl:element name="dateCreated">
                 <!-- Added in formCartV2  -->
-                <xsl:value-of select="date-created"/>
+                <xsl:value-of select="concat(substring(date-created, 1, 10), 'T', substring(date-created, 12, 10))"/>
             </xsl:element>
 	                <!-- Added in formCartV2  -->
-	           <xsl:element name="dateModified">
-	                <xsl:value-of select="date-modified"/>
-	           </xsl:element>
+	        <xsl:element name="dateModified">
+            	 <xsl:choose>
+                    <xsl:when test="date-modified">
+                        <xsl:value-of select="concat(substring(date-modified, 1, 10), 'T', substring(date-modified, 12, 10))"/>
+                    </xsl:when>
+                </xsl:choose>
+            </xsl:element>
 	        <xsl:if test="modifiedBy">
             <xsl:element name="modifiedBy"/>
             </xsl:if>
@@ -872,10 +875,15 @@
         <xsl:element name="definition">
             <xsl:element name="createdBy"/>
             <xsl:element name="dateCreated">
-                <xsl:value-of select="date-created"/>
+                <!-- xsl:value-of select="date-created"/>  -->
+                <xsl:value-of select="concat(substring(date-created, 1, 10), 'T', substring(date-created, 12, 10))"/>
             </xsl:element>
             <xsl:element name="dateModified">
-                <xsl:value-of select="date-modified"/>
+            	 <xsl:choose>
+                    <xsl:when test="date-modified">
+                        <xsl:value-of select="concat(substring(date-modified, 1, 10), 'T', substring(date-modified, 12, 10))"/>
+                    </xsl:when>
+                </xsl:choose>
             </xsl:element>
             <xsl:element name="modifiedBy"/>
             <xsl:element name="languageName">
