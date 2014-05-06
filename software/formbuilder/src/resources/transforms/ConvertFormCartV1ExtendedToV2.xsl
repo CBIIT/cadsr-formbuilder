@@ -548,28 +548,14 @@
         </xsl:element>
     </xsl:template>
 
+<!-- This is for the valueMeaning under DataElement/valueDomain/permissibleValue/valueMeaning -->
     <xsl:template match="value-meaning-v2">
         <xsl:element name="valueMeaning">
             <xsl:element name="publicID">
-                <xsl:choose>
-                <!--  Note: this test was changed in v24 but I'm ignoring that change, probably shouldn't test at all -->
-                    <xsl:when test="./@public-id">
-                        <xsl:value-of select="./@public-id"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$FILLPUBLICID"/>
-                    </xsl:otherwise>
-                </xsl:choose>
+            	<xsl:value-of select="./@public-id"/>
             </xsl:element>
             <xsl:element name="version">
-                <xsl:choose>
-                    <xsl:when test="./version">
-                        <xsl:value-of select="./version"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$FILLVERSION"/>
-                    </xsl:otherwise>
-                </xsl:choose>
+            	<xsl:value-of select="./version"/>
             </xsl:element>
             <xsl:element name="longName">
                 <xsl:value-of select="./long-name"/>
@@ -578,19 +564,12 @@
                 <xsl:when test="designations">
                     <xsl:apply-templates select="designations"/>
                 </xsl:when>
-                <xsl:otherwise>
-                    <xsl:call-template name="Designation"/>
-                </xsl:otherwise>
             </xsl:choose>
             <xsl:choose>
                 <xsl:when test="definitions">
                     <xsl:apply-templates select="definitions"/>
                     <!-- Added in V22 -->
                 </xsl:when>
-                <xsl:otherwise>
-                    <xsl:call-template name="Definition"/>
-                    <!-- Added V22 -->
-                </xsl:otherwise>
             </xsl:choose>
             <xsl:element name="preferredDefinition">
                 <!-- Added in V22 -->
@@ -603,30 +582,9 @@
         <xsl:element name="valueMeaning">
             <xsl:element name="publicID">
             	<xsl:value-of select="./@public-id"/>
-            	<!--  
-                <xsl:choose>
-                  Note: this test was changed in v24 but I'm ignoring that change, probably shouldn't test at all
-                    <xsl:when test="./@public-id">
-                        <xsl:value-of select="./@public-id"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$FILLPUBLICID"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-                -->
             </xsl:element>
             <xsl:element name="version">
             	<xsl:value-of select="./version"/>
-            	<!-- 
-                <xsl:choose>
-                    <xsl:when test="./version">
-                        <xsl:value-of select="./version"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$FILLVERSION"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-                 -->
             </xsl:element>
             
         </xsl:element>
@@ -634,15 +592,17 @@
 
     <xsl:template match="designations" name="Designations">
         <xsl:element name="designation">
-            <xsl:element name="createdBy"/>
+            <xsl:element name="createdBy">
+            	<xsl:value-of select="name"/>
+            </xsl:element>
             <!-- Added in formCartV2  -->
             <xsl:element name="dateCreated">
                 <!-- Added in formCartV2  -->
-                <xsl:value-of select="$FILLDATE"/>
+                <xsl:value-of select="date-created"/>
             </xsl:element>
 	                <!-- Added in formCartV2  -->
 	           <xsl:element name="dateModified">
-	                <xsl:value-of select="$FILLDATE"/>
+	                <xsl:value-of select="date-modified"/>
 	           </xsl:element>
 	        <xsl:if test="modifiedBy">
             <xsl:element name="modifiedBy"/>
@@ -912,10 +872,10 @@
         <xsl:element name="definition">
             <xsl:element name="createdBy"/>
             <xsl:element name="dateCreated">
-                <xsl:value-of select="$FILLDATE"/>
+                <xsl:value-of select="date-created"/>
             </xsl:element>
             <xsl:element name="dateModified">
-                <xsl:value-of select="$FILLDATE"/>
+                <xsl:value-of select="date-modified"/>
             </xsl:element>
             <xsl:element name="modifiedBy"/>
             <xsl:element name="languageName">
