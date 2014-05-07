@@ -1,6 +1,7 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
 import gov.nih.nci.ncicb.cadsr.common.CommonNavigationConstants;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormElementTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.formbuilder.common.FormBuilderConstants;
 import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
 import gov.nih.nci.ncicb.cadsr.common.jsp.util.CDEDetailsUtils;
@@ -119,6 +120,12 @@ public class FormDownloadAction extends Action {
   cell.setCellStyle(boldCellStyle);
   row.createCell((short)1).setCellValue(crf.getFormType());
 
+  row = sheet.createRow(rowNumber++);
+  cell = row.createCell((short)0);
+  cell.setCellValue("caDSR RAI");
+  cell.setCellStyle(boldCellStyle);
+  row.createCell((short)1).setCellValue(((FormElementTransferObject)crf).getRegistryId());
+  
   row = sheet.createRow(rowNumber++);
   cell = row.createCell((short)0);
   cell.setCellValue("Public ID");
