@@ -3,6 +3,7 @@ package gov.nih.nci.ncicb.cadsr.formbuilder.ejb.impl;
 import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
 import gov.nih.nci.ncicb.cadsr.common.CaDSRUtil;
 import gov.nih.nci.ncicb.cadsr.common.dto.CSITransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormElementTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.ejb.common.SessionBeanAdapter;
 import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
 import gov.nih.nci.ncicb.cadsr.common.persistence.ErrorCodeConstants;
@@ -225,6 +226,14 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
 
         List footerInstructions = fInstrdao.getFooterInstructions(formPK);
         myForm.setFooterInstructions(footerInstructions);
+        
+        try {
+        	String registryId = CaDSRUtil.getNciRegistryIdNoCache();
+        	((FormElementTransferObject)myForm).setRegistryId(registryId);
+        } catch (IOException ioe) {
+        	System.out.println("Unable to get registry id from config file: " + ioe.getMessage());
+        }
+        
 
         List modules = (List)fdao.getModulesInAForm(formPK);
         Iterator mIter = modules.iterator();
@@ -368,6 +377,13 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
 
         List instructions = fInstrdao.getInstructions(formPK);
         myForm.setInstructions(instructions);
+        
+        try {
+        	String registryId = CaDSRUtil.getNciRegistryIdNoCache();
+        	((FormElementTransferObject)myForm).setRegistryId(registryId);
+        } catch (IOException ioe) {
+        	System.out.println("Unable to get registry id from config file: " + ioe.getMessage());
+        }
 
         List footerInstructions = fInstrdao.getFooterInstructions(formPK);
         myForm.setFooterInstructions(footerInstructions);
