@@ -152,10 +152,12 @@ public class FormCartConverter {
 				if (argsCount == 3 && args_[2].equalsIgnoreCase("guest")) {
 					limit = false;
 					guestOnly = true;
+					cartId = args_[2];
 				}
 				else if (argsCount == 3 && args_[2].equalsIgnoreCase("all")) {
 					limit = false;
 					guestOnly = false;
+					cartId = args_[2];
 				}
 				else if (argsCount == 3) {
 					limit = true;
