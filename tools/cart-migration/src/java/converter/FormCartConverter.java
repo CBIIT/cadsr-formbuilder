@@ -11,12 +11,14 @@ package converter;
 // needs a bit of memory for intial list of carts  (tested with -Xmx512M)
 
 import org.apache.log4j.Logger;
+
 import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
-
 import gov.nih.nci.ncicb.cadsr.objectCart.CDECart;
 import gov.nih.nci.ncicb.cadsr.objectCart.CDECartItem;
+import gov.nih.nci.ncicb.cadsr.objectCart.FormDisplayCartTransferObject;
 import gov.nih.nci.ncicb.cadsr.objectCart.impl.CDECartOCImpl;
 import gov.nih.nci.objectCart.client.ObjectCartClient;
 import gov.nih.nci.objectCart.client.ObjectCartException;
@@ -25,28 +27,33 @@ import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.client.ApplicationServiceProvider;
 import gov.nih.nci.objectCart.applicationService.ObjectCartService;
 import gov.nih.nci.objectCart.domain.Cart;
-
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
+
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.ValidationException;
+
 import javax.xml.transform.TransformerException;
 
 import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.FormBuilder;
 import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.FormBuilderHome;
+
 import javax.naming.InitialContext;
 import javax.naming.Context;
+
 import java.util.Properties;
 import java.rmi.RemoteException;
+
 import javax.rmi.PortableRemoteObject;
 
 import org.jnp.interfaces.NamingContextFactory;
 
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConverterUtil;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Collection;
 import java.util.LinkedList;
-
+import java.util.Map;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 
@@ -66,12 +73,16 @@ public class FormCartConverter {
 	// Use these flag to limit changes (and anything that creates a lot of logging)  
 	private boolean limitToGuest; // limit changes to the guest cart (if changes are allowed)
 	private boolean noChanges;
+	private boolean perCart;
+	private String cartName;
 
-	public FormCartConverter(String formbuilderURL, String ocURL, boolean limit, boolean guestOnly) {
+	public FormCartConverter(String formbuilderURL, String ocURL, boolean limit, boolean guestOnly, boolean percart, String cartId) {
 		try {
 			objectCartURL = ocURL;
 			noChanges = limit;
 			limitToGuest = guestOnly;
+			cartName = cartId;
+			perCart = percart;
 			
 			cartService = (ObjectCartService) ApplicationServiceProvider
 			.getApplicationServiceFromUrl(objectCartURL, "objectCartServiceInfo");			
@@ -81,8 +92,14 @@ public class FormCartConverter {
 			_logger.debug("created ObjectCartClient using URL " + objectCartURL);
 			
 			String affectedCarts = "no carts";
-			if (!noChanges)
-				affectedCarts = limitToGuest ? "the guest cart" : "all carts";
+			if ((cartName.contentEquals("all")) || (cartName.contentEquals("guest")))
+				{
+					if (!noChanges)
+						affectedCarts = limitToGuest ? "the guest cart" : "all carts";
+				}
+			else 
+				affectedCarts = cartName;
+			
 			_logger.info("FormCartConverter created using URL " + objectCartURL + " operating on " + affectedCarts);
 			
 		} catch (Exception e) {
@@ -130,18 +147,26 @@ public class FormCartConverter {
 				
 				boolean limit = true;
 				boolean guestOnly = true;
+				boolean onlycart = false;
+				String cartId = null;
 				if (argsCount == 3 && args_[2].equalsIgnoreCase("guest")) {
 					limit = false;
 					guestOnly = true;
 				}
-				if (argsCount == 3 && args_[2].equalsIgnoreCase("all")) {
+				else if (argsCount == 3 && args_[2].equalsIgnoreCase("all")) {
 					limit = false;
 					guestOnly = false;
 				}
+				else if (argsCount == 3) {
+					limit = true;
+					guestOnly = false;
+					cartId = args_[2];
+					onlycart = true;
+				}
 				
-				FormCartConverter converter = new FormCartConverter(formbuilderURL, ocURL, limit, guestOnly);
+				FormCartConverter converter = new FormCartConverter(formbuilderURL, ocURL, limit, guestOnly, onlycart, cartId);
 				
-				int clearingErrors = converter.clearExistingV2FormCarts();
+				int clearingErrors = converter.clearExistingCarts(CaDSRConstants.FORMS_CART_V2);
 				if (clearingErrors == 0) {
 					int conversionErrors = converter.createV2FormCarts();
 					if (conversionErrors == 0) {
@@ -158,6 +183,43 @@ public class FormCartConverter {
 					_logger.info("Processing stopped before running V1 -> V2 conversions.");				
 					_logger.info("Check logs.");				
 				}
+				
+
+				clearingErrors = converter.clearExistingCarts(CaDSRConstants.FORMS_DISPLAY_CART);
+				if (clearingErrors == 0) {
+					int conversionErrors = converter.createDisplayCarts(CaDSRConstants.FORMS_DISPLAY_CART);
+					if (conversionErrors == 0) {
+						_logger.info("Conversion completed with no exceptions.");
+						_logger.info(converter.getNumberOfCartsConverted() + " carts converted.");
+					} else {
+						_logger.info("Conversion completed with " + conversionErrors + " conversion exceptions.");
+						_logger.info(converter.getNumberOfCartsConverted() + " carts converted.");
+						_logger.info("Check logs.");
+					}
+					
+				} else {
+					_logger.info(clearingErrors + " exceptions occurred while clearing existing Display form carts.");
+					_logger.info("Processing stopped before running V1 Display cart conversions.");				
+					_logger.info("Check logs.");				
+				}
+				
+				clearingErrors = converter.clearExistingCarts(CaDSRConstants.FORMS_DISPLAY_CART2);
+				if (clearingErrors == 0) {
+					int conversionErrors = converter.createDisplayCarts(CaDSRConstants.FORMS_DISPLAY_CART2);
+					if (conversionErrors == 0) {
+						_logger.info("Conversion completed with no exceptions.");
+						_logger.info(converter.getNumberOfCartsConverted() + " carts converted.");
+					} else {
+						_logger.info("Conversion completed with " + conversionErrors + " conversion exceptions.");
+						_logger.info(converter.getNumberOfCartsConverted() + " carts converted.");
+						_logger.info("Check logs.");
+					}
+					
+				} else {
+					_logger.info(clearingErrors + " exceptions occurred while clearing existing Display form carts.");
+					_logger.info("Processing stopped before running V2 Display cart conversions.");				
+					_logger.info("Check logs.");				
+				}
 			}
 			
 		}
@@ -169,11 +231,11 @@ public class FormCartConverter {
 	}
 
 
-	private int clearExistingV2FormCarts() {
+	private int clearExistingCarts(String cartname) {
 
 		try {
-			List<Cart> existingNewCarts = cartService.getCartsByName(CaDSRConstants.FORMS_CART_V2);					
-			_logger.debug(existingNewCarts.size() + " existing formCartV2 carts");
+			List<Cart> existingNewCarts = cartService.getCartsByName(cartname);					
+			_logger.debug(existingNewCarts.size() + " existing " + cartname + " carts");
 
 
 			for (Cart cart : existingNewCarts) {
@@ -187,14 +249,16 @@ public class FormCartConverter {
 
 					// log the existing elements
 					for (CartObject cartObject : cartElements) {
-						if (!noChanges && (!limitToGuest || cart.getUserId().equalsIgnoreCase("guest")))
+						if ((perCart && cart.getUserId().equalsIgnoreCase(cartName.toString())) ||
+						   (!noChanges && (!limitToGuest || cart.getUserId().equalsIgnoreCase("guest"))))
 							dumpCart(cartObject);
 					}
 
 					// clear the existing elements
 					if (cartElements.size() > 0) {
 						_logger.debug("emptying cart");
-						if (!noChanges && (!limitToGuest || cart.getUserId().equalsIgnoreCase("guest")))
+						if ((perCart && cart.getUserId().equalsIgnoreCase(cartName.toString())) ||
+							(!noChanges && (!limitToGuest || cart.getUserId().equalsIgnoreCase("guest"))))
 							cartClient.removeObjectCollection(cart, cartElements);
 						cartElements = cart.getCartObjectCollection();
 						_logger.debug("checking size of cart " + cart.getUserId() + " after emptying..." + cartElements.size());
@@ -212,7 +276,7 @@ public class FormCartConverter {
 		
 		return exceptionsWhileClearingExisting;
 	}
-
+	
 
 	private int createV2FormCarts() {
 
@@ -230,8 +294,9 @@ public class FormCartConverter {
 					Collection formCollection = oldCart.getForms();
 					_logger.debug(" contains " + formCollection.size() + " forms");
 
-					if (!noChanges && (!limitToGuest || cart.getUserId().equalsIgnoreCase("guest"))) {
-						addFormsToV2Cart(formCollection, cart.getUserId());
+					if ((perCart && cart.getUserId().equalsIgnoreCase(cartName.toString())) ||
+						(!noChanges && (!limitToGuest || cart.getUserId().equalsIgnoreCase("guest")))) {
+						addFormsToCart(formCollection, cart.getUserId(), CaDSRConstants.FORMS_CART_V2);
 						cartsConverted++;
 					}
 
@@ -248,6 +313,43 @@ public class FormCartConverter {
 		
 		return exceptionsWhileConverting;
 	}
+	
+	private int createDisplayCarts(String displayCartName) {
+
+		try {
+			List<Cart> existingCarts = cartService.getCartsByName(CaDSRConstants.FORMS_CART);					
+			_logger.debug(existingCarts.size() + " existing " + CaDSRConstants.FORMS_CART + " carts");
+
+
+			for (Cart cart : existingCarts) {
+
+				try {
+					_logger.debug("cart " + cart.getId() + " " + cart.getUserId() + " " + cart.getName());
+
+					CDECart v2Cart = new CDECartOCImpl(cartClient, cart.getUserId(), CaDSRConstants.FORMS_CART);
+					Collection formCollection = v2Cart.getForms();
+					_logger.debug(" contains " + formCollection.size() + " forms");
+
+					if ((perCart && cart.getUserId().equalsIgnoreCase(cartName.toString())) ||
+						(!noChanges && (!limitToGuest || cart.getUserId().equalsIgnoreCase("guest")))) {
+						addFormsToCart(formCollection, cart.getUserId(), displayCartName);
+						cartsConverted++;
+					}
+
+				} catch (Exception e) {
+					exceptionsWhileConverting++;
+					_logger.debug("  exception converting cart: msg: " + e.getMessage() + " toString: " + e.toString());			
+				}	
+
+			}
+
+		} catch (Exception e) {
+			throw new RuntimeException("exception in createV2FormCarts ", e);
+		}
+		
+		return exceptionsWhileConverting;
+	}
+	
 
 
 	private void dumpCart(CartObject cartObject){
@@ -261,36 +363,66 @@ public class FormCartConverter {
 	}
 
 
-	private Cart addFormsToV2Cart(Collection forms, String userId) throws ObjectCartException, FormBuilderException, RemoteException, MarshalException, ValidationException, TransformerException {
-		// Loosely based on FormAction addFormToCart
-		// We don't check for duplicates -- we assume the v2 cart is empty and that added forms don't include duplicates 	
-
-		_logger.debug(" adding forms to V2 cart..."); 
-
-		Cart v2Cart = cartClient.createCart(userId, CaDSRConstants.FORMS_CART_V2);
-
-		Collection<CartObject> cartObjects = new LinkedList<CartObject>();
-		for (Object f: forms)
-			cartObjects.add(translateCartObject((Form)f));
-
-		v2Cart = cartClient.storeObjectCollection(v2Cart, cartObjects);
-		
-		_logger.debug("  ...done adding forms to V2 cart for user " + userId); 		
-		return v2Cart;
-	}
+	private Cart addFormsToCart(Collection forms, String userId, String cartName) throws ObjectCartException, FormBuilderException, RemoteException, MarshalException, ValidationException, TransformerException 
+		{
+			_logger.debug(" adding  to cart..."); 
+	
+			Cart cart = cartClient.createCart(userId, cartName);
+			if (cartName.equals(CaDSRConstants.FORMS_CART_V2))
+				{
+					Collection<CartObject> cartObjects = new LinkedList<CartObject>();
+					for (Object f: forms)
+						{
+							cartObjects.add(translateCartObject((Form)f));
+						}
+					cart = cartClient.storeObjectCollection(cart, cartObjects);
+				}
+			else
+				{
+					Map<String, String> objectDisplayNames = new HashMap<String, String> ();
+					Map<String, Object>  objects = new HashMap<String, Object>();
+					for (Object f: forms)
+						{
+							FormDisplayCartTransferObject item = translateToDisplayObject((Form)f);
+							objectDisplayNames.put(item.getIdseq(), item.getLongName());
+							objects.put(item.getIdseq(), item);
+						}
+					cart = cartClient.storePOJOCollection(cart, FormDisplayCartTransferObject.class, objectDisplayNames, objects);
+				}
+	
+			
+			_logger.debug("  ...done adding objects to cart for user " + userId); 		
+			return cart;
+		}
 
 	
-	private CartObject translateCartObject(Form crf) throws FormBuilderException, RemoteException, MarshalException, ValidationException, TransformerException {
-		// function copied from FormAction and then modified for formV2
-		CartObject ob = new CartObject();
-		ob.setType(FormConverterUtil.instance().getCartObjectType());
-		ob.setDisplayText(Integer.toString(crf.getPublicId()) + "v" + Float.toString(crf.getVersion()));
-		ob.setNativeId(crf.getFormIdseq());		
-		FormV2 formV2 = formBuilderService.getFormDetailsV2(crf.getFormIdseq());	
-		String convertedForm = FormConverterUtil.instance().convertFormToV2(formV2);
-		ob.setData(convertedForm);
-		return ob;
-	}	
+	private CartObject translateCartObject(Form crf) throws FormBuilderException, RemoteException, MarshalException, ValidationException, TransformerException 
+		{
+			// function copied from FormAction and then modified for formV2
+			CartObject ob = new CartObject();
+			ob.setType(FormConverterUtil.instance().getCartObjectType());
+			ob.setDisplayText(Integer.toString(crf.getPublicId()) + "v" + Float.toString(crf.getVersion()));
+			ob.setNativeId(crf.getFormIdseq());		
+			FormV2 formV2 = formBuilderService.getFormDetailsV2(crf.getFormIdseq());	// fetching V2 form data from the database
+			String convertedForm = FormConverterUtil.instance().convertFormToV2(formV2);
+			ob.setData(convertedForm);
+			return ob;
+		}	
+	
+	public FormDisplayCartTransferObject translateToDisplayObject(Form form)
+		{
+			FormDisplayCartTransferObject displayObject = new FormDisplayCartTransferObject();
+			displayObject.setAslName(form.getAslName());
+			displayObject.setContextName(form.getContext().getName());
+			displayObject.setFormType(form.getFormType());
+			displayObject.setIdseq(form.getIdseq());
+			displayObject.setLongName(form.getLongName());
+			displayObject.setProtocols(form.getProtocols());
+			displayObject.setPublicId(form.getPublicId());
+			displayObject.setVersion(form.getVersion());
+			return displayObject;
+		}
+	
 
 	public int getNumberOfCartsConverted() {
 		return cartsConverted;
