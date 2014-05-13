@@ -83,7 +83,7 @@ public class XmlValidationServiceImplTest {
 			String status = StatusFormatter.getStatusInXml(aColl);
 			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\forms.HappyPath.status.xml");
 			
-			assertTrue(forms.get(1).getErrors().size() > 0);
+			assertTrue(forms.get(1).getErrors().size() == 0);
 		
 		} catch (FormLoaderServiceException e) {
 			fail("Got exception: " + e.toString());

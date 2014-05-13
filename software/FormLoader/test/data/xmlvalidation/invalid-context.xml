@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Transform based on FinalFormCartTransformv26.xsl which was validated with FormCartv21.xsd -->
 <forms>
+<collectionName>Unit Testing</collectionName>
+<collectionDescription>Unit Testing</collectionDescription>
 <form>
    <context>FormLoaderBla</context>
    <createdBy>FORMBUILDER</createdBy>

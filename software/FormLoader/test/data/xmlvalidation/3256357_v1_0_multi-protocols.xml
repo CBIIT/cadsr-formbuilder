@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Transform based on FinalFormCartTransformv26.xsl which was validated with FormCartv21.xsd -->
-<forms>
-<collectionName>Form With Protocols</collectionName>
-<collectionDescription>Testing</collectionDescription>
 <form>
    <context>TEST</context>
    <createdBy>DWARZEL</createdBy>
@@ -6756,4 +6753,3 @@
       <preferredDefinition>Previous clinical experience with UCN-01 has suggested activity in lymphoma and in vitro data suggests synergy is possible with other cytotoxic chemotherapeutic agents. For these reasons it is of interest to combine UCN-01 with anti-lymphoma regimens in future clinical trials. Many such regimens include prednisone (i.e. EPOCH, CHOP) and given that hyperglycemia was a dose limiting toxicity of UCN-01 in initial Phase I trials, it is prudent to first discover the toxicities and maximally tolerated dose of the UCN-01 and prednisone combination prior to combining UCN-01 to prednisone containing antilymphoma regimens. This trial will provide information necessary for further development of UCN-01 in prednisone containing chemotherapy strategies. In addition to following toxicities, monitoring the pharmacokinetic profile of this combination will be important. Earlier Phase I trials with UCN-01 alone demonstrated unexpectedly higher plasma concentrations of UCN-01 and a prolonged half-life. Subsequent in vitro and in vivo animal experiments determined the likely etiology was high affinity binding to a human plasma protein, alpha-1-acid glycoprotein (hAAG). Prednisilone, the active metabolite of prednisone, also binds to hAAG and may raise the active, unbound ("free") fraction of UCN-01 by competitively binding to the plasma protein. Higher levels of "free" UCN-01 may exacerbate the hyperglycemic and pulmonary toxicities seen in single agent UCN-01. In addition, the hyperglycemic effect of prednisone may add to that of UCN-01. Conversely, prednisone may ameliorate the pulmonary toxicities by the ability of glucocorticords to inhibit nitric oxide synthase. Therefore, the main goal of combining prednisone with UCN-01 is to discover the toxicities and maximally tolerated dose of the combination. Ancillary goals will be to assess changes in the pharmacokinetics of UCN-01 and to determine the effect of the combination on nitric oxide production.</preferredDefinition>
    </protocol>
 </form>
-</forms>

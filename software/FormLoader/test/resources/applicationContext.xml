@@ -148,6 +148,9 @@
 		<property name="definitionDao">
 			<ref bean="definitionDao" />
 		</property>
+		<property name="contactCommV2Dao">
+			<ref bean="contactCommV2Dao" />
+		</property>
 	</bean>
 	
 	<import resource="applicationContext-jdbcdao.xml" />

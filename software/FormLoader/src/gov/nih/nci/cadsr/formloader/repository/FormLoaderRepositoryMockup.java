@@ -512,6 +512,12 @@ public class FormLoaderRepositoryMockup implements FormLoaderRepository {
 		return false;
 	}
 
+	@Override
+	public String getOrganizationSeqidByName(String orgName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 	
 }

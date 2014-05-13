@@ -9,6 +9,7 @@ import gov.nih.nci.cadsr.formloader.service.ContentValidationService;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
+import gov.nih.nci.ncicb.cadsr.common.dto.ContactCommunicationV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
@@ -164,9 +165,10 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			parser.parseFormDetails(xmlPathName, form, form.getIndex());
 			
 			form.setRefdocs(parser.getRefdocs());
-			verifyProtocols(form, parser.getProtocols());		
-			verifyDesignations(form, parser.getDesignations());
-			verifyDefinitions(form, parser.getDefinitions());
+			verifyProtocols(form, form.getProtocols());		
+			verifyDesignations(form, form.getDesignations());
+			verifyDefinitions(form, form.getDefinitions());
+			verifyContactCommnunications(form, form.getContactCommnunications());
 			
 		}
 	}
@@ -244,6 +246,50 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		}		
 		
 		form.setDesignations(desigs);
+	}
+	
+	/**
+	 * Check on the contact commnunications for the form
+	 * 
+	 * - value must not be null or empty
+	 * - type must not be null or empty
+	 * - type needs to be a valid type in db (hardcoded for now)
+	 * 
+	 * @param form
+	 * @param contacts
+	 */
+	protected void verifyContactCommnunications(FormDescriptor form, List<ContactCommunicationV2TransferObject> contacts) {
+		
+		if (contacts == null || contacts.size() == 0)
+			return;
+		
+		List<ContactCommunicationV2TransferObject> communications = new ArrayList<ContactCommunicationV2TransferObject>();
+		
+		int idx = 0;
+		for (ContactCommunicationV2TransferObject con : contacts) {
+			idx++;
+			if (con.getValue() == null || con.getType().length() == 0) {
+				form.addMessage("ContactCommunication #" + idx + " has empty or null value. Skip loading.");
+				continue;  
+			}
+			
+			String type = con.getType();
+			
+			if (type == null || type.length() == 0) {
+				form.addMessage("ContactCommunication #" + idx + " has invalid empty or null type. Skip loading.");
+				continue;  
+			}
+			
+			String orgSeqid = repository.getOrganizationSeqidByName(con.getOrganizationName());
+			if (orgSeqid == null || orgSeqid.length() == 0) {
+				form.addMessage("ContactCommunication #" + idx + " has invalid organization name [" + con.getOrganizationName() + "]. Skip loading.");
+				continue;
+			} 
+			
+			communications.add(con);
+		}	
+		
+		form.setContactCommnunications(communications);
 	}
 	
 	protected boolean classificationValid(List<String> classificationPublicIdVersionPairs) {

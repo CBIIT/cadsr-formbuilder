@@ -1,6 +1,7 @@
 package gov.nih.nci.cadsr.formloader.service.common;
 
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
+import gov.nih.nci.ncicb.cadsr.common.dto.ContactCommunicationV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObjectExt;
@@ -32,14 +33,15 @@ public class FormDetailsParserHandler extends ParserHandler {
 	
 	List<RefdocTransferObjectExt> refdocs = new ArrayList<RefdocTransferObjectExt>();
 	List<DefinitionTransferObjectExt> definitions = new ArrayList<DefinitionTransferObjectExt>();
-	//List<String> protocolIds = new ArrayList<String>();
 	List<ProtocolTransferObjectExt> protocols = new ArrayList<ProtocolTransferObjectExt>();
 	List<DesignationTransferObjectExt> designations = new ArrayList<DesignationTransferObjectExt>();
+	List<ContactCommunicationV2TransferObject> contactCommnunications = new ArrayList<ContactCommunicationV2TransferObject>();
 	
 	DesignationTransferObjectExt currDesignation;	
 	RefdocTransferObjectExt currRefDoc;
 	DefinitionTransferObjectExt currDefinition;
 	ProtocolTransferObjectExt currProtocol;
+	ContactCommunicationV2TransferObject currContact;
 	
 	List<String> csPublicIdVersionPairs;
 	
@@ -80,9 +82,6 @@ public class FormDetailsParserHandler extends ParserHandler {
 				if (nodeQueue.peek().equals(StaXParser.FORM)) {
 					this.currDesignation = new DesignationTransferObjectExt();
 					currClassName = "DesignationTransferObjectExt";
-		
-					//ClassSchemeItem csi = currDesignation.getCsCsis().get(0);
-					//csi.get
 				}
 				
 			} else if (localName.equals(StaXParser.DEFINITION)) {
@@ -102,6 +101,12 @@ public class FormDetailsParserHandler extends ParserHandler {
 					currClassName = "ProtocolTransferObjectExt";
 				}
 				
+			}  else if (localName.equals(StaXParser.CONTACT_COMMUNICATION)) {
+				if (nodeQueue.peek().equals(StaXParser.FORM)) {
+					this.currContact = new ContactCommunicationV2TransferObject();
+					currClassName = "ContactCommunicationV2TransferObject";
+				}
+				
 			} else if (localName.equals(StaXParser.NAME)) {
 				if (nodeQueue.peek().equals(StaXParser.DESIGNATION))
 					this.methodName = "setName";
@@ -113,6 +118,8 @@ public class FormDetailsParserHandler extends ParserHandler {
 						this.methodName = "setType";
 				else if (nodeQueue.peek().equals(StaXParser.REFERENCE_DOCUMENT)) 
 					this.methodName = "setDocType";
+				else if (nodeQueue.peek().equals(StaXParser.CONTACT_COMMUNICATION) && this.currContact != null)
+					this.methodName = "setType";
 					
 			} else if (localName.equals(StaXParser.LANGUAGE_NAME) && nodeQueue.peek().equals(StaXParser.DESIGNATION)) {
 				this.methodName = "setLanguage";
@@ -136,23 +143,14 @@ public class FormDetailsParserHandler extends ParserHandler {
 				if (this.currDefinition != null)
 					this.csPublicIdVersionPairs = this.currDefinition.getClassficationPublicIdVersionPairs();
 				else if (this.currDesignation != null)
-					this.csPublicIdVersionPairs = this.currDesignation.getClassficationPublicIdVersionPairs();
-					
-			} 
-			
-//			else if (localName.equals(StaXParser.PUBLIC_ID) || 
-//					localName.equals(StaXParser.VALID_VALUE)) {
-//				
-//				if ((nodeQueue.peek().equals(StaXParser.CLASSFINICATION))) {
-//					if (this.currDefinition != null)
-//						this.csPublicIdVersionPairs = this.currDefinition.getClassficationPublicIdVersionPairs();
-//					else if (this.currDesignation != null)
-//						this.csPublicIdVersionPairs = this.currDesignation.getClassficationPublicIdVersionPairs();
-//				}
-//			}		
-						
-					
-				
+					this.csPublicIdVersionPairs = this.currDesignation.getClassficationPublicIdVersionPairs();	
+			} else if (localName.equals(StaXParser.VALUE)) {
+				if (nodeQueue.peek().equals(StaXParser.CONTACT_COMMUNICATION) && this.currContact != null)
+					this.methodName = "setValue";	
+			} 	 else if (localName.equals(StaXParser.ORGANIZATION_NAME)) {
+				if (nodeQueue.peek().equals(StaXParser.CONTACT_COMMUNICATION) && this.currContact != null)
+					this.methodName = "setOrganizationName";	
+			} 			
 		}
 		
 		//logger.debug("Pushing to node queue: " + localName);
@@ -177,27 +175,29 @@ public class FormDetailsParserHandler extends ParserHandler {
 		if (this.startFormIdx == this.currFormIdx) {
 			
 			if (localName.equals(StaXParser.DESIGNATION)) {
-				//if ( this.currClassName != null && this.currClassName.startsWith("Designation")) {
 				if (this.currDesignation != null) {
 					this.designations.add(this.currDesignation);
 					this.currClassName = null;
 					this.currDesignation = null;
 				}
 			} else if (localName.equals(StaXParser.DEFINITION)) {
-				//if ( this.currClassName != null && this.currClassName.equals("DefinitionTransferObjectExt")) {
 				if (this.currDefinition != null) {
 					this.definitions.add(this.currDefinition);
 					this.currClassName = null;
 					this.currDefinition = null;
 				}
 			} else if (localName.equals(StaXParser.REFERENCE_DOCUMENT)) {
-				//if ( this.currClassName != null && this.currClassName.equals("RefdocTransferObjectExt")) {
 				if (this.currRefDoc != null) {
 					this.refdocs.add(this.currRefDoc);
 					this.currClassName = null;
 					this.currRefDoc = null;
 				}				
-			} else if (localName.equals(StaXParser.PROTOCOL)) {				
+			} else if (localName.equals(StaXParser.CONTACT_COMMUNICATION)) {
+				if (this.currContact != null) {
+					this.contactCommnunications.add(currContact);
+					this.currContact = null;
+				}
+			}else if (localName.equals(StaXParser.PROTOCOL)) {				
 				if (this.currProtocol != null) {
 					this.protocols.add(this.currProtocol);
 					this.currClassName = null;
@@ -268,6 +268,8 @@ public class FormDetailsParserHandler extends ParserHandler {
 				} else if (this.currClassName != null && this.currClassName.equals("DefinitionTransferObjectExt") &&
 						this.methodName != null) {
 					setPropertyForObject(this.currDefinition, methodName, xmlreader.getText());
+				} else if (this.currContact != null && this.methodName != null) {
+					setPropertyForObject(this.currContact, methodName, xmlreader.getText());
 				}
 			} else if (peek.equals(StaXParser.TEXT)) {
 				if (this.currClassName != null && this.currClassName.equals("DefinitionTransferObjectExt") &&
@@ -280,26 +282,30 @@ public class FormDetailsParserHandler extends ParserHandler {
 			} else if (peek.equals(StaXParser.VERSION)) {
 				if (this.csPublicIdVersionPairs != null)
 					this.csVersion = xmlreader.getText().trim();
+			} else if (peek.equals(StaXParser.VALUE)) {
+				if (this.currContact != null && this.methodName != null) {
+					setPropertyForObject(this.currContact, methodName, xmlreader.getText());
+				}
+			} else if (peek.equals(StaXParser.ORGANIZATION_NAME)) {
+				if (this.currContact != null && this.methodName != null) {
+					setPropertyForObject(this.currContact, methodName, xmlreader.getText());
+				}
 			} 
 		}
 		
 	}
 
-
 	public List<RefdocTransferObjectExt> getRefdocs() {
 		return refdocs;
 	}
-
 
 	public void setRefdocs(List<RefdocTransferObjectExt> refdocs) {
 		this.refdocs = refdocs;
 	}
 
-
 	public List<DefinitionTransferObjectExt> getDefinitions() {
 		return definitions;
 	}
-
 
 	public void setDefinitions(List<DefinitionTransferObjectExt> definitions) {
 		this.definitions = definitions;
@@ -309,22 +315,28 @@ public class FormDetailsParserHandler extends ParserHandler {
 		return protocols;
 	}
 
-
 	public void setProtocols(List<ProtocolTransferObjectExt> protocols) {
 		this.protocols = protocols;
 	}
-
 
 	public List<DesignationTransferObjectExt> getDesignations() {
 		return designations;
 	}
 
-
 	public void setDesignations(List<DesignationTransferObjectExt> designations) {
 		this.designations = designations;
 	}
 	
-	
+	public List<ContactCommunicationV2TransferObject> getContactCommnunications() {
+		return contactCommnunications;
+	}
+
+	public void setContactCommnunications(
+			List<ContactCommunicationV2TransferObject> contactCommnunications) {
+		this.contactCommnunications = contactCommnunications;
+	}
+
+
 	/**
 	 * Use this version is the method is in super class
 	 * @param methodName

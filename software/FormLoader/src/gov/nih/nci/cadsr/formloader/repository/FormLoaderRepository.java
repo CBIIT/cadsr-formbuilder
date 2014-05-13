@@ -75,4 +75,6 @@ public interface FormLoaderRepository {
 	public boolean definitionTypeValid(String definitionType);
 	public boolean validClassificationScheme(String publicId, String version);
 	public boolean validClassificationSchemeItem(String publicId, String version);
+	
+	public String getOrganizationSeqidByName(String orgName); 
 }

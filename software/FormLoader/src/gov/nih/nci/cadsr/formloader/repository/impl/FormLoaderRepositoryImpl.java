@@ -13,6 +13,7 @@ import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCClassificationSchemeDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCCollectionDAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCContactCommunicationDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCDefinitionDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCDesignationDAO;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormDAOV2;
@@ -69,6 +70,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	JDBCDesignationDAO designationDao;
 	JDBCDefinitionDAO definitionDao;
 	JDBCClassificationSchemeDAOV2 classificationSchemeDao;
+	JDBCContactCommunicationDAOV2 contactCommV2Dao;
 	
 	//These are loaded from database for validation purposes
 	HashMap<String, String> conteNameSeqIdMap;
@@ -583,6 +585,13 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		}
 	}
 	
+	public String getOrganizationSeqidByName(String orgName) {
+		if (orgName == null || orgName.length() == 0)
+			return null;
+		
+		return this.contactCommV2Dao.getOrganizationIdseqByName(orgName);
+	}
+	
 	@Transactional(readOnly=true)
 	public void checkWorkflowStatusName(FormDescriptor form) {
 		if (this.workflowNames == null) {
@@ -679,6 +688,14 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	public void setClassificationSchemeDao(
 			JDBCClassificationSchemeDAOV2 classificationSchemeDao) {
 		this.classificationSchemeDao = classificationSchemeDao;
+	}
+
+	public JDBCContactCommunicationDAOV2 getContactCommV2Dao() {
+		return contactCommV2Dao;
+	}
+
+	public void setContactCommV2Dao(JDBCContactCommunicationDAOV2 contactCommV2Dao) {
+		this.contactCommV2Dao = contactCommV2Dao;
 	}
 	
 }

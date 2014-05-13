@@ -8,6 +8,7 @@ import gov.nih.nci.cadsr.formloader.domain.QuestionDescriptor;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
 import gov.nih.nci.ncicb.cadsr.common.dto.AdminComponentTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ContactCommunicationV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObject;
@@ -241,6 +242,58 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 		
 		
 		logger.debug("Done processing protocols, designations, refdocs and definitions for form");
+	}
+	
+	/**
+	 * 
+	 * @param form
+	 * @param refdocs
+	 */
+	@Transactional
+	protected void processContactCommnunications(FormDescriptor form) {
+		List<ContactCommunicationV2TransferObject> contacts = form.getContactCommnunications();
+		
+		if (contacts == null || contacts.size() == 0) {
+			logger.debug("Form " + form.getPublicId() + " has no contact. Do nothing");
+			return;
+		}
+		
+		String formSeqid = form.getFormSeqId();
+//		String contextSeqId = this.getContextSeqIdByName(form.getContext());
+//		List existings = null;
+//		
+//		if (!form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW)) {
+//			//2nd arg is not used in the actual query.
+//			existings = this.formV2Dao.getAllReferenceDocuments(form.getFormSeqId(), null);
+//		}
+//		
+//		//create ref docs
+//		int idx = 0;
+//		for (RefdocTransferObjectExt refdoc : refdocs) {
+//			String contextName = refdoc.getContextName();
+//			String refdocContextSeqid = this.getContextSeqIdByName(contextName);
+//			if (refdocContextSeqid == null || refdocContextSeqid.length() == 0) {
+//				refdocContextSeqid = contextSeqId;
+//				contextName = form.getContext();
+//			}
+//
+//			ContextTransferObject con = new ContextTransferObject(contextName);
+//			con.setConteIdseq(refdocContextSeqid);
+//			refdoc.setContext(con);
+//			refdoc.setDisplayOrder(idx++);
+//			if (!this.refdocTypeExists(refdoc.getDocType())) {
+//				form.addMessage("Refdoc type [" + refdoc.getDocType() + "] is invalid. Use default type [REFERENCE]");
+//				refdoc.setDocType(DEFAULT_REFDOC_TYPE);
+//			}
+//			if (existings != null && isExistingRefdoc(refdoc, existings)) {
+//				referenceDocV2Dao.updateReferenceDocument(refdoc);
+//			} else {
+//				this.referenceDocV2Dao.createReferenceDoc(refdoc, formSeqid);
+//			}
+//		}
+//		
+//		removeExtraRefdocsIfAny(existings);
+		
 	}
 	
 	/**

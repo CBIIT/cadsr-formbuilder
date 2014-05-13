@@ -11,6 +11,7 @@ import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceError;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
 import gov.nih.nci.cadsr.formloader.service.common.StatusFormatter;
+import gov.nih.nci.ncicb.cadsr.common.dto.ContactCommunicationV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
@@ -906,6 +907,44 @@ public class ContentValidationServiceImplTest {
 			}
 			
 			assertTrue(hasTheMsg);
+			
+		} catch (FormLoaderServiceException fle) {
+			logger.debug(fle);
+			fail("Got exception: " + fle.getMessage());
+		}
+	}
+	
+	@Test
+	public void testVerifyContactCommnunication() {
+		try {
+			aColl.setXmlPathOnServer(".\\test\\data\\contentvalidation");
+			aColl.setXmlFileName("3256357_v1_0_newform-contactCommunication.xml");
+			aColl.setCreatedBy("YANGS");
+			aColl = xmlValidator.validateXml(aColl);
+			
+			forms = aColl.getForms();
+			assertNotNull(forms);
+			assertTrue(forms.size() == 1);
+			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATED);
+			
+			for (FormDescriptor form : forms) {
+				form.setSelected(true);
+			}
+			
+			assertNotNull(contentValidationService);
+			aColl = contentValidationService.validateXmlContent(aColl);
+			
+			assertNotNull(aColl);
+			forms = aColl.getForms();
+			assertTrue(forms.size() == 1);
+			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_CONTENT_VALIDATED);
+			
+			FormDescriptor form = forms.get(0);				
+			List<ContactCommunicationV2TransferObject> contacts = form.getContactCommnunications();
+			
+			assertTrue(contacts.size() == 1);
+			assertTrue(contacts.get(0).getType().equals("EMAIL"));
+			assertTrue(contacts.get(0).getValue().contains("joh.doe"));
 			
 		} catch (FormLoaderServiceException fle) {
 			logger.debug(fle);

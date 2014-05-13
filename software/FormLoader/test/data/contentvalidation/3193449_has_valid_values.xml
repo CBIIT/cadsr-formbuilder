@@ -24,17 +24,40 @@
       <dateModified>0001-01-01T00:00:01</dateModified>
       <modifiedBy/>
       <languageName>ENGLISH</languageName>
+      <name>SY Testing</name>
+      <type>ABBREVIATION</type>
+      <context>caBIG</context>
+      <classification>
+         <name/>
+         <publicID>4011991</publicID>
+         <version>1.0</version>
+         <preferredDefinition/>
+         <classificationSchemeItem>
+            <name/>
+            <publicID>2812522</publicID>
+            <version>1.0</version>
+            <type>TEST</type>
+            <preferredDefinition/>
+         </classificationSchemeItem>
+      </classification>
+   </designation>
+   <designation>
+      <createdBy/>
+      <dateCreated>0001-01-01T00:00:01</dateCreated>
+      <dateModified>0001-01-01T00:00:01</dateModified>
+      <modifiedBy/>
+      <languageName>ENGLISH</languageName>
       <name/>
       <type>ABBREVIATION</type>
       <context>caBIG</context>
       <classification>
          <name/>
-         <publicID>0000000</publicID>
+         <publicID>4011991</publicID>
          <version>1.0</version>
          <preferredDefinition/>
          <classificationSchemeItem>
             <name/>
-            <publicID>0000000</publicID>
+            <publicID>2812522</publicID>
             <version>1.0</version>
             <type>TEST</type>
             <preferredDefinition/>
@@ -47,11 +70,11 @@
       <dateModified>0001-01-01T00:00:01</dateModified>
       <modifiedBy/>
       <languageName>ENGLISH</languageName>
-      <text/>
+      <text>SY Testing</text>
       <type>NCI</type>
       <classification>
          <name/>
-         <publicID>0000000</publicID>
+         <publicID>2812522</publicID>
          <version>1.0</version>
          <preferredDefinition/>
          <classificationSchemeItem>

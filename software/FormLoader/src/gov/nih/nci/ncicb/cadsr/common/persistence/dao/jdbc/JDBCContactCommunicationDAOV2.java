@@ -1,48 +1,88 @@
 package gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc;
 
-import gov.nih.nci.ncicb.cadsr.common.resource.ContactCommunicationV2;
-import gov.nih.nci.ncicb.cadsr.common.resource.Contact;
-import gov.nih.nci.ncicb.cadsr.common.resource.Person;
-import gov.nih.nci.ncicb.cadsr.common.resource.Organization;
-import gov.nih.nci.ncicb.cadsr.common.resource.Address;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ContactCommunicationV2DAO;
+import gov.nih.nci.ncicb.cadsr.common.dto.AddressTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContactCommunicationV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContactTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.PersonTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.OrganizationTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.AddressTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ContactCommunicationV2DAO;
+import gov.nih.nci.ncicb.cadsr.common.resource.Address;
+import gov.nih.nci.ncicb.cadsr.common.resource.Contact;
+import gov.nih.nci.ncicb.cadsr.common.resource.ContactCommunicationV2;
+import gov.nih.nci.ncicb.cadsr.common.resource.Person;
 
-
-import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
-import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocator;
-
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.sql.Types;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementSetter;
-import org.springframework.jdbc.core.SqlOutParameter;
-import org.springframework.jdbc.core.SqlParameter;
+import org.apache.log4j.Logger;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.object.MappingSqlQuery;
-import org.springframework.jdbc.object.SqlUpdate;
-import org.springframework.jdbc.object.StoredProcedure;
 
 public class JDBCContactCommunicationDAOV2 extends JDBCAdminComponentDAOV2
 		implements ContactCommunicationV2DAO {
+	
+	private static Logger logger = Logger.getLogger(JDBCContactCommunicationDAOV2.class.getName());
+	
 	public JDBCContactCommunicationDAOV2(DataSource dataSource) {
 		super(dataSource);
 	}
+	
+	public int createContactCommnunication(String ac_idseq, String org_idseq, ContactCommunicationV2TransferObject contact) {
+		//relationship: sbr.AC_CONTACTS_VIEW
+		//contact commun record: sbrext.contacts_view_ext
+		
+		String seqid = generateGUID();
+		String sql = "INSERT INTO sbr.contact_comms_view " +
+                " (ccomm_idseq, org_idseq, per_idseq, ctl_name, rank_order, " +
+                "  cyber_address, created_By) " +
+           " VALUES (:ccomm_idseq, :org_idseq, :per_idseq, :ctl_name, :rank_order, " +
+               "   :cyber_address, :createdBy)";
+		
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("ccomm_idseq", seqid);
+		
+		params.addValue("org_idseq", org_idseq); //un-nillable: otherwise, get "unique constraint violated" error
+		params.addValue("per_idseq", null);
+		
+		params.addValue("ctl_name", contact.getType());
+		
+		params.addValue("rank_order", contact.getRankOrder()); //un-nullable
+		params.addValue("cyber_address", contact.getValue());
+		params.addValue("createdBy", contact.getCreatedBy());
+		
+		try {
+			int res = this.namedParameterJdbcTemplate.update(sql, params);
+			return res;
+		} catch (DataAccessException de) {
+			logger.debug(de.getMessage());
+			throw de;
+		}
+	}
+	
+	public String getOrganizationIdseqByName(String org_name) {
+		
+		String sql = "select ORG_IDSEQ from sbr.ORGANIZATIONS_VIEW where name=:org_name";
+		
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("org_name", org_name);
+		
+		List<String> latest = this.namedParameterJdbcTemplate.query(sql, params, 
+	     		new RowMapper<String>() {
+	     	public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+	     		return rs.getString("ORG_IDSEQ");
+	         }
+	     });
+		
+		return null;
+	}
+	
+	
 
 	// (based on JDBCAdminComponentDAO#getContacts)
 	public List<ContactCommunicationV2> getContactCommunicationV2sForAC(String acIdseq) {

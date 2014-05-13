@@ -80,5 +80,9 @@
     <bean id="classificationSchemeDao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCClassificationSchemeDAOV2">
 		<constructor-arg ref="dataSource"/>       
     </bean>
+    
+    <bean id="contactCommV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCContactCommunicationDAOV2">
+		<constructor-arg ref="dataSource"/>       
+    </bean>
 </beans>
 
