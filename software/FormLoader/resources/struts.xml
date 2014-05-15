@@ -78,6 +78,10 @@
 			<result name="success" type="tiles">/home.tiles</result>
 			<result name="backToLogin">sessionExpired.jsp</result>
 		</action>
+		
+		<action name="uploadForm" class="gov.nih.nci.cadsr.formloader.struts2.XMLFileUploadInitialAction">
+			<result name="success" type="tiles">/upload.tiles</result>
+		</action>
 		 	
 		<action name="cancelFileUpload" class="gov.nih.nci.cadsr.formloader.struts2.XMLFileUploadAction" method="clear"> 
 			<interceptor-ref name="loggingStack"/>
