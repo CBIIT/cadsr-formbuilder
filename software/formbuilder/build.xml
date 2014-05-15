@@ -243,6 +243,10 @@
 			<fileset file="${conf.dir}/template.formbuilder-login-config-service.xml" />
 		</copy>
 		
+		<copy tofile="${artifacts.dir}/jboss/cadsrutil.properties" filtering="true">
+					<fileset file="${conf.dir}/cadsrutil.properties" />
+		</copy>
+		
 		<copy todir="${root.dir}/css" >
 		    <fileset dir="${basedir}/src/web/css" />
 		</copy>
