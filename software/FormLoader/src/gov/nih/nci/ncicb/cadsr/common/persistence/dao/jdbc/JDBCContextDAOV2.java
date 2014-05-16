@@ -175,12 +175,4 @@ public class JDBCContextDAOV2 extends JDBCBaseDAOV2 implements ContextDAO {
     return null;
   }
 
-  public static void main(String[] args) {
-    ServiceLocator locator = new SimpleServiceLocator();
-
-    //JDBCContextDAO test = new JDBCContextDAO(locator);
-    //Collection coll = test.getAllContexts();
-    //System.out.println(test.getAllContexts("'caBIG'"));
-  }
-
 }
