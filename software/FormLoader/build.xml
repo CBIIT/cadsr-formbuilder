@@ -130,6 +130,11 @@
     	    	  <include name="**/*.xsd" />
     	     </fileset>
     	</copy>
+    	<copy todir="${build.dir}/WEB-INF/classes/gov/nih/nci/cadsr/formloader/struts2">
+    	    		<fileset dir="${src.dir}/gov/nih/nci/cadsr/formloader/struts2">
+    	    	    	  <include name="**/*.xml" />
+    	    	     </fileset>
+    	    	</copy>
     </target>
 	
     <target name="build" depends="compile-war">
