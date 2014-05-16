@@ -10,25 +10,22 @@ import gov.nih.nci.ncicb.cadsr.common.resource.Concept;
 import gov.nih.nci.ncicb.cadsr.common.resource.ConceptDerivationRule;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
 import gov.nih.nci.ncicb.cadsr.common.resource.ValidValue;
-import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocator;
-import gov.nih.nci.ncicb.cadsr.common.servicelocator.SimpleServiceLocator;
 import gov.nih.nci.ncicb.cadsr.common.util.StringUtils;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import org.springframework.jdbc.core.SqlParameter;
-import org.springframework.jdbc.object.MappingSqlQuery;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
+
+import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.object.MappingSqlQuery;
 
 
 public class JDBCConceptDAOV2 extends JDBCAdminComponentDAOV2 implements ConceptDAO{

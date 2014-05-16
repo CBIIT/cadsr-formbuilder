@@ -4,9 +4,6 @@ import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
 import gov.nih.nci.ncicb.cadsr.common.persistence.ErrorCodeConstants;
 import gov.nih.nci.ncicb.cadsr.common.persistence.PersistenceConstants;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.BaseDAOV2;
-import gov.nih.nci.ncicb.cadsr.common.servicelocator.SimpleServiceLocator;
-import gov.nih.nci.ncicb.cadsr.common.util.logging.LogFactory;
-import gov.nih.nci.ncicb.cadsr.common.util.DBUtil;
 
 import java.io.IOException;
 import java.io.InputStream;

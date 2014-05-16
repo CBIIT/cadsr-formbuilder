@@ -1,23 +1,20 @@
 package gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc;
 
 import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ContextDAO;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
-import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocator;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import java.sql.Types;
-import java.util.Collection;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import org.springframework.jdbc.core.SqlParameter;
-import org.springframework.jdbc.object.MappingSqlQuery;
-import gov.nih.nci.ncicb.cadsr.common.servicelocator.SimpleServiceLocator;
-import java.util.Iterator;
 
 import javax.sql.DataSource;
+
+import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.object.MappingSqlQuery;
 
 
 public class JDBCContextDAOV2 extends JDBCBaseDAOV2 implements ContextDAO {

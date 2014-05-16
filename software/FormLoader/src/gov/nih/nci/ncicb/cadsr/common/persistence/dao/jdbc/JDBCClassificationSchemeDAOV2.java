@@ -1,29 +1,21 @@
 package gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc;
 
+import gov.nih.nci.ncicb.cadsr.common.dto.CSITransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.bc4j.BC4JClassificationsTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.jdbc.ClassSchemeValueObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.CSITransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ClassificationSchemeDAO;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCContextDAOV2.ContextByNameQuery_STMT;
 import gov.nih.nci.ncicb.cadsr.common.resource.ClassSchemeItem;
 import gov.nih.nci.ncicb.cadsr.common.resource.Classification;
 import gov.nih.nci.ncicb.cadsr.common.resource.ClassificationScheme;
-import gov.nih.nci.ncicb.cadsr.common.resource.Context;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-
-import java.util.ArrayList;
 import java.util.Collection;
-
 import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.object.MappingSqlQuery;
