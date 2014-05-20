@@ -201,6 +201,7 @@
 			<fileset file="${PROP.FILE}" />
 		</copy>
 		
+		<!-- jars needed for initial server setup -->
 		<copy tofile="${artifacts.dir}/jboss/xercesImpl.jar" filtering="true">
 			<fileset file="${formloader.dir}/build-jars/xercesImpl-2.11.0.jar" />
 		</copy>
@@ -228,6 +229,7 @@
 		<copy tofile="${artifacts.dir}/jboss/ojdbc14-10.2.0.4.0.jar" filtering="true">
 			<fileset file="${lib.dir}/ojdbc14-10.2.0.4.0.jar" />
 		</copy>
+		<!-- End of jars needed for initial server setup -->
 		
 		<copy tofile="${web.dir}/web.xml" filtering="true">
 			<fileset file="${conf.dir}/template.web.xml" />
