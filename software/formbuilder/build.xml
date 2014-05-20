@@ -225,6 +225,10 @@
 			<fileset file="${lib.dir}/hibernate-validator-3.0.0.GA.jar" />
 		</copy>
 		
+		<copy tofile="${artifacts.dir}/jboss/ojdbc14-10.2.0.4.0.jar" filtering="true">
+			<fileset file="${lib.dir}/ojdbc14-10.2.0.4.0.jar" />
+		</copy>
+		
 		<copy tofile="${web.dir}/web.xml" filtering="true">
 			<fileset file="${conf.dir}/template.web.xml" />
 		</copy>
