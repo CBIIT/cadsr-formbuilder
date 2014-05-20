@@ -200,6 +200,31 @@
 			<fileset file="build.xml" />
 			<fileset file="${PROP.FILE}" />
 		</copy>
+		
+		<copy tofile="${artifacts.dir}/jboss/xercesImpl.jar" filtering="true">
+			<fileset file="${formloader.dir}/build-jars/xercesImpl-2.11.0.jar" />
+		</copy>
+		
+		<copy tofile="${artifacts.dir}/jboss/xml-apis-1.4.01.jar" filtering="true">
+				<fileset file="${formloader.dir}/build-jars/xml-apis-1.4.01.jar" />
+		</copy>
+		
+		<copy tofile="${artifacts.dir}/jboss/org.eclipse.wst.xml.xpath2.processor_1.1.0.jar" filtering="true">
+			<fileset file="${formloader.dir}/build-jars/org.eclipse.wst.xml.xpath2.processor_1.1.0.jar" />
+		</copy>
+		
+		<copy tofile="${artifacts.dir}/jboss/hibernate-3.2.0.ga-modified.jar" filtering="true">
+			<fileset file="${lib.dir}/hibernate-3.2.0.ga-modified.jar" />
+		</copy>
+				
+		<copy tofile="${artifacts.dir}/jboss/hibernate-annotations-3.2.0.jar" filtering="true">
+				<fileset file="${lib.dir}/hibernate-annotations-3.2.0.jar" />
+		</copy>
+				
+		<copy tofile="${artifacts.dir}/jboss/hibernate-validator-3.0.0.GA.jar" filtering="true">
+			<fileset file="${lib.dir}/hibernate-validator-3.0.0.GA.jar" />
+		</copy>
+		
 		<copy tofile="${web.dir}/web.xml" filtering="true">
 			<fileset file="${conf.dir}/template.web.xml" />
 		</copy>
