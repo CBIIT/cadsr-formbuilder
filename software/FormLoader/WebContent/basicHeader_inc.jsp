@@ -1,9 +1,21 @@
 
 
-
-
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ include  file="common/topHeader.jsp" %>
+<%@ page import="java.io.IOException" %>
+<%@ page import="gov.nih.nci.ncicb.cadsr.common.*"%>
+<% 
+
+String formbuilderUrl = "";
+try {
+	formbuilderUrl = CaDSRUtil.getFormBuilderUrlNoCache();
+} catch (IOException ioe) {
+	System.out.println(ioe.getMessage());
+	formbuilderUrl = "https://formbuilder.nih.nci.gov/FormBuilder/";
+}
+
+%>
+
 <TABLE width=100% Cellpadding=0 Cellspacing=0 border=0>
   <tr>
     <td align="left" valign="TOP">
@@ -15,8 +27,11 @@
 
     <td align=right valign=top nowrap>
       <TABLE Cellpadding=0 Cellspacing=0 border=0>
-        <TR>
-          <TD valign="TOP" align="left" width="1%" colspan=1><A HREF="https://formbuilder.nci.nih.gov/FormBuilder/" target="_blank"><IMG SRC="<%=request.getContextPath()%>/i/form_builder_icon.jpg" alt="Form Builder" border=0  width=32 height=32></A></TD>
+
+          <TD valign="TOP" align="left" width="1%" colspan=1>
+          <A HREF="<%=formbuilderUrl%>" target="_blank">
+          <IMG SRC="<%=request.getContextPath()%>/i/form_builder_icon.jpg" alt="Form Builder" border=0  width=32 height=32></A>
+          </TD>
           <TD valign="TOP" align="left" width="1%" colspan=1><A HREF="https://cdebrowser.nci.nih.gov" target="_blank"><IMG SRC="<%=request.getContextPath()%>/i/icon_cdebrowser.gif" alt="CDE Browser" border=0  width=32 height=32></A></TD>
           <TD valign="TOP" align="left" width="1%" colspan=1><A HREF=" https://wiki.nci.nih.gov/x/-gSGCQ" target="_blank"><IMG SRC="<%=request.getContextPath()%>/i/icon_help.gif" alt="Task Help" border=0  width=32 height=32></A></TD>
 		  <TD valign="TOP" align="CENTER" width="1%" colspan=1>
