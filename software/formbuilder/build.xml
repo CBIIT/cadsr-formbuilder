@@ -6,6 +6,7 @@
 	<description>
         Build and deploy the caDSR Form Builder Tool
     </description>
+	
 	<!-- set global properties for this build -->   <!-- dev.build.properties -->
 	<property name="PROP.FILE" location="local.build.properties"/>   
 	<property file="${PROP.FILE}" />
@@ -139,6 +140,31 @@
 			<include name="**/*.zip"/>
 		</fileset>
 	</path>
+	
+
+	<!-- set up the tier string needed to update formbuilder /formloader url in cadsrutil.properties -->
+	<path id="antcontrib.lib.classpath">
+					<fileset dir="${lib.dir}">
+						<include name="**/ant*.jar" />
+					</fileset>
+	</path>
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath refid="antcontrib.lib.classpath" />
+	</taskdef>
+	<if>
+		<isset property="tier" />
+		<then><property name="tier.base" value="${tier}"/></then>
+		<else><property name="tier.base" value=""/></else>
+	</if>
+	
+	<if>
+		<or>
+			<equals arg1="${tier.base}" arg2="prod" />
+			<equals arg1="${tier.base}" arg2="" />
+		</or>
+		<then><property name="tier.suffix" value=""/></then>
+		<else><property name="tier.suffix" value="-${tier.base}"/></else>
+	</if>
 
 	<target name="clean" depends="-prop-check" description="Deletes all project build artifacts and temporary files.">
 		<echo>Remove old artifacts ...</echo>
@@ -155,6 +181,8 @@
 		<mkdir dir="${artifacts.dir}/jboss"/>
 		<mkdir dir="${artifacts.dir}/sql"/>
 		<mkdir dir="${tr.dir}"/>
+		<mkdir dir="${web.dir}/lib"/>
+		
 	</target>
 
 	<target name="-compile" depends="clean,-prop-check" description="Compiles the project source.">
@@ -275,8 +303,10 @@
 		</copy>
 		
 		<copy tofile="${artifacts.dir}/jboss/cadsrutil.properties" filtering="true">
-					<fileset file="${conf.dir}/cadsrutil.properties" />
+					<fileset file="${conf.dir}/template.cadsrutil.properties" />
 		</copy>
+		
+		<replaceregexp file="${artifacts.dir}/jboss/cadsrutil.properties" match="@tier@" replace="${tier.suffix}" flags="g"/>
 		
 		<copy todir="${root.dir}/css" >
 		    <fileset dir="${basedir}/src/web/css" />
