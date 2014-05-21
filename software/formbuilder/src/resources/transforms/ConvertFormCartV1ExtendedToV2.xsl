@@ -100,25 +100,18 @@
                 <!--  e.g. 2012-08-17 10:59:57.0 transform to xs:dateTime format 2001-10-26T21:32:52.12679-->
                 <xsl:choose>
                     <xsl:when test="date-created != ''">
-                <xsl:value-of
-                    select="concat(substring(date-created, 1, 10), 'T', substring(date-created, 12, 10))"
-                />
+                		<xsl:value-of
+                    		select="concat(substring(date-created, 1, 10), 'T', substring(date-created, 12, 10))"/>
                     </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$FILLDATE"/>
-                    </xsl:otherwise>
                 </xsl:choose>
             </xsl:element>
             <xsl:element name="dateModified">
                 <!--  e.g. 2012-08-17 10:59:57.0 transform to xs:dateTime format 2001-10-26T21:32:52.12679-->
                 <xsl:choose>
                     <xsl:when test="date-modified != ''">
-                <xsl:value-of
-                    select="concat(substring(date-modified, 1, 10), 'T', substring(date-modified, 12, 10))"/>
+                		<xsl:value-of
+                    		select="concat(substring(date-modified, 1, 10), 'T', substring(date-modified, 12, 10))"/>
                     </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$FILLDATE"/>
-                    </xsl:otherwise>
                 </xsl:choose>
             </xsl:element>
             <xsl:element name="modifiedBy">
@@ -134,6 +127,9 @@
             </xsl:element>
             <xsl:element name="preferredDefinition">
                 <xsl:value-of select="normalize-space(./preferred-definition)"/>
+            </xsl:element>
+            <xsl:element name="cadsrRAI">
+                <xsl:value-of select="./registry-id"/>
             </xsl:element>
             <xsl:element name="publicID">
                 <xsl:value-of select="./@public-id"/>
@@ -154,9 +150,17 @@
             <xsl:element name="type">
                 <xsl:value-of select="./form-type"/>
             </xsl:element>
-            <xsl:call-template name="Designation"/>
+            <xsl:apply-templates select="designations"/>
+            
+            <!-- Commented out so we don't generate fake data any more -->
+            <!--  xsl:call-template name="Designation"/> -->
+            
             <!-- new in formCartV2 (complexType element) -->
-            <xsl:call-template name="Definition"/>
+            <xsl:apply-templates select="definitions"/>
+            
+            <!-- Commented out so we don't generate fake data any more -->
+            <!--  xsl:call-template name="Definition"/> -->
+            
             <!-- new in formCartV2 (complexType element) -->
             <xsl:element name="headerInstruction">
                 <xsl:element name="text">
@@ -172,6 +176,7 @@
             <xsl:apply-templates select="modules"/>
             <xsl:apply-templates select="protocols"/>
             <xsl:apply-templates select="referece-docs"/>
+            <xsl:apply-templates select="classifications"/>
             <xsl:apply-templates select="contact-communication-v2"/>
         </xsl:element>
     </xsl:template>
@@ -198,12 +203,18 @@
             <xsl:element name="createdBy"/>
             <!-- New in formCartV2 -->
             <xsl:element name="dateCreated">
-                <!-- New in formCartV2 -->
-                <xsl:value-of select="$FILLDATE"/>
+            	<xsl:choose>
+                    <xsl:when test="date-created">
+                        <xsl:value-of select="concat(substring(date-created, 1, 10), 'T', substring(date-created, 12, 10))"/>
+                    </xsl:when>
+                </xsl:choose>
             </xsl:element>
             <xsl:element name="dateModified">
-                <!-- New in formCartV2 -->
-                <xsl:value-of select="$FILLDATE"/>
+            	<xsl:choose>
+                    <xsl:when test="date-modified">
+                        <xsl:value-of select="concat(substring(date-modified, 1, 10), 'T', substring(date-modified, 12, 10))"/>
+                    </xsl:when>
+                </xsl:choose>
             </xsl:element>
             <xsl:element name="modifiedBy"/>
             <!-- New in formCartV2 -->
@@ -273,11 +284,19 @@
             <xsl:element name="createdBy"/>
             <!-- Added in formCartV2 -->
             <xsl:element name="dateCreated">
-                <xsl:value-of select="$FILLDATE"/>
+                <xsl:choose>
+                    <xsl:when test="date-created">
+                        <xsl:value-of select="concat(substring(date-created, 1, 10), 'T', substring(date-created, 12, 10))"/>
+                    </xsl:when>
+                </xsl:choose>
             </xsl:element>
             <!-- Added in formCartV2 -->
             <xsl:element name="dateModified">
-                <xsl:value-of select="$FILLDATE"/>
+                <xsl:choose>
+                    <xsl:when test="date-modified">
+                        <xsl:value-of select="concat(substring(date-modified, 1, 10), 'T', substring(date-modified, 12, 10))"/>
+                    </xsl:when>
+                </xsl:choose>
             </xsl:element>
             <!-- Added in formCartV2 -->
             <xsl:element name="modifiedBy"/>
@@ -379,7 +398,8 @@
             <xsl:element name="preferredDefinition">
                 <xsl:value-of select="normalize-space(./preferred-definition)"/>
             </xsl:element>
-            <xsl:call-template name="Designation"/>
+            <!--  xsl:call-template name="Designation"/>-->
+            <xsl:apply-templates select="designations"/>
             <!-- Added in formCartV2  -->
             <xsl:apply-templates select="value-domain"/>
             <xsl:choose>
@@ -624,6 +644,41 @@
             </xsl:element>
             <xsl:apply-templates select="context"/>
             <xsl:apply-templates select="cs-csis"/>
+        </xsl:element>
+    </xsl:template>
+    
+    <!-- This is for form level classification -->
+    <xsl:template match="classifications">
+        <xsl:element name="classification">
+            <xsl:element name="name">
+                <xsl:value-of select="class-scheme-long-name"/>
+            </xsl:element>
+            <xsl:element name="publicID">
+                <xsl:value-of select="cs-iD"/>
+            </xsl:element>
+            <xsl:element name="version">
+                <xsl:value-of select="cs-version"/>
+            </xsl:element>
+            <xsl:element name="preferredDefinition">
+                <xsl:value-of select="normalize-space(class-scheme-definition)"/>
+            </xsl:element>
+            <xsl:element name="classificationSchemeItem">
+                <xsl:element name="name">
+                    <xsl:value-of select="class-scheme-item-name"/>
+                </xsl:element>
+                <xsl:element name="publicID">
+                    <xsl:value-of select="csi-id"/>
+                </xsl:element>
+                <xsl:element name="version">
+                    <xsl:value-of select="csi-version"/>
+                </xsl:element>
+                <xsl:element name="type">
+                    <xsl:value-of select="class-scheme-item-type"/>
+                </xsl:element>
+                <xsl:element name="preferredDefinition">
+                    <xsl:value-of select="normalize-space(csi-description)"/>
+                </xsl:element>
+            </xsl:element>
         </xsl:element>
     </xsl:template>
 
