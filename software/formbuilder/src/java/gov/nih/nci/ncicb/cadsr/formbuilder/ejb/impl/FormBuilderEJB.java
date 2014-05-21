@@ -35,6 +35,8 @@ import gov.nih.nci.ncicb.cadsr.common.resource.AdminComponentType;
 import gov.nih.nci.ncicb.cadsr.common.resource.ClassSchemeItem;
 import gov.nih.nci.ncicb.cadsr.common.resource.ConceptDerivationRule;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
+import gov.nih.nci.ncicb.cadsr.common.resource.Definition;
+import gov.nih.nci.ncicb.cadsr.common.resource.Designation;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormElement;
@@ -367,9 +369,20 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
         FormValidValueInstructionDAO vvInstrdao =
             daoFactory.getFormValidValueInstructionDAO();
         ContextDAO cdao = daoFactory.getContextDAO();
+        
+        AdminComponentDAO adminDao = daoFactory.getAdminComponentDAO();
 
-	  FormV2DAO fV2dao = daoFactory.getFormV2DAO();
+        FormV2DAO fV2dao = daoFactory.getFormV2DAO();
         myForm = fV2dao.findFormV2ByPrimaryKey(formPK);
+        
+        List<Definition> defs = adminDao.getDefinitions(formPK);
+        List<Designation> des = adminDao.getDesignations(formPK, null); //null: get all types
+        Collection classifications = retrieveFormClassifications(formPK);
+        
+        myForm.setDefinitions(defs);
+        myForm.setDesignations(des); //TODO: Shan: untested. FormBuilder currently doesn't provide GUI to add
+        								//designations or definitions to form
+        myForm.setClassifications(classifications);
 
         List refDocs =
             fdao.getAllReferenceDocuments(formPK, ReferenceDocument.REF_DOC_TYPE_IMAGE);
