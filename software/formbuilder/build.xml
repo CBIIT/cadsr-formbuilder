@@ -1,16 +1,16 @@
 <!-- Copyright ScenPro, Inc. 2005
-    $Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.29 2009-06-12 16:11:06 mathura Exp $
-    $Name: not supported by cvs2svn $
+$Header: /share/content/gforge/formbuilder/formbuilder/build.xml,v 1.29 2009-06-12 16:11:06 mathura Exp $
+$Name: not supported by cvs2svn $
 -->
 <project name="Form Builder Tool" default="init" basedir=".">
-	<description>
+<description>
         Build and deploy the caDSR Form Builder Tool
     </description>
-	
-	<!-- set global properties for this build -->   <!-- dev.build.properties -->
-	<property name="PROP.FILE" location="local.build.properties"/>   
-	<property file="${PROP.FILE}" />
-	<echo>
+
+<!-- set global properties for this build --> <!-- dev.build.properties -->
+<property name="PROP.FILE" location="local.build.properties"/>
+<property file="${PROP.FILE}" />
+<echo>
         PROP.FILE = ${PROP.FILE}
 
         CADSR.DS.URL = ${CADSR.DS.URL}
@@ -42,344 +42,338 @@
         TOOL.ROOT.DIR = ${TOOL.ROOT.DIR}
         TOOL.LOG.DIR = ${TOOL.LOG.DIR}
     </echo>
-	<condition property="check.props">
-		<and>
-			<isset property="JDEBUG" />
-			<isset property="CADSR.DS.URL" />
-			<isset property="CADSR.DS.USER" />
-			<isset property="CADSR.DS.PSWD" />
-			<isset property="CADSR.DS.TNS.ENTRY" />
-			<isset property="TIER" />
-			<isset property="TIER.UPPER" />
-			<isset property="TIER.NAME" />
-			<isset property="JBOSS.HOME.DIR" />
-			<isset property="JBOSS.SERVER.DIR" />
-			<isset property="JBOSS.CONF.DIR" />
-			<isset property="JBOSS.DEPLOY.DIR" />
-			<isset property="JBOSS.LOG.DIR" />
-			<isset property="TOOL.LOG.DIR" />
-			<isset property="TOOL.ROOT.DIR" />
-			<isset property="TEST" />
-			<isset property="TEST.VALID.USER" />
-			<isset property="TEST.VALID.PSWD" />
-			<isset property="TEST.BAD.USER" />
-			<isset property="TEST.BAD.PSWD" />
-			<isset property="SCP.USER" />
-			<isset property="SCP.HOST" />
-			<isset property="SCP.PATH" />
-			<isset property="SCP.KEYFILE" />
-			<isset property="SCP.PORT" />
-			<isset property="SCP.PASSPHRASE" />
-			<isset property="DEPLOY.LOCATION" />
-			<isset property="SQL.EXE" />
-		</and>
-	</condition>
+<condition property="check.props">
+<and>
+<isset property="JDEBUG" />
+<isset property="CADSR.DS.URL" />
+<isset property="CADSR.DS.USER" />
+<isset property="CADSR.DS.PSWD" />
+<isset property="CADSR.DS.TNS.ENTRY" />
+<isset property="TIER" />
+<isset property="TIER.UPPER" />
+<isset property="TIER.NAME" />
+<isset property="JBOSS.HOME.DIR" />
+<isset property="JBOSS.SERVER.DIR" />
+<isset property="JBOSS.CONF.DIR" />
+<isset property="JBOSS.DEPLOY.DIR" />
+<isset property="JBOSS.LOG.DIR" />
+<isset property="TOOL.LOG.DIR" />
+<isset property="TOOL.ROOT.DIR" />
+<isset property="TEST" />
+<isset property="TEST.VALID.USER" />
+<isset property="TEST.VALID.PSWD" />
+<isset property="TEST.BAD.USER" />
+<isset property="TEST.BAD.PSWD" />
+<isset property="SCP.USER" />
+<isset property="SCP.HOST" />
+<isset property="SCP.PATH" />
+<isset property="SCP.KEYFILE" />
+<isset property="SCP.PORT" />
+<isset property="SCP.PASSPHRASE" />
+<isset property="DEPLOY.LOCATION" />
+<isset property="SQL.EXE" />
+</and>
+</condition>
 
-	<condition property="remote.deploy">
-		<equals arg1="${DEPLOY.LOCATION}" arg2="remote" />
-	</condition>
-	<property name="root.dir" location="${basedir}/WebRoot" />
-	<property name="artifacts.dir" location="${basedir}/deployment-artifacts" />
-	<property name="doc.dir" location="${artifacts.dir}/javadoc" />
-	<property name="temp.dir" location="${basedir}/tmp" />
-	<property name="tr.dir" location="${artifacts.dir}/test-results" />
-	<property name="odi.dir" location="${artifacts.dir}/ospack" />
-	<property name="web.dir" location="${root.dir}/WEB-INF" />
-	<property name="classes.dir" location="${web.dir}/classes" />
-	<property name="temp.classes.dir" location="${web.dir}/classes/temp" />
-	<property name="wlib.dir" location="${basedir}/src/web/lib" />
-	<property name="jsp.dir" location="${root.dir}/jsp" />
-	<property name="prop.dir" location="${classes.dir}/gov/nih/nci/ncicb" />
-	<property name="src.dir" location="${basedir}/src/java" />
-	<property name="lib.dir" location="${basedir}/lib" />
-	<property name="dtd.dir" location="${basedir}/dtd" />
-	<property name="scpPath.dir" location="${SCP.PATH}/formbuilder" />
-	<property name="toolBin.dir" location="${TOOL.ROOT.DIR}bin" />
-	<property name="toolRoot.dir" location="${TOOL.ROOT.DIR}" />
-	<property name="toolDtd.dir" location="${TOOL.ROOT.DIR}htdocs/dtd" />
-	<property name="services.dir" location="${basedir}/src/web/services-config" />
-	<property name="tabProp.dir" location="${basedir}/src/web/tab-properties" />
-	<property name="conf.dir" location="${basedir}/src/resources/conf" />
-	<property name="war.dir" location="${artifacts.dir}/jboss/" />
-	
-	<property name="formloader.dir" location="../FormLoader" />
-	
-	<condition property="check.test">
-		<equals arg1="${TEST}" arg2="true" trim="true" />
-	</condition>
+<condition property="remote.deploy">
+<equals arg1="${DEPLOY.LOCATION}" arg2="remote" />
+</condition>
+<property name="root.dir" location="${basedir}/WebRoot" />
+<property name="artifacts.dir" location="${basedir}/deployment-artifacts" />
+<property name="doc.dir" location="${artifacts.dir}/javadoc" />
+<property name="temp.dir" location="${basedir}/tmp" />
+<property name="tr.dir" location="${artifacts.dir}/test-results" />
+<property name="odi.dir" location="${artifacts.dir}/ospack" />
+<property name="web.dir" location="${root.dir}/WEB-INF" />
+<property name="classes.dir" location="${web.dir}/classes" />
+<property name="temp.classes.dir" location="${web.dir}/classes/temp" />
+<property name="wlib.dir" location="${basedir}/src/web/lib" />
+<property name="jsp.dir" location="${root.dir}/jsp" />
+<property name="prop.dir" location="${classes.dir}/gov/nih/nci/ncicb" />
+<property name="src.dir" location="${basedir}/src/java" />
+<property name="lib.dir" location="${basedir}/lib" />
+<property name="dtd.dir" location="${basedir}/dtd" />
+<property name="scpPath.dir" location="${SCP.PATH}/formbuilder" />
+<property name="toolBin.dir" location="${TOOL.ROOT.DIR}bin" />
+<property name="toolRoot.dir" location="${TOOL.ROOT.DIR}" />
+<property name="toolDtd.dir" location="${TOOL.ROOT.DIR}htdocs/dtd" />
+<property name="services.dir" location="${basedir}/src/web/services-config" />
+<property name="tabProp.dir" location="${basedir}/src/web/tab-properties" />
+<property name="conf.dir" location="${basedir}/src/resources/conf" />
+<property name="war.dir" location="${artifacts.dir}/jboss/" />
 
-	<filter token="CADSR.DS.URL" value="${CADSR.DS.URL}" />
-	<filter token="CADSR.DS.USER" value="${CADSR.DS.USER}" />
-	<filter token="CADSR.DS.PSWD" value="${CADSR.DS.PSWD}" />
-	<filter token="CADSR.DS.TNS.ENTRY" value="${CADSR.DS.TNS.ENTRY}" />
-	<filter token="TEST.VALID.USER" value="${TEST.VALID.USER}" />
-	<filter token="TEST.VALID.PSWD" value="${TEST.VALID.PSWD}" />
-	<filter token="TEST.BAD.USER" value="${TEST.BAD.USER}" />
-	<filter token="TEST.BAD.PSWD" value="${TEST.BAD.PSWD}" />
-	<filter token="TIER" value="${TIER}" />
-	<filter token="TIER.UPPER" value="${TIER.UPPER}" />
-	<filter token="TIER.NAME" value="${TIER.NAME}" />
-	<filter token="TOOL.LOG.DIR" value="${TOOL.LOG.DIR}" />
-	<filter token="JBOSS.LOG.DIR" value="${JBOSS.LOG.DIR}" />
-	<filter token="TOOL.ROOT.DIR" value="${TOOL.ROOT.DIR}" />
+<property name="formloader.dir" location="../FormLoader" />
 
-	<!-- these values that replaces some tags in the tool, are needed at the build time -->
-	<filter token="Tool.ds.jndi.Name" value="FormBuilderDS"/>
-	<filter token="Tool.Version" value="4.0.4 Iteration 3"/>
-	<filter token="Tool.Build" value="4"/>
-	<filter token="Tool.Support" value="ncicb@pop.nci.nih.gov"/>
-	<filter token="Tool.Version.Suffix" value="4_0_4"/>
-	
-	<path id="libpath">
-		<fileset dir="${lib.dir}">
-			<include name="**/*.jar"/>
-			<include name="**/*.zip"/>
-		</fileset>
-		<fileset dir="${wlib.dir}">
-			<include name="**/*.jar"/>
-			<include name="**/*.zip"/>
-		</fileset>
-	</path>
-	
+<condition property="check.test">
+<equals arg1="${TEST}" arg2="true" trim="true" />
+</condition>
 
-	<!-- set up the tier string needed to update formbuilder /formloader url in cadsrutil.properties -->
-	<path id="antcontrib.lib.classpath">
-					<fileset dir="${lib.dir}">
-						<include name="**/ant*.jar" />
-					</fileset>
-	</path>
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
-		<classpath refid="antcontrib.lib.classpath" />
-	</taskdef>
-	<if>
-		<isset property="tier" />
-		<then><property name="tier.base" value="${tier}"/></then>
-		<else><property name="tier.base" value=""/></else>
-	</if>
-	
-	<if>
-		<or>
-			<equals arg1="${tier.base}" arg2="prod" />
-			<equals arg1="${tier.base}" arg2="" />
-		</or>
-		<then><property name="tier.suffix" value=""/></then>
-		<else><property name="tier.suffix" value="-${tier.base}"/></else>
-	</if>
+<filter token="CADSR.DS.URL" value="${CADSR.DS.URL}" />
+<filter token="CADSR.DS.USER" value="${CADSR.DS.USER}" />
+<filter token="CADSR.DS.PSWD" value="${CADSR.DS.PSWD}" />
+<filter token="CADSR.DS.TNS.ENTRY" value="${CADSR.DS.TNS.ENTRY}" />
+<filter token="TEST.VALID.USER" value="${TEST.VALID.USER}" />
+<filter token="TEST.VALID.PSWD" value="${TEST.VALID.PSWD}" />
+<filter token="TEST.BAD.USER" value="${TEST.BAD.USER}" />
+<filter token="TEST.BAD.PSWD" value="${TEST.BAD.PSWD}" />
+<filter token="TIER" value="${TIER}" />
+<filter token="TIER.UPPER" value="${TIER.UPPER}" />
+<filter token="TIER.NAME" value="${TIER.NAME}" />
+<filter token="TOOL.LOG.DIR" value="${TOOL.LOG.DIR}" />
+<filter token="JBOSS.LOG.DIR" value="${JBOSS.LOG.DIR}" />
+<filter token="TOOL.ROOT.DIR" value="${TOOL.ROOT.DIR}" />
 
-	<target name="clean" depends="-prop-check" description="Deletes all project build artifacts and temporary files.">
-		<echo>Remove old artifacts ...</echo>
-		<delete dir="${classes.dir}"/>
-		<delete dir="${artifacts.dir}"/>
-		<delete file="${web.dir}/web.xml"/>
-		<delete dir="${root.dir}"/>
-		<mkdir dir="${classes.dir}"/>
-		<mkdir dir="${classes.dir}/temp"/>
-		<mkdir dir="${artifacts.dir}"/>
-		<mkdir dir="${artifacts.dir}/bin"/>
-		<mkdir dir="${artifacts.dir}/dtd"/>
-		<mkdir dir="${artifacts.dir}/gforge"/>
-		<mkdir dir="${artifacts.dir}/jboss"/>
-		<mkdir dir="${artifacts.dir}/sql"/>
-		<mkdir dir="${tr.dir}"/>
-		<mkdir dir="${web.dir}/lib"/>
-		
-	</target>
+<!-- these values that replaces some tags in the tool, are needed at the build time -->
+<filter token="Tool.ds.jndi.Name" value="FormBuilderDS"/>
+<filter token="Tool.Version" value="4.0.4 Iteration 3"/>
+<filter token="Tool.Build" value="4"/>
+<filter token="Tool.Support" value="ncicb@pop.nci.nih.gov"/>
+<filter token="Tool.Version.Suffix" value="4_0_4"/>
 
-	<target name="-compile" depends="clean,-prop-check" description="Compiles the project source.">
-		<echo>Compiling project source, debug is ${JDEBUG} ...</echo>
-		<javac srcdir="${src.dir}" destdir="${temp.classes.dir}" tempdir="${temp.dir}" debug="${JDEBUG}" failonerror="yes">
-			<compilerarg line="-deprecation"/>
-			<compilerarg line="-Xlint:unchecked"/>
-			<classpath refid="libpath"/>
-		</javac>
-		
-		<unzip src="${lib.dir}/cadsrutil.jar" dest="${temp.classes.dir}" overwrite="No"/>
-		<!-- add the jndi name from the template -->		
-		<copy tofile="${classes.dir}/gov/nih/nci/ncicb/cadsr/common/jndi.properties" filtering="true" overwrite="Yes">
-			<fileset file="${conf.dir}/template.jndi.properties"/>
-		</copy>
-		<copy tofile="${classes.dir}/gov/nih/nci/ncicb/cadsr/common/persistence/dao/jdbc/jndi.properties" filtering="true" overwrite="Yes">
-			<fileset file="${conf.dir}/template.jndi.properties"/>
-		</copy>
-		
-	    <copy todir="${classes.dir}">      
-	      <fileset dir="${src.dir}">
+<path id="libpath">
+<fileset dir="${lib.dir}">
+<include name="**/*.jar"/>
+<include name="**/*.zip"/>
+</fileset>
+<fileset dir="${wlib.dir}">
+<include name="**/*.jar"/>
+<include name="**/*.zip"/>
+</fileset>
+</path>
+
+
+<!-- set up the tier string needed to update formbuilder /formloader url in cadsrutil.properties -->
+<path id="antcontrib.lib.classpath">
+<fileset dir="${lib.dir}">
+<include name="**/ant*.jar" />
+</fileset>
+</path>
+<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+<classpath refid="antcontrib.lib.classpath" />
+</taskdef>
+<if>
+<isset property="tier" />
+<then><property name="tier.base" value="${tier}"/></then>
+<else><property name="tier.base" value=""/></else>
+</if>
+
+<if>
+<or>
+<equals arg1="${tier.base}" arg2="prod" />
+<equals arg1="${tier.base}" arg2="" />
+</or>
+<then><property name="tier.suffix" value=""/></then>
+<else><property name="tier.suffix" value="-${tier.base}"/></else>
+</if>
+
+<target name="clean" depends="-prop-check" description="Deletes all project build artifacts and temporary files.">
+<echo>Remove old artifacts ...</echo>
+<delete dir="${classes.dir}"/>
+<delete dir="${artifacts.dir}"/>
+<delete file="${web.dir}/web.xml"/>
+<delete dir="${root.dir}"/>
+<mkdir dir="${classes.dir}"/>
+<mkdir dir="${classes.dir}/temp"/>
+<mkdir dir="${artifacts.dir}"/>
+<mkdir dir="${artifacts.dir}/bin"/>
+<mkdir dir="${artifacts.dir}/dtd"/>
+<mkdir dir="${artifacts.dir}/gforge"/>
+<mkdir dir="${artifacts.dir}/jboss"/>
+<mkdir dir="${artifacts.dir}/sql"/>
+<mkdir dir="${tr.dir}"/>
+<mkdir dir="${web.dir}/lib"/>
+
+</target>
+
+<target name="-compile" depends="clean,-prop-check" description="Compiles the project source.">
+<echo>Compiling project source, debug is ${JDEBUG} ...</echo>
+<javac srcdir="${src.dir}" destdir="${temp.classes.dir}" tempdir="${temp.dir}" debug="${JDEBUG}" failonerror="yes">
+<compilerarg line="-deprecation"/>
+<compilerarg line="-Xlint:unchecked"/>
+<classpath refid="libpath"/>
+</javac>
+
+<unzip src="${lib.dir}/cadsrutil.jar" dest="${temp.classes.dir}" overwrite="No"/>
+<!-- add the jndi name from the template -->	
+<copy tofile="${classes.dir}/gov/nih/nci/ncicb/cadsr/common/jndi.properties" filtering="true" overwrite="Yes">
+<fileset file="${conf.dir}/template.jndi.properties"/>
+</copy>
+<copy tofile="${classes.dir}/gov/nih/nci/ncicb/cadsr/common/persistence/dao/jdbc/jndi.properties" filtering="true" overwrite="Yes">
+<fileset file="${conf.dir}/template.jndi.properties"/>
+</copy>
+
+<copy todir="${classes.dir}">
+<fileset dir="${src.dir}">
             <patternset>
                <include name="gov/nih/nci/ncicb/cadsr/formbuilder/struts/common/*.properties"/>
             </patternset>
-	      </fileset>      
-	    </copy>
-		<!-- copy cadsr api config files to classess -->
-	    <copy todir="${classes.dir}">
-			<fileset dir="${services.dir}">
-				<patternset>
-					<include name="*.xml"/>
-				</patternset>
-			</fileset>
-		</copy>
-	</target>
+</fileset>
+</copy>
+<!-- copy cadsr api config files to classess -->
+<copy todir="${classes.dir}">
+<fileset dir="${services.dir}">
+<patternset>
+<include name="*.xml"/>
+</patternset>
+</fileset>
+</copy>
+</target>
 
-	<target name="-assemble" depends="-compile,-prop-check" description="Assembles the deployment parts into the artifacts folders.">
-		<echo>Assembling artifacts ...</echo>
-		<delete>
-			<fileset file="${web.dir}/web.xml" />
-		</delete>
-		<copy todir="${artifacts.dir}">
-			<fileset file="build.xml" />
-			<fileset file="${PROP.FILE}" />
-		</copy>
-		
-		<!-- jars needed for initial server setup -->
-		<copy tofile="${artifacts.dir}/jboss/xercesImpl.jar" filtering="true">
-			<fileset file="${formloader.dir}/build-jars/xercesImpl-2.11.0.jar" />
-		</copy>
-		
-		<copy tofile="${artifacts.dir}/jboss/xml-apis-1.4.01.jar" filtering="true">
-				<fileset file="${formloader.dir}/build-jars/xml-apis-1.4.01.jar" />
-		</copy>
-		
-		<copy tofile="${artifacts.dir}/jboss/org.eclipse.wst.xml.xpath2.processor_1.1.0.jar" filtering="true">
-			<fileset file="${formloader.dir}/build-jars/org.eclipse.wst.xml.xpath2.processor_1.1.0.jar" />
-		</copy>
-		
-		<copy tofile="${artifacts.dir}/jboss/hibernate-3.2.0.ga-modified.jar" filtering="true">
-			<fileset file="${lib.dir}/hibernate-3.2.0.ga-modified.jar" />
-		</copy>
-				
-		<copy tofile="${artifacts.dir}/jboss/hibernate-annotations-3.2.0.jar" filtering="true">
-				<fileset file="${lib.dir}/hibernate-annotations-3.2.0.jar" />
-		</copy>
-				
-		<copy tofile="${artifacts.dir}/jboss/hibernate-validator-3.0.0.GA.jar" filtering="true">
-			<fileset file="${lib.dir}/hibernate-validator-3.0.0.GA.jar" />
-		</copy>
-		
-		<copy tofile="${artifacts.dir}/jboss/ojdbc14-10.2.0.4.0.jar" filtering="true">
-			<fileset file="${lib.dir}/ojdbc14-10.2.0.4.0.jar" />
-		</copy>
-		<!-- End of jars needed for initial server setup -->
-		
-		<copy tofile="${web.dir}/web.xml" filtering="true">
-			<fileset file="${conf.dir}/template.web.xml" />
-		</copy>
-		<copy tofile="${web.dir}/jboss-web.xml" filtering="true">
-			<fileset file="${conf.dir}/template.jboss-web.xml" />
-		</copy>
-		<copy tofile="${jsp.dir}/common/common_bottom_border.jsp" filtering="true">
-			<fileset file="${conf.dir}/template.common_bottom_border.jsp" />
-		</copy>
-		<copy tofile="${web.dir}/spring/applicationContext-domainDao.xml" filtering="true">
-			<fileset file="${conf.dir}/template.applicationContext-domainDao.xml" />
-		</copy>
-		
-		
-		<copy tofile="${web.dir}/jboss-classloading.xml" filtering="true">
-							<fileset file="${conf.dir}/jboss-classloading.xml" />
-						</copy>
-		
-		<copy tofile="${artifacts.dir}/sql/load_options.sql" filtering="true">
-			<fileset file="${conf.dir}/template.load_options.sql" />
-		</copy>
-		<copy tofile="${artifacts.dir}/jboss/formbuilder-oracle-ds.xml" filtering="true">
-			<fileset file="${conf.dir}/template.formbuilder-oracle-ds.xml" />
-		</copy>
-		<copy tofile="${artifacts.dir}/jboss/formbuilder-log4j-appender.xml" filtering="true">
-			<fileset file="${conf.dir}/template.formbuilder-log4j-appender.xml" />
-		</copy>
-		<copy tofile="${artifacts.dir}/jboss/formbuilder-log4j-category.xml" filtering="true">
-			<fileset file="${conf.dir}/template.formbuilder-log4j-category.xml" />
-		</copy>
-		<copy tofile="${artifacts.dir}/jboss/cadsrutil-log4j-appender.xml" filtering="true">
-			<fileset file="${conf.dir}/template.cadsrutil-log4j-appender.xml" />
-		</copy>
-		<copy tofile="${artifacts.dir}/jboss/cadsrutil-log4j-category.xml" filtering="true">
-			<fileset file="${conf.dir}/template.cadsrutil-log4j-category.xml" />
-		</copy>
-		<copy tofile="${artifacts.dir}/jboss/formbuilder-login-config.xml" filtering="true">
-			<fileset file="${conf.dir}/template.formbuilder-login-config.xml" />
-		</copy>
-		<copy tofile="${artifacts.dir}/jboss/formbuilder-login-config-service.xml" filtering="true">
-			<fileset file="${conf.dir}/template.formbuilder-login-config-service.xml" />
-		</copy>
-		
-		<copy tofile="${artifacts.dir}/jboss/cadsrutil.properties" filtering="true">
-					<fileset file="${conf.dir}/template.cadsrutil.properties" />
-		</copy>
-		
-		<replaceregexp file="${artifacts.dir}/jboss/cadsrutil.properties" match="@tier@" replace="${tier.suffix}" flags="g"/>
-		
-		<copy todir="${root.dir}/css" >
-		    <fileset dir="${basedir}/src/web/css" />
-		</copy>
-		<copy todir="${root.dir}/html" >
-		    <fileset dir="${basedir}/src/web/html" />
-		</copy>
-		<copy todir="${root.dir}/images" >
-		   	<fileset dir="${basedir}/src/web/images" />
-		</copy>
-		<copy todir="${root.dir}/i" >
-			<fileset dir="${basedir}/src/web/i" />
-		</copy>
-		<copy todir="${root.dir}/jsp" >
-		    <fileset dir="${basedir}/src/web/jsp" />
-		</copy>
-		<copy todir="${root.dir}/js" >
-		    <fileset dir="${basedir}/src/web/js" />
-		</copy>
-		<copy todir="${web.dir}/tld" >
-		    <fileset dir="${basedir}/src/web/tld" />
-		</copy>		
-		<copy todir="${web.dir}/lib" >			
-		    <fileset dir="${wlib.dir}" />			
-		</copy>
-		<copy todir="${web.dir}/admin" >
-			<fileset dir="${basedir}/src/web/struts-config/admin" />
-		</copy>
-		<copy todir="${web.dir}/formbuilder" >
-			<fileset dir="${basedir}/src/web/struts-config/formbuilder" />
-		</copy>			
-		<copy todir="${web.dir}/spring" >
-			<fileset dir="${basedir}/src/web/spring" />
-		</copy>
-		<copy tofile="${web.dir}/cdebrowser-faces-config.xml" >
-		    <fileset file="${basedir}/src/web/cdebrowser-faces-config.xml" />
-		</copy>
-		<copy tofile="${root.dir}/formSearchAction.do" >
-		    <fileset file="${basedir}/src/web/formSearchAction.do" />
-		</copy>
-		<copy todir="${classes.dir}/transforms" >
-			<fileset dir="${basedir}/src/resources/transforms" />
-		</copy>		
-		<copy tofile="${classes.dir}/FormCart.properties" >
-			<fileset file="${basedir}/src/resources/FormCart.properties" />
-		</copy>		
-		<fixcrlf srcdir="${artifacts.dir}" eol="lf" includes="**/*.sh, **/*.xml, **/*.properties, **/*.dtd" />
-	</target>
+<target name="-assemble" depends="-compile,-prop-check" description="Assembles the deployment parts into the artifacts folders.">
+<echo>Assembling artifacts ...</echo>
+<delete>
+<fileset file="${web.dir}/web.xml" />
+</delete>
+<copy todir="${artifacts.dir}">
+<fileset file="build.xml" />
+<fileset file="${PROP.FILE}" />
+</copy>
 
-	<target name="-cjsp" depends="-assemble,-prop-check" description="Compiles the project JSP files to verify syntax.">
-		<echo>Compiling JSP files to verify syntax ...</echo>
-		<jspc srcdir="${root.dir}/jsp" destdir="${temp.classes.dir}" compiler="jasper41"  verbose="1" failonerror="no">
-			<classpath refid="libpath"/>
-			<include name="**/*.jsp"/>
-		</jspc>
-		
-		<echo>Compiling JSP-java files to verify syntax ...</echo>
-		<javac srcdir="${temp.classes.dir}/jsp" destdir="${temp.classes.dir}" encoding="Cp1252" debug="${JDEBUG}">
-			<classpath refid="libpath"/>
-			<include name="**/*.java"/>
-			<exclude name="**/*_inc*.java"/>
-		</javac>
-		<delete dir="${temp.classes.dir}/jsp"/>
-		<delete dir="${temp.classes.dir}/org"/>
-	</target>
+<!-- jars needed for initial server setup -->
+<copy tofile="${artifacts.dir}/jboss/xercesImpl.jar" filtering="true">
+<fileset file="${formloader.dir}/build-jars/xercesImpl-2.11.0.jar" />
+</copy>
+
+<copy tofile="${artifacts.dir}/jboss/xml-apis-1.4.01.jar" filtering="true">
+<fileset file="${formloader.dir}/build-jars/xml-apis-1.4.01.jar" />
+</copy>
+
+<copy tofile="${artifacts.dir}/jboss/org.eclipse.wst.xml.xpath2.processor_1.1.0.jar" filtering="true">
+<fileset file="${formloader.dir}/build-jars/org.eclipse.wst.xml.xpath2.processor_1.1.0.jar" />
+</copy>
+	
+<copy file="${lib.dir}/hibernate-3.2.0.ga-modified.jar" tofile="${artifacts.dir}/jboss/hibernate-3.2.0.ga-modified.jar" overwrite="true"/>
+
+<copy file="${lib.dir}/hibernate-annotations-3.2.0.jar" tofile="${artifacts.dir}/jboss/hibernate-annotations-3.2.0.jar" overwrite="true"/>
+	
+<copy file="${lib.dir}/hibernate-validator-3.0.0.GA.jar" tofile="${artifacts.dir}/jboss/hibernate-validator-3.0.0.GA.jar" overwrite="true"/>
+
+<copy tofile="${artifacts.dir}/jboss/ojdbc14-10.2.0.4.0.jar" filtering="true">
+<fileset file="${lib.dir}/ojdbc14-10.2.0.4.0.jar" />
+</copy>
+<!-- End of jars needed for initial server setup -->
+
+<copy tofile="${web.dir}/web.xml" filtering="true">
+<fileset file="${conf.dir}/template.web.xml" />
+</copy>
+<copy tofile="${web.dir}/jboss-web.xml" filtering="true">
+<fileset file="${conf.dir}/template.jboss-web.xml" />
+</copy>
+<copy tofile="${jsp.dir}/common/common_bottom_border.jsp" filtering="true">
+<fileset file="${conf.dir}/template.common_bottom_border.jsp" />
+</copy>
+<copy tofile="${web.dir}/spring/applicationContext-domainDao.xml" filtering="true">
+<fileset file="${conf.dir}/template.applicationContext-domainDao.xml" />
+</copy>
+
+
+<copy tofile="${web.dir}/jboss-classloading.xml" filtering="true">
+<fileset file="${conf.dir}/jboss-classloading.xml" />
+</copy>
+
+<copy tofile="${artifacts.dir}/sql/load_options.sql" filtering="true">
+<fileset file="${conf.dir}/template.load_options.sql" />
+</copy>
+<copy tofile="${artifacts.dir}/jboss/formbuilder-oracle-ds.xml" filtering="true">
+<fileset file="${conf.dir}/template.formbuilder-oracle-ds.xml" />
+</copy>
+<copy tofile="${artifacts.dir}/jboss/formbuilder-log4j-appender.xml" filtering="true">
+<fileset file="${conf.dir}/template.formbuilder-log4j-appender.xml" />
+</copy>
+<copy tofile="${artifacts.dir}/jboss/formbuilder-log4j-category.xml" filtering="true">
+<fileset file="${conf.dir}/template.formbuilder-log4j-category.xml" />
+</copy>
+<copy tofile="${artifacts.dir}/jboss/cadsrutil-log4j-appender.xml" filtering="true">
+<fileset file="${conf.dir}/template.cadsrutil-log4j-appender.xml" />
+</copy>
+<copy tofile="${artifacts.dir}/jboss/cadsrutil-log4j-category.xml" filtering="true">
+<fileset file="${conf.dir}/template.cadsrutil-log4j-category.xml" />
+</copy>
+<copy tofile="${artifacts.dir}/jboss/formbuilder-login-config.xml" filtering="true">
+<fileset file="${conf.dir}/template.formbuilder-login-config.xml" />
+</copy>
+<copy tofile="${artifacts.dir}/jboss/formbuilder-login-config-service.xml" filtering="true">
+<fileset file="${conf.dir}/template.formbuilder-login-config-service.xml" />
+</copy>
+
+<copy tofile="${artifacts.dir}/jboss/cadsrutil.properties" filtering="true">
+<fileset file="${conf.dir}/template.cadsrutil.properties" />
+</copy>
+
+<replaceregexp file="${artifacts.dir}/jboss/cadsrutil.properties" match="@tier@" replace="${tier.suffix}" flags="g"/>
+
+<copy todir="${root.dir}/css" >
+<fileset dir="${basedir}/src/web/css" />
+</copy>
+<copy todir="${root.dir}/html" >
+<fileset dir="${basedir}/src/web/html" />
+</copy>
+<copy todir="${root.dir}/images" >
+<fileset dir="${basedir}/src/web/images" />
+</copy>
+<copy todir="${root.dir}/i" >
+<fileset dir="${basedir}/src/web/i" />
+</copy>
+<copy todir="${root.dir}/jsp" >
+<fileset dir="${basedir}/src/web/jsp" />
+</copy>
+<copy todir="${root.dir}/js" >
+<fileset dir="${basedir}/src/web/js" />
+</copy>
+<copy todir="${web.dir}/tld" >
+<fileset dir="${basedir}/src/web/tld" />
+</copy>	
+<copy todir="${web.dir}/lib" >	
+<fileset dir="${wlib.dir}" />	
+</copy>
+<copy todir="${web.dir}/admin" >
+<fileset dir="${basedir}/src/web/struts-config/admin" />
+</copy>
+<copy todir="${web.dir}/formbuilder" >
+<fileset dir="${basedir}/src/web/struts-config/formbuilder" />
+</copy>	
+<copy todir="${web.dir}/spring" >
+<fileset dir="${basedir}/src/web/spring" />
+</copy>
+<copy tofile="${web.dir}/cdebrowser-faces-config.xml" >
+<fileset file="${basedir}/src/web/cdebrowser-faces-config.xml" />
+</copy>
+<copy tofile="${root.dir}/formSearchAction.do" >
+<fileset file="${basedir}/src/web/formSearchAction.do" />
+</copy>
+<copy todir="${classes.dir}/transforms" >
+<fileset dir="${basedir}/src/resources/transforms" />
+</copy>	
+<copy tofile="${classes.dir}/FormCart.properties" >
+<fileset file="${basedir}/src/resources/FormCart.properties" />
+</copy>	
+<fixcrlf srcdir="${artifacts.dir}" eol="lf" includes="**/*.sh, **/*.xml, **/*.properties, **/*.dtd" />
+</target>
+
+<target name="-cjsp" depends="-assemble,-prop-check" description="Compiles the project JSP files to verify syntax.">
+<echo>Compiling JSP files to verify syntax ...</echo>
+<jspc srcdir="${root.dir}/jsp" destdir="${temp.classes.dir}" compiler="jasper41" verbose="1" failonerror="no">
+<classpath refid="libpath"/>
+<include name="**/*.jsp"/>
+</jspc>
+
+<echo>Compiling JSP-java files to verify syntax ...</echo>
+<javac srcdir="${temp.classes.dir}/jsp" destdir="${temp.classes.dir}" encoding="Cp1252" debug="${JDEBUG}">
+<classpath refid="libpath"/>
+<include name="**/*.java"/>
+<exclude name="**/*_inc*.java"/>
+</javac>
+<delete dir="${temp.classes.dir}/jsp"/>
+<delete dir="${temp.classes.dir}/org"/>
+</target>
 
     <target name="-jar_common" depends="-compile" description="builds common jar.">
         <!-- jar jarfile="${artifacts.dir}/jboss/common.jar"> -->
-        	<jar jarfile="${root.dir}/WEB-INF/lib/common.jar">
+         <jar jarfile="${root.dir}/WEB-INF/lib/common.jar">
           <fileset dir="${temp.classes.dir}">
             <patternset>
               <include name="gov/nih/nci/ncicb/cadsr/common/resource/*"/>
-              <include name="gov/nih/nci/ncicb/cadsr/common/resource/impl/*"/>              
+              <include name="gov/nih/nci/ncicb/cadsr/common/resource/impl/*"/>
               <include name="gov/nih/nci/ncicb/cadsr/common/dto/*"/>
               <include name="gov/nih/nci/ncicb/cadsr/common/dto/base/*"/>
               <include name="gov/nih/nci/ncicb/cadsr/common/dto/jdbc/*"/>
@@ -400,48 +394,48 @@
               <exclude name="gov/nih/nci/ncicb/cadsr/common/servicelocator/ObjectLocator.class"/>
               <exclude name="gov/nih/nci/ncicb/cadsr/common/servicelocator/spring/*"/>
             </patternset>
-          </fileset>           
+          </fileset>
         </jar>
     </target>
 
     <target name="-jar_persistence_form" depends="-compile" description="builds persistence jar.">
         <!-- jar jarfile="${artifacts.dir}/jboss/persistence_form.jar"> -->
-        	<jar jarfile="${root.dir}/WEB-INF/lib/persistence_form.jar">
+         <jar jarfile="${root.dir}/WEB-INF/lib/persistence_form.jar">
           <fileset dir="${temp.classes.dir}">
             <patternset>
-              <include name="gov/nih/nci/ncicb/cadsr/common/persistence/base/**"/> 
-              <include name="gov/nih/nci/ncicb/cadsr/common/persistence/dao/**"/> 
-              <include name="gov/nih/nci/ncicb/cadsr/common/persistence/jdbc/**"/> 
+              <include name="gov/nih/nci/ncicb/cadsr/common/persistence/base/**"/>
+              <include name="gov/nih/nci/ncicb/cadsr/common/persistence/dao/**"/>
+              <include name="gov/nih/nci/ncicb/cadsr/common/persistence/jdbc/**"/>
             </patternset>
           </fileset>
         </jar>
-    </target>  
+    </target>
 
     <target name="-jar_ejb" depends="-compile,-jar_persistence_form,-jar_common" description="builds formbuilder-ejb jar.">
-	  <copy tofile="${temp.classes.dir}/ejb/META-INF/ejb-jar.xml" filtering="true">
-		<fileset file="${conf.dir}/template.ejb-jar.xml" />
-	  </copy>
-  	  <copy tofile="${temp.classes.dir}/ejb/META-INF/jboss.xml" filtering="true">
-  		<fileset file="${conf.dir}/template.jboss.xml" />
-  	  </copy>
+<copy tofile="${temp.classes.dir}/ejb/META-INF/ejb-jar.xml" filtering="true">
+<fileset file="${conf.dir}/template.ejb-jar.xml" />
+</copy>
+   <copy tofile="${temp.classes.dir}/ejb/META-INF/jboss.xml" filtering="true">
+   <fileset file="${conf.dir}/template.jboss.xml" />
+   </copy>
     
       <!-- jar jarfile="${artifacts.dir}/jboss/formbuilder-ejb.jar"> -->
-      	<jar jarfile="${root.dir}/WEB-INF/lib/formbuilder-ejb.jar">
+       <jar jarfile="${root.dir}/WEB-INF/lib/formbuilder-ejb.jar">
          <fileset dir="${temp.classes.dir}">
             <patternset>
               <include name="gov/nih/nci/ncicb/cadsr/formbuilder/ejb/**/*.*"/>
               <include name="gov/nih/nci/ncicb/cadsr/common/ejb/common/**/*.*"/>
             </patternset>
-          </fileset>          
-	      <fileset dir="${temp.classes.dir}/ejb" includes="META-INF/ejb-jar.xml"/>
+          </fileset>
+<fileset dir="${temp.classes.dir}/ejb" includes="META-INF/ejb-jar.xml"/>
           <fileset dir="${temp.classes.dir}/ejb" includes="META-INF/jboss.xml"/>
           <manifest>
              <attribute name="Built-By" value="${user.name}"/>
-             <attribute name="Class-Path" 
+             <attribute name="Class-Path"
                 value="persistence_form.jar common.jar
-                spring.jar commons-logging.jar log4j-1.2.8.jar properties/"/>
-          </manifest>  	    
-       </jar>         
+spring.jar commons-logging.jar log4j-1.2.8.jar properties/"/>
+          </manifest>
+       </jar>
     </target>
 	
 	<target name="-build-formloader-war">
@@ -506,6 +500,7 @@
 		<fileset file="${conf.dir}/template.application.xml" />
 	  </copy>
       <!-- Create ear file -->      
+
       <ear earfile="${artifacts.dir}/jboss/formbuilder.ear" appxml="${artifacts.dir}/META-INF/application.xml">
         <fileset dir="${artifacts.dir}/jboss">
           <patternset>
@@ -513,17 +508,17 @@
             <!-- include name="*.jar"/> -->
           </patternset>
         </fileset>
-      	
-      	<fileset dir="${formloader.dir}/dist">
-      		<patternset>
-      	    	<include name="*.war"/>
-      	    </patternset>
-      	</fileset>
+      
+       <fileset dir="${formloader.dir}/dist">
+       <patternset>
+       <include name="*.war"/>
+       </patternset>
+       </fileset>
       </ear>
     </target>
-	
-	<target name="-build-jar" depends="-assemble,-prop-check" description="Build the project JAR files.">
-		<echo>Building distributable JAR files ...</echo>
+
+<target name="-build-jar" depends="-assemble,-prop-check" description="Build the project JAR files.">
+<echo>Building distributable JAR files ...</echo>
         <delete file="${artifacts.dir}/bin/formbuilder.jar" />
         <cvs command="status -v" output="${classes.dir}/cvsdeploy.txt" />
         <jar destfile="${artifacts.dir}/bin/formbuilder.jar">
@@ -536,46 +531,46 @@
             </fileset>
         </jar>
         <delete file="${classes.dir}/cvsdeploy.txt" />
-	</target>
+</target>
 
-	<target name="test" if="check.test" depends="-prop-check" description="Execute auto tests on the project logic.">
-		<echo>Performing automated project tests not supported this time...</echo>
-		<!-- needs to rework this later       
-        <delete>
-            <fileset dir="${tr.dir}" includes="**/*" />
-        </delete>
-        <junit printsummary="on" haltonfailure="yes" showoutput="yes" filtertrace="off">
-            <classpath refid="libpath" />
-            <classpath>
-                <pathelement location="${root.dir}" />
-                <pathelement location="${classes.dir}" />
-            </classpath>
-            <sysproperty key="test_propfile" value="${prop.dir}/test/DSRAlertTest.properties" />
-            <sysproperty key="property_xml" value="${artifacts.dir}/bin/formbuilder.xml" />
-            <formatter type="plain" />
-            <batchtest fork="yes" todir="${tr.dir}" filtertrace="off">
-                <fileset dir="${src.dir}">
-                    <include name="**/test/TestDatabase.java" />
-                </fileset>
-            </batchtest>
-        </junit>
-        <junit printsummary="on" haltonfailure="yes" showoutput="yes" filtertrace="off">
-            <classpath refid="libpath" />
-            <classpath>
-                <pathelement location="${root.dir}" />
-                <pathelement location="${classes.dir}" />
-            </classpath>
-            <sysproperty key="test_propfile" value="${prop.dir}/test/DSRAlertTest.properties" />
-            <sysproperty key="property_xml" value="${artifacts.dir}/bin/formbuilder.xml" />
-            <formatter type="plain" />
-            <batchtest fork="yes" todir="${tr.dir}" filtertrace="off">
-                <fileset dir="${src.dir}">
-                    <include name="**/test/Test*.java" />
-                </fileset>
-            </batchtest>
-        </junit>
- -->
-	</target>
+<target name="test" if="check.test" depends="-prop-check" description="Execute auto tests on the project logic.">
+<echo>Performing automated project tests not supported this time...</echo>
+<!-- needs to rework this later
+<delete>
+<fileset dir="${tr.dir}" includes="**/*" />
+</delete>
+<junit printsummary="on" haltonfailure="yes" showoutput="yes" filtertrace="off">
+<classpath refid="libpath" />
+<classpath>
+<pathelement location="${root.dir}" />
+<pathelement location="${classes.dir}" />
+</classpath>
+<sysproperty key="test_propfile" value="${prop.dir}/test/DSRAlertTest.properties" />
+<sysproperty key="property_xml" value="${artifacts.dir}/bin/formbuilder.xml" />
+<formatter type="plain" />
+<batchtest fork="yes" todir="${tr.dir}" filtertrace="off">
+<fileset dir="${src.dir}">
+<include name="**/test/TestDatabase.java" />
+</fileset>
+</batchtest>
+</junit>
+<junit printsummary="on" haltonfailure="yes" showoutput="yes" filtertrace="off">
+<classpath refid="libpath" />
+<classpath>
+<pathelement location="${root.dir}" />
+<pathelement location="${classes.dir}" />
+</classpath>
+<sysproperty key="test_propfile" value="${prop.dir}/test/DSRAlertTest.properties" />
+<sysproperty key="property_xml" value="${artifacts.dir}/bin/formbuilder.xml" />
+<formatter type="plain" />
+<batchtest fork="yes" todir="${tr.dir}" filtertrace="off">
+<fileset dir="${src.dir}">
+<include name="**/test/Test*.java" />
+</fileset>
+</batchtest>
+</junit>
+-->
+</target>
 
     <target name="build-product" depends="-build-ear,-build-jar,test,-prop-check" description="Builds all project binaries.">
         <echo>Built products for ${TIER.NAME}</echo>
@@ -619,9 +614,9 @@
             <zipfileset dir="${odi.dir}"/>
         </zip>
         <tar destfile="${artifacts.dir}/gforge/formbuilder_ospack.tar.gz" basedir="${odi.dir}" compression="gzip"/>
-    	<delete dir="${temp.dir}"/>
-    	<delete dir="Webroot"/>
-    	<delete dir="${odi.dir}"/>
+     <delete dir="${temp.dir}"/>
+     <delete dir="Webroot"/>
+     <delete dir="${odi.dir}"/>
     </target>
 
     <target name="javadoc" depends="-prop-check" description="Build the project Javadoc.">
@@ -724,7 +719,7 @@
 
         <echo>mkdir ${TOOL.ROOT.DIR}</echo>
         <sshexec username="${SCP.USER}" host="${SCP.HOST}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true" failonerror="false" command="mkdir -p ${TOOL.ROOT.DIR}" />
-    	<echo>Deploying binaries to remote file system "${SCP.USER}@${SCP.HOST}:${scpPath.dir}"</echo>
+     <echo>Deploying binaries to remote file system "${SCP.USER}@${SCP.HOST}:${scpPath.dir}"</echo>
         <scp todir="${SCP.USER}@${SCP.HOST}:${scpPath.dir}" port="${SCP.PORT}" passphrase="${SCP.PASSPHRASE}" keyfile="${SCP.KEYFILE}" trust="true" verbose="true">
             <fileset dir="${artifacts.dir}" includes="**/*" />
         </scp>
@@ -785,34 +780,34 @@
     </target>
 
     <target name="-deploy-gforge" if="deploy.gforge" depends="-deploy-gforge-check" description="Disseminates the public project artifacts, e.g. API JAR files, Javadoc, etc.">
-        <echo>        
-			Artifacts exist in the ${artifacts.dir}/gforge directory and should be published.
-			Although this is not required for the software deployment please place these files in a location accessible by the development team.    
+        <echo>
+Artifacts exist in the ${artifacts.dir}/gforge directory and should be published.
+Although this is not required for the software deployment please place these files in a location accessible by the development team.
         </echo>
     </target>
 
     <target name="deploy" depends="-deploy-auto,-deploy-db,-deploy-gforge,-prop-check" description="Deploys the project artifacts.">
-    	<echo>    
-			Deployment is complete. Check the formal request for any special post deployment instructions.    
+     <echo>
+Deployment is complete. Check the formal request for any special post deployment instructions.
         </echo>
     </target>
 
     <target name="build-all" depends="build-product,clean,-prop-check" description="Builds all project deliverables.">
-<!--    <target name="build-all" depends="build-product,javadoc,package-download,-prop-check" description="Builds all project deliverables.">  -->
+<!-- <target name="build-all" depends="build-product,javadoc,package-download,-prop-check" description="Builds all project deliverables."> -->
         <echo>Built artifacts for ${TIER.NAME}</echo>
     </target>
 
-	<target name="-prop-check" unless="check.props" description="Verifies the presence of all required properties.">
-		<fail>Missing one or more properties, see template.build.properties for a complete list.</fail>
-	</target>
+<target name="-prop-check" unless="check.props" description="Verifies the presence of all required properties.">
+<fail>Missing one or more properties, see template.build.properties for a complete list.</fail>
+</target>
 
-	<target name="-init-check" if="check.props" description="Notify the user that all properties are present.">
-		<echo>All properties are present.</echo>
-	</target>
+<target name="-init-check" if="check.props" description="Notify the user that all properties are present.">
+<echo>All properties are present.</echo>
+</target>
 
-	<target name="init" depends="-prop-check,-init-check" description="The default target which only validates the presence of the script properties.">
-		<fail>This build script must be run with the name of the desired target: build-all, build-product, clean, deploy, javadoc, package-download, test.</fail>
-	</target>
+<target name="init" depends="-prop-check,-init-check" description="The default target which only validates the presence of the script properties.">
+<fail>This build script must be run with the name of the desired target: build-all, build-product, clean, deploy, javadoc, package-download, test.</fail>
+</target>
 
     <target name="-assemble-sql" depends="clean" description="create the tier specific scripts">
         <copy tofile="${artifacts.dir}/sql/load_options.sql" filtering="true">
