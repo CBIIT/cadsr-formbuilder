@@ -1,6 +1,7 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
 import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
+import gov.nih.nci.ncicb.cadsr.common.CaDSRUtil;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.resource.DataElement;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
@@ -16,7 +17,7 @@ import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormActionUtil;
 import gov.nih.nci.ncicb.cadsr.objectCart.CDECart;
 import gov.nih.nci.ncicb.cadsr.objectCart.CDECartItem;
 import gov.nih.nci.ncicb.cadsr.objectCart.impl.CDECartOCImpl;
-import gov.nih.nci.objectCart.client.ObjectCartClient;
+import gov.nih.nci.cadsrapi.client.ObjectCartClient;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -299,12 +300,16 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
 	      NCIUser user =
 	        (NCIUser) this.getSessionObject(request, CaDSRConstants.USER_KEY);
 	      CDEBrowserParams params = CDEBrowserParams.getInstance();
-	      String ocURL = params.getObjectCartUrl();
-	      //Get the cart in the session
+	      String ocURL = "http://cadsrapi-dev.nci.nih.gov/cadsrapi41";//params.getObjectCartUrl();	      //Get the cart in the session
 	      ObjectCartClient cartClient = null;
 	      
-		  if (!ocURL.equals(""))
-			  cartClient = new ObjectCartClient(ocURL);
+	      String username = CaDSRUtil.getFormBuilderUserNameNoCache();
+	        String password = CaDSRUtil.getFormBuilderPasswordNoCache();
+
+		if (!ocURL.equals(""))
+			cartClient = new ObjectCartClient(username, password);
+	//	  if (!ocURL.equals(""))
+	//		  cartClient = new ObjectCartClient(ocURL);
 		  else
 	    	  cartClient = new ObjectCartClient();
 	      

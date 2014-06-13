@@ -16,8 +16,8 @@ import gov.nih.nci.ncicb.cadsr.objectCart.CDECart;
 import gov.nih.nci.ncicb.cadsr.objectCart.CDECartItem;
 import gov.nih.nci.ncicb.cadsr.objectCart.FormDisplayCartTransferObject;
 import gov.nih.nci.ncicb.cadsr.objectCart.impl.CDECartOCImpl;
-import gov.nih.nci.objectCart.client.ObjectCartClient;
-import gov.nih.nci.objectCart.domain.CartObject;
+import gov.nih.nci.cadsrapi.client.ObjectCartClient;
+import gov.nih.nci.cadsr.objectcart.domain.CartObject;
 
 import java.io.IOException;
 import java.util.ArrayList;

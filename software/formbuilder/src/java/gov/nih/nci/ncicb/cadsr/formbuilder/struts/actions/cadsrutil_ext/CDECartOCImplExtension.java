@@ -9,9 +9,9 @@ package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.objectCart.CDECart;
-import gov.nih.nci.objectCart.client.ObjectCartClient;
-import gov.nih.nci.objectCart.client.ObjectCartException;
-import gov.nih.nci.objectCart.domain.CartObject;
+import gov.nih.nci.cadsrapi.client.ObjectCartClient;
+import gov.nih.nci.cadsrapi.client.ObjectCartException;
+import gov.nih.nci.cadsr.objectcart.domain.CartObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -170,7 +170,7 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 	}
 	
 	// need access to some generic (non-typed, non-POJO) cart functions 
-	public void addObjectCollection(Collection<CartObject> cartObjects) throws gov.nih.nci.objectCart.client.ObjectCartException {
+	public void addObjectCollection(Collection<CartObject> cartObjects) throws ObjectCartException {
 		oCart = cartClient.storeObjectCollection(oCart, cartObjects);		
 	}
 	
