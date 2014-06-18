@@ -2,6 +2,8 @@ package gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,7 +32,7 @@ public class JDBCContactCommunicationDAOV2Test {
 		contact.setRankOrder(1);
 		contact.setType("EMAIL");
 		contact.setValue("junit.test@shady.com");
-		int ret = contactCommV2Dao.createContactCommnunication("CA1469BC-A416-4680-E040-BB89AD4325CD", "9A5DC042-0DE2-4F94-E034-080020C9C0E0", contact);
+		int ret = contactCommV2Dao.createContactCommnunicationForComponent("CA1469BC-A416-4680-E040-BB89AD4325CD", "9A5DC042-0DE2-4F94-E034-080020C9C0E0", contact);
 		
 		assertTrue(ret == 1);
 	}
@@ -41,5 +43,14 @@ public class JDBCContactCommunicationDAOV2Test {
 		assertNotNull(orgSeqid);
 		assertTrue(orgSeqid.length() > 0);
 				
+	}
+	
+	@Test
+	public void testGetAllContactCommunicationTypes() {
+		List<String> types = contactCommV2Dao.getAllContactCommunicationTypes();
+		
+		assertNotNull(types);
+		assertTrue(types.size() > 3);
+		assertTrue(types.contains("EMAIL"));
 	}
 }
