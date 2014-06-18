@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -33,10 +34,37 @@ public class JDBCContactCommunicationDAOV2 extends JDBCAdminComponentDAOV2
 		super(dataSource);
 	}
 	
-	public int createContactCommnunication(String ac_idseq, String org_idseq, ContactCommunicationV2TransferObject contact) {
-		//relationship: sbr.AC_CONTACTS_VIEW
-		//contact commun record: sbrext.contacts_view_ext
+	public int createContactCommnunicationForComponent(String ac_idseq, String org_idseq, ContactCommunicationV2TransferObject contact) {
+		//Insert contact comm. record
+		String newseqid = createContactCommunication(org_idseq, contact);
 		
+		return (newseqid == null || newseqid.length() == 0) ? 0 :
+			createContactCommunicationComponentMapping(ac_idseq, org_idseq, contact);	
+	}
+	
+	protected int createContactCommunicationComponentMapping(String ac_idseq, String org_idseq, ContactCommunicationV2TransferObject contact) {
+		String seqid = generateGUID();
+		String createdBy = contact.getCreatedBy();
+		String sql = "INSERT INTO sbr.AC_CONTACTS_VIEW " +
+                " (acc_idseq, org_idseq, ac_idseq, created_by) " +
+           " VALUES (:seqid, :org_idseq, :ac_idseq, :createdBy)";
+		
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("seqid", seqid);
+		params.addValue("org_idseq", org_idseq); //un-nillable: otherwise, get "unique constraint violated" error
+		params.addValue("ac_idseq", ac_idseq);
+		params.addValue("createdBy", createdBy);
+		
+		try {
+			int res = this.namedParameterJdbcTemplate.update(sql, params);
+			return res;
+		} catch (DataAccessException de) {
+			logger.debug(de.getMessage());
+			throw de;
+		}
+	}
+	
+	protected String createContactCommunication(String org_idseq, ContactCommunicationV2TransferObject contact) {
 		String seqid = generateGUID();
 		String sql = "INSERT INTO sbr.contact_comms_view " +
                 " (ccomm_idseq, org_idseq, per_idseq, ctl_name, rank_order, " +
@@ -58,7 +86,7 @@ public class JDBCContactCommunicationDAOV2 extends JDBCAdminComponentDAOV2
 		
 		try {
 			int res = this.namedParameterJdbcTemplate.update(sql, params);
-			return res;
+			return seqid;
 		} catch (DataAccessException de) {
 			logger.debug(de.getMessage());
 			throw de;
@@ -72,14 +100,14 @@ public class JDBCContactCommunicationDAOV2 extends JDBCAdminComponentDAOV2
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("org_name", org_name);
 		
-		List<String> latest = this.namedParameterJdbcTemplate.query(sql, params, 
+		List<String> seqids = this.namedParameterJdbcTemplate.query(sql, params, 
 	     		new RowMapper<String>() {
 	     	public String mapRow(ResultSet rs, int rowNum) throws SQLException {
 	     		return rs.getString("ORG_IDSEQ");
 	         }
 	     });
 		
-		return null;
+		return (seqids == null || seqids.size() == 0) ? null : seqids.get(0);
 	}
 	
 	
@@ -295,5 +323,22 @@ public class JDBCContactCommunicationDAOV2 extends JDBCAdminComponentDAOV2
 		}
 	}	
 
+	/**
+	 * Returns all valid contact communication types
+	 * @return
+	 */
+	public List<String> getAllContactCommunicationTypes() {
+		String sql = "select distinct CTL_NAME from SBR.COMM_TYPES_LOV_VIEW " +
+				" order by CTL_NAME";
+
+		List rows = this.namedParameterJdbcTemplate.getJdbcOperations().queryForList(sql);
+
+		List<String> cmTypes = new ArrayList<String>();
+		for (Object row : rows) {
+			cmTypes.add((String)((Map)row).get("CTL_NAME"));
+		}
+
+		return cmTypes;
+	}
 }
 
