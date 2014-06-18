@@ -104,6 +104,9 @@
 		<property name="classificationSchemeDao">
 			<ref bean="classificationSchemeDao" />
 		</property>
+		<property name="contactCommV2Dao">
+			<ref bean="contactCommV2Dao" />
+		</property>
 	</bean>
 	
 	<bean id="loadRepository"
