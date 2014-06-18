@@ -1229,7 +1229,7 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
 //                    fvvDao.createFormValidValueComponent(currfvv, parentId, getUserName());     
                 
                 
-                currfvv.setPreferredName("cq" + parentId + "d" + System.currentTimeMillis() + "fvv" + currfvv.getDisplayOrder());
+                //currfvv.setPreferredName("cq" + parentId + "d" + System.currentTimeMillis() + "fvv" + currfvv.getDisplayOrder());
                 String newFVVIdseq = fvvDao.createValidValue(currfvv, parentId, getUserName());
                 
                 if (newFVVIdseq != null && newFVVIdseq.length() > 0) {
@@ -1338,7 +1338,7 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
                         fvv.setQuestion(newQusetion);
                         
                         
-                        fvv.setPreferredName("q" + currQuestion.getPublicId() + "d" + currQuestion.getDisplayOrder() + "fvv" + fvv.getDisplayOrder());
+                        //fvv.setPreferredName("q" + currQuestion.getPublicId() + "d" + currQuestion.getDisplayOrder() + "fvv" + fvv.getDisplayOrder());
                         
                         //String newFVVIdseq =
                         //    fvvDao.createFormValidValueComponent(
