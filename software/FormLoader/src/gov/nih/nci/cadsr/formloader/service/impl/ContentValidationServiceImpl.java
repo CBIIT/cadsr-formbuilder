@@ -280,11 +280,16 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 				continue;  
 			}
 			
+			if (!repository.isContactCommunicationTypeValid(type)) {
+				form.addMessage("ContactCommunication type [" + type + "] is invalid. Skip loading.");
+				continue;
+			}
+			
 			String orgSeqid = repository.getOrganizationSeqidByName(con.getOrganizationName());
 			if (orgSeqid == null || orgSeqid.length() == 0) {
 				form.addMessage("ContactCommunication #" + idx + " has invalid organization name [" + con.getOrganizationName() + "]. Skip loading.");
 				continue;
-			} 
+			} 			
 			
 			communications.add(con);
 		}	
