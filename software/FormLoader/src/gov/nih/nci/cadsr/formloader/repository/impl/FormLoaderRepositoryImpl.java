@@ -78,6 +78,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	List<String> designationTypes;
 	List<String> refdocTypes;
 	List<String> workflowNames;
+	List<String> contactCommunicationTypes;
 
 	/**
 	 * Gets Seq id, public id and version for forms with the given public ids
@@ -473,6 +474,15 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		
 		
 		return (refdocTypes == null) ? false : refdocTypes.contains(refdocType);
+	}
+	
+	
+	@Transactional(readOnly=true)
+	public boolean isContactCommunicationTypeValid(String contactCommType) {
+		if (this.contactCommunicationTypes == null)
+			contactCommunicationTypes = this.contactCommV2Dao.getAllContactCommunicationTypes();
+		
+		return (contactCommunicationTypes == null) ? false : contactCommunicationTypes.contains(contactCommType);
 	}
 	
 	@Transactional(readOnly=true)

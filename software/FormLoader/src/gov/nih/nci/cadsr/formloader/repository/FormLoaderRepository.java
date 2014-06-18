@@ -77,4 +77,5 @@ public interface FormLoaderRepository {
 	public boolean validClassificationSchemeItem(String publicId, String version);
 	
 	public String getOrganizationSeqidByName(String orgName); 
+	public boolean isContactCommunicationTypeValid(String contactCommType);
 }

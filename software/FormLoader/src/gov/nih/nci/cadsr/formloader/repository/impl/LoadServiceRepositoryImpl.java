@@ -238,7 +238,7 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 		List<DefinitionTransferObjectExt> definitions = form.getDefinitions();
 		processDefinitions(form, definitions);
 		
-		//processContactCommunications()
+		processContactCommnunications(form);
 		
 		
 		logger.debug("Done processing protocols, designations, refdocs and definitions for form");
@@ -259,41 +259,11 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 		}
 		
 		String formSeqid = form.getFormSeqId();
-//		String contextSeqId = this.getContextSeqIdByName(form.getContext());
-//		List existings = null;
-//		
-//		if (!form.getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW)) {
-//			//2nd arg is not used in the actual query.
-//			existings = this.formV2Dao.getAllReferenceDocuments(form.getFormSeqId(), null);
-//		}
-//		
-//		//create ref docs
-//		int idx = 0;
-//		for (RefdocTransferObjectExt refdoc : refdocs) {
-//			String contextName = refdoc.getContextName();
-//			String refdocContextSeqid = this.getContextSeqIdByName(contextName);
-//			if (refdocContextSeqid == null || refdocContextSeqid.length() == 0) {
-//				refdocContextSeqid = contextSeqId;
-//				contextName = form.getContext();
-//			}
-//
-//			ContextTransferObject con = new ContextTransferObject(contextName);
-//			con.setConteIdseq(refdocContextSeqid);
-//			refdoc.setContext(con);
-//			refdoc.setDisplayOrder(idx++);
-//			if (!this.refdocTypeExists(refdoc.getDocType())) {
-//				form.addMessage("Refdoc type [" + refdoc.getDocType() + "] is invalid. Use default type [REFERENCE]");
-//				refdoc.setDocType(DEFAULT_REFDOC_TYPE);
-//			}
-//			if (existings != null && isExistingRefdoc(refdoc, existings)) {
-//				referenceDocV2Dao.updateReferenceDocument(refdoc);
-//			} else {
-//				this.referenceDocV2Dao.createReferenceDoc(refdoc, formSeqid);
-//			}
-//		}
-//		
-//		removeExtraRefdocsIfAny(existings);
-		
+		for (ContactCommunicationV2TransferObject contact : contacts) {
+			String org_idseq = this.contactCommV2Dao.getOrganizationIdseqByName(contact.getOrganizationName());
+			contact.setCreatedBy(form.getCreatedBy());
+			this.contactCommV2Dao.createContactCommnunicationForComponent(formSeqid, org_idseq, contact);
+		}
 	}
 	
 	/**

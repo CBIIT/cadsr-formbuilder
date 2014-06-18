@@ -31,6 +31,12 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class FormLoaderRepositoryMockup implements FormLoaderRepository {
 	
+	@Override
+	public boolean isContactCommunicationTypeValid(String contactCommType) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	String mockRepoPath = ".\\test\\data\\serializedDtos\\";
 	
 	@Override
