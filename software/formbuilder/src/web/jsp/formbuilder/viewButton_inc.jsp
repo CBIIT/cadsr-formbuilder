@@ -191,8 +191,8 @@ if(confirm(message)) location.href = url;
  	       		paramId = '<%= "checkedFormIds" %>'
  				paramName="<%=FormConstants.CRF%>" paramProperty="formIdseq"
  				>
-			Add Form to Cart
-	      </html:link>
+			<html:img src='<%=urlPrefix+"i/queue_for_saving.gif"%>' border="0" alt="Add Form to Cart"/>
+	      </html:link> 
 </td>
 <td>
  	       <html:link action='<%="/formPrinterAction?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.GET_FORM_TO_PRINT%>' 
