@@ -91,16 +91,16 @@ function displayAdditionalMessage( )
 		{
 			if( n == "1" )
 			{
-				info = n + " form queued in Form Cart for saving. Please go to Form Cart to save it.";
+				info = " form queued in Form Cart for saving. Please go to Form Cart to save it.";
 
-				p1 = n + " form queued in Form Cart for saving."
+				p1 = " form queued in Form Cart for saving."
 				p2 = "Please go to Form Cart to save it.";
 			}
 			else
 			{
-				info = n + " forms queued in Form Cart for saving. Please go to Form Cart to save them.";
+				info = " forms queued in Form Cart for saving. Please go to Form Cart to save them.";
 
-				p1 =  n + " forms queued in Form Cart for saving."
+				p1 =  " forms queued in Form Cart for saving."
 				p2 = "Please go to Form Cart to save them."
 			}
 			
