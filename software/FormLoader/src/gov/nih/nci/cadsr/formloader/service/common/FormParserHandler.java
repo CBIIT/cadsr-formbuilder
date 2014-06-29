@@ -27,6 +27,8 @@ public class FormParserHandler extends ParserHandler {
 	ArrayDeque<String> nodeQueue;
 	int formCount = 0;
 	
+	boolean formProtocol = false;
+	
 	FormCollection formCollection; 
 
 	public FormCollection getFormCollection() {
@@ -75,8 +77,7 @@ public class FormParserHandler extends ParserHandler {
 			tempForm = new FormDescriptor();
 			tempForm.setXml_line_begin(lineNum);
 			this.methodName = null;
-		} else if (localName.equals(StaXParser.LONG_NAME) || 
-				localName.equals(StaXParser.CONTEXT) || 
+		} else if (localName.equals(StaXParser.CONTEXT) || 
 				localName.equals(StaXParser.VERSION)  ||
 				localName.equals(StaXParser.TYPE) ||
 				localName.equals(StaXParser.WORKFLOW_STATUS) ||
@@ -89,12 +90,14 @@ public class FormParserHandler extends ParserHandler {
 				localName.equals(StaXParser.CATEGORY_NAME)) {
 			if (nodeQueue.peek().equals(StaXParser.FORM)) {
 				this.methodName = getMethodName(localName);	
-			} else if (nodeQueue.peek().equals(StaXParser.PROTOCOL) &&
-					localName.equals(StaXParser.LONG_NAME)) {
-				this.methodName = getMethodName(StaXParser.PROTOCOL) + "Name"; 
-				
 			}
 		
+		} else if (localName.equals(StaXParser.LONG_NAME)) {
+			if (nodeQueue.peek().equals(StaXParser.PROTOCOL) && formProtocol == true) {
+				this.methodName = getMethodName(StaXParser.PROTOCOL) + "Name"; 
+			} else if (nodeQueue.peek().equals(StaXParser.FORM)) {
+				this.methodName = getMethodName(localName);	
+			}
 		} else if (localName.equals(StaXParser.MODULE)) {
 			tempForm.getModules().add(new ModuleDescriptor());
 		} else if (localName.equalsIgnoreCase(StaXParser.TEXT)) {
@@ -103,6 +106,9 @@ public class FormParserHandler extends ParserHandler {
 			} else if (nodeQueue.peek().equals(StaXParser.FOOTER_INSTRUCTION)) {
 				this.methodName = getMethodName(StaXParser.FOOTER_INSTRUCTION);
 			}
+		} else if (localName.equals(StaXParser.PROTOCOL)) {
+			if (nodeQueue.peek().equals(StaXParser.FORM))
+				formProtocol = true;
 		}
 		
 		//logger.debug("Pushing to node queue: " + localName);
@@ -140,6 +146,8 @@ public class FormParserHandler extends ParserHandler {
 			 
 		} else if (localName.equals(StaXParser.FORMS)) {
 			this.formCollection.setForms(this.formList);
+		} else if (localName.equals(StaXParser.PROTOCOL)) {
+			formProtocol = false;
 		}
 		
 		this.methodName = null;
