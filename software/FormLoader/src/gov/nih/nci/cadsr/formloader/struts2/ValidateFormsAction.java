@@ -173,6 +173,10 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware {
 		return validatedFormCollection;
 	}
 	
+	/**
+	 * Cancel action should go back to xml validation page
+	 * @return
+	 */
 	public String cancel() {
 		return SUCCESS;
 	}

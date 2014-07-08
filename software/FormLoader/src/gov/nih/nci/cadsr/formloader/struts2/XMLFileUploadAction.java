@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletRequestAware;
+import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -90,6 +91,27 @@ ServletRequestAware, ValidationAware{
 	    }
        
     	return ERROR;
+    }
+    
+    
+    /**
+     * Action to allow Xml validation page to be reloaded when Cancel button is click
+     * in View DB Validation page
+     * @return
+     */
+    @SkipValidation
+    public String reload() {
+    	FormCollection aColl = (FormCollection) servletRequest.getSession().getAttribute("formCollection");
+    	
+		parsedFormsList = aColl.getForms();
+		sortForms();
+		
+		servletRequest.getSession().setAttribute("formCollection", aColl);
+		this.description = aColl.getDescription();
+		this.collectionName = aColl.getNameWithRepeatIndicator();
+    	System.out.println(parsedFormsList.size()+" Parsed Forms ");
+    	
+    	return SUCCESS;
     }
     
     private int saveUploadedFile(File xmlFile)
@@ -187,7 +209,7 @@ ServletRequestAware, ValidationAware{
 		parsedFormsWithErrorList = new ArrayList<FormDescriptor>();
 		
 		for (FormDescriptor each : parsedFormsList){
-			if (each.getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATED)
+			if (each.getLoadStatus() >= FormDescriptor.STATUS_XML_VALIDATED)
 				parsedFormsNoErrorList.add(each);
 			else if (!each.getXmlValidationErrorString().isEmpty())
 				parsedFormsWithErrorList.add(each);
@@ -213,7 +235,7 @@ ServletRequestAware, ValidationAware{
 		this.servletRequest = arg0;
 	}
 	
-	public String clear()
+	public String cancel()
 	{
 		return SUCCESS;
 	}
