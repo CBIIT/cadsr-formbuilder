@@ -80,7 +80,7 @@ Select forms to validate the questions against caDSR database
 <s:submit type="image" src="/FormLoader/i/dbvalidate.gif" title="Select at least one form and you may proceed..." 
 	action="validateForms" disabled="true" align="left" theme="simple" onclick="submitFormSetWaitCursor('validateForms')" /></td>
 	<td colspan="1" align="left" nowrap>
-<s:submit type="image" src="/FormLoader/i/cancel.gif" action="cancelDBValidate" align="left" theme="simple"/></td>
+<s:submit type="image" src="/FormLoader/i/cancel.gif" action="uploadForm" align="left" theme="simple"/></td>
 	<td colspan="1" align="left" nowrap>
 <input type="image" src="/FormLoader/i/reset.gif"  onClick="return resetAllCheckboxesByName('selectedFormIndices', 0);" /></input></td>
 </tr>

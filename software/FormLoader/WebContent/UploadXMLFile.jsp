@@ -25,7 +25,7 @@ L--%>
    </div>
 </s:if>
 
-<s:form action="xmlFileUpload" method="post" enctype="multipart/form-data">
+<s:form action="xmlFileUpload" id="xmlFileUpload" method="post" enctype="multipart/form-data">
 <div id="content">
 <table>
 <tr><td align="left">
@@ -38,19 +38,21 @@ L--%>
   <tr></tr>
     	  <tr>
 	  	<td colspan="1" align="left" nowrap >
-<s:submit type="image" src="/FormLoader/i/validate-XML.gif" action="xmlFileUpload" align="left" theme="simple" /></td>
+<s:submit type="image" src="/FormLoader/i/validate-XML.gif" align="left" theme="simple" /></td>
 	  	<td colspan="1" align="left" nowrap >
-<s:submit type="image" src="/FormLoader/i/cancel.gif" action="cancelFileUpload" onclick="this.form.reset();" align="left" theme="simple"/></td>
+<s:submit type="image" src="/FormLoader/i/cancel.gif" action="cancelFileUpload" align="left" theme="simple"/>
+<!--  input type="image" id="cancel" src="/FormLoader/i/cancel.gif" value="Cancel" onclick="javascript:cancelButton(); return true;"/>-->
+</td>
 	  <td></td>
   </tr>
   </table>
   </div>
 </s:form>
 
-
-
-
 </div>
+
+
+
 </body>
 
 </html>

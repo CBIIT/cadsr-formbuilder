@@ -21,11 +21,11 @@
 
 <s:if test="collectionList.size() > 0">
 <p>You have previously loaded <s:property value="collectionList.size()"/> Collections. Click on any collection field to view forms in a Collection.<br>
-To Unload,  select forms in <b>Collection View</b> or <b>Loaded Form View</b> tab, and click the <b>Unload Forms</b> button.
+To Unload,  select forms in <b>Collection View</b> or <b>Unloadable Form View</b> tab, and click the <b>Unload Forms</b> button.
 <br><br>
 Only forms eligible for unloading have checkboxes available for selection. <a href="#" title="A form is eligible for unload if
-1. it was successfully loaded previously into caDSR database
-2. its current modified date is the same as its loaded date
+1. it was successfully loaded previously into caDSR database.
+2. its current modified date is the same as its loaded date, or its modified date is empty.
 
 Unload means the form will have a new workflow status RETIRED UNLOADED but the form itself will not be deleted from caDSR database." >More...</a>
 </p>
@@ -39,13 +39,13 @@ Unload means the form will have a new workflow status RETIRED UNLOADED but the f
 <table><tr>
 <td>Filter:</td>
 <td><input type="text" id="filter" placeholder="Type to search"></td> 
-<td>Filter the Collection or Form list by typing into the filter input field</td>
+<td>Filter the Collection list in Collection View or Form list in Unloadable Form View, by typing into the filter input field</td>
 </tr></table>
 
 <div id="tabs">
 <ul>
 <li><a href="#Collection_View">Collection View</a></li>
-<li><a href="#Form_View">Loaded Form View</a></li>
+<li><a href="#Form_View">Unloadable Form View</a></li>
 </ul>
 
  <div id="Collection_View">
@@ -72,7 +72,7 @@ Unload means the form will have a new workflow status RETIRED UNLOADED but the f
 				<td><div style="width: 250px;"><s:property value="description" /></div></td>
 				<td align="center"><div style="width: 100px;"><s:property value="forms.size()" /></div></td>
 				<td><div style="width: 150px;"><s:property value="createdBy" /></div></td>
-				<td><div style="width: 250px;"><s:date name="dateCreated" format="dd/MM/yyyy h:mm:ss a"/></div></td>
+				<td><div style="width: 250px;"><s:date name="dateCreated" format="MM/dd/yyyy h:mm:ss a"/></div></td>
 			</tr>
 			<!-- row for form table -->
 			<tr class="child-<s:property value="id" />" id="child-<s:property value="id" />" style="display:none;">
@@ -110,7 +110,8 @@ Unload means the form will have a new workflow status RETIRED UNLOADED but the f
 				<td><s:property value="modifiedBy" /></td>
 				
 				<td><s:property value="modifiedDate" /></td>
-				<td><s:property value="loadUnloadDate" /></td>
+				<td><s:date name="loadUnloadDate" format="MM/dd/yyyy h:mm:ss a"/></td>
+				<!--  s:property value="loadUnloadDate" /> -->
 				
 				<td><s:property value="getLoadTypeLoadStatusString()" /></td>
 				

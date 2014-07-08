@@ -110,7 +110,7 @@ the workflow status to "Retired Deleted". Users must use Form Builder applicatio
 <s:submit type="image" src="/FormLoader/i/load_forms.gif" title="Select at least one form and you may proceed..." 
 	action="loadForms" disabled="true" align="left" theme="simple" onclick="submitFormSetWaitCursor('loadForms')" /></td>
 	  	<td colspan="1" align="left" nowrap>
-<s:submit type="image" src="/FormLoader/i/cancel.gif" action="cancelLoad" align="left" theme="simple"/></td>
+<s:submit type="image" src="/FormLoader/i/cancel.gif" action="xmlFormsReload" align="left" theme="simple"/></td>
 		<td colspan="1" align="left" nowrap>
 <input type="image" src="/FormLoader/i/reset.gif"  onClick="return resetAllCheckboxesByName('selectedFormIndices', 0);" /></input></td>
 </tr> 
