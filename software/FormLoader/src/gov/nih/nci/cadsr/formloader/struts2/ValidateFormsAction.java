@@ -38,6 +38,7 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware {
 	private Map<Integer, String> checkboxes;
     //private List<FormDescriptor> selectedFormsList = new ArrayList<FormDescriptor>();
     private List<FormDescriptor> validatedForms = null;
+    private List<FormDescriptor> invalidForms = null;
     private FormCollection validatedFormCollection;
     
     private HttpServletRequest servletRequest;
@@ -83,9 +84,14 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware {
 			try {
 				validatedFormCollection = xmlContentValidator.validateXmlContent(aColl);
 				validatedForms = extractValidedForms(validatedFormCollection);
+				invalidForms = extractInvalidForms(validatedFormCollection);
 				
-				if (validatedForms.size() == 0)
+				if (validatedForms.size() == 0) {
 					addActionError("All your forms failed DB validation");
+					for (FormDescriptor form : invalidForms) {
+						addActionError(form.getMessagesInString());
+					}
+				}
 				
 				servletRequest.getSession().setAttribute("formCollection", aColl);
 				logger.debug(validatedForms.size()+" Forms selected for validation");
@@ -104,6 +110,18 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware {
     	}
     	
     	return validated;
+    }
+    
+    protected List<FormDescriptor> extractInvalidForms(FormCollection validatedColl) {
+    	List<FormDescriptor> invalid = new ArrayList<FormDescriptor>();
+    	List<FormDescriptor> forms = validatedColl.getForms();
+    	
+    	for (FormDescriptor form : forms) {
+    		if (form.getLoadStatus() == FormDescriptor.STATUS_CONTENT_VALIDATION_FAILED)
+    			invalid.add(form);
+    	}
+    	
+    	return invalid;
     }
     
     protected void setSelectForFormsInCollections(FormCollection aColl, int[] selectedFormIndices) {
@@ -189,6 +207,14 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware {
 
 	public void setVersioningRulesUrl(String versioningRulesUrl) {
 		this.versioningRulesUrl = versioningRulesUrl;
+	}
+
+	public List<FormDescriptor> getInvalidForms() {
+		return invalidForms;
+	}
+
+	public void setInvalidForms(List<FormDescriptor> invalidForms) {
+		this.invalidForms = invalidForms;
 	}
 	
 	
