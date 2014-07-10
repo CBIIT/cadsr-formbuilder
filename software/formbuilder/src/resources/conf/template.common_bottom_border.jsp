@@ -25,7 +25,7 @@
 </TD>
 
 <td width="30%" align="right">
- <FONT color="white" size=-2 face=arial>Version @Tool.Version@&nbsp;&nbsp;Build @Tool.Build@
+ <FONT color="white" size=-2 face=arial>Version @Tool.Version@&nbsp;&nbsp;
  <%=CDEBrowserParams.mode%></FONT>
 </TD>
 
