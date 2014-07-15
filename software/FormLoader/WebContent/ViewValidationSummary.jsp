@@ -123,6 +123,7 @@ the workflow status to "Retired Deleted". Users must use Form Builder applicatio
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
   
 <script type='text/javascript' src='js/jquery.simplemodal.js'></script>
+<script type='text/javascript' src='json2.js'></script>
 	
 	<script type='text/javascript' src='js/formloader-common.js'></script>
 	
