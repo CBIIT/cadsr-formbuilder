@@ -167,9 +167,9 @@ public class JDBCModuleDAOV2 extends JDBCAdminComponentDAOV2 implements ModuleDA
       String contentInsertSql = 
       " INSERT INTO sbrext.quest_contents_view_ext " + 
       " (qc_idseq, version, preferred_name, long_name, preferred_definition, " + 
-      "  conte_idseq, proto_idseq, asl_name, created_by, qtl_name ) " +
+      "  conte_idseq, proto_idseq, asl_name, created_by, qtl_name, display_order ) " +
       " VALUES " +
-      " (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+      " (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 
       this.setDataSource(ds);
       this.setSql(contentInsertSql);
@@ -184,6 +184,7 @@ public class JDBCModuleDAOV2 extends JDBCAdminComponentDAOV2 implements ModuleDA
       declareParameter(new SqlParameter("p_asl_name", Types.VARCHAR));
       declareParameter(new SqlParameter("p_created_by", Types.VARCHAR));
       declareParameter(new SqlParameter("p_qtl_name", Types.VARCHAR));
+      declareParameter(new SqlParameter("p_display_order", Types.NUMERIC));
       compile();
     }
     protected int createContent (Module sm, String qcIdseq) 
@@ -207,7 +208,8 @@ public class JDBCModuleDAOV2 extends JDBCAdminComponentDAOV2 implements ModuleDA
            null,
            sm.getAslName(),
            sm.getCreatedBy(),
-           "MODULE"
+           "MODULE",
+           sm.getDisplayOrder()
           };
       
 	    int res = update(obj);
