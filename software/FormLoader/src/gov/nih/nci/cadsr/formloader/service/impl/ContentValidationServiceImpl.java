@@ -26,6 +26,8 @@ import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomainV2;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -497,12 +499,18 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		if (versions == null)
 			return "";
 		
-		StringBuilder sb = new StringBuilder();
+		//Use set to filter duplicates
+		SortedSet<String> versionSet = new TreeSet<String>();
 		for (Float version : versions) {
 			String v = FormLoaderHelper.formatVersion(version.floatValue());
+			versionSet.add(v);
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		for (String aVers : versionSet) {
 			if (sb.length() > 0) 
-				sb.append(", ");
-			sb.append(v);
+				sb.append(", ");			
+			sb.append(aVers);
 		}
 		
 		return sb.toString();
