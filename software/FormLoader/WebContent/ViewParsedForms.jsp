@@ -82,7 +82,7 @@ Select forms to validate the questions against caDSR database
 	<td colspan="1" align="left" nowrap>
 <s:submit type="image" src="/FormLoader/i/cancel.gif" action="uploadForm" align="left" theme="simple"/></td>
 	<td colspan="1" align="left" nowrap>
-<input type="image" src="/FormLoader/i/reset.gif"  onClick="return resetAllCheckboxesByName('selectedFormIndices', 0);" /></input></td>
+<input type="image" src="/FormLoader/i/reset.gif"  onClick="return resetAllCheckboxesByName('action:validateForms', 'selectedFormIndices', 0);" /></input></td>
 </tr>
 		</table>
 		</div> 

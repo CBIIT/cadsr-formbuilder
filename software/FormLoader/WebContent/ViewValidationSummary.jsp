@@ -58,7 +58,7 @@ the workflow status to "Retired Deleted". Users must use Form Builder applicatio
 				</td>
 				<td>
 				<s:if test="loadType.equals('Update Form')">
-					<s:property value="loadType" /> (Unavailable)
+					<s:property value="loadType" /> (Not Supported)
 				<!-- Temp disable loading update form
 					<b>*<s:property value="loadType" /> </b>
 					-->
@@ -112,7 +112,7 @@ the workflow status to "Retired Deleted". Users must use Form Builder applicatio
 	  	<td colspan="1" align="left" nowrap>
 <s:submit type="image" src="/FormLoader/i/cancel.gif" action="xmlFormsReload" align="left" theme="simple"/></td>
 		<td colspan="1" align="left" nowrap>
-<input type="image" src="/FormLoader/i/reset.gif"  onClick="return resetAllCheckboxesByName('selectedFormIndices', 0);" /></input></td>
+<input type="image" src="/FormLoader/i/reset.gif"  onClick="return resetAllCheckboxesByName('action:loadForms', 'selectedFormIndices', 0);" /></input></td>
 </tr> 
 		</table>
 		</div>

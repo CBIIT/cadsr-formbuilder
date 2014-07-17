@@ -1,10 +1,12 @@
-function resetAllCheckboxesByName(name, val) {
+function resetAllCheckboxesByName(actionButtonName, name, val) {
 
+	var button = document.getElementsByName(actionButtonName);
 	var cbs = document.getElementsByName(name);
   
   	for(var i=0; i < cbs.length; i++) {
     	cbs[i].checked = val;
  	}
+	button[0].disabled = true;
   	
   return false;
 }
