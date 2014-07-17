@@ -520,9 +520,10 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 				a. If the module's createBy is valid, use it and apply that to all questions.
 				b. If the module's createdBy is not valid, use form's createdBy and apply to all questions.
 		 */
-		
+		int displayOrder = 0;
 		for (ModuleDescriptor module : modules) {
 			ModuleTransferObject moduledto = DomainObjectTranslator.translateIntoModuleDTO(module, form, formdto);
+			moduledto.setDisplayOrder(displayOrder++);
 			
 			String moduleSeqid = moduleV2Dao.createModuleComponent(moduledto);
 			logger.debug("Created a module with seqid: " + moduleSeqid);
