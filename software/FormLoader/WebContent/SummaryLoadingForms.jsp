@@ -23,6 +23,7 @@ L--%>
 <s:property value="otherForms.size()" /> form(s) in the Collection were not loaded.
 <br><br>
 
+<h3>Loaded</h3>
 <div class="content">
 		<table class="fileTable">
 			<tr class="even">
@@ -56,7 +57,7 @@ L--%>
 <br>
 <s:if test="otherForms.size() > 0">	
 <hr>
-	<h3>Forms in Form Collection that were not Loaded</h3>
+	<h3>Not Loaded</h3>
 
 		<div class="content">
 		<table class="fileTable">

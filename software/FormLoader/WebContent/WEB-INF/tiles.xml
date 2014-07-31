@@ -26,7 +26,7 @@
 	</definition>
 	
 	<definition name="/upload.tiles" extends="baseLayout">
-		<put-attribute name="title" value="Upload a XML File" />
+		<put-attribute name="title" value="Upload XML File" />
 		<put-attribute name="header" value="/basicHeader_inc.jsp" />
 		<put-attribute name="body" value="/UploadXMLFile.jsp" />
 	</definition>

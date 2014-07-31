@@ -26,7 +26,7 @@
 </s:form>
 </td>
 <td>
-<a href="<s:url action="uploadForm"/>"><s:text name="<b><u>Load Form Collection</u></b><br>Load a form collection in XML format based on the Form<br>Collection XSD."></s:text></a>
+<a href="<s:url action="uploadForm"/>"><s:text name="<b>Load Form Collection</b><br>Load a form collection in XML format based on the Form<br>Collection XSD."></s:text></a>
 
 
 
@@ -42,7 +42,7 @@
 </s:form>
 </td>
 <td><a href="<s:url action="searchFormCollections"/>">
-<s:text name="<b><u>View/Unload Form Collections</u></b><br>View previously loaded Form Collections and unload forms<br>within a Form Collection."></s:text></a>
+<s:text name="<b>View/Unload Form Collections</b><br>View previously loaded Form Collections and unload forms<br>within a Form Collection."></s:text></a>
 </td></tr>
 </table>
 </body>
