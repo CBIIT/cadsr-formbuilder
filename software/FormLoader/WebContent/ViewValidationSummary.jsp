@@ -84,24 +84,23 @@ the workflow status to "Retired Deleted". Users must use Form Builder applicatio
 				<td><s:property value="modules.size()" /></td>
 				
 				<td>
-				<s:if test="loadStatus != 4">
-				
-					<a href="#" title="<s:property value="getMessagesInString()" />">
-				<s:property value="getLoadStatusString()" /></a></s:if>
-				
-				<s:elseif test="loadStatus == 4">
-				
-				<a href="#" onClick=
-				"return popupvalidationMessages('showValidationMessages.action?formIndexInCollection=<s:property value="index" />')"><s:property value="getLoadStatusString()" /> </a>
-				
-				
-				
-				<!--  a href="#"><s:property value="getLoadStatusString()" /></a>
-				<input type="hidden" id="<s:property value="getFormIdString()" />" value='<s:property value="getStructuredStatusInHtml(false)" />'> -->
-				</s:elseif>
-				
-				
-				
+					<s:if test="loadType.equals('Update Form')">
+						(Not Supported)
+					<!-- Temp disable loading update form
+						<b>*<s:property value="loadType" /> </b>
+						-->
+					</s:if>
+					<s:else>
+						<s:if test="loadStatus != 4">
+							<a href="#" title="<s:property value="getMessagesInString()" />">
+							<s:property value="getLoadStatusString()" /></a></s:if>
+						<s:elseif test="loadStatus == 4">
+							<a href="#" onClick=
+							"return popupvalidationMessages('showValidationMessages.action?formIndexInCollection=<s:property value="index" />')"><s:property value="getLoadStatusString()" /> </a>
+							<!--  a href="#"><s:property value="getLoadStatusString()" /></a>
+							<input type="hidden" id="<s:property value="getFormIdString()" />" value='<s:property value="getStructuredStatusInHtml(false)" />'> -->
+						</s:elseif>
+					</s:else> 
 				</td>
 			</tr>
 			</s:iterator>
@@ -113,12 +112,19 @@ the workflow status to "Retired Deleted". Users must use Form Builder applicatio
 <s:submit type="image" src="/FormLoader/i/cancel.gif" action="xmlFormsReload" align="left" theme="simple"/></td>
 		<td colspan="1" align="left" nowrap>
 <input type="image" src="/FormLoader/i/reset.gif"  onClick="return resetAllCheckboxesByName('action:loadForms', 'selectedFormIndices', 0);" /></input></td>
-</tr> 
+</tr>
+<tr><td>
+<br><br>
+<br><br>
+<br><br>
+</td>
+</tr>
 		</table>
 		</div>
 	</s:form>
 	</s:if>
-	
+
+
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
   

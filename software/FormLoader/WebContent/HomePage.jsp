@@ -26,7 +26,8 @@
 </s:form>
 </td>
 <td>
-<a href="<s:url action="uploadForm"/>"><s:text name="<b>Load Form Collection</b><br>Load a form collection in XML format based on the Form<br>Collection XSD."></s:text></a>
+<b>Load Form Collection</b>
+<a href="<s:url action="uploadForm"/>"><s:text name="<br>Load a form collection in XML format based on the Form<br>Collection XSD."></s:text></a>
 
 
 
@@ -41,8 +42,10 @@
 <s:submit type="image" src="/FormLoader/i/unload.jpg" method="execute" alt="Unload Forms" align="left" />
 </s:form>
 </td>
-<td><a href="<s:url action="searchFormCollections"/>">
-<s:text name="<b>View/Unload Form Collections</b><br>View previously loaded Form Collections and unload forms<br>within a Form Collection."></s:text></a>
+<td>
+<b>View/Unload Form Collections</b>
+<a href="<s:url action="searchFormCollections"/>">
+<s:text name="<br>View previously loaded Form Collections and unload forms<br>within a Form Collection."></s:text></a>
 </td></tr>
 </table>
 </body>
