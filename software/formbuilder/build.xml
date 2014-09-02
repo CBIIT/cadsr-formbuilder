@@ -172,6 +172,7 @@ $Name: not supported by cvs2svn $
 <delete dir="${artifacts.dir}"/>
 <delete file="${web.dir}/web.xml"/>
 <delete dir="${root.dir}"/>
+<delete file="${formloader.dir}/resources/db-tier.properties"/>
 <mkdir dir="${classes.dir}"/>
 <mkdir dir="${classes.dir}/temp"/>
 <mkdir dir="${artifacts.dir}"/>
@@ -300,7 +301,20 @@ $Name: not supported by cvs2svn $
 <fileset file="${conf.dir}/template.cadsrutil.properties" />
 </copy>
 
+
+	
 <replaceregexp file="${artifacts.dir}/jboss/cadsrutil.properties" match="@tier@" replace="${tier.suffix}" flags="g"/>
+	
+<copy tofile="${formloader.dir}/resources/db-tier.properties" filtering="true">
+	<fileset file="${conf.dir}/template.db-tier.properties" />
+</copy>
+	
+<echo>replacing text in file from ${formloader.dir}/resource/db-tier.properties </echo>
+<replaceregexp file="${formloader.dir}/resources/db-tier.properties" match="@db.url@" replace="${CADSR.DS.URL}" flags="g"/>
+<replaceregexp file="${formloader.dir}/resources/db-tier.properties" match="@db.user@" replace="${CADSR.DS.USER}" flags="g"/>
+<replaceregexp file="${formloader.dir}/resources/db-tier.properties" match="@db.password@" replace="${CADSR.DS.PSWD}" flags="g"/>
+	<!--  <replaceregexp file="${artifacts.dir}/jboss/db-tier.properties" match="@db.url@" replace="${CADSR.DS.URL}" flags="g"/> -->
+
 
 <copy todir="${root.dir}/css" >
 <fileset dir="${basedir}/src/web/css" />
@@ -573,7 +587,8 @@ spring.jar commons-logging.jar log4j-1.2.8.jar properties/"/>
 </target>
 
     <target name="build-product" depends="-build-ear,-build-jar,test,-prop-check" description="Builds all project binaries.">
-        <echo>Built products for ${TIER.NAME}</echo>
+        <echo>Built products for - TIER.NAME ${TIER.NAME}</echo>
+        <echo>Built products for - tier ${tier}</echo>
     </target>
 
     <target name="package-download" depends="clean,-prop-check" description="Packages the project for public distribution and access.">
@@ -794,7 +809,8 @@ Deployment is complete. Check the formal request for any special post deployment
 
     <target name="build-all" depends="build-product,clean,-prop-check" description="Builds all project deliverables.">
 <!-- <target name="build-all" depends="build-product,javadoc,package-download,-prop-check" description="Builds all project deliverables."> -->
-        <echo>Built artifacts for ${TIER.NAME}</echo>
+        <echo>Built artifacts for TIER.NAME ${TIER.NAME}</echo>
+        <echo>Built artifacts for tier ${tier}</echo>
     </target>
 
 <target name="-prop-check" unless="check.props" description="Verifies the presence of all required properties.">

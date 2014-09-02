@@ -16,12 +16,30 @@
     <tx:annotation-driven transaction-manager = "transactionManager" />
     <tx:annotation-driven proxy-target-class="true"/>
     
+<!--    <context:property-placeholder location="classpath:db-tier.properties"/> -->
+      
+    <bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+  		<property name="locations">
+    		<list>
+      			<value>classpath:db-tier.properties</value>
+    		</list>
+  		</property>
+	</bean>
+
+	<bean id="dataSource" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">
+	    <property name="URL" value="jdbc:oracle:thin:@${db.url}"/>
+  		<property name="user" value="${db.user}"/>
+  		<property name="password" value="${db.password}"/>
+  		<property name="connectionCachingEnabled" value="true"/>
+	</bean>
+    
+<!--      
     <bean id="dataSource" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">
     	<property name="URL" value="jdbc:oracle:thin:@ncidb-dsr-d:1551:DSRDEV"/>
     	<property name="user" value="FORMLOADER"/>
     	<property name="password" value="f0rmloader"/>
     	<property name="connectionCachingEnabled" value="true"/>
-	</bean>
+	</bean> -->
 	
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
