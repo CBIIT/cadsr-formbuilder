@@ -857,10 +857,9 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
     public Form copyForm(String sourceFormPK, Form newForm)
     {
         Form resultForm = null;
-
         FormDAO myDAO = daoFactory.getFormDAO();
-        String resultFormPK = myDAO.copyForm(sourceFormPK, newForm);
-        resultForm = this.getFormDetails(resultFormPK);
+		String resultFormPK = myDAO.copyForm(sourceFormPK, newForm);
+		resultForm = this.getFormDetails(resultFormPK);
         return resultForm;
     }
 

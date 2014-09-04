@@ -11,6 +11,7 @@ import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -147,7 +148,21 @@ public class FormCopyAction extends FormBuilderSecureBaseDispatchAction {
       newForm.setProtocols(crf.getProtocols());
 
       FormBuilderServiceDelegate service = getFormBuilderService();
-      newForm = service.copyForm(crf.getFormIdseq(), newForm);
+      
+      Collection forms = null;
+      
+      forms = service.getAllForms((String) dynaForm.get(FORM_LONG_NAME), null, null, null, null, null,
+    	        null, null, null, null, null, (NCIUser)getSessionObject(request,this.USER_KEY), null);
+      
+      if (forms.size() == 0)
+	      {
+    	  		newForm = service.copyForm(crf.getFormIdseq(), newForm);
+	      }
+      else
+	      {
+	          	saveMessage("cadsr.formbuilder.form.copy.error.existinglongname", request);
+	          	return mapping.findForward("failure");  
+	      }
 
       // 		newForm = service.getFormDetails(newFormPK);
     }
