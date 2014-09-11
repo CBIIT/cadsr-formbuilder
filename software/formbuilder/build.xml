@@ -16,6 +16,8 @@ $Name: not supported by cvs2svn $
         CADSR.DS.URL = ${CADSR.DS.URL}
         CADSR.DS.USER = ${CADSR.DS.USER}
         CADSR.DS.PSWD = ${CADSR.DS.PSWD}
+		CADSR.DS.FL.USER = ${CADSR.DS.FL.USER}
+		CADSR.DS.FL.PSWD = ${CADSR.DS.FL.PSWD}
         CADSR.DS.TNS.ENTRY=${CADSR.DS.TNS.ENTRY}
         DEPLOY.LOCATION = ${DEPLOY.LOCATION}
         JBOSS.HOME.DIR = ${JBOSS.HOME.DIR}
@@ -48,6 +50,8 @@ $Name: not supported by cvs2svn $
 <isset property="CADSR.DS.URL" />
 <isset property="CADSR.DS.USER" />
 <isset property="CADSR.DS.PSWD" />
+<isset property="CADSR.DS.FL.USER" />
+<isset property="CADSR.DS.FL.PSWD" />
 <isset property="CADSR.DS.TNS.ENTRY" />
 <isset property="TIER" />
 <isset property="TIER.UPPER" />
@@ -111,6 +115,8 @@ $Name: not supported by cvs2svn $
 <filter token="CADSR.DS.URL" value="${CADSR.DS.URL}" />
 <filter token="CADSR.DS.USER" value="${CADSR.DS.USER}" />
 <filter token="CADSR.DS.PSWD" value="${CADSR.DS.PSWD}" />
+<filter token="CADSR.DS.FL.USER" value="${CADSR.DS.FL.USER}" />
+<filter token="CADSR.DS.FL.PSWD" value="${CADSR.DS.FL.PSWD}" />
 <filter token="CADSR.DS.TNS.ENTRY" value="${CADSR.DS.TNS.ENTRY}" />
 <filter token="TEST.VALID.USER" value="${TEST.VALID.USER}" />
 <filter token="TEST.VALID.PSWD" value="${TEST.VALID.PSWD}" />
@@ -311,8 +317,8 @@ $Name: not supported by cvs2svn $
 	
 <echo>replacing text in file from ${formloader.dir}/resource/db-tier.properties </echo>
 <replaceregexp file="${formloader.dir}/resources/db-tier.properties" match="@db.url@" replace="${CADSR.DS.URL}" flags="g"/>
-<replaceregexp file="${formloader.dir}/resources/db-tier.properties" match="@db.user@" replace="${CADSR.DS.USER}" flags="g"/>
-<replaceregexp file="${formloader.dir}/resources/db-tier.properties" match="@db.password@" replace="${CADSR.DS.PSWD}" flags="g"/>
+<replaceregexp file="${formloader.dir}/resources/db-tier.properties" match="@db.user@" replace="${CADSR.DS.FL.USER}" flags="g"/>
+<replaceregexp file="${formloader.dir}/resources/db-tier.properties" match="@db.password@" replace="${CADSR.DS.FL.PSWD}" flags="g"/>
 	<!--  <replaceregexp file="${artifacts.dir}/jboss/db-tier.properties" match="@db.url@" replace="${CADSR.DS.URL}" flags="g"/> -->
 
 
