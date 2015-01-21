@@ -375,6 +375,8 @@ function clearProtocol() {
 
 -->
 <%
+  //int vvCount = 0; //JR391
+
   CDEBrowserParams params = CDEBrowserParams.getInstance();
 
   // To jum to the correct location on the screen
@@ -1024,11 +1026,24 @@ function clearProtocol() {
                                                           <html:textarea  styleClass="OraFieldText" rows="2" cols="80" property='<%=FormConstants.FORM_VALUE_MEANING_TEXT + "[" + vvInstrIndex + "]"%>' readonly="true">
                                                           </html:textarea>
                                                           &nbsp;
-                                                          <logic:notEmpty name="validValue" property="valueMeaning.designations">
+    <!-- JR391 -->
+    <%
+        //*** Valid Value = VM ***
+        //This block would not be entered if there is a Question does not have any valid value/vm!!!
+        //System.out.println("The type of the question is: " + question.getClass().getName());
+    /*
+        vvCount++;
+        if(question.getValidValues() != null) {
+            List<ValidValue> validValues = question.getValidValues();
+            System.out.println(vvCount + "] validValues.size() = [" + validValues.size() + "]");
+        }
+    */
+    %>
+                                                          <%--<logic:notEmpty name="validValue" property="valueMeaning.designations">--%>
                                                             <a href="javaScript:newWin('<%=dest%>', 'Alternates', 1200, 900);">
                                                             Modify
                                                             </a>
-                                                          </logic:notEmpty>
+                                                          <%--</logic:notEmpty>--%>
                                                        </td>                                          
                                                       </tr>
 		                                              <tr class="OraTabledata">
@@ -1047,12 +1062,13 @@ function clearProtocol() {
                                                        <td class="OraFieldText" >                                                       
                                                           <html:textarea  styleClass="OraFieldText" rows="2" cols="80" property='<%=FormConstants.FORM_VALUE_MEANING_DESC + "[" + vvInstrIndex + "]"%>' readonly="true">
                                                           </html:textarea>
-                                                       	<logic:notEmpty name="validValue" property="valueMeaning.definitions">                                            
+    <!-- JR391 -->
+                                                        <%--<logic:notEmpty name="validValue" property="valueMeaning.definitions">--%>
                                                           &nbsp;
                                                             <a href="javaScript:newWin('<%=dest%>', 'Alternates', 1200, 900);">
                                                            Modify
                                                             </a>
-                                                        </logic:notEmpty> <%--definitions--%>
+                                                        <%--</logic:notEmpty> &lt;%&ndash;definitions&ndash;%&gt;--%>
                                                        </td>                                          
                                                       </tr>
                                                       </logic:notEmpty>
