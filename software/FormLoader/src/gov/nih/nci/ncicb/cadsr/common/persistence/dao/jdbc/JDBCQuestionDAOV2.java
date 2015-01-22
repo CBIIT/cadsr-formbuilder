@@ -836,7 +836,7 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
 
     	List<QuestionTransferObject> questions = 
     			 this.namedParameterJdbcTemplate.query(sql, params, 
-    					 new RowMapper<QuestionTransferObject>() {
+    					 new RowMapper() {
     				 public QuestionTransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
     					 QuestionTransferObject quest = new QuestionTransferObject();
     					 //quest.setIdseq(rs.getString(1)); //this is the super class object id
@@ -869,7 +869,7 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
 
     	List<QuestionTransferObject> questions = 
     			 this.namedParameterJdbcTemplate.query(sql, params, 
-    					 new RowMapper<QuestionTransferObject>() {
+    					 new RowMapper() {
     				 public QuestionTransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
     					 QuestionTransferObject quest = new QuestionTransferObject();
     					 //quest.setIdseq(rs.getString(1)); //this is the super class object id
@@ -902,7 +902,7 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
 
       	List<QuestionTransferObject> questions = 
       			 this.namedParameterJdbcTemplate.query(sql, params, 
-      					 new RowMapper<QuestionTransferObject>() {
+      					 new RowMapper() {
       				public QuestionTransferObject mapRow(ResultSet rs,
       				      int rownum) throws SQLException {
       					QuestionTransferObject question = new QuestionTransferObject();
@@ -981,7 +981,7 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
 
    	List<QuestionTransferObject> questions = 
    			 this.namedParameterJdbcTemplate.query(sql, params, 
-   					 new RowMapper<QuestionTransferObject>() {
+   					 new RowMapper() {
    				public QuestionTransferObject mapRow(ResultSet rs,
    				      int rownum) throws SQLException {
    					QuestionTransferObject question = new QuestionTransferObject();
@@ -1049,7 +1049,7 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
 
     	List<DataElementTransferObject> des = 
     			this.namedParameterJdbcTemplate.query(sql, params, 
-    					new RowMapper<DataElementTransferObject>() {
+    					new RowMapper() {
     				public DataElementTransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
     					DataElementTransferObject de = new DataElementTransferObject();
     					de.setDeIdseq(rs.getString("DE_IDSEQ"));
@@ -1075,7 +1075,7 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
 
     	List<DataElementTransferObject> des = 
     			this.namedParameterJdbcTemplate.query(sql, params, 
-    					new RowMapper<DataElementTransferObject>() {
+    					new RowMapper() {
     				public DataElementTransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
     					DataElementTransferObject de = new DataElementTransferObject();
     					de.setDeIdseq(rs.getString("DE_IDSEQ"));
