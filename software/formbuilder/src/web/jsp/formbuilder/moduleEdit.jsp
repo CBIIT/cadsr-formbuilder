@@ -1039,11 +1039,12 @@ function clearProtocol() {
         }
     */
     %>
-                                                          <%--<logic:notEmpty name="validValue" property="valueMeaning.designations">--%>
+    <!-- JR391 -->
+                                                          <logic:notEmpty name="validValue" property="valueMeaning.designations">
                                                             <a href="javaScript:newWin('<%=dest%>', 'Alternates', 1200, 900);">
                                                             Modify
                                                             </a>
-                                                          <%--</logic:notEmpty>--%>
+                                                          </logic:notEmpty>
                                                        </td>                                          
                                                       </tr>
 		                                              <tr class="OraTabledata">
@@ -1063,12 +1064,12 @@ function clearProtocol() {
                                                           <html:textarea  styleClass="OraFieldText" rows="2" cols="80" property='<%=FormConstants.FORM_VALUE_MEANING_DESC + "[" + vvInstrIndex + "]"%>' readonly="true">
                                                           </html:textarea>
     <!-- JR391 -->
-                                                        <%--<logic:notEmpty name="validValue" property="valueMeaning.definitions">--%>
+                                                        <logic:notEmpty name="validValue" property="valueMeaning.definitions">
                                                           &nbsp;
                                                             <a href="javaScript:newWin('<%=dest%>', 'Alternates', 1200, 900);">
                                                            Modify
                                                             </a>
-                                                        <%--</logic:notEmpty> &lt;%&ndash;definitions&ndash;%&gt;--%>
+                                                        </logic:notEmpty> <%--definitions--%>
                                                        </td>                                          
                                                       </tr>
                                                       </logic:notEmpty>
