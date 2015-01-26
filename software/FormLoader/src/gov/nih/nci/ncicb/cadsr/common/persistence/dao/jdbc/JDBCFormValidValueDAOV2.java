@@ -215,7 +215,7 @@ public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
 		
 		List<String> rows = 
     			this.namedParameterJdbcTemplate.query(sql, params, 
-    					new RowMapper() {
+    					new RowMapper<String>() {
     				public String mapRow(ResultSet rs, int rowNum) throws SQLException {
     					
     					return rs.getString("C_QC_IDSEQ");

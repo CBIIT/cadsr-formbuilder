@@ -146,7 +146,7 @@ public class JDBCProtocolDAOV2 extends JDBCBaseDAOV2 implements ProtocolDAO {
 
     	List<String> des = 
     			this.namedParameterJdbcTemplate.query(sql, params, 
-    					new RowMapper() {
+    					new RowMapper<String>() {
     				public String mapRow(ResultSet rs, int rowNum) throws SQLException {
     					
     					return rs.getString("proto_idseq");

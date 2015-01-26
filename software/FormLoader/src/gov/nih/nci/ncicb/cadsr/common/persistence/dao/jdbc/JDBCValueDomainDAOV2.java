@@ -199,7 +199,7 @@ public class JDBCValueDomainDAOV2 extends JDBCAdminComponentDAOV2 implements
     	
     	List<PermissibleValueV2TransferObject> des = 
     			this.namedParameterJdbcTemplate.query(sql, params, 
-    					new RowMapper() {
+    					new RowMapper<PermissibleValueV2TransferObject>() {
     				public PermissibleValueV2TransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
     					
     					String vdSeqId = rs.getString("VD_IDSEQ");				
@@ -246,7 +246,7 @@ public class JDBCValueDomainDAOV2 extends JDBCAdminComponentDAOV2 implements
     	
     	List<String> defTexts = 
     			this.namedParameterJdbcTemplate.query(sql, params, 
-    					new RowMapper() {
+    					new RowMapper<String>() {
     				public String mapRow(ResultSet rs, int rowNum) throws SQLException {
     					
     					 return rs.getString("DEFINITION");
@@ -270,7 +270,7 @@ public List<String> getDesignationNamesByVMId(String vmSeqId) {
     	
     	List<String> desNames = 
     			this.namedParameterJdbcTemplate.query(sql, params, 
-    					new RowMapper() {
+    					new RowMapper<String>() {
     				public String mapRow(ResultSet rs, int rowNum) throws SQLException {
     					
     					 return rs.getString("NAME");

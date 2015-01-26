@@ -107,9 +107,7 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 	     params.addValue("user", userName.toUpperCase());
 	      
 	     List<FormCollection> collections = this.namedParameterJdbcTemplate.query(sql, params, 
-	     		new RowMapper() {
- 				//new RowMapper<FormCollection>() { //JR391 not related to the ticket, just avoiding Eclipse compilation error
-
+	     		new RowMapper<FormCollection>() {
 	     	public FormCollection mapRow(ResultSet rs, int rowNum) throws SQLException {
 	     		FormCollection aColl = new FormCollection();
 	     		aColl.setId(rs.getString("FORM_COLLECTION_IDSEQ"));
@@ -142,8 +140,7 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 		 
 		 List<String> seqid = 
 				 this.namedParameterJdbcTemplate.query(sql, params, 
-						 new RowMapper() {
-	        			//new RowMapper<String>() { //JR391 not related to the ticket, just avoiding Eclipse compilation error
+						 new RowMapper<String>() {
 					 public String mapRow(ResultSet rs, int rowNum) throws SQLException {
 						 return rs.getString("FORM_IDSEQ");
 
@@ -164,8 +161,7 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 		 
 		 List<FormDescriptor> forms = 
 				 this.namedParameterJdbcTemplate.query(sql, params, 
-						 new RowMapper() {
-	        			//new RowMapper<FormDescriptor>() { //JR391 not related to the ticket, just avoiding Eclipse compilation error
+						 new RowMapper<FormDescriptor>() {
 					 public FormDescriptor mapRow(ResultSet rs, int rowNum) throws SQLException {
 						 FormDescriptor form = new FormDescriptor();
 						 form.setFormSeqId(rs.getString("FORM_IDSEQ"));
