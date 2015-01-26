@@ -101,7 +101,7 @@ public class JDBCContactCommunicationDAOV2 extends JDBCAdminComponentDAOV2
 		params.addValue("org_name", org_name);
 		
 		List<String> seqids = this.namedParameterJdbcTemplate.query(sql, params, 
-	     		new RowMapper<String>() {
+	     		new RowMapper() {
 	     	public String mapRow(ResultSet rs, int rowNum) throws SQLException {
 	     		return rs.getString("ORG_IDSEQ");
 	         }

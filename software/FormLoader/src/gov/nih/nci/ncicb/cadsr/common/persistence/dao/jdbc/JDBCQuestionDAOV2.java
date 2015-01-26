@@ -52,7 +52,7 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
    */
   public List<FormValidValueTransferObject> getValidValues(String questionId) {
 	//List<FormValidValue> = new ArrayList();
-    ValidValuesForAQuestionQuery_STMT query = new ValidValuesForAQuestionQuery_STMT();
+    ValidValuesForAQuestionQuery_STMT query = new ValidValuesForAQuestionQuery_STMT();	//JR391
     query.setDataSource(this.dataSource);
     query._setSql(questionId);
 
@@ -488,7 +488,7 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
           fvv.setContext(contextTransferObject);
           
           //No need to get designations and definitions for vm anymore
-          vm = retrieveValueMeaningAttr(vm);	//JR391 uncomment it as it is breaking the Modify functionality
+          vm = retrieveValueMeaningAttr(vm);	//JR391 uncomment it as it is breaking the Modify functionality - this is not the place, this is the FORM's VV!!!
           
           fvv.setValueMeaning(vm);
           

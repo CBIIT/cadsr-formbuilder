@@ -376,7 +376,7 @@ public class JDBCModuleDAOV2 extends JDBCAdminComponentDAOV2 implements ModuleDA
      params.addValue("moduleseqid", moduleseqid);
       
      List<ModuleTransferObject> modules = this.namedParameterJdbcTemplate.query(sql, params, 
-     		new RowMapper<ModuleTransferObject>() {
+     		new RowMapper() {
      	public ModuleTransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
      		ModuleTransferObject module = new ModuleTransferObject();
      		module.setPublicId(rs.getInt("QC_ID"));

@@ -1861,7 +1861,7 @@ public class JDBCAdminComponentDAOV2 extends JDBCBaseDAOV2
 
    	List<ReferenceDocumentTransferObject> des = 
    			this.namedParameterJdbcTemplate.query(sql, params, 
-   					new RowMapper<ReferenceDocumentTransferObject>() {
+   					new RowMapper() {
    				public ReferenceDocumentTransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
    					ReferenceDocumentTransferObject refDoc = new ReferenceDocumentTransferObject();
    					
@@ -2005,7 +2005,7 @@ public class JDBCAdminComponentDAOV2 extends JDBCBaseDAOV2
 
 	   List<DesignationTransferObject> des = 
 			   this.namedParameterJdbcTemplate.query(sql, params, 
-					   new RowMapper<DesignationTransferObject>() {
+					   new RowMapper() {
 				   public DesignationTransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
 					   DesignationTransferObject desig = new DesignationTransferObject();
 					   desig.setDesigIDSeq(rs.getString("DESIG_IDSEQ"));

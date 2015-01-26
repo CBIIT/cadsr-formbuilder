@@ -319,7 +319,8 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 
         List<FormV2> forms = 
         this.namedParameterJdbcTemplate.query(sql, params, 
-        		new RowMapper<FormV2>() {
+        		//new RowMapper<FormV2>() {
+    			new RowMapper() {	//JR391 not related to the ticket, just avoiding Eclipse compilation error
         	public FormV2 mapRow(ResultSet rs, int rowNum) throws SQLException {
             	FormV2 form = new FormV2TransferObject();
             	form.setIdseq(rs.getString("QC_IDSEQ"));
@@ -351,7 +352,8 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 
         List<FormV2> forms = 
         this.namedParameterJdbcTemplate.query(sql, params, 
-        		new RowMapper<FormV2>() {
+        		//new RowMapper<FormV2>() {
+    			new RowMapper() {	//JR391 not related to the ticket, just avoiding Eclipse compilation error
         	public FormV2TransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
         		String seqid = rs.getString("QC_IDSEQ");
         		FormV2TransferObject form = new FormV2TransferObject();
@@ -374,7 +376,8 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 
     	List<FormV2TransferObject> forms = 
     			this.namedParameterJdbcTemplate.query(sql, params, 
-    					new RowMapper<FormV2TransferObject>() {
+    	        		//new RowMapper<FormV2TransferObject>() {
+    					new RowMapper() {	//JR391 not related to the ticket, just avoiding Eclipse compilation error
     				public FormV2TransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
 
     					FormV2TransferObject form = new FormV2TransferObject();
@@ -409,7 +412,8 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
         
         List<FormV2TransferObject> forms = 
         this.namedParameterJdbcTemplate.query(sql, params, 
-        		new RowMapper<FormV2TransferObject>() {
+        		//new RowMapper<FormV2TransferObject>() {
+    			new RowMapper() { //JR391 not related to the ticket, just avoiding Eclipse compilation error
         	public FormV2TransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
         		FormV2TransferObject form = new FormV2TransferObject();
             	form.setPublicId(rs.getInt("QC_ID"));
@@ -450,7 +454,8 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
         
         List<FormV2TransferObject> forms = 
         this.namedParameterJdbcTemplate.query(sql, params, 
-        		new RowMapper<FormV2TransferObject>() {
+        		new RowMapper() {
+    			//new RowMapper<FormV2TransferObject>() { //JR391 not related to the ticket, just avoiding Eclipse compilation error
         	public FormV2TransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
         		FormV2TransferObject form = new FormV2TransferObject();
         		form.setPublicId(rs.getInt("QC_ID"));
@@ -559,7 +564,8 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 
     	List<String> des = 
     			this.namedParameterJdbcTemplate.query(sql, params, 
-    					new RowMapper<String>() {
+    					new RowMapper() {
+            			//new RowMapper<String>() { //JR391 not related to the ticket, just avoiding Eclipse compilation error
     				public String mapRow(ResultSet rs, int rowNum) throws SQLException {
     					protoMap.put(rs.getString("protocol_Id"), rs.getString("proto_idseq"));
 
@@ -581,7 +587,8 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 
     	List<String> rows = 
     			this.namedParameterJdbcTemplate.query(sql, params, 
-    					new RowMapper<String>() {
+    					new RowMapper() {
+            			//new RowMapper<String>() { //JR391 not related to the ticket, just avoiding Eclipse compilation error
     				public String mapRow(ResultSet rs, int rowNum) throws SQLException {
     					
 
@@ -1663,7 +1670,8 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 			 params.addValue("publicId", publicId);
 			 
 			 List<Float> latest = this.namedParameterJdbcTemplate.query(sql, params, 
-			     		new RowMapper<Float>() {
+			     		new RowMapper() {
+	        			//new RowMapper<Float>() { //JR391 not related to the ticket, just avoiding Eclipse compilation error
 			     	public Float mapRow(ResultSet rs, int rowNum) throws SQLException {
 			     		return rs.getFloat("version");
 			         }
@@ -1710,7 +1718,8 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 			 params.addValue("formseqid", formseqid);
 
 			 List<String> inds = this.namedParameterJdbcTemplate.query(sql, params, 
-			     		new RowMapper<String>() {
+			     		new RowMapper() {
+	        			//new RowMapper<String>() { //JR391 not related to the ticket, just avoiding Eclipse compilation error
 			     	public String mapRow(ResultSet rs, int rowNum) throws SQLException {
 			     		return rs.getString("LATEST_VERSION_IND");
 			         }
@@ -1732,7 +1741,8 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 
 	    	List<String> des = 
 	    			this.namedParameterJdbcTemplate.query(sql, params, 
-	    					new RowMapper<String>() {
+	    					new RowMapper() {
+	        				//new RowMapper<String>() { //JR391 not related to the ticket, just avoiding Eclipse compilation error
 	    				public String mapRow(ResultSet rs, int rowNum) throws SQLException {
 	    					String seqid = rs.getString("QC_IDSEQ");
 	    					Timestamp timestamp = rs.getTimestamp("DATE_MODIFIED");
