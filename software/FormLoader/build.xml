@@ -5,7 +5,7 @@
 		
 	<!-- Need this to run deploy-war-local target. Otherwise, ignore this -->
 	<property file="template.build.properties"/>
-	<echo message="${JBOSS.DEPLOY.DIR}" />
+	<echo message="JBOSS.DEPLOY.DIR = ${JBOSS.DEPLOY.DIR}" />
 	
     <property name="build.dir"   value="build"/>
     <property name="classes.dir" value="${build.dir}/classes"/>
@@ -16,7 +16,7 @@
 	<property name="resources.dir"     value="${basedir}/resources"/>
 	<property name="source.dir"     value="${basedir}/src"/>
     <property name="web.dir"   value="${basedir}/WebContent"/>
-	<property name="dist.home" value="dist"/>
+	<!-- <property name="dist.home" value="dist"/> redundant and confusing-->
 	<property name="app.name" value="FormLoader"/>
 	<property name="compile.debug"     value="true"/>
 	<property name="compile.deprecation"     value="false"/>
@@ -147,12 +147,12 @@
 
     </target>
 	
-	<target name="archive" depends="build" description="Create binary archive of all files in dist.home">
+	<target name="archive" depends="build" description="Create binary archive of all files in dist.dir">
 		
-		<mkdir dir="${dist.home}"/>
+		<mkdir dir="${dist.dir}"/>
 		
 		<!-- Create application WAR file -->
-	    <jar jarfile="${dist.home}/${app.name}.war"
+	    <jar jarfile="${dist.dir}/${app.name}.war"
 				basedir="${build.dir}" />
 
 	</target>

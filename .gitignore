@@ -1,0 +1,10 @@
+
+software/FormLoader/build
+software/formbuilder/deployment-artifacts/jboss
+software/formbuilder/deployment-artifacts/bin
+software/formbuilder/deployment-artifacts
+software/formbuilder/src/.idea
+software/formbuilder/WebRoot
+software/formbuilder/local.build.properties
+software/FormLoader/dist
+software/FormLoader/log
