@@ -42,7 +42,7 @@ public class LoadFormsAction extends ActionSupport implements SessionAware{
     	servletRequest = ServletActionContext.getRequest();
     	
         try {
-        	FormCollection aColl = (FormCollection)servletRequest.getSession().getAttribute("formCollection");
+        	FormCollection aColl = (FormCollection)servletRequest.getSession().getAttribute("formCollection");	//JR367 at this point, the instruction is already "missing"
         	
         	if (selectedFormIndices != null && selectedFormIndices.length > 0) {
         		setSelectForFormsInCollections(aColl, selectedFormIndices);
