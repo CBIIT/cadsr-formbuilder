@@ -9,10 +9,6 @@ public class ModuleDescriptor {
 	String version;
 	
 	String longName;
-	//JR367 begin
-	String instruction;	//TBD not sure if it needs to be a custom object as the XSD http://localhost:8080/FormLoader/file/FormLoaderv17.xsd has more than one field!
-	//JR367 end
-	
 	String preferredDefinition;
 	String createdBy;
 	String modifiedBy;
@@ -90,14 +86,6 @@ public class ModuleDescriptor {
 
 	public void setLongName(String longName) {
 		this.longName = longName;
-	}
-
-	public String getInstruction() {
-		return instruction;
-	}
-
-	public void setInstruction(String instruction) {
-		this.instruction = instruction;
 	}
 
 	public String getPreferredDefinition() {
