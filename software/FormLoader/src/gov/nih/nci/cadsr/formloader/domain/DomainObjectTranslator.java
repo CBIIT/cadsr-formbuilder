@@ -4,13 +4,18 @@ import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ModuleInstructionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ModuleTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
+import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
+import gov.nih.nci.ncicb.cadsr.common.resource.Module;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import javassist.bytecode.Descriptor.Iterator;
 
 import org.apache.log4j.Logger;
 
@@ -116,6 +121,25 @@ public class DomainObjectTranslator {
 	    formdto.setContext(context);
 		formdto.setConteIdseq(form.getContextSeqid());
 		
+		//JR367 begin populate dto with domain object
+		List mCol = form.getModules();
+		java.util.Iterator it = (java.util.Iterator) mCol.iterator();
+	    ArrayList<ModuleTransferObject> list = new ArrayList();
+	    ModuleDescriptor module = null;
+	    Instruction mi = null;
+	    ModuleTransferObject mDTO = null;
+		while(it.hasNext()) {
+			module = (ModuleDescriptor)it.next();
+			mDTO = new ModuleTransferObject();
+		    mDTO.setLongName("Module");
+		    mi = new ModuleInstructionTransferObject();
+		    mi.setPreferredDefinition(module.getInstruction());
+		    mDTO.setInstruction(mi);
+		    list.add(mDTO);
+		}
+	    formdto.setModules(list);
+	    //JR367 end
+
 		return formdto;
 	}
 	

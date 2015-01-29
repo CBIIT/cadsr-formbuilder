@@ -31,6 +31,8 @@ public class FormParserHandler extends ParserHandler {
 	
 	FormCollection formCollection; 
 
+	ModuleDescriptor tempModule;
+	
 	public FormCollection getFormCollection() {
 		return formCollection;
 	}
@@ -99,7 +101,13 @@ public class FormParserHandler extends ParserHandler {
 				this.methodName = getMethodName(localName);	
 			}
 		} else if (localName.equals(StaXParser.MODULE)) {
-			tempForm.getModules().add(new ModuleDescriptor());
+			//tempForm.getModules().add(new ModuleDescriptor());	//JR367
+			tempModule = new ModuleDescriptor();
+		} else if (localName.equals(StaXParser.MODULE_INSTRUCTION)) { //JR367
+			if(tempModule != null) {
+				this.methodName = getMethodName(localName);		//how to get value??? this is just setInstruction
+				tempModule.setInstruction(methodName);
+			}
 		} else if (localName.equalsIgnoreCase(StaXParser.TEXT)) {
 			if (nodeQueue.peek().equals(StaXParser.HEADER_INSTRUCTION)) {
 				this.methodName = getMethodName(StaXParser.HEADER_INSTRUCTION);
@@ -148,6 +156,9 @@ public class FormParserHandler extends ParserHandler {
 			this.formCollection.setForms(this.formList);
 		} else if (localName.equals(StaXParser.PROTOCOL)) {
 			formProtocol = false;
+		} else if (localName.equals(StaXParser.MODULE)) {	//JR367
+			tempForm.getModules().add(tempModule);	//JR367
+			tempModule = null;
 		}
 		
 		this.methodName = null;

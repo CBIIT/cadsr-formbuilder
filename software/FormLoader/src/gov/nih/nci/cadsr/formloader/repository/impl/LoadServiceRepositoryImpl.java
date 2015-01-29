@@ -92,7 +92,7 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 		String formSeqid = "";
 		
 		try {
-			FormV2TransferObject formdto = DomainObjectTranslator.translateIntoFormDTO(form);	
+			FormV2TransferObject formdto = DomainObjectTranslator.translateIntoFormDTO(form);	//JR367 after translated to DTO, module is still empty!!! :(
 			if (formdto == null) 
 				return null;
 
