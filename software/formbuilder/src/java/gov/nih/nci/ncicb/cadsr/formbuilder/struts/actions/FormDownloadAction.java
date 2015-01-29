@@ -286,7 +286,7 @@ public class FormDownloadAction extends Action {
      colNumber = 3;
      String longName = FormJspUtil.updateDataForSpecialCharacters(question.getLongName());
      row.createCell(colNumber++).setCellValue(longName);
-     //row.createCell(colNumber++).setCellValue("test special character < 7*minutes  ß Superscript: (x2) x²  Subscript: (x2)  x\u2082(\u03BB)Plus-minus: (±)Alpha: (\u03B1)Gamma: (\u03B3)Delta: (\u03B4)");
+     //row.createCell(colNumber++).setCellValue("test special character < 7*minutes   Superscript: (x2) x  Subscript: (x2)  x\u2082(\u03BB)Plus-minus: ()Alpha: (\u03B1)Gamma: (\u03B3)Delta: (\u03B4)");
 
      if (cde != null) {
       row.createCell(colNumber++).setCellValue(cde.getLongName());
