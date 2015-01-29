@@ -461,6 +461,7 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
       ResultSet rs,
       int rownum) throws SQLException {
           FormValidValueTransferObject fvv = new FormValidValueTransferObject();
+//          FormValidValue fvv = new FormValidValueTransferObject();	//JR391
           fvv.setValueIdseq(rs.getString(1));     // VV_IDSEQ
           fvv.setVpIdseq(rs.getString(8));        // VP_IDSEQ
           fvv.setLongName(rs.getString(9));       // LONG_NAME
@@ -487,7 +488,7 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
           fvv.setContext(contextTransferObject);
           
           //No need to get designations and definitions for vm anymore
-          //vm = retrieveValueMeaningAttr(vm);
+          vm = retrieveValueMeaningAttr(vm);	//JR391 uncomment it as it is breaking the Modify functionality
           
           fvv.setValueMeaning(vm);
           
@@ -835,7 +836,7 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
 
     	List<QuestionTransferObject> questions = 
     			 this.namedParameterJdbcTemplate.query(sql, params, 
-    					 new RowMapper<QuestionTransferObject>() {
+    					 new RowMapper() {
     				 public QuestionTransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
     					 QuestionTransferObject quest = new QuestionTransferObject();
     					 //quest.setIdseq(rs.getString(1)); //this is the super class object id
@@ -868,7 +869,7 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
 
     	List<QuestionTransferObject> questions = 
     			 this.namedParameterJdbcTemplate.query(sql, params, 
-    					 new RowMapper<QuestionTransferObject>() {
+    					 new RowMapper() {
     				 public QuestionTransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
     					 QuestionTransferObject quest = new QuestionTransferObject();
     					 //quest.setIdseq(rs.getString(1)); //this is the super class object id
@@ -901,7 +902,7 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
 
       	List<QuestionTransferObject> questions = 
       			 this.namedParameterJdbcTemplate.query(sql, params, 
-      					 new RowMapper<QuestionTransferObject>() {
+      					 new RowMapper() {
       				public QuestionTransferObject mapRow(ResultSet rs,
       				      int rownum) throws SQLException {
       					QuestionTransferObject question = new QuestionTransferObject();
@@ -980,7 +981,7 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
 
    	List<QuestionTransferObject> questions = 
    			 this.namedParameterJdbcTemplate.query(sql, params, 
-   					 new RowMapper<QuestionTransferObject>() {
+   					 new RowMapper() {
    				public QuestionTransferObject mapRow(ResultSet rs,
    				      int rownum) throws SQLException {
    					QuestionTransferObject question = new QuestionTransferObject();
@@ -1048,7 +1049,7 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
 
     	List<DataElementTransferObject> des = 
     			this.namedParameterJdbcTemplate.query(sql, params, 
-    					new RowMapper<DataElementTransferObject>() {
+    					new RowMapper() {
     				public DataElementTransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
     					DataElementTransferObject de = new DataElementTransferObject();
     					de.setDeIdseq(rs.getString("DE_IDSEQ"));
@@ -1074,7 +1075,7 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
 
     	List<DataElementTransferObject> des = 
     			this.namedParameterJdbcTemplate.query(sql, params, 
-    					new RowMapper<DataElementTransferObject>() {
+    					new RowMapper() {
     				public DataElementTransferObject mapRow(ResultSet rs, int rowNum) throws SQLException {
     					DataElementTransferObject de = new DataElementTransferObject();
     					de.setDeIdseq(rs.getString("DE_IDSEQ"));
