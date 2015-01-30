@@ -502,7 +502,7 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
     	namedParameters.put("version", String.valueOf(sourceForm.getVersion()));
     	namedParameters.put("preferred_name", generatePreferredName(sourceForm.getLongName()));
     	namedParameters.put("long_name", sourceForm.getLongName());
-    	namedParameters.put("preferred_definition", sourceForm.getPreferredDefinition());
+    	namedParameters.put("preferred_definition", sourceForm.getPreferredDefinition());	//JR367
     	namedParameters.put("conte_idseq", sourceForm.getConteIdseq());
     	namedParameters.put("proto_idseq", protocolIdSeq);
     	namedParameters.put("asl_name", sourceForm.getAslName());

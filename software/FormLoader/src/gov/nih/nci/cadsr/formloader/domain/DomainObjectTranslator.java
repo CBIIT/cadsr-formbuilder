@@ -164,6 +164,11 @@ public class DomainObjectTranslator {
 		
 		moduleDto.setContext(formdto.getContext());
 		moduleDto.setPreferredDefinition(module.getPreferredDefinition());
+		//JR367 begin
+		Instruction instr = new ModuleInstructionTransferObject();
+		instr.setPreferredDefinition(module.getInstruction());
+		moduleDto.setInstruction(instr);
+		//JR367 end
 		
 		return moduleDto;
 	}

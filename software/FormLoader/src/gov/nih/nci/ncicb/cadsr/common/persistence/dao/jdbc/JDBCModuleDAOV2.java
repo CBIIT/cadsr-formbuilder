@@ -201,7 +201,7 @@ public class JDBCModuleDAOV2 extends JDBCAdminComponentDAOV2 implements ModuleDA
            sm.getVersion().toString(),
            generatePreferredName(sm.getLongName()),
            sm.getLongName(),
-           sm.getPreferredDefinition(),
+           sm.getPreferredDefinition(),	//JR367 this can not be empty, it's the module instruction!!!
            contextSeqid,
            //module is not associate with protocol any more.
            //sm.getForm().getProtocol().getProtoIdseq(),
