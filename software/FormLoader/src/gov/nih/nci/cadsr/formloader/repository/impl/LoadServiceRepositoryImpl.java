@@ -18,6 +18,7 @@ import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormValidValueTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.InstructionTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ModuleInstructionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ModuleTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionChangeTransferObject;
@@ -534,6 +535,8 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			
 			//do we need to go back to db to get module's public id?
 			
+			createModuleInstruction(moduledto, module.getInstruction());	//JR367
+
 			//Now, onto questions
 			createQuestionsInModule(module, moduledto, form, formdto);
 		}
@@ -621,9 +624,45 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 	}
 	
 	
-	
-	
-	
+	/**
+	 * Create new instruction for a module. (JR367)
+	 * 
+	 * Do nothing is instruction string is null or empty. 
+	 * 
+	 */
+	@Transactional
+	protected void createModuleInstruction(
+			ModuleTransferObject moduledto, String instString) {
+		
+		if (instString == null || instString.length() == 0)
+			return; //Nothing to do
+		
+		String sizedUpInstr = instString;
+
+		/* (Snippet copied from FormModuleEditAction (FB)
+		 * 
+		 * Truncate instruction string to fit in LONG_NAME field (255 characters)
+		 * Refer to GF# 12379 for guidance on this
+		 */
+
+		if (sizedUpInstr.length() > MAX_LONG_NAME_LENGTH) { 
+			sizedUpInstr = sizedUpInstr.substring(0, MAX_LONG_NAME_LENGTH);
+		}
+
+		Instruction instr = new InstructionTransferObject();
+		instr.setLongName(sizedUpInstr);
+		instr.setDisplayOrder(0);
+		instr.setVersion(new Float(1));
+		instr.setAslName("DRAFT NEW");
+		instr.setContext(moduledto.getContext());
+		instr.setPreferredDefinition(instString);	//JR367 this is the only field that is important, the rest are just to avoid NPE in DAOV2!!! :(
+		instr.setCreatedBy(moduledto.getCreatedBy());
+		moduledto.setInstruction(instr);
+		
+		moduleInstructionV2Dao.createInstruction(instr, moduledto.getModuleIdseq());
+	}
+
+
 	/**
 	 * Create new instruction for a question.
 	 * 
