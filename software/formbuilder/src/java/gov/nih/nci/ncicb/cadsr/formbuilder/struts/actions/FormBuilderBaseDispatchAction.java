@@ -259,7 +259,7 @@ public class FormBuilderBaseDispatchAction extends BaseDispatchAction
         hrefCRFForm.set(FORM_ID_SEQ,formIdSeq);
       }
       if ((formIdSeq != null) && (formIdSeq.length() > 0)) {
-        crf = service.getFormDetails(formIdSeq);
+        crf = service.getFormDetails(formIdSeq);	//JR368 0DE15062-E0A1-4B2E-E050-BB89A7B413EF is not found here!!!
         setSessionObject(request, CRF, crf);
       }
       else {

@@ -74,7 +74,7 @@
     Version 16 
     Added classification to formType
   </xs:documentation>
-		<xs:documentation>
+  <xs:documentation>
     Version 17 
     Added targetModulePublicId
   </xs:documentation>
@@ -98,6 +98,12 @@
 				</xs:element>
 				<xs:element name="form" type="formType" maxOccurs="unbounded"/>
 			</xs:all>
+			<xs:attribute name="collectionName">
+				<xs:annotation>
+					<xs:documentation>A name for the collection, this name should be unique for the user, it if is not, a _n will be added to the name 
+          when loaded into caDSR</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
 	<xs:complexType name="formType" mixed="true">
@@ -718,6 +724,7 @@
 						<xs:documentation>The public id of the next module in this form to be executed as a result of this operation.</xs:documentation>
 					</xs:annotation>
 				</xs:element>
+				
 				<xs:element ref="instruction" minOccurs="0"/>
 				<xs:element name="targetQuestionDisplayOrder" type="xs:string">
 					<xs:annotation>

@@ -147,7 +147,7 @@ System.out.println("sFormIdSeq found !!!!! -- " + sFormIdSeq );
     }
     
     try {
-      crf = setFormForAction(formEditForm, request);
+      crf = setFormForAction(formEditForm, request);	//JR368 this one has .terms in it
       clonedCrf = (Form) crf.clone();
       setSessionObject(request, CLONED_CRF, clonedCrf,true);
     }
