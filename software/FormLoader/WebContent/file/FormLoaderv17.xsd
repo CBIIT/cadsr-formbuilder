@@ -98,12 +98,6 @@
 				</xs:element>
 				<xs:element name="form" type="formType" maxOccurs="unbounded"/>
 			</xs:all>
-			<xs:attribute name="collectionName">
-				<xs:annotation>
-					<xs:documentation>A name for the collection, this name should be unique for the user, it if is not, a _n will be added to the name 
-          when loaded into caDSR</xs:documentation>
-				</xs:annotation>
-			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
 	<xs:complexType name="formType" mixed="true">
