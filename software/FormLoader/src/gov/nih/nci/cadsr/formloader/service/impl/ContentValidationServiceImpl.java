@@ -902,7 +902,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		List<ReferenceDocumentTransferObject> rdDtos = refdocDtos.get(
 				"" + matchingCde.getPublicId() + "-" + matchingCde.getVersion());
 		
-		verifyQuestionDefaultValue(form, question, pValDtos, matchingCde);
+		verifyQuestionDefaultValue(form, question, pValDtos, matchingCde);	//JR368 need to support non-enumerated VD
 		verifyQuestionValidValues(form, question, pValDtos, matchingCde);
 		verifyQuestionText(form, question, rdDtos, matchingCde);		
 			
@@ -1075,11 +1075,11 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 	protected void verifyQuestionDefaultValue(FormDescriptor form, QuestionDescriptor question, List<PermissibleValueV2TransferObject> pValues,
 			DataElementTransferObject matchingCde) {
 		String msg;
-		if (pValues == null || pValues.size() == 0) {
+		if (pValues == null || pValues.size() == 0) {	//JR368 non-enumerated VD does not have VV?
 			msg = "The value domain associated with data Element [" + matchingCde.getPublicId() + " " + matchingCde.getVersion() + " " +
 					matchingCde.getLongName() + 
 					"] does not have permissible values. Unable to verify question's default value";
-			prepareQuestionForLoadWithoutValidation(form,  question, msg);
+			prepareQuestionForLoadWithoutValidation(form,  question, msg);	//JR368 need to skip ths for non-enumerated VD
 			return;
 		} 	 
 		
