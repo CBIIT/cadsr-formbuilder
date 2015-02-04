@@ -57,5 +57,9 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="software/formbuilder/lib/servlet.jar"/>
+	<classpathentry kind="lib" path="software/formbuilder/lib/commons-logging.jar"/>
+	<classpathentry kind="lib" path="software/formbuilder/lib/log4j-1.2.8.jar"/>
+	<classpathentry kind="lib" path="software/formbuilder/lib/ojdbc14-10.2.0.4.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
