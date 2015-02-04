@@ -897,14 +897,17 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			return; 
 		}
 			
-		
 		List<PermissibleValueV2TransferObject> pValDtos = pvDtos.get(matchingCde.getVdIdseq());	
+		//JR368 begin
+		if(pValDtos != null) {	//validate only if it is enumerated VD
 		List<ReferenceDocumentTransferObject> rdDtos = refdocDtos.get(
 				"" + matchingCde.getPublicId() + "-" + matchingCde.getVersion());
 		
 		verifyQuestionDefaultValue(form, question, pValDtos, matchingCde);	//JR368 need to support non-enumerated VD
 		verifyQuestionValidValues(form, question, pValDtos, matchingCde);
 		verifyQuestionText(form, question, rdDtos, matchingCde);		
+		}
+		//JR368 end
 			
 		logger.debug("Done validating question against CDE");
 	}
