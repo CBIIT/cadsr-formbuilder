@@ -17,7 +17,7 @@
     <tx:annotation-driven proxy-target-class="true"/>
     
     <bean id="dataSource" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">
-    	<property name="URL" value="jdbc:oracle:thin:@ncidb-dsr-d:1551:DSRDEV"/>
+    	<property name="URL" value="jdbc:oracle:thin:@137.187.181.4:1551:DSRDEV"/>
     	<property name="user" value="FORMLOADER"/>
     	<property name="password" value="f0rmloader"/>
     	<property name="connectionCachingEnabled" value="true"/>
