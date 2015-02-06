@@ -169,7 +169,7 @@ public class JDBCValueDomainDAOV2 extends JDBCAdminComponentDAOV2 implements
 			vm.setPreferredDefinition(rs.getString("PREFERRED_DEFINITION"));
 			vm.setLongName(rs.getString("LONG_NAME"));
 
-			pv.setValueMeaningV2(vm);
+			pv.setValueMeaningV2(vm);	//JR471 vm pub id is good
 
 			return pv;
 		}

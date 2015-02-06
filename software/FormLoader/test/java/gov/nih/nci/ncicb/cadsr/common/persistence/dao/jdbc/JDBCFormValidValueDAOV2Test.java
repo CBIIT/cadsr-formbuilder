@@ -22,7 +22,10 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-
+/**
+ * Setup: Add software/FormLoader/test/resources/ into the classpath before running this test.
+ *
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/applicationContext.xml"})
 public class JDBCFormValidValueDAOV2Test {

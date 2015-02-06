@@ -474,14 +474,15 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
           vm.setIdseq(rs.getString("VM_IDSEQ"));
           vm.setLongName(rs.getString("short_meaning"));
           vm.setPreferredDefinition(rs.getString("VM_DESCRIPTION"));
-          vm.setPublicId(rs.getInt("vm_public_id"));
-          vm.setVersion(rs.getFloat("vm_version"));
+          vm.setPublicId(rs.getInt("VM_PUBLIC_ID"));	//JR417 upper case vm_public_id
+          vm.setVersion(rs.getFloat("VM_VERSION"));		//JR417 upper case vm_version
           
           fvv.setAslName(rs.getString(5));
           fvv.setPreferredDefinition(rs.getString(7));
           fvv.setFormValueMeaningText(rs.getString(16)); //Meaning_text
-          if (vm.getPublicId() > 0)
+//          if (vm.getPublicId() > 0)	//JR417 public id can be any number, including negative
         	  fvv.setFormValueMeaningIdVersion(String.valueOf(vm.getPublicId()) + "v"+String.valueOf(vm.getVersion())); //Meaning_id version
+
           fvv.setFormValueMeaningDesc(rs.getString("DESCRIPTION_TEXT")); //DESCRIPTION_TEXT          
           ContextTransferObject contextTransferObject = new ContextTransferObject();
           contextTransferObject.setConteIdseq(rs.getString(4)); //CONTE_IDSEQ
@@ -527,6 +528,8 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
           fvv.setShortMeaning(rs.getString(15));    // Meaning
           fvv.setFormValueMeaningText(rs.getString(16)); //Meaning_text
           fvv.setFormValueMeaningDesc(rs.getString("DESCRIPTION_TEXT")); //DESCRIPTION_TEXT
+    	  fvv.setFormValueMeaningIdVersion(String.valueOf(rs.getInt("VM_PUBLIC_ID")) + "v"+String.valueOf(rs.getFloat("VM_VERSION"))); //Meaning_id version JR417
+
          return fvv;
     }
   }
@@ -808,7 +811,7 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
             question.setDefaultValue(defaultValueStr);
             question.setIdseq(rs.getString(3));
             if (defaultValueStr==null || defaultValueStr.length()==0 ){ //default value Id
-             FormValidValue fvv = new FormValidValueTransferObject();
+             FormValidValue fvv = new FormValidValueTransferObject();	//JR417 is the vm public id and version ok?
              fvv.setValueIdseq(rs.getString(4));   // VV_IDSEQ
              fvv.setLongName(rs.getString(6));       // LONG_NAME
              //fvv.setIdseq(rs.getString(1));

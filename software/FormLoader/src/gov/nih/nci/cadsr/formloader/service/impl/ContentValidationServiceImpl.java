@@ -897,7 +897,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			return; 
 		}
 			
-		List<PermissibleValueV2TransferObject> pValDtos = pvDtos.get(matchingCde.getVdIdseq());	
+		List<PermissibleValueV2TransferObject> pValDtos = pvDtos.get(matchingCde.getVdIdseq());		//JR471 vm pub id is good
 		//JR368 begin
 		if(pValDtos != null) {	//validate only if it is enumerated VD
 		List<ReferenceDocumentTransferObject> rdDtos = refdocDtos.get(
@@ -1219,7 +1219,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			return;
 		}
 
-		ValueMeaningV2TransferObject valMeaningDto = (ValueMeaningV2TransferObject)matchedPv.getValueMeaningV2();	
+		ValueMeaningV2TransferObject valMeaningDto = (ValueMeaningV2TransferObject)matchedPv.getValueMeaningV2();	//JR471 vm pub id is good
 		String valMeaningLongName = FormLoaderHelper.normalizeSpace(valMeaningDto.getLongName());
 
 		if (!valMeaning.equalsIgnoreCase(valMeaningLongName)) { //question vv's meantingText field
@@ -1244,7 +1244,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 
 		if (!valDesc.equals(valMeaningPreferredDefinition)) {
 			//see if it matches the pv's value meaning's definition's text
-			if (!matchMeaningDefinitions(valDesc, valMeaningDto.getDefinitions()))
+			if (!matchMeaningDefinitions(valDesc, valMeaningDto.getDefinitions()))	//JR471 vm pub id is good
 				vVal.setDescription(valMeaningPreferredDefinition);
 		}
 	}

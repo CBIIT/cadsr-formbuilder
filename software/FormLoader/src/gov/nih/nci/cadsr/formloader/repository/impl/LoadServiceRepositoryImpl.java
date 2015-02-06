@@ -596,7 +596,7 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			if (vValue.isSkip()) continue;
 			
 			idx++;
-			FormValidValueTransferObject fvv = translateIntoValidValueDto(vValue, newQuestdto, moduledto, formdto, idx);
+			FormValidValueTransferObject fvv = translateIntoValidValueDto(vValue, newQuestdto, moduledto, formdto, idx);	 //JR417 no vm, but vv public id is empty here!!!
 			
 			fvv.setDisplayOrder(idx);
 			
@@ -612,6 +612,8 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			if (vvSeqid != null && vvSeqid.length() > 0) {
 				formValidValueV2Dao.createValidValueAttributes(vvSeqid, vValue.getMeaningText(), vValue.getDescription(), moduledto.getCreatedBy());
 				
+            	formValidValueV2Dao.updateValueMeaning(vvSeqid, vValue.getMeaningText(), vValue.getDescription(), moduledto.getCreatedBy());	//JR417 new call!
+                
 				String instr = vValue.getInstruction();
 				if (instr != null && instr.length() > 0) {
 					InstructionTransferObject instrdto = createInstructionDto(fvv, instr);

@@ -277,6 +277,8 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		fvv.setPreferredDefinition(vValue.getDescription());
 		
 		fvv.setContext(moduledto.getContext());
+
+		fvv.setFormValueMeaningIdVersion("123456v1.0"); 	//JR417	new
 		
 		fvv.setVersion(Float.valueOf("1.0"));
 		fvv.setAslName("DRAFT NEW");
