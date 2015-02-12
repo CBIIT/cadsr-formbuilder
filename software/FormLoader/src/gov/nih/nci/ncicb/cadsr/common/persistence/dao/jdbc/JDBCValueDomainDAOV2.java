@@ -191,7 +191,6 @@ public class JDBCValueDomainDAOV2 extends JDBCAdminComponentDAOV2 implements
     					" where vdpv.pv_idseq = pv.pv_idseq and pv.vm_idseq = vm.vm_idseq and vdpv.vd_idseq in (:seqIds) " +
     					" order by vdpv.vd_idseq";
 
-		//System.out.println("JDBCValueDomainDAOV2.java sql = [" + sql + "]");	//JR368
     	MapSqlParameterSource params = new MapSqlParameterSource();
     	params.addValue("seqIds", vdSeqIds);
     	

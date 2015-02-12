@@ -9,7 +9,6 @@ public class ModuleDescriptor {
 	String version;
 	
 	String longName;
-	String instruction;		//JR367
 	String preferredDefinition;
 	String createdBy;
 	String modifiedBy;
@@ -87,14 +86,6 @@ public class ModuleDescriptor {
 
 	public void setLongName(String longName) {
 		this.longName = longName;
-	}
-
-	public String getInstruction() {
-		return instruction;
-	}
-
-	public void setInstruction(String instruction) {
-		this.instruction = instruction;
 	}
 
 	public String getPreferredDefinition() {

@@ -69,7 +69,6 @@ public class StaXParser {
 	protected static final String CREATED_BY = "createdBy";
 	protected static final String MODIFIED_BY = "modifiedBy";
 	protected static final String CHANGE_NOTE = "changeNote";
-	protected static final String MODULE_INSTRUCTION = "instruction";	//JR367
 	protected static final String PREFERRED_DEFINITION = "preferredDefinition";
 	protected static final String REGISTRATION_STATUS = "registrationStatus";
 	protected static final String HEADER_INSTRUCTION = "headerInstruction";

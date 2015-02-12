@@ -157,8 +157,6 @@
 
 	</target>
 	
-	<target name="deploy" depends="-deploy-war-local"/>
-
 	<target name="-deploy-war-local" depends="archive"  description="Deploys the war file">
 	        <echo>Deploying war ...</echo>
 <!--	        <copy todir="${JBOSS.DEPLOY.DIR}">

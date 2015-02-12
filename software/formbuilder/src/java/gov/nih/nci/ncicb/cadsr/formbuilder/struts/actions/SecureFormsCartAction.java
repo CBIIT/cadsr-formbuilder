@@ -33,7 +33,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
 
-//import com.sun.enterprise.log.Log;	//JR417 not related to ticket
+//import com.sun.enterprise.log.Log;
 
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormCartOptionsUtil;
 

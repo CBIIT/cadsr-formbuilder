@@ -30,9 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-/*
- * Setup: Make sure software\FormLoader\test\resources\applicationContext.xml dataSource's is setup correctly before running this test.
- */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/applicationContext.xml"})
 public class ContentValidationServiceImplTest {
@@ -51,34 +48,6 @@ public class ContentValidationServiceImplTest {
 	@Before
 	public void setUp() throws Exception {
 		aColl = new FormCollection();
-	}
-
-	//https://tracker.nci.nih.gov/browse/FORMBUILD-18
-	@Test
-	public void testValidateXmlJR18() {
-		
-		try {
-			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
-			aColl.setXmlFileName("JR18.xml");
-			aColl.setCreatedBy("YANGS");
-			aColl = xmlValidator.validateXml(aColl);
-			
-			forms = aColl.getForms();
-			assertNotNull(forms);
-			assertTrue(forms.size() == 1);
-			assertTrue(forms.get(0).getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATED);
-			
-			for (FormDescriptor form : forms) {
-				form.setSelected(true);
-			}
-			
-			assertNotNull(contentValidationService);
-			aColl = contentValidationService.validateXmlContent(aColl);
-			
-		} catch (FormLoaderServiceException fle) {
-			logger.debug(fle);
-			fail("Got exception: " + fle.getMessage());
-		}
 	}
 	
 	@Test

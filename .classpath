@@ -6,6 +6,7 @@
 	<classpathentry kind="src" path="software/FormLoader/src"/>
 	<classpathentry kind="src" path="software/FormLoader/test/java"/>
 	<classpathentry kind="src" path="tools/cart-migration/src/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/FB_LIB"/>
 	<classpathentry kind="lib" path="software/formbuilder/src/web/lib/acegi-security-1.0.4.jar"/>
 	<classpathentry kind="lib" path="software/formbuilder/src/web/lib/ajaxanywhere-1.1.0.6.jar"/>
 	<classpathentry kind="lib" path="software/formbuilder/src/web/lib/antlr-2.7.6.jar"/>
@@ -41,24 +42,21 @@
 	<classpathentry kind="lib" path="software/formbuilder/src/web/lib/saxon9-unpack.jar"/>
 	<classpathentry kind="lib" path="software/formbuilder/src/web/lib/saxon9he.jar"/>
 	<classpathentry kind="lib" path="software/formbuilder/src/web/lib/sdk-client-framework.jar"/>
-	<classpathentry kind="lib" path="software/formbuilder/src/web/lib/standard.jar"/>
-	<classpathentry kind="lib" path="software/formbuilder/src/web/lib/tomahawk-1.1.3.jar"/>
-	<classpathentry kind="lib" path="software/formbuilder/src/web/lib/xmlcomp.jar"/>
-	<classpathentry kind="lib" path="software/formbuilder/src/web/lib/xsu12.jar"/>
-	<classpathentry kind="lib" path="test/lib/jbossall-client.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="software/formbuilder/lib/servlet.jar"/>
-	<classpathentry kind="lib" path="software/formbuilder/lib/commons-logging.jar"/>
-	<classpathentry kind="lib" path="software/formbuilder/lib/log4j-1.2.8.jar"/>
-	<classpathentry kind="lib" path="software/formbuilder/lib/ojdbc14-10.2.0.4.0.jar"/>
 	<classpathentry kind="lib" path="software/formbuilder/src/web/lib/spring.jar"/>
+	<classpathentry kind="lib" path="software/formbuilder/src/web/lib/standard.jar"/>
 	<classpathentry kind="lib" path="software/formbuilder/src/web/lib/struts-core-1.3.5.jar"/>
 	<classpathentry kind="lib" path="software/formbuilder/src/web/lib/struts-extras-1.3.5.jar"/>
 	<classpathentry kind="lib" path="software/formbuilder/src/web/lib/struts-taglib-1.3.5.jar"/>
+	<classpathentry kind="lib" path="software/formbuilder/src/web/lib/tomahawk-1.1.3.jar"/>
+	<classpathentry kind="lib" path="software/formbuilder/src/web/lib/xmlcomp.jar"/>
+	<classpathentry kind="lib" path="software/formbuilder/src/web/lib/xsu12.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="tools/cart-to-displaycart-migration/lib/jbossall-client.jar"/>
+	<classpathentry kind="lib" path="software/formbuilder/lib/j2ee.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

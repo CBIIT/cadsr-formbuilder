@@ -260,7 +260,7 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
             List mInstructions = mInstrdao.getInstructions(moduleId);
             block.setInstructions(mInstructions);
 
-            questions = (List)mdao.getQuestionsInAModule(moduleId);		//JR368 this is the main defect?
+            questions = (List)mdao.getQuestionsInAModule(moduleId);
             qIter = questions.iterator();
 
             while (qIter.hasNext())
@@ -322,7 +322,7 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
                 term.setQuestionRepitition(qReps);                
             }
 
-            block.setQuestions(questions);	//JR368 set the question
+            block.setQuestions(questions);
             //Set Skip Patterns
              possibleTargets.put(moduleId,block); //one of the possible targets
             List<TriggerAction> actions= getAllTriggerActionsForSource(moduleId);
