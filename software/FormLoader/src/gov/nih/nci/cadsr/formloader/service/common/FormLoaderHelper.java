@@ -3,6 +3,13 @@ package gov.nih.nci.cadsr.formloader.service.common;
 
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
+import gov.nih.nci.cadsr.formloader.domain.ModuleDescriptor;
+import gov.nih.nci.cadsr.formloader.domain.QuestionDescriptor;
+import gov.nih.nci.cadsr.formloader.repository.impl.FormLoaderRepositoryImpl;
+import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.PermissibleValueV2TransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
@@ -21,8 +28,10 @@ import java.security.CodeSource;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
@@ -389,4 +398,37 @@ public class FormLoaderHelper {
 	            source == null ? "Java Runtime" : source.getLocation());
 	}
 	
+	/**
+	 * Populate PV and its VM as required for a form's question.
+	 * @param form
+	 * @param repository
+	 * @comment created specifically for JR417.
+	 * @return
+	 */
+	public static final HashMap<String, List<PermissibleValueV2TransferObject>> populateQuestionsPV(FormDescriptor form, FormLoaderRepositoryImpl repository) {
+		String formLoadType = form.getLoadType();
+
+		List<String> questPublicIds = new ArrayList<String>();
+		List<String> questCdePublicIds = new ArrayList<String>();
+//		List<ModuleDescriptor> modules = form.getModules();
+//		collectPublicIdsForModules(modules, questPublicIds, questCdePublicIds, formLoadType);
+		
+//		List<QuestionTransferObject> questDtos = repository.getQuestionsByPublicIds(questPublicIds);
+		List<DataElementTransferObject> cdeDtos = repository.getCDEsByPublicIds(questCdePublicIds);
+		
+//		HashMap<String, List<ReferenceDocumentTransferObject>> refdocDtos = 
+//				repository.getReferenceDocsByCdePublicIds(questCdePublicIds);
+		List<String> vdSeqIds = new ArrayList<String>();
+		for (DataElementTransferObject de: cdeDtos) {
+			String vdseqId = de.getVdIdseq();
+			if (vdseqId != null && vdseqId.length() > 0)
+				vdSeqIds.add(vdseqId);
+		}
+		
+		HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = 
+				repository.getPermissibleValuesByVdIds(vdSeqIds);	//JR417 pv has the vpIdseq and vm has the vmIdseq after this successful call!
+
+		return pvDtos;
+	}
+
 }

@@ -268,7 +268,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		
 		fvv.setCreatedBy(moduledto.getCreatedBy());
 		fvv.setQuestion(newQuestdto);
-		fvv.setVpIdseq(vValue.getVdPermissibleValueSeqid());
+		fvv.setVpIdseq(vValue.getVdPermissibleValueSeqid());	//JR417 it is still empty!!!
 		
 		String preferredName = composeVVPreferredName(vValue, newQuestdto.getPublicId(), formdto.getPublicId(), formdto.getVersion(), displayOrder);
 		
@@ -278,7 +278,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		
 		fvv.setContext(moduledto.getContext());
 
-		//fvv.setFormValueMeaningIdVersion("123456v1.0"); 	//JR417	new
+		fvv.setFormValueMeaningIdVersion(vValue.getPreferredName()); 	//JR417	new
 		
 		fvv.setVersion(Float.valueOf("1.0"));
 		fvv.setAslName("DRAFT NEW");
@@ -290,7 +290,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		protected String composeVVPreferredName(QuestionDescriptor.ValidValue vValue, int questPublicId, int formPublicId, float formversion,  int displayorder) {
 			
 			return vValue.getPreferredName() + "_" + questPublicId + "_" + formPublicId + "v" + formversion + "_"  + displayorder;
-			
+			//return String.valueOf(questPublicId);	//JR417
 		}
 
 	@Transactional(readOnly=true)

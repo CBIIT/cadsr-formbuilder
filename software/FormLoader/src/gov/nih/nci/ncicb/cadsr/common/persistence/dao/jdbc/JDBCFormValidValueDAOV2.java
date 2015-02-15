@@ -110,7 +110,7 @@ public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
 		
 		params.addValue("p_asl_name", newVV.getAslName());
 		logger.debug(newVV.getAslName());
-		params.addValue("p_vp_idseq", newVV.getVpIdseq());
+		params.addValue("p_vp_idseq", newVV.getVpIdseq());	//JR417 newVV's vpIdseq is already empty here!!!
 		logger.debug( newVV.getVpIdseq());
 		params.addValue("p_created_by", newVV.getCreatedBy());		
 		logger.debug(newVV.getCreatedBy());
@@ -254,7 +254,7 @@ public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
     Map out = insertValidValue.executInsertCommand(newValidValue,parentId);
 
     String returnCode = (String) out.get("p_return_code");
-    String returnDesc = (String) out.get("p_return_desc");
+    String returnDesc = (String) out.get("p_return_desc");	//JR417 gave error: ORA-01400: cannot insert NULL into ("SBREXT"."QUEST_CONTENTS_EXT"."VERSION") ?
     String newFVVIdSeq = (String) out.get("p_val_idseq");
     
     if (!StringUtils.doesValueExist(returnCode)) {

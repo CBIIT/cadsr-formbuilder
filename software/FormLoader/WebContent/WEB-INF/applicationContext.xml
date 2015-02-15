@@ -171,6 +171,11 @@
 		<property name="contactCommV2Dao">
 			<ref bean="contactCommV2Dao" />
 		</property>
+		<!-- JR417 begin -->
+		<property name="repository">
+			<ref local="repository" />
+		</property>
+		<!-- JR417 end -->
 	</bean>
 	
 	<import resource="applicationContext-jdbcdao.xml" />

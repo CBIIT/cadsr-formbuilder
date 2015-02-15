@@ -19,6 +19,7 @@ import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormValidValueTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.InstructionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ModuleTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.PermissibleValueV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionChangeTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
@@ -39,6 +40,23 @@ import org.springframework.transaction.annotation.Transactional;
 public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 	
 	private static Logger logger = Logger.getLogger(LoadServiceRepositoryImpl.class.getName());
+	
+	FormLoaderRepositoryImpl repository;
+	
+	public LoadServiceRepositoryImpl() {}
+	
+	public LoadServiceRepositoryImpl(FormLoaderRepositoryImpl repository) {
+		this.repository = repository;
+	}
+
+	public FormLoaderRepositoryImpl getRepository() {
+		return repository;
+	}
+
+	public void setRepository(FormLoaderRepositoryImpl repository) {
+		this.repository = repository;
+	}
+
 	
 	/**
 	 * Create new form
@@ -533,9 +551,11 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			moduledto.setContext(formdto.getContext());
 			
 			//do we need to go back to db to get module's public id?
+		
+			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = FormLoaderHelper.populateQuestionsPV(form, repository);	//JR417
 			
 			//Now, onto questions
-			createQuestionsInModule(module, moduledto, form, formdto);
+			createQuestionsInModule(module, moduledto, form, formdto, pvDtos);	//JR417 new pvDtos param
 		}
 		
 		logger.debug("Done creating modules for form");
@@ -543,7 +563,7 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 	
 	@Transactional
 	protected void createQuestionsInModule(ModuleDescriptor module, ModuleTransferObject moduledto, 
-			FormDescriptor form, FormV2TransferObject formdto) {
+			FormDescriptor form, FormV2TransferObject formdto, HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos) {
 		List<QuestionDescriptor> questions = module.getQuestions();
 		
 		logger.debug("Creating questions for module");
@@ -551,12 +571,12 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 		for (QuestionDescriptor question : questions) {
 			if (question.isSkip()) continue;
 			
-			QuestionTransferObject questdto = DomainObjectTranslator.translateIntoQuestionDTO(question, form);
+			QuestionTransferObject questdto = DomainObjectTranslator.translateIntoQuestionDTO(question, form);	//JR417 check vp_idseq here!!!
 			
 			questdto.setDisplayOrder(idx++);
 			questdto.setContext(formdto.getContext());
 			questdto.setModule(moduledto);
-			
+
 			//better to call createQuestionComponents, which is not implement.
 			QuestionTransferObject newQuestdto = (QuestionTransferObject)this.questionV2Dao.createQuestionComponent(questdto);
 			String seqid = newQuestdto.getQuesIdseq();
@@ -566,7 +586,11 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			retrievePublicIdForQuestion(seqid, question, questdto);
 			
 			createQuestionInstruction(newQuestdto, moduledto, question.getInstruction());
-			createQuestionValidValues(question, form, newQuestdto, moduledto, formdto);
+			
+			
+			
+			createQuestionValidValues(question, form, newQuestdto, moduledto, formdto, pvDtos);		//JR417 entry point
+			
 		}
 		
 		
@@ -584,7 +608,7 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 	 */
 	@Transactional
 	protected void createQuestionValidValues(QuestionDescriptor question, FormDescriptor form, QuestionTransferObject newQuestdto, 
-			ModuleTransferObject moduledto, FormV2TransferObject formdto) {
+			ModuleTransferObject moduledto, FormV2TransferObject formdto, HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos) {
 		
 		List<QuestionDescriptor.ValidValue>  validValues = question.getValidValues();
 		
@@ -593,24 +617,42 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			if (vValue.isSkip()) continue;
 			
 			idx++;
-			FormValidValueTransferObject fvv = translateIntoValidValueDto(vValue, newQuestdto, moduledto, formdto, idx);	 //JR417 no vm, but vv public id is empty here!!!
+			
+			//JR417 begin
+			//get the correct vv and its vdPermissibleValueSeqid
+			
+			String vdPermissibleValueSeqid = null;	//TBD
+			vValue.setVdPermissibleValueSeqid(vdPermissibleValueSeqid);  //set the vdpvIdseq!
+			//JR417 end
+			FormValidValueTransferObject fvv = translateIntoValidValueDto(vValue, newQuestdto, moduledto, formdto, idx);	 //JR417 vValue's vdpvseqid / vp_idseq is already empty here!
 			
 			fvv.setDisplayOrder(idx);
 			
 			if (fvv.getPreferredDefinition() == null || fvv.getPreferredDefinition().length() == 0) {
 				String stop = "debug";
-				stop = "stop";
+				stop = "stop";	//I have no clue what this does, if you do, please let me know
 			}
 			
 			String vvSeqid  = 
-					formValidValueV2Dao.createValidValue(fvv,newQuestdto.getQuesIdseq(),moduledto.getCreatedBy());
+					formValidValueV2Dao.createValidValue(fvv,newQuestdto.getQuesIdseq(),moduledto.getCreatedBy());	//JR417 the correct place to emulate EJB method
 			
 			
 			if (vvSeqid != null && vvSeqid.length() > 0) {
 				formValidValueV2Dao.createValidValueAttributes(vvSeqid, vValue.getMeaningText(), vValue.getDescription(), moduledto.getCreatedBy());
+				//vValue.setPreferredName("JAMES_PREFEREDNAME_123");   //JR417
+//            	formValidValueV2Dao.updateValueMeaning(vvSeqid, vValue.getMeaningText(), vValue.getDescription(), moduledto.getCreatedBy());
+				formValidValueV2Dao.createFormValidValueComponent(fvv,  vvSeqid, moduledto.getCreatedBy());	//JR417 new call!
+
+				//JR417 TBD not sure if the following should be in formValidValueV2Dao.createFormValidValueComponent or outside!!!
+//    createNewValidValues(formValidValueV2Dao, formValidValueInstructionV2Dao,
+//    		fvv.getNewValidValues(),
+//            formVVChanges.getQuestionId());
+//   updateValidValues(fvvDao, fvvInstrDao,
+//                     formVVChanges.getUpdatedValidValues());
+//   deleteValidValues(fvvDao, fvvInstrDao,
+//                     formVVChanges.getDeletedValidValues());
+//   
 				
-            	formValidValueV2Dao.updateValueMeaning(vvSeqid, vValue.getMeaningText(), vValue.getDescription(), moduledto.getCreatedBy());	//JR417 new call!
-                
 				String instr = vValue.getInstruction();
 				if (instr != null && instr.length() > 0) {
 					InstructionTransferObject instrdto = createInstructionDto(fvv, instr);

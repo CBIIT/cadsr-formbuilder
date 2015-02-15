@@ -682,27 +682,33 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			
 			logger.debug("Start validating questions for form [" + form.getPublicId() + "|" + form.getVersion() + "|" + form.getFormSeqId() + "]");
 			
+			//JR417 refactored into FormLoaderHelper!
 			List<String> questPublicIds = new ArrayList<String>();
 			List<String> questCdePublicIds = new ArrayList<String>();
-			List<ModuleDescriptor> modules = form.getModules();
-			collectPublicIdsForModules(modules, questPublicIds, questCdePublicIds, formLoadType);
+//			List<ModuleDescriptor> modules = form.getModules();
+//			collectPublicIdsForModules(modules, questPublicIds, questCdePublicIds, formLoadType);
 			
 			List<QuestionTransferObject> questDtos = repository.getQuestionsByPublicIds(questPublicIds);
 			List<DataElementTransferObject> cdeDtos = repository.getCDEsByPublicIds(questCdePublicIds);
+//			
+			HashMap<String, List<ReferenceDocumentTransferObject>> refdocDtos = repository.getReferenceDocsByCdePublicIds(questCdePublicIds);
+//			List<String> vdSeqIds = new ArrayList<String>();
+//			for (DataElementTransferObject de: cdeDtos) {
+//				String vdseqId = de.getVdIdseq();
+//				if (vdseqId != null && vdseqId.length() > 0)
+//					vdSeqIds.add(vdseqId);
+//			}
+//			
+//			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = 
+//					repository.getPermissibleValuesByVdIds(vdSeqIds);	//JR417 pv has the vpIdseq and vm has the vmIdseq after this successful call!
 			
-			HashMap<String, List<ReferenceDocumentTransferObject>> refdocDtos = 
-					repository.getReferenceDocsByCdePublicIds(questCdePublicIds);
-			List<String> vdSeqIds = new ArrayList<String>();
-			for (DataElementTransferObject de: cdeDtos) {
-				String vdseqId = de.getVdIdseq();
-				if (vdseqId != null && vdseqId.length() > 0)
-					vdSeqIds.add(vdseqId);
-			}
-			
-			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = 
-					repository.getPermissibleValuesByVdIds(vdSeqIds);
-			
-			validateQuestionsInModules(modules, form, questDtos, cdeDtos, refdocDtos, pvDtos);			
+			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = FormLoaderHelper.populateQuestionsPV(form, repository);
+			//JR417 end
+
+			List<ModuleDescriptor> modules = form.getModules();
+			collectPublicIdsForModules(modules, questPublicIds, questCdePublicIds, formLoadType);
+
+			validateQuestionsInModules(modules, form, questDtos, cdeDtos, refdocDtos, pvDtos);		
 			
 			form.setLoadStatus(FormDescriptor.STATUS_CONTENT_VALIDATED);
 			
@@ -897,7 +903,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			return; 
 		}
 			
-		List<PermissibleValueV2TransferObject> pValDtos = pvDtos.get(matchingCde.getVdIdseq());		//JR471 vm pub id is good
+		List<PermissibleValueV2TransferObject> pValDtos = pvDtos.get(matchingCde.getVdIdseq());		//JR417 vm pub id is good
 		//JR368 begin
 		if(pValDtos != null) {	//validate only if it is enumerated VD
 		
@@ -1201,7 +1207,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		String valDesc = FormLoaderHelper.normalizeSpace(vVal.getDescription());
 
 		PermissibleValueV2TransferObject matchedPv = null;
-		for (PermissibleValueV2TransferObject pVal : pValues) {
+		for (PermissibleValueV2TransferObject pVal : pValues) {		//JR417 you have everything you need in pVal (vd_iqseq in the pv itself and vm_idseq in the pv.vm) 
 			String pValStr = pVal.getValue().trim();
 			if (val.equals(pValStr)) { //question vv's value field
 				matchedPv = pVal;
@@ -1219,7 +1225,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			return;
 		}
 
-		ValueMeaningV2TransferObject valMeaningDto = (ValueMeaningV2TransferObject)matchedPv.getValueMeaningV2();	//JR471 vm pub id is good
+		ValueMeaningV2TransferObject valMeaningDto = (ValueMeaningV2TransferObject)matchedPv.getValueMeaningV2();	//JR417 vm pub id is good
 		String valMeaningLongName = FormLoaderHelper.normalizeSpace(valMeaningDto.getLongName());
 
 		if (!valMeaning.equalsIgnoreCase(valMeaningLongName)) { //question vv's meantingText field
@@ -1244,8 +1250,12 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 
 		if (!valDesc.equals(valMeaningPreferredDefinition)) {
 			//see if it matches the pv's value meaning's definition's text
-			if (!matchMeaningDefinitions(valDesc, valMeaningDto.getDefinitions()))	//JR471 vm pub id is good
+			if (!matchMeaningDefinitions(valDesc, valMeaningDto.getDefinitions())) {
 				vVal.setDescription(valMeaningPreferredDefinition);
+				vVal.setPreferredName(String.valueOf(valMeaningDto.getPublicId()));		//JR417 new
+				vVal.setVdPermissibleValueSeqid(matchedPv.getIdseq());	//JR417 new
+			
+			}
 		}
 	}
 	
