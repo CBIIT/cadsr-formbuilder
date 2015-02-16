@@ -619,9 +619,15 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			idx++;
 			
 			//JR417 begin
-			//get the correct vv and its vdPermissibleValueSeqid
-			
-			String vdPermissibleValueSeqid = null;	//TBD
+			//get the correct vv's pvdto and set vv's vdPermissibleValueSeqid
+			PermissibleValueV2TransferObject pv = null;
+			try {
+				pv = FormLoaderHelper.getValidValuePV(idx-1, pvDtos);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			String vdPermissibleValueSeqid = pv.getIdseq();	//JR417 c.f. FormLoaderHelper.populateQuestionsPV(form, repository)
 			vValue.setVdPermissibleValueSeqid(vdPermissibleValueSeqid);  //set the vdpvIdseq!
 			//JR417 end
 			FormValidValueTransferObject fvv = translateIntoValidValueDto(vValue, newQuestdto, moduledto, formdto, idx);	 //JR417 vValue's vdpvseqid / vp_idseq is already empty here!

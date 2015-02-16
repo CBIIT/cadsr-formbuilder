@@ -82,17 +82,18 @@ public class JDBCUserManagerDAOV2 extends JDBCBaseDAOV2 implements UserManagerDA
     }
     catch (SQLException e) {
       validUser = false;
+        try {
+		  if(this.dataSource != null && this.dataSource.getConnection() != null) { 
+				System.out.println("JDBCUserManagerDAOV2.java#validUser error: user [" + userName + "] jdbcurl [" + this.dataSource.getConnection().toString() + "]");
+		  } else {
+			  System.out.println("JDBCUserManagerDAOV2.java#validUser dataSource or connection is null!");
+		  }
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
     }
-    finally
-    {
-      try{
-       if(conn!=null)
-        conn.close();
-      }
-      catch(Exception exp)
-      {        
-      }
-    }
+	  
     return validUser;
   }
 

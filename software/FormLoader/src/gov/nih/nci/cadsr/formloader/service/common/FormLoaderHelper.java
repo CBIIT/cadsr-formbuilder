@@ -402,7 +402,7 @@ public class FormLoaderHelper {
 	 * Populate PV and its VM as required for a form's question.
 	 * @param form
 	 * @param repository
-	 * @comment created specifically for JR417.
+	 * @comment Created specifically for JR417.
 	 * @return
 	 */
 	public static final HashMap<String, List<PermissibleValueV2TransferObject>> populateQuestionsPV(FormDescriptor form, FormLoaderRepositoryImpl repository) {
@@ -429,6 +429,25 @@ public class FormLoaderHelper {
 				repository.getPermissibleValuesByVdIds(vdSeqIds);	//JR417 pv has the vpIdseq and vm has the vmIdseq after this successful call!
 
 		return pvDtos;
+	}
+	
+	/**
+	 * Get the PV based on the valid value's index.
+	 * @param form
+	 * @param repository
+	 * @return
+	 * @throws Exception
+	 * @comment The assumption is that, the order of the valid value list is the same as the PV's. Created specifically for JR417.
+	 */
+	public static final PermissibleValueV2TransferObject getValidValuePV(int vvIndex, HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos) throws Exception {
+		PermissibleValueV2TransferObject ret = null;
+		
+		if(vvIndex < 0) throw new Exception("Valid value index must be greater than 0.");
+		if(pvDtos == null) throw new Exception("Permissible Values DTO list is null.");
+		
+		ret = (PermissibleValueV2TransferObject) pvDtos.get(vvIndex);
+		
+		return ret;
 	}
 
 }
