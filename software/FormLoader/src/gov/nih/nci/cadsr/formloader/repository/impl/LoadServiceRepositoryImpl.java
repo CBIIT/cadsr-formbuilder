@@ -6,6 +6,7 @@ import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.ModuleDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.QuestionDescriptor;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
+import gov.nih.nci.cadsr.formloader.service.common.QuestionsPVLoader;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
 import gov.nih.nci.ncicb.cadsr.common.dto.AdminComponentTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContactCommunicationV2TransferObject;
@@ -28,6 +29,7 @@ import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
 import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
+import gov.nih.nci.ncicb.cadsr.common.util.ValueHolder;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -552,8 +554,13 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			
 			//do we need to go back to db to get module's public id?
 		
-			FormLoaderHelper fhelper = new FormLoaderHelper();
-			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = fhelper.populateQuestionsPV(form, repository);	//JR417
+			ValueHolder vh = FormLoaderHelper.populateQuestionsPV(form, repository);
+			List data = (ArrayList) vh.getValue();
+//			List<ModuleDescriptor> modules = (List<ModuleDescriptor>) data.get(QuestionsPVLoader.MODULE_INDEX);
+//			List<QuestionTransferObject> questDtos = (List<QuestionTransferObject>) data.get(QuestionsPVLoader.QUESTION_INDEX);
+//			List<DataElementTransferObject> cdeDtos = (List<DataElementTransferObject>) data.get(QuestionsPVLoader.CDE_INDEX);
+//			HashMap<String, List<ReferenceDocumentTransferObject>> refdocDtos = (HashMap<String, List<ReferenceDocumentTransferObject>>) data.get(QuestionsPVLoader.REF_DOC_INDEX);
+			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = (HashMap<String, List<PermissibleValueV2TransferObject>>) data.get(QuestionsPVLoader.PV_INDEX);
 			
 			//Now, onto questions
 			createQuestionsInModule(module, moduledto, form, formdto, pvDtos);	//JR417 new pvDtos param

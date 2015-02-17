@@ -10,6 +10,7 @@ import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.PermissibleValueV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.util.ValueHolder;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
@@ -399,36 +400,75 @@ public class FormLoaderHelper {
 	}
 	
 	/**
+	 * Collect public ids for questions and their cde from all modules of a form, so that
+	 * we could query database with a list.
+	 * @param modules
+	 * @param questPublicIds
+	 * @param questCdePublicIds
+	 * @param formLoadType
+	 */
+	private static void collectPublicIdsForModules(List<ModuleDescriptor> modules, 
+			List<String> questPublicIds, List<String> questCdePublicIds, String formLoadType) {
+		
+		if (modules == null) {
+			logger.debug("Module list is null. Unable to collect public ids.");
+			return;
+		}
+			
+		for (ModuleDescriptor module : modules) {
+			List<QuestionDescriptor> questions = module.getQuestions();
+			
+			for (QuestionDescriptor question : questions) {
+				String questPubId = question.getPublicId();
+				//Only need to validate question public id + version if it's an update form
+				if (formLoadType.equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)
+						&& questPubId != null && questPubId.length() > 0)
+					questPublicIds.add(questPubId);
+				
+				String cdePublicId = question.getCdePublicId();
+				if (cdePublicId != null && cdePublicId.length() > 0)
+					questCdePublicIds.add(cdePublicId); 
+				else
+					question.addMessage("Question has not associated data element public id. Unable to validate");				
+			}
+			
+			logger.debug("Collected " + questPublicIds.size() + " question public ids and " + questCdePublicIds.size() +
+					" cde public ids in module [" + module.getPublicId() + "|" + module.getVersion() + "]");
+		}
+		
+	}
+
+	/**
 	 * Populate PV and its VM as required for a form's question.
 	 * @param form
 	 * @param repository
 	 * @comment Created specifically for JR417.
 	 * @return
 	 */
-	public final HashMap<String, List<PermissibleValueV2TransferObject>> populateQuestionsPV(FormDescriptor form, FormLoaderRepositoryImpl repository) {
+	public static final ValueHolder populateQuestionsPV(FormDescriptor form, FormLoaderRepositoryImpl repository) {
 		String formLoadType = form.getLoadType();
 
 		List<String> questPublicIds = new ArrayList<String>();
 		List<String> questCdePublicIds = new ArrayList<String>();
 		List<ModuleDescriptor> modules = form.getModules();
-//		collectPublicIdsForModules(modules, questPublicIds, questCdePublicIds, formLoadType);
+		collectPublicIdsForModules(modules, questPublicIds, questCdePublicIds, formLoadType);
 		
 		List<QuestionTransferObject> questDtos = repository.getQuestionsByPublicIds(questPublicIds);
-		System.out.println("FormLoaderHelper.java 0");
+//		System.out.println("FormLoaderHelper.java 0");
 		List<DataElementTransferObject> cdeDtos = repository.getCDEsByPublicIds(questCdePublicIds);
 		
-		System.out.println("FormLoaderHelper.java 1");
+//		System.out.println("FormLoaderHelper.java 1");
 		HashMap<String, List<ReferenceDocumentTransferObject>> refdocDtos = 
 				repository.getReferenceDocsByCdePublicIds(questCdePublicIds);
-		System.out.println("FormLoaderHelper.java 2");
+//		System.out.println("FormLoaderHelper.java 2");
 		List<String> vdSeqIds = new ArrayList<String>();
-		System.out.println("FormLoaderHelper.java 3");
+//		System.out.println("FormLoaderHelper.java 3");
 		if(cdeDtos != null) {	//JR417 not related to the ticket but just avoiding NPE during the test!
-			System.out.println("FormLoaderHelper.java 4");
+//			System.out.println("FormLoaderHelper.java 4");
 			for (DataElementTransferObject de: cdeDtos) {
-				System.out.println("FormLoaderHelper.java 5");
+//				System.out.println("FormLoaderHelper.java 5");
 				if(de != null) {	//JR417 not related to the ticket but just avoiding NPE during the test!
-					System.out.println("FormLoaderHelper.java 6");
+//					System.out.println("FormLoaderHelper.java 6");
 					String vdseqId = de.getVdIdseq();
 					if (vdseqId != null && vdseqId.length() > 0) {
 						vdSeqIds.add(vdseqId);
@@ -440,7 +480,9 @@ public class FormLoaderHelper {
 		HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = 
 				repository.getPermissibleValuesByVdIds(vdSeqIds);	//JR417 pv has the vpIdseq and vm has the vmIdseq after this successful call!
 
-		return pvDtos;
+		ValueHolder vh = new ValueHolder(new QuestionsPVLoader(modules, questDtos, cdeDtos, refdocDtos, pvDtos));
+
+		return vh;
 	}
 	
 	/**

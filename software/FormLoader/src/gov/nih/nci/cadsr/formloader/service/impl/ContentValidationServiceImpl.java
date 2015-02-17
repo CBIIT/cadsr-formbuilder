@@ -8,6 +8,7 @@ import gov.nih.nci.cadsr.formloader.repository.impl.FormLoaderRepositoryImpl;
 import gov.nih.nci.cadsr.formloader.service.ContentValidationService;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
+import gov.nih.nci.cadsr.formloader.service.common.QuestionsPVLoader;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContactCommunicationV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
@@ -22,6 +23,7 @@ import gov.nih.nci.ncicb.cadsr.common.resource.Definition;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.ReferenceDocument;
 import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomainV2;
+import gov.nih.nci.ncicb.cadsr.common.util.ValueHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -683,31 +685,33 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			logger.debug("Start validating questions for form [" + form.getPublicId() + "|" + form.getVersion() + "|" + form.getFormSeqId() + "]");
 			
 			//JR417 refactored into FormLoaderHelper!
-			List<String> questPublicIds = new ArrayList<String>();
-			List<String> questCdePublicIds = new ArrayList<String>();
-List<ModuleDescriptor> modules = form.getModules();
-collectPublicIdsForModules(modules, questPublicIds, questCdePublicIds, formLoadType);
+//			List<String> questPublicIds = new ArrayList<String>();
+//			List<String> questCdePublicIds = new ArrayList<String>();
+//List<ModuleDescriptor> modules = form.getModules();
+//collectPublicIdsForModules(modules, questPublicIds, questCdePublicIds, formLoadType);
 			
-			List<QuestionTransferObject> questDtos = repository.getQuestionsByPublicIds(questPublicIds);
-			List<DataElementTransferObject> cdeDtos = repository.getCDEsByPublicIds(questCdePublicIds);
+//			List<QuestionTransferObject> questDtos = repository.getQuestionsByPublicIds(questPublicIds);
+//			List<DataElementTransferObject> cdeDtos = repository.getCDEsByPublicIds(questCdePublicIds);
 //			
-			HashMap<String, List<ReferenceDocumentTransferObject>> refdocDtos = repository.getReferenceDocsByCdePublicIds(questCdePublicIds);
+//			HashMap<String, List<ReferenceDocumentTransferObject>> refdocDtos = repository.getReferenceDocsByCdePublicIds(questCdePublicIds);
 //			List<String> vdSeqIds = new ArrayList<String>();
 //			for (DataElementTransferObject de: cdeDtos) {
 //				String vdseqId = de.getVdIdseq();
 //				if (vdseqId != null && vdseqId.length() > 0)
 //					vdSeqIds.add(vdseqId);
 //			}
-//			
+			
 //			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = 
 //					repository.getPermissibleValuesByVdIds(vdSeqIds);	//JR417 pv has the vpIdseq and vm has the vmIdseq after this successful call!
 			
-			FormLoaderHelper fhelper = new FormLoaderHelper();
-			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = fhelper.populateQuestionsPV(form, repository);
+			ValueHolder vh = FormLoaderHelper.populateQuestionsPV(form, repository);
+			List data = (ArrayList) vh.getValue();
+			List<ModuleDescriptor> modules = (List<ModuleDescriptor>) data.get(QuestionsPVLoader.MODULE_INDEX);
+			List<QuestionTransferObject> questDtos = (List<QuestionTransferObject>) data.get(QuestionsPVLoader.QUESTION_INDEX);
+			List<DataElementTransferObject> cdeDtos = (List<DataElementTransferObject>) data.get(QuestionsPVLoader.CDE_INDEX);
+			HashMap<String, List<ReferenceDocumentTransferObject>> refdocDtos = (HashMap<String, List<ReferenceDocumentTransferObject>>) data.get(QuestionsPVLoader.REF_DOC_INDEX);
+			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = (HashMap<String, List<PermissibleValueV2TransferObject>>) data.get(QuestionsPVLoader.PV_INDEX);
 			//JR417 end
-
-//			List<ModuleDescriptor> modules = form.getModules();
-//			collectPublicIdsForModules(modules, questPublicIds, questCdePublicIds, formLoadType);
 
 			validateQuestionsInModules(modules, form, questDtos, cdeDtos, refdocDtos, pvDtos);		
 			
@@ -754,36 +758,36 @@ collectPublicIdsForModules(modules, questPublicIds, questCdePublicIds, formLoadT
 	 * @param questCdePublicIds
 	 * @param formLoadType
 	 */
-	protected void collectPublicIdsForModules(List<ModuleDescriptor> modules, 
-			List<String> questPublicIds, List<String> questCdePublicIds, String formLoadType) {
-		
-		if (modules == null) {
-			logger.debug("Module list is null. Unable to collect public ids.");
-			return;
-		}
-			
-		for (ModuleDescriptor module : modules) {
-			List<QuestionDescriptor> questions = module.getQuestions();
-			
-			for (QuestionDescriptor question : questions) {
-				String questPubId = question.getPublicId();
-				//Only need to validate question public id + version if it's an update form
-				if (formLoadType.equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)
-						&& questPubId != null && questPubId.length() > 0)
-					questPublicIds.add(questPubId);
-				
-				String cdePublicId = question.getCdePublicId();
-				if (cdePublicId != null && cdePublicId.length() > 0)
-					questCdePublicIds.add(cdePublicId); 
-				else
-					question.addMessage("Question has not associated data element public id. Unable to validate");				
-			}
-			
-			logger.debug("Collected " + questPublicIds.size() + " question public ids and " + questCdePublicIds.size() +
-					" cde public ids in module [" + module.getPublicId() + "|" + module.getVersion() + "]");
-		}
-		
-	}
+//	protected void collectPublicIdsForModules(List<ModuleDescriptor> modules, 
+//			List<String> questPublicIds, List<String> questCdePublicIds, String formLoadType) {
+//		
+//		if (modules == null) {
+//			logger.debug("Module list is null. Unable to collect public ids.");
+//			return;
+//		}
+//			
+//		for (ModuleDescriptor module : modules) {
+//			List<QuestionDescriptor> questions = module.getQuestions();
+//			
+//			for (QuestionDescriptor question : questions) {
+//				String questPubId = question.getPublicId();
+//				//Only need to validate question public id + version if it's an update form
+//				if (formLoadType.equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)
+//						&& questPubId != null && questPubId.length() > 0)
+//					questPublicIds.add(questPubId);
+//				
+//				String cdePublicId = question.getCdePublicId();
+//				if (cdePublicId != null && cdePublicId.length() > 0)
+//					questCdePublicIds.add(cdePublicId); 
+//				else
+//					question.addMessage("Question has not associated data element public id. Unable to validate");				
+//			}
+//			
+//			logger.debug("Collected " + questPublicIds.size() + " question public ids and " + questCdePublicIds.size() +
+//					" cde public ids in module [" + module.getPublicId() + "|" + module.getVersion() + "]");
+//		}
+//		
+//	}
 	
 	/**
 	 * Parse questions in module for all the forms in xml
