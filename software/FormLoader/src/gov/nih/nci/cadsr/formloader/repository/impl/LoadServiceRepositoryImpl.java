@@ -552,7 +552,8 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			
 			//do we need to go back to db to get module's public id?
 		
-			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = FormLoaderHelper.populateQuestionsPV(form, repository);	//JR417
+			FormLoaderHelper fhelper = new FormLoaderHelper();
+			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = fhelper.populateQuestionsPV(form, repository);	//JR417
 			
 			//Now, onto questions
 			createQuestionsInModule(module, moduledto, form, formdto, pvDtos);	//JR417 new pvDtos param

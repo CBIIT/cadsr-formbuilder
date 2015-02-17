@@ -685,8 +685,8 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			//JR417 refactored into FormLoaderHelper!
 			List<String> questPublicIds = new ArrayList<String>();
 			List<String> questCdePublicIds = new ArrayList<String>();
-//			List<ModuleDescriptor> modules = form.getModules();
-//			collectPublicIdsForModules(modules, questPublicIds, questCdePublicIds, formLoadType);
+List<ModuleDescriptor> modules = form.getModules();
+collectPublicIdsForModules(modules, questPublicIds, questCdePublicIds, formLoadType);
 			
 			List<QuestionTransferObject> questDtos = repository.getQuestionsByPublicIds(questPublicIds);
 			List<DataElementTransferObject> cdeDtos = repository.getCDEsByPublicIds(questCdePublicIds);
@@ -702,11 +702,12 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 //			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = 
 //					repository.getPermissibleValuesByVdIds(vdSeqIds);	//JR417 pv has the vpIdseq and vm has the vmIdseq after this successful call!
 			
-			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = FormLoaderHelper.populateQuestionsPV(form, repository);
+			FormLoaderHelper fhelper = new FormLoaderHelper();
+			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = fhelper.populateQuestionsPV(form, repository);
 			//JR417 end
 
-			List<ModuleDescriptor> modules = form.getModules();
-			collectPublicIdsForModules(modules, questPublicIds, questCdePublicIds, formLoadType);
+//			List<ModuleDescriptor> modules = form.getModules();
+//			collectPublicIdsForModules(modules, questPublicIds, questCdePublicIds, formLoadType);
 
 			validateQuestionsInModules(modules, form, questDtos, cdeDtos, refdocDtos, pvDtos);		
 			
@@ -1252,8 +1253,8 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			//see if it matches the pv's value meaning's definition's text
 			if (!matchMeaningDefinitions(valDesc, valMeaningDto.getDefinitions())) {
 				vVal.setDescription(valMeaningPreferredDefinition);
-				vVal.setPreferredName(String.valueOf(valMeaningDto.getPublicId()));		//JR417 new
-				vVal.setVdPermissibleValueSeqid(matchedPv.getIdseq());	//JR417 new
+//				vVal.setPreferredName(String.valueOf(valMeaningDto.getPublicId()));		//JR417 new
+//				vVal.setVdPermissibleValueSeqid(matchedPv.getIdseq());	//JR417 new
 			
 			}
 		}

@@ -405,24 +405,36 @@ public class FormLoaderHelper {
 	 * @comment Created specifically for JR417.
 	 * @return
 	 */
-	public static final HashMap<String, List<PermissibleValueV2TransferObject>> populateQuestionsPV(FormDescriptor form, FormLoaderRepositoryImpl repository) {
+	public final HashMap<String, List<PermissibleValueV2TransferObject>> populateQuestionsPV(FormDescriptor form, FormLoaderRepositoryImpl repository) {
 		String formLoadType = form.getLoadType();
 
 		List<String> questPublicIds = new ArrayList<String>();
 		List<String> questCdePublicIds = new ArrayList<String>();
-//		List<ModuleDescriptor> modules = form.getModules();
+		List<ModuleDescriptor> modules = form.getModules();
 //		collectPublicIdsForModules(modules, questPublicIds, questCdePublicIds, formLoadType);
 		
-//		List<QuestionTransferObject> questDtos = repository.getQuestionsByPublicIds(questPublicIds);
+		List<QuestionTransferObject> questDtos = repository.getQuestionsByPublicIds(questPublicIds);
+		System.out.println("FormLoaderHelper.java 0");
 		List<DataElementTransferObject> cdeDtos = repository.getCDEsByPublicIds(questCdePublicIds);
 		
-//		HashMap<String, List<ReferenceDocumentTransferObject>> refdocDtos = 
-//				repository.getReferenceDocsByCdePublicIds(questCdePublicIds);
+		System.out.println("FormLoaderHelper.java 1");
+		HashMap<String, List<ReferenceDocumentTransferObject>> refdocDtos = 
+				repository.getReferenceDocsByCdePublicIds(questCdePublicIds);
+		System.out.println("FormLoaderHelper.java 2");
 		List<String> vdSeqIds = new ArrayList<String>();
-		for (DataElementTransferObject de: cdeDtos) {
-			String vdseqId = de.getVdIdseq();
-			if (vdseqId != null && vdseqId.length() > 0)
-				vdSeqIds.add(vdseqId);
+		System.out.println("FormLoaderHelper.java 3");
+		if(cdeDtos != null) {	//JR417 not related to the ticket but just avoiding NPE during the test!
+			System.out.println("FormLoaderHelper.java 4");
+			for (DataElementTransferObject de: cdeDtos) {
+				System.out.println("FormLoaderHelper.java 5");
+				if(de != null) {	//JR417 not related to the ticket but just avoiding NPE during the test!
+					System.out.println("FormLoaderHelper.java 6");
+					String vdseqId = de.getVdIdseq();
+					if (vdseqId != null && vdseqId.length() > 0) {
+						vdSeqIds.add(vdseqId);
+					}
+				}
+			}
 		}
 		
 		HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = 

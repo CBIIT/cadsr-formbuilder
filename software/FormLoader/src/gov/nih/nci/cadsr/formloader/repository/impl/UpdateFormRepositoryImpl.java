@@ -1,5 +1,6 @@
 package gov.nih.nci.cadsr.formloader.repository.impl;
 
+import java.util.HashMap;
 import java.util.List;
 
 import gov.nih.nci.cadsr.formloader.domain.DomainObjectTranslator;
@@ -98,7 +99,8 @@ public class UpdateFormRepositoryImpl extends LoadServiceRepositoryImpl {
 				
 				//Now, onto questions. Ignore version from xml. Start from 1.0
 				resetQeustionVersionInModule(module); //
-				createQuestionsInModule(module, moduledto, form, formdto, null);	//JR417 4.2 release for PvDtos! Thus it is null.
+				createQuestionsInModule(module, moduledto, form, formdto, new HashMap());	//JR417 4.2 release for PvDtos! Thus it is empty hashmap.
+
 			}
 			
 		}
@@ -230,7 +232,7 @@ public class UpdateFormRepositoryImpl extends LoadServiceRepositoryImpl {
 				QuestionTransferObject newQuestdto = (QuestionTransferObject)this.questionV2Dao.createQuestionComponent(questdto);
 				createQuestionInstruction(newQuestdto, moduledto, question.getInstruction());
 				//DEBUGG
-				createQuestionValidValues(question, form, newQuestdto, moduledto, formdto, null);	//JR417 support PvDtos in 4.2 release!
+				createQuestionValidValues(question, form, newQuestdto, moduledto, formdto, new HashMap());	//JR417 4.2 release for PvDtos! Thus it is empty hashmap.
 			}
 		}
 		
