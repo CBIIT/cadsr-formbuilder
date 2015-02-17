@@ -635,8 +635,10 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			String vdPermissibleValueSeqid = pv.getIdseq();	//JR417 c.f. FormLoaderHelper.populateQuestionsPV(form, repository)
-			vValue.setVdPermissibleValueSeqid(vdPermissibleValueSeqid);  //set the vdpvIdseq!
+			if(pv != null) {
+				String vdPermissibleValueSeqid = pv.getIdseq();	//JR417 c.f. FormLoaderHelper.populateQuestionsPV(form, repository)
+				vValue.setVdPermissibleValueSeqid(vdPermissibleValueSeqid);  //set the vdpvIdseq!
+			} //what happend if it is null? do we need to check?
 			//JR417 end
 			FormValidValueTransferObject fvv = translateIntoValidValueDto(vValue, newQuestdto, moduledto, formdto, idx);	 //JR417 vValue's vdpvseqid / vp_idseq is already empty here!
 			

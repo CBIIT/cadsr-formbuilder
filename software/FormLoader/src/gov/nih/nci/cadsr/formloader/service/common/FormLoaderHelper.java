@@ -480,7 +480,7 @@ public class FormLoaderHelper {
 		HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = 
 				repository.getPermissibleValuesByVdIds(vdSeqIds);	//JR417 pv has the vpIdseq and vm has the vmIdseq after this successful call!
 
-		ValueHolder vh = new ValueHolder(new QuestionsPVLoader(modules, questDtos, cdeDtos, refdocDtos, pvDtos));
+		ValueHolder vh = new ValueHolder(new QuestionsPVLoader(modules, questDtos, cdeDtos, refdocDtos, pvDtos));	//JR417 TBD questDtos is null for some reason
 
 		return vh;
 	}

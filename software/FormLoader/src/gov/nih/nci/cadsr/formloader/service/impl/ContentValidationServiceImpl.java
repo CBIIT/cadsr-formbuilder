@@ -1257,8 +1257,8 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			//see if it matches the pv's value meaning's definition's text
 			if (!matchMeaningDefinitions(valDesc, valMeaningDto.getDefinitions())) {
 				vVal.setDescription(valMeaningPreferredDefinition);
-//				vVal.setPreferredName(String.valueOf(valMeaningDto.getPublicId()));		//JR417 new
-//				vVal.setVdPermissibleValueSeqid(matchedPv.getIdseq());	//JR417 new
+				vVal.setPreferredName(String.valueOf(valMeaningDto.getPublicId()));		//JR417 new
+				vVal.setVdPermissibleValueSeqid(matchedPv.getIdseq());	//JR417 new
 			
 			}
 		}
