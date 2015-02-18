@@ -554,16 +554,20 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			
 			//do we need to go back to db to get module's public id?
 		
+			System.out.println("LoadServiceRepositoryImpl.java#createModulesInForm before FormLoaderHelper.populateQuestionsPV");
 			ValueHolder vh = FormLoaderHelper.populateQuestionsPV(form, repository);
-			List data = (ArrayList) vh.getValue();
-//			List<ModuleDescriptor> modules = (List<ModuleDescriptor>) data.get(QuestionsPVLoader.MODULE_INDEX);
-//			List<QuestionTransferObject> questDtos = (List<QuestionTransferObject>) data.get(QuestionsPVLoader.QUESTION_INDEX);
-//			List<DataElementTransferObject> cdeDtos = (List<DataElementTransferObject>) data.get(QuestionsPVLoader.CDE_INDEX);
-//			HashMap<String, List<ReferenceDocumentTransferObject>> refdocDtos = (HashMap<String, List<ReferenceDocumentTransferObject>>) data.get(QuestionsPVLoader.REF_DOC_INDEX);
-			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = (HashMap<String, List<PermissibleValueV2TransferObject>>) data.get(QuestionsPVLoader.PV_INDEX);
-			
+			System.out.println("LoadServiceRepositoryImpl.java#createModulesInForm after FormLoaderHelper.populateQuestionsPV");
+			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = null;
+			try {
+				List data = (ArrayList) vh.getValue();
+				pvDtos = (HashMap<String, List<PermissibleValueV2TransferObject>>) data.get(QuestionsPVLoader.PV_INDEX);
+				System.out.println("LoadServiceRepositoryImpl.java#createModulesInForm before createQuestionsInModule");
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
 			//Now, onto questions
 			createQuestionsInModule(module, moduledto, form, formdto, pvDtos);	//JR417 new pvDtos param
+			System.out.println("LoadServiceRepositoryImpl.java#createModulesInForm after createQuestionsInModule");
 		}
 		
 		logger.debug("Done creating modules for form");
@@ -621,16 +625,22 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 		List<QuestionDescriptor.ValidValue>  validValues = question.getValidValues();
 		
 		int idx = 0;
+		System.out.println("LoadServiceRepositoryImpl.java#createQuestionValidValues 1");
 		for (QuestionDescriptor.ValidValue vValue : validValues) {
-			if (vValue.isSkip()) continue;
+			System.out.println("LoadServiceRepositoryImpl.java#createQuestionValidValues 2");
+			if (vValue.isSkip()) { 
+				logger.debug("LoadServiceRepositoryImpl.java#createQuestionValidValues vValue " + vValue.getMeaningText() + " vpIdSeq [" + vValue.getVdPermissibleValueSeqid() + "] skipped!");
+				continue;
+			}
 			
+			System.out.println("LoadServiceRepositoryImpl.java#createQuestionValidValues 3");
 			idx++;
 			
 			//JR417 begin
 			//get the correct vv's pvdto and set vv's vdPermissibleValueSeqid
 			PermissibleValueV2TransferObject pv = null;
 			try {
-				pv = FormLoaderHelper.getValidValuePV(idx-1, pvDtos);
+				pv = FormLoaderHelper.getValidValuePV(vValue, pvDtos);	//JR417 TBD need to fix the key matching algo here!!!
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -654,20 +664,21 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			
 			
 			if (vvSeqid != null && vvSeqid.length() > 0) {
-				formValidValueV2Dao.createValidValueAttributes(vvSeqid, vValue.getMeaningText(), vValue.getDescription(), moduledto.getCreatedBy());
+				int count = formValidValueV2Dao.createValidValueAttributes(vvSeqid, vValue.getMeaningText(), vValue.getDescription(), moduledto.getCreatedBy());
 				//vValue.setPreferredName("JAMES_PREFEREDNAME_123");   //JR417
-//            	formValidValueV2Dao.updateValueMeaning(vvSeqid, vValue.getMeaningText(), vValue.getDescription(), moduledto.getCreatedBy());
-				formValidValueV2Dao.createFormValidValueComponent(fvv,  vvSeqid, moduledto.getCreatedBy());	//JR417 new call!
+//            	formValidValueV2Dao.updateValueMeaning(vvSeqid, vValue.getMeaningText(), vValue.getDescription(), moduledto.getCreatedBy());	//JR417 already called by createFormValidValueComponent (see below)
+				if(count == 1) {	//assuming that only one match!
+					formValidValueV2Dao.createFormValidValueComponent(fvv,  vvSeqid, moduledto.getCreatedBy());	//JR417 new call! is version empty here?
 
-				//JR417 TBD not sure if the following should be in formValidValueV2Dao.createFormValidValueComponent or outside!!!
-//    createNewValidValues(formValidValueV2Dao, formValidValueInstructionV2Dao,
-//    		fvv.getNewValidValues(),
-//            formVVChanges.getQuestionId());
-//   updateValidValues(fvvDao, fvvInstrDao,
-//                     formVVChanges.getUpdatedValidValues());
-//   deleteValidValues(fvvDao, fvvInstrDao,
-//                     formVVChanges.getDeletedValidValues());
-//   
+					//JR417 TBD not sure if the following should be in formValidValueV2Dao.createFormValidValueComponent or outside!!!
+//				    createNewValidValues(formValidValueV2Dao, formValidValueInstructionV2Dao,
+//				    		fvv.getNewValidValues(),
+//				            formVVChanges.getQuestionId());
+//				   updateValidValues(fvvDao, fvvInstrDao,
+//				                     formVVChanges.getUpdatedValidValues());
+//				   deleteValidValues(fvvDao, fvvInstrDao,
+//				                     formVVChanges.getDeletedValidValues());
+				}
 				
 				String instr = vValue.getInstruction();
 				if (instr != null && instr.length() > 0) {
@@ -677,6 +688,8 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			}
 			
 			logger.debug("Created new valid valid");
+			System.out.println("LoadServiceRepositoryImpl.java#createQuestionValidValues Created new valid valid [" + validValues + "]");
+
 		}
 	}
 	

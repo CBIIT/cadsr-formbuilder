@@ -687,11 +687,11 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			//JR417 refactored into FormLoaderHelper!
 //			List<String> questPublicIds = new ArrayList<String>();
 //			List<String> questCdePublicIds = new ArrayList<String>();
-//List<ModuleDescriptor> modules = form.getModules();
+List<ModuleDescriptor> modules = null;	//form.getModules();
 //collectPublicIdsForModules(modules, questPublicIds, questCdePublicIds, formLoadType);
 			
-//			List<QuestionTransferObject> questDtos = repository.getQuestionsByPublicIds(questPublicIds);
-//			List<DataElementTransferObject> cdeDtos = repository.getCDEsByPublicIds(questCdePublicIds);
+List<QuestionTransferObject> questDtos = null;	//repository.getQuestionsByPublicIds(questPublicIds);
+List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(questCdePublicIds);
 //			
 //			HashMap<String, List<ReferenceDocumentTransferObject>> refdocDtos = repository.getReferenceDocsByCdePublicIds(questCdePublicIds);
 //			List<String> vdSeqIds = new ArrayList<String>();
@@ -703,17 +703,28 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			
 //			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = 
 //					repository.getPermissibleValuesByVdIds(vdSeqIds);	//JR417 pv has the vpIdseq and vm has the vmIdseq after this successful call!
-			
+
+			System.out.println("ContentValidationServiceImpl.java#validateQuestions before FormLoaderHelper.populateQuestionsPV");
 			ValueHolder vh = FormLoaderHelper.populateQuestionsPV(form, repository);
-			List data = (ArrayList) vh.getValue();
-			List<ModuleDescriptor> modules = (List<ModuleDescriptor>) data.get(QuestionsPVLoader.MODULE_INDEX);
-			List<QuestionTransferObject> questDtos = (List<QuestionTransferObject>) data.get(QuestionsPVLoader.QUESTION_INDEX);
-			List<DataElementTransferObject> cdeDtos = (List<DataElementTransferObject>) data.get(QuestionsPVLoader.CDE_INDEX);
-			HashMap<String, List<ReferenceDocumentTransferObject>> refdocDtos = (HashMap<String, List<ReferenceDocumentTransferObject>>) data.get(QuestionsPVLoader.REF_DOC_INDEX);
-			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = (HashMap<String, List<PermissibleValueV2TransferObject>>) data.get(QuestionsPVLoader.PV_INDEX);
+			System.out.println("ContentValidationServiceImpl.java#validateQuestions after FormLoaderHelper.populateQuestionsPV");
+			HashMap<String, List<ReferenceDocumentTransferObject>> refdocDtos = null;
+			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = null;
+			try {
+				List data = (ArrayList) vh.getValue();
+				pvDtos = (HashMap<String, List<PermissibleValueV2TransferObject>>) data.get(QuestionsPVLoader.PV_INDEX);
+				modules = (List<ModuleDescriptor>) data.get(QuestionsPVLoader.MODULE_INDEX);
+				questDtos = (List<QuestionTransferObject>) data.get(QuestionsPVLoader.QUESTION_INDEX);
+				cdeDtos = (List<DataElementTransferObject>) data.get(QuestionsPVLoader.CDE_INDEX);
+				refdocDtos = (HashMap<String, List<ReferenceDocumentTransferObject>>) data.get(QuestionsPVLoader.REF_DOC_INDEX);
+				pvDtos = (HashMap<String, List<PermissibleValueV2TransferObject>>) data.get(QuestionsPVLoader.PV_INDEX);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
 			//JR417 end
 
+			System.out.println("ContentValidationServiceImpl.java#validateQuestions before validateQuestionsInModules");
 			validateQuestionsInModules(modules, form, questDtos, cdeDtos, refdocDtos, pvDtos);		
+			System.out.println("ContentValidationServiceImpl.java#validateQuestions after validateQuestionsInModules");
 			
 			form.setLoadStatus(FormDescriptor.STATUS_CONTENT_VALIDATED);
 			

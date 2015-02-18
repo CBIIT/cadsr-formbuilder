@@ -33,7 +33,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.xml.parsers.SAXParserFactory;
@@ -486,20 +488,30 @@ public class FormLoaderHelper {
 	}
 	
 	/**
-	 * Get the PV based on the valid value's index.
+	 * Get the PV based on the valid value's passed.
 	 * @param form
 	 * @param repository
 	 * @return
 	 * @throws Exception
 	 * @comment The assumption is that, the order of the valid value list is the same as the PV's. Created specifically for JR417.
 	 */
-	public static final PermissibleValueV2TransferObject getValidValuePV(int vvIndex, HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos) throws Exception {
+	public static final PermissibleValueV2TransferObject getValidValuePV(QuestionDescriptor.ValidValue vValue, HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos) throws Exception {
 		PermissibleValueV2TransferObject ret = null;
 		
-		if(vvIndex < 0) throw new Exception("Valid value index must be greater than 0.");
+		if(vValue == null) throw new Exception("Valid value is null.");
 		if(pvDtos == null) throw new Exception("Permissible Values DTO list is null.");
 		
-		ret = (PermissibleValueV2TransferObject) pvDtos.get(vvIndex);
+		//ret = (PermissibleValueV2TransferObject) pvDtos.get(vvIndex);	//key is not 0,1, ... but F169098A-E8D2-306E-E034-0003BA3F9857, F54516A5-2717-25D2-E034-0003BA3F9857 and 85FA5C84-F008-BF1A-E040-BB89AD43366C
+		//find the first PV that has the same value as the VV (c.f. https://wiki.nci.nih.gov/display/caDSR/Form+Builder+4.1+-+Form+Loader+System+Use+Cases)
+		Iterator it = pvDtos.entrySet().iterator();
+	    while (it.hasNext()) {
+	        Map.Entry pair = (Map.Entry)it.next();
+	        System.out.println(pair.getKey() + " = " + pair.getValue());
+	        if(pair.getValue() != null && pair.getValue().equals(vValue.getMeaningText())) {
+	        	ret = (PermissibleValueV2TransferObject) pvDtos.get(pair.getKey());
+	        	break;
+	        }
+	    }
 		
 		return ret;
 	}
