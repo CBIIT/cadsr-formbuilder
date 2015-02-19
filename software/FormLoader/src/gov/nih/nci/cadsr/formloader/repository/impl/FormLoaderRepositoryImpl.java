@@ -269,7 +269,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		fvv.setCreatedBy(moduledto.getCreatedBy());
 		fvv.setQuestion(newQuestdto);
 		fvv.setVpIdseq(vValue.getVdPermissibleValueSeqid());	//JR417 TBD vValue vdPermissibleValueSeqid is not empty only for the first one (fixed in this ticket)
-		
+		logger.debug("FormLoaderRepositoryImpl.java#translateIntoValidValueDto vValue.getVdPermissibleValueSeqid() can not be empty! *** vdPVIdSeq [" + vValue.getVdPermissibleValueSeqid() + "]");
 		String preferredName = composeVVPreferredName(vValue, newQuestdto.getPublicId(), formdto.getPublicId(), formdto.getVersion(), displayOrder);
 		
 		fvv.setLongName(vValue.getValue());
@@ -282,6 +282,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		fvv.setFormValueMeaningText(vValue.getMeaningText());
 		fvv.setFormValueMeaningIdVersion(vValue.getPreferredName());
 		fvv.setFormValueMeaningDesc(vValue.getDescription());
+		logger.debug("FormLoaderRepositoryImpl.java#translateIntoValidValueDto JR417 *** the three fields of fvv have to be populated! *** fvv [" + fvv + "]");
 		//JR417	end
 		
 		fvv.setVersion(Float.valueOf("1.0"));

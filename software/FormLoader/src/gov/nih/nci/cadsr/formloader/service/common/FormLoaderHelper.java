@@ -503,12 +503,23 @@ public class FormLoaderHelper {
 		
 		//ret = (PermissibleValueV2TransferObject) pvDtos.get(vvIndex);	//key is not 0,1, ... but F169098A-E8D2-306E-E034-0003BA3F9857, F54516A5-2717-25D2-E034-0003BA3F9857 and 85FA5C84-F008-BF1A-E040-BB89AD43366C
 		//find the first PV that has the same value as the VV (c.f. https://wiki.nci.nih.gov/display/caDSR/Form+Builder+4.1+-+Form+Loader+System+Use+Cases)
+        ArrayList<PermissibleValueV2TransferObject> pvs = null;
+        PermissibleValueV2TransferObject pv = null;
 		Iterator it = pvDtos.entrySet().iterator();
+		boolean found = false;
 	    while (it.hasNext()) {
 	        Map.Entry pair = (Map.Entry)it.next();
-	        System.out.println(pair.getKey() + " = " + pair.getValue());
-	        if(pair.getValue() != null && pair.getValue().equals(vValue.getMeaningText())) {
-	        	ret = (PermissibleValueV2TransferObject) pvDtos.get(pair.getKey());
+	        pvs = (ArrayList<PermissibleValueV2TransferObject>) pair.getValue();
+	        for(int i=0; i<pvs.size(); i++) {
+		        pv = pvs.get(i);
+		        System.out.println(pair.getKey() + " = " + pv.getValue());
+		        if(pv.getValue() != null && pv.getValue().equals(vValue.getMeaningText())) {
+		        	ret = pv;
+		        	found = true;
+		        	break;
+		        }
+	        }
+	        if(found) {
 	        	break;
 	        }
 	    }

@@ -755,7 +755,7 @@ class="OraBGAccentVeryDark" >
                             <logic:present name="question">
                             <logic:notEmpty name="question" property = "validValues">
                               <tr class="OraTabledata">
-                                <td class="OraFieldText" width="50">&nbsp;JR417</td>
+                                <td class="OraFieldText" width="50">&nbsp;</td><!-- JR417 just tagged -->
                                 <td colspan="2">
                                   <table width="100%" align="center" cellpadding="0" cellspacing="0" border="0" class="OraBGAccentVeryDark" id="collapsible"><logic:iterate id="validValue" name="question" type="gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue" property="validValues"><tr   class="OraTabledata">
                                         <td COLSPAN="2" class="OraFieldText" >&nbsp;</td>
@@ -780,7 +780,7 @@ class="OraBGAccentVeryDark" >
                                                  <td  class="OraTableColumnHeader" width="10%" nowrap >
                                                    <bean:message key="cadsr.formbuilder.valueMeaning.idversion" /></td>
                                                  <td class="OraFieldText" >
-                                                  TEST ID<bean:write name="validValue" property="formValueMeaningIdVersion"/></td>
+                                                  <!-- JR417 just tagged --><bean:write name="validValue" property="formValueMeaningIdVersion"/></td>
                                              </tr>  
                                              <tr class="OraTabledata">
                                              <td  class="OraTableColumnHeader" width="10%" nowrap >
