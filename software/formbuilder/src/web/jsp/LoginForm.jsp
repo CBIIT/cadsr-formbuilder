@@ -6,7 +6,7 @@
 %>
 <html>
 <head>
-<!-- @tag fb master for 4.1 r0008a -->
+<!-- @tag fb master for 4.1 r0008b -->
 <title>Login</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <LINK REL=STYLESHEET TYPE="text/css" HREF="<%=request.getContextPath()%>/css/blaf.css">

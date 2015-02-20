@@ -10,6 +10,8 @@ import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.PermissibleValueV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ValueMeaningV2TransferObject;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValueMeaning;
 import gov.nih.nci.ncicb.cadsr.common.util.ValueHolder;
 
 import java.io.BufferedInputStream;
@@ -482,7 +484,7 @@ public class FormLoaderHelper {
 		HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = 
 				repository.getPermissibleValuesByVdIds(vdSeqIds);	//JR417 pv has the vpIdseq and vm has the vmIdseq after this successful call!
 
-		ValueHolder vh = new ValueHolder(new QuestionsPVLoader(modules, questDtos, cdeDtos, refdocDtos, pvDtos));	//JR417 TBD questDtos is null for some reason
+		ValueHolder vh = new ValueHolder(new QuestionsPVLoader(modules, questDtos, cdeDtos, refdocDtos, pvDtos));	//JR417 questDtos is null for some reason, but it's ok
 
 		return vh;
 	}
@@ -512,7 +514,8 @@ public class FormLoaderHelper {
 	        pvs = (ArrayList<PermissibleValueV2TransferObject>) pair.getValue();
 	        for(int i=0; i<pvs.size(); i++) {
 		        pv = pvs.get(i);
-		        System.out.println(pair.getKey() + " = " + pv.getValue());
+		        //System.out.println(pair.getKey() + " = " + pv.getValue());
+		        logger.debug(pair.getKey() + " = " + pv.getValue());
 		        if(pv.getValue() != null && pv.getValue().equals(vValue.getMeaningText())) {
 		        	ret = pv;
 		        	found = true;
@@ -527,4 +530,41 @@ public class FormLoaderHelper {
 		return ret;
 	}
 
+	public static final ValueMeaningV2TransferObject getVVPVVM(int vvIndex, int pvIndex, HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos) throws Exception {
+		ValueMeaningV2TransferObject ret = null;
+		
+		if(vvIndex < 0) throw new Exception("VV index must be zero or greater.");
+		if(pvIndex < 0) throw new Exception("PV index must be zero or greater.");
+		if(pvDtos == null) throw new Exception("Permissible Values DTO list is null.");
+		
+        ArrayList<PermissibleValueV2TransferObject> pvs = null;
+        PermissibleValueV2TransferObject pv = null;
+		Iterator it = pvDtos.entrySet().iterator();
+		boolean found = false;
+		int vvCount = 0;
+		int pvCount = 0;
+	    while (it.hasNext()) {
+	        Map.Entry pair = (Map.Entry)it.next();
+	        if(pvIndex == pvCount) {
+		        pvs = (ArrayList<PermissibleValueV2TransferObject>) pair.getValue();
+		        for(int i=0; i<pvs.size(); i++) {
+			        pv = pvs.get(i);
+			        System.out.println(pair.getKey() + " = " + pv.getValue());
+			        if(pvIndex == pvCount) {
+			        	ret = (ValueMeaningV2TransferObject) pv.getValueMeaningV2();
+			        	found = true;
+			        	break;
+			        }
+			        pvCount++;
+		        }
+		        if(found) {
+		        	break;
+		        }
+	        }
+	        vvCount++;
+	        pvCount = 0;
+	    }
+		
+		return ret;
+	}
 }

@@ -583,7 +583,7 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 		for (QuestionDescriptor question : questions) {
 			if (question.isSkip()) continue;
 			
-			QuestionTransferObject questdto = DomainObjectTranslator.translateIntoQuestionDTO(question, form);	//JR417 check vp_idseq here!!!
+			QuestionTransferObject questdto = DomainObjectTranslator.translateIntoQuestionDTO(question, form);
 			
 			questdto.setDisplayOrder(idx++);
 			questdto.setContext(formdto.getContext());
@@ -599,10 +599,7 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			
 			createQuestionInstruction(newQuestdto, moduledto, question.getInstruction());
 			
-			
-			
 			createQuestionValidValues(question, form, newQuestdto, moduledto, formdto, pvDtos);		//JR417 entry point
-			
 		}
 		
 		
@@ -640,18 +637,18 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			//get the correct vv's pvdto and set vv's vdPermissibleValueSeqid
 			PermissibleValueV2TransferObject pv = null;
 			try {
-				pv = FormLoaderHelper.getValidValuePV(vValue, pvDtos);	//JR417 TBD need to fix the key matching algo here!!!
+				pv = FormLoaderHelper.getValidValuePV(vValue, pvDtos);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			if(pv != null) {
-				String vdPermissibleValueSeqid = pv.getIdseq();	//JR417 c.f. FormLoaderHelper.populateQuestionsPV(form, repository)
+				String vdPermissibleValueSeqid = pv.getIdseq();	//c.f. FormLoaderHelper.populateQuestionsPV(form, repository)
 				vValue.setVdPermissibleValueSeqid(vdPermissibleValueSeqid);  //set the vdpvIdseq!
 				//vValue.setPreferredName(pv.getValueMeaningV2().getPublicId() + "v" + pv.getValueMeaningV2().getVersion());
 			} //what happend if it is null? do we need to check?
 			//JR417 end
-			FormValidValueTransferObject fvv = translateIntoValidValueDto(vValue, newQuestdto, moduledto, formdto, idx);	 //JR417 vValue's vdpvseqid / vp_idseq is already empty here!
+			FormValidValueTransferObject fvv = translateIntoValidValueDto(vValue, newQuestdto, moduledto, formdto, idx);	 //JR417 vValue's vdpvseqid / vp_idseq is NOT empty anymore (fixed in this ticket)
 			
 			fvv.setDisplayOrder(idx);
 			
@@ -669,7 +666,7 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 				//vValue.setPreferredName("JAMES_PREFEREDNAME_123");   //JR417
 //            	formValidValueV2Dao.updateValueMeaning(vvSeqid, vValue.getMeaningText(), vValue.getDescription(), moduledto.getCreatedBy());	//JR417 already called by createFormValidValueComponent (see below)
 				if(count == 1) {	//assuming that only one match!
-					formValidValueV2Dao.createFormValidValueComponent(fvv,  vvSeqid, moduledto.getCreatedBy());	//JR417 new call! is version empty here?
+					formValidValueV2Dao.createFormValidValueComponent(fvv,  vvSeqid, moduledto.getCreatedBy());	//JR417 new call!
 
 					//JR417 TBD not sure if the following should be in formValidValueV2Dao.createFormValidValueComponent or outside!!!
 //				    createNewValidValues(formValidValueV2Dao, formValidValueInstructionV2Dao,
