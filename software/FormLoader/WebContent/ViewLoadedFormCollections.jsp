@@ -21,7 +21,7 @@
 
 <s:if test="collectionList.size() > 0">
 <p>You have previously loaded <s:property value="collectionList.size()"/> Collections. Click on any collection field to view forms in a Collection.<br>
-To Unload,  select forms in <b>Collection View</b> or <b>Unloadable Form View</b> tab, and click the <b>Unload Forms</b> button.
+To Unload,  select forms in <b>Collection View</b> or <b>Forms for Unloading</b> tab, and click the <b>Unload Forms</b> button.
 <br><br>
 Only forms eligible for unloading have checkboxes available for selection. <a href="#" title="A form is eligible for unload if
 1. it was successfully loaded previously into caDSR database.
@@ -39,13 +39,13 @@ Unload means the form will have a new workflow status RETIRED UNLOADED but the f
 <table><tr>
 <td>Filter:</td>
 <td><input type="text" id="filter" placeholder="Type to search"></td> 
-<td>Filter the Collection list in Collection View or Form list in Unloadable Form View, by typing into the filter input field</td>
+<td>Filter the Collection list in Collection View or Form list in Forms for Unloading, by typing into the filter input field</td>
 </tr></table>
 
 <div id="tabs">
 <ul>
 <li><a href="#Collection_View">Collection View</a></li>
-<li><a href="#Form_View">Unloadable Form View</a></li>
+<li><a href="#Form_View">Forms for Unloading</a></li>
 </ul>
 
  <div id="Collection_View">
