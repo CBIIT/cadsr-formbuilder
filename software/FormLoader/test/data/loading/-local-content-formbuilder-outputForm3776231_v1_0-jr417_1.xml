@@ -1,0 +1,1907 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms>
+    <collectionName>Content Validation Unit Test 1</collectionName>
+    <collectionDescription>Form with enumerated VD Test Cases 9/24/14</collectionDescription>
+<!--Transformed with FinalFormCartTransformv33.xsl and validated with FormCartv21.xsd --><form>
+   <context>TEST</context>
+   <createdBy>GUEST</createdBy>
+   <dateCreated>2013-06-07T10:17:49.0</dateCreated>
+   <longName>abcde</longName>
+   <preferredDefinition>12345</preferredDefinition>
+   <publicID>3776231</publicID>
+   <version>1.0</version>
+   <workflowStatusName>DRAFT NEW</workflowStatusName>
+   <categoryName>Treatment</categoryName>
+   <type>CRF</type>
+   <module>
+      <displayOrder>0</displayOrder>
+      <maximumModuleRepeat>0</maximumModuleRepeat>
+      <longName>abcde-m1</longName>
+      <instruction>
+         <text>do nothing at first</text>
+      </instruction>
+      <preferredDefinition>abcde-m1</preferredDefinition>
+      <publicID>3776232</publicID>
+      <version>1.0</version>
+      <usageCategory>
+         <usageType>None</usageType>
+         <rule>do nothing at first</rule>
+      </usageCategory>
+      <question>
+         <publicID>3776251</publicID>
+         <version>1.0</version>
+         <isDerived>false</isDerived>
+         <displayOrder>0</displayOrder>
+         <dateCreated>2013-06-07T00:00:00.0</dateCreated>
+         <dateModified>2013-06-07T00:00:00.0</dateModified>
+         <questionText>Given Name</questionText>
+         <isEditable>No</isEditable>
+         <isMandatory>Yes</isMandatory>
+         <multiValue>No</multiValue>
+         <dataElement>
+            <longName>Person Given/First Name</longName>
+            <shortName>PERSON_FIRST_NM</shortName>
+            <publicID>2179589</publicID>
+            <version>2.0</version>
+            <context>DCP</context>
+            <workflowStatusName>RELEASED</workflowStatusName>
+            <preferredDefinition>A word or group of words indicating a person's first (personal or given) name; the name that precedes the surname. Synonym = Given Name.</preferredDefinition>
+            <valueDomain>
+               <longName>Individuals Name</longName>
+               <publicID>2018284</publicID>
+               <version>1.0</version>
+               <type>NonEnumerated</type>
+               <workflowStatusName>RELEASED</workflowStatusName>
+               <datatypeName>CHARACTER</datatypeName>
+               <maximumLengthNumber>100</maximumLengthNumber>
+               <minimumLengthNumber>1</minimumLengthNumber>
+            </valueDomain>
+            <referenceDocument>
+               <name>Given Name</name>
+               <type>DESCRIPTION</type>
+               <context>Given Name</context>
+               <doctext>Given Name</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Given Name</name>
+               <type>Preferred Question Text</type>
+               <context>Given Name</context>
+               <doctext>Given Name</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>ISA-TAB-Nano (Study)</name>
+               <type>Alternate Question Text</type>
+               <context>ISA-TAB-Nano (Study)</context>
+               <doctext>Study Person First Name</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>ISA-TAB-Nano (Investigation)</name>
+               <type>Alternate Question Text</type>
+               <context>ISA-TAB-Nano (Investigation)</context>
+               <doctext>Investigation Person First Name</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>caBIG eCRF Participant ID Text</name>
+               <type>Alternate Question Text</type>
+               <context>caBIG eCRF Participant ID Text</context>
+               <doctext>Participant First Name</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Recipient first name:</name>
+               <type>Alternate Question Text</type>
+               <context>Recipient first name:</context>
+               <doctext>Recipient first name:</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>BRIDG mapping path for CDE:2179589</name>
+               <type>BRIDG Mapping Path</type>
+               <context>BRIDG mapping path for CDE:2179589</context>
+               <doctext>"Person.name WHERE Person &gt; Performer &gt; PerformedActivity &gt; DefinedActivity.nameCode = ""collect followup information"" AND Person.name(EN.ENXP).partType = ""given"""</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>First Name:</name>
+               <type>Application Standard Question Text</type>
+               <context>First Name:</context>
+               <doctext>First Name:</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>First Name:</name>
+               <type>Alternate Question Text</type>
+               <context>First Name:</context>
+               <doctext>First Name:</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Newborn's First Name</name>
+               <type>Alternate Question Text</type>
+               <context>Newborn's First Name</context>
+               <doctext>Newborn's First Name</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Mother's First Name</name>
+               <type>Alternate Question Text</type>
+               <context>Mother's First Name</context>
+               <doctext>Mother's First Name</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Father's First Name</name>
+               <type>Alternate Question Text</type>
+               <context>Father's First Name</context>
+               <doctext>Father's First Name</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Pediatrician's First Name</name>
+               <type>Alternate Question Text</type>
+               <context>Pediatrician's First Name</context>
+               <doctext>Pediatrician's First Name</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Attending Health Care Provider's First Name</name>
+               <type>Alternate Question Text</type>
+               <context>Attending Health Care Provider's First Name</context>
+               <doctext>Attending Health Care Provider's First Name</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>CRF TEXT10</name>
+               <type>Alternate Question Text</type>
+               <context>CRF TEXT10</context>
+               <doctext>Given/First Name</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>First Name</name>
+               <type>Alternate Question Text</type>
+               <context>First Name</context>
+               <doctext>First Name</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <cdeBrowserLink>https://cdebrowser.nci.nih.gov/CDEBrowser/search?elementDetails=9%26FirstTimer=0%26PageId=ElementDetailsGroup&amp;publicId=2179589&amp;version=2.0</cdeBrowserLink>
+         </dataElement>
+      </question>
+      <question>
+         <publicID>3776252</publicID>
+         <version>1.0</version>
+         <isDerived>false</isDerived>
+         <displayOrder>1</displayOrder>
+         <dateCreated>2013-06-07T00:00:00.0</dateCreated>
+         <dateModified>2013-06-07T00:00:00.0</dateModified>
+         <questionText>Family Name</questionText>
+         <isEditable>No</isEditable>
+         <isMandatory>Yes</isMandatory>
+         <multiValue>No</multiValue>
+         <dataElement>
+            <longName>Person Family/Last Name</longName>
+            <shortName>PERSON_FAMILY_NM</shortName>
+            <publicID>2179591</publicID>
+            <version>2.0</version>
+            <context>DCP</context>
+            <workflowStatusName>RELEASED</workflowStatusName>
+            <preferredDefinition>A means of identifying an individual by using a word or group of words indicating a person's last (family) name. Synonym = Last Name, Surname.</preferredDefinition>
+            <valueDomain>
+               <longName>Individuals Name</longName>
+               <publicID>2018284</publicID>
+               <version>1.0</version>
+               <type>NonEnumerated</type>
+               <workflowStatusName>RELEASED</workflowStatusName>
+               <datatypeName>CHARACTER</datatypeName>
+               <maximumLengthNumber>100</maximumLengthNumber>
+               <minimumLengthNumber>1</minimumLengthNumber>
+            </valueDomain>
+            <referenceDocument>
+               <name>Family Name</name>
+               <type>Preferred Question Text</type>
+               <context>Family Name</context>
+               <doctext>Family Name</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>56135</name>
+               <type>Associations</type>
+               <context>56135</context>
+               <doctext>650696</doctext>
+               <languageName>ENGLISH</languageName>
+               <URL>https://231649.gov</URL>
+            </referenceDocument>
+            <referenceDocument>
+               <name>ISA-TAB-Nano (Investigation)</name>
+               <type>Alternate Question Text</type>
+               <context>ISA-TAB-Nano (Investigation)</context>
+               <doctext>Investigation Person Last Name</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>ISA-TAB-Nano (Study)</name>
+               <type>Alternate Question Text</type>
+               <context>ISA-TAB-Nano (Study)</context>
+               <doctext>Study Person Last Name</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>caBIG eCRF Participant ID Text</name>
+               <type>Alternate Question Text</type>
+               <context>caBIG eCRF Participant ID Text</context>
+               <doctext>Participant Last Name</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Last Name:</name>
+               <type>Alternate Question Text</type>
+               <context>Last Name:</context>
+               <doctext>Last Name:</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Recipient last name:</name>
+               <type>Alternate Question Text</type>
+               <context>Recipient last name:</context>
+               <doctext>Recipient last name:</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>BRIDG mapping path for CDE:2179591</name>
+               <type>BRIDG Mapping Path</type>
+               <context>BRIDG mapping path for CDE:2179591</context>
+               <doctext>"Person.name WHERE Person &gt; Performer &gt; PerformedActivity &gt; DefinedActivity.nameCode = ""collect folowup information"" AND Person.name(EN.ENXP).partType = ""family"""</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Last Name:</name>
+               <type>Application Standard Question Text</type>
+               <context>Last Name:</context>
+               <doctext>Last Name:</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Attending Health Care Provider Last Name</name>
+               <type>Alternate Question Text</type>
+               <context>Attending Health Care Provider Last Name</context>
+               <doctext>Attending Health Care Provider's Last Name</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Pediatrician Last Name</name>
+               <type>Alternate Question Text</type>
+               <context>Pediatrician Last Name</context>
+               <doctext>Pediatrician's Last Name</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Father Last Name</name>
+               <type>Alternate Question Text</type>
+               <context>Father Last Name</context>
+               <doctext>Father's Last Name</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Mother Last Name</name>
+               <type>Alternate Question Text</type>
+               <context>Mother Last Name</context>
+               <doctext>Mother's Last Name</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Newborn Last Name</name>
+               <type>Alternate Question Text</type>
+               <context>Newborn Last Name</context>
+               <doctext>Newborn's Last Name</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>CRF TEXT8</name>
+               <type>Alternate Question Text</type>
+               <context>CRF TEXT8</context>
+               <doctext>Family/Last Name</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Last Name</name>
+               <type>Alternate Question Text</type>
+               <context>Last Name</context>
+               <doctext>Last Name</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <cdeBrowserLink>https://cdebrowser.nci.nih.gov/CDEBrowser/search?elementDetails=9%26FirstTimer=0%26PageId=ElementDetailsGroup&amp;publicId=2179591&amp;version=2.0</cdeBrowserLink>
+         </dataElement>
+      </question>
+      <question>
+         <publicID>3776253</publicID>
+         <version>1.0</version>
+         <isDerived>false</isDerived>
+         <displayOrder>2</displayOrder>
+         <dateCreated>2013-06-07T00:00:00.0</dateCreated>
+         <dateModified>2013-06-07T00:00:00.0</dateModified>
+         <questionText>What level of education have you completed?</questionText>
+         <isEditable>Yes</isEditable>
+         <isMandatory>No</isMandatory>
+         <multiValue>No</multiValue>
+         <dataElement>
+            <longName>Person Education Level Person Education Level Type</longName>
+            <shortName>2651173v1.0:2733218v1.0</shortName>
+            <publicID>2733252</publicID>
+            <version>1.0</version>
+            <context>TEST</context>
+            <workflowStatusName>RELEASED</workflowStatusName>
+            <preferredDefinition>A demographic parameter indicating the number of years of schooling or the highest level of achievement at school by a human being._Person; a human being._A demographic parameter indicating the number of years of schooling or the highest level of achievement at school._Something distinguishable as an identifiable class based on common qualities.</preferredDefinition>
+            <valueDomain>
+               <longName>Person Education Level Type</longName>
+               <publicID>2733218</publicID>
+               <version>1.0</version>
+               <type>Enumerated</type>
+               <workflowStatusName>RETIRED WITHDRAWN</workflowStatusName>
+               <datatypeName>NUMBER</datatypeName>
+               <decimalPlace>1</decimalPlace>
+               <highValueNumber>12</highValueNumber>
+               <lowValueNumber>1</lowValueNumber>
+               <maximumLengthNumber>10</maximumLengthNumber>
+               <minimumLengthNumber>5</minimumLengthNumber>
+               <valueDomainConcept>
+                  <primaryConceptName>Education Level</primaryConceptName>
+                  <primaryConceptCode>C17953</primaryConceptCode>
+                  <nciTermBrowserLink>http://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI%20Thesaurus&amp;code=C17953</nciTermBrowserLink>
+               </valueDomainConcept>
+               <permissibleValue>
+                  <value>10th Grade</value>
+                  <valueMeaning>
+                     <publicID>2733219</publicID>
+                     <version>1.0</version>
+                     <longName>10th Grade Completion</longName>
+                     <preferredDefinition>Indicates that 10th grade is the highest level of educational achievement</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>11th Grade Completion [0]</value>
+                  <valueMeaning>
+                     <publicID>2733220</publicID>
+                     <version>1.0</version>
+                     <longName>11th Grade Completion</longName>
+                     <preferredDefinition>Indicates that 11th grade is the highest level of educational achievement</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>12th Grade Completion, No Diploma [0]</value>
+                  <valueMeaning>
+                     <publicID>2733221</publicID>
+                     <version>1.0</version>
+                     <longName>12th Grade Completion, No Diploma </longName>
+                     <preferredDefinition>Indicates that a person was in school through 12th grade but that they did not receive a high school diploma.</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>1st Grade Completion [0]</value>
+                  <valueMeaning>
+                     <publicID>2733222</publicID>
+                     <version>1.0</version>
+                     <longName>1st Grade Completion</longName>
+                     <preferredDefinition>Indicates that 1st grade is the highest level of educational achievement.</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>2nd Grade Completion [0]</value>
+                  <valueMeaning>
+                     <publicID>2733223</publicID>
+                     <version>1.0</version>
+                     <longName>2nd Grade Completion</longName>
+                     <preferredDefinition>Indicates that 2nd grade is the highest level of educational achievement.</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>3rd Grade Completion [0]</value>
+                  <valueMeaning>
+                     <publicID>2733224</publicID>
+                     <version>1.0</version>
+                     <longName>3rd Grade Completion</longName>
+                     <preferredDefinition>Indicates that 3rd grade is the highest level of educational achievement.</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>4th Grade Completion [0]</value>
+                  <valueMeaning>
+                     <publicID>2733225</publicID>
+                     <version>1.0</version>
+                     <longName>4th Grade Completion</longName>
+                     <preferredDefinition>Indicates that 4th grade is the highest level of educational achievement.</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>5th Grade Completion [0]</value>
+                  <valueMeaning>
+                     <publicID>2733226</publicID>
+                     <version>1.0</version>
+                     <longName>5th Grade Completion</longName>
+                     <preferredDefinition>Indicates that 5th grade is the highest level of educational achievement.</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>6th Grade Completion [0]</value>
+                  <valueMeaning>
+                     <publicID>2733227</publicID>
+                     <version>1.0</version>
+                     <longName>6th Grade Completion</longName>
+                     <preferredDefinition>Indicates that 6th grade is the highest level of educational achievement.</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>7th Grade Completion [0]</value>
+                  <valueMeaning>
+                     <publicID>2733228</publicID>
+                     <version>1.0</version>
+                     <longName>7th Grade Completion</longName>
+                     <preferredDefinition>Indicates that 7th grade is the highest level of educational achievement</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>8th Grade Completion [0]</value>
+                  <valueMeaning>
+                     <publicID>2733229</publicID>
+                     <version>1.0</version>
+                     <longName>8th Grade Completion</longName>
+                     <preferredDefinition>Indicates that 8th grade is the highest level of educational achievement</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>9th Grade Completion [0]</value>
+                  <valueMeaning>
+                     <publicID>2733230</publicID>
+                     <version>1.0</version>
+                     <longName>9th Grade Completion</longName>
+                     <preferredDefinition>Indicates that 9th grade is the highest level of educational achievement</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>Academic Doctorate Degree Completion [0]</value>
+                  <valueMeaning>
+                     <publicID>2688040</publicID>
+                     <version>1.0</version>
+                     <longName>Academic Doctorate Degree Completion</longName>
+                     <preferredDefinition>Indicates that a person has received a degree the highest award earned for graduate study.</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>Associate Academic Degree Completion [0]</value>
+                  <valueMeaning>
+                     <publicID>2733231</publicID>
+                     <version>1.0</version>
+                     <longName>Associate Academic Degree Completion</longName>
+                     <preferredDefinition>Indicates that a person has received a degree from a 2 year college program.</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>Bachelor's Degree Completion [0]</value>
+                  <valueMeaning>
+                     <publicID>2688041</publicID>
+                     <version>1.0</version>
+                     <longName>Bachelor's Degree Completion</longName>
+                     <preferredDefinition>Indicates that a person has received a degree for successful completion of a program of studies that normally requires at least 4-5 years of full-time equivalent college-level work.</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>High School Completion [0]</value>
+                  <valueMeaning>
+                     <publicID>2733232</publicID>
+                     <version>1.0</version>
+                     <longName>High School Completion</longName>
+                     <preferredDefinition>Indicates that a person has attended high school and has received a high school diploma.</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>Master's Degree Completion [0]</value>
+                  <valueMeaning>
+                     <publicID>2688039</publicID>
+                     <version>1.0</version>
+                     <longName>Master's Degree Completion</longName>
+                     <preferredDefinition>Indicates that a person has received a degree for completion of at least one year of prescribed study beyond the bachelor's degree.</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>Professional Doctorate Degree Completion [0]</value>
+                  <valueMeaning>
+                     <publicID>2688038</publicID>
+                     <version>1.0</version>
+                     <longName>Professional Doctorate Degree Completion</longName>
+                     <preferredDefinition>Indicates that a person has received a degree allowing them to practice a profession, such as law, medicine, music, or ministry.</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>Some College Completion [0]</value>
+                  <valueMeaning>
+                     <publicID>2733233</publicID>
+                     <version>1.0</version>
+                     <longName>Some College Completion</longName>
+                     <preferredDefinition>Indicates that a person has attended college but that they did not receive any degree.</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+            </valueDomain>
+            <referenceDocument>
+               <name>What level of education have</name>
+               <type>Preferred Question Text</type>
+               <context>What level of education have</context>
+               <doctext>What level of education have you completed?</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <cdeBrowserLink>https://cdebrowser.nci.nih.gov/CDEBrowser/search?elementDetails=9%26FirstTimer=0%26PageId=ElementDetailsGroup&amp;publicId=2733252&amp;version=1.0</cdeBrowserLink>
+         </dataElement>
+         <validValue>
+            <displayOrder>0</displayOrder>
+            <value>1st Grade Completion [0]</value>
+            <meaningText>1st Grade Completion</meaningText>
+            <description>Indicates that 1st grade is the highest level of educational achievement.</description>
+            <valueMeaning>
+               <publicID>2733222</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>1</displayOrder>
+            <value>2nd Grade Completion [0]</value>
+            <meaningText>2nd Grade Completion</meaningText>
+            <description>Indicates that 2nd grade is the highest level of educational achievement.</description>
+            <valueMeaning>
+               <publicID>2733223</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>2</displayOrder>
+            <value>3rd Grade Completion [0]</value>
+            <meaningText>3rd Grade Completion</meaningText>
+            <description>Indicates that 3rd grade is the highest level of educational achievement.</description>
+            <valueMeaning>
+               <publicID>2733224</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>3</displayOrder>
+            <value>4th Grade Completion [0]</value>
+            <meaningText>4th Grade Completion</meaningText>
+            <description>Indicates that 4th grade is the highest level of educational achievement.</description>
+            <valueMeaning>
+               <publicID>2733225</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>4</displayOrder>
+            <value>5th Grade Completion [0]</value>
+            <meaningText>5th Grade Completion</meaningText>
+            <description>Indicates that 5th grade is the highest level of educational achievement.</description>
+            <valueMeaning>
+               <publicID>2733226</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>5</displayOrder>
+            <value>6th Grade Completion [0]</value>
+            <meaningText>6th Grade Completion</meaningText>
+            <description>Indicates that 6th grade is the highest level of educational achievement.</description>
+            <valueMeaning>
+               <publicID>2733227</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>6</displayOrder>
+            <value>7th Grade Completion [0]</value>
+            <meaningText>7th Grade Completion</meaningText>
+            <description>Indicates that 7th grade is the highest level of educational achievement</description>
+            <valueMeaning>
+               <publicID>2733228</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>7</displayOrder>
+            <value>8th Grade Completion [0]</value>
+            <meaningText>8th Grade Completion</meaningText>
+            <description>Indicates that 8th grade is the highest level of educational achievement</description>
+            <valueMeaning>
+               <publicID>2733229</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>8</displayOrder>
+            <value>9th Grade Completion [0]</value>
+            <meaningText>9th Grade Completion</meaningText>
+            <description>Indicates that 9th grade is the highest level of educational achievement</description>
+            <valueMeaning>
+               <publicID>2733230</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>9</displayOrder>
+            <value>Academic Doctorate Degree Completion [0]</value>
+            <meaningText>Academic Doctorate Degree Completion</meaningText>
+            <description>Indicates that a person has received a degree the highest award earned for graduate study.</description>
+            <valueMeaning>
+               <publicID>2688040</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>10</displayOrder>
+            <value>Associate Academic Degree Completion [0]</value>
+            <meaningText>Associate Academic Degree Completion</meaningText>
+            <description>Indicates that a person has received a degree from a 2 year college program.</description>
+            <valueMeaning>
+               <publicID>2733231</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>11</displayOrder>
+            <value>Bachelor's Degree Completion [0]</value>
+            <meaningText>Bachelor's Degree Completion</meaningText>
+            <description>Indicates that a person has received a degree for successful completion of a program of studies that normally requires at least 4-5 years of full-time equivalent college-level work.</description>
+            <valueMeaning>
+               <publicID>2688041</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>12</displayOrder>
+            <value>High School Completion [0]</value>
+            <meaningText>High School Completion</meaningText>
+            <description>Indicates that a person has attended high school and has received a high school diploma.</description>
+            <valueMeaning>
+               <publicID>2733232</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>13</displayOrder>
+            <value>Master's Degree Completion [0]</value>
+            <meaningText>Master's Degree Completion</meaningText>
+            <description>Indicates that a person has received a degree for completion of at least one year of prescribed study beyond the bachelor's degree.</description>
+            <valueMeaning>
+               <publicID>2688039</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>14</displayOrder>
+            <value>Professional Doctorate Degree Completion [0]</value>
+            <meaningText>Professional Doctorate Degree Completion</meaningText>
+            <description>Indicates that a person has received a degree allowing them to practice a profession, such as law, medicine, music, or ministry.</description>
+            <valueMeaning>
+               <publicID>2688038</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>15</displayOrder>
+            <value>Some College Completion [0]</value>
+            <meaningText>Some College Completion</meaningText>
+            <description>Indicates that a person has attended college but that they did not receive any degree.</description>
+            <valueMeaning>
+               <publicID>2733233</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+      </question>
+      <question>
+         <publicID>3776273</publicID>
+         <version>1.0</version>
+         <isDerived>false</isDerived>
+         <displayOrder>3</displayOrder>
+         <dateCreated>2013-06-07T00:00:00.0</dateCreated>
+         <dateModified>2013-06-07T00:00:00.0</dateModified>
+         <questionText>Data Element Test Method Diameter does not have Preferred Question Text</questionText>
+         <isEditable>Yes</isEditable>
+         <isMandatory>No</isMandatory>
+         <multiValue>No</multiValue>
+         <dataElement>
+            <longName>Test Method Diameter</longName>
+            <shortName>Test_Meth_Diameter</shortName>
+            <publicID>2184611</publicID>
+            <version>1.0</version>
+            <context>TEST</context>
+            <workflowStatusName>DRAFT NEW</workflowStatusName>
+            <preferredDefinition>A method of examination, as to determine the presence or absence of a definite disease or of some substance in any of the fluids, tissues, or excretions of the body, or to determine the presence or degree of a psychological or behavioral trait. (from STED26)_Involvement_The length of a straight line that extends from one edge of a tumor or other object, through its center and to the opposite edge. It is usually used to measure the size of round or spherical shapes.</preferredDefinition>
+            <valueDomain>
+               <longName>Diameter Millimeter Number</longName>
+               <publicID>2019279</publicID>
+               <version>1.0</version>
+               <type>NonEnumerated</type>
+               <workflowStatusName>RELEASED</workflowStatusName>
+               <datatypeName>NUMBER</datatypeName>
+               <decimalPlace>0</decimalPlace>
+               <maximumLengthNumber>5</maximumLengthNumber>
+            </valueDomain>
+            <cdeBrowserLink>https://cdebrowser.nci.nih.gov/CDEBrowser/search?elementDetails=9%26FirstTimer=0%26PageId=ElementDetailsGroup&amp;publicId=2184611&amp;version=1.0</cdeBrowserLink>
+         </dataElement>
+      </question>
+      <question>
+         <publicID>3776274</publicID>
+         <version>1.0</version>
+         <isDerived>true</isDerived>
+         <displayOrder>4</displayOrder>
+         <dateCreated>2013-06-07T00:00:00.0</dateCreated>
+         <dateModified>2013-06-07T00:00:00.0</dateModified>
+         <questionText>Body Mass Index (BMI)</questionText>
+         <isEditable>No</isEditable>
+         <isMandatory>No</isMandatory>
+         <multiValue>No</multiValue>
+         <dataElement>
+            <longName>Person Body Mass Index Value</longName>
+            <shortName>PRSN_BMI_VAL</shortName>
+            <publicID>2006410</publicID>
+            <version>3.0</version>
+            <context>SPOREs</context>
+            <workflowStatusName>RELEASED</workflowStatusName>
+            <preferredDefinition>A calculated numerical quantity that represents an individual's weight to height ratio. [Manually-curated]</preferredDefinition>
+            <valueDomain>
+               <longName>Body Mass Index Value</longName>
+               <publicID>2018654</publicID>
+               <version>2.0</version>
+               <type>NonEnumerated</type>
+               <workflowStatusName>RELEASED</workflowStatusName>
+               <datatypeName>NUMBER</datatypeName>
+               <decimalPlace>1</decimalPlace>
+               <maximumLengthNumber>4</maximumLengthNumber>
+               <UOMName>kg/m2</UOMName>
+            </valueDomain>
+            <dataElementDerivation>
+               <componentDataElement>
+                  <usageCategory>
+                     <usageType>Mandatory</usageType>
+                  </usageCategory>
+                  <displayOrder>0</displayOrder>
+                  <dataElement>
+                     <publicID>0</publicID>
+                     <version>0</version>
+                     <valueDomain>
+                        <shortName>PRSN_BMI_VAL</shortName>
+                        <type>NonEnumerated</type>
+                        <workflowStatusName>RELEASED</workflowStatusName>
+                        <valueDomainConcept>
+                           <nciTermBrowserLink>http://blankNode</nciTermBrowserLink>
+                        </valueDomainConcept>
+                     </valueDomain>
+                  </dataElement>
+               </componentDataElement>
+            </dataElementDerivation>
+            <referenceDocument>
+               <name>Body Mass Index (BMI)</name>
+               <type>Preferred Question Text</type>
+               <context>Body Mass Index (BMI)</context>
+               <doctext>Body Mass Index (BMI)</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>1-Admin Note</name>
+               <type>NOTE</type>
+               <context>1-Admin Note</context>
+               <doctext>On Aug. 1 it was pointed out that there was a question mark where there should have been an Apostrophe in the defintion. I fixed it.</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>CRF TEXT1</name>
+               <type>Alternate Question Text</type>
+               <context>CRF TEXT1</context>
+               <doctext>Body Mass Index</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>DCP Document Text</name>
+               <type>Alternate Question Text</type>
+               <context>DCP Document Text</context>
+               <doctext>BMI</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <cdeBrowserLink>https://cdebrowser.nci.nih.gov/CDEBrowser/search?elementDetails=9%26FirstTimer=0%26PageId=ElementDetailsGroup&amp;publicId=2006410&amp;version=3.0</cdeBrowserLink>
+         </dataElement>
+      </question>
+      <question>
+         <publicID>3776275</publicID>
+         <version>1.0</version>
+         <isDerived>false</isDerived>
+         <displayOrder>5</displayOrder>
+         <dateCreated>2013-06-07T00:00:00.0</dateCreated>
+         <dateModified>2013-06-07T00:00:00.0</dateModified>
+         <questionText>ISO 639-2 Language Code</questionText>
+         <isEditable>Yes</isEditable>
+         <isMandatory>No</isMandatory>
+         <multiValue>No</multiValue>
+         <dataElement>
+            <longName>Person Language Code</longName>
+            <shortName>PRSN_LANG_CD</shortName>
+            <publicID>2435968</publicID>
+            <version>1.0</version>
+            <context>NCIP</context>
+            <workflowStatusName>RELEASED</workflowStatusName>
+            <preferredDefinition>A three character system of symbols and rules that represents the name of a means of communication used by a person.</preferredDefinition>
+            <valueDomain>
+               <longName>Language Code</longName>
+               <publicID>2435966</publicID>
+               <version>1.0</version>
+               <type>NonEnumerated</type>
+               <workflowStatusName>RELEASED</workflowStatusName>
+               <datatypeName>CHARACTER</datatypeName>
+               <maximumLengthNumber>3</maximumLengthNumber>
+            </valueDomain>
+            <referenceDocument>
+               <name>ISO 639-2 Language Code</name>
+               <type>Preferred Question Text</type>
+               <context>ISO 639-2 Language Code</context>
+               <doctext>ISO 639-2 Language Code</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>SO 639-2 Language name codes</name>
+               <type>VALID_VALUE_SOURCE</type>
+               <context>SO 639-2 Language name codes</context>
+               <doctext>SO 639-2 Language name codes</doctext>
+               <languageName>ENGLISH</languageName>
+               <URL>http://www.loc.gov/standards/iso639-2/php/English_list.php</URL>
+            </referenceDocument>
+            <cdeBrowserLink>https://cdebrowser.nci.nih.gov/CDEBrowser/search?elementDetails=9%26FirstTimer=0%26PageId=ElementDetailsGroup&amp;publicId=2435968&amp;version=1.0</cdeBrowserLink>
+         </dataElement>
+      </question>
+      <question>
+         <publicID>3776276</publicID>
+         <version>1.0</version>
+         <isDerived>false</isDerived>
+         <displayOrder>6</displayOrder>
+         <dateCreated>2013-06-07T00:00:00.0</dateCreated>
+         <dateModified>2013-06-07T00:00:00.0</dateModified>
+         <questionText>Patient's Date of Birth</questionText>
+         <isEditable>Yes</isEditable>
+         <isMandatory>No</isMandatory>
+         <multiValue>No</multiValue>
+         <dataElement>
+            <longName>Person Birth Date</longName>
+            <shortName>PER_BIR_DT</shortName>
+            <publicID>793</publicID>
+            <version>5.1</version>
+            <context>CTEP</context>
+            <workflowStatusName>RELEASED</workflowStatusName>
+            <preferredDefinition>the month, day and year on which the person was born</preferredDefinition>
+            <valueDomain>
+               <longName>Date</longName>
+               <publicID>2018550</publicID>
+               <version>1.0</version>
+               <type>NonEnumerated</type>
+               <workflowStatusName>RELEASED</workflowStatusName>
+               <datatypeName>DATE</datatypeName>
+               <formatName>MM/DD/YYYY</formatName>
+               <maximumLengthNumber>8</maximumLengthNumber>
+            </valueDomain>
+            <referenceDocument>
+               <name>Patient DOB</name>
+               <type>Alternate Question Text</type>
+               <context>Patient DOB</context>
+               <doctext>Patient DOB</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>CRF Text 9</name>
+               <type>Alternate Question Text</type>
+               <context>CRF Text 9</context>
+               <doctext>What was the date of birth</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Source</name>
+               <type>DATA_ELEMENT_SOURCE</type>
+               <context>Source</context>
+               <doctext>Data element and all values comply with Clinical Data Update System (CDUS) v3.0 Release 2; for CDUS reporting, only submit the year and month of the patient's birth (format: YYYYMM), do not submit the day of birth.</doctext>
+               <languageName>ENGLISH</languageName>
+               <URL>http://ctep.cancer.gov/reporting/cdus.html</URL>
+            </referenceDocument>
+            <referenceDocument>
+               <name>CRF Text8</name>
+               <type>Alternate Question Text</type>
+               <context>CRF Text8</context>
+               <doctext>Birthdate</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>MMQL Question Text</name>
+               <type>Alternate Question Text</type>
+               <context>MMQL Question Text</context>
+               <doctext>What is your date of birth?</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>MMQL Question Number</name>
+               <type>LABEL</type>
+               <context>MMQL Question Number</context>
+               <doctext>A1.</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>COG CRF Text 1</name>
+               <type>Alternate Question Text</type>
+               <context>COG CRF Text 1</context>
+               <doctext>DOB:</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>DCP Text 1</name>
+               <type>Alternate Question Text</type>
+               <context>DCP Text 1</context>
+               <doctext>Birth Date:</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>2007 DICOM Standard</name>
+               <type>REFERENCE</type>
+               <context>2007 DICOM Standard</context>
+               <doctext>2007 DICOM Standard; Parts 3, 5 &amp; 6; Detailed in Part 3 paragraph C.2.3 Patient Demographic Module</doctext>
+               <languageName>ENGLISH</languageName>
+               <URL>http://medical.nema.org/dicom/2007/</URL>
+            </referenceDocument>
+            <referenceDocument>
+               <name>DateOfBirth</name>
+               <type>Alternate Question Text</type>
+               <context>DateOfBirth</context>
+               <doctext>DateOfBirth</doctext>
+            </referenceDocument>
+            <referenceDocument>
+               <name>FBPP Question Text</name>
+               <type>Alternate Question Text</type>
+               <context>FBPP Question Text</context>
+               <doctext>Date of Birth</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Mother Date of Birth</name>
+               <type>Alternate Question Text</type>
+               <context>Mother Date of Birth</context>
+               <doctext>Mother's Date of Birth</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Father Date of Birth</name>
+               <type>Alternate Question Text</type>
+               <context>Father Date of Birth</context>
+               <doctext>Father's Date of Birth</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Newborn Date of  Birth</name>
+               <type>Alternate Question Text</type>
+               <context>Newborn Date of  Birth</context>
+               <doctext>Newborn's Date of Birth</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>NINDS CDE Project</name>
+               <type>REFERENCE</type>
+               <context>NINDS CDE Project</context>
+               <doctext>NINDS CDE Project</doctext>
+               <languageName>ENGLISH</languageName>
+               <URL>http://www.commondataelements.ninds.nih.gov/</URL>
+            </referenceDocument>
+            <referenceDocument>
+               <name>CRF Text</name>
+               <type>Alternate Question Text</type>
+               <context>CRF Text</context>
+               <doctext>Patient Birth Date</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Patient's Date of Birth</name>
+               <type>Preferred Question Text</type>
+               <context>Patient's Date of Birth</context>
+               <doctext>Patient's Date of Birth</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <cdeBrowserLink>https://cdebrowser.nci.nih.gov/CDEBrowser/search?elementDetails=9%26FirstTimer=0%26PageId=ElementDetailsGroup&amp;publicId=793&amp;version=5.1</cdeBrowserLink>
+         </dataElement>
+      </question>
+      <question>
+         <publicID>3776277</publicID>
+         <version>1.0</version>
+         <isDerived>false</isDerived>
+         <displayOrder>7</displayOrder>
+         <dateCreated>2013-06-07T00:00:00.0</dateCreated>
+         <dateModified>2013-06-07T00:00:00.0</dateModified>
+         <questionText>Gender of a Person</questionText>
+         <isEditable>Yes</isEditable>
+         <isMandatory>No</isMandatory>
+         <multiValue>No</multiValue>
+         <dataElement>
+            <longName>Person Gender Text Type</longName>
+            <shortName>PRSN_GENDER_TXT_TP</shortName>
+            <publicID>2200604</publicID>
+            <version>3.0</version>
+            <context>NCIP</context>
+            <workflowStatusName>RELEASED</workflowStatusName>
+            <preferredDefinition>Text designations that identify gender. Gender is described as the assemblage of properties that distinguish people on the basis of their societal roles. [Explanatory Comment 1: Identification of gender is based upon self-report and may come from a form, questionnaire, interview, etc.]</preferredDefinition>
+            <valueDomain>
+               <longName>Person Gender Text Type</longName>
+               <publicID>2222445</publicID>
+               <version>2.0</version>
+               <type>Enumerated</type>
+               <workflowStatusName>RELEASED</workflowStatusName>
+               <datatypeName>CHARACTER</datatypeName>
+               <maximumLengthNumber>13</maximumLengthNumber>
+               <minimumLengthNumber>4</minimumLengthNumber>
+               <permissibleValue>
+                  <value>Female</value>
+                  <valueMeaning>
+                     <publicID>2575551</publicID>
+                     <version>1.0</version>
+                     <longName>Female Gender</longName>
+                     <preferredDefinition>Earlier in time or order.::1: An individual who reports belonging to the cultural gender role distinction of female.</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>Male</value>
+                  <valueMeaning>
+                     <publicID>2575550</publicID>
+                     <version>1.0</version>
+                     <longName>Male Gender</longName>
+                     <preferredDefinition>An individual who reports belonging to the cultural gender role distinction of male.</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>Unknown</value>
+                  <valueMeaning>
+                     <publicID>2575365</publicID>
+                     <version>1.0</version>
+                     <longName>Unknown</longName>
+                     <designation>
+                        <createdBy>CURTIST</createdBy>
+                        <dateCreated>2010-12-22T12:42:41.0</dateCreated>
+                        <languageName>ENGLISH</languageName>
+                        <name>UNK</name>
+                        <type>HL7 Code</type>
+                        <context>UNK</context>
+                        <classification>
+                           <name>NMDP: CDEs to review</name>
+                           <publicID>2695319</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>NMDP CDEs to be reviewed</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>2029r1: Fanconi Anemia / Constitutional Anemia Pre-HSCT Data</name>
+                              <publicID>2964895</publicID>
+                              <version>1.0</version>
+                              <type>Case Report Form</type>
+                              <preferredDefinition>2029r1: Fanconi Anemia / Constitutional Anemia Pre-HSCT Data</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>Division of Cancer Control and Population Sciences</name>
+                           <publicID>2193114</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>Classification of the Division of Cancer Control and Population Sciences</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>NAACCR 12.1</name>
+                              <publicID>3134707</publicID>
+                              <version>1.0</version>
+                              <type>GROUP_TYPE</type>
+                              <preferredDefinition>North American Association of Central Cancer Registries</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>PICUcoreClinicalData</name>
+                           <publicID>3588382</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>Descriptive information about pediatric intensive care unit (PICU) discharges from NICHD Collaborative Pediatric Critical Care Research Network (CPCCRN) Clinical Centers, based primarily on hospital billing databases. The Core Clinical Data Project (CCDP) provides pilot and descriptive data for hypothesis generation, study design, preliminary power analyses, and recruitment projections for CPCCRN studies under development.</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>UMLLoader Test1</name>
+                           <publicID>4188891</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>UMLLoader sample Test</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                     </designation>
+                     <designation>
+                        <createdBy>CURTIST</createdBy>
+                        <dateCreated>2010-12-22T12:10:38.0</dateCreated>
+                        <languageName>ENGLISH</languageName>
+                        <name>unknown</name>
+                        <type>NAACCR VM Name</type>
+                        <context>unknown</context>
+                        <classification>
+                           <name>NMDP: CDEs to review</name>
+                           <publicID>2695319</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>NMDP CDEs to be reviewed</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>2029r1: Fanconi Anemia / Constitutional Anemia Pre-HSCT Data</name>
+                              <publicID>2964895</publicID>
+                              <version>1.0</version>
+                              <type>Case Report Form</type>
+                              <preferredDefinition>2029r1: Fanconi Anemia / Constitutional Anemia Pre-HSCT Data</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>Division of Cancer Control and Population Sciences</name>
+                           <publicID>2193114</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>Classification of the Division of Cancer Control and Population Sciences</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>NAACCR 12.1</name>
+                              <publicID>3134707</publicID>
+                              <version>1.0</version>
+                              <type>GROUP_TYPE</type>
+                              <preferredDefinition>North American Association of Central Cancer Registries</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>UMLLoader Test1</name>
+                           <publicID>4188891</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>UMLLoader sample Test</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>PICUcoreClinicalData</name>
+                           <publicID>3588382</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>Descriptive information about pediatric intensive care unit (PICU) discharges from NICHD Collaborative Pediatric Critical Care Research Network (CPCCRN) Clinical Centers, based primarily on hospital billing databases. The Core Clinical Data Project (CCDP) provides pilot and descriptive data for hypothesis generation, study design, preliminary power analyses, and recruitment projections for CPCCRN studies under development.</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                     </designation>
+                     <designation>
+                        <createdBy>CURTIST</createdBy>
+                        <dateCreated>2007-05-29T13:13:48.0</dateCreated>
+                        <languageName>ENGLISH</languageName>
+                        <name>Grade/differentiation unknown, not stated, or not applicable</name>
+                        <type>NAACCR Alt Name</type>
+                        <context>Grade/differentiation unknown, not stated, or not applicable</context>
+                        <classification>
+                           <name>NMDP: CDEs to review</name>
+                           <publicID>2695319</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>NMDP CDEs to be reviewed</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>2029r1: Fanconi Anemia / Constitutional Anemia Pre-HSCT Data</name>
+                              <publicID>2964895</publicID>
+                              <version>1.0</version>
+                              <type>Case Report Form</type>
+                              <preferredDefinition>2029r1: Fanconi Anemia / Constitutional Anemia Pre-HSCT Data</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>Division of Cancer Control and Population Sciences</name>
+                           <publicID>2193114</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>Classification of the Division of Cancer Control and Population Sciences</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>CancerID11.1</name>
+                              <publicID>3103520</publicID>
+                              <version>1.0</version>
+                              <type>GROUP_TYPE</type>
+                              <preferredDefinition>Cancer Identification11.1</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>PICUcoreClinicalData</name>
+                           <publicID>3588382</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>Descriptive information about pediatric intensive care unit (PICU) discharges from NICHD Collaborative Pediatric Critical Care Research Network (CPCCRN) Clinical Centers, based primarily on hospital billing databases. The Core Clinical Data Project (CCDP) provides pilot and descriptive data for hypothesis generation, study design, preliminary power analyses, and recruitment projections for CPCCRN studies under development.</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>UMLLoader Test1</name>
+                           <publicID>4188891</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>UMLLoader sample Test</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                     </designation>
+                     <designation>
+                        <createdBy>UMLLOADER_C3PRPRD</createdBy>
+                        <dateCreated>2010-07-08T14:47:33.0</dateCreated>
+                        <languageName>ENGLISH</languageName>
+                        <name>Unknown</name>
+                        <type>UML Value Name</type>
+                        <context>Unknown</context>
+                        <classification>
+                           <name>NMDP: CDEs to review</name>
+                           <publicID>2695319</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>NMDP CDEs to be reviewed</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>2029r1: Fanconi Anemia / Constitutional Anemia Pre-HSCT Data</name>
+                              <publicID>2964895</publicID>
+                              <version>1.0</version>
+                              <type>Case Report Form</type>
+                              <preferredDefinition>2029r1: Fanconi Anemia / Constitutional Anemia Pre-HSCT Data</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>Grid Enabled Measures</name>
+                           <publicID>2983752</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>A resource to allow researchers to access metadata about measures used in cancer research and the population sciences.</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>LocalValueDomains</name>
+                              <publicID>3024955</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>No Value Exists.</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>Common Biorepository Model</name>
+                           <publicID>3204728</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>A common model to contain summary-level details of biorepository / biobank holdings which can be advertised through the OBBR Specimen Resource Locator</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>LocalValueDomains</name>
+                              <publicID>3024955</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>No Value Exists.</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>UMLLoader Test1</name>
+                           <publicID>4188891</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>UMLLoader sample Test</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>PICUcoreClinicalData</name>
+                           <publicID>3588382</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>Descriptive information about pediatric intensive care unit (PICU) discharges from NICHD Collaborative Pediatric Critical Care Research Network (CPCCRN) Clinical Centers, based primarily on hospital billing databases. The Core Clinical Data Project (CCDP) provides pilot and descriptive data for hypothesis generation, study design, preliminary power analyses, and recruitment projections for CPCCRN studies under development.</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>C3PR</name>
+                           <publicID>2551427</publicID>
+                           <version>2.8</version>
+                           <preferredDefinition>Version 2.8 The Cancer Central Clinical Participent Registry (C3PR) is a web-based application used to manage participants in cancer clinical trials. Research staff will use C3PR as a participant-centric entry point to clinical trial management systems. C3PR provides a central registry for study participants, and it enables the end-user to access participant-centric information that is stored in multiple clinical trial systems. Participants that can be tracked include patients or potential patients, their guardians, family members, and referring physicians. The system also allows tracking other types of participants such as principal investigators, caregivers, referring physicians, and the users of the system.</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                     </designation>
+                     <definition>
+                        <createdBy>CURTIST</createdBy>
+                        <dateCreated>2007-04-30T14:19:12.0</dateCreated>
+                        <languageName>ENGLISH</languageName>
+                        <text>Unknown whether Spanish or not&#xD;
+</text>
+                        <type>NAACCR</type>
+                        <classification>
+                           <name>NMDP: CDEs to review</name>
+                           <publicID>2695319</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>NMDP CDEs to be reviewed</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>2029r1: Fanconi Anemia / Constitutional Anemia Pre-HSCT Data</name>
+                              <publicID>2964895</publicID>
+                              <version>1.0</version>
+                              <type>Case Report Form</type>
+                              <preferredDefinition>2029r1: Fanconi Anemia / Constitutional Anemia Pre-HSCT Data</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>Division of Cancer Control and Population Sciences</name>
+                           <publicID>2193114</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>Classification of the Division of Cancer Control and Population Sciences</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>Demographic11.1</name>
+                              <publicID>3242099</publicID>
+                              <version>1.0</version>
+                              <type>GROUP_TYPE</type>
+                              <preferredDefinition>Demographic11.1</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>PICUcoreClinicalData</name>
+                           <publicID>3588382</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>Descriptive information about pediatric intensive care unit (PICU) discharges from NICHD Collaborative Pediatric Critical Care Research Network (CPCCRN) Clinical Centers, based primarily on hospital billing databases. The Core Clinical Data Project (CCDP) provides pilot and descriptive data for hypothesis generation, study design, preliminary power analyses, and recruitment projections for CPCCRN studies under development.</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>UMLLoader Test1</name>
+                           <publicID>4188891</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>UMLLoader sample Test</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <context>PS&amp;CC</context>
+                     </definition>
+                     <definition>
+                        <createdBy>CURTIST</createdBy>
+                        <dateCreated>2007-07-18T16:11:28.0</dateCreated>
+                        <languageName>ENGLISH</languageName>
+                        <text>Patient's address is unknown</text>
+                        <type>NAACCR</type>
+                        <classification>
+                           <name>NMDP: CDEs to review</name>
+                           <publicID>2695319</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>NMDP CDEs to be reviewed</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>2029r1: Fanconi Anemia / Constitutional Anemia Pre-HSCT Data</name>
+                              <publicID>2964895</publicID>
+                              <version>1.0</version>
+                              <type>Case Report Form</type>
+                              <preferredDefinition>2029r1: Fanconi Anemia / Constitutional Anemia Pre-HSCT Data</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>Division of Cancer Control and Population Sciences</name>
+                           <publicID>2193114</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>Classification of the Division of Cancer Control and Population Sciences</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>Demographic11.1</name>
+                              <publicID>3242099</publicID>
+                              <version>1.0</version>
+                              <type>GROUP_TYPE</type>
+                              <preferredDefinition>Demographic11.1</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>PICUcoreClinicalData</name>
+                           <publicID>3588382</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>Descriptive information about pediatric intensive care unit (PICU) discharges from NICHD Collaborative Pediatric Critical Care Research Network (CPCCRN) Clinical Centers, based primarily on hospital billing databases. The Core Clinical Data Project (CCDP) provides pilot and descriptive data for hypothesis generation, study design, preliminary power analyses, and recruitment projections for CPCCRN studies under development.</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>UMLLoader Test1</name>
+                           <publicID>4188891</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>UMLLoader sample Test</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <context>PS&amp;CC</context>
+                     </definition>
+                     <definition>
+                        <createdBy>UMLLOADER_GEM</createdBy>
+                        <dateCreated>2011-01-27T16:26:05.0</dateCreated>
+                        <languageName>ENGLISH</languageName>
+                        <text>A response indicating that the respondent does not know what the correct answer is.</text>
+                        <type>UML Value Definition</type>
+                        <classification>
+                           <name>NMDP: CDEs to review</name>
+                           <publicID>2695319</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>NMDP CDEs to be reviewed</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>2029r1: Fanconi Anemia / Constitutional Anemia Pre-HSCT Data</name>
+                              <publicID>2964895</publicID>
+                              <version>1.0</version>
+                              <type>Case Report Form</type>
+                              <preferredDefinition>2029r1: Fanconi Anemia / Constitutional Anemia Pre-HSCT Data</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>Grid Enabled Measures</name>
+                           <publicID>2983752</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>A resource to allow researchers to access metadata about measures used in cancer research and the population sciences.</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>LocalValueDomains</name>
+                              <publicID>3024955</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>No Value Exists.</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>UMLLoader Test1</name>
+                           <publicID>4188891</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>UMLLoader sample Test</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>PICUcoreClinicalData</name>
+                           <publicID>3588382</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>Descriptive information about pediatric intensive care unit (PICU) discharges from NICHD Collaborative Pediatric Critical Care Research Network (CPCCRN) Clinical Centers, based primarily on hospital billing databases. The Core Clinical Data Project (CCDP) provides pilot and descriptive data for hypothesis generation, study design, preliminary power analyses, and recruitment projections for CPCCRN studies under development.</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <context>NCIP</context>
+                     </definition>
+                     <definition>
+                        <createdBy>UMLLOADER_C3PRPRD</createdBy>
+                        <dateCreated>2010-07-08T14:47:33.0</dateCreated>
+                        <languageName>ENGLISH</languageName>
+                        <text>Could not be determined or unsure.</text>
+                        <type>UML Value Definition</type>
+                        <classification>
+                           <name>NMDP: CDEs to review</name>
+                           <publicID>2695319</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>NMDP CDEs to be reviewed</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>2029r1: Fanconi Anemia / Constitutional Anemia Pre-HSCT Data</name>
+                              <publicID>2964895</publicID>
+                              <version>1.0</version>
+                              <type>Case Report Form</type>
+                              <preferredDefinition>2029r1: Fanconi Anemia / Constitutional Anemia Pre-HSCT Data</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>UMLLoader Test1</name>
+                           <publicID>4188891</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>UMLLoader sample Test</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>PICUcoreClinicalData</name>
+                           <publicID>3588382</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>Descriptive information about pediatric intensive care unit (PICU) discharges from NICHD Collaborative Pediatric Critical Care Research Network (CPCCRN) Clinical Centers, based primarily on hospital billing databases. The Core Clinical Data Project (CCDP) provides pilot and descriptive data for hypothesis generation, study design, preliminary power analyses, and recruitment projections for CPCCRN studies under development.</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>C3PR</name>
+                           <publicID>2551427</publicID>
+                           <version>2.8</version>
+                           <preferredDefinition>Version 2.8 The Cancer Central Clinical Participent Registry (C3PR) is a web-based application used to manage participants in cancer clinical trials. Research staff will use C3PR as a participant-centric entry point to clinical trial management systems. C3PR provides a central registry for study participants, and it enables the end-user to access participant-centric information that is stored in multiple clinical trial systems. Participants that can be tracked include patients or potential patients, their guardians, family members, and referring physicians. The system also allows tracking other types of participants such as principal investigators, caregivers, referring physicians, and the users of the system.</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <context>NCIP</context>
+                     </definition>
+                     <definition>
+                        <createdBy>UMLLOADER_C3PRPRD</createdBy>
+                        <dateCreated>2010-07-08T14:47:35.0</dateCreated>
+                        <languageName>ENGLISH</languageName>
+                        <text>Not known, not observed, not recorded, or refused.</text>
+                        <type>UML Value Definition</type>
+                        <classification>
+                           <name>NMDP: CDEs to review</name>
+                           <publicID>2695319</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>NMDP CDEs to be reviewed</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>2029r1: Fanconi Anemia / Constitutional Anemia Pre-HSCT Data</name>
+                              <publicID>2964895</publicID>
+                              <version>1.0</version>
+                              <type>Case Report Form</type>
+                              <preferredDefinition>2029r1: Fanconi Anemia / Constitutional Anemia Pre-HSCT Data</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>UMLLoader Test1</name>
+                           <publicID>4188891</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>UMLLoader sample Test</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>PICUcoreClinicalData</name>
+                           <publicID>3588382</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>Descriptive information about pediatric intensive care unit (PICU) discharges from NICHD Collaborative Pediatric Critical Care Research Network (CPCCRN) Clinical Centers, based primarily on hospital billing databases. The Core Clinical Data Project (CCDP) provides pilot and descriptive data for hypothesis generation, study design, preliminary power analyses, and recruitment projections for CPCCRN studies under development.</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>C3PR</name>
+                           <publicID>2551427</publicID>
+                           <version>2.8</version>
+                           <preferredDefinition>Version 2.8 The Cancer Central Clinical Participent Registry (C3PR) is a web-based application used to manage participants in cancer clinical trials. Research staff will use C3PR as a participant-centric entry point to clinical trial management systems. C3PR provides a central registry for study participants, and it enables the end-user to access participant-centric information that is stored in multiple clinical trial systems. Participants that can be tracked include patients or potential patients, their guardians, family members, and referring physicians. The system also allows tracking other types of participants such as principal investigators, caregivers, referring physicians, and the users of the system.</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <context>NCIP</context>
+                     </definition>
+                     <definition>
+                        <createdBy>CHILLIJ</createdBy>
+                        <dateCreated>2010-07-13T22:01:19.0</dateCreated>
+                        <languageName>ENGLISH</languageName>
+                        <text>Not known, not observed, or not recorded.</text>
+                        <type>Manually-curated</type>
+                        <classification>
+                           <name>NMDP: CDEs to review</name>
+                           <publicID>2695319</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>NMDP CDEs to be reviewed</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>2029r1: Fanconi Anemia / Constitutional Anemia Pre-HSCT Data</name>
+                              <publicID>2964895</publicID>
+                              <version>1.0</version>
+                              <type>Case Report Form</type>
+                              <preferredDefinition>2029r1: Fanconi Anemia / Constitutional Anemia Pre-HSCT Data</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>Data Standards</name>
+                           <publicID>2192345</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>Data standards developed for the NCI/caBIG community.</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>Image Quality CRF</name>
+                              <publicID>3079057</publicID>
+                              <version>1.0</version>
+                              <type>GROUP_TYPE</type>
+                              <preferredDefinition>Data elements used on an Image Quality CRF</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>PICUcoreClinicalData</name>
+                           <publicID>3588382</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>Descriptive information about pediatric intensive care unit (PICU) discharges from NICHD Collaborative Pediatric Critical Care Research Network (CPCCRN) Clinical Centers, based primarily on hospital billing databases. The Core Clinical Data Project (CCDP) provides pilot and descriptive data for hypothesis generation, study design, preliminary power analyses, and recruitment projections for CPCCRN studies under development.</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>UMLLoader Test1</name>
+                           <publicID>4188891</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>UMLLoader sample Test</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <context>NCIP</context>
+                     </definition>
+                     <definition>
+                        <createdBy>CURTIST</createdBy>
+                        <dateCreated>2010-12-22T12:10:38.0</dateCreated>
+                        <languageName>ENGLISH</languageName>
+                        <text>a proper value is applicable but not known.  this event occurred, but the date is unknown (e.g., birth date).</text>
+                        <type>NAACCR</type>
+                        <classification>
+                           <name>NMDP: CDEs to review</name>
+                           <publicID>2695319</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>NMDP CDEs to be reviewed</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>2029r1: Fanconi Anemia / Constitutional Anemia Pre-HSCT Data</name>
+                              <publicID>2964895</publicID>
+                              <version>1.0</version>
+                              <type>Case Report Form</type>
+                              <preferredDefinition>2029r1: Fanconi Anemia / Constitutional Anemia Pre-HSCT Data</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>Division of Cancer Control and Population Sciences</name>
+                           <publicID>2193114</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>Classification of the Division of Cancer Control and Population Sciences</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>NAACCR 12.1</name>
+                              <publicID>3134707</publicID>
+                              <version>1.0</version>
+                              <type>GROUP_TYPE</type>
+                              <preferredDefinition>North American Association of Central Cancer Registries</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>UMLLoader Test1</name>
+                           <publicID>4188891</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>UMLLoader sample Test</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <classification>
+                           <name>PICUcoreClinicalData</name>
+                           <publicID>3588382</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>Descriptive information about pediatric intensive care unit (PICU) discharges from NICHD Collaborative Pediatric Critical Care Research Network (CPCCRN) Clinical Centers, based primarily on hospital billing databases. The Core Clinical Data Project (CCDP) provides pilot and descriptive data for hypothesis generation, study design, preliminary power analyses, and recruitment projections for CPCCRN studies under development.</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <context>PS&amp;CC</context>
+                     </definition>
+                     <preferredDefinition>Not known, not observed, not recorded, or refused.</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>Unspecified</value>
+                  <valueMeaning>
+                     <publicID>2573360</publicID>
+                     <version>1.0</version>
+                     <longName>Unspecified</longName>
+                     <designation>
+                        <createdBy>UMLLOADER_CBM</createdBy>
+                        <dateCreated>2011-03-25T13:44:15.0</dateCreated>
+                        <languageName>ENGLISH</languageName>
+                        <name>Unspecified</name>
+                        <type>UML Value Name</type>
+                        <context>Unspecified</context>
+                        <classification>
+                           <name>Common Biorepository Model</name>
+                           <publicID>3204728</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>A common model to contain summary-level details of biorepository / biobank holdings which can be advertised through the OBBR Specimen Resource Locator</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>LocalValueDomains</name>
+                              <publicID>3024955</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>No Value Exists.</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                     </designation>
+                     <preferredDefinition>Not stated explicitly or in detail.</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+            </valueDomain>
+            <referenceDocument>
+               <name>CRF Text1</name>
+               <type>Alternate Question Text</type>
+               <context>CRF Text1</context>
+               <doctext>Patient gender</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>DCP Document Text</name>
+               <type>Alternate Question Text</type>
+               <context>DCP Document Text</context>
+               <doctext>Gender</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Gender of a Person</name>
+               <type>Preferred Question Text</type>
+               <context>Gender of a Person</context>
+               <doctext>Gender of a Person</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>TARGET CRF Text</name>
+               <type>Alternate Question Text</type>
+               <context>TARGET CRF Text</context>
+               <doctext>Gender</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>NINDS CDE Project</name>
+               <type>REFERENCE</type>
+               <context>NINDS CDE Project</context>
+               <doctext>NINDS CDE Project</doctext>
+               <languageName>ENGLISH</languageName>
+               <URL>http://www.commondataelements.ninds.nih.gov/</URL>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Recipient gender:</name>
+               <type>Alternate Question Text</type>
+               <context>Recipient gender:</context>
+               <doctext>Recipient gender:</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>BRIDG mapping path for CDE:2200604</name>
+               <type>BRIDG Mapping Path</type>
+               <context>BRIDG mapping path for CDE:2200604</context>
+               <doctext>Subject &gt; BiologicEntity.administrativeGenderCode</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Newborn Exam Question</name>
+               <type>Alternate Question Text</type>
+               <context>Newborn Exam Question</context>
+               <doctext>Newborn Gender</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>U of Michigan Health Survey Text</name>
+               <type>Alternate Question Text</type>
+               <context>U of Michigan Health Survey Text</context>
+               <doctext>What is your gender?</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <cdeBrowserLink>https://cdebrowser.nci.nih.gov/CDEBrowser/search?elementDetails=9%26FirstTimer=0%26PageId=ElementDetailsGroup&amp;publicId=2200604&amp;version=3.0</cdeBrowserLink>
+         </dataElement>
+         <validValue>
+            <displayOrder>0</displayOrder>
+            <value>Female</value>
+            <meaningText>Female Gender</meaningText>
+            <description>An individual who reports belonging to the cultural gender role distinction of female.</description>
+            <valueMeaning>
+               <publicID>2575551</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>1</displayOrder>
+            <value>Male</value>
+            <meaningText>Male Gender</meaningText>
+            <description>An individual who reports belonging to the cultural gender role distinction of male.</description>
+            <valueMeaning>
+               <publicID>2575550</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>2</displayOrder>
+            <value>Unknown</value>
+            <meaningText>Unknown</meaningText>
+            <description>Not known, not observed, not recorded, or refused.</description>
+            <valueMeaning>
+               <publicID>2575365</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>3</displayOrder>
+            <value>Unspecified</value>
+            <meaningText>Unspecified</meaningText>
+            <description>Not stated explicitly or in detail.</description>
+            <valueMeaning>
+               <publicID>2573360</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+      </question>
+   </module>
+   <module>
+      <displayOrder>1</displayOrder>
+      <maximumModuleRepeat>0</maximumModuleRepeat>
+      <longName>abcde-m2</longName>
+      <instruction>
+         <text>do nothing again</text>
+      </instruction>
+      <preferredDefinition>abcde-m2</preferredDefinition>
+      <publicID>3776234</publicID>
+      <version>1.0</version>
+      <usageCategory>
+         <usageType>None</usageType>
+         <rule>do nothing again</rule>
+      </usageCategory>
+   </module>
+</form>
+</forms>
+
