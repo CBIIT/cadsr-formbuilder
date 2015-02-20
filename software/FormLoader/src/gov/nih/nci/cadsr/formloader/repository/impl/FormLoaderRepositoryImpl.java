@@ -268,8 +268,8 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		
 		fvv.setCreatedBy(moduledto.getCreatedBy());
 		fvv.setQuestion(newQuestdto);
-		fvv.setVpIdseq(vValue.getVdPermissibleValueSeqid());
-		
+		fvv.setVpIdseq(vValue.getVdPermissibleValueSeqid());	//JR417 vValue vdPermissibleValueSeqid can not be empty (fixed in this ticket)!
+		logger.debug("FormLoaderRepositoryImpl.java#translateIntoValidValueDto vValue.getVdPermissibleValueSeqid() can not be empty! *** vdPVIdSeq [" + vValue.getVdPermissibleValueSeqid() + "]");
 		String preferredName = composeVVPreferredName(vValue, newQuestdto.getPublicId(), formdto.getPublicId(), formdto.getVersion(), displayOrder);
 		
 		fvv.setLongName(vValue.getValue());
@@ -278,7 +278,12 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		
 		fvv.setContext(moduledto.getContext());
 
-		//fvv.setFormValueMeaningIdVersion("123456v1.0"); 	//JR417	new
+		//JR417	begin
+		fvv.setFormValueMeaningText(vValue.getMeaningText());
+		fvv.setFormValueMeaningIdVersion(vValue.getPreferredName());
+		fvv.setFormValueMeaningDesc(vValue.getDescription());
+		logger.debug("FormLoaderRepositoryImpl.java#translateIntoValidValueDto JR417 *** the three fields of fvv have to be populated! *** fvv [" + fvv + "]");
+		//JR417	end
 		
 		fvv.setVersion(Float.valueOf("1.0"));
 		fvv.setAslName("DRAFT NEW");
@@ -290,7 +295,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		protected String composeVVPreferredName(QuestionDescriptor.ValidValue vValue, int questPublicId, int formPublicId, float formversion,  int displayorder) {
 			
 			return vValue.getPreferredName() + "_" + questPublicId + "_" + formPublicId + "v" + formversion + "_"  + displayorder;
-			
+			//return String.valueOf(questPublicId);	//JR417
 		}
 
 	@Transactional(readOnly=true)

@@ -169,7 +169,7 @@ public class JDBCValueDomainDAOV2 extends JDBCAdminComponentDAOV2 implements
 			vm.setPreferredDefinition(rs.getString("PREFERRED_DEFINITION"));
 			vm.setLongName(rs.getString("LONG_NAME"));
 
-			pv.setValueMeaningV2(vm);	//JR471 vm pub id is good
+			pv.setValueMeaningV2(vm);	//JR417 vm pub id is good
 
 			return pv;
 		}
@@ -207,11 +207,12 @@ public class JDBCValueDomainDAOV2 extends JDBCAdminComponentDAOV2 implements
     					PermissibleValueV2TransferObject pv = new PermissibleValueV2TransferObject();
     					
     					pv.setValue(rs.getString("VALUE")); 
-    					pv.setIdseq(rs.getString("VP_IDSEQ"));
+    					pv.setIdseq(rs.getString("VP_IDSEQ"));	//JR417 this is THE vdPvIdSeq! Not sure why is it populated during content validation but it is what it is!
 
     					ValueMeaningV2TransferObject vm = new ValueMeaningV2TransferObject();
     					vm.setPublicId(rs.getInt("PUBLIC_ID")); //this is also the preferred name for some reason
     					vm.setVersion(rs.getFloat("VERSION"));
+    					vm.setPreferredName(String.valueOf(vm.getPublicId()));  //JR417 new
     					vm.setPreferredDefinition(rs.getString("PREFERRED_DEFINITION"));
     					vm.setLongName(rs.getString("LONG_NAME"));
     					vm.setDescription(rs.getString("DESCRIPTION").trim());

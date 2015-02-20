@@ -345,6 +345,8 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
     private ValueMeaning retrieveValueMeaningAttr(ValueMeaning vm){
         vm.setDesignations(getDesignations(vm.getIdseq(), null)); ///this should be the VM_IDSEQ;
         vm.setDefinitions(getDefinitions(vm.getIdseq())); ///this should be the VM_IDSEQ;
+        vm.setPublicId(123456);	//JR417 new
+        vm.setVersion(1.0f);	//JR417 new
         return vm;
     }
 
@@ -480,7 +482,7 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
           fvv.setAslName(rs.getString(5));
           fvv.setPreferredDefinition(rs.getString(7));
           fvv.setFormValueMeaningText(rs.getString(16)); //Meaning_text
-//          if (vm.getPublicId() > 0)	//JR417 public id can be any number, including negative
+          if (vm.getPublicId() > 0)	//JR417 tagged
         	  fvv.setFormValueMeaningIdVersion(String.valueOf(vm.getPublicId()) + "v"+String.valueOf(vm.getVersion())); //Meaning_id version
 
           fvv.setFormValueMeaningDesc(rs.getString("DESCRIPTION_TEXT")); //DESCRIPTION_TEXT          

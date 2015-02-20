@@ -1139,7 +1139,7 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
                                              formVVChanges.getNewValidValues(),
                                              formVVChanges.getQuestionId());
                         updateValidValues(fvvDao, fvvInstrDao,
-                                          formVVChanges.getUpdatedValidValues());
+                                          formVVChanges.getUpdatedValidValues());	//JR417 emulate this!
                         deleteValidValues(fvvDao, fvvInstrDao,
                                           formVVChanges.getDeletedValidValues());
                     }

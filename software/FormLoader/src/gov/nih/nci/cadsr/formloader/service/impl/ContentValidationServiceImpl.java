@@ -8,6 +8,7 @@ import gov.nih.nci.cadsr.formloader.repository.impl.FormLoaderRepositoryImpl;
 import gov.nih.nci.cadsr.formloader.service.ContentValidationService;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
+import gov.nih.nci.cadsr.formloader.service.common.QuestionsPVLoader;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContactCommunicationV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
@@ -22,6 +23,7 @@ import gov.nih.nci.ncicb.cadsr.common.resource.Definition;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.ReferenceDocument;
 import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomainV2;
+import gov.nih.nci.ncicb.cadsr.common.util.ValueHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -682,27 +684,47 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			
 			logger.debug("Start validating questions for form [" + form.getPublicId() + "|" + form.getVersion() + "|" + form.getFormSeqId() + "]");
 			
-			List<String> questPublicIds = new ArrayList<String>();
-			List<String> questCdePublicIds = new ArrayList<String>();
-			List<ModuleDescriptor> modules = form.getModules();
-			collectPublicIdsForModules(modules, questPublicIds, questCdePublicIds, formLoadType);
+			//JR417 refactored into FormLoaderHelper!
+//			List<String> questPublicIds = new ArrayList<String>();
+//			List<String> questCdePublicIds = new ArrayList<String>();
+List<ModuleDescriptor> modules = null;	//form.getModules();
+//collectPublicIdsForModules(modules, questPublicIds, questCdePublicIds, formLoadType);
 			
-			List<QuestionTransferObject> questDtos = repository.getQuestionsByPublicIds(questPublicIds);
-			List<DataElementTransferObject> cdeDtos = repository.getCDEsByPublicIds(questCdePublicIds);
+List<QuestionTransferObject> questDtos = null;	//repository.getQuestionsByPublicIds(questPublicIds);
+List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(questCdePublicIds);
+//			
+//			HashMap<String, List<ReferenceDocumentTransferObject>> refdocDtos = repository.getReferenceDocsByCdePublicIds(questCdePublicIds);
+//			List<String> vdSeqIds = new ArrayList<String>();
+//			for (DataElementTransferObject de: cdeDtos) {
+//				String vdseqId = de.getVdIdseq();
+//				if (vdseqId != null && vdseqId.length() > 0)
+//					vdSeqIds.add(vdseqId);
+//			}
 			
-			HashMap<String, List<ReferenceDocumentTransferObject>> refdocDtos = 
-					repository.getReferenceDocsByCdePublicIds(questCdePublicIds);
-			List<String> vdSeqIds = new ArrayList<String>();
-			for (DataElementTransferObject de: cdeDtos) {
-				String vdseqId = de.getVdIdseq();
-				if (vdseqId != null && vdseqId.length() > 0)
-					vdSeqIds.add(vdseqId);
+//			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = 
+//					repository.getPermissibleValuesByVdIds(vdSeqIds);	//JR417 pv has the vpIdseq and vm has the vmIdseq after this successful call!
+
+			System.out.println("ContentValidationServiceImpl.java#validateQuestions before FormLoaderHelper.populateQuestionsPV");
+			ValueHolder vh = FormLoaderHelper.populateQuestionsPV(form, repository);
+			System.out.println("ContentValidationServiceImpl.java#validateQuestions after FormLoaderHelper.populateQuestionsPV");
+			HashMap<String, List<ReferenceDocumentTransferObject>> refdocDtos = null;
+			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = null;
+			try {
+				List data = (ArrayList) vh.getValue();
+				pvDtos = (HashMap<String, List<PermissibleValueV2TransferObject>>) data.get(QuestionsPVLoader.PV_INDEX);
+				modules = (List<ModuleDescriptor>) data.get(QuestionsPVLoader.MODULE_INDEX);
+				questDtos = (List<QuestionTransferObject>) data.get(QuestionsPVLoader.QUESTION_INDEX);
+				cdeDtos = (List<DataElementTransferObject>) data.get(QuestionsPVLoader.CDE_INDEX);
+				refdocDtos = (HashMap<String, List<ReferenceDocumentTransferObject>>) data.get(QuestionsPVLoader.REF_DOC_INDEX);
+				pvDtos = (HashMap<String, List<PermissibleValueV2TransferObject>>) data.get(QuestionsPVLoader.PV_INDEX);
+			} catch(Exception e) {
+				e.printStackTrace();
 			}
-			
-			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = 
-					repository.getPermissibleValuesByVdIds(vdSeqIds);
-			
-			validateQuestionsInModules(modules, form, questDtos, cdeDtos, refdocDtos, pvDtos);			
+			//JR417 end
+
+			System.out.println("ContentValidationServiceImpl.java#validateQuestions before validateQuestionsInModules");
+			validateQuestionsInModules(modules, form, questDtos, cdeDtos, refdocDtos, pvDtos);		
+			System.out.println("ContentValidationServiceImpl.java#validateQuestions after validateQuestionsInModules");
 			
 			form.setLoadStatus(FormDescriptor.STATUS_CONTENT_VALIDATED);
 			
@@ -747,36 +769,36 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 	 * @param questCdePublicIds
 	 * @param formLoadType
 	 */
-	protected void collectPublicIdsForModules(List<ModuleDescriptor> modules, 
-			List<String> questPublicIds, List<String> questCdePublicIds, String formLoadType) {
-		
-		if (modules == null) {
-			logger.debug("Module list is null. Unable to collect public ids.");
-			return;
-		}
-			
-		for (ModuleDescriptor module : modules) {
-			List<QuestionDescriptor> questions = module.getQuestions();
-			
-			for (QuestionDescriptor question : questions) {
-				String questPubId = question.getPublicId();
-				//Only need to validate question public id + version if it's an update form
-				if (formLoadType.equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)
-						&& questPubId != null && questPubId.length() > 0)
-					questPublicIds.add(questPubId);
-				
-				String cdePublicId = question.getCdePublicId();
-				if (cdePublicId != null && cdePublicId.length() > 0)
-					questCdePublicIds.add(cdePublicId); 
-				else
-					question.addMessage("Question has not associated data element public id. Unable to validate");				
-			}
-			
-			logger.debug("Collected " + questPublicIds.size() + " question public ids and " + questCdePublicIds.size() +
-					" cde public ids in module [" + module.getPublicId() + "|" + module.getVersion() + "]");
-		}
-		
-	}
+//	protected void collectPublicIdsForModules(List<ModuleDescriptor> modules, 
+//			List<String> questPublicIds, List<String> questCdePublicIds, String formLoadType) {
+//		
+//		if (modules == null) {
+//			logger.debug("Module list is null. Unable to collect public ids.");
+//			return;
+//		}
+//			
+//		for (ModuleDescriptor module : modules) {
+//			List<QuestionDescriptor> questions = module.getQuestions();
+//			
+//			for (QuestionDescriptor question : questions) {
+//				String questPubId = question.getPublicId();
+//				//Only need to validate question public id + version if it's an update form
+//				if (formLoadType.equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)
+//						&& questPubId != null && questPubId.length() > 0)
+//					questPublicIds.add(questPubId);
+//				
+//				String cdePublicId = question.getCdePublicId();
+//				if (cdePublicId != null && cdePublicId.length() > 0)
+//					questCdePublicIds.add(cdePublicId); 
+//				else
+//					question.addMessage("Question has not associated data element public id. Unable to validate");				
+//			}
+//			
+//			logger.debug("Collected " + questPublicIds.size() + " question public ids and " + questCdePublicIds.size() +
+//					" cde public ids in module [" + module.getPublicId() + "|" + module.getVersion() + "]");
+//		}
+//		
+//	}
 	
 	/**
 	 * Parse questions in module for all the forms in xml
@@ -897,7 +919,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			return; 
 		}
 			
-		List<PermissibleValueV2TransferObject> pValDtos = pvDtos.get(matchingCde.getVdIdseq());		//JR471 vm pub id is good
+		List<PermissibleValueV2TransferObject> pValDtos = pvDtos.get(matchingCde.getVdIdseq());		//JR417 vm pub id is good
 		//JR368 begin
 		if(pValDtos != null) {	//validate only if it is enumerated VD
 		
@@ -1201,7 +1223,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 		String valDesc = FormLoaderHelper.normalizeSpace(vVal.getDescription());
 
 		PermissibleValueV2TransferObject matchedPv = null;
-		for (PermissibleValueV2TransferObject pVal : pValues) {
+		for (PermissibleValueV2TransferObject pVal : pValues) {		//JR417 you have everything you need in pVal (vd_iqseq in the pv itself and vm_idseq in the pv.vm) 
 			String pValStr = pVal.getValue().trim();
 			if (val.equals(pValStr)) { //question vv's value field
 				matchedPv = pVal;
@@ -1219,7 +1241,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			return;
 		}
 
-		ValueMeaningV2TransferObject valMeaningDto = (ValueMeaningV2TransferObject)matchedPv.getValueMeaningV2();	//JR471 vm pub id is good
+		ValueMeaningV2TransferObject valMeaningDto = (ValueMeaningV2TransferObject)matchedPv.getValueMeaningV2();	//JR417 vm pub id is good
 		String valMeaningLongName = FormLoaderHelper.normalizeSpace(valMeaningDto.getLongName());
 
 		if (!valMeaning.equalsIgnoreCase(valMeaningLongName)) { //question vv's meantingText field
@@ -1244,8 +1266,12 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 
 		if (!valDesc.equals(valMeaningPreferredDefinition)) {
 			//see if it matches the pv's value meaning's definition's text
-			if (!matchMeaningDefinitions(valDesc, valMeaningDto.getDefinitions()))	//JR471 vm pub id is good
+			if (!matchMeaningDefinitions(valDesc, valMeaningDto.getDefinitions())) {
 				vVal.setDescription(valMeaningPreferredDefinition);
+				vVal.setPreferredName(String.valueOf(valMeaningDto.getPublicId()));		//JR417 new
+				vVal.setVdPermissibleValueSeqid(matchedPv.getIdseq());	//JR417 new
+			
+			}
 		}
 	}
 	

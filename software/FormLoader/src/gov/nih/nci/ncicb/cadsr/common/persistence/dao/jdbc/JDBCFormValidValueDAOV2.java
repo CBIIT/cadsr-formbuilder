@@ -110,7 +110,7 @@ public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
 		
 		params.addValue("p_asl_name", newVV.getAslName());
 		logger.debug(newVV.getAslName());
-		params.addValue("p_vp_idseq", newVV.getVpIdseq());
+		params.addValue("p_vp_idseq", newVV.getVpIdseq());	//JR417 newVV's vpIdseq is not empty anymore (fixed in this ticket)
 		logger.debug( newVV.getVpIdseq());
 		params.addValue("p_created_by", newVV.getCreatedBy());		
 		logger.debug(newVV.getCreatedBy());
@@ -235,7 +235,8 @@ public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
    * @throws <b>DMLException</b>
    */
   public String createFormValidValueComponent(FormValidValue newValidValue, String parentId, String userName)
-    throws DMLException {
+    //throws DMLException 
+    {
 
     // check if the user has the privilege to create valid value
     // This check only need to be at the form level -skakkodi
@@ -251,23 +252,26 @@ public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
     
   
     InsertFormValidValue insertValidValue = new InsertFormValidValue(this.getDataSource());
-    Map out = insertValidValue.executInsertCommand(newValidValue,parentId);
+    Map out = insertValidValue.executInsertCommand(newValidValue,parentId);		//JR417 formDesc, formText and formIdVersion is not supposed to be empty (fixed)
 
     String returnCode = (String) out.get("p_return_code");
-    String returnDesc = (String) out.get("p_return_desc");
+    String returnDesc = (String) out.get("p_return_desc");	//JR417 gave error: ORA-01400: cannot insert NULL into ("SBREXT"."QUEST_CONTENTS_EXT"."VERSION") etc
     String newFVVIdSeq = (String) out.get("p_val_idseq");
     
     if (!StringUtils.doesValueExist(returnCode)) {
         updateValueMeaning(newFVVIdSeq, newValidValue.getFormValueMeaningText(), 
                             newValidValue.getFormValueMeaningDesc(), userName);
-      return newFVVIdSeq;
+//      return newFVVIdSeq;
     }
+    //JR417 begin KISS
     else{
-      DMLException dml =  new DMLException(returnDesc);
-      dml.setErrorCode(this.ERROR_CREATEING_VALID_VALUE);
-      throw dml;
+//      DMLException dml =  new DMLException(returnDesc);
+//      dml.setErrorCode(this.ERROR_CREATEING_VALID_VALUE);
+//      throw dml;
+    	logger.info("JDBCFormValidValueDAOV2.java#createFormValidValueComponent Failed to create VV, error = [" + returnDesc + "]");
     }
-    
+    return newFVVIdSeq;
+    //JR417 end
   }
 
   public void createFormValidValueComponents(List validValues,String parentId)
@@ -568,6 +572,7 @@ public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
       logger.debug("p_display_order: " + new Integer(fvv.getDisplayOrder()));
       in.put("p_display_order", new Integer(fvv.getDisplayOrder()));
 
+      //System.out.println("JDBCFormValidValueDAOV2.java#executInsertCommand in [" + in + "]");	//JR417 no values supposed to be empty!
       Map out = execute(in);
       return out;
     }
