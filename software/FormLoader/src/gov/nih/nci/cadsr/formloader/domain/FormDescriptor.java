@@ -717,5 +717,36 @@ public class FormDescriptor implements java.io.Serializable {
 	public void setContactCommnunications(
 			List<ContactCommunicationV2TransferObject> contactCommnunications) {
 		this.contactCommnunications = contactCommnunications;
+	}
+
+	@Override
+	public String toString() {
+		return "FormDescriptor [formSeqId=" + formSeqId + ", publicId="
+				+ publicId + ", version=" + version + ", longName=" + longName
+				+ ", context=" + context + ", type=" + type + ", protocolName="
+				+ protocolName + ", workflowStatusName=" + workflowStatusName
+				+ ", modifiedBy=" + modifiedBy + ", createdBy=" + createdBy
+				+ ", changeNote=" + changeNote + ", preferredDefinition="
+				+ preferredDefinition + ", registrationStatus="
+				+ registrationStatus + ", headerInstruction="
+				+ headerInstruction + ", footerInstruction="
+				+ footerInstruction + ", categoryName=" + categoryName
+				+ ", designations=" + designations + ", definitions="
+				+ definitions + ", protocols=" + protocols + ", refdocs="
+				+ refdocs + ", contactCommnunications="
+				+ contactCommnunications + ", createdDate=" + createdDate
+				+ ", modifiedDate=" + modifiedDate + ", workflowStatusCadsr="
+				+ workflowStatusCadsr + ", versionCadsr=" + versionCadsr
+				+ ", loadUnloadDate=" + loadUnloadDate + ", collectionName="
+				+ collectionName + ", collectionSeqid=" + collectionSeqid
+				+ ", belongToCollections=" + belongToCollections + ", modules="
+				+ modules + ", xmlValidationErrors=" + xmlValidationErrors
+				+ ", messages=" + messages + ", loadType=" + loadType
+				+ ", loadStatus=" + loadStatus + ", index=" + index
+				+ ", previousLatestVersion=" + previousLatestVersion
+				+ ", selected=" + selected + ", xml_line_begin="
+				+ xml_line_begin + ", xml_line_end=" + xml_line_end
+				+ ", contextSeqid=" + contextSeqid + "]";
 	}	
+
 }

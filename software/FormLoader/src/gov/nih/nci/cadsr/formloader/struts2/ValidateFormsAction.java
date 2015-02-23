@@ -11,6 +11,7 @@ import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
+import gov.nih.nci.cadsr.formloader.service.common.FormLoaderUtil;
 import gov.nih.nci.cadsr.formloader.service.impl.ContentValidationServiceImpl;
 
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware {
         	
         	if (selectedFormIndices != null && selectedFormIndices.length > 0) {
         		setSelectForFormsInCollections(aColl, selectedFormIndices);
-        		validateFormCollection(aColl);
+        		validateFormCollection(aColl);	//JR408 entry point
         	} else {
         		addActionError("No form has been selected. Unable to procedd.");
         		return INPUT;
@@ -93,6 +94,7 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware {
 					}
 				}
 				
+				//FormLoaderUtil.printFormLoader(validatedForms);  //JR408 let's see the form states
 				servletRequest.getSession().setAttribute("formCollection", aColl);
 				logger.debug(validatedForms.size()+" Forms selected for validation");
 			} catch (FormLoaderServiceException e) {

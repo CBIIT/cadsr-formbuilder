@@ -51,6 +51,9 @@ import javax.xml.xpath.XPathFactory;
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
+/**
+ * Helper is generally very application specific (i.e. very FormLoader specific).
+ */
 public class FormLoaderHelper {
 	
 	private static Logger logger = Logger.getLogger(FormLoaderHelper.class.getName());

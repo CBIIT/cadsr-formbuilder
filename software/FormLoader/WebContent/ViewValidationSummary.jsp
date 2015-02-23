@@ -104,7 +104,65 @@ the workflow status to "Retired Deleted". Users must use Form Builder applicatio
 				</td>
 			</tr>
 			</s:iterator>
-				<tr>
+    <s:iterator value="invalidForms" var="form" status="status">
+    <tr> <!-- JR408 row color is not handled -->
+    <td>
+    <!-- Temp disable loading update form added: && !loadType.equals('Update Form') -->
+    <s:if test="loadStatus == 4 && !loadType.equals('Update Form') ">
+    <s:checkbox id="myCheck" name="selectedFormIndices" fieldValue="%{index}" value="false"
+    onClick="toggleActionButton('selectedFormIndices', 'action:loadForms')" theme = "simple" />
+    </s:if>
+
+    </td>
+    <td>
+    <s:if test="loadType.equals('Update Form')">
+    <s:property value="loadType" /> (Not Supported)
+    <!-- Temp disable loading update form
+    <b>*<s:property value="loadType" /> </b>
+    -->
+    </s:if>
+    <s:elseif test="loadType.equals('New Version')">
+    <b><a href="<s:property value="versioningRulesUrl" />" title="Click to view Form Versioning Rules..."
+    target="_blank"><s:property value="loadType" /></a></b>
+    </s:elseif>
+    <s:else>
+    <s:property value="loadType" />
+    </s:else>
+    </td>
+    <td><s:property value="publicId" /></td>
+    <td><s:property value="version" /></td>
+    <td style="word-wrap: break-word"><div style="width: 250px;"><s:property value="versionCadsr" /></div></td>
+    <td><s:property value="longName" /></td>
+    <td><s:property value="context" /></td>
+    <td><s:property value="type" /></td>
+    <td><div style="width: 250px;"><s:property value="protocolName" /></div></td>
+    <td><s:property value="workflowStatusName" /></td>
+    <td><s:property value="workflowStatusCadsr" /></td>
+
+    <td><s:property value="modules.size()" /></td>
+
+    <td>
+    <s:if test="loadType.equals('Update Form')">
+    (Not Supported)
+    <!-- Temp disable loading update form
+    <b>*<s:property value="loadType" /> </b>
+    -->
+    </s:if>
+    <s:else>
+    <s:if test="loadStatus != 4">
+    <a href="#" title="<s:property value="getMessagesInString()" />">
+    <s:property value="getLoadStatusString()" /></a></s:if>
+    <s:elseif test="loadStatus == 4">
+    <a href="#" onClick=
+    "return popupvalidationMessages('showValidationMessages.action?formIndexInCollection=<s:property value="index" />')"><s:property value="getLoadStatusString()" /> </a>
+    <!--  a href="#"><s:property value="getLoadStatusString()" /></a>
+    <input type="hidden" id="<s:property value="getFormIdString()" />" value='<s:property value="getStructuredStatusInHtml(false)" />'> -->
+    </s:elseif>
+    </s:else>
+    </td>
+    </tr>
+    </s:iterator>
+<tr>
 		 <td colspan="1" align="left" nowrap>
 <s:submit type="image" src="/FormLoader/i/load_forms.gif" title="Select at least one form and you may proceed..." 
 	action="loadForms" disabled="true" align="left" theme="simple" onclick="submitFormSetWaitCursor('loadForms')" /></td>
