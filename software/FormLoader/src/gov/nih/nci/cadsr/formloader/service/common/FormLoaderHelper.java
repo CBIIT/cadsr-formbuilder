@@ -11,22 +11,18 @@ import gov.nih.nci.ncicb.cadsr.common.dto.PermissibleValueV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ValueMeaningV2TransferObject;
-import gov.nih.nci.ncicb.cadsr.common.resource.ValueMeaning;
 import gov.nih.nci.ncicb.cadsr.common.util.ValueHolder;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.security.CodeSource;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
@@ -41,15 +37,10 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Schema;
-import javax.xml.validation.Validator;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.apache.log4j.Logger;
-import org.xml.sax.SAXException;
 
 /**
  * Helper is generally very application specific (i.e. very FormLoader specific).
@@ -570,4 +561,25 @@ public class FormLoaderHelper {
 		
 		return ret;
 	}
+	
+	/**
+	 * Duplicated a module based on a repeatCount and an index.
+	 * @param repeatCount
+	 * @param modules
+	 * @comment Created specifically for JR366.
+	 */
+	public static final void handleModuleRepeat(int r, List<ModuleDescriptor> modules) {
+		int count = 1;
+		for (ModuleDescriptor module : modules) {
+			System.out.println("count [" + module.toString() + "]\n");
+			if(module.getMaximumModuleRepeat() != null && Integer.valueOf(module.getMaximumModuleRepeat()) > 0) {
+				int repeatCount = Integer.valueOf(module.getMaximumModuleRepeat());
+				for(int i=0; i<repeatCount; i++) {
+					ModuleDescriptor cloned = (ModuleDescriptor) SerializationUtils.clone(module);
+					modules.add(cloned);
+				}
+			}
+		}
+	}
+
 }

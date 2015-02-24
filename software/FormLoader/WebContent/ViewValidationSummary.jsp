@@ -104,7 +104,7 @@ the workflow status to "Retired Deleted". Users must use Form Builder applicatio
 				</td>
 			</tr>
 			</s:iterator>
-    <s:iterator value="invalidForms" var="form" status="status">
+    <s:iterator value="invalidForms" var="form" status="status">	<!-- JR408 added the following block -->
     <tr> <!-- JR408 row color is not handled -->
     <td>
     <!-- Temp disable loading update form added: && !loadType.equals('Update Form') -->

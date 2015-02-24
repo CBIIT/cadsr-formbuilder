@@ -1,9 +1,10 @@
 package gov.nih.nci.cadsr.formloader.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModuleDescriptor {
+public class ModuleDescriptor /* JR366 begin */ implements Serializable /* JR366 end */ {
 	String moduleSeqId;
 	String publicId;
 	String version;
@@ -118,6 +119,16 @@ public class ModuleDescriptor {
 
 	public void setMaximumModuleRepeat(String maximumModuleRepeat) {
 		this.maximumModuleRepeat = maximumModuleRepeat;
+	}
+
+	@Override
+	public String toString() {
+		return "ModuleDescriptor [moduleSeqId=" + moduleSeqId + ", publicId="
+				+ publicId + ", version=" + version + ", longName=" + longName
+				+ ", preferredDefinition=" + preferredDefinition
+				+ ", createdBy=" + createdBy + ", modifiedBy=" + modifiedBy
+				+ ", maximumModuleRepeat=" + maximumModuleRepeat
+				+ ", questions=" + questions + "]";
 	}
 	
 }

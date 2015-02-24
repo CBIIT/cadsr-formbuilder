@@ -532,6 +532,8 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 		logger.debug("Start creating modules for form");
 		List<ModuleDescriptor> modules = form.getModules();
 		
+		FormLoaderHelper.handleModuleRepeat(0, modules);  //JR366
+		
 		/*
 		 * Denise:
 		 * For a module and its questions in a form
