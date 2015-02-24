@@ -58,5 +58,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="tools/cart-to-displaycart-migration/lib/jbossall-client.jar"/>
 	<classpathentry kind="lib" path="software/formbuilder/lib/j2ee.jar"/>
+	<classpathentry kind="lib" path="software/FormLoader/WebContent/WEB-INF/lib/gson-2.3.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
