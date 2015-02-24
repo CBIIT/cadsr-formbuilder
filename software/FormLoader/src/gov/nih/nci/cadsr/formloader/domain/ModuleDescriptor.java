@@ -1,10 +1,9 @@
 package gov.nih.nci.cadsr.formloader.domain;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModuleDescriptor /* JR366 begin */ implements Serializable /* JR366 end */ {
+public class ModuleDescriptor {
 	String moduleSeqId;
 	String publicId;
 	String version;

@@ -1,6 +1,7 @@
 package gov.nih.nci.cadsr.formloader.service.common;
 
 
+import gov.nih.nci.cadsr.formloader.common.JsonUtil;
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.ModuleDescriptor;
@@ -568,18 +569,23 @@ public class FormLoaderHelper {
 	 * @param modules
 	 * @comment Created specifically for JR366.
 	 */
-	public static final void handleModuleRepeat(int r, List<ModuleDescriptor> modules) {
+	public static final List<ModuleDescriptor> handleModuleRepeat(List<ModuleDescriptor> modules) {
 		int count = 1;
+		List<ModuleDescriptor> ret = new ArrayList();
 		for (ModuleDescriptor module : modules) {
 			System.out.println("count [" + module.toString() + "]\n");
 			if(module.getMaximumModuleRepeat() != null && Integer.valueOf(module.getMaximumModuleRepeat()) > 0) {
 				int repeatCount = Integer.valueOf(module.getMaximumModuleRepeat());
 				for(int i=0; i<repeatCount; i++) {
-					ModuleDescriptor cloned = (ModuleDescriptor) SerializationUtils.clone(module);
-					modules.add(cloned);
+					//ModuleDescriptor cloned = (ModuleDescriptor) SerializationUtils.clone(module);
+					ModuleDescriptor cloned = (ModuleDescriptor)JsonUtil.clone(module);
+					//cloned.setPublicId(null);
+					ret.add(cloned);
 				}
 			}
+			ret.add(module);
 		}
+		return ret;
 	}
 
 }
