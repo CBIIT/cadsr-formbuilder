@@ -1808,7 +1808,7 @@ public class FormBuilderEJB extends SessionBeanAdapter implements FormBuilderSer
                 dao.deleteRepititionsForQuestion(key);
             }
         }
-        dao.updateModuleRepeatCount(moduleId,repeatCount,userId);
+        dao.updateModuleRepeatCount(moduleId,repeatCount,userId);	//JR366 tagged
         if(repititionMap!=null &&!repititionMap.isEmpty())
         {
             Set keys = repititionMap.keySet();

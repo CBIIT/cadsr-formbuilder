@@ -82,5 +82,10 @@
     <bean id="contactCommV2Dao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCContactCommunicationDAOV2">
 		<constructor-arg ref="dataSource"/>       
     </bean>
+    <!-- JR366 begin -->
+    <bean id="qrdao" class="gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCQuestionRepititionDAOV2">
+		<constructor-arg ref="dataSource"/>       
+    </bean>
+	<!-- JR366 end -->
 </beans>
 

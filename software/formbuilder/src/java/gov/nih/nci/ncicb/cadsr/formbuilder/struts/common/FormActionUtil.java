@@ -311,10 +311,10 @@ public class FormActionUtil
     public static List<Module> getRepetitions(Module module)
     {
         List<Module> moduleRepeats = new ArrayList<Module>();
-        List questions = module.getQuestions();
+        List questions = module.getQuestions();	//JR366 tagged #1
         if (questions == null)
             return moduleRepeats;
-        if (module.getNumberOfRepeats() == 0)
+        if (module.getNumberOfRepeats() == 0)	//JR366 tagged #2
             return moduleRepeats;
 
         Map<Integer, Map<String, QuestionRepitition>> questionRepMap =

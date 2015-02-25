@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 public class DomainObjectTranslator {
@@ -140,7 +141,9 @@ public class DomainObjectTranslator {
 		
 		moduleDto.setContext(formdto.getContext());
 		moduleDto.setPreferredDefinition(module.getPreferredDefinition());
-		
+		if(StringUtils.isNumeric(module.maximumModuleRepeat)) {
+			moduleDto.setNumberOfRepeats(Integer.valueOf(module.maximumModuleRepeat));	//JR366
+		}
 		return moduleDto;
 	}
 	

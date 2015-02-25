@@ -25,6 +25,7 @@ import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCModuleInstruction
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCProtocolDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCQuestionDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCQuestionInstructionDAOV2;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCQuestionRepititionDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCReferenceDocumentDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCValueDomainDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
@@ -71,6 +72,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	JDBCDefinitionDAO definitionDao;
 	JDBCClassificationSchemeDAOV2 classificationSchemeDao;
 	JDBCContactCommunicationDAOV2 contactCommV2Dao;
+	JDBCQuestionRepititionDAOV2 qrdao;	//JR366
 	
 	//These are loaded from database for validation purposes
 	HashMap<String, String> conteNameSeqIdMap;
@@ -713,6 +715,14 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 
 	public void setContactCommV2Dao(JDBCContactCommunicationDAOV2 contactCommV2Dao) {
 		this.contactCommV2Dao = contactCommV2Dao;
+	}
+
+	public JDBCQuestionRepititionDAOV2 getQrdao() {
+		return qrdao;
+	}
+
+	public void setQrdao(JDBCQuestionRepititionDAOV2 qrdao) {
+		this.qrdao = qrdao;
 	}
 	
 }

@@ -125,6 +125,11 @@
 		<property name="contactCommV2Dao">
 			<ref bean="contactCommV2Dao" />
 		</property>
+		<!-- JR366 begin -->
+		<property name="qrdao">
+			<ref bean="qrdao" />
+		</property>
+		<!-- JR366 end -->
 	</bean>
 	
 	<bean id="loadRepository"

@@ -27,6 +27,8 @@ import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.RefdocTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormDAOV2;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCQuestionRepititionDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
 import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
 import gov.nih.nci.ncicb.cadsr.common.util.ValueHolder;
@@ -532,7 +534,7 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 		logger.debug("Start creating modules for form");
 		List<ModuleDescriptor> modules = form.getModules();
 		
-		modules = FormLoaderHelper.handleModuleRepeat(modules);  //JR366
+		//modules = FormLoaderHelper.handleModuleRepeat(modules);  //JR366 not needed
 		
 		/*
 		 * Denise:
@@ -569,6 +571,9 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			}
 			//Now, onto questions
 			createQuestionsInModule(module, moduledto, form, formdto, pvDtos);	//JR417 new pvDtos param
+
+			repository.getQrdao().updateModuleRepeatCount(moduledto.getModuleIdseq(), moduledto.getNumberOfRepeats(), moduledto.getModifiedBy());	//JR366 new!
+
 			System.out.println("LoadServiceRepositoryImpl.java#createModulesInForm after createQuestionsInModule");
 		}
 		
