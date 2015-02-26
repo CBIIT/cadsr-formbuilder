@@ -135,14 +135,18 @@ public class DomainObjectTranslator {
 		} else if (FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(form.getLoadType())) {
 			moduleDto.setVersion(formdto.getVersion());
 		} else {
-			moduleDto.setPublicId(Integer.parseInt((module.getPublicId())));
-			moduleDto.setVersion(Float.parseFloat(module.getVersion()));
+			if(StringUtils.isNumeric(module.getPublicId())) {	//JR366 not related to ticket
+				moduleDto.setPublicId(Integer.parseInt((module.getPublicId())));
+			}
+			if(StringUtils.isNumeric(module.getVersion())) {	//JR366 not related to ticket
+				moduleDto.setVersion(Float.parseFloat(module.getVersion()));
+			}
 		}
 		
 		moduleDto.setContext(formdto.getContext());
 		moduleDto.setPreferredDefinition(module.getPreferredDefinition());
 		if(StringUtils.isNumeric(module.maximumModuleRepeat)) {
-			moduleDto.setNumberOfRepeats(Integer.valueOf(module.maximumModuleRepeat));	//JR366
+			moduleDto.setNumberOfRepeats(Integer.valueOf(module.maximumModuleRepeat));	//JR366 new
 		}
 		return moduleDto;
 	}

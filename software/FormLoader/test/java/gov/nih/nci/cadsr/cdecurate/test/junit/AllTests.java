@@ -28,6 +28,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ 
+	JR366.class,
 	JR417.class,
 	JDBCAdminComponentDAOV2Test.class,
 	JDBCClassificationSchemeDAOV2Test.class,
