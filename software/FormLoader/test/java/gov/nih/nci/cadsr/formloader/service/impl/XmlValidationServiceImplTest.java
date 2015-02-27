@@ -1,5 +1,6 @@
 package gov.nih.nci.cadsr.formloader.service.impl;
 
+import java.io.File;
 import java.util.List;
 
 import gov.nih.nci.cadsr.formloader.domain.FormCollection;
@@ -46,14 +47,14 @@ public class XmlValidationServiceImplTest {
 	public void testValidateXmlMalformed() {
 		FormCollection aColl = new FormCollection();
 		try {			
-			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
+			aColl.setXmlPathOnServer("test" + File.separator + "data" + File.separator + "xmlvalidation");
 			aColl.setXmlFileName("forms-malformed.xml");
 			aColl = this.xmlValService.validateXml(aColl);
 			fail("Exception not thrown as expected");
 		} catch (FormLoaderServiceException e) {
 			
 			String status = StatusFormatter.getStatusInXml(aColl);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\forms-malformed-status.xml");
+			StatusFormatter.writeStatusToXml(status, "test" + File.separator + "data" + File.separator + "xmlvalidation" + File.separator + "forms-malformed-status.xml");
 			
 			System.out.println(e.toString());
 			assertTrue(e.getErrorCode() == FormLoaderServiceError.ERROR_MALFORMED_XML);
@@ -65,7 +66,7 @@ public class XmlValidationServiceImplTest {
 		
 		try {
 			FormCollection aColl = new FormCollection();
-			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
+			aColl.setXmlPathOnServer("test" + File.separator + "data" + File.separator + "xmlvalidation");
 			aColl.setXmlFileName("forms.xml"); //2 of the 3 forms have an empty module (doens't have question).
 			aColl = this.xmlValService.validateXml(aColl);
 			
@@ -81,7 +82,7 @@ public class XmlValidationServiceImplTest {
 			//assertTrue(xmlerror.length() == 0);
 			
 			String status = StatusFormatter.getStatusInXml(aColl);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\forms.HappyPath.status.xml");
+			StatusFormatter.writeStatusToXml(status, "test" + File.separator + "data" + File.separator + "xmlvalidation" + File.separator + "forms.HappyPath.status.xml");
 			
 			assertTrue(forms.get(1).getErrors().size() == 0);
 		
@@ -95,7 +96,7 @@ public class XmlValidationServiceImplTest {
 		FormCollection aColl = null;
 		try {
 			aColl = new FormCollection();
-			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
+			aColl.setXmlPathOnServer("test" + File.separator + "data" + File.separator + "xmlvalidation");
 			aColl.setXmlFileName("forms-no-collectionname.xml"); 
 			aColl = this.xmlValService.validateXml(aColl);
 
@@ -104,7 +105,7 @@ public class XmlValidationServiceImplTest {
 		} catch (FormLoaderServiceException e) {
 			
 			String status = StatusFormatter.getStatusInXml(aColl);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\forms-no-collectionname.status.xml");
+			StatusFormatter.writeStatusToXml(status, "test" + File.separator + "data" + File.separator + "xmlvalidation" + File.separator + "forms-no-collectionname.status.xml");
 			assertTrue(e.getErrorCode() == FormLoaderServiceException.ERROR_COLLECTION_NAME_MISSING);
 		}
 	}
@@ -115,7 +116,7 @@ public class XmlValidationServiceImplTest {
 		//This is to test the xsd. It should accept xmls that don't have form public id or version
 		try {
 			FormCollection aColl = new FormCollection();
-			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
+			aColl.setXmlPathOnServer("test" + File.separator + "data" + File.separator + "xmlvalidation");
 			aColl.setXmlFileName("forms-2.xml");
 			aColl = this.xmlValService.validateXml(aColl);
 			List<FormDescriptor> forms = aColl.getForms();
@@ -138,12 +139,12 @@ public class XmlValidationServiceImplTest {
 	public void testValidateXmlWithInvalidContext() {
 		//This works because we're using a non-finalized xsd, which has context type enumeration. 
 		//When we move to the xsd without those list, this test needs to be removed or althered. 
-		// == 09/20/2013
+		// == 09" + File.separator + "20" + File.separator + "2013
 		
-		//FormLoaderv7.xsd will validate this xml == 09/26/2013
+		//FormLoaderv7.xsd will validate this xml == 09" + File.separator + "26" + File.separator + "2013
 		try {
 			FormCollection aColl = new FormCollection();
-			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
+			aColl.setXmlPathOnServer("test" + File.separator + "data" + File.separator + "xmlvalidation");
 			aColl.setXmlFileName("invalid-context.xml");
 			aColl = this.xmlValService.validateXml(aColl);
 			List<FormDescriptor> forms = aColl.getForms();
@@ -151,7 +152,7 @@ public class XmlValidationServiceImplTest {
 			FormDescriptor form = forms.get(0);
 			
 			String status = StatusFormatter.getStatusInXml(aColl);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\invalid-context.status.xml");
+			StatusFormatter.writeStatusToXml(status, "test" + File.separator + "data" + File.separator + "xmlvalidation" + File.separator + "invalid-context.status.xml");
 			
 			//assertTrue(form.getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATION_FAILED);
 			assertTrue(form.getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATED);
@@ -171,7 +172,7 @@ public class XmlValidationServiceImplTest {
 		FormCollection aColl = new FormCollection();
 		try {
 			
-			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
+			aColl.setXmlPathOnServer("test" + File.separator + "data" + File.separator + "xmlvalidation");
 			aColl.setXmlFileName("invalid-xml.xml");
 			aColl = this.xmlValService.validateXml(aColl);
 			List<FormDescriptor> forms = aColl.getForms();
@@ -179,12 +180,12 @@ public class XmlValidationServiceImplTest {
 			FormDescriptor form = forms.get(0);
 			assertTrue(form.getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATION_FAILED);
 			String status = StatusFormatter.getStatusInXml(aColl);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\invalid-xml.status.xml");
+			StatusFormatter.writeStatusToXml(status, "test" + File.separator + "data" + File.separator + "xmlvalidation" + File.separator + "invalid-xml.status.xml");
 			
 		
 		} catch (FormLoaderServiceException e) {
 			String status = StatusFormatter.getStatusInXml(aColl);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\invalid-xml.status.xml");
+			StatusFormatter.writeStatusToXml(status, "test" + File.separator + "data" + File.separator + "xmlvalidation" + File.separator + "invalid-xml.status.xml");
 		}
 	}
 	
@@ -194,7 +195,7 @@ public class XmlValidationServiceImplTest {
 		FormCollection aColl = new FormCollection();
 		try {
 			
-			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
+			aColl.setXmlPathOnServer("test" + File.separator + "data" + File.separator + "xmlvalidation");
 			aColl.setXmlFileName("build.xml");
 			aColl = this.xmlValService.validateXml(aColl);
 			List<FormDescriptor> forms = aColl.getForms();
@@ -202,12 +203,12 @@ public class XmlValidationServiceImplTest {
 			assertTrue(forms.size() == 0);
 			
 			String status = StatusFormatter.getStatusInXml(aColl);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\build.xml.status.xml");
+			StatusFormatter.writeStatusToXml(status, "test" + File.separator + "data" + File.separator + "xmlvalidation" + File.separator + "build.xml.status.xml");
 			
 		
 		} catch (FormLoaderServiceException e) {
 			String status = StatusFormatter.getStatusInXml(aColl);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\invalid-xml.status.xml");
+			StatusFormatter.writeStatusToXml(status, "test" + File.separator + "data" + File.separator + "xmlvalidation" + File.separator + "invalid-xml.status.xml");
 		}
 	}
 	
@@ -217,7 +218,7 @@ public class XmlValidationServiceImplTest {
 		FormCollection aColl = new FormCollection();
 		try {
 			
-			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
+			aColl.setXmlPathOnServer("test" + File.separator + "data" + File.separator + "xmlvalidation");
 			aColl.setXmlFileName("load_forms-5.xml");
 			aColl = this.xmlValService.validateXml(aColl);
 			List<FormDescriptor> forms = aColl.getForms();
@@ -225,12 +226,12 @@ public class XmlValidationServiceImplTest {
 			assertTrue(forms.size() == 5);
 			
 			String status = StatusFormatter.getStatusInXml(aColl);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\load_forms-5.xmlvalidationstatus.xml");
+			StatusFormatter.writeStatusToXml(status, "test" + File.separator + "data" + File.separator + "xmlvalidation" + File.separator + "load_forms-5.xmlvalidationstatus.xml");
 			
 		
 		} catch (FormLoaderServiceException e) {
 			String status = StatusFormatter.getStatusInXml(aColl);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\invalid-xml.status.xml");
+			StatusFormatter.writeStatusToXml(status, "test" + File.separator + "data" + File.separator + "xmlvalidation" + File.separator + "invalid-xml.status.xml");
 			fail("Got exception in testValidatexmlWith5Forms");
 		}
 	}
@@ -242,7 +243,7 @@ public class XmlValidationServiceImplTest {
 		FormCollection aColl = new FormCollection();
 		try {
 			
-			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
+			aColl.setXmlPathOnServer("test" + File.separator + "data" + File.separator + "xmlvalidation");
 			aColl.setXmlFileName("3193449_has_valid_values.xml");
 			aColl = this.xmlValService.validateXml(aColl);
 			List<FormDescriptor> forms = aColl.getForms();
@@ -250,12 +251,12 @@ public class XmlValidationServiceImplTest {
 			assertTrue(forms.size() == 1);
 			
 			String status = StatusFormatter.getStatusInXml(aColl);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\3193449_has_valid_values-status.xml");
+			StatusFormatter.writeStatusToXml(status, "test" + File.separator + "data" + File.separator + "xmlvalidation" + File.separator + "3193449_has_valid_values-status.xml");
 			
 		
 		} catch (FormLoaderServiceException e) {
 			String status = StatusFormatter.getStatusInXml(aColl);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\3193449_has_valid_values.status.xml");
+			StatusFormatter.writeStatusToXml(status, "test" + File.separator + "data" + File.separator + "xmlvalidation" + File.separator + "3193449_has_valid_values.status.xml");
 			fail("Got exception in testValidatexmlWith5Forms");
 		}
 	}
@@ -266,7 +267,7 @@ public class XmlValidationServiceImplTest {
 		FormCollection aColl = new FormCollection();
 		try {
 			
-			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
+			aColl.setXmlPathOnServer("test" + File.separator + "data" + File.separator + "xmlvalidation");
 			aColl.setXmlFileName("FourTheradexMedidataRaveFormsMinimumFields_01-11-2014.xml");
 			aColl = this.xmlValService.validateXml(aColl);
 			List<FormDescriptor> forms = aColl.getForms();
@@ -274,12 +275,12 @@ public class XmlValidationServiceImplTest {
 			assertTrue(forms.size() == 4);
 			
 			String status = StatusFormatter.getStatusInXml(aColl);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\rave-status.xml");
+			StatusFormatter.writeStatusToXml(status, "test" + File.separator + "data" + File.separator + "xmlvalidation" + File.separator + "rave-status.xml");
 			
 		
 		} catch (FormLoaderServiceException e) {
 			String status = StatusFormatter.getStatusInXml(aColl);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\rave-status-error.xml");
+			StatusFormatter.writeStatusToXml(status, "test" + File.separator + "data" + File.separator + "xmlvalidation" + File.separator + "rave-status-error.xml");
 			fail("Got exception in testValidatexmlWith5Forms: " + e.getMessage());
 		}
 	}
@@ -290,7 +291,7 @@ public class XmlValidationServiceImplTest {
 		FormCollection aColl = new FormCollection();
 		try {
 			
-			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
+			aColl.setXmlPathOnServer("test" + File.separator + "data" + File.separator + "xmlvalidation");
 			aColl.setXmlFileName("3256357_v1_0_multi-protocols.xml");
 			aColl = this.xmlValService.validateXml(aColl);
 			List<FormDescriptor> forms = aColl.getForms();
@@ -300,7 +301,7 @@ public class XmlValidationServiceImplTest {
 		
 		} catch (FormLoaderServiceException e) {
 			String status = StatusFormatter.getStatusInXml(aColl);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\3256357_v1_0_multi-protocols-status-error.xml");
+			StatusFormatter.writeStatusToXml(status, "test" + File.separator + "data" + File.separator + "xmlvalidation" + File.separator + "3256357_v1_0_multi-protocols-status-error.xml");
 			assertTrue(e.getErrorCode() == FormLoaderServiceException.ERROR_FORMS_ELEMENT_MISSING);
 		}
 	}
@@ -311,7 +312,7 @@ public class XmlValidationServiceImplTest {
 		FormCollection aColl = new FormCollection();
 		try {
 			
-			aColl.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
+			aColl.setXmlPathOnServer("test" + File.separator + "data" + File.separator + "xmlvalidation");
 			aColl.setXmlFileName("load_forms-0.xml");
 			aColl = this.xmlValService.validateXml(aColl);
 			List<FormDescriptor> forms = aColl.getForms();
@@ -321,7 +322,7 @@ public class XmlValidationServiceImplTest {
 		
 		} catch (FormLoaderServiceException e) {
 			String status = StatusFormatter.getStatusInXml(aColl);
-			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\xmlvalidation\\load_forms-0-status.xml");
+			StatusFormatter.writeStatusToXml(status, "test" + File.separator + "data" + File.separator + "xmlvalidation" + File.separator + "load_forms-0-status.xml");
 			assertTrue(e.getErrorCode() == FormLoaderServiceException.ERROR_EMPTY_FORM_LIST);
 		}
 	}

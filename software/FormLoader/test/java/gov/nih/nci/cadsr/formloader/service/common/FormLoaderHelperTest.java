@@ -131,7 +131,7 @@ public class FormLoaderHelperTest {
 	@Test 
 	public void testResolveWindowsPathPathWithDot() {
 	
-		String inpath = ".\\test\\data\\xmlvalidation\\3256357_v1_0_newform-partial.xml";
+		String inpath = "test/data/xmlvalidation/3256357_v1_0_newform-partial.xml";
 		String path = FormLoaderHelper.resolveWindowsPathIfNecessary(inpath);
 		assertTrue(path.contains(":"));
 		//assertTrue(!path.contains("."));

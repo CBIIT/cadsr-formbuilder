@@ -47,8 +47,8 @@ import org.junit.runners.Suite;
 	LoadingServiceImplTest.class,
 	UnloadingServiceImplTest.class,
 	XmlValidationServiceImplTest.class,
-//	FormLoaderHelperTest.class,
-//	StaXParserTest.class,
+	FormLoaderHelperTest.class,
+	StaXParserTest.class,
 	FormLoaderRepositoryImplTest.class,
 	LoadServiceRepositoryImplTest.class,
 	QuestionDescriptorTest.class

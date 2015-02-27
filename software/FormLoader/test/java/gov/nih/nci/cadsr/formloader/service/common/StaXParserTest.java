@@ -31,12 +31,12 @@ public class StaXParserTest {
 	@Test
 	public void testParseFormCollection() {
 		parser = new StaXParser();
-		String xmlPathName = ".\\test\\data\\xmlvalidation\\forms-2.xml";
+		String xmlPathName = "test/data/xmlvalidation/forms-2.xml";
 		
 		FormCollection formCollection = new FormCollection();
 		formCollection.setXmlFileName("forms-2.xml");
-		formCollection.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
-		formCollection = parser.parseCollectionAndForms(formCollection, ".\\test\\data\\xmlvalidation\\forms-2.xml");
+		formCollection.setXmlPathOnServer("test/data/xmlvalidation");
+		formCollection = parser.parseCollectionAndForms(formCollection, "test/data/xmlvalidation/forms-2.xml");
 		List<FormDescriptor> forms = formCollection.getForms();
 		assertNotNull(forms);
 		assertTrue(forms.size() == 3);
@@ -73,11 +73,11 @@ public class StaXParserTest {
 	public void testParseFormDetails() {
 		
 		parser = new StaXParser();
-		String xmlPathName = ".\\test\\data\\xmlvalidation\\3256357_v1_0_multi-protocols.xml";
+		String xmlPathName = "test/data/xmlvalidation/3256357_v1_0_multi-protocols.xml";
 		
 		FormCollection formCollection = new FormCollection();
 		formCollection.setXmlFileName("3256357_v1_0_multi-protocols.xml");
-		formCollection.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
+		formCollection.setXmlPathOnServer("test/data/xmlvalidation");
 		formCollection = parser.parseCollectionAndForms(formCollection, xmlPathName);
 		List<FormDescriptor> forms = formCollection.getForms();
 		
@@ -118,11 +118,11 @@ public class StaXParserTest {
 	public void testParseFormDetailsFor5Forms() {
 		
 		parser = new StaXParser();
-		String xmlPathName = ".\\test\\data\\xmlvalidation\\load_forms-5.xml";
+		String xmlPathName = "test/data/xmlvalidation/load_forms-5.xml";
 		
 		FormCollection formCollection = new FormCollection();
 		formCollection.setXmlFileName("load_forms-5.xml");
-		formCollection.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
+		formCollection.setXmlPathOnServer("test/data/xmlvalidation");
 		formCollection = parser.parseCollectionAndForms(formCollection, xmlPathName);
 		List<FormDescriptor> forms = formCollection.getForms();
 		
@@ -166,11 +166,11 @@ public class StaXParserTest {
 	@Test
 	public void testParseFormQuestions() {
 		parser = new StaXParser();
-		String xmlPathName = ".\\test\\data\\xmlvalidation\\3193449_has_valid_values.xml";
+		String xmlPathName = "test/data/xmlvalidation/3193449_has_valid_values.xml";
 		
 		FormCollection formCollection = new FormCollection();
 		formCollection.setXmlFileName("3193449_has_valid_values.xml");
-		formCollection.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
+		formCollection.setXmlPathOnServer("test/data/xmlvalidation");
 		formCollection = parser.parseCollectionAndForms(formCollection, xmlPathName);
 		List<FormDescriptor> forms = formCollection.getForms();
 		
@@ -211,11 +211,11 @@ public class StaXParserTest {
 	public void testParseFormDesigAndDefClassification() {
 		
 		parser = new StaXParser();
-		String xmlPathName = ".\\test\\data\\xmlvalidation\\3193449_has_valid_values.xml";
+		String xmlPathName = "test/data/xmlvalidation/3193449_has_valid_values.xml";
 		
 		FormCollection formCollection = new FormCollection();
 		formCollection.setXmlFileName("3193449_has_valid_values.xml");
-		formCollection.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
+		formCollection.setXmlPathOnServer("test/data/xmlvalidation");
 		
 		formCollection = parser.parseCollectionAndForms(formCollection, xmlPathName);
 		List<FormDescriptor> forms = formCollection.getForms();
@@ -258,11 +258,11 @@ public class StaXParserTest {
 	public void testParseFormQuestionsWithValueDomainFields() {
 		
 		parser = new StaXParser();
-		String xmlPathName = ".\\test\\data\\xmlvalidation\\3193449_has_valueDomain_values.xml";
+		String xmlPathName = "test/data/xmlvalidation/3193449_has_valueDomain_values.xml";
 		
 		FormCollection formCollection = new FormCollection();
 		formCollection.setXmlFileName("3193449_has_valueDomain_values.xml");
-		formCollection.setXmlPathOnServer(".\\test\\data\\xmlvalidation");
+		formCollection.setXmlPathOnServer("test/data/xmlvalidation");
 		formCollection = parser.parseCollectionAndForms(formCollection, xmlPathName);
 		List<FormDescriptor> forms = formCollection.getForms();
 		
