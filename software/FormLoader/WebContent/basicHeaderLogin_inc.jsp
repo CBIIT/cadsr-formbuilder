@@ -7,8 +7,16 @@ String formbuilderUrl = "";
 try {
 	formbuilderUrl = CaDSRUtil.getFormBuilderUrlNoCache();
 } catch (IOException ioe) {
-	System.out.println(ioe.getMessage());
+  System.out.println(ioe.getMessage());
 	formbuilderUrl = "https://formbuilder.nih.nci.gov/FormBuilder/";
+}
+
+String cdeBrowserUrl = "";
+try {
+  cdeBrowserUrl = CaDSRUtil.getCdeBrowserUrlNoCache();
+} catch (IOException ioe) {
+  System.out.println(ioe.getMessage());
+  cdeBrowserUrl = "https://cdebrowser.nci.nih.gov";
 }
 %>
 <TABLE width=100% Cellpadding=0 Cellspacing=0 border=0>
@@ -24,7 +32,7 @@ try {
       <TABLE Cellpadding=0 Cellspacing=0 border=0>
         <TR>
           <TD valign="TOP" align="center" width="1%" colspan=1><A HREF="<%=formbuilderUrl%>" ><IMG SRC="<%=request.getContextPath()%>/i/form_builder_icon.jpg" alt="Form Builder" border=0  width=32 height=32></A></TD>
-          <TD valign="TOP" align="center" width="1%" colspan=1><A HREF="https://cdebrowser.nci.nih.gov" target="_blank"><IMG SRC="<%=request.getContextPath()%>/i/icon_cdebrowser.gif" alt="CDE Browser" border=0  width=32 height=32></A></TD>
+          <TD valign="TOP" align="center" width="1%" colspan=1><A HREF="<%=cdeBrowserUrl%>" target="_blank"><IMG SRC="<%=request.getContextPath()%>/i/icon_cdebrowser.gif" alt="CDE Browser" border=0  width=32 height=32></A></TD>
           <TD valign="TOP" align="left" width="1%" colspan=1><A HREF="<s:url value=" https://wiki.nci.nih.gov/x/-gSGCQ"/>"  target="_blank"><IMG SRC="<%=request.getContextPath()%>/i/icon_help.gif" alt="Task Help" border=0  width=32 height=32></A></TD>
         </TR>
         <TR>
