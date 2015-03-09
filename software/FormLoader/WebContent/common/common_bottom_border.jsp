@@ -25,7 +25,7 @@
 </TD>
 
 <td width="30%" align="right">
- <FONT color="white" size=-2 face=arial>Form Builder 4.1 Build 1 Iteration 1
+ <FONT color="white" size=-2 face=arial>4.1 Build 1 Iteration 1
  </FONT>
 </TD>
 
