@@ -20,12 +20,15 @@ $Name: not supported by cvs2svn $
 		CADSR.DS.FL.PSWD = ${CADSR.DS.FL.PSWD}
         CADSR.DS.TNS.ENTRY=${CADSR.DS.TNS.ENTRY}
         DEPLOY.LOCATION = ${DEPLOY.LOCATION}
+        DEV.BASE.URL = ${DEV.BASE.URL}
         JBOSS.HOME.DIR = ${JBOSS.HOME.DIR}
         JBOSS.SERVER.DIR = ${JBOSS.SERVER.DIR}
         JBOSS.CONF.DIR = ${JBOSS.CONF.DIR}
         JBOSS.DEPLOY.DIR = ${JBOSS.DEPLOY.DIR}
         JBOSS.LOG.DIR = ${JBOSS.LOG.DIR}
         JDEBUG = ${JDEBUG}
+        PROD.BASE.URL = ${PROD.BASE.URL}
+        QA.BASE.URL = ${QA .BASE.URL}
         SCP.USER = ${SCP.USER}
         SCP.HOST = ${SCP.HOST}
         SCP.PATH = ${SCP.PATH}
@@ -53,6 +56,7 @@ $Name: not supported by cvs2svn $
 <isset property="CADSR.DS.FL.USER" />
 <isset property="CADSR.DS.FL.PSWD" />
 <isset property="CADSR.DS.TNS.ENTRY" />
+<isset property="DEV.BASE.URL" />
 <isset property="TIER" />
 <isset property="TIER.UPPER" />
 <isset property="TIER.NAME" />
@@ -61,6 +65,8 @@ $Name: not supported by cvs2svn $
 <isset property="JBOSS.CONF.DIR" />
 <isset property="JBOSS.DEPLOY.DIR" />
 <isset property="JBOSS.LOG.DIR" />
+<isset property="PROD.BASE.URL" />
+<isset property="QA.BASE.URL" />
 <isset property="TOOL.LOG.DIR" />
 <isset property="TOOL.ROOT.DIR" />
 <isset property="TEST" />
@@ -170,6 +176,22 @@ $Name: not supported by cvs2svn $
 </or>
 <then><property name="tier.suffix" value=""/></then>
 <else><property name="tier.suffix" value="-${tier.base}"/></else>
+</if>
+
+<if>
+ <equals arg1="${tier}" arg2="prod" />
+ <then>
+   <property name="BASE.URL" value="${PROD.BASE.URL}"/>
+ </then>
+<elseif> 
+ <equals arg1="${tier}" arg2="qa" />
+ <then>
+   <property name="BASE.URL" value="${QA.BASE.URL}"/>
+ </then>
+</elseif> 
+<else> 
+   <property name="BASE.URL" value="${DEV.BASE.URL}"/>
+</else> 
 </if>
 
 <target name="clean" depends="-prop-check" description="Deletes all project build artifacts and temporary files.">
@@ -306,8 +328,6 @@ $Name: not supported by cvs2svn $
 <copy tofile="${artifacts.dir}/jboss/cadsrutil.properties" filtering="true">
 <fileset file="${conf.dir}/template.cadsrutil.properties" />
 </copy>
-
-
 	
 <replaceregexp file="${artifacts.dir}/jboss/cadsrutil.properties" match="@tier@" replace="${tier.suffix}" flags="g"/>
 	
@@ -321,6 +341,7 @@ $Name: not supported by cvs2svn $
 <replaceregexp file="${formloader.dir}/resources/db-tier.properties" match="@db.password@" replace="${CADSR.DS.FL.PSWD}" flags="g"/>
 	<!--  <replaceregexp file="${artifacts.dir}/jboss/db-tier.properties" match="@db.url@" replace="${CADSR.DS.URL}" flags="g"/> -->
 
+<replaceregexp file="${src.dir}/gov/nih/nci/ncicb/cadsr/formbuilder/struts/common/formloader.properties" match="@formbuilder.detailsAction.url@" replace="${BASE.URL}/FormBuilder/formDetailsAction.do?method=getFormDetails&amp;formIdSeq=" flags="g"/>
 
 <copy todir="${root.dir}/css" >
 <fileset dir="${basedir}/src/web/css" />
