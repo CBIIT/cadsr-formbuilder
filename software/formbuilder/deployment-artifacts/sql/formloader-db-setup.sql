@@ -44,10 +44,10 @@ references SBREXT.FORM_COLLECTIONS(FORM_COLLECTION_IDSEQ);
 commit;
 
 -- Insert new designation type for Form Loader
-insert into sbrext.DESIGNATION_TYPES_LOV_VIEW (DETL_NAME) values ('Form Loader')
+insert into sbrext.DESIGNATION_TYPES_LOV_VIEW (DETL_NAME) values ('Form Loader');
 
 -- Insert new definition type for Form Loader
-insert into sbrext.DEFINITION_TYPES_LOV_EXT (DEFL_NAME) values ('Form Loader')
+insert into sbrext.DEFINITION_TYPES_LOV_EXT (DEFL_NAME) values ('Form Loader');
 
 -- Insert the new workflow status value "RETIRED UNLOADED" for Form Loader
 INSERT INTO SBR.AC_STATUS_LOV (ASL_NAME, CREATED_BY, DATE_CREATED )

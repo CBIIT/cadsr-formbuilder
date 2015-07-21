@@ -1,0 +1,29 @@
+FormBuilder/FormLoader 4.1 related scripts (4 scripts in total, 3 belong to FormBuilder and 1 belongs to FormLoader).
+
+Please STOP proceeding to the next script if any errors show up with the current script.
+
+Please execute as in the following order with the suggested account in the bracket as written in the parentheses:
+
+. load_options.sql (SBREXT)
+. GF32671_fb_whats_new_link.sql (SBREXT)
+. GF32430_fb_help_link.sql (SBREXT)
+. formloader-db-setup.sql (SBREXT)
+
+Descriptions related to each scripts:
+
+. load_options.sql (SBREXT) - This is a legacy script, it might not be needed/redundant but we should run it anyway to be safe (same entries like HELP.ROOT is overwritten by subsequent script)
+		-update URL link of FormBuilder
+		-update XML file download related settings
+		-update Help link
+
+. GF32671_fb_whats_new_link.sql (SBREXT)
+		-update WHATS_NEW_URL entry
+
+. GF32430_fb_help_link.sql (SBREXT)
+		-updates HELP.ROOT entry
+
+. formloader-db-setup.sql (SBREXT)
+		-creates tables SBREXT.FORM_COLLECTIONS and SBREXT.FORMS_IN_COLLECTION for FormLoader only
+		-added entries into lookup tables like designation and definition, ac status and workflow status for the proper functioning of FormLoader
+
+End of instructions.

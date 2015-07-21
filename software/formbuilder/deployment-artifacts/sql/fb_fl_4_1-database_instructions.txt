@@ -1,0 +1,62 @@
+. GF32671_fb_whats_new_link.sql (SBREXT)
+5 rows merged.
+committed.
+Commit
+
+. GF32430_fb_help_link.sql (SBREXT)
+> set SERVEROUTPUT ON
+> set LINESIZE 200
+> set heading off
+> set define off
+> set scan off
+> spool ./GF32430_fb_help_link.log
+> select * from tool_options_view_ext where tool_name = 'FormBuilder' and property = 'HELP.ROOT'
+62B915F1-F7D6-4AB6-E040-BB89AD430472 FormBuilder                    HELP.ROOT                                                                                                                                                                                                https://formbuilder-dev.nci.nih.gov/help                                                                                                                                                                 12-FEB-09    FORMBUILDER                                                                                                root url for formbulder tool help                                                                                                                                                                        US         
+
+> update tool_options_view_ext set value = 'https://wiki.nci.nih.gov/x/TgvRB' where tool_name = 'FormBuilder' and property = 'HELP.ROOT'
+1 rows updated.
+> commit
+committed.
+> --rollback;
+> select * from tool_options_view_ext where tool_name = 'FormBuilder' and property = 'HELP.ROOT'
+62B915F1-F7D6-4AB6-E040-BB89AD430472 FormBuilder                    HELP.ROOT                                                                                                                                                                                                https://wiki.nci.nih.gov/x/TgvRB                                                                                                                                                                         12-FEB-09    FORMBUILDER                                                                                                root url for formbulder tool help                                                                                                                                                                        US         
+
+> spool off
+Commit
+
+. GF32671_fb_whats_new_link.sql (SBREXT)
+> set SERVEROUTPUT ON
+> set LINESIZE 200
+> set heading off
+> set define off
+> set scan off
+> spool ./GF32671_fb_whats_new_link.log
+> select * from tool_options_view_ext where tool_name = 'FormBuilder' and property = 'WHATS_NEW_URL'
+E464FBC4-C784-903E-E040-BB8939B60A27 FormBuilder                    WHATS_NEW_URL                                                                                                                                                                                            https://wiki.nci.nih.gov/x/P4CrBQ                                                                                                                                                                        20-AUG-13    FORMBUILDER                                                                                                The URL for the Whats New link                                                                                                                                                                           US         
+
+> MERGE INTO SBREXT.TOOL_OPTIONS_VIEW_EXT S
+USING (SELECT 'FormBuilder' AS TOOL_NAME, 'WHATS_NEW_URL' AS PROPERTY, 'https://wiki.nci.nih.gov/x/P4CrBQ' AS VALUE, 'The URL for the Whats New link' AS DESCRIPTION, 'US' AS LOCALE FROM DUAL) T
+ON (S.TOOL_NAME = T.TOOL_NAME AND S.PROPERTY = T.PROPERTY)
+WHEN MATCHED THEN UPDATE SET S.VALUE = T.VALUE, S.DESCRIPTION = T.DESCRIPTION, S.LOCALE = T.LOCALE
+WHEN NOT MATCHED THEN INSERT (TOOL_NAME, PROPERTY, VALUE, DESCRIPTION, LOCALE) VALUES (T.TOOL_NAME, T.PROPERTY, T.VALUE, T.DESCRIPTION, T.LOCALE)
+1 rows merged.
+> commit
+committed.
+> --rollback;
+> select * from tool_options_view_ext where tool_name = 'FormBuilder' and property = 'WHATS_NEW_URL'
+E464FBC4-C784-903E-E040-BB8939B60A27 FormBuilder                    WHATS_NEW_URL                                                                                                                                                                                            https://wiki.nci.nih.gov/x/P4CrBQ                                                                                                                                                                        20-AUG-13    FORMBUILDER                                                                                                The URL for the Whats New link                                                                                                                                                                           US         
+
+> spool off
+Commit
+
+. formloader-db-setup.sql (SBREXT)
+table SBREXT.FORM_COLLECTIONS created.
+table SBREXT.FORMS_IN_COLLECTION created.
+table SBREXT.FORMS_IN_COLLECTION altered.
+committed.
+1 rows inserted.
+1 rows inserted.
+1 rows inserted.
+1 rows inserted.
+committed.
+
