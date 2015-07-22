@@ -21,6 +21,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+/**
+ * Setup:
+ * 
+ * 1. Make sure all FL libraries i.e. software/FormLoader/WebContent/WEB-INF/*.jar are on top of your classpath except FormLoader's src/java and test/java
+ * 2. Add software/FormLoader/WebContent/WEB-INF into the classpath of JUnit runner
+ * 3. Add software/FormLoader/resources into the classpath of JUnit runner
+ * 
+ * @author tanj
+ *
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/applicationContext.xml"})
 public class LoadingServiceImplTest {
@@ -282,6 +292,40 @@ public void testUserHasRight() {
 //			
 			String status = StatusFormatter.getStatusInXml(aColl);
 			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\loading\\load_forms-5.status.xml");
+			
+			FormDescriptor form = aColl.getForms().get(0);
+			assertTrue(form.getLoadStatus() == FormDescriptor.STATUS_LOADED);
+			
+			//status = StatusFormatter.getStatusMessagesInXml(aColl.getForms().get(1));
+			//StatusFormatter.writeStatusToXml(status, ".\\test\\data\\load_forms-5-1.status.xml");
+//			
+		} catch (FormLoaderServiceException fle) {
+			fail("Got exception: " + fle.getMessage());
+		}
+	}
+	
+	@Test
+	public void testJR423() {
+		this.prepareCollectionToLoad(".\\test\\data\\loading", "QA4188231_v1_8.xml");
+		try {
+			List<FormDescriptor> forms = aColl.getForms();
+			assertTrue(forms.get(0).getLoadType().equals(FormDescriptor.LOAD_TYPE_NEW));
+			assertTrue(forms.get(1).getLoadType().equals(FormDescriptor.LOAD_TYPE_UNKNOWN));
+			assertTrue(forms.get(2).getLoadType().equals(FormDescriptor.LOAD_TYPE_UNKNOWN));
+			//assertTrue(forms.get(3).getLoadStatus() == FormDescriptor.STATUS_XML_VALIDATION_FAILED);
+			assertTrue(forms.get(4).getLoadType().equals(FormDescriptor.LOAD_TYPE_UNKNOWN));
+			
+			forms.get(0).setSelected(true);
+//			forms.get(1).setSelected(true);
+//			forms.get(2).setSelected(true);
+//			forms.get(3).setSelected(false);
+//			forms.get(4).setSelected(true);
+			
+//			
+			aColl = this.loadService.loadForms(aColl);
+//			
+			String status = StatusFormatter.getStatusInXml(aColl);
+			StatusFormatter.writeStatusToXml(status, ".\\test\\data\\loading\\QA4188231_v1_8.status.xml");
 			
 			FormDescriptor form = aColl.getForms().get(0);
 			assertTrue(form.getLoadStatus() == FormDescriptor.STATUS_LOADED);
