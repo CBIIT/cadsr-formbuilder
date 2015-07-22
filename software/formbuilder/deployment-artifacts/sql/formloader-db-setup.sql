@@ -56,4 +56,12 @@ values ('RETIRED UNLOADED', 'SBREXT', SYSDATE );
 insert into sbrext.ASL_ACTL_EXT (ASL_NAME, ACTL_NAME, CREATED_BY) 
 values ('RETIRED UNLOADED', 'QUEST_CONTENT', 'SBREXT');
 
+grant select, insert, update, delete on FORM_COLLECTIONS to formbuilder;
+ 
+grant select, insert, update, delete on FORMS_IN_COLLECTION to formbuilder;
+
+grant select, insert, update, delete on FORMS_IN_COLLECTION to FORMLOADER;
+
+grant select, insert, update, delete on FORM_COLLECTIONS to FORMLOADER;
+
 commit;

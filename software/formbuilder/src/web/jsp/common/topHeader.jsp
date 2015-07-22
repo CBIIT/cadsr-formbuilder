@@ -1,4 +1,5 @@
 <%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
 <HTML>
 <SCRIPT LANGUAGE="JavaScript1.1"
 	SRC='<html:rewrite page="/js/helpWinJS.js"/>'></SCRIPT>

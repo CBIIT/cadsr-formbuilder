@@ -17,8 +17,9 @@
     
 %>
 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
 <HTML>
-<script language="JavaScript1.2" src="<%=treeDir%>skins/<%=skin%>/JavaScript.js"></script>
+<script src="<%=treeDir%>skins/<%=skin%>/JavaScript.js"></script>
 <HEAD>
 <TITLE>NCI Center for Bioinformatics</TITLE>
 <META http-equiv="Content-Type" content="text/html;">
