@@ -154,6 +154,10 @@ public class LoadingServiceImpl implements LoadingService {
 				continue;
 			}
 			
+			//JR423 begin
+			//add new logic here
+			//JR423 end
+			
 			logger.debug("========  Start loading form [" + form.getFormIdString() + "] ===============");
 				
 			if (FormDescriptor.LOAD_TYPE_NEW.equals(form.getLoadType())) {				

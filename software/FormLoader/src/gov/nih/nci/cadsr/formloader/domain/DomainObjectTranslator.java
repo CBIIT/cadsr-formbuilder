@@ -183,9 +183,10 @@ public class DomainObjectTranslator {
 		
 		questdto.setLongName(question.getQuestionText());  
 		
-		//TODO: xsd doesn't have preferred def use question text now
+		//TODO: xsd doesn't have preferred def use question text now 
 		//Denise: if preferred def of data element if it's not null. Otherwise, use long name of data element. if No CDE, use question text
 		questdto.setPreferredDefinition(question.getQuestionText());
+
 		return questdto;
 	}
 	

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms>
+  <collectionName>Test Case 8.03</collectionName> 
+  <collectionDescription>Form with enumerated VD Test Cases 10/05/14</collectionDescription>
+<form>
+   <context>CCR</context>
+   <createdBy>CHENR_QA</createdBy>
+   <dateCreated>2014-10-03T09:00:13.0</dateCreated>
+   <longName>Test - loaded from FL - 8.03</longName>
+   <preferredDefinition>loaded from FL V1.8 - 8.03.06 - Test CDE 2504934 only which doesn't have AQT/PQT</preferredDefinition>
+   <version>1.8</version>
+   <workflowStatusName>DRAFT MOD</workflowStatusName>
+   <categoryName>Flow Sheet</categoryName>
+   <type>CRF</type>
+   <headerInstruction>
+      <text>Header:</text>
+   </headerInstruction>
+   <module>
+      <displayOrder>0</displayOrder>
+      <maximumModuleRepeat>0</maximumModuleRepeat>
+      <longName>Module 5</longName>
+      <instruction>
+         <text>This CDE doesn't have PQT or AQT</text>
+      </instruction>
+      <preferredDefinition>Module 5</preferredDefinition>
+      <publicID>4188289</publicID>
+      <version>1.0</version>
+      <usageCategory>
+         <usageType>None</usageType>
+         <rule>This CDE doesn't have PQT or AQT</rule>
+      </usageCategory>
+      <question>
+         <publicID>4188291</publicID>
+         <version>1.0</version>
+         <isDerived>false</isDerived>
+         <displayOrder>0</displayOrder>
+         <questionText></questionText>
+         <instruction>
+            <text>Question xxx CDE 2504934 V1.0's instruction</text>
+         </instruction>
+         <isEditable>Yes</isEditable>
+         <isMandatory>No</isMandatory>
+         <multiValue>No</multiValue>
+         <dataElement>
+            <longName>Gene Annotation Status Flag Indicator</longName>
+            <shortName>2504924v1.0:2504930v1.0</shortName>
+            <publicID>2504934</publicID>
+            <version>1.0</version>
+            <context>NCIP</context>
+            <workflowStatusName>RELEASED</workflowStatusName>
+            <preferredDefinition>A functional unit of heredity which occupies a specific position (locus) on a particular chromosome, is capable of reproducing itself exactly at each cell division, and directs the formation of an enzyme or other protein. The gene as a functional unit consists of a discrete segment of a giant DNA molecule containing the purine (adenine and guanine) and pyrimidine (cytosine and thymine) bases in the ordered and correct sequence that encodes a specific functional product (i.e., a protein or RNA molecule). Protein synthesis is mediated by molecules of messenger-RNA formed on the chromosome with the gene acting as template. The RNA then passes into the cytoplasm and becomes oriented on the ribosomes where it in turn acts as template to organize a chain of amino acids to form a peptide. Genes normally occur in pairs in all cells except gametes, as a consequence of the fact that all chromosomes are paired except the sex chromosomes (X and Y) of the male._An explanatory or critical comment that has been added to a text._A condition or state at a particular time._An indicator that can be set or unset in order to signal whether a particular condition is true. The indicator usually takes the form of a single binary digit, or bit (either 0 or 1). (from Dictionary of Computers)._An event, entity or condition that typically characterizes a prescribed environment or situation. Indicators determine or aid in determining whether or not certain stated circumstances exist or criteria are satisfied. (On-line Medical Dictionary)</preferredDefinition>
+            <valueDomain>
+               <longName>Gene Annotation Status Flag Indicator</longName>
+               <publicID>2504930</publicID>
+               <version>1.0</version>
+               <type>Enumerated</type>
+               <workflowStatusName>RELEASED</workflowStatusName>
+               <datatypeName>java.lang.String</datatypeName>
+               <permissibleValue>
+                  <value>Finished</value>
+                  <valueMeaning>
+                     <publicID>2576722</publicID>
+                     <version>1.0</version>
+                     <longName>End</longName>
+                     <preferredDefinition>The point or place at which something terminates in time, space, or extent.</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>Null</value>
+                  <valueMeaning>
+                     <publicID>2559614</publicID>
+                     <version>1.0</version>
+                     <longName>NULL</longName>
+                     <preferredDefinition>A special value that may be stored in some database columns to represent an unknown, missing, not applicable, or undefined value. (from Free On-Line Dictionary of Computing)</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+            </valueDomain>
+            <cdeBrowserLink>https://cdebrowser.nci.nih.gov/CDEBrowser/search?elementDetails=9%26FirstTimer=0%26PageId=ElementDetailsGroup&amp;publicId=2504934&amp;version=1.0</cdeBrowserLink>
+         </dataElement>
+         <validValue>
+            <displayOrder>0</displayOrder>
+            <value>Finished</value>
+            <meaningText>End</meaningText>
+            <description>The point or place at which something terminates in time, space, or extent.</description>
+            <valueMeaning>
+               <publicID>2576722</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>1</displayOrder>
+            <value>Null</value>
+            <meaningText>NULL</meaningText>
+            <description>A special value that may be stored in some database columns to represent an unknown, missing, not applicable, or undefined value. (from Free On-Line Dictionary of Computing)</description>
+            <valueMeaning>
+               <publicID>2559614</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+      </question>
+      <question>
+         <publicID>4188295</publicID>
+         <version>1.0</version>
+         <isDerived>false</isDerived>
+         <displayOrder>1</displayOrder>
+         <dateCreated>2014-10-06T00:00:00.0</dateCreated>
+         <dateModified>2014-10-06T00:00:00.0</dateModified>
+         <questionText>Data Element Gene Expression Level Immunohistochemistry Staining Method Finding Overall Gene Expression OverallExpression does not have Preferred Question Text</questionText>
+         <instruction>
+            <text>Question xxx CDE 2529190V1.0's instruction</text>
+         </instruction>
+         <defaultValue>lowExpression</defaultValue>
+         <isEditable>No</isEditable>
+         <isMandatory>No</isMandatory>
+         <multiValue>No</multiValue>
+         <dataElement>
+            <longName>Gene Expression Level Immunohistochemistry Staining Method Finding Overall Gene Expression OverallExpression</longName>
+            <shortName>2528895v1.0:2529050v1.0</shortName>
+            <publicID>2529190</publicID>
+            <version>1.0</version>
+            <context>NCIP</context>
+            <workflowStatusName>RELEASED</workflowStatusName>
+            <preferredDefinition>Typically involves transcription of genetically encoded information into an intermediary message (messenger RNA) and subsequent translation into a functional protein.:A position on a scale measuring intensity, quality, or amount.:Immunohistochemical staining techniques allow for the visualization of antigens via the sequential application of a specific antibody to the antigen (primary antibody), a secondary antibody to the primary antibody and an enzyme complex with a chromogenic substrate. The enzymatic activation of the chromogen results in a visible reaction product at the antigen site. The specimen may then be counterstained and coverslipped. Results are interpreted using a light microscope and aid in the differential diagnosis of pathophysiological processes, which may or may not be associated with a particular antigen.:Objective evidence of disease perceptible to the examining physician (sign) and subjective evidence of disease perceived by the patient (symptom)._Including everything.:Typically involves transcription of genetically encoded information into an intermediary message (messenger RNA) and subsequent translation into a functional protein._Measurement of protein expression in IHC experiments.</preferredDefinition>
+            <valueDomain>
+               <longName>Overall Expression Type</longName>
+               <publicID>2529050</publicID>
+               <version>1.0</version>
+               <type>Enumerated</type>
+               <workflowStatusName>RELEASED</workflowStatusName>
+               <datatypeName>CHARACTER</datatypeName>
+               <permissibleValue>
+                  <value>highExpression</value>
+                  <valueMeaning>
+                     <publicID>2581857</publicID>
+                     <version>1.0</version>
+                     <longName>High Gene Expression</longName>
+                     <preferredDefinition>An elevated level or position or degree; greater than normal in degree or intensity or amount.:Typically involves transcription of genetically encoded information into an intermediary message (messenger RNA) and subsequent translation into a functional protein.</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>lowExpression</value>
+                  <valueMeaning>
+                     <publicID>2581858</publicID>
+                     <version>1.0</version>
+                     <longName>Low Gene Expression</longName>
+                     <preferredDefinition>A minimum level or position or degree; less than normal in degree or intensity or amount.:Typically involves transcription of genetically encoded information into an intermediary message (messenger RNA) and subsequent translation into a functional protein.</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+            </valueDomain>
+            <cdeBrowserLink>https://cdebrowser.nci.nih.gov/CDEBrowser/search?elementDetails=9%26FirstTimer=0%26PageId=ElementDetailsGroup&amp;publicId=2529190&amp;version=1.0</cdeBrowserLink>
+         </dataElement>
+         <validValue>
+            <displayOrder>0</displayOrder>
+            <value>lowExpression</value>
+            <meaningText>Low Gene Expression</meaningText>
+            <description>A minimum level or position or degree; less than normal in degree or intensity or amount.:Typically involves transcription of genetically encoded information into an intermediary message (messenger RNA) and subsequent translation into a functional protein.</description>
+            <valueMeaning>
+               <publicID>2581858</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+      </question>
+   </module>
+   <protocol>
+      <phase>1</phase>
+      <type>Treatment trials</type>
+      <protocolID>02_C_0241E</protocolID>
+      <longName>02_C_0241E</longName>
+      <context>CCR</context>
+      <shortName>02_C_0241E</shortName>
+      <preferredDefinition>Previous clinical experience with UCN-01 has suggested activity in lymphoma and in vitro data suggests synergy is possible with other cytotoxic chemotherapeutic agents. For these reasons it is of interest to combine UCN-01 with anti-lymphoma regimens in future clinical trials. Many such regimens include prednisone (i.e. EPOCH, CHOP) and given that hyperglycemia was a dose limiting toxicity of UCN-01 in initial Phase I trials, it is prudent to first discover the toxicities and maximally tolerated dose of the UCN-01 and prednisone combination prior to combining UCN-01 to prednisone containing antilymphoma regimens. This trial will provide information necessary for further development of UCN-01 in prednisone containing chemotherapy strategies. In addition to following toxicities, monitoring the pharmacokinetic profile of this combination will be important. Earlier Phase I trials with UCN-01 alone demonstrated unexpectedly higher plasma concentrations of UCN-01 and a prolonged half-life. Subsequent in vitro and in vivo animal experiments determined the likely etiology was high affinity binding to a human plasma protein, alpha-1-acid glycoprotein (hAAG). Prednisilone, the active metabolite of prednisone, also binds to hAAG and may raise the active, unbound ("free") fraction of UCN-01 by competitively binding to the plasma protein. Higher levels of "free" UCN-01 may exacerbate the hyperglycemic and pulmonary toxicities seen in single agent UCN-01. In addition, the hyperglycemic effect of prednisone may add to that of UCN-01. Conversely, prednisone may ameliorate the pulmonary toxicities by the ability of glucocorticords to inhibit nitric oxide synthase. Therefore, the main goal of combining prednisone with UCN-01 is to discover the toxicities and maximally tolerated dose of the combination. Ancillary goals will be to assess changes in the pharmacokinetics of UCN-01 and to determine the effect of the combination on nitric oxide production.</preferredDefinition>
+   </protocol>
+</form>
+</forms>

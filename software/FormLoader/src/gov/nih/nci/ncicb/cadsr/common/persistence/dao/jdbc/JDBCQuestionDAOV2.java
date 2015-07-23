@@ -398,6 +398,9 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
           "QUESTION", deIdseq
         };
 
+      System.out.println("JR423: generatePreferredName(sm.getLongName())=[" + generatePreferredName(sm.getLongName()) + "]");
+      System.out.println("JR423: 						sm.getLongName()=[" + sm.getLongName() + "]");	//4000
+      System.out.println("JR423: 			 sm.getPreferredDefinition()=[" + sm.getPreferredDefinition() + "]");	//2000 can not be null
       int res = update(obj);
 
       return res;

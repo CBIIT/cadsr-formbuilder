@@ -6,6 +6,7 @@ import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.ModuleDescriptor;
 import gov.nih.nci.cadsr.formloader.domain.QuestionDescriptor;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
+import gov.nih.nci.cadsr.formloader.service.common.QuestionHelper;
 import gov.nih.nci.cadsr.formloader.service.common.QuestionsPVLoader;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
 import gov.nih.nci.ncicb.cadsr.common.dto.AdminComponentTransferObject;
@@ -562,15 +563,17 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			ValueHolder vh = FormLoaderHelper.populateQuestionsPV(form, repository);
 			System.out.println("LoadServiceRepositoryImpl.java#createModulesInForm after FormLoaderHelper.populateQuestionsPV");
 			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = null;
+			List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(questCdePublicIds);
 			try {
 				List data = (ArrayList) vh.getValue();
 				pvDtos = (HashMap<String, List<PermissibleValueV2TransferObject>>) data.get(QuestionsPVLoader.PV_INDEX);
+				cdeDtos = (List<DataElementTransferObject>) data.get(QuestionsPVLoader.CDE_INDEX);
 				System.out.println("LoadServiceRepositoryImpl.java#createModulesInForm before createQuestionsInModule");
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
 			//Now, onto questions
-			createQuestionsInModule(module, moduledto, form, formdto, pvDtos);	//JR417 new pvDtos param
+			createQuestionsInModule(module, moduledto, form, formdto, pvDtos, cdeDtos);	//JR417 new pvDtos param //JR423 added second new param
 
 			repository.getQrdao().updateModuleRepeatCount(moduledto.getModuleIdseq(), moduledto.getNumberOfRepeats(), moduledto.getModifiedBy());	//JR366 new!
 
@@ -582,7 +585,7 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 	
 	@Transactional
 	protected void createQuestionsInModule(ModuleDescriptor module, ModuleTransferObject moduledto, 
-			FormDescriptor form, FormV2TransferObject formdto, HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos) {
+			FormDescriptor form, FormV2TransferObject formdto, HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos, List<DataElementTransferObject> cdeDtos) {
 		List<QuestionDescriptor> questions = module.getQuestions();
 		
 		logger.debug("Creating questions for module");
@@ -595,6 +598,7 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			questdto.setDisplayOrder(idx++);
 			questdto.setContext(formdto.getContext());
 			questdto.setModule(moduledto);
+			QuestionHelper.handleEmptyQuestionText(questdto, cdeDtos.get(idx-1));
 
 			//better to call createQuestionComponents, which is not implement.
 			QuestionTransferObject newQuestdto = (QuestionTransferObject)this.questionV2Dao.createQuestionComponent(questdto);
