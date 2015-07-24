@@ -287,7 +287,7 @@ $Name: not supported by cvs2svn $
 <fileset file="${conf.dir}/template.load_options.sql" />
 </copy>
 <copy tofile="${artifacts.dir}/jboss/formbuilder-oracle-ds.xml" filtering="true">
-<fileset file="./conf/template.formbuilder-oracle-ds.xml.p6" />
+<fileset file="./conf/template.formbuilder-oracle-ds.xml" />
 </copy>
 <copy tofile="${artifacts.dir}/jboss/formbuilder-log4j-appender.xml" filtering="true">
 <fileset file="${conf.dir}/template.formbuilder-log4j-appender.xml" />
