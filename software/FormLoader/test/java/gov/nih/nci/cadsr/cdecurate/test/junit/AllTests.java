@@ -26,10 +26,21 @@ import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCValueDomainDAOV2T
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+/**
+ * Setup:
+ * 
+ * 1. Make sure all FL libraries i.e. software/FormLoader/WebContent/WEB-INF/*.jar are on top of your classpath except FormLoader's src/java and test/java
+ * 2. Add software/FormLoader/WebContent/WEB-INF into the classpath of JUnit runner
+ * 3. Add software/FormLoader/resources into the classpath of JUnit runner
+ * 
+ * @author tanj
+ *
+ */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ 
 	JR366.class,
 	JR417.class,
+	JR423.class,
 	JDBCAdminComponentDAOV2Test.class,
 	JDBCClassificationSchemeDAOV2Test.class,
 	JDBCCollectionDAOTest.class,

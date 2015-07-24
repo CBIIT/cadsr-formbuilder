@@ -913,7 +913,7 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 		}
 		
 		if (!isAssociatedVdValid(question, matchingCde)) {
-			msg = "Question is disassocited with CDE [" + matchingCde.getPublicId() + "|" + matchingCde.getVersion() + 
+			msg = "Question is disassociated with CDE [" + matchingCde.getPublicId() + "|" + matchingCde.getVersion() + 
 					" in xml because the valueDomain fields have no match in database.";
 			prepareQuestionForLoadWithoutValidation(form, question, msg);
 			return; 

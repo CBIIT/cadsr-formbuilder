@@ -21,16 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-/**
- * Setup:
- * 
- * 1. Make sure all FL libraries i.e. software/FormLoader/WebContent/WEB-INF/*.jar are on top of your classpath except FormLoader's src/java and test/java
- * 2. Add software/FormLoader/WebContent/WEB-INF into the classpath of JUnit runner
- * 3. Add software/FormLoader/resources into the classpath of JUnit runner
- * 
- * @author tanj
- *
- */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/applicationContext.xml"})
 public class LoadingServiceImplTest {
