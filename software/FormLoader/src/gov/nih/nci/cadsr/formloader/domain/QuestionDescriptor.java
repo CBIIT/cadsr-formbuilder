@@ -398,7 +398,7 @@ public class QuestionDescriptor {
 			return false;
 		
 		if (this.lowValueNumber != null && this.lowValueNumber.length() > 0 
-				&& !this.lowValueNumber.equals(highValueNumber))
+				&& !this.lowValueNumber.equals(lowValueNumber))	//JR447 - lowValueNumber is 0 and yet highValueNumber is 10 (highValueNumber should be just lowValueNumber)
 			return false;
 		
 		if (this.maximumLengthNumber != null && this.maximumLengthNumber.length() > 0 
