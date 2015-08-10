@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Transformed with FinalFormCartTransformv33.xsl and validated with FormCartv21.xsd -->
+<forms>
+  <collectionName> Rui test form - CDE 2003831 2015-03-18 </collectionName> 
+  <collectionDescription>FormCollection is from DEV tier Form 4225002v1.0 </collectionDescription> 
+<form>
+   <context>CTEP</context>
+   <createdBy>CHENR_QA</createdBy>
+   <dateCreated>2015-03-18T13:44:07.0</dateCreated>
+   <dateModified>2015-03-18T13:44:20.0</dateModified>
+   <modifiedBy>CHENR_QA</modifiedBy>
+   <longName>Rui test form - CDE 2003831 2015-03-18</longName>
+   <preferredDefinition>Test to load CDE 2003831</preferredDefinition>
+   <cadsrRAI>2.16.840.1.113883.3.26.2</cadsrRAI>
+   <workflowStatusName>DRAFT NEW</workflowStatusName>
+   <categoryName>Pre-Study</categoryName>
+   <type>CRF</type>
+   <headerInstruction>
+      <text>This is header instruction</text>
+   </headerInstruction>
+   <module>
+      <displayOrder>0</displayOrder>
+      <maximumModuleRepeat>0</maximumModuleRepeat>
+      <longName>module 1</longName>
+      <instruction>
+         <text>Module 1 instruction</text>
+      </instruction>
+      <preferredDefinition>module 1</preferredDefinition>
+      <publicID>4225004</publicID>
+      <version>1.0</version>
+      <usageCategory>
+         <usageType>None</usageType>
+         <rule>Module 1 instruction</rule>
+      </usageCategory>
+      <question>
+         <publicID>4225006</publicID>
+         <version>1.0</version>
+         <isDerived>false</isDerived>
+         <displayOrder>0</displayOrder>
+         <dateCreated>2015-03-18T00:00:00.0</dateCreated>
+         <dateModified>2015-03-18T00:00:00.0</dateModified>
+         <questionText>Relations with other people</questionText>
+         <isEditable>Yes</isEditable>
+         <isMandatory>No</isMandatory>
+         <multiValue>No</multiValue>
+         <dataElement>
+            <longName>Patient Interpersonal Interaction Pain Restricted Scale</longName>
+            <shortName>PT_IPIA_PN_RES_SCALE</shortName>
+            <publicID>2003831</publicID>
+            <version>3.0</version>
+            <context>CTEP</context>
+            <workflowStatusName>RELEASED</workflowStatusName>
+            <preferredDefinition>the scale to determine the level to which pain interferes with a patient's relations with other people.</preferredDefinition>
+            <valueDomain>
+               <longName>Pain Restricted Scale</longName>
+               <publicID>2200542</publicID>
+               <version>1.0</version>
+               <type>Enumerated</type>
+               <workflowStatusName>RELEASED</workflowStatusName>
+               <datatypeName>CHARACTER</datatypeName>
+               <highValueNumber>10</highValueNumber>
+               <lowValueNumber>0</lowValueNumber>
+               <maximumLengthNumber>2</maximumLengthNumber>
+               <minimumLengthNumber>1</minimumLengthNumber>
+               <permissibleValue>
+                  <value>0</value>
+                  <valueMeaning>
+                     <publicID>2558062</publicID>
+                     <version>1.0</version>
+                     <longName>0</longName>
+                     <preferredDefinition>No value exists.</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>3</value>
+                  <valueMeaning>
+                     <publicID>2558081</publicID>
+                     <version>1.0</version>
+                     <longName>3</longName>
+                     <preferredDefinition>3</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>4</value>
+                  <valueMeaning>
+                     <publicID>2558084</publicID>
+                     <version>1.0</version>
+                     <longName>4</longName>
+                     <preferredDefinition>4</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>5</value>
+                  <valueMeaning>
+                     <publicID>2558086</publicID>
+                     <version>1.0</version>
+                     <longName>5</longName>
+                     <preferredDefinition>5</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>6</value>
+                  <valueMeaning>
+                     <publicID>2558092</publicID>
+                     <version>1.0</version>
+                     <longName>6</longName>
+                     <preferredDefinition>6</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>7</value>
+                  <valueMeaning>
+                     <publicID>2558098</publicID>
+                     <version>1.0</version>
+                     <longName>7</longName>
+                     <preferredDefinition>7</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>8</value>
+                  <valueMeaning>
+                     <publicID>2558102</publicID>
+                     <version>1.0</version>
+                     <longName>8</longName>
+                     <preferredDefinition>8</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>9</value>
+                  <valueMeaning>
+                     <publicID>2558107</publicID>
+                     <version>1.0</version>
+                     <longName>9</longName>
+                     <preferredDefinition>9</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>2</value>
+                  <valueMeaning>
+                     <publicID>2558074</publicID>
+                     <version>1.0</version>
+                     <longName>2</longName>
+                     <designation>
+                        <createdBy>UMLLOADER_HARIKA_DEV</createdBy>
+                        <dateCreated>2014-05-02T12:22:56.0</dateCreated>
+                        <languageName>ENGLISH</languageName>
+                        <name>2</name>
+                        <type>UML Value Name</type>
+                        <context>NCIP</context>
+                        <classification>
+                           <name>UMLLoader Test1</name>
+                           <publicID>4188891</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>UMLLoader sample Test</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                     </designation>
+                     <definition>
+                        <createdBy>UMLLOADER_HARIKA_DEV</createdBy>
+                        <dateCreated>2014-05-06T13:29:57.0</dateCreated>
+                        <languageName>ENGLISH</languageName>
+                        <text>2</text>
+                        <type>UML Value Definition</type>
+                        <classification>
+                           <name>UMLLoader Test1</name>
+                           <publicID>4188891</publicID>
+                           <version>1.0</version>
+                           <preferredDefinition>UMLLoader sample Test</preferredDefinition>
+                           <classificationSchemeItem>
+                              <name>ValueDomains</name>
+                              <publicID>2812842</publicID>
+                              <version>1.0</version>
+                              <type>UML_PACKAGE_NAME</type>
+                              <preferredDefinition>ValueDomains</preferredDefinition>
+                           </classificationSchemeItem>
+                        </classification>
+                        <context>NCIP</context>
+                     </definition>
+                     <preferredDefinition>A natural number greater than 1 and less than 3 and the quantity that it denotes: the sum of one and one.</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>1</value>
+                  <valueMeaning>
+                     <publicID>2558069</publicID>
+                     <version>1.0</version>
+                     <longName>1</longName>
+                     <preferredDefinition>1</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+               <permissibleValue>
+                  <value>10</value>
+                  <valueMeaning>
+                     <publicID>2561191</publicID>
+                     <version>1.0</version>
+                     <longName>10</longName>
+                     <preferredDefinition>10</preferredDefinition>
+                  </valueMeaning>
+               </permissibleValue>
+            </valueDomain>
+            <referenceDocument>
+               <name>CRF Text</name>
+               <type>Alternate Question Text</type>
+               <context>CTEP</context>
+               <doctext>Select the one number that describes how, during the past 24 hours, PAIN HAS INTERFERED with your Relations with other people</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <referenceDocument>
+               <name>Relations with other people</name>
+               <type>Preferred Question Text</type>
+               <context>CTEP</context>
+               <doctext>Relations with other people</doctext>
+               <languageName>ENGLISH</languageName>
+            </referenceDocument>
+            <cdeBrowserLink>https://cdebrowser.nci.nih.gov/CDEBrowser/search?elementDetails=9%26FirstTimer=0%26PageId=ElementDetailsGroup&amp;publicId=2003831&amp;version=3.0</cdeBrowserLink>
+         </dataElement>
+         <validValue>
+            <displayOrder>0</displayOrder>
+            <value>0</value>
+            <meaningText>0</meaningText>
+            <description>No value exists.</description>
+            <valueMeaning>
+               <publicID>2558062</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>1</displayOrder>
+            <value>1</value>
+            <meaningText>1</meaningText>
+            <description>1</description>
+            <valueMeaning>
+               <publicID>2558069</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>2</displayOrder>
+            <value>10</value>
+            <meaningText>10</meaningText>
+            <description>10</description>
+            <valueMeaning>
+               <publicID>2561191</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>3</displayOrder>
+            <value>2</value>
+            <meaningText>2</meaningText>
+            <description>A natural number greater than 1 and less than 3 and the quantity that it denotes: the sum of one and one.</description>
+            <valueMeaning>
+               <publicID>2558074</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>4</displayOrder>
+            <value>3</value>
+            <meaningText>3</meaningText>
+            <description>3</description>
+            <valueMeaning>
+               <publicID>2558081</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>5</displayOrder>
+            <value>4</value>
+            <meaningText>4</meaningText>
+            <description>4</description>
+            <valueMeaning>
+               <publicID>2558084</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>6</displayOrder>
+            <value>5</value>
+            <meaningText>5</meaningText>
+            <description>5</description>
+            <valueMeaning>
+               <publicID>2558086</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>7</displayOrder>
+            <value>6</value>
+            <meaningText>6</meaningText>
+            <description>6</description>
+            <valueMeaning>
+               <publicID>2558092</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>8</displayOrder>
+            <value>7</value>
+            <meaningText>7</meaningText>
+            <description>7</description>
+            <valueMeaning>
+               <publicID>2558098</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>9</displayOrder>
+            <value>8</value>
+            <meaningText>8</meaningText>
+            <description>8</description>
+            <valueMeaning>
+               <publicID>2558102</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+         <validValue>
+            <displayOrder>10</displayOrder>
+            <value>9</value>
+            <meaningText>9</meaningText>
+            <description>9</description>
+            <valueMeaning>
+               <publicID>2558107</publicID>
+               <version>1.0</version>
+            </valueMeaning>
+         </validValue>
+      </question>
+   </module>
+   <protocol>
+      <leadOrganization>SWOG</leadOrganization>
+      <phase>III</phase>
+      <type>Treatment trials</type>
+      <protocolID>S0421</protocolID>
+      <longName>S0421</longName>
+      <context>CTEP</context>
+      <shortName>S0421</shortName>
+      <preferredDefinition>Phase III Study of Docetaxel and Atrasentan Versus Docetaxel and Placebo for Patients with Advanced Hormone Refractory Prostate Cancer</preferredDefinition>
+   </protocol>
+</form>
+</forms>
