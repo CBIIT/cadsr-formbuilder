@@ -27,11 +27,13 @@ import gov.nih.nci.ncicb.cadsr.common.dto.QuestionChangeTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.RefdocTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.ReferenceDocumentTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ValueMeaningV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCFormDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCQuestionRepititionDAOV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
 import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValueMeaningV2;
 import gov.nih.nci.ncicb.cadsr.common.util.ValueHolder;
 
 import java.util.ArrayList;
@@ -656,7 +658,21 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			if(pv != null) {
 				String vdPermissibleValueSeqid = pv.getIdseq();	//c.f. FormLoaderHelper.populateQuestionsPV(form, repository)
 				vValue.setVdPermissibleValueSeqid(vdPermissibleValueSeqid);  //set the vdpvIdseq!
-				//vValue.setPreferredName(pv.getValueMeaningV2().getPublicId() + "v" + pv.getValueMeaningV2().getVersion());
+//				pv.setIdseq(rs.getString("VP_IDSEQ"));	//JR448 TODO do I need to set this? JR417 this is THE vdPvIdSeq! Not sure why is it populated during content validation but it is what it is!
+				ValueMeaningV2 pvVM = pv.getValueMeaningV2();
+				if(pvVM != null) {
+					vValue.setPreferredName(pvVM.getPublicId() + "v" + pvVM.getVersion());
+					ValueMeaningV2TransferObject vm = new ValueMeaningV2TransferObject();
+					vm.setPublicId(pvVM.getPublicId()); //this is also the preferred name for some reason
+					vm.setVersion(pvVM.getVersion());
+					vm.setPreferredName(pvVM.getPreferredName());
+					vm.setPreferredDefinition(pv.getValue());	//or pvVM's preferedDefinition/vValue's meaningText
+					vm.setLongName(pvVM.getLongName());
+					vm.setDescription(pvVM.getPreferredDefinition());
+					vm.setPreferredDefinition(pvVM.getPreferredDefinition());
+					vm.setIdseq(pvVM.getIdseq());
+					pv.setValueMeaningV2(vm);
+				}
 			} //what happend if it is null? do we need to check?
 			//JR417 end
 			FormValidValueTransferObject fvv = translateIntoValidValueDto(vValue, newQuestdto, moduledto, formdto, idx);	 //JR417 vValue's vdpvseqid / vp_idseq is NOT empty anymore (fixed in this ticket)
