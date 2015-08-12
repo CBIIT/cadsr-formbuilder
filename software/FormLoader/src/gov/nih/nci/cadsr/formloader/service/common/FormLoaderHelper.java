@@ -504,6 +504,7 @@ public class FormLoaderHelper {
         PermissibleValueV2TransferObject pv = null;
 		Iterator it = pvDtos.entrySet().iterator();
 		boolean found = false;
+		String value = null;
 	    while (it.hasNext()) {
 	        Map.Entry pair = (Map.Entry)it.next();
 	        pvs = (ArrayList<PermissibleValueV2TransferObject>) pair.getValue();
@@ -511,7 +512,10 @@ public class FormLoaderHelper {
 		        pv = pvs.get(i);
 		        //System.out.println(pair.getKey() + " = " + pv.getValue());
 		        logger.debug(pair.getKey() + " = " + pv.getValue());
-		        if(pv.getValue() != null && pv.getValue().equals(vValue.getMeaningText())) {
+		        if(pv.getValueMeaningV2() != null) value = pv.getValueMeaningV2().getPreferredDefinition();
+		        System.out.println("pv vm value = [" + value + "] vValue.getMeaningText() = [" + vValue.getMeaningText() + "]");
+//		        if(pv.getValue() != null && pv.getValue().equals(vValue.getMeaningText())) {
+		        if(value != null && value.equals(vValue.getMeaningText())) {
 		        	ret = pv;
 		        	found = true;
 		        	break;

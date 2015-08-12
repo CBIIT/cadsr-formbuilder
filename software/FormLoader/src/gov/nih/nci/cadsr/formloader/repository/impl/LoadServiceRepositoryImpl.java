@@ -662,6 +662,7 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 				ValueMeaningV2 pvVM = pv.getValueMeaningV2();
 				if(pvVM != null) {
 					vValue.setPreferredName(pvVM.getPublicId() + "v" + pvVM.getVersion());
+					System.out.println("*********** pv value[" + pv.getValue() + "] vValue getPreferredName[" + vValue.getPreferredName() + "] ***********");
 					ValueMeaningV2TransferObject vm = new ValueMeaningV2TransferObject();
 					vm.setPublicId(pvVM.getPublicId()); //this is also the preferred name for some reason
 					vm.setVersion(pvVM.getVersion());
