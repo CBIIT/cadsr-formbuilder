@@ -123,10 +123,10 @@ try {
 				href="<%=params.getSentinelToolUrl()%>" target="_blank">Sentinel<br>Tool</a> </span>
 		</td>
 		
-		<td align="center" width="15%" height="10">
+		<%-- <td align="center" width="15%" height="10">
 			<span style="font-size: 9pt; font-family: Arial"> <a
 				href="<%=params.getUmlBrowserUrl()%>" target="_blank">UML Model<br>Browser</a> </span>
-		</td>
+		</td> --%>
 		
 		<td align="center" width="15%" height="10">
 			<span style="font-size: 9pt; font-family: Arial"> <a
