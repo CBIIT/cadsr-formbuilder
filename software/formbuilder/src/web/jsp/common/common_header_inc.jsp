@@ -47,7 +47,7 @@ try {
 							TARGET="_top"><IMG SRC="i/cde_cart.gif" alt="Form Cart 2"
 								border=0> </A>
 						<br>
-						<font color=brown face=verdana size=1>&nbsp;Form &nbsp;Cart 2</font>
+						<font color=brown face=verdana size=1>&nbsp;Form &nbsp;Cart2<sup><font color="red"><b>New!</b></font></sup></font>
 					</TD>
 					<TD valign="TOP" align="CENTER" width="1%" colspan=1>
 						<A HREF="<%="formCDECartAction.do?method=displayCDECart"%>"
