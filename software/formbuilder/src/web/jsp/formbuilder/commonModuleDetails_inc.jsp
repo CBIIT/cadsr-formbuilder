@@ -117,7 +117,7 @@
                                    <table align="center" width="100%" cellpadding="0" cellspacing="1" border="0" class="OraBGAccentVeryDark" >
                                      <tr class="OraTabledata">
                                       <td class="OraTableColumnHeader" width="10%" nowrap>
-                                      <bean:message key="cadsr.formbuilder.form.question.mandatory"/> 
+                                      <bean:message key="cadsr.formbuilder.form.question.mandatory"/>
                                      </td>
                                      <td class="OraFieldTextInstruction"><html:checkbox name="question" property="mandatory" disabled="true"/> </td>
                                     </tr>
@@ -131,7 +131,7 @@
                                    <table align="center" width="100%" cellpadding="0" cellspacing="1" border="0" class="OraBGAccentVeryDark" >
                                      <tr class="OraTabledata">
                                       <td class="OraTableColumnHeader" width="10%" nowrap>
-                                      <bean:message key="cadsr.formbuilder.form.question.editable"/> 
+                                      <bean:message key="cadsr.formbuilder.form.question.editable"/>
                                      </td>
                                      <td class="OraFieldTextInstruction">
 										<html:checkbox name="question" property="editable" disabled="true"/>

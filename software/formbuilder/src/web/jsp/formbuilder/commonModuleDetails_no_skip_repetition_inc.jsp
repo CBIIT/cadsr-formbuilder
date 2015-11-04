@@ -121,7 +121,7 @@
                                           <bean:message key="cadsr.formbuilder.form.question.mandatory"/> 
                                      </td>
                                      <td class="OraFieldTextInstruction">
-        				<html:checkbox name="question" property="mandatory" disabled="true"/>
+        								<html:checkbox name="question" property="mandatory" disabled="true"/>
                                      </td>
                                     </tr>
                                    </table>                                                            

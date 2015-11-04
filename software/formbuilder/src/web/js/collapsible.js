@@ -72,7 +72,9 @@ while (i<listElements.length) {
 function getClosedNode(list) {
 
 	var node = createAnchorTag(CLOSED_STATUS);
-	node.appendChild(createImgTag(CLOSED_IMAGE));
+	var closedImgTag = createImgTag(CLOSED_IMAGE);
+	closedImgTag.setAttribute("alt", "close valid values");
+	node.appendChild(closedImgTag);
 	node.appendChild(createVVTextTag());
 
 	node.onclick=createToggleFunction(node,list);
@@ -83,7 +85,9 @@ function getClosedNode(list) {
 function getOpenNode(list) {
 
 	var node = createAnchorTag(OPEN_STATUS);
-	node.appendChild(createImgTag(OPEN_IMAGE));
+	var openImgTag = createImgTag(OPEN_IMAGE);
+	openImgTag.setAttribute("alt", "open valid values");
+	node.appendChild(openImgTag);
 
 	node.onclick=createToggleFunction(node,list);
 	
@@ -197,9 +201,11 @@ function getToggleDisplay(elem) {
 	var imgNode = null;
 	if (collapsedStatus == CLOSED_STATUS) {
 		imgNode = createImgTag(OPEN_VVs);
+		imgNode.setAttribute("alt", "Open All Valid Values");
 	}
 	else {
 		imgNode = createImgTag(CLOSED_VVs);
+		imgNode.setAttribute("alt", "Close All Valid Values");
 	}
 	imgNode.setAttribute('border', '0');
 	if (elem.hasChildNodes()) {

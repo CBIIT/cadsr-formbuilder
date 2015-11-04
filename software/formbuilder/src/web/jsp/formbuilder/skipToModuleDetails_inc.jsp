@@ -123,7 +123,7 @@
                                     </tr>
                                      <tr class="OraTabledata">
                                       <td class="OraTableColumnHeader" width="10%" nowrap>
-                                          <bean:message key="cadsr.formbuilder.form.question.mandatory"/> 
+                                          <bean:message key="cadsr.formbuilder.form.question.mandatory"/>
                                      </td>
                                      <td class="OraFieldText">
                                 	<html:checkbox name="question" property="mandatory" disabled="true"/>

@@ -90,15 +90,15 @@ function setDefaults() {
           <table width="100%" cellpadding="1" cellspacing="1" class="OraBGAccentVeryDark" >      
             <tr>
               <td colspan="2" class="OraTableColumnHeaderNoBG" >
-                <html:checkbox property="excludeTestContext" value="true"  >
-                   <bean:message key="cadsr.cdebrowser.exclude.test.context"/>
+                <html:checkbox styleId="excludeTestContext" property="excludeTestContext" value="true"  >
+                   <label for="excludeTestContext"><bean:message key="cadsr.cdebrowser.exclude.test.context"/></label>
                 </html:checkbox>
               </td>
             </tr>   
             <tr>
               <td colspan="2" class="OraTableColumnHeaderNoBG" >
-                <html:checkbox property="excludeTrainingContext" value="true"  >
-                   <bean:message key="cadsr.cdebrowser.exclude.training.context"/>
+                <html:checkbox styleId="excludeTrainingContext" property="excludeTrainingContext" value="true"  >
+                   <label for="excludeTrainingContext"><bean:message key="cadsr.cdebrowser.exclude.training.context"/></label>
                 </html:checkbox>
               </td>
             </tr>             

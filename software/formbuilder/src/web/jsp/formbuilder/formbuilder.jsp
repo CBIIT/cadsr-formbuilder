@@ -57,20 +57,20 @@ $(document).ready(function()
   <jsp:useBean id="requestMap" scope="request" class="java.util.HashMap"/>
   
 <frameset rows="30,*">
-  <html:frame page="/jsp/common/topHeader.jsp" frameborder="0" scrolling = "no" frameName="tree_header"/>
+  <html:frame title="treeHeader" page="/jsp/common/topHeader.jsp" frameborder="0" scrolling = "no" frameName="tree_header"/>
   <frameset cols="25%,*">
     <frameset rows="7%,*">
-       <html:frame page="/jsp/common/tree_hdr.jsp"
+       <html:frame title="requestMap" page="/jsp/common/tree_hdr.jsp"
               name="requestMap"
               frameborder="0"
               frameName="tree_header"
               scrolling = "no"/>
-       <html:frame page='<%=treeURL%>'
+       <html:frame title="requestMap" page='<%=treeURL%>'
               name="requestMap"
               frameborder="0"
               frameName="tree"/>              
     </frameset>
-       <html:frame action="/setMessagesForFrameAction?method=setMessagesFormKeys"
+       <html:frame title="requestMap" action="/setMessagesForFrameAction?method=setMessagesFormKeys"
               name="requestMap"
               frameborder="0"
               frameName="body"/>      

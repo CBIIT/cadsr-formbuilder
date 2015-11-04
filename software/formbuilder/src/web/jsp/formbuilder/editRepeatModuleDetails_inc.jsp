@@ -85,7 +85,7 @@
                                     </tr>
                                      <tr class="OraTabledata">
                                       <td class="OraTableColumnHeaderGrayBG" width="10%" nowrap>
-                                          <bean:message key="cadsr.formbuilder.form.question.mandatory"/> 
+                                          <bean:message key="cadsr.formbuilder.form.question.mandatory"/>
                                      </td>
                                      <td class="OraFieldText">
                                 	<html:checkbox name="question" property="mandatory" disabled="true"/>
@@ -93,11 +93,11 @@
                                     </tr>
 									<tr class="OraTabledata">
                                       <td class="OraTableColumnHeaderGrayBG" width="10%" nowrap>
-                                          <bean:message key="cadsr.formbuilder.form.question.editable"/> 
+                                          <label for="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>"><bean:message key="cadsr.formbuilder.form.question.editable"/></label>
                                      </td>
                                      <td class="OraFieldText">
 										<logic:equal name="question" property="deDerived" value="true">
-											<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" disabled="true"/>
+											<html:checkbox styleId="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" disabled="true"/>
 											<font color="gray" size="2"><i>Cannot be changed because Data Element is derived</i></font>
 										</logic:equal>
 

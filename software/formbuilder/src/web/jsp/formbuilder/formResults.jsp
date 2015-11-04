@@ -107,7 +107,7 @@ $(document).ready(function()
           </td>
      </tr>       
         <tr>
-          <td colspan="2" ><img height=1 src="i/beigedot.gif" width="99%" align=top border=0> </td>
+          <td colspan="2" ><img height=1 src="i/beigedot.gif" width="99%" align=top border=0 alt="spacer image"> </td>
         </tr>
       </table>   
   <%@ include  file="/jsp/formbuilder/formResults_inc.jsp" %>

@@ -84,8 +84,8 @@ function ToggleSelectAll(e){
         <table width="100%" align="center" cellpadding="1" cellspacing="1" border="0" class="OraBGAccentVeryDark">
           <tr class="OraTableColumnHeader">
             <logic:notPresent name="<%=FormConstants.IN_PROCESS%>">
-				<th class="OraTableColumnHeader" nowrap>
-<input class="viewerDisable" type="checkbox" name="selectAllChk" value="yes" onClick="ToggleSelectAll(this)"/>
+				<th class="OraTableColumnHeader" nowrap><label for="selectAllChk">Select All</label><br/>&nbsp;&nbsp;&nbsp;
+				<input id="selectAllChk" class="viewerDisable" type="checkbox" name="selectAllChk" value="yes" onClick="ToggleSelectAll(this)"/>
 <%-- end GF29128 fix --%>
 				</th> 
                <th class="OraTableColumnHeader" nowrap>Action</th>
@@ -167,8 +167,8 @@ function ToggleSelectAll(e){
  
 <%-- Begin GF29128 fix. -D.An, 20130812 --%>        	                 
 <TD class="noneViewer" style="display:none" width="20" align="center">
-	<html:multibox name="searchForm" property="checkedFormIds">
-		<bean:write name="form" property="formIdseq" />
+	<html:multibox styleId="checkedFormIds" name="searchForm" property="checkedFormIds">
+		<label for="checkedFormIds"><bean:write name="form" property="formIdseq" /></label>
                	</html:multibox>
 </TD>
 <TD class="viewer" style="display:none" width="20" class="OraTabledata" align=center>

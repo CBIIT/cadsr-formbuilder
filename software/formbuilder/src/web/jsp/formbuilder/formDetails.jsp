@@ -212,14 +212,12 @@ $(document).ready(function()
           <% Form aForm = (Form)formObj;
             if(FormJspUtil.hasModuleRepetition(aForm)){ %>
              <logic:present name="<%=FormConstants.SHOW_MODULE_REPEATS%>">
-               <html:link action='<%="/displayViewFormModuleRepeationAction.do?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.HIDE_REPETITIONS%>'
-                 >
+               <html:link action='<%="/displayViewFormModuleRepeationAction.do?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.HIDE_REPETITIONS%>'>
                <html:img src='i/hideModuleRepetitions.gif' border="0" alt="Hide Module Repetitions"/>
               </html:link>                
              </logic:present>
              <logic:notPresent name="<%=FormConstants.SHOW_MODULE_REPEATS%>">
-               <html:link action='<%="/displayViewFormModuleRepeationAction.do?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.SHOW_REPETITIONS%>'
-                 >
+               <html:link action='<%="/displayViewFormModuleRepeationAction.do?"+NavigationConstants.METHOD_PARAM+"="+NavigationConstants.SHOW_REPETITIONS%>'>
                <html:img src='i/showModuleRepetitions.gif' border="0" alt="Show Module Repetitions"/>
               </html:link>  
              </logic:notPresent>  
@@ -229,7 +227,7 @@ $(document).ready(function()
           </td>          
         </tr>
         <tr>
-          <td colspan=3><img height=1 src="i/beigedot.gif" width="99%" align=top border=0> </td>
+          <td colspan=3><img height=1 src="i/beigedot.gif" width="99%" align=top border=0 alt="Layout spacer"> </td>
         </tr>
       </table>       
       

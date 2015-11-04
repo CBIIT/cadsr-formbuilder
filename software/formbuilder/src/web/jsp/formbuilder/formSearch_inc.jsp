@@ -96,9 +96,9 @@ function gotoClassificationsLOV() {
   <table align="center" valign="top" width="100%" cellpadding="0" cellspacing="1" class="OraBGAccentVeryDark" border="0">
   
             <tr>
-              <td width="20%" class="OraTableColumnHeaderNoBG" nowrap><bean:message key="cadsr.formbuilder.form.name" /></td>
+              <td width="20%" class="OraTableColumnHeaderNoBG" nowrap><label for="<%=FormConstants.SEARCH_FORM_NAME%>"><bean:message key="cadsr.formbuilder.form.name" /></label></td>
               <td class="OraTabledata" nowrap>
-                <html:text property="<%=FormConstants.SEARCH_FORM_NAME%>" size="60"
+                <html:text styleId="<%=FormConstants.SEARCH_FORM_NAME%>" property="<%=FormConstants.SEARCH_FORM_NAME%>" size="60"
                 onkeypress="if(event.keyCode==13){submitForm('getAllForms');};"/>
               </td>
             </tr>
@@ -106,9 +106,9 @@ function gotoClassificationsLOV() {
               <td colspan=2 width="100%" class="OraTableColumnHeaderNoBG" nowrap>
                 <table width="100%" border=0>
                     <tr>
-                        <td width="20%" class="OraTableColumnHeaderNoBG" nowrap>Public ID</td>
+                        <td width="20%" class="OraTableColumnHeaderNoBG" nowrap><label for="<%=FormConstants.SEARCH_FORM_PUBLICID%>">Public ID</label></td>
                         <td class="OraTabledata" nowrap>
-                        <html:text property="<%=FormConstants.SEARCH_FORM_PUBLICID%>" size="20"
+                        <html:text styleId="<%=FormConstants.SEARCH_FORM_PUBLICID%>" property="<%=FormConstants.SEARCH_FORM_PUBLICID%>" size="20"
                             onkeypress="if(event.keyCode==13){submitForm('getAllForms');};"/>
                          </td>
                          <td width="50%" class="OraTableColumnHeaderNoBG" nowrap>
@@ -117,16 +117,12 @@ function gotoClassificationsLOV() {
                                  <td valign="top"  class="OraTableColumnHeaderNoBG" nowrap>Version</td>
                                     <td class="OraTableColumnHeaderNoBG" nowrap>
                                     <logic:notEmpty name="searchForm" property="<%=FormConstants.LATEST_VERSION_INDICATOR%>" > 
-					    <html:radio property="<%=FormConstants.LATEST_VERSION_INDICATOR%>" value="<%=FormConstants.LATEST_VERSION%>" >Latest Version </html:radio>
-					    <html:radio property="<%=FormConstants.LATEST_VERSION_INDICATOR%>" value="<%=FormConstants.ALL_VERSION%>" >All Versions </html:radio>
+									    <html:radio styleId="<%=FormConstants.LATEST_VERSION%>" property="<%=FormConstants.LATEST_VERSION_INDICATOR%>" value="<%=FormConstants.LATEST_VERSION%>" ><label for="<%=FormConstants.LATEST_VERSION%>">Latest Version </label></html:radio>
+									    <html:radio styleId="<%=FormConstants.ALL_VERSION%>" property="<%=FormConstants.LATEST_VERSION_INDICATOR%>" value="<%=FormConstants.ALL_VERSION%>" ><label for="<%=FormConstants.ALL_VERSION%>">All Versions </label></html:radio>
                                     </logic:notEmpty>
                                     <logic:empty name="searchForm" property="<%=FormConstants.LATEST_VERSION_INDICATOR%>" > 
-					    <input type="radio"  name="<%=FormConstants.LATEST_VERSION_INDICATOR%>" value="<%=FormConstants.LATEST_VERSION%>"
-						   checked="checked"> Latest Version 
-					    </input>
-					    <input type="radio"  name="<%=FormConstants.LATEST_VERSION_INDICATOR%>" value="<%=FormConstants.ALL_VERSION%>">
-					    All Versions
-					    </input>
+									    <input type="radio" id="<%=FormConstants.LATEST_VERSION%>" name="<%=FormConstants.LATEST_VERSION_INDICATOR%>" value="<%=FormConstants.LATEST_VERSION%>" checked="checked"><label for="<%=FormConstants.LATEST_VERSION%>"> Latest Version </label></input>
+									    <input type="radio" id="<%=FormConstants.ALL_VERSION%>" name="<%=FormConstants.LATEST_VERSION_INDICATOR%>" value="<%=FormConstants.ALL_VERSION%>"><label for="<%=FormConstants.ALL_VERSION%>">All Versions</label></input>
                                     </logic:empty>
                                 </td>
                                </tr>          
@@ -143,9 +139,9 @@ function gotoClassificationsLOV() {
       <td width="50%"  valign="top" >
           <table width="100%" cellpadding="0" cellspacing="1" class="OraBGAccentVeryDark" border="0" %>           
             <tr>            
-                <td width="30%" class="OraTableColumnHeaderNoBG" nowrap><bean:message key="cadsr.formbuilder.form.protocol.longName"/></td>
+                <td width="30%" class="OraTableColumnHeaderNoBG" nowrap><label for="<%=FormConstants.PROTOCOLS_LOV_NAME_FIELD%>"><bean:message key="cadsr.formbuilder.form.protocol.longName"/></label></td>
                 <td class="OraTabledata" nowrap>
-                  <html:text property="<%=FormConstants.PROTOCOLS_LOV_NAME_FIELD%>" 
+                  <html:text styleId="<%=FormConstants.PROTOCOLS_LOV_NAME_FIELD%>" property="<%=FormConstants.PROTOCOLS_LOV_NAME_FIELD%>" 
                          readonly="true" 
                          size="19"
                          styleClass="LOVField"
@@ -156,9 +152,9 @@ function gotoClassificationsLOV() {
                 </td>
              </tr>
             <tr>            
-              <td width="30%" class="OraTableColumnHeaderNoBG" nowrap>CS/CSI</td>
+              <td width="30%" class="OraTableColumnHeaderNoBG" nowrap><label for="<%=FormConstants.CSI_NAME%>">CS/CSI</label></td>
               <td width="70%" class="OraTabledata" nowrap>
-                <html:text property="<%=FormConstants.CSI_NAME%>" 
+                <html:text styleId="<%=FormConstants.CSI_NAME%>" property="<%=FormConstants.CSI_NAME%>" 
                        readonly="true" 
                        size="19"
                        styleClass="LOVField"
@@ -170,16 +166,16 @@ function gotoClassificationsLOV() {
                 </td>
              </tr>  
             <tr>            
-              <td width="21%" class="OraTableColumnHeaderNoBG" nowrap>Module</td>
+              <td width="21%" class="OraTableColumnHeaderNoBG" nowrap><label for="<%=FormConstants.MODULE_LONG_NAME%>">Module</label></td>
               <td width="70%" class="OraTabledata" nowrap>
-                <html:text property="<%=FormConstants.MODULE_LONG_NAME%>" size="38"
+                <html:text styleId="<%=FormConstants.MODULE_LONG_NAME%>" property="<%=FormConstants.MODULE_LONG_NAME%>" size="38"
                 onkeypress="if(event.keyCode==13){submitForm('getAllForms');};"/>       
               </td>  
              </tr>       
             <tr>            
-              <td width="21%" class="OraTableColumnHeaderNoBG" nowrap>CDE Public ID</td>
+              <td width="21%" class="OraTableColumnHeaderNoBG" nowrap><label for="<%=FormConstants.CDE_PUBLIC_ID%>">CDE Public ID</label></td>
               <td width="70%" class="OraTabledata" nowrap>
-                <html:text property="<%=FormConstants.CDE_PUBLIC_ID%>" size="21"
+                <html:text styleId="<%=FormConstants.CDE_PUBLIC_ID%>" property="<%=FormConstants.CDE_PUBLIC_ID%>" size="21"
                 onkeypress="if(event.keyCode==13){submitForm('getAllForms');};"/>       
               </td>  
              </tr>               
@@ -189,9 +185,9 @@ function gotoClassificationsLOV() {
       <td width="50%" valign="top" >
           <table width="100%" cellpadding="0" cellspacing="1" class="OraBGAccentVeryDark" border="0" %>
             <tr>            
-              <td width="21%" class="OraTableColumnHeaderNoBG" nowrap><bean:message key="cadsr.formbuilder.form.workflow" /></td>
+              <td width="21%" class="OraTableColumnHeaderNoBG" nowrap><label for="<%=FormConstants.SEARCH_WORKFLOW%>"><bean:message key="cadsr.formbuilder.form.workflow" /></label></td>
               <td width="70%" class="OraTabledata" nowrap>
-              <html:select styleClass = "FreeDropdown" property="<%=FormConstants.SEARCH_WORKFLOW%>"
+              <html:select styleId="<%=FormConstants.SEARCH_WORKFLOW%>" styleClass = "FreeDropdown" property="<%=FormConstants.SEARCH_WORKFLOW%>"
               onkeypress="if(window.event.keyCode==13){submitForm('getAllForms');};">
                  <html:option key="cadsr.formbuilder.form.blank" value="<%=FormConstants.SEARCH_ALL%>" /> 
                  <html:options name="<%=FormConstants.ALL_WORKFLOWS%>"/>
@@ -199,9 +195,9 @@ function gotoClassificationsLOV() {
               </td>  
              </tr>              
             <tr>    
-              <td width="30%" class="OraTableColumnHeaderNoBG" nowrap><bean:message key="cadsr.formbuilder.form.context" /></td>
+              <td width="30%" class="OraTableColumnHeaderNoBG" nowrap><label for="<%=FormConstants.SEARCH_CONTEXT_IDSEQ%>"><bean:message key="cadsr.formbuilder.form.context" /></label></td>
               <td width="70%" class="OraTabledata" nowrap>
-                <html:select styleClass = "Dropdown" property="<%=FormConstants.SEARCH_CONTEXT_IDSEQ%>"
+                <html:select styleId="<%=FormConstants.SEARCH_CONTEXT_IDSEQ%>" styleClass = "Dropdown" property="<%=FormConstants.SEARCH_CONTEXT_IDSEQ%>"
                 onkeypress="if(window.event.keyCode==13){submitForm('getAllForms');};">
                    <html:option key="cadsr.formbuilder.form.blank" value="<%=FormConstants.SEARCH_ALL%>" /> 
                    <html:options collection="<%=FormConstants.ALL_CONTEXTS%>" 
@@ -210,9 +206,9 @@ function gotoClassificationsLOV() {
                </td>
              </tr>
             <tr>    
-              <td width="30%" class="OraTableColumnHeaderNoBG" nowrap><bean:message key="cadsr.formbuilder.form.category" /></td>
+              <td width="30%" class="OraTableColumnHeaderNoBG" nowrap><label for="<%=FormConstants.SEARCH_CATEGORY_NAME%>"><bean:message key="cadsr.formbuilder.form.category" /></label></td>
               <td width="70%" class="OraTabledata" nowrap>
-              <html:select styleClass = "Dropdown" property="<%=FormConstants.SEARCH_CATEGORY_NAME%>"
+              <html:select styleId="<%=FormConstants.SEARCH_CATEGORY_NAME%>" styleClass = "Dropdown" property="<%=FormConstants.SEARCH_CATEGORY_NAME%>"
               onkeypress="if(window.event.keyCode==13){submitForm('getAllForms');};">
                 <html:option key="cadsr.formbuilder.form.blank" value="<%=FormConstants.SEARCH_ALL%>" /> 
                 <html:options name="<%=FormConstants.ALL_FORM_CATEGORIES%>" /> 
@@ -220,9 +216,9 @@ function gotoClassificationsLOV() {
               </td>
              </tr>  
             <tr>    
-                <td width="30%" class="OraTableColumnHeaderNoBG" nowrap><bean:message key="cadsr.formbuilder.form.type" /></td>  
+                <td width="30%" class="OraTableColumnHeaderNoBG" nowrap><label for="<%=FormConstants.SEARCH_FORM_TYPE%>"><bean:message key="cadsr.formbuilder.form.type" /></label></td>  
                 <td width="70%" class="OraTabledata" nowrap>
-                <html:select styleClass = "Dropdown" property="<%=FormConstants.SEARCH_FORM_TYPE%>"
+                <html:select styleId="<%=FormConstants.SEARCH_FORM_TYPE%>" styleClass = "Dropdown" property="<%=FormConstants.SEARCH_FORM_TYPE%>"
                 onkeypress="if(window.event.keyCode==13){submitForm('getAllForms');};">
                   <html:option key="cadsr.formbuilder.form.blank" value="<%=FormConstants.SEARCH_ALL%>" /> 
                   <html:options name="<%=FormConstants.ALL_FORM_TYPES%>" /> 
