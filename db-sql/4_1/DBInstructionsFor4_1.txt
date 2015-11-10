@@ -1,1 +1,24 @@
-/** Main functionality delivered as part of this release **/
+
+The account that needs to be used are specified in the parenthesis. Please use the account as suggested to execute the scripts
+in the order suggested:
+
+FormBuilder/FormLoader 4.1 related scripts
+
+1. load_options.sql (SBREXT)
+2. GF32430_fb_help_link.sql (SBREXT)
+3. GF32671_fb_whats_new_link.sql (SBREXT)
+4. formloader-db-setup.sql (SBREXT)
+
+Change Default Context to NCIP related scripts
+
+1. update_default_context_to_NCIP.sql (SBREXT)
+2. change_default_context_to_NCIP.sql (SBR)
+3. gf32649_CADSR_XLS_LOADER_PKG_WORK3_SPEC.sql (SBREXT)
+4. gf32649_CADSR_XLS_LOADER_PKG_WORK3_BODY_NCIP.sql (SBREXT)
+5. gf32649_MAINTAIN_CONCEPTS_SPEC.sql (SBREXT)
+6. gf32649_MAINTAIN_CONCEPTS_BODY_NCIP.sql (SBREXT)
+7. gf32649_SBREXT_GET_ROW_SPEC.sql (SBREXT)
+8. gf32649_SBREXT_GET_ROW_BODY.sql (SBREXT)
+9. gf32649_SBREXT_SET_ROW_SPEC.sql (SBREXT)
+10. gf32649_SBREXT_SET_ROW_BODY_NCIP.sql (SBREXT)
+11. change_user_groups_sc_groups_to_NCIP.sql (SBR)
