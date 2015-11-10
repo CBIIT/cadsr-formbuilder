@@ -1,19 +1,19 @@
-/** Main functionality delivered as part of this release **/
+The following scripts does not belong to the default context changing changes but have to be run again nevertheless. 
+The account that needs to be used are specified in the parenthesis, please use the account as suggested to execute the scripts
+ and as the order suggested:
 
-Please execute teh following scripts in the order specified below-
-
-1. GF32430_fb_help_link.sql
-2. GF32671_fb_whats_new_link.sql
-3. change_default_context_to_NCIP.sql
-4. update_default_context_to_NCIP.sql
-5. gf32649_CADSR_XLS_LOADER_PKG_WORK3_SPEC.sql
-6. gf32649_CADSR_XLS_LOADER_PKG_WORK3_BODY_NCIP.sql
-7. gf32649_MAINTAIN_CONCEPTS_SPEC.sql 
-8. gf32649_MAINTAIN_CONCEPTS_BODY_NCIP.sql
-9. gf32649_SBREXT_GET_ROW_SPEC.sql
-10. gf32649_SBREXT_GET_ROW_BODY.sql
-11. gf32649_SBREXT_SET_ROW_SPEC.sql
-12. gf32649_SBREXT_SET_ROW_BODY_NCIP.sql
-13. change_user_groups_sc_groups_to_NCIP.sql
-14. formloader-db-setup.sql
-15. load_options.sql
+1. GF32430_fb_help_link.sql (SBREXT)
+2. GF32671_fb_whats_new_link.sql (SBREXT)
+3. update_default_context_to_NCIP.sql (SBREXT)
+4. change_default_context_to_NCIP.sql (SBR)
+5. gf32649_CADSR_XLS_LOADER_PKG_WORK3_SPEC.sql (SBREXT)
+6. gf32649_CADSR_XLS_LOADER_PKG_WORK3_BODY_NCIP.sql (SBREXT)
+7. gf32649_MAINTAIN_CONCEPTS_SPEC.sql (SBREXT)
+8. gf32649_MAINTAIN_CONCEPTS_BODY_NCIP.sql (SBREXT)
+9. gf32649_SBREXT_GET_ROW_SPEC.sql (SBREXT)
+10. gf32649_SBREXT_GET_ROW_BODY.sql (SBREXT)
+11. gf32649_SBREXT_SET_ROW_SPEC.sql (SBREXT)
+12. gf32649_SBREXT_SET_ROW_BODY_NCIP.sql (SBREXT)
+13. change_user_groups_sc_groups_to_NCIP.sql (SBR)
+14. formloader-db-setup.sql (SBREXT)
+15. load_options.sql (SBREXT)
