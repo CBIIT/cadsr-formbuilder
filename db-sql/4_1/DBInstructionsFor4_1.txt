@@ -1,1 +1,19 @@
 /** Main functionality delivered as part of this release **/
+
+Please execute teh following scripts in the order specified below-
+
+1. GF32430_fb_help_link.sql
+2. GF32671_fb_whats_new_link.sql
+3. change_default_context_to_NCIP.sql
+4. update_default_context_to_NCIP.sql
+5. gf32649_CADSR_XLS_LOADER_PKG_WORK3_SPEC.sql
+6. gf32649_CADSR_XLS_LOADER_PKG_WORK3_BODY_NCIP.sql
+7. gf32649_MAINTAIN_CONCEPTS_SPEC.sql 
+8. gf32649_MAINTAIN_CONCEPTS_BODY_NCIP.sql
+9. gf32649_SBREXT_GET_ROW_SPEC.sql
+10. gf32649_SBREXT_GET_ROW_BODY.sql
+11. gf32649_SBREXT_SET_ROW_SPEC.sql
+12. gf32649_SBREXT_SET_ROW_BODY_NCIP.sql
+13. change_user_groups_sc_groups_to_NCIP.sql
+14. formloader-db-setup.sql
+15. load_options.sql
