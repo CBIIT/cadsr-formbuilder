@@ -1,6 +1,6 @@
-The following scripts does not belong to the default context changing changes but have to be run again nevertheless. 
-The account that needs to be used are specified in the parenthesis, please use the account as suggested to execute the scripts
- and as the order suggested:
+
+The account that needs to be used are specified in the parenthesis. Please use the account as suggested to execute the scripts
+in the order suggested:
 
 FormBuilder/FormLoader 4.1 related scripts
 
