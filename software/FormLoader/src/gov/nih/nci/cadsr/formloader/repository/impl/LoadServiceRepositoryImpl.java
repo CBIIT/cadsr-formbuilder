@@ -660,6 +660,8 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 				vValue.setVdPermissibleValueSeqid(vdPermissibleValueSeqid);  //set the vdpvIdseq!
 //				pv.setIdseq(rs.getString("VP_IDSEQ"));	//JR448 TODO do I need to set this? JR417 this is THE vdPvIdSeq! Not sure why is it populated during content validation but it is what it is!
 				ValueMeaningV2 pvVM = pv.getValueMeaningV2();
+				
+				//FORMBUILD-448 following is redundant code as the PV already has the correct VMs associated with it. 
 				if(pvVM != null) {
 					vValue.setPreferredName(pvVM.getPublicId() + "v" + pvVM.getVersion());
 					System.out.println("*********** pv value[" + pv.getValue() + "] vValue getPreferredName[" + vValue.getPreferredName() + "] ***********");
@@ -692,8 +694,10 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			if (vvSeqid != null && vvSeqid.length() > 0) {
 				int count = formValidValueV2Dao.createValidValueAttributes(vvSeqid, vValue.getMeaningText(), vValue.getDescription(), moduledto.getCreatedBy());
 				//vValue.setPreferredName("JAMES_PREFEREDNAME_123");   //JR417
-//            	formValidValueV2Dao.updateValueMeaning(vvSeqid, vValue.getMeaningText(), vValue.getDescription(), moduledto.getCreatedBy());	//JR417 already called by createFormValidValueComponent (see below)
-				if(count == 1) {	//assuming that only one match!
+				formValidValueV2Dao.updateValueMeaning(vvSeqid, vValue.getMeaningText(), vValue.getDescription(), moduledto.getCreatedBy());	//JR417 already called by createFormValidValueComponent (see below)
+
+				//FORMBUILD-448 commenting out the following duplicate call to insert valid value. Does not help with resolving tracker 417.
+				/*if(count == 1) {	//assuming that only one match!
 					formValidValueV2Dao.createFormValidValueComponent(fvv,  vvSeqid, moduledto.getCreatedBy());	//JR417 new call!
 
 					//JR417 TBD not sure if the following should be in formValidValueV2Dao.createFormValidValueComponent or outside!!!
@@ -704,7 +708,7 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 //				                     formVVChanges.getUpdatedValidValues());
 //				   deleteValidValues(fvvDao, fvvInstrDao,
 //				                     formVVChanges.getDeletedValidValues());
-				}
+				}*/
 				
 				String instr = vValue.getInstruction();
 				if (instr != null && instr.length() > 0) {

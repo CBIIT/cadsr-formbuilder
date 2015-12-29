@@ -138,11 +138,17 @@
     </target>
 	
     <target name="build" depends="compile-war">
-		<copy todir="${build.dir}">
+    	<filter token="TIER" value="${TIER}" />
+    	<copy todir="${build.dir}">
 			<fileset dir="${web.dir}" excludes="CVS,**/*.class" />
 		</copy>
-    	<copy todir="${build.dir}/WEB-INF/classes">
-    		<fileset dir="${resources.dir}" includes="**/*.properties,**/*.xml" />
+    	<copy todir="${build.dir}/WEB-INF/classes" >
+    		<fileset dir="${resources.dir}" includes="**/*.properties,**/*.xml" >
+    			<exclude name="template.formloader.properties" />
+    		</fileset>
+    	</copy>
+    	<copy tofile="${build.dir}/WEB-INF/classes/formloader.properties" filtering="true" >
+    	    <fileset file="${resources.dir}/template.formloader.properties" />
     	</copy>
 
     </target>

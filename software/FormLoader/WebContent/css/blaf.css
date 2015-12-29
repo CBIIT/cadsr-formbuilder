@@ -188,3 +188,7 @@ font-family:Arial, Helvetica, Geneva, sans-serif; font-size:10pt; color:#336699;
     width:150px;
     font-style:normal !important;
 }
+
+.errors {
+	text-align: left;
+}

@@ -272,7 +272,12 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		fvv.setQuestion(newQuestdto);
 		fvv.setVpIdseq(vValue.getVdPermissibleValueSeqid());	//JR417 vValue vdPermissibleValueSeqid can not be empty (fixed in this ticket)!
 		logger.debug("FormLoaderRepositoryImpl.java#translateIntoValidValueDto vValue.getVdPermissibleValueSeqid() can not be empty! *** vdPVIdSeq [" + vValue.getVdPermissibleValueSeqid() + "]");
-		String preferredName = composeVVPreferredName(vValue, newQuestdto.getPublicId(), formdto.getPublicId(), formdto.getVersion(), displayOrder);
+		
+		//FORMBUILD-448 inserting a valid value finally inserts a record in SBR.ADMIN_COMPONENTS_VIEW which has a unique key on the combination of
+		//Version, Preferred name and Context. For this to work, Preferred Name is being set as a uniquely generated ID to cover cases where 
+		//a valid value is repeated across many questions.
+		String preferredName = vValue.getPreferredName().substring(0, vValue.getPreferredName().indexOf("v")) + new Date().getTime() + "";
+		//composeVVPreferredName(vValue, newQuestdto.getPublicId(), formdto.getPublicId(), formdto.getVersion(), displayOrder);
 		
 		fvv.setLongName(vValue.getValue());
 		fvv.setPreferredName(preferredName);
@@ -294,9 +299,8 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	}
 	
 	//PreferredName format: value meaning public id_quetionpublicid_form_public_id_version_<x> x = 1, 2, 3
-		protected String composeVVPreferredName(QuestionDescriptor.ValidValue vValue, int questPublicId, int formPublicId, float formversion,  int displayorder) {
-			
-			return vValue.getPreferredName() + "_" + questPublicId + "_" + formPublicId + "v" + formversion + "_"  + displayorder;
+		protected String composeVVPreferredName(QuestionDescriptor.ValidValue vValue, int questPublicId, int formPublicId, float formversion,  int displayorder) {			
+			 return vValue.getPreferredName() + "_" + questPublicId + "_" + formPublicId + "v" + formversion + "_"  + displayorder;
 			//return String.valueOf(questPublicId);	//JR417
 		}
 

@@ -114,6 +114,9 @@ public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
 		logger.debug( newVV.getVpIdseq());
 		params.addValue("p_created_by", newVV.getCreatedBy());		
 		logger.debug(newVV.getCreatedBy());
+		System.out.println("Before Valid Value insert, values are: Question IdSeq=" + vvidseq + ", Version=" + newVV.getVersion() + ", PreferredName=" + newVV.getPreferredName() + 
+							", LongName=" + newVV.getLongName()  + ", PreferredDefn=" + newVV.getPreferredDefinition() + ", Context IDSeq=" + newVV.getContext().getConteIdseq() +
+							", ASL Name=" + newVV.getAslName() + ", Vp IdSeq=" + newVV.getVpIdseq() + ", QTL Name=VALID_VALUE" );
 		try {
 			int res = this.namedParameterJdbcTemplate.update(sql, params);
 			return res;
@@ -510,16 +513,16 @@ public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
     public InsertFormValidValue(DataSource ds) {
       super(ds, "sbrext_form_builder_pkg.ins_value");
       declareParameter(new SqlParameter("p_ques_idseq", Types.VARCHAR));
-      declareParameter(new SqlOutParameter("p_version", Types.VARCHAR));
-      declareParameter(new SqlOutParameter("p_preferred_name", Types.VARCHAR));
+      declareParameter(new SqlParameter("p_version", Types.FLOAT));
+      declareParameter(new SqlParameter("p_preferred_name", Types.VARCHAR));
       declareParameter(new SqlParameter("p_long_name", Types.VARCHAR));
-      declareParameter(new SqlOutParameter("p_preferred_definition", Types.VARCHAR));
-      declareParameter(new SqlOutParameter("p_conte_idseq", Types.VARCHAR));
+      declareParameter(new SqlParameter("p_preferred_definition", Types.VARCHAR));
+      declareParameter(new SqlParameter("p_conte_idseq", Types.CHAR));
       declareParameter(new SqlParameter("p_proto_idseq", Types.VARCHAR));
-      declareParameter(new SqlOutParameter("p_asl_name", Types.VARCHAR));
-      declareParameter(new SqlOutParameter("p_vp_idseq", Types.VARCHAR));
+      declareParameter(new SqlParameter("p_asl_name", Types.VARCHAR));
+      declareParameter(new SqlParameter("p_vp_idseq", Types.VARCHAR));
       declareParameter(new SqlParameter("p_created_by", Types.VARCHAR));
-      declareParameter(new SqlOutParameter("p_display_order", Types.NUMERIC));
+      declareParameter(new SqlParameter("p_display_order", Types.NUMERIC));
       
       declareParameter(new SqlOutParameter("p_val_idseq", Types.VARCHAR));
       declareParameter(new SqlOutParameter("p_qr_idseq", Types.VARCHAR));
@@ -547,8 +550,8 @@ public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
       fvv.setVersion(Float.valueOf("3.0"));
       
       in.put("p_ques_idseq", parentId);
-      logger.debug("p_version: >" + fvv.getVersion().toString() + "<");
-      in.put("p_version", fvv.getVersion().toString());
+      logger.debug("p_version: >" + fvv.getVersion() + "<");
+      in.put("p_version", fvv.getVersion());
       logger.debug("p_preferred_name: " + "TestingPrepareName");
       in.put("p_preferred_name", "TestingPrepareName");
       logger.debug("qp_long_name: " + fvv.getLongName());
@@ -556,6 +559,7 @@ public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
       logger.debug("p_preferred_definition: " + fvv.getPreferredDefinition());
       in.put("p_preferred_definition", fvv.getPreferredDefinition());
       logger.debug("p_conte_idseq: " + fvv.getContext().getConteIdseq());
+      System.out.println("p_conte_idseq: " + fvv.getContext().getConteIdseq());
       in.put("p_conte_idseq", fvv.getContext().getConteIdseq());
       
       //logger.debug("p_proto_idseq: " + fvv.getVpIdseq());

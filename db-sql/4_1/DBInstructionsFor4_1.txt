@@ -8,6 +8,8 @@ FormBuilder/FormLoader 4.1 related scripts
 2. GF32430_fb_help_link.sql (SBREXT)
 3. GF32671_fb_whats_new_link.sql (SBREXT)
 4. formloader-db-setup.sql (SBREXT)
+5. SBREXT_FORM_BUILDER_PKG.pkb (SBREXT)
+6. SBREXT_FORM_BUILDER_PKG.pks (SBREXT)
 
 Change Default Context to NCIP related scripts
 
