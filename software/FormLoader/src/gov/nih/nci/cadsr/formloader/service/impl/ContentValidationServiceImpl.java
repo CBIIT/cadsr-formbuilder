@@ -1333,8 +1333,10 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 				matchingCde.getPublicId() +
 				"|" + matchingCde.getVersion() + "] in xml. Unable to verify question text.");
 			form.setDefaultWorkflowName();
-			question.setCdeSeqId(""); //disassociate cde from question
-			return;
+			//FORMBUILD-428 if CDE does not have any reference docs, retain the CDE association with question.
+			//Do not NULL it.
+			//question.setCdeSeqId(""); //disassociate cde from question
+			//return;
 		}
 		
 		String questionText = question.getQuestionText();
@@ -1342,33 +1344,42 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 		String cdeVersion = question.getCdeVersion();
 		
 		//refdoc list is ordered by type, preferred first
-		if (questionText == null || questionText.length() == 0) {
-			
-			for (ReferenceDocument refdoc : refDocs) {				
-				if ("Preferred Question Text".equalsIgnoreCase( refdoc.getDocType())) {
-					questionText = refdoc.getDocText();
-					if (questionText == null || questionText.length() == 0) {
-						questionText = "Data Element [" + matchingCde.getLongName() + "] does not have Preferred Question Text";
+		if (questionText == null || questionText.length() == 0) 
+		{	
+			questionText = "Data Element [" + matchingCde.getLongName() + "] does not have Preferred Question Text";
+			if (refDocs != null)
+			{
+				for (ReferenceDocument refdoc : refDocs)
+				{				
+					if ("Preferred Question Text".equalsIgnoreCase(refdoc.getDocType()) ||
+						"Alternate Question Text".equalsIgnoreCase(refdoc.getDocType())) 
+					{
+						questionText = refdoc.getDocText();
+						if (questionText == null || questionText.length() == 0) {
+							questionText = "Data Element [" + matchingCde.getLongName() + "] does not have Preferred Question Text";
+						}
+						break;
 					}
-					break;
 				}
 			}
 		} else {
 			boolean matched = false;
 			String preferredText = null; 
-			for (ReferenceDocument refdoc : refDocs) {
-				String docText = refdoc.getDocText();
-				if ("Preferred Question Text".equalsIgnoreCase( refdoc.getDocType()))
-					preferredText = docText;
-				
-				if (questionText.equalsIgnoreCase(docText)) {
-					matched = true;
-					break;
+			if (refDocs != null)
+			{
+				for (ReferenceDocument refdoc : refDocs) {
+					String docText = refdoc.getDocText();
+					if ("Preferred Question Text".equalsIgnoreCase( refdoc.getDocType()))
+						preferredText = docText;
+					
+					if (questionText.equalsIgnoreCase(docText)) {
+						matched = true;
+						break;
+					}
 				}
 			}
-			
 			if (!matched) {
-				question.setCdeSeqId(""); 
+				//question.setCdeSeqId(""); 
 				if (preferredText != null && preferredText.length() > 0)
 					questionText = preferredText;
 				else {
