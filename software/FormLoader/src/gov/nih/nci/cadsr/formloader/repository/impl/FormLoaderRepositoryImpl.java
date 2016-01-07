@@ -276,7 +276,12 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		//FORMBUILD-448 inserting a valid value finally inserts a record in SBR.ADMIN_COMPONENTS_VIEW which has a unique key on the combination of
 		//Version, Preferred name and Context. For this to work, Preferred Name is being set as a uniquely generated ID to cover cases where 
 		//a valid value is repeated across many questions.
-		String preferredName = vValue.getPreferredName().substring(0, vValue.getPreferredName().indexOf("v")) + new Date().getTime() + "";
+		
+		String preferredName = "";
+		if (vValue.getPreferredName() != null && vValue.getPreferredName().length() > 0)
+			preferredName = vValue.getPreferredName().substring(0, vValue.getPreferredName().indexOf("v")) + new Date().getTime() + "";
+		else
+			preferredName = new Date().getTime() + "";
 		//composeVVPreferredName(vValue, newQuestdto.getPublicId(), formdto.getPublicId(), formdto.getVersion(), displayOrder);
 		
 		fvv.setLongName(vValue.getValue());
