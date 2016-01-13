@@ -89,7 +89,7 @@ $(document).ready(function()
        <table width="80%" height="25" align="center" cellpadding="1" cellspacing="1" border="0">
         <tr>
           <td>
-<!--  <%@ include file="additionalMessages.jsp" %> -->
+  <%@ include file="additionalMessages.jsp" %> 
           </td>                
            </td>
         </tr>

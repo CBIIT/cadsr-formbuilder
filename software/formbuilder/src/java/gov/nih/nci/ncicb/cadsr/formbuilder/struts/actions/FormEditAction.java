@@ -112,7 +112,7 @@ public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
     if( userMame != null && userMame.equalsIgnoreCase("viewer") != true )
     {
 System.out.println("userName -- " + userMame );	
-		  request.getSession().setAttribute("myFormAdded", "n");
+		  //request.getSession().setAttribute("myFormAdded", "n");
 System.out.println(" " + sFormIdSeq + " not found " );	
 	
 	   CDECartOCImplExtension sessionCartV2 = (CDECartOCImplExtension) this

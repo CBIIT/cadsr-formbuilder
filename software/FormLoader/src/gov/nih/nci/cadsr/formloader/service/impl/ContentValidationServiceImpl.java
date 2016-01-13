@@ -202,6 +202,10 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 				proto.setIdseq(protoSeqid);
 				protos.add(proto);
 			}
+			else
+			{
+				form.addMessage("Protocol [" + preferredName +  "] does not exist, will not be loaded with this form.");
+			}
 		}
 		
 		if (protos.size() > 0) 

@@ -86,43 +86,46 @@ function displayAdditionalMessage( )
 	var p2 = "No form is added in the Form Cart.";
 	if( currentPage == "Result" )
 	{	
-		var n = myInfo.replace("/","");
-		if( n != "0" )
+		if( formHasBeenAdded == "Y/" )
 		{
-			if( n == "1" )
+			var n = myInfo.replace("/","");
+			if( n != "0" )
 			{
-				info = " Form queued in Form Cart for saving. Please go to Form Cart to save it.";
-
-				p1 = " Form queued in Form Cart for saving."
-				p2 = "Please go to Form Cart to save it.";
+				if( n == "1" )
+				{
+					info = "Form queued for saving to Form Cart. Please go to Form Cart to save it.";
+	
+					p1 = "Form queued for saving to Form Cart ."
+					p2 = "Please go to Form Cart to save it.";
+				}
+				else
+				{
+					info = " Forms queued for saving to Form Cart. Please go to Form Cart to save them.";
+	
+					p1 =  "Forms queued for saving to Form Cart."
+					p2 = "Please go to Form Cart to save them."
+				}
+				
+				$('#p1Message').show().delay( 200 );
+				$('#p2Message').show().delay( 200 );
+				$('#p1Message').html(p1);
+				$('#p2Message').html(p2);
 			}
 			else
 			{
-				info = " Forms queued in Form Cart for saving. Please go to Form Cart to save them.";
-
-				p1 =  "Forms queued in Form Cart for saving."
-				p2 = "Please go to Form Cart to save them."
+				$('#p1Message').hide().delay( 200 );
+				$('#p2Message').hide().delay( 200 );
 			}
-			
-			$('#p1Message').show().delay( 200 );
-			$('#p2Message').show().delay( 200 );
-			$('#p1Message').html(p1);
-			$('#p2Message').html(p2);
-		}
-		else
-		{
-			$('#p1Message').hide().delay( 200 );
-			$('#p2Message').hide().delay( 200 );
 		}
 	}
 	else 
 	{
 		if( formHasBeenAdded == "Y/" )
-		{		
-			info = "This form has been queued in Form Cart for saving. When done, please go to Form Cart to save it.";
+		{	
+			info = "Form queued for saving to Form Cart. Please go to Form Cart to save it.";
 			
-			p1 = "This form has been queued in Form Cart for saving."
-			p2 = "When done, please go to Form Cart to save it.";
+			p1 = "Form queued for saving to Form Cart."
+			p2 = "Please go to Form Cart to save it.";
 
 			$('#p1Message').show().delay( 200 );
 			$('#p2Message').show().delay( 200 );

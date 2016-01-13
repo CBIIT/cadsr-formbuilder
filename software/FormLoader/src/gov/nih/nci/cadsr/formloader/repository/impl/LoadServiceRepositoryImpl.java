@@ -490,9 +490,9 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 		String formSeqid = form.getFormSeqId();
 		
 		for (ProtocolTransferObjectExt proto :protos) {
-			if (FormDescriptor.LOAD_TYPE_NEW.equals(form.getLoadType())
-					|| FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(form.getLoadType())) {
-				formV2Dao.addFormProtocol(formSeqid, proto.getIdseq(), form.getCreatedBy());
+			if (FormDescriptor.LOAD_TYPE_NEW.equals(form.getLoadType()) || FormDescriptor.LOAD_TYPE_NEW_VERSION.equals(form.getLoadType())) {
+				if (proto.getIdseq() != null)
+					formV2Dao.addFormProtocol(formSeqid, proto.getIdseq(), form.getCreatedBy());
 			} else  {
 				
 				//Update form will be handle for v4.2

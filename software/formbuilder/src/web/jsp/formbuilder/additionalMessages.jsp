@@ -12,6 +12,7 @@ System.out.println("additionalMessages.jsp:" + showMessageUsername);
 		formCartInfo = "0";
 	
 System.out.println("additionalMessages.jsp :  " + formCartInfo);
+session.removeAttribute("myFormAdded");
 %>
 <input type="hidden" id="myInputUserName" name="myInputUserName" value=<%=showMessageUsername %>/>
 <input type="hidden" id="myInputAdditionalMessage" name="myInputAdditionalMessage" value=<%=formCartInfo %>/>
