@@ -97,10 +97,11 @@ public class JDBCValueDomainDAOV2 extends JDBCAdminComponentDAOV2 implements
 			this.setDataSource(ds);
 		}
 
+		//FORMBUILD-500: Added VD_TYPE_FLAG to the select
 		public void setSql() {
 			String sql = " SELECT VD_IDSEQ, LONG_NAME, VERSION, VD_ID, ASL_NAME, UOML_NAME," +
 					" MAX_LENGTH_NUM, MIN_LENGTH_NUM, DECIMAL_PLACE, HIGH_VALUE_NUM, " +
-					" LOW_VALUE_NUM, CONDR_IDSEQ, FORML_NAME, DTL_NAME from SBR.VALUE_DOMAINS_VIEW where VD_IDSEQ=?";
+					" LOW_VALUE_NUM, CONDR_IDSEQ, FORML_NAME, DTL_NAME, VD_TYPE_FLAG from SBR.VALUE_DOMAINS_VIEW where VD_IDSEQ=?";
 			setSql(sql);
 			declareParameter(new SqlParameter("VD_IDSEQ", Types.VARCHAR));
 			compile();
@@ -127,7 +128,7 @@ public class JDBCValueDomainDAOV2 extends JDBCAdminComponentDAOV2 implements
 			vd.setDatatype(rs.getString(14));
 			ConceptDerivationRule cdr = new ConceptDerivationRuleTransferObject();
 			cdr.setIdseq(rs.getString(12));
-
+			vd.setVDType(rs.getString(15));
 			vd.setConceptDerivationRule(cdr);
 			return vd;
 		}

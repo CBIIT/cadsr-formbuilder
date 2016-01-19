@@ -922,6 +922,22 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 			prepareQuestionForLoadWithoutValidation(form, question, msg);
 			return; 
 		}
+		
+		//FORMBUILD-500: Add check if CDE'S value domain is non-enumerated but there are valid values for the question, dissociate CDE
+		String vdseqid = matchingCde.getVdIdseq();
+		if (vdseqid != null)
+		{
+			ValueDomainV2 vd = repository.getValueDomainBySeqid(vdseqid);
+			if ((vd != null) && ("N".equalsIgnoreCase(vd.getVDType())))
+			{
+				String message = "CDE " + matchingCde.getPublicId() + " is not enumerated but question has Valid Values in XML. CDE is dissociated from the question.";
+				logger.debug(message);
+				question.addMessage(message);
+				question.addInstruction(message);
+				question.setCdeSeqId(""); //disassociate cde if it's there.
+				return;
+			}
+		}
 			
 		List<PermissibleValueV2TransferObject> pValDtos = pvDtos.get(matchingCde.getVdIdseq());		//JR417 vm pub id is good
 		//JR368 begin
@@ -1183,8 +1199,9 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 			return;
 		} 	
 		
+		
 		for (QuestionDescriptor.ValidValue vVal : validValues) {
-			 validateQuestionValidValue(form, question, vVal, pValues, matchingCde);
+			validateQuestionValidValue(form, question, vVal, pValues, matchingCde);
 		}
 		 
 	}

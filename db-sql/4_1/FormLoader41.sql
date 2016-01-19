@@ -1,0 +1,1 @@
+GRANT SELECT ON document_types_lov TO FORMLOADER;
