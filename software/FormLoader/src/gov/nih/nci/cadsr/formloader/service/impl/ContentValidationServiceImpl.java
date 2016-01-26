@@ -10,6 +10,7 @@ import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderServiceException;
 import gov.nih.nci.cadsr.formloader.service.common.QuestionsPVLoader;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
+import gov.nih.nci.ncicb.cadsr.common.dto.ClassificationTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContactCommunicationV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObjectExt;
@@ -173,7 +174,48 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 			verifyDesignations(form, form.getDesignations());
 			verifyDefinitions(form, form.getDefinitions());
 			verifyContactCommnunications(form, form.getContactCommnunications());
+			verifyClassifications(form);
+		}
+	}
+	
+	protected void verifyClassifications(FormDescriptor form)
+	{
+		List<ClassificationTransferObject> classifications = form.getClassifications();
+		if (classifications != null && classifications.size() > 0)
+		{
+			List<ClassificationTransferObject> newClassifications = new ArrayList<ClassificationTransferObject>();
 			
+			int idx = 0;
+			for (ClassificationTransferObject classification : classifications)
+			{
+				if ((classification.getPublicID() == null || classification.getPublicID().length() == 0) || 
+					(classification.getCsiPublicID() == null || classification.getCsiPublicID().length() == 0))
+				{
+					form.addMessage("Classification/Classification Scheme Item " + (idx+1) + " does not have a Public ID. It cannot be loaded." );
+					classifications.remove(idx);
+				}
+				else if ((classification.getVersion() == null || classification.getVersion().length() == 0) || 
+						(classification.getCsiVersion() == null || classification.getCsiVersion().length() == 0))
+				{
+					form.addMessage("Classification/Classification Scheme Item " + (idx + 1) + " does not have a Version. It cannot be loaded." );
+					classifications.remove(idx);
+				}
+				else
+				{
+					String csCsiIdSeq = this.repository.getClassificationSchemeItem(classification.getPublicID(), classification.getVersion(),
+																				  classification.getCsiPublicID(), classification.getCsiVersion());
+					if (csCsiIdSeq == null || csCsiIdSeq.length() == 0 )
+					{
+						form.addMessage("Classification [" + classification.getName() + "] does not exist. It cannot be loaded");
+						classifications.remove(idx);
+					}
+					else
+					{
+						classification.setCsCsiIdSeq(csCsiIdSeq);
+					}
+				}
+				idx++;
+			}
 		}
 	}
 	
@@ -930,7 +972,7 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 			ValueDomainV2 vd = repository.getValueDomainBySeqid(vdseqid);
 			if ((vd != null) && ("N".equalsIgnoreCase(vd.getVDType())))
 			{
-				String message = "CDE " + matchingCde.getPublicId() + " is not enumerated but question has Valid Values in XML. CDE is dissociated from the question.";
+				String message = "CDE " + matchingCde.getPublicId() + " is not enumerated but question has Valid Values in XML. CDE will be dissociated from the question.";
 				logger.debug(message);
 				question.addMessage(message);
 				question.addInstruction(message);

@@ -383,6 +383,22 @@ public class JDBCClassificationSchemeDAOV2 extends JDBCAdminComponentDAOV2
 
     }
     
+    public String getClassificationSchemeItem(String publicID, Float version, String csiPublicID, Float csiVersion)
+    {
+    	String sql = "select csc.cs_csi_idseq from sbr.contexts_view cs_conte, sbr.classification_schemes_view cs, sbr.cs_csi_view csc ,  sbr.cs_items_view csi " +
+    			     "where cs.conte_idseq = cs_conte.conte_idseq  and cs.cs_idseq = csc.cs_idseq " +
+					 "and csi.csi_idseq = csc.csi_idseq  and cs.asl_name not in ('RETIRED PHASED OUT','RETIRED DELETED') " +
+    			     "and cs.cs_id = :publicID and csi.csi_id = :csiPublicID and cs.version = :version and csi.version = :csiVersion";
+    	MapSqlParameterSource params = new MapSqlParameterSource();
+       	params.addValue("publicID", publicID);
+       	params.addValue("version", version);
+       	params.addValue("csiPublicID", csiPublicID);
+       	params.addValue("csiVersion", csiVersion);
+       	
+       	String csiIdSeq = (String) this.namedParameterJdbcTemplate.queryForObject(sql, params, String.class);        
+        return csiIdSeq;
+    }
+    
     public int getClassificationSchemeCountByPublicIdVersion(int publicId, float version) {
     	String sql = "select count(*) from sbr.CLASSIFICATION_SCHEMES_VIEW csv " +
     			" where CSV.CS_ID=:publicId and CSV.VERSION=:version";

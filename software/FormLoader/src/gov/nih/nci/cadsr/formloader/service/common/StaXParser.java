@@ -1,13 +1,5 @@
 package gov.nih.nci.cadsr.formloader.service.common;
 
-import gov.nih.nci.cadsr.formloader.domain.FormCollection;
-import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
-import gov.nih.nci.ncicb.cadsr.common.dto.ContactCommunicationV2TransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObjectExt;
-import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
-import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObjectExt;
-import gov.nih.nci.ncicb.cadsr.common.dto.RefdocTransferObjectExt;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -24,6 +16,15 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.apache.log4j.Logger;
+
+import gov.nih.nci.cadsr.formloader.domain.FormCollection;
+import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
+import gov.nih.nci.ncicb.cadsr.common.dto.ClassificationTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ContactCommunicationV2TransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObjectExt;
+import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
+import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObjectExt;
+import gov.nih.nci.ncicb.cadsr.common.dto.RefdocTransferObjectExt;
 
 public class StaXParser {
 	
@@ -121,6 +122,7 @@ public class StaXParser {
 	List<ProtocolTransferObjectExt> protocols;
 	List<DesignationTransferObjectExt> designations;
 	List<ContactCommunicationV2TransferObject> contactCommnunications = new ArrayList<ContactCommunicationV2TransferObject>();
+	List<ClassificationTransferObject> classifications;
 	
 	/**
 	 * For the first pass of the collection xml, to get the forms' basic header info
@@ -176,6 +178,7 @@ public class StaXParser {
 		currForm.setDefinitions(((FormDetailsParserHandler)handler).getDefinitions());
 		currForm.setDesignations(((FormDetailsParserHandler)handler).getDesignations());
 		currForm.setContactCommnunications(((FormDetailsParserHandler)handler).getContactCommnunications());
+		currForm.setClassifications(((FormDetailsParserHandler)handler).getClassifications());
 		return currForm;
 	}
 
@@ -288,4 +291,13 @@ public class StaXParser {
 			List<ContactCommunicationV2TransferObject> contactCommnunications) {
 		this.contactCommnunications = contactCommnunications;
 	}
+
+	public List<ClassificationTransferObject> getClassifications() {
+		return classifications;
+	}
+
+	public void setClassifications(List<ClassificationTransferObject> classifications) {
+		this.classifications = classifications;
+	}
+
 }

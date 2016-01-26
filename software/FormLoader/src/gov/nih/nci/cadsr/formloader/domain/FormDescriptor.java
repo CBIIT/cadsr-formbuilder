@@ -3,6 +3,7 @@ package gov.nih.nci.cadsr.formloader.domain;
 import gov.nih.nci.cadsr.formloader.service.common.FormLoaderHelper;
 import gov.nih.nci.cadsr.formloader.service.common.StatusFormatter;
 import gov.nih.nci.cadsr.formloader.service.common.XmlValidationError;
+import gov.nih.nci.ncicb.cadsr.common.dto.ClassificationTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContactCommunicationV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
@@ -73,6 +74,7 @@ public class FormDescriptor implements java.io.Serializable {
 	List<ProtocolTransferObjectExt> protocols;
 	List<RefdocTransferObjectExt> refdocs;
 	List<ContactCommunicationV2TransferObject> contactCommnunications;
+	List<ClassificationTransferObject> classifications;
 	
 	Date createdDate;  //cadsr db
 	Date modifiedDate;	//cadsr db
@@ -717,6 +719,14 @@ public class FormDescriptor implements java.io.Serializable {
 	public void setContactCommnunications(
 			List<ContactCommunicationV2TransferObject> contactCommnunications) {
 		this.contactCommnunications = contactCommnunications;
+	}
+
+	public List<ClassificationTransferObject> getClassifications() {
+		return classifications;
+	}
+
+	public void setClassifications(List<ClassificationTransferObject> classifications) {
+		this.classifications = classifications;
 	}
 
 	@Override

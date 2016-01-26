@@ -10,6 +10,7 @@ import gov.nih.nci.cadsr.formloader.service.common.QuestionHelper;
 import gov.nih.nci.cadsr.formloader.service.common.QuestionsPVLoader;
 import gov.nih.nci.cadsr.formloader.service.common.StaXParser;
 import gov.nih.nci.ncicb.cadsr.common.dto.AdminComponentTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ClassificationTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContactCommunicationV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DataElementTransferObject;
@@ -265,9 +266,12 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 		
 		processContactCommnunications(form);
 		
+		processClassifications(form);
 		
 		logger.debug("Done processing protocols, designations, refdocs and definitions for form");
 	}
+	
+	
 	
 	/**
 	 * 
@@ -425,6 +429,32 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 		}
 	}
 	
+	@Transactional
+	protected void processClassifications(FormDescriptor form) {
+		List<ClassificationTransferObject> classifications = form.getClassifications();
+		
+		if (classifications == null || classifications.size() == 0) {
+			logger.debug("Form " + form.getPublicId() + " has no classifications to be loaded.");
+		}
+		else
+		{
+			String formSeqid = form.getFormSeqId();
+			List<String> csCsiIdSeqList = new ArrayList<String>();
+			for (ClassificationTransferObject classification : classifications)
+			{
+				if (classification.getCsCsiIdSeq() != null && classification.getCsCsiIdSeq().length() > 0)
+				{
+					if (!csCsiIdSeqList.contains(classification.getCsCsiIdSeq()))
+					{
+						csCsiIdSeqList.add(classification.getCsCsiIdSeq());
+						this.formV2Dao.assignClassification(formSeqid, classification.getCsCsiIdSeq());
+					}
+					else
+						logger.info("Classification Scheme Item: " + classification.getCsiPublicID() + " is dupilcaed. Will be added only once.");
+				}
+			}
+		}
+	}
 
 	/**
 	 * Deprecated.

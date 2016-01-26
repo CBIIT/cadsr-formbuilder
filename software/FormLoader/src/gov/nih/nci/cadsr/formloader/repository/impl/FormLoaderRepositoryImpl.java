@@ -590,6 +590,26 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 	}
 	
 	@Transactional(readOnly=true)
+	public String getClassificationSchemeItem(String publicID, String version, String csiPublicID, String csiVersion)
+	{
+		String csiIdSeq = "";
+		try
+		{
+			Float ver = Float.valueOf(version);
+			Float csiVer = Float.valueOf(csiVersion);
+			if ((publicID != null && publicID.length() > 0) && (csiPublicID != null && csiPublicID.length() > 0))
+				csiIdSeq = this.classificationSchemeDao.getClassificationSchemeItem(publicID, ver, csiPublicID, csiVer);
+			
+		}
+		catch (Exception e)
+		{
+			logger.error("Error in convesion to float for classification public ID : " + publicID + ", Version: " + version + ", csiPublicID: " + csiPublicID + ", csiVersion: " + csiVersion);
+		}
+
+		return csiIdSeq;
+	}
+	
+	@Transactional(readOnly=true)
 	public boolean validClassificationSchemeItem(String publicId, String version) {
 		if (publicId == null || publicId.length() == 0)
 			return false;

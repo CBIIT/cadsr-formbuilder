@@ -1,18 +1,16 @@
 package gov.nih.nci.cadsr.formloader.service.common;
 
 import gov.nih.nci.cadsr.formloader.domain.FormDescriptor;
+import gov.nih.nci.ncicb.cadsr.common.dto.ClassificationTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContactCommunicationV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.DefinitionTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.DesignationTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObjectExt;
 import gov.nih.nci.ncicb.cadsr.common.dto.RefdocTransferObjectExt;
-import gov.nih.nci.ncicb.cadsr.common.resource.ClassSchemeItem;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.stream.XMLStreamReader;
@@ -36,12 +34,15 @@ public class FormDetailsParserHandler extends ParserHandler {
 	List<ProtocolTransferObjectExt> protocols = new ArrayList<ProtocolTransferObjectExt>();
 	List<DesignationTransferObjectExt> designations = new ArrayList<DesignationTransferObjectExt>();
 	List<ContactCommunicationV2TransferObject> contactCommnunications = new ArrayList<ContactCommunicationV2TransferObject>();
+	List<ClassificationTransferObject> classifications = new ArrayList<ClassificationTransferObject>();
 	
 	DesignationTransferObjectExt currDesignation;	
 	RefdocTransferObjectExt currRefDoc;
 	DefinitionTransferObjectExt currDefinition;
 	ProtocolTransferObjectExt currProtocol;
 	ContactCommunicationV2TransferObject currContact;
+	ClassificationTransferObject currClassification;
+	boolean classificationSchemeItem = false;
 	
 	List<String> csPublicIdVersionPairs;
 	
@@ -105,14 +106,17 @@ public class FormDetailsParserHandler extends ParserHandler {
 				if (nodeQueue.peek().equals(StaXParser.FORM)) {
 					this.currContact = new ContactCommunicationV2TransferObject();
 					currClassName = "ContactCommunicationV2TransferObject";
-				}
-				
-			} else if (localName.equals(StaXParser.NAME)) {
+				}			
+			} else if (localName.equals(StaXParser.NAME))
+			{
 				if (nodeQueue.peek().equals(StaXParser.DESIGNATION))
 					this.methodName = "setName";
 				else if (nodeQueue.peek().equals(StaXParser.REFERENCE_DOCUMENT)) 
 					this.methodName = "setDocName";
-						
+				else if (nodeQueue.peek().equals(StaXParser.CLASSFINICATION))  
+					this.methodName = getMethodName(localName);
+				else if (nodeQueue.peek().equals(StaXParser.CLASSFINICATION_SCHEME_ITEM) && this.currClassification != null)
+					this.methodName = "setCsiName";
 			} else if (localName.equals(StaXParser.TYPE)) {
 				if (nodeQueue.peek().equals(StaXParser.DESIGNATION) || nodeQueue.peek().equals(StaXParser.DEFINITION))
 						this.methodName = "setType";
@@ -120,14 +124,13 @@ public class FormDetailsParserHandler extends ParserHandler {
 					this.methodName = "setDocType";
 				else if (nodeQueue.peek().equals(StaXParser.CONTACT_COMMUNICATION) && this.currContact != null)
 					this.methodName = "setType";
-					
+				else if (nodeQueue.peek().equals(StaXParser.CLASSFINICATION_SCHEME_ITEM) && this.currClassification != null & this.classificationSchemeItem)
+					this.methodName = "setCsiType";					
 			} else if (localName.equals(StaXParser.LANGUAGE_NAME) && nodeQueue.peek().equals(StaXParser.DESIGNATION)) {
 				this.methodName = "setLanguage";
 			} else if (localName.equals(StaXParser.CONTEXT)) {
-				if (nodeQueue.peek().equals(StaXParser.DESIGNATION) || 
-						nodeQueue.peek().equals(StaXParser.REFERENCE_DOCUMENT) ||
-								nodeQueue.peek().equals(StaXParser.PROTOCOL) ||
-								nodeQueue.peek().equals(StaXParser.DEFINITION))
+				if (nodeQueue.peek().equals(StaXParser.DESIGNATION) || nodeQueue.peek().equals(StaXParser.REFERENCE_DOCUMENT) ||
+					nodeQueue.peek().equals(StaXParser.PROTOCOL) || nodeQueue.peek().equals(StaXParser.DEFINITION))
 					this.methodName = "setContextName";
 			} else if (localName.equals(StaXParser.URL) && nodeQueue.peek().equals(StaXParser.REFERENCE_DOCUMENT)) {
 				this.methodName = "setUrl";
@@ -143,14 +146,29 @@ public class FormDetailsParserHandler extends ParserHandler {
 				if (this.currDefinition != null)
 					this.csPublicIdVersionPairs = this.currDefinition.getClassficationPublicIdVersionPairs();
 				else if (this.currDesignation != null)
-					this.csPublicIdVersionPairs = this.currDesignation.getClassficationPublicIdVersionPairs();	
+					this.csPublicIdVersionPairs = this.currDesignation.getClassficationPublicIdVersionPairs();
+				else
+				{
+					if (nodeQueue.peek().equals(StaXParser.FORM)) 
+					{
+						this.currClassification = new ClassificationTransferObject();
+						currClassName = "ClassificationTransferObject";
+					}
+				}
 			} else if (localName.equals(StaXParser.VALUE)) {
 				if (nodeQueue.peek().equals(StaXParser.CONTACT_COMMUNICATION) && this.currContact != null)
 					this.methodName = "setValue";	
-			} 	 else if (localName.equals(StaXParser.ORGANIZATION_NAME)) {
+			} else if (localName.equals(StaXParser.ORGANIZATION_NAME)) {
 				if (nodeQueue.peek().equals(StaXParser.CONTACT_COMMUNICATION) && this.currContact != null)
 					this.methodName = "setOrganizationName";	
-			} 			
+			} else if (localName.equals(StaXParser.CLASSFINICATION_SCHEME_ITEM)) {
+				this.classificationSchemeItem = true;
+			}
+			else if (localName.equals(StaXParser.PREFERRED_DEFINITION))
+			{
+				if (nodeQueue.peek().equals(StaXParser.CLASSFINICATION) && this.currClassification != null)
+					this.methodName = getMethodName(localName);
+			}
 		}
 		
 		//logger.debug("Pushing to node queue: " + localName);
@@ -212,12 +230,19 @@ public class FormDetailsParserHandler extends ParserHandler {
 					this.currDesignation.setClassficationPublicIdVersionPairs(this.csPublicIdVersionPairs);
 					this.csPublicIdVersionPairs = null;
 			    }
+			    else if (this.currClassification != null)
+			    {
+			    	this.classifications.add(currClassification);
+			    	this.currClassification = null;
+			    }
 				 
-			} else if (localName.equals(StaXParser.PUBLIC_ID) ||
-					localName.equals(StaXParser.VERSION)) {
-				if (this.csPublicIdVersionPairs != null && 
-						this.csPublicId != null && this.csPublicId.length() > 0 &&
-						this.csVersion != null && this.csVersion.length() > 0) {
+			} else if (localName.equals(StaXParser.CLASSFINICATION_SCHEME_ITEM)) {
+				this.classificationSchemeItem = false;
+			} else if (localName.equals(StaXParser.PUBLIC_ID) || localName.equals(StaXParser.VERSION))
+			{
+				if (this.csPublicIdVersionPairs != null && this.csPublicId != null && this.csPublicId.length() > 0 &&
+						this.csVersion != null && this.csVersion.length() > 0)
+				{
 					this.csPublicIdVersionPairs.add(this.csPublicId + "," + this.csVersion);
 					this.csPublicId = null;
 					this.csVersion = null;
@@ -255,7 +280,7 @@ public class FormDetailsParserHandler extends ParserHandler {
 				}
 			} else if (peek.equals(StaXParser.NAME) || peek.equals(StaXParser.TYPE) 
 					|| peek.equals(StaXParser.LANGUAGE_NAME) || peek.equals(StaXParser.CONTEXT)
-					||  peek.equals(StaXParser.URL) || peek.equals(StaXParser.DOCTEXT)) {
+					||  peek.equals(StaXParser.URL) || peek.equals(StaXParser.DOCTEXT) || peek.equals(StaXParser.PREFERRED_DEFINITION)) {
 				if (this.currClassName != null && this.currClassName.equals("DesignationTransferObjectExt") &&
 						this.methodName != null) {
 					setPropertyForObject(this.currDesignation, methodName, xmlreader.getText());
@@ -270,6 +295,8 @@ public class FormDetailsParserHandler extends ParserHandler {
 					setPropertyForObject(this.currDefinition, methodName, xmlreader.getText());
 				} else if (this.currContact != null && this.methodName != null) {
 					setPropertyForObject(this.currContact, methodName, xmlreader.getText());
+				} else if (this.currClassName != null && this.currClassName.equals("ClassificationTransferObject") && this.methodName != null) {
+					setPropertyForObject(this.currClassification, methodName, xmlreader.getText());
 				}
 			} else if (peek.equals(StaXParser.TEXT)) {
 				if (this.currClassName != null && this.currClassName.equals("DefinitionTransferObjectExt") &&
@@ -277,10 +304,27 @@ public class FormDetailsParserHandler extends ParserHandler {
 					setPropertyForObject(this.currDefinition, methodName, xmlreader.getText());
 				} 
 			} else if (peek.equals(StaXParser.PUBLIC_ID)) {
-				if (this.csPublicIdVersionPairs != null)
+				if (this.currClassification != null)
+				{
+					if (this.classificationSchemeItem)
+						setPropertyForObject(this.currClassification, "setCsiPublicID" , xmlreader.getText());
+					else
+						setPropertyForObject(this.currClassification, "setPublicID", xmlreader.getText());
+				}
+				else if (this.csPublicIdVersionPairs != null)
 					this.csPublicId = xmlreader.getText().trim();
 			} else if (peek.equals(StaXParser.VERSION)) {
-				if (this.csPublicIdVersionPairs != null)
+				if (this.currClassification != null)
+				{
+					if (this.classificationSchemeItem)
+						setPropertyForObject(this.currClassification, "setCsiVersion" , xmlreader.getText());
+					else
+					{
+						this.methodName = getMethodName(peek);
+						setPropertyForObject(this.currClassification, methodName, xmlreader.getText());
+					}
+				}
+				else if (this.csPublicIdVersionPairs != null)
 					this.csVersion = xmlreader.getText().trim();
 			} else if (peek.equals(StaXParser.VALUE)) {
 				if (this.currContact != null && this.methodName != null) {
@@ -334,6 +378,14 @@ public class FormDetailsParserHandler extends ParserHandler {
 	public void setContactCommnunications(
 			List<ContactCommunicationV2TransferObject> contactCommnunications) {
 		this.contactCommnunications = contactCommnunications;
+	}
+
+	public List<ClassificationTransferObject> getClassifications() {
+		return classifications;
+	}
+
+	public void setClassifications(List<ClassificationTransferObject> classifications) {
+		this.classifications = classifications;
 	}
 
 
