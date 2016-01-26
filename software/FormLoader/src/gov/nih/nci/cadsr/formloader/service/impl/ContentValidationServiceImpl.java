@@ -204,7 +204,9 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 																				  classification.getCsiPublicID(), classification.getCsiVersion());
 					if (csCsiIdSeq == null || csCsiIdSeq.length() == 0 )
 					{
-						form.addMessage("Classification [" + classification.getName() + "] with Classification Scheme Item [" + classification.getCsiName() + "] does not exist. It cannot be loaded");
+						form.addMessage("Classification [" + classification.getName() +  " - " + classification.getPublicID() + "v" + classification.getVersion() + 
+										"] with Classification Scheme Item [" + classification.getCsiName() +  " - " + classification.getCsiPublicID() + "v" + classification.getCsiVersion() + 
+										"] does not exist. It cannot be loaded");
 					}
 					else
 					{
