@@ -192,13 +192,11 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 					(classification.getCsiPublicID() == null || classification.getCsiPublicID().length() == 0))
 				{
 					form.addMessage("Classification/Classification Scheme Item " + (idx+1) + " does not have a Public ID. It cannot be loaded." );
-					classifications.remove(idx);
 				}
 				else if ((classification.getVersion() == null || classification.getVersion().length() == 0) || 
 						(classification.getCsiVersion() == null || classification.getCsiVersion().length() == 0))
 				{
 					form.addMessage("Classification/Classification Scheme Item " + (idx + 1) + " does not have a Version. It cannot be loaded." );
-					classifications.remove(idx);
 				}
 				else
 				{
@@ -207,15 +205,16 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 					if (csCsiIdSeq == null || csCsiIdSeq.length() == 0 )
 					{
 						form.addMessage("Classification [" + classification.getName() + "] does not exist. It cannot be loaded");
-						classifications.remove(idx);
 					}
 					else
 					{
 						classification.setCsCsiIdSeq(csCsiIdSeq);
+						newClassifications.add(classification);
 					}
 				}
 				idx++;
 			}
+			form.setClassifications(newClassifications);
 		}
 	}
 	
@@ -1312,7 +1311,7 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 			//3. see if it matches the pv's value meaning's definition's text
 			//  * If no match found, skip loading the valid value
 			if (!ableToValidateByAlternatives(valMeaningLongName, valMeaningDto.getIdseq())) {
-				msg = "Valid value meaning text [" + valMeaning + "] doesn't match any of the associated CDE's permissible value meaning.  Valid Value/ValueMeaning not loaded.";
+				msg = "Valid value meaning text [" + valMeaning + "] doesn't match any of the associated CDE's permissible value meaning. However, the Valid Value/ValueMeaning will be loaded.";
 //				vVal.setSkip(true);
 //				question.addInstruction(msg);
 //				question.addMessage(msg);

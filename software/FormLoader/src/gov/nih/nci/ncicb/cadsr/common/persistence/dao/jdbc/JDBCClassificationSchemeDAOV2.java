@@ -1,5 +1,6 @@
 package gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc;
 
+import gov.nih.nci.cadsr.formloader.service.impl.ContentValidationServiceImpl;
 import gov.nih.nci.ncicb.cadsr.common.dto.CSITransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.bc4j.BC4JClassificationsTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.jdbc.ClassSchemeValueObject;
@@ -16,13 +17,16 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.log4j.Logger;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.object.MappingSqlQuery;
 
 
-public class JDBCClassificationSchemeDAOV2 extends JDBCAdminComponentDAOV2
-  implements ClassificationSchemeDAO {
+public class JDBCClassificationSchemeDAOV2 extends JDBCAdminComponentDAOV2 implements ClassificationSchemeDAO
+{	
+	private static Logger logger = Logger.getLogger(JDBCClassificationSchemeDAOV2.class);
 
 	public JDBCClassificationSchemeDAOV2(DataSource dataSource) {
 		super(dataSource);
@@ -395,8 +399,14 @@ public class JDBCClassificationSchemeDAOV2 extends JDBCAdminComponentDAOV2
        	params.addValue("csiPublicID", csiPublicID);
        	params.addValue("csiVersion", csiVersion);
        	
-       	String csiIdSeq = (String) this.namedParameterJdbcTemplate.queryForObject(sql, params, String.class);        
-        return csiIdSeq;
+       	String csCsiIdSeq = "";
+       	
+       	try {
+			csCsiIdSeq = (String) this.namedParameterJdbcTemplate.queryForObject(sql, params, String.class);
+		} catch (DataAccessException e) {
+			logger.info("Classification with Public ID: " + publicID + ", CSI Public ID: " + csiPublicID + " does not exist in the DB.");
+		}        
+        return csCsiIdSeq;
     }
     
     public int getClassificationSchemeCountByPublicIdVersion(int publicId, float version) {
