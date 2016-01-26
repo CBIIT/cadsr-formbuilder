@@ -204,7 +204,7 @@ public class ContentValidationServiceImpl implements ContentValidationService {
 																				  classification.getCsiPublicID(), classification.getCsiVersion());
 					if (csCsiIdSeq == null || csCsiIdSeq.length() == 0 )
 					{
-						form.addMessage("Classification [" + classification.getName() + "] does not exist. It cannot be loaded");
+						form.addMessage("Classification [" + classification.getName() + "] with Classification Scheme Item [" + classification.getCsiName() + "] does not exist. It cannot be loaded");
 					}
 					else
 					{
@@ -1310,7 +1310,8 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 			//2. see if it matches the pv's value meaning's designation's name, if not -
 			//3. see if it matches the pv's value meaning's definition's text
 			//  * If no match found, skip loading the valid value
-			if (!ableToValidateByAlternatives(valMeaningLongName, valMeaningDto.getIdseq())) {
+			//Fix for FORMBUILD-501
+			if (!ableToValidateByAlternatives(valMeaning, valMeaningDto.getIdseq())) {
 				msg = "Valid value meaning text [" + valMeaning + "] doesn't match any of the associated CDE's permissible value meaning. However, the Valid Value/ValueMeaning will be loaded.";
 //				vVal.setSkip(true);
 //				question.addInstruction(msg);
