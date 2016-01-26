@@ -137,12 +137,10 @@ try {
 			<span style="font-size: 9pt; font-family: Arial"> <a
 				href="<%=params.getNciTerminologyServerUrl()%>" target="_blank">NCI Terminology<br>Server</a> </span>
 		</td>
-		<%-- FormBuilder tracker - 518 %>
-		<%-- <td align="center" width="10%" height="10">
+		<td align="center" width="10%" height="10">
 			<span style="font-size: 9pt; font-family: Arial"> <a id="idCDEBrowser" 
 				href="<%=formloaderUrl%>" target="_blank">Form<br>Loader</a> </span>
 		</td>
-		--%>
 		<td align="center" width="10%" height="10">
 			<span style="font-size: 10.0pt; font-family: Arial"> <A
 				HREF="<%=params.getFormBuilderWhatsNewUrl()%>" target="_blank">
