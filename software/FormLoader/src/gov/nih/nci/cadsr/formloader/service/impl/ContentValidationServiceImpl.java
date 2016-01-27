@@ -971,7 +971,8 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 		if (vdseqid != null)
 		{
 			ValueDomainV2 vd = repository.getValueDomainBySeqid(vdseqid);
-			if ((vd != null) && ("N".equalsIgnoreCase(vd.getVDType())))
+			if (vd != null && "N".equalsIgnoreCase(vd.getVDType()) && 
+				question.getValidValues() != null && question.getValidValues().size() > 0)
 			{
 				String message = "CDE " + matchingCde.getPublicId() + " is not enumerated but question has Valid Values in XML. CDE will be dissociated from the question.";
 				logger.debug(message);
@@ -986,8 +987,7 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 		//JR368 begin
 		if(pValDtos != null) {	//validate only if it is enumerated VD
 		
-		List<ReferenceDocumentTransferObject> rdDtos = refdocDtos.get(
-				"" + matchingCde.getPublicId() + "-" + matchingCde.getVersion());
+		List<ReferenceDocumentTransferObject> rdDtos = refdocDtos.get("" + matchingCde.getPublicId() + "-" + matchingCde.getVersion());
 		
 		verifyQuestionDefaultValue(form, question, pValDtos, matchingCde);
 		verifyQuestionValidValues(form, question, pValDtos, matchingCde);
@@ -1181,8 +1181,7 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 			}
 
 			if (!validated) {
-				msg = "Question's default value [" + 
-						defaultValue + "] doesn't match any of the associated CDE's permissible values";
+				msg = "Question's default value [" + defaultValue + "] doesn't match any of the associated CDE's permissible values";
 				question.addInstruction(msg);
 				question.addMessage(msg);
 				question.setDefaultValue("");
@@ -1297,7 +1296,7 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 		
 		if (matchedPv == null) {
 			msg = "Valid value [" + val + "] doesn't match any of permissible values of the associated CDE [" + 
-					matchingCde.getPublicId() + "|" + matchingCde.getVersion() + "]. Unable to validate Valid Value/ValueMeaning.";
+					matchingCde.getPublicId() + "|" + matchingCde.getVersion() + "]. Unable to validate Valid Value/Value Meaning.";
 			//vVal.setSkip(true);
 			//question.addInstruction(msg);
 			//question.addMessage(msg);
@@ -1314,7 +1313,8 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 			//  * If no match found, skip loading the valid value
 			//Fix for FORMBUILD-501
 			if (!ableToValidateByAlternatives(valMeaning, valMeaningDto.getIdseq())) {
-				msg = "Valid value meaning text [" + valMeaning + "] doesn't match any of the associated CDE's permissible value meaning. However, the Valid Value/ValueMeaning will be loaded.";
+				msg = "Valid value meaning text [" + valMeaning + "] doesn't match any of the associated CDE's permissible value meaning. " +
+					  "However, the Valid Value/Value Meaning will be loaded but dissociated from the CDE.";
 //				vVal.setSkip(true);
 //				question.addInstruction(msg);
 //				question.addMessage(msg);
