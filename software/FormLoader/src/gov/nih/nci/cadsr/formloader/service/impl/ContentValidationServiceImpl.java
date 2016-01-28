@@ -974,7 +974,7 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 			if (vd != null && "N".equalsIgnoreCase(vd.getVDType()) && 
 				question.getValidValues() != null && question.getValidValues().size() > 0)
 			{
-				String message = "CDE " + matchingCde.getPublicId() + " is not enumerated but question has Valid Values in XML. CDE will be dissociated from the question.";
+				String message = "CDE " + matchingCde.getPublicId() + " is not enumerated but question has Valid Values in XML. Question will be dissociated from CDE.";
 				logger.debug(message);
 				question.addMessage(message);
 				question.addInstruction(message);
@@ -1314,7 +1314,7 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 			//Fix for FORMBUILD-501
 			if (!ableToValidateByAlternatives(valMeaning, valMeaningDto.getIdseq())) {
 				msg = "Valid value meaning text [" + valMeaning + "] doesn't match any of the associated CDE's permissible value meaning. " +
-					  "However, the Valid Value/Value Meaning will be loaded but dissociated from the CDE.";
+					  "However, the Valid Value/Value Meaning will be loaded but Question will be dissociated from CDE.";
 //				vVal.setSkip(true);
 //				question.addInstruction(msg);
 //				question.addMessage(msg);
