@@ -138,7 +138,7 @@
     </target>
 	
     <target name="build" depends="compile-war">
-    	<filter token="TIER" value="${TIER}" />
+    	<filter token="tier" value="${tier}" />
     	<copy todir="${build.dir}">
 			<fileset dir="${web.dir}" excludes="CVS,**/*.class" />
 		</copy>

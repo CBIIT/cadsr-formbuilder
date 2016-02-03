@@ -465,7 +465,7 @@ spring.jar commons-logging.jar log4j-1.2.8.jar properties/"/>
 	
 	<target name="-build-formloader-war">
 			<ant antfile="build.xml" target="archive" dir="${formloader.dir}" inheritall="false">
-				<property name="TIER" value="${TIER}" />
+				<property name="tier" value="${tier}" />
 			</ant>
 	</target>
 
