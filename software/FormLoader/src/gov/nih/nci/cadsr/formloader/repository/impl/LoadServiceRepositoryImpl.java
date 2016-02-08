@@ -613,6 +613,32 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 		}
 		
 		logger.debug("Done creating modules for form");
+	}	
+	
+	
+	protected DataElementTransferObject getMatchingDataElement(QuestionDescriptor question, List<DataElementTransferObject> cdeDtos)
+	{	
+		String cdePublicId = question.getCdePublicId();
+		String cdeVersion = question.getCdeVersion();
+		DataElementTransferObject matchedCde = null;
+
+		try
+		{
+			int cdePubIdNum = Integer.parseInt(cdePublicId);
+			float cdeVerNum = Float.parseFloat(cdeVersion);
+
+			if (cdeDtos != null && cdeDtos.size() > 0)
+			{
+				for (DataElementTransferObject cde : cdeDtos)
+				{
+					if (cde.getPublicId() == cdePubIdNum && cdeVerNum == cde.getVersion().floatValue())
+						matchedCde = cde;
+				}
+			}
+		} catch (NumberFormatException ne) {
+			logger.error("Error in formatting CDE Public ID: " + cdePublicId + "v" + cdeVersion);
+		}	
+		return matchedCde;
 	}
 	
 	@Transactional
@@ -630,7 +656,11 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			questdto.setDisplayOrder(idx++);
 			questdto.setContext(formdto.getContext());
 			questdto.setModule(moduledto);
-			QuestionHelper.handleEmptyQuestionText(questdto, cdeDtos.get(idx-1));
+			
+			//FORMBUILD-529 associate the correct CDE and then use that CDE for setting Question Text
+			DataElementTransferObject matchingCde = getMatchingDataElement(question, cdeDtos);
+			
+			QuestionHelper.handleEmptyQuestionText(questdto, matchingCde);
 
 			//better to call createQuestionComponents, which is not implement.
 			QuestionTransferObject newQuestdto = (QuestionTransferObject)this.questionV2Dao.createQuestionComponent(questdto);

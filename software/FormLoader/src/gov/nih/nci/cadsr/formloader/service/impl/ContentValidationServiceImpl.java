@@ -1411,7 +1411,7 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 		//refdoc list is ordered by type, preferred first
 		if (questionText == null || questionText.length() == 0) 
 		{	
-			questionText = "Data Element [" + matchingCde.getLongName() + "] does not have Preferred Question Text";
+			questionText = "Data Element " + matchingCde.getLongName() + " does not have Preferred Question Text";
 			if (refDocs != null)
 			{
 				for (ReferenceDocument refdoc : refDocs)
@@ -1421,20 +1421,22 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 					{
 						questionText = refdoc.getDocText();
 						if (questionText == null || questionText.length() == 0) {
-							questionText = "Data Element [" + matchingCde.getLongName() + "] does not have Preferred Question Text";
+							questionText = "Data Element " + matchingCde.getLongName() + " does not have Preferred Question Text";
 						}
 						break;
 					}
 				}
 			}
-		} else {
+		} else 
+		{
 			boolean matched = false;
 			String preferredText = null; 
 			if (refDocs != null)
 			{
 				for (ReferenceDocument refdoc : refDocs) {
 					String docText = refdoc.getDocText();
-					if ("Preferred Question Text".equalsIgnoreCase( refdoc.getDocType()))
+					if ("Preferred Question Text".equalsIgnoreCase( refdoc.getDocType()) ||
+						"Alternate Question Text".equalsIgnoreCase(refdoc.getDocType()))
 						preferredText = docText;
 					
 					if (questionText.equalsIgnoreCase(docText)) {
@@ -1444,12 +1446,13 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 				}
 			}
 			if (!matched) {
-				//question.setCdeSeqId(""); 
+				//FORMBUILD-528
+				question.setCdeSeqId(""); 
 				if (preferredText != null && preferredText.length() > 0)
 					questionText = preferredText;
 				else {
 					question.addInstruction("Question text in xml [" + questionText + "] is invalid");
-					questionText = "Data Element [" + matchingCde.getLongName() + "] does not have Preferred Question Text";
+					questionText = "Data Element " + matchingCde.getLongName() + " does not have Preferred Question Text";
 					
 				}
 			}
