@@ -24,6 +24,7 @@ import gov.nih.nci.ncicb.cadsr.common.resource.Definition;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.resource.ReferenceDocument;
 import gov.nih.nci.ncicb.cadsr.common.resource.ValueDomainV2;
+import gov.nih.nci.ncicb.cadsr.common.resource.ValueMeaningV2;
 import gov.nih.nci.ncicb.cadsr.common.util.ValueHolder;
 
 import java.util.ArrayList;
@@ -1278,8 +1279,8 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 	}
 	
 	protected void validateQuestionValidValue(FormDescriptor form, QuestionDescriptor question, QuestionDescriptor.ValidValue vVal,
-			List<PermissibleValueV2TransferObject> pValues, DataElementTransferObject matchingCde) {
-		 
+			List<PermissibleValueV2TransferObject> pValues, DataElementTransferObject matchingCde) 
+	{
 		String msg;	
 		String val = vVal.getValue();
 		String valMeaning = FormLoaderHelper.normalizeSpace(vVal.getMeaningText());
@@ -1292,50 +1293,51 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 				matchedPv = pVal;
 				break;
 			}
-		}	
+		}
 		
-		if (matchedPv == null) {
+		if (matchedPv == null)
+		{
 			msg = "Valid value [" + val + "] doesn't match any of permissible values of the associated CDE [" + 
 					matchingCde.getPublicId() + "|" + matchingCde.getVersion() + "]. Unable to validate Valid Value/Value Meaning.";
 			//vVal.setSkip(true);
 			//question.addInstruction(msg);
 			//question.addMessage(msg);
 			prepareQuestionForLoadWithoutValidation(form, question, msg);
-			return;
 		}
+		//FORMBUILD- 424, 425 : If matched PV found, further validate the Valid Values' Value Meaning Text and Description.
+		else
+		{
+			ValueMeaningV2TransferObject valMeaningDto = (ValueMeaningV2TransferObject) matchedPv.getValueMeaningV2();	//JR417 vm pub id is good
+			String valMeaningLongName = FormLoaderHelper.normalizeSpace(valMeaningDto.getLongName());
 
-		ValueMeaningV2TransferObject valMeaningDto = (ValueMeaningV2TransferObject)matchedPv.getValueMeaningV2();	//JR417 vm pub id is good
-		String valMeaningLongName = FormLoaderHelper.normalizeSpace(valMeaningDto.getLongName());
+			if (!valMeaning.equalsIgnoreCase(valMeaningLongName)) { //question vv's meantingText field
+				//2. see if it matches the pv's value meaning's designation's name, if not -
+				//3. see if it matches the pv's value meaning's definition's text
+				//  * If no match found, skip loading the valid value
+				//Fix for FORMBUILD-501
+				if (!ableToValidateByAlternatives(valMeaning, valMeaningDto.getIdseq())) {
+					msg = "Valid value meaning text [" + valMeaning + "] doesn't match any of the associated CDE's permissible value meaning. " +
+							"However, the Valid Value/Value Meaning will be loaded but Question will be dissociated from CDE.";
+					//				vVal.setSkip(true);
+					//				question.addInstruction(msg);
+					//				question.addMessage(msg);
+					prepareQuestionForLoadWithoutValidation(form, question, msg);
+				}	
+			}
 
-		if (!valMeaning.equalsIgnoreCase(valMeaningLongName)) { //question vv's meantingText field
-			//2. see if it matches the pv's value meaning's designation's name, if not -
-			//3. see if it matches the pv's value meaning's definition's text
-			//  * If no match found, skip loading the valid value
-			//Fix for FORMBUILD-501
-			if (!ableToValidateByAlternatives(valMeaning, valMeaningDto.getIdseq())) {
-				msg = "Valid value meaning text [" + valMeaning + "] doesn't match any of the associated CDE's permissible value meaning. " +
-					  "However, the Valid Value/Value Meaning will be loaded but Question will be dissociated from CDE.";
-//				vVal.setSkip(true);
-//				question.addInstruction(msg);
-//				question.addMessage(msg);
-				prepareQuestionForLoadWithoutValidation(form, question, msg);
-				return;
-			}	
-		}
-
-		String valMeaningPreferredDefinition = FormLoaderHelper.normalizeSpace(valMeaningDto.getPreferredDefinition());
-		if (valDesc == null || valDesc.length() == 0) {
-			vVal.setDescription(valMeaningPreferredDefinition);
-			return;
-		}	
-
-		if (!valDesc.equals(valMeaningPreferredDefinition)) {
-			//see if it matches the pv's value meaning's definition's text
-			if (!matchMeaningDefinitions(valDesc, valMeaningDto.getDefinitions())) {
-				vVal.setDescription(valMeaningPreferredDefinition);
-				vVal.setPreferredName(String.valueOf(valMeaningDto.getPublicId()));		//JR417 new
-				vVal.setVdPermissibleValueSeqid(matchedPv.getIdseq());	//JR417 new
+			vVal.setPreferredName(String.valueOf(valMeaningDto.getPublicId()) + "v" + valMeaningDto.getVersion());
+			vVal.setVdPermissibleValueSeqid(matchedPv.getIdseq());
 			
+			String valMeaningPreferredDefinition = FormLoaderHelper.normalizeSpace(valMeaningDto.getPreferredDefinition());
+			if (valDesc == null || valDesc.length() == 0) {
+				vVal.setDescription(valMeaningPreferredDefinition);
+			}	
+			else
+			{
+				if (!valDesc.equals(valMeaningPreferredDefinition))
+					//see if it matches the pv's value meaning's definition's text
+					if (!matchMeaningDefinitions(valDesc, valMeaningDto.getIdseq()))
+						vVal.setDescription(valMeaningPreferredDefinition);
 			}
 		}
 	}
@@ -1350,26 +1352,17 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 					return true;
 			}
 		}
-		
+		return false;
+	}
+	
+	protected boolean matchMeaningDefinitions(String valDesc, String vmSeqid) {
 		List<String> defTexts = this.repository.getDefinitionTextsByVmIds(vmSeqid);
 		if (defTexts != null && defTexts.size() > 0) {
 			for (String defTest : defTexts) {
 				defTest = FormLoaderHelper.normalizeSpace(defTest);
-				if (valMeaningLongName.equalsIgnoreCase(defTest)) 
+				if (valDesc.equalsIgnoreCase(defTest)) 
 					return true;
 			}
-		}
-		
-		return false;
-	}
-	
-	protected boolean matchMeaningDefinitions(String valDesc, List<Definition> definitions) {
-		if (definitions == null)
-			return false;
-		
-		for (Definition def : definitions) {
-			if (valDesc.equals(def.getDefinition()))
-				return true;
 		}
 		
 		return false;

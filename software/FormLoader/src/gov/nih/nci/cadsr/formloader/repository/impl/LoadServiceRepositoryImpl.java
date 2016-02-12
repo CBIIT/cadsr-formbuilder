@@ -615,7 +615,7 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 		logger.debug("Done creating modules for form");
 	}	
 	
-	
+	//FORMBUILD-529 get the correct CDE to be associated with a question
 	protected DataElementTransferObject getMatchingDataElement(QuestionDescriptor question, List<DataElementTransferObject> cdeDtos)
 	{	
 		String cdePublicId = question.getCdePublicId();
@@ -674,9 +674,6 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			
 			createQuestionValidValues(question, form, newQuestdto, moduledto, formdto, pvDtos);		//JR417 entry point
 		}
-		
-		
-		
 		logger.debug("Done creating questions for module");
 	}
 	
@@ -706,11 +703,12 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			System.out.println("LoadServiceRepositoryImpl.java#createQuestionValidValues 3");
 			idx++;
 			
+			//FORMBUILD-424, 425 : Following block of code to be done in validation step and get the correct PV and set values for Meaning Text and Description
 			//JR417 begin
 			//get the correct vv's pvdto and set vv's vdPermissibleValueSeqid
-			PermissibleValueV2TransferObject pv = null;
-			try {
-				pv = FormLoaderHelper.getValidValuePV(vValue, pvDtos);
+			/*PermissibleValueV2TransferObject pv = null;
+			 * try {
+			 pv = FormLoaderHelper.getValidValuePV(vValue, pvDtos, repository);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -738,6 +736,7 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 				}
 			} //what happend if it is null? do we need to check?
 			//JR417 end
+			*/
 			FormValidValueTransferObject fvv = translateIntoValidValueDto(vValue, newQuestdto, moduledto, formdto, idx);	 //JR417 vValue's vdpvseqid / vp_idseq is NOT empty anymore (fixed in this ticket)
 			
 			fvv.setDisplayOrder(idx);
@@ -747,8 +746,7 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 				stop = "stop";	//I have no clue what this does, if you do, please let me know
 			}
 			
-			String vvSeqid  = 
-					formValidValueV2Dao.createValidValue(fvv,newQuestdto.getQuesIdseq(),moduledto.getCreatedBy());	//JR417 the correct place to emulate EJB method
+			String vvSeqid = formValidValueV2Dao.createValidValue(fvv,newQuestdto.getQuesIdseq(),moduledto.getCreatedBy());	//JR417 the correct place to emulate EJB method
 			
 			
 			if (vvSeqid != null && vvSeqid.length() > 0) {

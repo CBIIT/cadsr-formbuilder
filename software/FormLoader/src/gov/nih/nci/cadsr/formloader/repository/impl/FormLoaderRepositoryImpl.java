@@ -337,8 +337,6 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		}
 		
 		return this.valueDomainV2Dao.getDesignationNamesByVMId(vmSeqid);
-		
-		
 	}
 	
 	/**

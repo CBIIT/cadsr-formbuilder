@@ -12,13 +12,16 @@ public class QuestionHelper {
 	public static final void handleEmptyQuestionText(QuestionTransferObject questdto, DataElementTransferObject cdeDto) {
 		String questionText = null;
 		//TODO to confirm "if preferred def of data element if it's not null. Otherwise, use long name of data element. if No CDE, use question text"
-		if(StringUtils.isEmpty(questdto.getPreferredDefinition())) {
-			if(!StringUtils.isEmpty(cdeDto.getPreferredDefinition())) {
+		if(StringUtils.isEmpty(questdto.getPreferredDefinition()))
+		{
+			if(cdeDto != null && !StringUtils.isEmpty(cdeDto.getPreferredDefinition())) {
 				questionText = cdeDto.getPreferredDefinition();
-			} else
-			if(!StringUtils.isEmpty(cdeDto.getLongName())) {
+			} 
+			else if(cdeDto != null && !StringUtils.isEmpty(cdeDto.getLongName())) {
 				questionText = cdeDto.getLongName();
-			} else {
+			}
+			else
+			{
 				questionText = "Data Element " + cdeDto.getLongCDEName() + " does not have Preferred Question Text";	//TODO test it and confirm that if is it not cdeDto.getLongName()
 			}
 			questdto.setLongName(questionText);
