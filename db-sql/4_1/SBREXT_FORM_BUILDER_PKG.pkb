@@ -1,4 +1,4 @@
-CREATE OR REPLACE PACKAGE BODY SBREXT."SBREXT_FORM_BUILDER_PKG"
+create or replace PACKAGE BODY "SBREXT_FORM_BUILDER_PKG"
 AS
 /******************************************************************************
    PROCEDURE:  ins_crf
@@ -3543,11 +3543,13 @@ AS
            FROM quest_contents_ext
           WHERE qc_idseq = v_src_crf_idseq;
           
-      CURSOR pq
-      IS
-         SELECT *
-           FROM protocol_qc_ext
-          WHERE qc_idseq = p_idseq;
+      --FORMBUILD-358 Do not insert protocols from previous version of the form.
+      --Load only protocols specified in the XML while a loading a new version of a form.
+      --CURSOR pq
+      --IS
+         --SELECT *
+           --FROM protocol_qc_ext
+          --WHERE qc_idseq = p_idseq;
 
       v_qtl_name               VARCHAR2 (2000);               --:= p_qtl_name;
       v_version                VARCHAR2 (2000)                    := p_version;
@@ -3628,15 +3630,17 @@ AS
            FROM quest_contents_ext
           WHERE qc_idseq = p_idseq;
 
-         FOR p_rec IN pq
-         LOOP
-            IF v_proto_idseq IS NULL
-            THEN
-               v_proto_idseq := p_rec.proto_idseq;
-            ELSE
-               v_proto_idseq := v_proto_idseq || ',' || p_rec.proto_idseq;
-            END IF;
-         END LOOP;
+		--FORMBUILD-358 Do not insert protocols from previous version of the form.
+        --Load only protocols specified in the XML while a loading a new version of a form.
+        --FOR p_rec IN pq
+         --LOOP
+           -- IF v_proto_idseq IS NULL
+            --THEN
+              -- v_proto_idseq := p_rec.proto_idseq;
+            --ELSE
+              -- v_proto_idseq := v_proto_idseq || ',' || p_rec.proto_idseq;
+            --END IF;
+         --END LOOP;
 
          v_asl_name := 'DRAFT NEW';
          meta_global_pkg.transaction_type := 'VERSION';
@@ -3652,8 +3656,8 @@ AS
                      p_proto_idseq               => v_proto_idseq,
                      p_asl_name                  => 'DRAFT NEW',
                      p_qcdl_name                 => crf_rec.qcdl_name,
-                     p_created_by                => v_created_by,
                      p_change_note               => p_change_note,
+                     p_created_by                => v_created_by,
                      p_crf_idseq                 => v_new_crf_idseq,
                      p_return_code               => v_return_code,
                      p_return_desc               => v_return_desc
@@ -3667,13 +3671,13 @@ AS
                           p_proto_idseq               => v_proto_idseq,
                           p_asl_name                  => 'DRAFT NEW',
                           p_qcdl_name                 => crf_rec.qcdl_name,
-                          p_created_by                => v_created_by,
                           p_change_note               => p_change_note,
+                          p_created_by                => v_created_by,
                           p_tmplt_idseq               => v_new_crf_idseq,
                           p_return_code               => v_return_code,
                           p_return_desc               => v_return_desc
                          );
-         END IF;     
+         END IF;
 
          UPDATE quest_contents_ext
             SET qc_id = v_qc_id
@@ -3704,7 +3708,11 @@ AS
          meta_config_mgmt.copyacnamescopy (p_idseq, p_new_idseq);
          meta_config_mgmt.copyacdefs (p_idseq, p_new_idseq);
          meta_config_mgmt.copyacdocs (p_idseq, p_new_idseq);
-         meta_config_mgmt.copyaccsi (p_idseq, p_new_idseq);
+         
+         --FORMBUILD-526 Do not copy CSI from earlier version of the form
+         --Load only CSIs specified in the XML.
+         --meta_config_mgmt.copyaccsi (p_idseq, p_new_idseq);
+         
          v_id_reference (i).old_idseq := p_idseq;
          v_id_reference (i).new_idseq := v_new_crf_idseq;
          i := i + 1;
@@ -3783,6 +3791,4 @@ AS
          p_return_desc := SQLERRM;
          ROLLBACK;
    END;
-END sbrext_form_builder_pkg; 
-/
-
+END sbrext_form_builder_pkg;
