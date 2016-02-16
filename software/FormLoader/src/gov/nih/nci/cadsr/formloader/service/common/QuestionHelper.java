@@ -17,6 +17,7 @@ public class QuestionHelper {
 			if(cdeDto != null && !StringUtils.isEmpty(cdeDto.getPreferredDefinition())) {
 				questionText = cdeDto.getPreferredDefinition();
 			} 
+			//FORMBUILD-529 
 			/*else if(cdeDto != null && !StringUtils.isEmpty(cdeDto.getLongName())) {
 				questionText = cdeDto.getLongName();
 			}*/
