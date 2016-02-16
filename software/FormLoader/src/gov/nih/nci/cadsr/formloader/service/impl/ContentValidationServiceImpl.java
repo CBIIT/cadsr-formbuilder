@@ -986,14 +986,15 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 			
 		List<PermissibleValueV2TransferObject> pValDtos = pvDtos.get(matchingCde.getVdIdseq());		//JR417 vm pub id is good
 		//JR368 begin
-		if(pValDtos != null) {	//validate only if it is enumerated VD
-		
-		List<ReferenceDocumentTransferObject> rdDtos = refdocDtos.get("" + matchingCde.getPublicId() + "-" + matchingCde.getVersion());
-		
-		verifyQuestionDefaultValue(form, question, pValDtos, matchingCde);
-		verifyQuestionValidValues(form, question, pValDtos, matchingCde);
-		verifyQuestionText(form, question, rdDtos, matchingCde);		
+		if(pValDtos != null) //validate only if it is enumerated VD
+		{
+			verifyQuestionDefaultValue(form, question, pValDtos, matchingCde);
+			verifyQuestionValidValues(form, question, pValDtos, matchingCde);		
 		}
+		
+		//FORMBUILD-529 Question Text has to be set similarly for both enumerated and non-enumerated CDEs
+		List<ReferenceDocumentTransferObject> rdDtos = refdocDtos.get("" + matchingCde.getPublicId() + "-" + matchingCde.getVersion());
+		verifyQuestionText(form, question, rdDtos, matchingCde);
 		
 		logger.debug("Done validating question against CDE");
 	}

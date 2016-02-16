@@ -17,12 +17,12 @@ public class QuestionHelper {
 			if(cdeDto != null && !StringUtils.isEmpty(cdeDto.getPreferredDefinition())) {
 				questionText = cdeDto.getPreferredDefinition();
 			} 
-			else if(cdeDto != null && !StringUtils.isEmpty(cdeDto.getLongName())) {
+			/*else if(cdeDto != null && !StringUtils.isEmpty(cdeDto.getLongName())) {
 				questionText = cdeDto.getLongName();
-			}
+			}*/
 			else
 			{
-				questionText = "Data Element " + cdeDto.getLongCDEName() + " does not have Preferred Question Text";	//TODO test it and confirm that if is it not cdeDto.getLongName()
+				questionText = "Data Element " + cdeDto.getLongName() + " does not have Preferred Question Text";	//TODO test it and confirm that if is it not cdeDto.getLongName()
 			}
 			questdto.setLongName(questionText);
 			questdto.setPreferredDefinition(questionText);
