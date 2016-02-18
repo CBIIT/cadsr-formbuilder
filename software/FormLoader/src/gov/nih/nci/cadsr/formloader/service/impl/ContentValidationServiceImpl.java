@@ -1389,8 +1389,7 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 		
 		if (refDocs == null || refDocs.size() == 0) {
 			question.addInstruction("Unable to load any reference document with CDE public id and version [" + 
-				matchingCde.getPublicId() +
-				"|" + matchingCde.getVersion() + "] in xml. Unable to verify question text.");
+				matchingCde.getPublicId() + "|" + matchingCde.getVersion() + "] in xml. Unable to verify question text.");
 			form.setDefaultWorkflowName();
 			//FORMBUILD-428 if CDE does not have any reference docs, retain the CDE association with question.
 			//Do not NULL it.
@@ -1405,50 +1404,46 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 		//refdoc list is ordered by type, preferred first
 		if (questionText == null || questionText.length() == 0) 
 		{	
-			questionText = "Data Element " + matchingCde.getLongName() + " does not have Preferred Question Text";
+			if (refDocs != null)
+			{
+				String pqt = null;
+				String aqt = null;
+				for (ReferenceDocument refdoc : refDocs)
+				{				
+					if ("Preferred Question Text".equalsIgnoreCase(refdoc.getDocType()))
+						pqt = refdoc.getDocText();
+					if ("Alternate Question Text".equalsIgnoreCase(refdoc.getDocType()))
+						aqt = refdoc.getDocText();
+				}
+				questionText = (pqt != null && pqt.length() > 0) ? pqt : aqt;
+				if (questionText == null || questionText.length() == 0) {
+					questionText = "Data Element " + matchingCde.getLongName() + " does not have Preferred Question Text";
+				}
+			}
+		}
+		else 
+		{
+			boolean matched = false;
 			if (refDocs != null)
 			{
 				for (ReferenceDocument refdoc : refDocs)
-				{				
+				{
 					if ("Preferred Question Text".equalsIgnoreCase(refdoc.getDocType()) ||
-						"Alternate Question Text".equalsIgnoreCase(refdoc.getDocType())) 
-					{
-						questionText = refdoc.getDocText();
-						if (questionText == null || questionText.length() == 0) {
-							questionText = "Data Element " + matchingCde.getLongName() + " does not have Preferred Question Text";
-						}
-						break;
-					}
-				}
-			}
-		} else 
-		{
-			boolean matched = false;
-			String preferredText = null; 
-			if (refDocs != null)
-			{
-				for (ReferenceDocument refdoc : refDocs) {
-					String docText = refdoc.getDocText();
-					if ("Preferred Question Text".equalsIgnoreCase( refdoc.getDocType()) ||
 						"Alternate Question Text".equalsIgnoreCase(refdoc.getDocType()))
-						preferredText = docText;
-					
-					if (questionText.equalsIgnoreCase(docText)) {
-						matched = true;
-						break;
+					{
+						if (questionText.equalsIgnoreCase(refdoc.getDocText())) {
+							matched = true;
+							break;
+						}
 					}
 				}
 			}
 			if (!matched) {
 				//FORMBUILD-528
-				question.setCdeSeqId(""); 
-				if (preferredText != null && preferredText.length() > 0)
-					questionText = preferredText;
-				else {
-					question.addInstruction("Question text in xml [" + questionText + "] is invalid");
-					questionText = "Data Element " + matchingCde.getLongName() + " does not have Preferred Question Text";
-					
-				}
+				String message = "Question is dissociated from CDE [" + cdePublicId + "v" + cdeVersion + "] because question text does not match with CDE's PQT or AQT.";
+				question.addMessage(message);
+				question.addInstruction(message);
+				question.setCdeSeqId("");
 			}
 		}
 		question.setQuestionText(questionText);
