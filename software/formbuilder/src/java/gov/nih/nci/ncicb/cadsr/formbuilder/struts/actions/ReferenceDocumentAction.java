@@ -12,8 +12,7 @@ import gov.nih.nci.ncicb.cadsr.common.resource.ReferenceDocument;
 import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
 import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.ReferenceDocFormBean;
 import gov.nih.nci.ncicb.cadsr.common.util.DBUtil;
-import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
+import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -362,7 +361,7 @@ public class ReferenceDocumentAction
   */
  public ActionForward saveReferenceDocs(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                         HttpServletResponse response) throws IOException, ServletException {
-  FormBuilderServiceDelegate service = getFormBuilderService();
+  FormBuilderService service = getFormBuilderService();
 
   Form crf = (Form)getSessionObject(request, CRF);
 
@@ -455,11 +454,11 @@ public class ReferenceDocumentAction
     saveMessage("cadsr.formbuilder.refdoc.save.error", request);
 
    return mapping.findForward("success"); //simply reload the form
-  } catch (FormBuilderException fe) {
+  } catch (Exception fe) {
    log.error("Error occurred trying to save reference documents", fe);
 
    saveMessage(ERROR_REFERENCE_DOC_SAVE_FAILED, request);
-   saveMessage(fe.getErrorCode(), request);
+   //saveMessage(fe.getErrorCode(), request);
 
    //         return mapping.findForward(FAILURE);
 

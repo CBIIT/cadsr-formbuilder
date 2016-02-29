@@ -7,12 +7,10 @@ import gov.nih.nci.ncicb.cadsr.common.exception.FatalException;
 import gov.nih.nci.ncicb.cadsr.common.exception.InvalidUserException;
 import gov.nih.nci.ncicb.cadsr.common.formbuilder.common.FormElementLocker;
 import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.AbstractDAOFactory;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.AbstractDAOFactoryFB;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.UserManagerDAO;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
 import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
-import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocator;
-import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocatorFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,16 +24,28 @@ import org.apache.struts.action.DynaActionForm;
 import org.owasp.esapi.ESAPI;
 import org.owasp.esapi.codecs.Codec;
 import org.owasp.esapi.codecs.OracleCodec;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
  * Base DispatchAction for all formbuilder DispatchActions
  */
 public class FormBuilderSecureBaseDispatchAction extends FormBuilderBaseDispatchAction
-  {
+{
   protected static Log log = LogFactory.getLog(FormAction.class.getName());
+  
+  @Autowired
+  AbstractDAOFactoryFB daoFactory;
 
-  /**
+  public AbstractDAOFactoryFB getDaoFactory() {
+	  return daoFactory;
+  }
+  
+  public void setDaoFactory(AbstractDAOFactoryFB daoFactory) {
+	  this.daoFactory = daoFactory;
+  }
+  
+/**
    * Sets default method name if no method is specified
    *
    * @return ActionForward
@@ -119,10 +129,6 @@ System.out.println( request.getSession().getAttribute("myUsername") );
     }
 
   protected NCIUser getNCIUser(String username) {
-    String locatorClassName =
-      servlet.getInitParameter(ServiceLocator.SERVICE_LOCATOR_CLASS_KEY);
-    ServiceLocator locator = ServiceLocatorFactory.getLocator(locatorClassName);
-    AbstractDAOFactory daoFactory = AbstractDAOFactory.getDAOFactory(locator);
     UserManagerDAO dao = daoFactory.getUserManagerDAO();
     NCIUser user = dao.getNCIUser(username);
 

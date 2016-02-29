@@ -2,7 +2,7 @@ package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
 import gov.nih.nci.ncicb.cadsr.common.resource.AdminComponentType;
 import gov.nih.nci.ncicb.cadsr.common.resource.ComponentType;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
+import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +34,7 @@ public class ValidValuesDisplayAction extends
 			return mapping.findForward("error");
 		}
 		
-		FormBuilderServiceDelegate service = getFormBuilderService();
+		FormBuilderService service = getFormBuilderService();
 		AdminComponentType adminCompType = service.getComponentType(publicId, version);
 		Map pvMap = null;
 		

@@ -4,7 +4,7 @@ import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
 import gov.nih.nci.ncicb.cadsr.common.resource.TriggerActionChanges;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
+import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormActionUtil;
 
 import java.io.IOException;
@@ -55,18 +55,19 @@ public class ManageClassificationsAction
         setFormForAction(form, request);
       }
 
-      FormBuilderServiceDelegate service = getFormBuilderService();
+      FormBuilderService service = getFormBuilderService();
 
       Collection classifications = service.retrieveFormClassifications(formId);
 
       setSessionObject(request, CLASSIFICATIONS, classifications);
     }
-    catch (FormBuilderException exp) {
+    catch (Exception exp) {
       if (log.isErrorEnabled()) {
         log.error("Exception on getClassifications ", exp);
       }
 
-      saveMessage(exp.getErrorCode(), request);
+      //saveMessage(exp.getErrorCode(), request);
+      saveMessage("cadsr.formbuilder.classification.fetch.failure", request);
     }
 
     return mapping.findForward("success");
@@ -94,7 +95,7 @@ public class ManageClassificationsAction
     boolean success = true;
     try {
       Form crf = (Form) getSessionObject(request, CRF);
-      FormBuilderServiceDelegate service = getFormBuilderService();
+      FormBuilderService service = getFormBuilderService();
 
       //get form Id and CDE Id if it is to classify CDE as well.
 
@@ -119,12 +120,14 @@ public class ManageClassificationsAction
     
       try {
              service.assignFormClassification(acIdList, csCsiIdList);
-      }catch (FormBuilderException exp) {
+      }catch (Exception exp) {
             if (log.isErrorEnabled()) {
               log.error("Exception on addClassification ", exp);
             }
 
-            saveMessage(exp.getErrorCode(), request);
+        //saveMessage(exp.getErrorCode(), request);
+	    saveMessage("cadsr.formbuilder.classification.add.failure", request);
+	    
 	    success = false;
        }// end of try-catch
 
@@ -133,12 +136,12 @@ public class ManageClassificationsAction
 
       setSessionObject(request, CLASSIFICATIONS, classifications);
     }
-    catch (FormBuilderException exp) {
+    catch (Exception exp) {
       if (log.isErrorEnabled()) {
         log.error("Exception on addClassification ", exp);
       }
 
-      saveMessage(exp.getErrorCode(), request);
+      //saveMessage(exp.getErrorCode(), request);
       saveMessage("cadsr.formbuilder.classification.add.failure", request);
 
       return mapping.findForward("failure");
@@ -178,7 +181,7 @@ public class ManageClassificationsAction
           return mapping.findForward("hasSkipPattern");          
       }
 
-      FormBuilderServiceDelegate service = getFormBuilderService();
+      FormBuilderService service = getFormBuilderService();
       service.removeFFormClassification(cscsiId, crf.getFormIdseq());
       
       Collection classifications =
@@ -188,11 +191,13 @@ public class ManageClassificationsAction
       removeSessionObject(request, CLASSIFICATION_ASSOCIATED_TRIGGERS);
       setSessionObject(request, CLASSIFICATIONS, classifications);
     }
-    catch (FormBuilderException exp) {
+    catch (Exception exp) {
       if (log.isErrorEnabled()) {
         log.error("Exception on removeClassification ", exp);
       }
-      saveMessage(exp.getErrorCode(), request);
+      //saveMessage(exp.getErrorCode(), request);
+      saveMessage("cadsr.formbuilder.classification.delete.failure", request);
+      
       return mapping.findForward("failure");
     }
 
@@ -214,7 +219,7 @@ public class ManageClassificationsAction
       Form crf = (Form)getSessionObject(request, CRF);
       try{
           if ("yes".equalsIgnoreCase(choice)){
-              FormBuilderServiceDelegate service = getFormBuilderService();
+              FormBuilderService service = getFormBuilderService();
               List<TriggerActionChanges> triggerChangesList = (List<TriggerActionChanges>)
                         getSessionObject(request,CLASSIFICATION_ASSOCIATED_TRIGGERS);
               service.removeFormClassificationUpdateTriggerActions(cscsiId,  crf.getFormIdseq(), triggerChangesList);
@@ -229,7 +234,7 @@ public class ManageClassificationsAction
               setSessionObject(request, CRF, crf);
           }
           removeSessionObject(request,CLASSIFICATION_ASSOCIATED_TRIGGERS);
-      }catch(FormBuilderException e){
+      }catch(Exception e){
           if (log.isErrorEnabled()) {
             log.error("Exception on updateSkipPatternForCSI ", e);
           }

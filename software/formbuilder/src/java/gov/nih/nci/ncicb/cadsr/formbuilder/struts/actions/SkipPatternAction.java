@@ -1,22 +1,5 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
-import gov.nih.nci.ncicb.cadsr.common.dto.CSITransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.TriggerActionChangesTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.TriggerActionTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.resource.ClassSchemeItem;
-import gov.nih.nci.ncicb.cadsr.common.resource.Form;
-import gov.nih.nci.ncicb.cadsr.common.resource.FormElement;
-import gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue;
-import gov.nih.nci.ncicb.cadsr.common.resource.Module;
-import gov.nih.nci.ncicb.cadsr.common.resource.Protocol;
-import gov.nih.nci.ncicb.cadsr.common.resource.Question;
-import gov.nih.nci.ncicb.cadsr.common.resource.TriggerAction;
-import gov.nih.nci.ncicb.cadsr.common.resource.TriggerActionChanges;
-import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
-import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +15,22 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
+
+import gov.nih.nci.ncicb.cadsr.common.dto.CSITransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.TriggerActionChangesTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.TriggerActionTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.resource.ClassSchemeItem;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormElement;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormValidValue;
+import gov.nih.nci.ncicb.cadsr.common.resource.Module;
+import gov.nih.nci.ncicb.cadsr.common.resource.Protocol;
+import gov.nih.nci.ncicb.cadsr.common.resource.Question;
+import gov.nih.nci.ncicb.cadsr.common.resource.TriggerAction;
+import gov.nih.nci.ncicb.cadsr.common.resource.TriggerActionChanges;
+import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
+import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
 
 
 public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
@@ -146,10 +145,10 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
         formBean.set(SKIP_INSTRUCTION,"");
 
          try {
-           FormBuilderServiceDelegate service = getFormBuilderService();
+           FormBuilderService service = getFormBuilderService();
            Collection  csis = service.retrieveFormClassifications(sourceForm.getFormIdseq());
            sourceForm.setClassifications(csis);
-         } catch (FormBuilderException exp) {
+         } catch (Exception exp) {
              if (log.isErrorEnabled()) {
                log.error("Exception while retriveing Classifications for Skip pattern  " , exp);
              }
@@ -209,10 +208,10 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
 
        Form sourceForm = (Form) getSessionObject(request,CRF);
         try {
-          FormBuilderServiceDelegate service = getFormBuilderService();
+          FormBuilderService service = getFormBuilderService();
           Collection  csis = service.retrieveFormClassifications(sourceForm.getFormIdseq());
           sourceForm.setClassifications(csis);
-        } catch (FormBuilderException exp) {
+        } catch (Exception exp) {
             if (log.isErrorEnabled()) {
               log.error("Exception while retriveing Classifications for Skip pattern  " , exp);
             }
@@ -268,10 +267,10 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
         formBean.set(SKIP_INSTRUCTION,"");
 
         try {
-          FormBuilderServiceDelegate service = getFormBuilderService();
+          FormBuilderService service = getFormBuilderService();
           Collection  csis = service.retrieveFormClassifications(sourceForm.getFormIdseq());
           sourceForm.setClassifications(csis);
-        } catch (FormBuilderException exp) {
+        } catch (Exception exp) {
             if (log.isErrorEnabled()) {
               log.error("Exception while retriveing Classifications for Skip pattern  " , exp);
             }
@@ -340,10 +339,10 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
         setSessionObject(request,SKIP_PATTERN_CLONE,clone);
 
         try {
-          FormBuilderServiceDelegate service = getFormBuilderService();
+          FormBuilderService service = getFormBuilderService();
           Collection  csis = service.retrieveFormClassifications(sourceForm.getFormIdseq());
           sourceForm.setClassifications(csis);
-        } catch (FormBuilderException exp) {
+        } catch (Exception exp) {
             if (log.isErrorEnabled()) {
               log.error("Exception while retriveing Classifications for Skip pattern  " , exp);
             }
@@ -406,7 +405,7 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
             crf = getFormBuilderService().getFormDetails(formIdSeq);
             setSessionObject(request,SKIP_TARGET_FORM,crf,true);
         }
-        catch (FormBuilderException exp) {
+        catch (Exception exp) {
           if (log.isErrorEnabled()) {
             log.error("Exception getting CRF", exp);
           }
@@ -627,15 +626,15 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
 
         TriggerAction triggerAction =  sourceModule.getTriggerActions().remove(triggerIndex);
         try {
-          FormBuilderServiceDelegate service = getFormBuilderService();
+          FormBuilderService service = getFormBuilderService();
           service.deleteTriggerAction(triggerAction.getIdSeq());
           saveMessage("cadsr.formbuilder.delete.skippattern.success",request);
-        } catch (FormBuilderException exp) {
+        } catch (Exception exp) {
             if (log.isErrorEnabled()) {
               log.error("Exception on deleteing  Skip pattern  " , exp);
             }
         saveMessage(ERROR_SKIP_PATTERN_DELETE, request);
-            saveMessage(exp.getErrorCode(), request);
+            //saveMessage(exp.getErrorCode(), request);
             return mapping.findForward("backToModuleEdit");
 
         }
@@ -674,15 +673,15 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
 
         TriggerAction triggerAction =  sourceValidValue.getTriggerActions().remove(triggerIndex);
         try {
-          FormBuilderServiceDelegate service = getFormBuilderService();
+          FormBuilderService service = getFormBuilderService();
           service.deleteTriggerAction(triggerAction.getIdSeq());
           saveMessage("cadsr.formbuilder.delete.skippattern.success",request);
-        } catch (FormBuilderException exp) {
+        } catch (Exception exp) {
             if (log.isErrorEnabled()) {
               log.error("Exception on deleteing  Skip pattern  " , exp);
             }
         saveMessage(ERROR_SKIP_PATTERN_DELETE, request);
-            saveMessage(exp.getErrorCode(), request);
+            //saveMessage(exp.getErrorCode(), request);
             return mapping.findForward("backToModuleEdit");
 
         }
@@ -758,15 +757,15 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
                 }
 
                  try {
-                   FormBuilderServiceDelegate service = getFormBuilderService();
+                   FormBuilderService service = getFormBuilderService();
                    savedAction = service.createTriggerAction(triggerAction);
                      saveMessage("cadsr.formbuilder.create.skippattern.success",request);
-                 } catch (FormBuilderException exp) {
+                 } catch (Exception exp) {
                      if (log.isErrorEnabled()) {
                        log.error("Exception on creating new Skip pattern  " , exp);
                      }
                  saveMessage(ERROR_SKIP_PATTERN_CREATE, request);
-                     saveMessage(exp.getErrorCode(), request);
+                     //saveMessage(exp.getErrorCode(), request);
                      return mapping.findForward("editSkipPattern");
 
                  }
@@ -837,16 +836,16 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
                                    return mapping.findForward("editSkipPattern");
                                }
                     try {
-                      FormBuilderServiceDelegate service = getFormBuilderService();
+                      FormBuilderService service = getFormBuilderService();
                       savedAction = service.updateTriggerAction(changes);
                       saveMessage("cadsr.formbuilder.save.skippattern.success",request);
                       //Add Message
-                    } catch (FormBuilderException exp) {
+                    } catch (Exception exp) {
                         if (log.isErrorEnabled()) {
                           log.error("Exception on Saving  Skip pattern  " , exp);
                         }
                     saveMessage(ERROR_SKIP_PATTERN_SAVE, request);
-                        saveMessage(exp.getErrorCode(), request);
+                        //saveMessage(exp.getErrorCode(), request);
                         return mapping.findForward("editSkipPattern");
 
                     }

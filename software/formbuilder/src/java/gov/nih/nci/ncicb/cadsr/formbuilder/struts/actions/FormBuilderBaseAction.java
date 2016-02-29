@@ -5,11 +5,7 @@ import gov.nih.nci.ncicb.cadsr.common.formbuilder.common.FormBuilderConstants;
 import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
 import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants;
 import gov.nih.nci.ncicb.cadsr.common.persistence.PersistenceConstants;
-import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocator;
-import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocatorFactory;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.ServiceDelegateFactory;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.ServiceStartupException;
+import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
 
 import java.io.IOException;
 
@@ -24,6 +20,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 public abstract class FormBuilderBaseAction extends Action 
@@ -31,6 +28,17 @@ public abstract class FormBuilderBaseAction extends Action
     FormBuilderConstants, CaDSRConstants {
   
   protected static Log log = LogFactory.getLog(FormAction.class.getName());
+  
+  @Autowired
+  private FormBuilderService formBuilderService;
+  
+  public FormBuilderService getFormBuilderService() {
+	  return formBuilderService;
+  }
+
+  public void setFormBuilderService(FormBuilderService formBuilderService) {
+	  this.formBuilderService = formBuilderService;
+  }
   
   /**
    * This is the main action called from the Struts framework.
@@ -118,25 +126,6 @@ public abstract class FormBuilderBaseAction extends Action
     if (session != null) {
       session.setAttribute(FormBuilderConstants.LOGIN_TOKEN_KEY, path);
     }
-  }
-
-  protected FormBuilderServiceDelegate getFormBuilderService()
-    throws ServiceStartupException {
-    FormBuilderServiceDelegate svcDelegate = null;
-    ServiceDelegateFactory svcFactory =
-      (ServiceDelegateFactory) getApplicationObject(
-        FormBuilderConstants.SERVICE_DELEGATE_FACTORY_KEY);
-    svcDelegate = svcFactory.createService();
-
-    return svcDelegate;
-  }
-  
-  protected ServiceLocator getServiceLocator() {
-    String locatorClassName =
-      servlet.getInitParameter(ServiceLocator.SERVICE_LOCATOR_CLASS_KEY);
-    ServiceLocator locator = ServiceLocatorFactory.getLocator(locatorClassName);
-            
-    return locator;
   }
 
 }

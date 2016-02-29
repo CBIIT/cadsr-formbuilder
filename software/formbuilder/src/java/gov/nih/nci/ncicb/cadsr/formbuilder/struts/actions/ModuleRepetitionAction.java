@@ -6,7 +6,7 @@ import gov.nih.nci.ncicb.cadsr.common.dto.FormInstructionTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormValidValueTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.InstructionTransferObject;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
+import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
 import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
 import gov.nih.nci.ncicb.cadsr.common.jsp.bean.PaginationBean;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
@@ -283,7 +283,7 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
             numberOfRepeats = repeats.size();
             questionRepeatMap = getQuestionRepeatMap(module,defaultArrList,defaultArrIdList,defaultArrEditableList, noRepQIdList);
         }
-        FormBuilderServiceDelegate service = getFormBuilderService();
+         FormBuilderService service = getFormBuilderService();
         Module savedModeule = null;
         try
         {
@@ -294,13 +294,13 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
             Form updatedForm = service.getFormDetails(crf.getIdseq());
             setSessionObject(request, CRF, updatedForm);
         }
-        catch (FormBuilderException e)
+        catch (Exception e)
         {
             if (log.isDebugEnabled()) {
               log.debug("Exception saving question repitition  " + e);
             }
             saveMessage(ERROR_SAVE_QUESTION_REPITITON, request);
-            saveMessage(e.getErrorCode(), request);
+            //saveMessage(e.getErrorCode(), request);
             return mapping.findForward(FAILURE);        
         }
         crf.getModules().remove(index.intValue());

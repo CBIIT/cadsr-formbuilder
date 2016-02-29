@@ -48,7 +48,7 @@
 	
     <target name="compile-service-jar" depends="clean" description="Compile for formloader-services jar excluding struts classes">
         <mkdir dir="${classes.dir}"/>
-        <javac destdir="${classes.dir}" classpathref="classpath"  includeantruntime="false">
+        <javac destdir="${classes.dir}" classpathref="classpath" includeantruntime="false">
         	<src path="${src.dir}" />
         	 <src path="${test.src.dir}" />
         	<exclude name="gov/nih/nci/cadsr/formloader/struts2/*.java" />
@@ -120,7 +120,7 @@
     <target name="compile-war" depends="clean" description="Compiles the project source.">
 		<mkdir dir="${build.dir}/WEB-INF/classes" />
         <javac destdir="${build.dir}/WEB-INF/classes" classpathref="classpath"  includeantruntime="false" 
-        	debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}" source="1.6" target="1.6">
+        	debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}" >
         	<src path="${src.dir}" />
         	<compilerarg value="-Xlint:unchecked"/>
         </javac>

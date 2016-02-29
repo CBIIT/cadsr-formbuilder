@@ -1,23 +1,8 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
-import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
-import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.InstructionTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.common.resource.Context;
-import gov.nih.nci.ncicb.cadsr.common.resource.Form;
-import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
-import gov.nih.nci.ncicb.cadsr.common.resource.Protocol;
-import gov.nih.nci.ncicb.cadsr.common.util.StringUtils;
-import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +12,18 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
+
+import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
+import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.InstructionTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.resource.Context;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
+import gov.nih.nci.ncicb.cadsr.common.resource.Protocol;
+import gov.nih.nci.ncicb.cadsr.common.util.StringUtils;
+import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
 
 public class FormCreateAction extends FormBuilderSecureBaseDispatchAction {
 
@@ -146,14 +143,14 @@ public class FormCreateAction extends FormBuilderSecureBaseDispatchAction {
 
     Form createdForm = null;
     try {
-      FormBuilderServiceDelegate service = getFormBuilderService();
+      FormBuilderService service = getFormBuilderService();
       createdForm = service.createForm(newForm, newFormHdrInst, newFormFtrInst);
-    } catch (FormBuilderException exp) {
+    } catch (Exception exp) {
         if (log.isErrorEnabled()) {
           log.error("Exception on creating Form  "+newForm , exp);
         }
   saveMessage(ERROR_FORM_CREATE, request);
-	saveMessage(exp.getErrorCode(), request);
+	//saveMessage(exp.getErrorCode(), request);
 	return mapping.findForward("failure");
 	  
     }

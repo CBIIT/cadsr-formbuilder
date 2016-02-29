@@ -100,9 +100,10 @@
     </context-param> 
   <context-param>
       <param-name>contextConfigLocation</param-name>
-      <param-value>/WEB-INF/spring/applicationContext-common.xml 
+      <!-- param-value>/WEB-INF/spring/applicationContext-common.xml 
       				/WEB-INF/spring/applicationContext-domainDao.xml
-      </param-value>
+      </param-value-->
+      <param-value>/WEB-INF/spring/applicationContext.xml</param-value>
       <description> Spring application context xml files</description>
   </context-param>  
  
@@ -739,7 +740,7 @@
     </init-param>
     <init-param>
       <param-name>ServiceLocatorClassName</param-name>
-      <param-value>gov.nih.nci.ncicb.cadsr.common.servicelocator.ejb.ServiceLocatorImpl</param-value>
+      <param-value>gov.nih.nci.ncicb.cadsr.common.servicelocator.ejb.ServiceLocatorImplForFB</param-value>
     </init-param>
     <init-param>
       <param-name>ApplicationServiceLocatorClassName</param-name>
@@ -957,13 +958,13 @@
     <role-name>CONTEXT ADMIN</role-name>
   </security-role>   
  
-  <env-entry>
+  <!-- <env-entry>
     <description>Specifies the implementation class of FormBuilderServiceDelegate that should be used.</description>
     <env-entry-name>FormBuilderServiceDelegate</env-entry-name>
     <env-entry-value>gov.nih.nci.ncicb.cadsr.formbuilder.service.ejb.FormBuilderDynamicRemoteServiceDelegateImpl</env-entry-value>
     <env-entry-type>java.lang.String</env-entry-type>
-  </env-entry>
-  <env-entry>
+  </env-entry> -->
+  <!-- <env-entry>
     <description>Class name of the DAOFactory that FormBuilderEJB will use.</description>
     <env-entry-name>DAOFactoryClassName</env-entry-name>
     <env-entry-value>gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCDAOFactory</env-entry-value>
@@ -971,11 +972,11 @@
   </env-entry>
   
   <ejb-ref>
-    <ejb-ref-name>ejb/FormBuilder</ejb-ref-name>
+    <ejb-ref-name>FormBuilder</ejb-ref-name>
     <ejb-ref-type>Session</ejb-ref-type>
     <home>gov.nih.nci.ncicb.cadsr.formbuilder.ejb.FormBuilderHome</home>
     <remote>gov.nih.nci.ncicb.cadsr.formbuilder.ejb.FormBuilder</remote>
     <ejb-link>FormBuilder</ejb-link>
-  </ejb-ref>
+  </ejb-ref> -->
   
 </web-app>

@@ -1,13 +1,6 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
 
-//import gov.nih.nci.ncicb.cadsr.domain.Question;
-import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.common.resource.Context;
-import gov.nih.nci.ncicb.cadsr.common.resource.Form;
-import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -18,6 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+
+//import gov.nih.nci.ncicb.cadsr.domain.Question;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
+import gov.nih.nci.ncicb.cadsr.common.resource.Context;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
 
 
 public class FormDesignationsAction
@@ -50,13 +49,13 @@ public class FormDesignationsAction
             contextIdSeq = context.getConteIdseq();  
         }
         try{
-            FormBuilderServiceDelegate service = getFormBuilderService();
+            FormBuilderService service = getFormBuilderService();
             Boolean result = service.isAllACDesignatedToContext(cdeIdList , contextIdSeq);
             if (result.booleanValue()){
                 request.setAttribute(FormConstants.ALREADY_DESIGNATED, result);
             }    
             return mapping.findForward("success");
-        }catch (FormBuilderException exp) {
+        }catch (Exception exp) {
               if (log.isErrorEnabled()) {
                 log.error("Exception on service.isAllACDesignatedToContext ", exp);
               }
@@ -84,12 +83,12 @@ public class FormDesignationsAction
         Form crf = (Form) getSessionObject(request, CRF);
         String cdeContextIdSeq = crf.getContext().getConteIdseq();
 
-        FormBuilderServiceDelegate service = getFormBuilderService();
+        FormBuilderService service = getFormBuilderService();
         List cdeList = crf.getCDEIdList();
 
         int result = service.saveDesignation(cdeContextIdSeq, cdeList);
       }
-      catch (FormBuilderException exp) {
+      catch (Exception exp) {
         if (log.isErrorEnabled()) {
           log.error("Exception on saveDesignations ", exp);
         }

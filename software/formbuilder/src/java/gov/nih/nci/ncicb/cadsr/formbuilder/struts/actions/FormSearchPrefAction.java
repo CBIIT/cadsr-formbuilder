@@ -1,14 +1,7 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
-import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
-import gov.nih.nci.ncicb.cadsr.common.cdebrowser.DataElementSearchBean;
-import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
-import gov.nih.nci.ncicb.cadsr.common.util.SessionHelper;
-import gov.nih.nci.ncicb.cadsr.contexttree.TreeBacker;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +11,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
+
+import gov.nih.nci.ncicb.cadsr.common.cdebrowser.DataElementSearchBean;
+import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
+import gov.nih.nci.ncicb.cadsr.common.util.SessionHelper;
 
 
 public class FormSearchPrefAction

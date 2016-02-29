@@ -24,8 +24,8 @@ import org.springframework.jdbc.object.SqlUpdate;
 import org.springframework.jdbc.object.StoredProcedure;
 
 
-public abstract class JDBCInstructionDAOV2 extends JDBCAdminComponentDAOV2
-  implements InstructionDAO {
+public abstract class JDBCInstructionDAOV2 extends JDBCAdminComponentDAOV2 implements InstructionDAO
+{
   
 	
 	private static Logger logger = Logger.getLogger(JDBCInstructionDAOV2.class.getName());

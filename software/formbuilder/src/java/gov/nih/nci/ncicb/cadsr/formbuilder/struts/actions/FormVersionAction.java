@@ -6,7 +6,7 @@ import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
 import gov.nih.nci.ncicb.cadsr.common.resource.Version;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
+import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class FormVersionAction
     
     try{
         int publicId = crf.getPublicId();
-        FormBuilderServiceDelegate service = getFormBuilderService();
+        FormBuilderService service = getFormBuilderService();
         List formVersions = service.getFormVersions(publicId);
         if (formVersions.size() <1 ){
             return mapping.findForward("gotoCreateNewVersion");
@@ -65,12 +65,13 @@ public class FormVersionAction
             }    
         }//end of for
         return mapping.findForward("success");
-    }catch (FormBuilderException ex){
+    }catch (Exception ex){
         if (log.isErrorEnabled()) {
           log.error("Exception on getFormVersions ", ex);
         }
 
-        saveMessage(ex.getErrorCode(), request);
+        //saveMessage(ex.getErrorCode(), request);
+        saveMessage("cadsr.formbuilder.form.version.read.failure", request);
         ActionForward forward =  mapping.findForward("failure");
         return forward;
     }
@@ -129,7 +130,7 @@ public class FormVersionAction
       
 
       try{ 
-          FormBuilderServiceDelegate service = getFormBuilderService();
+          FormBuilderService service = getFormBuilderService();
 
           if (changed){
               service.setLatestVersion(oldVersion, newVersion, changedNoteList);
@@ -145,7 +146,7 @@ public class FormVersionAction
           removeSessionObject(request, FormConstants.OLD_LATEST_VERSION);
 
           return mapping.findForward("success");
-      }catch (FormBuilderException ex){
+      }catch (Exception ex){
           if (log.isErrorEnabled()) {
             log.error("Exception on saveLatestVersion ", ex);
           }
@@ -175,14 +176,14 @@ public class FormVersionAction
         HttpServletResponse response) throws IOException, ServletException {
         Form crf = (Form)getSessionObject(request, CRF);
         try{
-            FormBuilderServiceDelegate service = getFormBuilderService();            
+            FormBuilderService service = getFormBuilderService();            
             Float maxVersion = service.getMaxFormVersion(crf.getPublicId());
 
             DynaActionForm dynaForm = (DynaActionForm) form;
             dynaForm.set(FormConstants.FORM_MAX_VERSION, maxVersion.toString());
             request.setAttribute(FormConstants.FORM_MAX_VERSION, maxVersion);
             return mapping.findForward(SUCCESS);
-        }catch (FormBuilderException fbe){
+        }catch (Exception fbe){
             if (log.isErrorEnabled()) {
               log.error("Could not get the maximum version by form public Id= " + crf.getPublicId(), fbe);
             }
@@ -215,7 +216,7 @@ public class FormVersionAction
         String changeNote = (String)dynaForm.get(CHANGE_NOTE);
         boolean editNewFormIndicator = "true".equalsIgnoreCase(editNewFormStr);
 
-        FormBuilderServiceDelegate service = getFormBuilderService();
+        FormBuilderService service = getFormBuilderService();
         String newFormIdSeq = service.createNewFormVersion(crf.getFormIdseq(), newVersionNumber, changeNote);
         saveMessage("cadsr.formbuilder.create.version.success", request);
         
@@ -228,7 +229,7 @@ public class FormVersionAction
             return mapping.findForward("successViewNew");
         }
       }
-      catch (FormBuilderException exp) {
+      catch (Exception exp) {
         if (log.isErrorEnabled()) {
           log.error("Exception on saveNewVersion ", exp);
         }

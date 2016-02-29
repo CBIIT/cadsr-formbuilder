@@ -1,48 +1,14 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
-import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
-import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.FormInstructionChangesTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
-
-import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
-
-import gov.nih.nci.ncicb.cadsr.common.dto.InstructionChangesTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.InstructionTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.exception.FatalException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext.CDECartOCImplExtension;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormActionUtil;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConverterUtil;
-import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants;
-import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
-import gov.nih.nci.ncicb.cadsr.common.persistence.PersistenceConstants;
-import gov.nih.nci.ncicb.cadsr.common.resource.Context;
-import gov.nih.nci.ncicb.cadsr.common.resource.Form;
-import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
-import gov.nih.nci.ncicb.cadsr.common.resource.FormInstructionChanges;
-import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
-import gov.nih.nci.ncicb.cadsr.common.resource.InstructionChanges;
-import gov.nih.nci.ncicb.cadsr.common.resource.Module;
-import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
-import gov.nih.nci.ncicb.cadsr.common.resource.Orderable;
-
-import gov.nih.nci.ncicb.cadsr.common.resource.Protocol;
-import gov.nih.nci.ncicb.cadsr.common.resource.Question;
-
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-
 import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,11 +18,31 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
 
-import gov.nih.nci.objectCart.client.ObjectCartClient;
-import gov.nih.nci.objectCart.client.ObjectCartException;
-import gov.nih.nci.objectCart.domain.Cart;
+import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
+import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormInstructionChangesTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.InstructionTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants;
+import gov.nih.nci.ncicb.cadsr.common.persistence.PersistenceConstants;
+import gov.nih.nci.ncicb.cadsr.common.resource.Context;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormInstructionChanges;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
+import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
+import gov.nih.nci.ncicb.cadsr.common.resource.Module;
+import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
+import gov.nih.nci.ncicb.cadsr.common.resource.Protocol;
+import gov.nih.nci.ncicb.cadsr.common.resource.Question;
+import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
+import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
+import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext.CDECartOCImplExtension;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormActionUtil;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConverterUtil;
 import gov.nih.nci.objectCart.domain.CartObject;
-import gov.nih.nci.ncicb.cadsr.objectCart.CDECart;
 
 public class FormEditAction extends FormBuilderSecureBaseDispatchAction {
 
@@ -499,18 +485,18 @@ System.out.println("sFormIdSeq found !!!!! -- " + sFormIdSeq );
         saveMessage("cadsr.formbuilder.form.locked.cannot.delete", request, nciUser.getUsername(), nciUser.getEmailAddress());
         return mapping.findForward(FAILURE);
     }
-    FormBuilderServiceDelegate service = getFormBuilderService();
+    FormBuilderService service = getFormBuilderService();
     try {
         service.deleteForm(formIdSeq);
         //unlock the form after delete this form.
         unlockForm(formIdSeq, request.getRemoteUser());
       }
-    catch (FormBuilderException exp) {
+    catch (Exception exp) {
         if (log.isDebugEnabled()) {
           log.debug("Exception on delete  " + exp);
         }
         saveMessage(ERROR_FORM_DELETE_FAILED, request);
-        saveMessage(exp.getErrorCode(), request);
+        //saveMessage(exp.getErrorCode(), request);
         return mapping.findForward(FAILURE);
       }
     removeSessionObject(request, DELETED_MODULES);
@@ -557,7 +543,7 @@ System.out.println("sFormIdSeq found !!!!! -- " + sFormIdSeq );
   	  }
     	
         try {
-          FormBuilderServiceDelegate service = getFormBuilderService();
+          FormBuilderService service = getFormBuilderService();
           Form header = (Form)getSessionObject(request,FORM_EDIT_HEADER);
 
           if(header!=null)
@@ -604,19 +590,19 @@ System.out.println("sFormIdSeq found !!!!! -- " + sFormIdSeq );
           Form clonedCrf = (Form) updatedCrf.clone();
           setSessionObject(request, CLONED_CRF, clonedCrf,true);
         }
-        catch (FormBuilderException exp) {
+        catch (CloneNotSupportedException exp) {
+            saveMessage(ERROR_FORM_SAVE_FAILED, request);
+            if (log.isErrorEnabled()) {
+              log.error("On save, Exception on cloneing crf " + crf,exp);
+            }
+            return mapping.findForward(FAILURE);
+          }
+        catch (Exception exp) {
           if (log.isErrorEnabled()) {
             log.error("Exception While saving the form " + crf,exp);
           }
           saveMessage(ERROR_FORM_SAVE_FAILED, request);
-          saveMessage(exp.getErrorCode(), request);
-          return mapping.findForward(FAILURE);
-        }
-        catch (CloneNotSupportedException exp) {
-          saveMessage(ERROR_FORM_SAVE_FAILED, request);
-          if (log.isErrorEnabled()) {
-            log.error("On save, Exception on cloneing crf " + crf,exp);
-          }
+          //saveMessage(exp.getErrorCode(), request);
           return mapping.findForward(FAILURE);
         }
         removeSessionObject(request, DELETED_MODULES);
@@ -731,7 +717,7 @@ System.out.println("sFormIdSeq found !!!!! -- " + sFormIdSeq );
     Form crf = (Form) getSessionObject(request, CRF);
 
         try {
-          FormBuilderServiceDelegate service = getFormBuilderService();
+          FormBuilderService service = getFormBuilderService();
           Form header = (Form)getSessionObject(request,FORM_EDIT_HEADER);
           if(header!=null)
           {
@@ -778,19 +764,19 @@ System.out.println("sFormIdSeq found !!!!! -- " + sFormIdSeq );
               unlockForm(crf.getFormIdseq(), request.getRemoteUser());
           }    
         }
-        catch (FormBuilderException exp) {
+        catch (CloneNotSupportedException exp) {
+            saveMessage(ERROR_FORM_SAVE_FAILED, request);
+            if (log.isErrorEnabled()) {
+              log.error("On save, Exception on cloneing crf " + crf,exp);
+            }
+            return mapping.findForward(FAILURE);
+        }
+        catch (Exception exp) {
           if (log.isErrorEnabled()) {
             log.error("Exception while saveing form =  " + crf,exp);
           }
           saveMessage(ERROR_FORM_SAVE_FAILED, request);
-          saveMessage(exp.getErrorCode(), request);
-          return mapping.findForward(FAILURE);
-        }
-        catch (CloneNotSupportedException exp) {
-          saveMessage(ERROR_FORM_SAVE_FAILED, request);
-          if (log.isErrorEnabled()) {
-            log.error("On save, Exception on cloneing crf " + crf,exp);
-          }
+          //saveMessage(exp.getErrorCode(), request);
           return mapping.findForward(FAILURE);
         }
         saveMessage("cadsr.formbuilder.form.edit.save.success", request);
@@ -1388,7 +1374,7 @@ System.out.println("sFormIdSeq found !!!!! -- " + sFormIdSeq );
     {
         List<String> targetIdList = new ArrayList<String>();
         targetIdList.add(module.getModuleIdseq());
-        FormBuilderServiceDelegate service = getFormBuilderService();
+        FormBuilderService service = getFormBuilderService();
         if(module.getQuestions()!=null)
             if(!module.getQuestions().isEmpty())
             {

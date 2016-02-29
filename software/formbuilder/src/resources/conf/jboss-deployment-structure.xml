@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.2">
+	<sub-deployment name="formbuilder.war">
+		<dependencies>
+			<module name="org.apache.commons.collections" >
+				<imports>
+					<include path="META-INF" />
+				</imports>
+			</module>
+		</dependencies>
+	</sub-deployment>
+	<sub-deployment name="FormLoader.war">
+		<dependencies>
+			<module name="org.apache.commons.collections" >
+				<imports>
+					<include path="META-INF" />
+				</imports>
+			</module>
+			<module name="com.oracle.jdbc5" />
+		</dependencies>
+	</sub-deployment>
+</jboss-deployment-structure>

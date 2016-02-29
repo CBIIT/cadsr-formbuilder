@@ -1,42 +1,20 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
-import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
-import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObject;
-import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
-import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
-import gov.nih.nci.ncicb.cadsr.common.jsp.bean.PaginationBean;
-import gov.nih.nci.ncicb.cadsr.common.resource.Context;
-import gov.nih.nci.ncicb.cadsr.common.resource.Form;
-import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
-import gov.nih.nci.ncicb.cadsr.common.resource.Protocol;
-import gov.nih.nci.ncicb.cadsr.common.util.ContextUtils;
-import gov.nih.nci.ncicb.cadsr.common.util.StringUtils;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import org.apache.struts.Globals;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.DynaActionForm;
-
 import java.io.IOException;
-
 import java.util.Collection;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
+import gov.nih.nci.ncicb.cadsr.common.resource.Context;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.util.ContextUtils;
+import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
 
 
 public class FormPublishAction extends FormBuilderSecureBaseDispatchAction {
@@ -63,7 +41,7 @@ public class FormPublishAction extends FormBuilderSecureBaseDispatchAction {
     try {
 
       Form aForm = (Form) getSessionObject(request, CRF);
-      FormBuilderServiceDelegate service = getFormBuilderService();
+      FormBuilderService service = getFormBuilderService();
       Collection contexts = (Collection)getSessionObject(request, ALL_CONTEXTS);
 
       //Context currContext = ContextUtils.getContextByName(contexts,CONTEXT_CABIG); 
@@ -71,7 +49,7 @@ public class FormPublishAction extends FormBuilderSecureBaseDispatchAction {
       service.publishForm(aForm.getIdseq(),aForm.getFormType(),currContext.getConteIdseq());
       setSessionObject(request,TREE_REFRESH_INDICATOR,YES,true);
     }
-    catch (FormBuilderException exp) {
+    catch (Exception exp) {
       if (log.isErrorEnabled()) {
         log.error("Exception while publishing the form "+form , exp);
       }
@@ -106,7 +84,7 @@ public class FormPublishAction extends FormBuilderSecureBaseDispatchAction {
     try {
 
       Form aForm = (Form) getSessionObject(request, CRF);
-      FormBuilderServiceDelegate service = getFormBuilderService();
+      FormBuilderService service = getFormBuilderService();
       Collection contexts = (Collection)getSessionObject(request, ALL_CONTEXTS);
 
       //Context currContext = ContextUtils.getContextByName(contexts,CONTEXT_CABIG);  
@@ -114,7 +92,7 @@ public class FormPublishAction extends FormBuilderSecureBaseDispatchAction {
       service.unpublishForm(aForm.getIdseq(),aForm.getFormType(),currContext.getConteIdseq());
       setSessionObject(request,TREE_REFRESH_INDICATOR,YES,true);
     }
-    catch (FormBuilderException exp) {
+    catch (Exception exp) {
       if (log.isErrorEnabled()) {
         log.error("Exception while unpublishing the form "+form , exp);
       }

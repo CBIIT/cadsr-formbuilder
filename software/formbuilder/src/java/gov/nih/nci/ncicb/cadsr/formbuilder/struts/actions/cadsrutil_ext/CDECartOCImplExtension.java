@@ -6,7 +6,6 @@ package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext;
 // Note: There is no automatic mechanism for ensuring the cache is in sync with the forms.
 // setFormDisplayObjects should be explicitly called before displaying the cart.
 
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
 import gov.nih.nci.ncicb.cadsr.objectCart.CDECart;
 import gov.nih.nci.objectCart.client.ObjectCartClient;
@@ -39,7 +38,7 @@ import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormCartDisplayObjectPe
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConverterUtil;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormCartOptionsUtil;
-
+import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormCartDisplayObject;
 
 public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.impl.CDECartOCImpl implements CDECart, Serializable  {
@@ -49,7 +48,7 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 	public static final String transformToConvertCartToDisplayObject = "/transforms/ConvertFormCartV2ToDisplayObject.xsl";
 	public static final String formNotInDatabaseLongNamePrefix = "NOT IN DATABASE: "; 
 	
-	protected FormBuilderServiceDelegate formBuilderService;
+	protected FormBuilderService formBuilderService;
 	protected Collection formDisplayObjects;
 	
 	// This holds V2 forms temporarily until the user is ready to
@@ -57,9 +56,9 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 	// in this cart will be added to the contents of the oCart. - Sula
 	private Map formCartV2;
 	
-	public CDECartOCImplExtension(ObjectCartClient client, String uid, String cName, FormBuilderServiceDelegate formBuilderServiceDelegate) {
+	public CDECartOCImplExtension(ObjectCartClient client, String uid, String cName, FormBuilderService formBuilderService) {
 		super(client, uid, cName);
-		formBuilderService = formBuilderServiceDelegate;
+		//formBuilderService = formBuilderServiceDelegate;
 		formCartV2 = new HashMap();
 	}
 
@@ -131,7 +130,7 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 					log.error("MarshalException loading forms", e);	
 				} catch (ValidationException e) {
 					log.error("ValidationException loading forms", e);	
-				} catch (FormBuilderException e) {
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

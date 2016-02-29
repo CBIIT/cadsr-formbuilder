@@ -1,46 +1,27 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
-import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
-import gov.nih.nci.ncicb.cadsr.common.resource.Context;
-import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.ModuleTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.ProtocolTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.TriggerActionChangesTransferObject;
-import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormActionUtil;
-import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants;
-import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
-import gov.nih.nci.ncicb.cadsr.common.jsp.bean.PaginationBean;
-import gov.nih.nci.ncicb.cadsr.common.resource.Form;
-import gov.nih.nci.ncicb.cadsr.common.resource.Module;
-import gov.nih.nci.ncicb.cadsr.common.resource.Protocol;
-import gov.nih.nci.ncicb.cadsr.common.resource.Question;
-import gov.nih.nci.ncicb.cadsr.common.resource.TriggerAction;
-import gov.nih.nci.ncicb.cadsr.common.resource.TriggerActionChanges;
-import gov.nih.nci.ncicb.cadsr.common.resource.ValidValue;
-import gov.nih.nci.ncicb.cadsr.common.util.StringUtils;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import org.apache.struts.Globals;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.action.DynaActionForm;
-
 import java.io.IOException;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.DynaActionForm;
+
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.Protocol;
+import gov.nih.nci.ncicb.cadsr.common.resource.TriggerActionChanges;
+import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
+import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormActionUtil;
 
 
 public class ManageProtocolsAction
@@ -104,7 +85,7 @@ public class ManageProtocolsAction
         Form crf = (Form) getSessionObject(request, CRF);
         List oldList = crf.getProtocols();
 
-        FormBuilderServiceDelegate service = getFormBuilderService();
+        FormBuilderService service = getFormBuilderService();
         try{
             if (!alreadyExist(oldList, id)){
                 Protocol p = service.getProtocolByPK(id);                
@@ -113,11 +94,12 @@ public class ManageProtocolsAction
             crf.setProtocols(oldList);
             setSessionObject(request, CRF, crf);
             
-       }catch(FormBuilderException exp){
+       }catch(Exception exp){
            if (log.isDebugEnabled()) {
              log.debug("Exception on getting protocol by PK  " + exp);
            }
-           saveMessage(exp.getErrorCode(), request);
+           //saveMessage(exp.getErrorCode(), request);
+           saveMessage("cadsr.formbuilder.form.read.failure", request);
            return mapping.findForward(FAILURE);
        }
     return mapping.findForward(SUCCESS);

@@ -1,5 +1,24 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.DynaActionForm;
+
 import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormValidValueChangeTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormValidValueChangesTransferObject;
@@ -28,27 +47,8 @@ import gov.nih.nci.ncicb.cadsr.common.resource.ValueMeaning;
 import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
 import gov.nih.nci.ncicb.cadsr.common.util.DTOTransformer;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
+import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormActionUtil;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.DynaActionForm;
 
 
 public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
@@ -119,16 +119,16 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
      
     setSessionObject(request, MODULE, selectedModule,true);
 
-    FormBuilderServiceDelegate service = getFormBuilderService();
+    FormBuilderService service = getFormBuilderService();
     Collection allVdIds = getAllVDsForQuestions(selectedModule.getQuestions());
     Map validValueMap = null;
 
     try {
       validValueMap = service.getValidValues(allVdIds);
     }
-    catch (FormBuilderException exp) {
+    catch (Exception exp) {
       saveMessage(ERROR_MODULE_RETRIEVE, request);
-      saveMessage(exp.getErrorCode(),request);
+      //saveMessage(exp.getErrorCode(),request);
       if (log.isErrorEnabled()) {
         log.error("Exp while getting validValue", exp);
       }
@@ -767,21 +767,21 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
       return mapping.findForward(NO_CHANGES);
     }
 
-    FormBuilderServiceDelegate service = getFormBuilderService();
+    FormBuilderService service = getFormBuilderService();
     Module updatedModule = orgModule;
     try{
     //TODO move the method param to a transfer object
      updatedModule = service.updateModule(module.getModuleIdseq(),
                             moduleChanges);
     }
-    catch(FormBuilderException exp)
+    catch(Exception exp)
     {
         if (log.isErrorEnabled()) {
           log.error("Exception on saving module  "+module,exp);
         }
 
         saveMessage(ERROR_MODULE_SAVE_FAILED, request);
-        saveMessage(exp.getErrorCode(), request);
+        //saveMessage(exp.getErrorCode(), request);
         return mapping.findForward(FAILURE);
     }
 
@@ -1898,7 +1898,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
     {
         List<String> targetIdList = new ArrayList<String>();
         targetIdList.add(question.getQuesIdseq());
-        FormBuilderServiceDelegate service = getFormBuilderService();
+        FormBuilderService service = getFormBuilderService();
 
         return service.isTargetForTriggerAction(targetIdList);
     }      

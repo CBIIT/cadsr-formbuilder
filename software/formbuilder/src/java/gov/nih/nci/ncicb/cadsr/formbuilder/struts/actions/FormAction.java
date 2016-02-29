@@ -19,7 +19,6 @@ import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
 import gov.nih.nci.ncicb.cadsr.common.util.StringPropertyComparator;
 import gov.nih.nci.ncicb.cadsr.common.util.StringUtils;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
 import gov.nih.nci.objectCart.client.ObjectCartClient;
 import gov.nih.nci.objectCart.client.ObjectCartException;
 import gov.nih.nci.objectCart.domain.Cart;
@@ -69,6 +68,7 @@ import java.io.StringReader;
 import javax.servlet.ServletContext; 
 
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormCartOptionsUtil;
+import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext.CDECartOCImplExtension;
 
 
@@ -118,7 +118,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
     //Set the lookup values in the session
     setInitLookupValues(request);
 
-    FormBuilderServiceDelegate service = getFormBuilderService();
+    FormBuilderService service = getFormBuilderService();
     DynaActionForm searchForm = (DynaActionForm) form;
     String formLongName = (String) searchForm.get(this.SEARCH_FORM_NAME);
     String protocolIdSeq = (String) searchForm.get(this.SEARCH_PROTO_IDSEQ);
@@ -536,7 +536,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
 			HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		
-		   FormBuilderServiceDelegate service = getFormBuilderService();
+		   FormBuilderService service = getFormBuilderService();
 		   CDECartOCImplExtension sessionCartV2 = (CDECartOCImplExtension) this
 					.getSessionObject(request, CaDSRConstants.FORMS_CART_V2);
 		   Collection selectedSaveItems = sessionCartV2.getFormCartV2().values();
@@ -650,7 +650,7 @@ System.out.println( "Forms Queued in Cart : " + request.getSession().getAttribut
 			HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 
-		FormBuilderServiceDelegate service = getFormBuilderService();
+		FormBuilderService service = getFormBuilderService();
 		int formsInQueue = 0;
 		
 		try {

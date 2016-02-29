@@ -1,23 +1,5 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
-import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
-import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.resource.DataElement;
-import gov.nih.nci.ncicb.cadsr.common.resource.Form;
-import gov.nih.nci.ncicb.cadsr.common.resource.Module;
-import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
-import gov.nih.nci.ncicb.cadsr.common.resource.Question;
-import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.CDECartFormBean;
-import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
-import gov.nih.nci.ncicb.cadsr.common.util.DTOTransformer;
-import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormActionUtil;
-import gov.nih.nci.ncicb.cadsr.objectCart.CDECart;
-import gov.nih.nci.ncicb.cadsr.objectCart.CDECartItem;
-import gov.nih.nci.ncicb.cadsr.objectCart.impl.CDECartOCImpl;
-import gov.nih.nci.objectCart.client.ObjectCartClient;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,6 +15,23 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
+
+import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
+import gov.nih.nci.ncicb.cadsr.common.dto.QuestionTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.resource.DataElement;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.Module;
+import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
+import gov.nih.nci.ncicb.cadsr.common.resource.Question;
+import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.CDECartFormBean;
+import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
+import gov.nih.nci.ncicb.cadsr.common.util.DTOTransformer;
+import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormActionUtil;
+import gov.nih.nci.ncicb.cadsr.objectCart.CDECart;
+import gov.nih.nci.ncicb.cadsr.objectCart.CDECartItem;
+import gov.nih.nci.ncicb.cadsr.objectCart.impl.CDECartOCImpl;
+import gov.nih.nci.objectCart.client.ObjectCartClient;
 
 
 public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
@@ -80,7 +79,7 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
     ArrayList al = new ArrayList(col);
 
     //for getting reference docs
-    FormBuilderServiceDelegate service = getFormBuilderService();
+    FormBuilderService service = getFormBuilderService();
     List refDocs = null;
     
     int length = selectedItems.length;
@@ -140,11 +139,13 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
 
       newQuestions.add(q);        
     }//end of for
-    }catch (FormBuilderException exp){
+    }catch (Exception exp){
             if (log.isErrorEnabled()) {
               log.error("Exception on getting reference documents or Permissible values for the Data Element de Idseq=" + de.getIdseq() , exp);
             }
-            saveMessage(exp.getErrorCode(), request);
+            //saveMessage(exp.getErrorCode(), request);
+            saveMessage("cadsr.formbuilder.form.read.failure", request);
+            
             return mapping.findForward(FAILURE);
     }       
         
@@ -211,17 +212,18 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
       }
 
       //get reference docs
-      FormBuilderServiceDelegate service = getFormBuilderService();
+      FormBuilderService service = getFormBuilderService();
       List refDocs = null;
       
       try {
           refDocs = service.getRreferenceDocuments(de.getDeIdseq());          
           de.setReferenceDocs(refDocs);
-       }catch (FormBuilderException exp){
+       }catch (Exception exp){
            if (log.isErrorEnabled()) {
              log.error("Exception on getting reference documents for the Data Element " , exp);
            }
-           saveMessage(exp.getErrorCode(), request);
+           //saveMessage(exp.getErrorCode(), request);
+           saveMessage("cadsr.formbuilder.form.read.failure", request);
            return mapping.findForward(FAILURE);
        }       
         
@@ -243,7 +245,7 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
               newValidValues = DTOTransformer.toFormValidValueList(vvList, q);
           }    
           
-      }catch (FormBuilderException fbe){
+      }catch (Exception fbe){
           log.error("Exception on getting valid values for the Data Element Value Doamin , vdIdSeq=" 
                                 +  de.getValueDomain().getVdIdseq(), fbe);
           saveMessage("cadsr.formbuilder.question.changeAssociation.newAssociation.fail", request);

@@ -16,7 +16,7 @@
 
     <resource-manager>
       <res-name>@Tool.ds.jndi.Name@</res-name>
-      <res-jndi-name>java:/jdbc/@Tool.ds.jndi.Name@</res-jndi-name>
+      <res-jndi-name>java:jboss/datasources/FormBuilderDS</res-jndi-name>
     </resource-manager>
 
   </resource-managers>

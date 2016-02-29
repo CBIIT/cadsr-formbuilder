@@ -102,7 +102,7 @@ public class CaDsrUserCredentialsV2
 
     private Logger _logger = Logger.getLogger(CaDsrUserCredentialsV2.class);
     
-    private static String _jndiName = "java:/jdbc/FormBuilderDS";
+    private static String _jndiName = "java:jboss/datasources/FormBuilderDS";
     
     private static final String CHECKOPTIONS = "select COUNT(*) from sbrext.tool_options_view_ext "
         + "where tool_name = 'caDSR' and property in ('LOCKOUT.TIMER', 'LOCKOUT.THRESHOLD')";

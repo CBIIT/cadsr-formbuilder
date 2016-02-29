@@ -10,8 +10,9 @@
 	http://www.springframework.org/schema/jee
 	http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
-              
-    <!--  jee:jndi-lookup id="dataSource" jndi-name="jdbc/FormBuilderDS" resource-ref="false" /> -->
+    
+    <jee:jndi-lookup id="dataSource" jndi-name="java:jboss/datasources/FormBuilderDS" />
+    <import resource="applicationContext-jdbcdao.xml" />
     
     <tx:annotation-driven transaction-manager = "transactionManager" />
     <tx:annotation-driven proxy-target-class="true"/>
@@ -26,24 +27,22 @@
   		</property>
 	</bean>
 
-    <bean id="dataSource" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">
-    	<!-- <property name="URL" value="jdbc:oracle:thin:@ncidb-dsr-d.nci.nih.gov:1551:DSRDEV"/>  -->
+    <!-- <bean id="dataSource" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">
+    	<property name="URL" value="jdbc:oracle:thin:@ncidb-dsr-d.nci.nih.gov:1551:DSRDEV"/> 
     	<property name="URL" value="jdbc:oracle:thin:@${db.url}"/>
     	<property name="user" value="${db.user}"/>
     	<property name="password" value="${db.password}"/>
     	<property name="connectionCachingEnabled" value="true"/>
-    </bean>
+    </bean> -->
+    
+    
 
-	<bean id="transactionManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-	<bean id="unloadService"
-		class="gov.nih.nci.cadsr.formloader.service.impl.UnloadingServiceImpl">
-		<property name="loadRepository">
-			<ref local="loadRepository" />
-		</property>
+	<bean id="unloadService" class="gov.nih.nci.cadsr.formloader.service.impl.UnloadingServiceImpl">
+		<property name="loadRepository" ref="loadRepository" />
 	</bean>
 	
 	<bean id="collectionRetrievalService"
@@ -176,7 +175,7 @@
 		<!-- JR417 end -->
 	</bean>
 	
-	<import resource="applicationContext-jdbcdao.xml" />
+	
 
 </beans>
 

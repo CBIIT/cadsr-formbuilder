@@ -11,9 +11,7 @@ import gov.nih.nci.ncicb.cadsr.common.resource.Form;
 import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
 import gov.nih.nci.ncicb.cadsr.common.struts.common.BaseDispatchAction;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.ServiceDelegateFactory;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.ServiceStartupException;
+import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,7 +19,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +34,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.DynaActionForm;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -47,7 +45,18 @@ public class FormBuilderBaseDispatchAction extends BaseDispatchAction
    {
   protected static Log log = LogFactory.getLog(FormBuilderBaseDispatchAction.class.getName());
 
-  /**
+  @Autowired
+  private FormBuilderService formBuilderService;
+  
+  public FormBuilderService getFormBuilderService() {
+	  return formBuilderService;
+  }
+
+  public void setFormBuilderService(FormBuilderService formBuilderService) {
+	  this.formBuilderService = formBuilderService;
+  }
+
+/**
    * Retrieve an object from the application scope by its name. This is a
    * convience method.
    */
@@ -130,7 +139,8 @@ public class FormBuilderBaseDispatchAction extends BaseDispatchAction
    *
    * @throws ServiceStartupException
    */
-  protected FormBuilderServiceDelegate getFormBuilderService()
+  //Service will be injected through Spring
+  /*protected FormBuilderServiceDelegate getFormBuilderService()
     throws ServiceStartupException {
     FormBuilderServiceDelegate svcDelegate = null;
     ServiceDelegateFactory svcFactory =
@@ -140,7 +150,7 @@ public class FormBuilderBaseDispatchAction extends BaseDispatchAction
     svcDelegate = svcFactory.findService();
 
     return svcDelegate;
-  }
+  }*/
 
   /**
    * Initializes the lookupvalues(contexts,categories,workflows into session)
@@ -157,7 +167,7 @@ public class FormBuilderBaseDispatchAction extends BaseDispatchAction
     obj = getSessionObject(req, ALL_WORKFLOWS);
     if (obj == null) {
       Collection workflows =
-        getFormBuilderService().getStatusesForACType(FORM_ADMIN_COMPONENT_TYPE);
+        formBuilderService.getStatusesForACType(FORM_ADMIN_COMPONENT_TYPE);
       setSessionObject(req, ALL_WORKFLOWS, workflows);
     }
 
@@ -238,7 +248,7 @@ public class FormBuilderBaseDispatchAction extends BaseDispatchAction
   protected Form setFormForAction(
     ActionForm form,
     HttpServletRequest request) throws FormBuilderException {
-    FormBuilderServiceDelegate service = getFormBuilderService();
+    FormBuilderService service = getFormBuilderService();
     DynaActionForm hrefCRFForm = (DynaActionForm) form;
     Form crf = null;
 

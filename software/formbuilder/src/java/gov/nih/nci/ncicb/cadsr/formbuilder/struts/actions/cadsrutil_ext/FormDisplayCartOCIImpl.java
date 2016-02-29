@@ -1,24 +1,5 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext;
 
-import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
-import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
-import gov.nih.nci.ncicb.cadsr.common.util.logging.Log;
-import gov.nih.nci.ncicb.cadsr.common.util.logging.LogFactory;
-import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormCartOptionsUtil;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormCartDisplayObject;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormCartDisplayObjectPersisted;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConverterUtil;
-import gov.nih.nci.ncicb.cadsr.objectCart.FormDisplayCartTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
-import gov.nih.nci.objectCart.client.ObjectCartClient;
-import gov.nih.nci.objectCart.client.ObjectCartException;
-import gov.nih.nci.objectCart.domain.Cart;
-import gov.nih.nci.objectCart.domain.CartObject;
-
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -31,16 +12,22 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.Unmarshaller;
 import org.exolab.castor.xml.ValidationException;
+
+import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
+import gov.nih.nci.ncicb.cadsr.common.util.logging.Log;
+import gov.nih.nci.ncicb.cadsr.common.util.logging.LogFactory;
+import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormCartOptionsUtil;
+import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormCartDisplayObject;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormCartDisplayObjectPersisted;
+import gov.nih.nci.ncicb.cadsr.objectCart.FormDisplayCartTransferObject;
+import gov.nih.nci.objectCart.client.ObjectCartClient;
+import gov.nih.nci.objectCart.client.ObjectCartException;
+import gov.nih.nci.objectCart.domain.Cart;
+import gov.nih.nci.objectCart.domain.CartObject;
 
 public class FormDisplayCartOCIImpl implements
 		Serializable {
@@ -73,7 +60,7 @@ public class FormDisplayCartOCIImpl implements
 	
 	public static final String transformToConvertCartToDisplayObject = "/transforms/ConvertFormCartV2ToDisplayObject.xsl";
 	public static final String formNotInDatabaseLongNamePrefix = "NOT IN DATABASE: "; 
-	protected FormBuilderServiceDelegate formBuilderService;
+	protected FormBuilderService formBuilderService;
 	
     private static Log log = LogFactory.getLog(FormDisplayCartOCIImpl.class.getName());
 
@@ -94,9 +81,9 @@ public class FormDisplayCartOCIImpl implements
 //	}
 		
 		
-	public FormDisplayCartOCIImpl(ObjectCartClient client, String uid, String cName, FormBuilderServiceDelegate formBuilderServiceDelegate) {
+	public FormDisplayCartOCIImpl(ObjectCartClient client, String uid, String cName, FormBuilderService formBuilderService) {
 		
-		formBuilderService = formBuilderServiceDelegate;
+		//formBuilderService = formBuilderServiceDelegate;
 		oCart = new Cart();
 		//itemComparator = new CDECartItemComparator();
 		userId = uid;

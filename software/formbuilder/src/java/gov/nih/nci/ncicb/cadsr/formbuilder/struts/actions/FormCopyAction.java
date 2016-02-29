@@ -3,12 +3,13 @@ package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
 import gov.nih.nci.ncicb.cadsr.common.dto.ContextTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
 import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
 import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.service.FormBuilderServiceDelegate;
+import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -147,7 +148,7 @@ public class FormCopyAction extends FormBuilderSecureBaseDispatchAction {
       newForm.setCreatedBy(request.getRemoteUser());
       newForm.setProtocols(crf.getProtocols());
 
-      FormBuilderServiceDelegate service = getFormBuilderService();
+      FormBuilderService service = getFormBuilderService();
       
       Collection forms = null;
       
@@ -166,7 +167,7 @@ public class FormCopyAction extends FormBuilderSecureBaseDispatchAction {
 
       // 		newForm = service.getFormDetails(newFormPK);
     }
-    catch (FormBuilderException exp) {
+    catch (DMLException exp) {
       if (log.isErrorEnabled()) {
         log.error("Exception on copying Form  " + crf, exp);
       }
