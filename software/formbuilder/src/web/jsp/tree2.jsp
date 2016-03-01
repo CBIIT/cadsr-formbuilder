@@ -18,6 +18,7 @@
 	private static final Pattern INT_PATTERN = Pattern.compile("[0-9]*");
 	private static final Pattern LINK_HIDDEN_PATTERN = Pattern.compile("[cdeBrowserTree:]*([[0-9]*[:]]*t2g|_idJsp3)");
 	private static final Pattern TREE_PARAMS_PATTERN = Pattern.compile("[[a-zA-Z0-9]*[;]?[:]?[a-zA-Z0-9]*]*");
+	private static final Pattern CDE_BROWSER_PATTERN = Pattern.compile("^.*(%|<|>).*$");
 	
 	private void filterHiddenVariables(HttpServletRequest request, HttpServletResponse response) throws java.io.IOException{
 		boolean valid = true;
@@ -28,6 +29,8 @@
 		String navCmd = request.getParameter("cdeBrowserTree:org.apache.myfaces.tree.NAV_COMMAND");
 		String submit = request.getParameter("cdeBrowserTree_SUBMIT");
 		String treeParams = request.getParameter("treeParams");
+		String cdeBrowserTree = request.getParameter("cdeBrowserTree");
+		String cdeBrowserTreet2g = request.getParameter("cdeBrowserTree:cdeBrowserTree:0:t2g");
 		
 		if (autoScroll != null && !AUTOSCROLL_PATTERN.matcher(autoScroll).matches()) {
 			System.out.println("Auto Scroll:"+autoScroll);
@@ -51,6 +54,12 @@
 		}
 		if (treeParams != null && valid && !TREE_PARAMS_PATTERN.matcher(treeParams).matches()) {
 			System.out.println("Tree params:"+treeParams);
+			valid = false;
+		}
+		if (cdeBrowserTree != null && valid && CDE_BROWSER_PATTERN.matcher(cdeBrowserTree).matches()) {
+			valid = false;
+		}
+		if (cdeBrowserTreet2g != null && valid && CDE_BROWSER_PATTERN.matcher(cdeBrowserTreet2g).matches()) {
 			valid = false;
 		}
 		
