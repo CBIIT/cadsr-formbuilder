@@ -283,9 +283,9 @@ $Name: not supported by cvs2svn $
 		<copy tofile="${jsp.dir}/common/common_bottom_border.jsp" filtering="true">
 			<fileset file="${conf.dir}/template.common_bottom_border.jsp" />
 		</copy>
-		<copy tofile="${web.dir}/spring/applicationContext-domainDao.xml" filtering="true">
+		<!--copy tofile="${web.dir}/spring/applicationContext-domainDao.xml" filtering="true">
 			<fileset file="${conf.dir}/template.applicationContext-domainDao.xml" />
-		</copy>
+		</copy-->
 
 
 		<copy tofile="${web.dir}/jboss-classloading.xml" filtering="true">
