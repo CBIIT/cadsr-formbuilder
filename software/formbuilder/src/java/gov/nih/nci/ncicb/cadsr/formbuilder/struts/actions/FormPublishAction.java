@@ -41,7 +41,7 @@ public class FormPublishAction extends FormBuilderSecureBaseDispatchAction {
     try {
 
       Form aForm = (Form) getSessionObject(request, CRF);
-      FormBuilderService service = getFormBuilderService();
+      FormBuilderService service = getFormBuilderService(request);
       Collection contexts = (Collection)getSessionObject(request, ALL_CONTEXTS);
 
       //Context currContext = ContextUtils.getContextByName(contexts,CONTEXT_CABIG); 
@@ -84,7 +84,7 @@ public class FormPublishAction extends FormBuilderSecureBaseDispatchAction {
     try {
 
       Form aForm = (Form) getSessionObject(request, CRF);
-      FormBuilderService service = getFormBuilderService();
+      FormBuilderService service = getFormBuilderService(request);
       Collection contexts = (Collection)getSessionObject(request, ALL_CONTEXTS);
 
       //Context currContext = ContextUtils.getContextByName(contexts,CONTEXT_CABIG);  

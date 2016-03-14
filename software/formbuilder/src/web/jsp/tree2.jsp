@@ -5,7 +5,7 @@
 <%@ taglib uri="http://jsf-comp.sourceforge.net/aa" prefix="jcaa" %>
 <%@ page import="gov.nih.nci.ncicb.cadsr.common.util.* "%>
 <%@ page import="java.util.*"%>
-<%@page import="gov.nih.nci.ncicb.cadsr.contexttree.TreeConstants " %>
+<%@ page import="gov.nih.nci.ncicb.cadsr.contexttree.TreeConstants " %>
 <%@ page import="net.sf.jsfcomp.aa.tree.AaTreeTag"%>
 <%@ page import="org.owasp.esapi.ESAPI"%>
 

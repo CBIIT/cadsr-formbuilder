@@ -12,50 +12,57 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.myfaces.custom.tree2.TreeModelBase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import gov.nih.nci.ncicb.cadsr.common.cdebrowser.DataElementSearchBean;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.AbstractDAOFactoryFB;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.ContextDAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCDAOFactoryFB;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
-import gov.nih.nci.ncicb.cadsr.common.servicelocator.ApplicationServiceLocator;
 import gov.nih.nci.ncicb.cadsr.common.util.SessionHelper;
 import gov.nih.nci.ncicb.webtree.ContextNode;
 import gov.nih.nci.ncicb.webtree.LazyActionTreeModel;
 import gov.nih.nci.ncicb.webtree.LazyActionTreeNode;
 
 @Component("treeData")
-public class CDEBrowserTreeDataFB implements Serializable
+public class CDEBrowserTreeData implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	protected Log log;
 
 	@Autowired
 	private AbstractDAOFactoryFB daoFactory;
-
-	@Autowired
-	private ApplicationServiceLocator appServiceLocator;
 	
 	LazyActionTreeNode treeData;
 	TreeModelBase treeModel;
 
-	public CDEBrowserTreeDataFB()
+	public CDEBrowserTreeData()
 	{
-		log = LogFactory.getLog(CDEBrowserTreeDataFB.class.getName());
+		log = LogFactory.getLog(CDEBrowserTreeData.class.getName());
 		treeData = null;
 	}
 
-	public CDEBrowserTreeDataFB(TreeModelBase treeMdl)
+	public CDEBrowserTreeData(TreeModelBase treeMdl)
 	{
-		log = LogFactory.getLog(CDEBrowserTreeDataFB.class.getName());
+		log = LogFactory.getLog(CDEBrowserTreeData.class.getName());
 		treeData = null;
 		treeModel = treeMdl;
+	}
+	
+	private void initSpringObjects(HttpSession session)
+	{
+		if (daoFactory == null)
+		{
+			ApplicationContext context =  WebApplicationContextUtils.getWebApplicationContext(session.getServletContext());
+			daoFactory = (AbstractDAOFactoryFB) context.getBean("daoFactory", JDBCDAOFactoryFB.class);
+		}
 	}
 
 	private LazyActionTreeNode buildTree()
 	{
 		log.info("Building CDE Browser tree start ....");
-		ContextDAO dao = daoFactory.getContextDAO();
 		LazyActionTreeNode contextFolder = new LazyActionTreeNode("Context Folder", "caDSR Contexts", "javascript:performAction('P_PARAM_TYPE=CONTEXT&NOT_FIRST_DISPLAY=1&performQuery=yes')", false);
 		contextFolder.setParent(null);
 		contextFolder.setTreeModel(new LazyActionTreeModel(contextFolder));
@@ -66,9 +73,11 @@ public class CDEBrowserTreeDataFB implements Serializable
 		{
 			FacesContext facesContext = FacesContext.getCurrentInstance();
 			HttpSession session = (HttpSession)facesContext.getExternalContext().getSession(false);
+			initSpringObjects(session);
 			Collection contexts = (Collection)session.getAttribute("allContexts");
 			if(contexts == null || contexts.size() < 1)
 			{
+				ContextDAO dao = daoFactory.getContextDAO();
 				contexts = dao.getAllContexts();
 				DataElementSearchBean desb = (DataElementSearchBean)(DataElementSearchBean)SessionHelper.getInfoBean(session, "desb");
 				if(desb == null)
@@ -96,16 +105,6 @@ public class CDEBrowserTreeDataFB implements Serializable
 		contextFolder.setExpanded(noBuildException);
 		log.info("Finished Building CDE Browser tree");
 		return contextFolder;
-	}
-
-	public void setAppServiceLocator(ApplicationServiceLocator appServiceLocator)
-	{
-		this.appServiceLocator = appServiceLocator;
-	}
-
-	public ApplicationServiceLocator getAppServiceLocator()
-	{
-		return appServiceLocator;
 	}
 
 	public void refreshTree()

@@ -143,7 +143,7 @@ public class FormCreateAction extends FormBuilderSecureBaseDispatchAction {
 
     Form createdForm = null;
     try {
-      FormBuilderService service = getFormBuilderService();
+      FormBuilderService service = getFormBuilderService(request);
       createdForm = service.createForm(newForm, newFormHdrInst, newFormFtrInst);
     } catch (Exception exp) {
         if (log.isErrorEnabled()) {

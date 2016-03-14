@@ -92,7 +92,7 @@ public class CopyModuleAction extends FormBuilderSecureBaseDispatchAction {
       }
          Form crf = null; 
          try {
-             crf = getFormBuilderService().getFormDetails(formIdSeq);
+             crf = getFormBuilderService(request).getFormDetails(formIdSeq);
              setSessionObject(request,MODULE_COPY_FORM,crf,true);
          }
          catch (Exception exp) {

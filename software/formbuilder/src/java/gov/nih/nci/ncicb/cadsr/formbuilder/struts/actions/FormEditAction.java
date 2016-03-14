@@ -349,7 +349,7 @@ System.out.println("sFormIdSeq found !!!!! -- " + sFormIdSeq );
     //Check if the module or its questions is target to any Skip Pattern
     boolean hasSkipTarget = false;
      try{
-         hasSkipTarget = isTargetToSkipPattern(moduleToDelete);
+         hasSkipTarget = isTargetToSkipPattern(moduleToDelete, request);
      }
      catch (FormBuilderException exp) {
        if (log.isErrorEnabled()) {
@@ -485,7 +485,7 @@ System.out.println("sFormIdSeq found !!!!! -- " + sFormIdSeq );
         saveMessage("cadsr.formbuilder.form.locked.cannot.delete", request, nciUser.getUsername(), nciUser.getEmailAddress());
         return mapping.findForward(FAILURE);
     }
-    FormBuilderService service = getFormBuilderService();
+    FormBuilderService service = getFormBuilderService(request);
     try {
         service.deleteForm(formIdSeq);
         //unlock the form after delete this form.
@@ -543,7 +543,7 @@ System.out.println("sFormIdSeq found !!!!! -- " + sFormIdSeq );
   	  }
     	
         try {
-          FormBuilderService service = getFormBuilderService();
+          FormBuilderService service = getFormBuilderService(request);
           Form header = (Form)getSessionObject(request,FORM_EDIT_HEADER);
 
           if(header!=null)
@@ -717,7 +717,7 @@ System.out.println("sFormIdSeq found !!!!! -- " + sFormIdSeq );
     Form crf = (Form) getSessionObject(request, CRF);
 
         try {
-          FormBuilderService service = getFormBuilderService();
+          FormBuilderService service = getFormBuilderService(request);
           Form header = (Form)getSessionObject(request,FORM_EDIT_HEADER);
           if(header!=null)
           {
@@ -1370,11 +1370,11 @@ System.out.println("sFormIdSeq found !!!!! -- " + sFormIdSeq );
         return false;
     }
     
-    private boolean isTargetToSkipPattern(Module module) throws FormBuilderException
+    private boolean isTargetToSkipPattern(Module module, HttpServletRequest request) throws FormBuilderException
     {
         List<String> targetIdList = new ArrayList<String>();
         targetIdList.add(module.getModuleIdseq());
-        FormBuilderService service = getFormBuilderService();
+        FormBuilderService service = getFormBuilderService(request);
         if(module.getQuestions()!=null)
             if(!module.getQuestions().isEmpty())
             {

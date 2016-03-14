@@ -443,10 +443,14 @@
   </action-mappings>
  
   <message-resources parameter="gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.ApplicationResources"/>
-  <plug-in className="gov.nih.nci.ncicb.cadsr.formbuilder.service.ServiceDelegateFactory"/>
+  <!-- plug-in className="gov.nih.nci.ncicb.cadsr.formbuilder.service.ServiceDelegateFactory"/ -->
   
   <plug-in className="gov.nih.nci.ncicb.cadsr.common.struts.common.SpringWebContextPlugIn">  
-  </plug-in> 
+  </plug-in>
+  
+  <!--plug-in className="org.springframework.web.struts.ContextLoaderPlugIn">
+   <set-property property="contextConfigLocation" value="/WEB-INF/spring/applicationContext.xml"/>
+ </plug-in -->
   
   <plug-in className="org.apache.struts.validator.ValidatorPlugIn">
     <set-property 
@@ -461,7 +465,7 @@
       value="ApplicationServiceLocatorClassName"/>
     <set-property 
       property="className" 
-      value="gov.nih.nci.ncicb.cadsr.common.servicelocator.spring.ApplicationServiceLocatorImpl"/>      
+      value="gov.nih.nci.ncicb.cadsr.common.servicelocator.spring.ApplicationServiceLocatorImplFB"/>      
   </plug-in>
  
   

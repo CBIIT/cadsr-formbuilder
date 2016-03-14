@@ -361,7 +361,7 @@ public class ReferenceDocumentAction
   */
  public ActionForward saveReferenceDocs(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                         HttpServletResponse response) throws IOException, ServletException {
-  FormBuilderService service = getFormBuilderService();
+  FormBuilderService service = getFormBuilderService(request);
 
   Form crf = (Form)getSessionObject(request, CRF);
 

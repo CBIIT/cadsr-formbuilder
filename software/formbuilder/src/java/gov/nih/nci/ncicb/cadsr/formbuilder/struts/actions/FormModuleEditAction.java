@@ -119,7 +119,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
      
     setSessionObject(request, MODULE, selectedModule,true);
 
-    FormBuilderService service = getFormBuilderService();
+    FormBuilderService service = getFormBuilderService(request);
     Collection allVdIds = getAllVDsForQuestions(selectedModule.getQuestions());
     Map validValueMap = null;
 
@@ -297,7 +297,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
       //Check if the module or its questions is target to any Skip Pattern
       boolean hasSkipTarget = false;
        try{
-           hasSkipTarget = isTargetToSkipPattern(questionToDelete);
+           hasSkipTarget = isTargetToSkipPattern(questionToDelete, request);
        }
        catch (FormBuilderException exp) {
          if (log.isErrorEnabled()) {
@@ -767,7 +767,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
       return mapping.findForward(NO_CHANGES);
     }
 
-    FormBuilderService service = getFormBuilderService();
+    FormBuilderService service = getFormBuilderService(request);
     Module updatedModule = orgModule;
     try{
     //TODO move the method param to a transfer object
@@ -1894,11 +1894,11 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
       
       
       
-    private boolean isTargetToSkipPattern(Question question) throws FormBuilderException
+    private boolean isTargetToSkipPattern(Question question, HttpServletRequest request) throws FormBuilderException
     {
         List<String> targetIdList = new ArrayList<String>();
         targetIdList.add(question.getQuesIdseq());
-        FormBuilderService service = getFormBuilderService();
+        FormBuilderService service = getFormBuilderService(request);
 
         return service.isTargetForTriggerAction(targetIdList);
     }      

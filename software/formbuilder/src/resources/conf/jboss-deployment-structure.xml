@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.2">
 	<sub-deployment name="formbuilder.war">
+		<exclusions>
+    		<module name="org.hibernate"/>
+        </exclusions>
 		<dependencies>
 			<module name="org.apache.commons.collections" >
 				<imports>
 					<include path="META-INF" />
 				</imports>
 			</module>
+			<module name="javax.faces.api" slot="main" />
+			<module name="com.sun.jsf-impl" slot="main" />
+			<module name="org.jboss.as.jsf-injection" slot="main" />
+			<module name="org.apache.xerces" />
 		</dependencies>
 	</sub-deployment>
 	<sub-deployment name="FormLoader.war">

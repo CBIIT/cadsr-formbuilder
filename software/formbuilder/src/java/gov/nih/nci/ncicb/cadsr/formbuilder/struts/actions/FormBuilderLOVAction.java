@@ -112,7 +112,7 @@ public class FormBuilderLOVAction extends FormBuilderBaseDispatchAction {
 //      setSessionObject(request, this.PROTOCOLS_LOV_TAB_BEAN, tib);
 //      CDEBrowserParams params = CDEBrowserParams.getInstance();
       //String dsName = params.getSbrDSN();
-      dbUtil.getConnectionFromContainer();
+      dbUtil.getConnectionFromContainer(request);
 
       if (performQuery == null) {
         plb = new ProtocolsLOVBean(request, dbUtil, additionalWhere);
@@ -181,7 +181,7 @@ public class FormBuilderLOVAction extends FormBuilderBaseDispatchAction {
 //	    }
 //	    setSessionObject(request, "tib", tib);
 	
-	    dbUtil.getConnectionFromContainer();
+	    dbUtil.getConnectionFromContainer(request);
 	    if (performQuery == null) {
 	    	  clb = new ClassificationsLOVBean(request, dbUtil, chk, contextIdSeq);
 	        setSessionObject(request, ProcessConstants.CS_LOV, clb);

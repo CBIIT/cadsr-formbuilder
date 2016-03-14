@@ -79,7 +79,7 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
     ArrayList al = new ArrayList(col);
 
     //for getting reference docs
-    FormBuilderService service = getFormBuilderService();
+    FormBuilderService service = getFormBuilderService(request);
     List refDocs = null;
     
     int length = selectedItems.length;
@@ -212,7 +212,7 @@ public class SecureCDECartAction extends FormBuilderSecureBaseDispatchAction {
       }
 
       //get reference docs
-      FormBuilderService service = getFormBuilderService();
+      FormBuilderService service = getFormBuilderService(request);
       List refDocs = null;
       
       try {

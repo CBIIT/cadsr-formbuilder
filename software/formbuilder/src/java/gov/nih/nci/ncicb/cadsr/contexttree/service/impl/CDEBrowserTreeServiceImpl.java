@@ -20,7 +20,7 @@ public class CDEBrowserTreeServiceImpl implements CDEBrowserTreeService
 {
 
 	@Autowired
-	private AbstractDAOFactory daoFactory;
+	private AbstractDAOFactoryFB daoFactory;
 
 	public CDEBrowserTreeServiceImpl()
 	{
@@ -650,12 +650,12 @@ public class CDEBrowserTreeServiceImpl implements CDEBrowserTreeService
 		}
 	}
 
-	public void setDaoFactory(AbstractDAOFactory daoFactory)
+	public void setDaoFactory(AbstractDAOFactoryFB daoFactory)
 	{
 		this.daoFactory = daoFactory;
 	}
 
-	public AbstractDAOFactory getDaoFactory()
+	public AbstractDAOFactoryFB getDaoFactory()
 	{
 		return daoFactory;
 	}

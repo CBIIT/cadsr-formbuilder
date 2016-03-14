@@ -34,7 +34,7 @@ public class ValidValuesDisplayAction extends
 			return mapping.findForward("error");
 		}
 		
-		FormBuilderService service = getFormBuilderService();
+		FormBuilderService service = getFormBuilderService(request);
 		AdminComponentType adminCompType = service.getComponentType(publicId, version);
 		Map pvMap = null;
 		

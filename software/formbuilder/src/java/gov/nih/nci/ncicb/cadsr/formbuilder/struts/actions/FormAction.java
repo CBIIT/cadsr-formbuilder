@@ -1,39 +1,12 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
 
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConverterUtil;
-import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
-import gov.nih.nci.ncicb.cadsr.common.cdebrowser.DataElementSearchBean;
-import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
-import gov.nih.nci.ncicb.cadsr.common.dto.jdbc.JDBCFormTransferObject;
-import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.common.jsp.bean.PaginationBean;
-import gov.nih.nci.ncicb.cadsr.common.resource.Context;
-import gov.nih.nci.ncicb.cadsr.common.resource.Form;
-import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
-import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
-import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.CDECartFormBean;
-import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
-import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
-import gov.nih.nci.ncicb.cadsr.common.util.StringPropertyComparator;
-import gov.nih.nci.ncicb.cadsr.common.util.StringUtils;
-import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.objectCart.client.ObjectCartClient;
-import gov.nih.nci.objectCart.client.ObjectCartException;
-import gov.nih.nci.objectCart.domain.Cart;
-import gov.nih.nci.objectCart.domain.CartObject;
-import gov.nih.nci.ncicb.cadsr.objectCart.CDECart;
-import gov.nih.nci.ncicb.cadsr.objectCart.FormDisplayCartTransferObject;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext.FormDisplayCartOCIImpl;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -51,25 +24,28 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.DynaActionForm;
 
-import java.util.LinkedList;
-import java.io.StringWriter;
-
-import org.exolab.castor.xml.Marshaller;
-import org.exolab.castor.xml.MarshalException;
-import org.exolab.castor.xml.ValidationException;
-
-import javax.xml.transform.*;
-import javax.xml.transform.stream.*;
-
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.StringReader;
-
-import javax.servlet.ServletContext; 
-
+import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
+import gov.nih.nci.ncicb.cadsr.common.cdebrowser.DataElementSearchBean;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
+import gov.nih.nci.ncicb.cadsr.common.jsp.bean.PaginationBean;
+import gov.nih.nci.ncicb.cadsr.common.resource.Context;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
+import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
+import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
+import gov.nih.nci.ncicb.cadsr.common.util.StringPropertyComparator;
+import gov.nih.nci.ncicb.cadsr.common.util.StringUtils;
+import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormCartOptionsUtil;
 import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext.CDECartOCImplExtension;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext.FormDisplayCartOCIImpl;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConverterUtil;
+import gov.nih.nci.ncicb.cadsr.objectCart.CDECart;
+import gov.nih.nci.ncicb.cadsr.objectCart.FormDisplayCartTransferObject;
+import gov.nih.nci.objectCart.domain.CartObject;
 
 
 public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
@@ -118,7 +94,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
     //Set the lookup values in the session
     setInitLookupValues(request);
 
-    FormBuilderService service = getFormBuilderService();
+    FormBuilderService service = getFormBuilderService(request);
     DynaActionForm searchForm = (DynaActionForm) form;
     String formLongName = (String) searchForm.get(this.SEARCH_FORM_NAME);
     String protocolIdSeq = (String) searchForm.get(this.SEARCH_PROTO_IDSEQ);
@@ -536,7 +512,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
 			HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		
-		   FormBuilderService service = getFormBuilderService();
+		   FormBuilderService service = getFormBuilderService(request);
 		   CDECartOCImplExtension sessionCartV2 = (CDECartOCImplExtension) this
 					.getSessionObject(request, CaDSRConstants.FORMS_CART_V2);
 		   Collection selectedSaveItems = sessionCartV2.getFormCartV2().values();
@@ -650,7 +626,7 @@ System.out.println( "Forms Queued in Cart : " + request.getSession().getAttribut
 			HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 
-		FormBuilderService service = getFormBuilderService();
+		FormBuilderService service = getFormBuilderService(request);
 		int formsInQueue = 0;
 		
 		try {

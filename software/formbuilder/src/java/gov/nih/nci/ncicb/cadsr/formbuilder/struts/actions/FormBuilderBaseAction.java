@@ -1,12 +1,5 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
-import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
-import gov.nih.nci.ncicb.cadsr.common.formbuilder.common.FormBuilderConstants;
-import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants;
-import gov.nih.nci.ncicb.cadsr.common.persistence.PersistenceConstants;
-import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
-
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -20,7 +13,12 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.common.FormBuilderConstants;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants;
+import gov.nih.nci.ncicb.cadsr.common.persistence.PersistenceConstants;
 
 
 public abstract class FormBuilderBaseAction extends Action 
@@ -29,7 +27,7 @@ public abstract class FormBuilderBaseAction extends Action
   
   protected static Log log = LogFactory.getLog(FormAction.class.getName());
   
-  @Autowired
+  /*@Autowired
   private FormBuilderService formBuilderService;
   
   public FormBuilderService getFormBuilderService() {
@@ -38,7 +36,7 @@ public abstract class FormBuilderBaseAction extends Action
 
   public void setFormBuilderService(FormBuilderService formBuilderService) {
 	  this.formBuilderService = formBuilderService;
-  }
+  }*/
   
   /**
    * This is the main action called from the Struts framework.

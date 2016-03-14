@@ -33,12 +33,12 @@ public abstract class JDBCInstructionDAOFB extends JDBCAdminComponentDAOFB imple
             return out;
         }
 
-        final JDBCInstructionDAOFB this$0;
+        //final JDBCInstructionDAOFB this$0;
 
         public DeleteInstruction(DataSource ds)
         {
         	super(ds, "sbrext_form_builder_pkg.remove_instr");
-            this$0 = JDBCInstructionDAOFB.this;
+            //this$0 = JDBCInstructionDAOFB.this;
             declareParameter(new SqlParameter("p_qc_idseq", 12));
             declareParameter(new SqlOutParameter("p_return_code", 12));
             declareParameter(new SqlOutParameter("p_return_desc", 12));

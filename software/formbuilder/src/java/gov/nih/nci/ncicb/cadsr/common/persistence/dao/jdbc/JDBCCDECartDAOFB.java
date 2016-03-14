@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -40,10 +41,15 @@ public class JDBCCDECartDAOFB extends JDBCBaseDAOFB implements CDECartDAO
 
 	public JDBCCDECartDAOFB() {
 		super();
-		deCartQuery = new DataElementsInCartQuery(this.getDataSource());
-		frmCartQuery = new FormsInCartQuery(this.getDataSource());
-		deleteItemQuery  = new DeleteCartItem (this.getDataSource());
-		insertItemQuery  = new InsertCartItem (this.getDataSource());
+	}
+	
+	@PostConstruct
+	public void init()
+	{
+		deCartQuery = new DataElementsInCartQuery(getDataSource());
+		frmCartQuery = new FormsInCartQuery(getDataSource());
+		deleteItemQuery  = new DeleteCartItem(getDataSource());
+		insertItemQuery  = new InsertCartItem (getDataSource());
 	}
 
 	public CDECart findCDECart(String username) {

@@ -1,12 +1,5 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
-import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.common.resource.Form;
-import gov.nih.nci.ncicb.cadsr.common.resource.TriggerActionChanges;
-import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormActionUtil;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,6 +13,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
+
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.TriggerActionChanges;
+import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormActionUtil;
 
 
 public class ManageClassificationsAction
@@ -55,7 +54,7 @@ public class ManageClassificationsAction
         setFormForAction(form, request);
       }
 
-      FormBuilderService service = getFormBuilderService();
+      FormBuilderService service = getFormBuilderService(request);
 
       Collection classifications = service.retrieveFormClassifications(formId);
 
@@ -95,7 +94,7 @@ public class ManageClassificationsAction
     boolean success = true;
     try {
       Form crf = (Form) getSessionObject(request, CRF);
-      FormBuilderService service = getFormBuilderService();
+      FormBuilderService service = getFormBuilderService(request);
 
       //get form Id and CDE Id if it is to classify CDE as well.
 
@@ -181,7 +180,7 @@ public class ManageClassificationsAction
           return mapping.findForward("hasSkipPattern");          
       }
 
-      FormBuilderService service = getFormBuilderService();
+      FormBuilderService service = getFormBuilderService(request);
       service.removeFFormClassification(cscsiId, crf.getFormIdseq());
       
       Collection classifications =
@@ -219,7 +218,7 @@ public class ManageClassificationsAction
       Form crf = (Form)getSessionObject(request, CRF);
       try{
           if ("yes".equalsIgnoreCase(choice)){
-              FormBuilderService service = getFormBuilderService();
+              FormBuilderService service = getFormBuilderService(request);
               List<TriggerActionChanges> triggerChangesList = (List<TriggerActionChanges>)
                         getSessionObject(request,CLASSIFICATION_ASSOCIATED_TRIGGERS);
               service.removeFormClassificationUpdateTriggerActions(cscsiId,  crf.getFormIdseq(), triggerChangesList);

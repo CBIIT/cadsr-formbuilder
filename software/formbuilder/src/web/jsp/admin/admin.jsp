@@ -34,7 +34,7 @@ function reloadCDEBrowserProperties() {
        <br>
        
        <jsp:include page="mltitab_inc.jsp" flush="true">
-         <jsp:param name="label" value="formbuilder&nbsp;Admin"/>
+         <jsp:param name="label" value="Formbuilder Admin"/>
        </jsp:include>
 
        <br>

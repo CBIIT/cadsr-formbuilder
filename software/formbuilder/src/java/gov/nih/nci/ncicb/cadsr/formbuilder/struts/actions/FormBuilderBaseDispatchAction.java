@@ -1,18 +1,5 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
-import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
-import gov.nih.nci.ncicb.cadsr.common.cdebrowser.DataElementSearchBean;
-import gov.nih.nci.ncicb.cadsr.common.exception.FatalException;
-import gov.nih.nci.ncicb.cadsr.common.formbuilder.common.FormBuilderConstants;
-import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants;
-import gov.nih.nci.ncicb.cadsr.common.resource.Context;
-import gov.nih.nci.ncicb.cadsr.common.resource.Form;
-import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
-import gov.nih.nci.ncicb.cadsr.common.struts.common.BaseDispatchAction;
-import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +21,22 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.DynaActionForm;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
+import gov.nih.nci.ncicb.cadsr.common.cdebrowser.DataElementSearchBean;
+import gov.nih.nci.ncicb.cadsr.common.exception.FatalException;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.common.FormBuilderConstants;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.NavigationConstants;
+import gov.nih.nci.ncicb.cadsr.common.resource.Context;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
+import gov.nih.nci.ncicb.cadsr.common.struts.common.BaseDispatchAction;
+import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
+import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.impl.FormBuilderServiceImpl;
+import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
 
 
 /**
@@ -45,10 +47,14 @@ public class FormBuilderBaseDispatchAction extends BaseDispatchAction
    {
   protected static Log log = LogFactory.getLog(FormBuilderBaseDispatchAction.class.getName());
 
-  @Autowired
   private FormBuilderService formBuilderService;
   
-  public FormBuilderService getFormBuilderService() {
+  public FormBuilderService getFormBuilderService(HttpServletRequest request) {
+	  if (formBuilderService == null)
+	  {
+		  ApplicationContext context =  WebApplicationContextUtils.getWebApplicationContext(request.getSession().getServletContext());
+		  formBuilderService = (FormBuilderService) context.getBean("formBuilderService");
+	  }
 	  return formBuilderService;
   }
 
@@ -174,14 +180,14 @@ public class FormBuilderBaseDispatchAction extends BaseDispatchAction
     obj = getSessionObject(req, ALL_FORM_CATEGORIES);
 
     if (obj == null) {
-      Collection categories = getFormBuilderService().getAllFormCategories();
+      Collection categories = getFormBuilderService(req).getAllFormCategories();
       setSessionObject(req, ALL_FORM_CATEGORIES, categories);
     }
     
     obj = getSessionObject(req, ALL_REFDOC_TYPES);
 
     if (obj == null) {
-      Collection refDocTypes = getFormBuilderService().getAllDocumentTypes();
+      Collection refDocTypes = getFormBuilderService(req).getAllDocumentTypes();
       setSessionObject(req, ALL_REFDOC_TYPES, refDocTypes);
     }
     
@@ -223,7 +229,7 @@ public class FormBuilderBaseDispatchAction extends BaseDispatchAction
 		  excludeBean = initSearchPreferences(request);
 	  String excludeList = excludeBean.getExcludeContextList();
 	  //get all contexts from the database
-	  Collection<Context> contexts = getFormBuilderService().getAllContexts();
+	  Collection<Context> contexts = getFormBuilderService(request).getAllContexts();
 	  if (!excludeList.equals(""))
 	  {
 		  Collection<Context> exContexts = new ArrayList<Context>();
@@ -248,7 +254,7 @@ public class FormBuilderBaseDispatchAction extends BaseDispatchAction
   protected Form setFormForAction(
     ActionForm form,
     HttpServletRequest request) throws FormBuilderException {
-    FormBuilderService service = getFormBuilderService();
+    FormBuilderService service = getFormBuilderService(request);
     DynaActionForm hrefCRFForm = (DynaActionForm) form;
     Form crf = null;
 

@@ -12,6 +12,8 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
 import gov.nih.nci.ncicb.cadsr.common.CaDSRUtil;
@@ -75,6 +77,7 @@ import gov.nih.nci.ncicb.cadsr.common.resource.Version;
 import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
 
 @Service("formBuilderService")
+@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
 public class FormBuilderServiceImpl implements FormBuilderService
 {
     @Autowired

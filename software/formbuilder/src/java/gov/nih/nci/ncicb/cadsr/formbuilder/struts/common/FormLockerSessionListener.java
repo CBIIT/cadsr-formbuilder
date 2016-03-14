@@ -1,18 +1,16 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.common;
 
-import gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.FormAction;
-
-import gov.nih.nci.ncicb.cadsr.common.servicelocator.ApplicationServiceLocator;
-import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocatorException;
-import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
-import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
+import gov.nih.nci.ncicb.cadsr.common.servicelocator.ApplicationServiceLocator;
+import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocatorException;
+import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
 
 
 public class FormLockerSessionListener implements HttpSessionListener{
@@ -24,7 +22,7 @@ public class FormLockerSessionListener implements HttpSessionListener{
             log.debug("New session " + se.getSession().getId() + " is created");
         }
         //CDEBrowserParams.reloadInstance();
-        CDEBrowserParams.getToolInstance(CaDSRConstants.FORMBUILDER);
+        CDEBrowserParams.getToolInstance(CaDSRConstants.FORMBUILDER, se.getSession().getServletContext());
         return;
     }
 

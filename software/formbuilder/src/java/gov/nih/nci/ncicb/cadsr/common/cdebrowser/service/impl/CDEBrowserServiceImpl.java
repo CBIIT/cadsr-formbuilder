@@ -1,9 +1,16 @@
 package gov.nih.nci.ncicb.cadsr.common.cdebrowser.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
+import java.util.Properties;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import gov.nih.nci.cadsr.domain.ClassSchemeClassSchemeItem;
 import gov.nih.nci.cadsr.domain.ClassificationScheme;
-import gov.nih.nci.cadsr.domain.ClassificationSchemeItem;
-import gov.nih.nci.cadsr.domain.Context;
 import gov.nih.nci.cadsr.domain.DataElement;
 import gov.nih.nci.cadsr.domain.Definition;
 import gov.nih.nci.cadsr.domain.DefinitionClassSchemeItem;
@@ -21,20 +28,10 @@ import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
 import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.client.ApplicationServiceProvider;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Properties;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-@Service("CDEBrowserService")
+@Service("cDEBrowserService")
 public class CDEBrowserServiceImpl implements CDEBrowserService
 {
-
     @Autowired
 	private AbstractDAOFactoryFB daoFactory;
     

@@ -85,7 +85,7 @@ public class ManageProtocolsAction
         Form crf = (Form) getSessionObject(request, CRF);
         List oldList = crf.getProtocols();
 
-        FormBuilderService service = getFormBuilderService();
+        FormBuilderService service = getFormBuilderService(request);
         try{
             if (!alreadyExist(oldList, id)){
                 Protocol p = service.getProtocolByPK(id);                

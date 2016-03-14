@@ -3,15 +3,6 @@ package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 import java.util.ArrayList;
 import java.util.List;
 
-import gov.nih.nci.ncicb.cadsr.common.exception.FatalException;
-import gov.nih.nci.ncicb.cadsr.common.exception.InvalidUserException;
-import gov.nih.nci.ncicb.cadsr.common.formbuilder.common.FormElementLocker;
-import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.AbstractDAOFactoryFB;
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.UserManagerDAO;
-import gov.nih.nci.ncicb.cadsr.common.resource.Form;
-import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,7 +15,18 @@ import org.apache.struts.action.DynaActionForm;
 import org.owasp.esapi.ESAPI;
 import org.owasp.esapi.codecs.Codec;
 import org.owasp.esapi.codecs.OracleCodec;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import gov.nih.nci.ncicb.cadsr.common.exception.FatalException;
+import gov.nih.nci.ncicb.cadsr.common.exception.InvalidUserException;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.common.FormElementLocker;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.AbstractDAOFactoryFB;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.UserManagerDAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCDAOFactoryFB;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
 
 
 /**
@@ -34,7 +36,7 @@ public class FormBuilderSecureBaseDispatchAction extends FormBuilderBaseDispatch
 {
   protected static Log log = LogFactory.getLog(FormAction.class.getName());
   
-  @Autowired
+  //@Autowired
   AbstractDAOFactoryFB daoFactory;
 
   public AbstractDAOFactoryFB getDaoFactory() {
@@ -43,6 +45,15 @@ public class FormBuilderSecureBaseDispatchAction extends FormBuilderBaseDispatch
   
   public void setDaoFactory(AbstractDAOFactoryFB daoFactory) {
 	  this.daoFactory = daoFactory;
+  }
+  
+  public void initPostConstruct(HttpServletRequest request)
+  {
+	  if (daoFactory == null)
+	  {
+		  ApplicationContext context =  WebApplicationContextUtils.getWebApplicationContext(request.getSession().getServletContext());
+		  daoFactory = (AbstractDAOFactoryFB) context.getBean("daoFactory", JDBCDAOFactoryFB.class);
+	  }
   }
   
 /**
@@ -58,7 +69,8 @@ public class FormBuilderSecureBaseDispatchAction extends FormBuilderBaseDispatch
     HttpServletRequest request,
     HttpServletResponse response,
     String name) throws Exception {
-    
+	  
+    initPostConstruct(request);
     try {
       String username = getLoggedInUsername(request);
       if ((username == null) || username.equals("")) {

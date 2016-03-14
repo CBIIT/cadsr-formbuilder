@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
@@ -15,16 +17,16 @@ import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
+import javax.sql.DataSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.security.SimpleGroup;
 import org.jboss.security.SimplePrincipal;
 import org.jboss.security.auth.spi.AbstractServerLoginModule;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import gov.nih.nci.ncicb.cadsr.common.persistence.dao.AbstractDAOFactoryFB;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.UserManagerDAO;
+import gov.nih.nci.ncicb.cadsr.common.persistence.dao.jdbc.JDBCUserManagerDAOFB;
 
 public class DBLoginModuleV3 extends AbstractServerLoginModule
 {
@@ -32,16 +34,15 @@ public class DBLoginModuleV3 extends AbstractServerLoginModule
     private Principal identity;
     private char credential[];
     
-    @Autowired
-    private AbstractDAOFactoryFB daoFactory;
-    
     private UserManagerDAO userManagerDAO;
     private String appUserName;
     private String appPassword;
+    private static String _jndiName = "java:jboss/datasources/FormBuilderDS";
     
     public DBLoginModuleV3()
     {
         logger = LogFactory.getLog(DBLoginModuleV3.class.getName());
+        
         userManagerDAO = null;
         appUserName = null;
         appPassword = null;
@@ -56,7 +57,13 @@ public class DBLoginModuleV3 extends AbstractServerLoginModule
             appUserName = (String)p3.get("applicationUserName");
             appPassword = (String)p3.get("applicationPassword");
             if(userManagerDAO == null)
-                userManagerDAO = daoFactory.getUserManagerDAO();
+            {
+            	JDBCUserManagerDAOFB umDao = new JDBCUserManagerDAOFB();
+            	Context envContext = new InitialContext();
+                DataSource ds = (DataSource)envContext.lookup(_jndiName);
+            	umDao.setDataSource(ds);
+                userManagerDAO = umDao;
+            }
         }
         catch(Exception le)
         {
@@ -246,4 +253,5 @@ public class DBLoginModuleV3 extends AbstractServerLoginModule
         }
         return "";
     }
+    
 }

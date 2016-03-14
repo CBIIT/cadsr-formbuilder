@@ -121,7 +121,7 @@ function details(linkParms ){
 %>
 <%@ include file="../common/in_process_common_header_inc.jsp"%>
 <jsp:include page="../common/tab_inc.jsp" flush="true">
-  <jsp:param name="label" value="Add&nbsp;Question"/>
+  <jsp:param name="label" value="Add Question"/>
   <jsp:param name="urlPrefix" value=""/>
 </jsp:include>
 <table>

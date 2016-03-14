@@ -14,6 +14,7 @@ import java.sql.Types;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.SqlParameter;
@@ -28,8 +29,13 @@ public class JDBCDerivedDataElementDAOFB extends JDBCBaseDAOFB implements Derive
 
   public JDBCDerivedDataElementDAOFB() {
     super();
-    ddeQuery = new DerivedDataElementQuery(this.getDataSource());
-    dedQuery = new DataElementDerivationQuery(this.getDataSource());
+  }
+  
+  @PostConstruct
+  public void init()
+  {
+	  ddeQuery = new DerivedDataElementQuery(this.getDataSource());
+	  dedQuery = new DataElementDerivationQuery(this.getDataSource());
   }
 
   public DerivedDataElement findDerivedDataElement(String deIdSeq) {

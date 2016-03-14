@@ -165,7 +165,7 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchActionWi
     String displayCartId,
     String formCartId) throws IOException, ServletException {
 	     
-   FormBuilderService service = getFormBuilderService();
+   FormBuilderService service = getFormBuilderService(request);
 	
    log.info("add forms in memeory to the cart");
    CDECartFormBean myForm = (CDECartFormBean) form;
@@ -331,7 +331,7 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchActionWi
       Collection savedItems = new ArrayList();
 
       //Collection unsavedItems = new ArrayList();
-      FormBuilderService service = getFormBuilderService();
+      FormBuilderService service = getFormBuilderService(request);
       
 	  FormDisplayCartOCIImpl userFormDisplayCart = (FormDisplayCartOCIImpl) this
 				.getSessionObject(request, displayCartId);

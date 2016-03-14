@@ -148,7 +148,7 @@ public class FormCopyAction extends FormBuilderSecureBaseDispatchAction {
       newForm.setCreatedBy(request.getRemoteUser());
       newForm.setProtocols(crf.getProtocols());
 
-      FormBuilderService service = getFormBuilderService();
+      FormBuilderService service = getFormBuilderService(request);
       
       Collection forms = null;
       

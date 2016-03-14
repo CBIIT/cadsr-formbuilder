@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.object.MappingSqlQuery;
 import org.springframework.jdbc.object.SqlUpdate;
 import org.springframework.jdbc.object.StoredProcedure;
+import org.springframework.stereotype.Component;
 
 import gov.nih.nci.ncicb.cadsr.common.exception.DMLException;
 import gov.nih.nci.ncicb.cadsr.common.persistence.ErrorCodeConstants;
@@ -22,10 +23,10 @@ import gov.nih.nci.ncicb.cadsr.common.persistence.PersistenceConstants;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.BaseDAOFB;
 import gov.nih.nci.ncicb.cadsr.common.util.logging.LogFactory;
 
-
+@Component("baseDAO")
 public class JDBCBaseDAOFB extends BaseDAOFB implements PersistenceConstants, ErrorCodeConstants
 {
-	GUIDGenerator idGen = null;
+	private GUIDGenerator idGen = null;
 	
 	@Autowired
 	private DataSource dataSource;
@@ -54,7 +55,10 @@ public class JDBCBaseDAOFB extends BaseDAOFB implements PersistenceConstants, Er
 		return guid;
 	}
 
-	public GUIDGenerator getGUIDGenerator (){
+	public GUIDGenerator getGUIDGenerator ()
+	{
+		if (idGen == null)
+			idGen = new GUIDGenerator(dataSource);
 		return idGen;
 	}
 
@@ -287,6 +291,7 @@ public class JDBCBaseDAOFB extends BaseDAOFB implements PersistenceConstants, Er
 
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
+		idGen = new GUIDGenerator(this.dataSource);
 	}
 
 }

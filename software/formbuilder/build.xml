@@ -213,7 +213,7 @@ $Name: not supported by cvs2svn $
 			<classpath refid="libpath"/>
 		</javac>
 
-		<unzip src="${lib.dir}/cadsrutil.jar" dest="${temp.classes.dir}" overwrite="No"/>
+		<unzip src="${lib.dir}/cadsrutil.jar" dest="${temp.classes.dir}" overwrite="false"/>
 		<!-- add the jndi name from the template -->
 		<copy tofile="${classes.dir}/gov/nih/nci/ncicb/cadsr/common/jndi.properties" filtering="true" overwrite="Yes">
 			<fileset file="${conf.dir}/template.jndi.properties"/>
@@ -262,12 +262,12 @@ $Name: not supported by cvs2svn $
 			<fileset file="${formloader.dir}/build-jars/org.eclipse.wst.xml.xpath2.processor_1.1.0.jar" />
 		</copy>
 
-		<copy file="${lib.dir}/hibernate-3.2.0.ga-modified.jar" tofile="${artifacts.dir}/jboss/hibernate-3.2.0.ga-modified.jar" overwrite="true"/>
+		<!--copy file="${lib.dir}/hibernate-3.2.0.ga-modified.jar" tofile="${artifacts.dir}/jboss/hibernate-3.2.0.ga-modified.jar" overwrite="true"/>
 
 		<copy file="${lib.dir}/hibernate-annotations-3.2.0.jar" tofile="${artifacts.dir}/jboss/hibernate-annotations-3.2.0.jar" overwrite="true"/>
 
 		<copy file="${lib.dir}/hibernate-validator-3.0.0.GA.jar" tofile="${artifacts.dir}/jboss/hibernate-validator-3.0.0.GA.jar" overwrite="true"/>
-
+-->
 		<copy tofile="${artifacts.dir}/jboss/ojdbc5.jar" filtering="true">
 			<fileset file="${lib.dir}/ojdbc5.jar" />
 		</copy>
@@ -292,12 +292,12 @@ $Name: not supported by cvs2svn $
 			<fileset file="${conf.dir}/jboss-classloading.xml" />
 		</copy>
 
-		<copy tofile="${artifacts.dir}/sql/load_options.sql" filtering="true">
+		<!--copy tofile="${artifacts.dir}/sql/load_options.sql" filtering="true">
 			<fileset file="${conf.dir}/template.load_options.sql" />
 		</copy>
 		<copy tofile="${artifacts.dir}/jboss/formbuilder-oracle-ds.xml" filtering="true">
 			<fileset file="${conf.dir}/template.formbuilder-oracle-ds.xml" />
-		</copy>
+		</copy-->
 		<copy tofile="${artifacts.dir}/jboss/formbuilder-log4j-appender.xml" filtering="true">
 			<fileset file="${conf.dir}/template.formbuilder-log4j-appender.xml" />
 		</copy>
@@ -310,9 +310,9 @@ $Name: not supported by cvs2svn $
 		<copy tofile="${artifacts.dir}/jboss/cadsrutil-log4j-category.xml" filtering="true">
 			<fileset file="${conf.dir}/template.cadsrutil-log4j-category.xml" />
 		</copy>
-		<copy tofile="${artifacts.dir}/jboss/formbuilder-login-config.xml" filtering="true">
+		<!--copy tofile="${artifacts.dir}/jboss/formbuilder-login-config.xml" filtering="true">
 			<fileset file="${conf.dir}/template.formbuilder-login-config.xml" />
-		</copy>
+		</copy-->
 		<copy tofile="${artifacts.dir}/jboss/formbuilder-login-config-service.xml" filtering="true">
 			<fileset file="${conf.dir}/template.formbuilder-login-config-service.xml" />
 		</copy>
@@ -356,7 +356,10 @@ $Name: not supported by cvs2svn $
 			<fileset dir="${basedir}/src/web/tld" />
 		</copy>
 		<copy todir="${web.dir}/lib" >
-			<fileset dir="${wlib.dir}" />
+			<fileset dir="${wlib.dir}">
+				<exclude name="jboss-jsf-api_2.2_spec-2.2.6.jar" />
+				<exclude name="jsf-impl-2.2.6-jbossorg-4.jar" />
+			</fileset>
 		</copy>
 		<copy todir="${web.dir}/admin" >
 			<fileset dir="${basedir}/src/web/struts-config/admin" />
@@ -475,7 +478,7 @@ spring.jar commons-logging.jar log4j-1.2.8.jar properties/"/>
 		</ant>
 	</target>
 
-	<target name="-build-war" depends="-cjsp,-prop-check" description="Builds the project WAR file.">
+	<target name="-build-war" depends="-cjsp,-prop-check,-jar_persistence_form,-jar_common" description="Builds the project WAR file.">
 		<echo>Building deployable WAR file ...</echo>
 		<delete file="${war.dir}/formbuilder.war" />
 
@@ -489,6 +492,7 @@ spring.jar commons-logging.jar log4j-1.2.8.jar properties/"/>
 					<include name="gov/nih/nci/ncicb/cadsr/common/struts/common/**"/>
 					<include name="gov/nih/nci/ncicb/cadsr/common/struts/formbeans/**"/>
 					<include name="gov/nih/nci/ncicb/cadsr/common/servicelocator/**"/>
+					<exclude name="gov/nih/nci/ncicb/cadsr/common/servicelocator/spring/ApplicationServiceLocatorImpl.class"/>
 					<include name="gov/nih/nci/ncicb/cadsr/common/database/**"/>
 					<include name="gov/nih/nci/ncicb/cadsr/common/security/jboss/**"/>
 					<include name="gov/nih/nci/ncicb/cadsr/common/security/LogoutServlet.class"/>
@@ -515,6 +519,7 @@ spring.jar commons-logging.jar log4j-1.2.8.jar properties/"/>
 					<include name="gov/nih/nci/ncicb/cadsr/formbuilder/servlets/**"/>
 					<include name="gov/nih/nci/ncicb/cadsr/objectCart/**"/>
 					<include name="gov/nih/nci/ncicb/cadsr/common/downloads/**"/>
+					<include name="gov/nih/nci/ncicb/cadsr/formbuilder/ejb/**/*.*" />
 				</patternset>
 			</fileset>
 		</copy>

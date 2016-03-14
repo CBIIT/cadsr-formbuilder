@@ -1,13 +1,6 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
 
-import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
-import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
-import gov.nih.nci.ncicb.cadsr.common.resource.Form;
-import gov.nih.nci.ncicb.cadsr.common.resource.Version;
-import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
-import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +13,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
+
+import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
+import gov.nih.nci.ncicb.cadsr.common.resource.Form;
+import gov.nih.nci.ncicb.cadsr.common.resource.Version;
+import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
 
 
 public class FormVersionAction
@@ -50,7 +49,7 @@ public class FormVersionAction
     
     try{
         int publicId = crf.getPublicId();
-        FormBuilderService service = getFormBuilderService();
+        FormBuilderService service = getFormBuilderService(request);
         List formVersions = service.getFormVersions(publicId);
         if (formVersions.size() <1 ){
             return mapping.findForward("gotoCreateNewVersion");
@@ -130,7 +129,7 @@ public class FormVersionAction
       
 
       try{ 
-          FormBuilderService service = getFormBuilderService();
+          FormBuilderService service = getFormBuilderService(request);
 
           if (changed){
               service.setLatestVersion(oldVersion, newVersion, changedNoteList);
@@ -176,7 +175,7 @@ public class FormVersionAction
         HttpServletResponse response) throws IOException, ServletException {
         Form crf = (Form)getSessionObject(request, CRF);
         try{
-            FormBuilderService service = getFormBuilderService();            
+            FormBuilderService service = getFormBuilderService(request);            
             Float maxVersion = service.getMaxFormVersion(crf.getPublicId());
 
             DynaActionForm dynaForm = (DynaActionForm) form;
@@ -216,7 +215,7 @@ public class FormVersionAction
         String changeNote = (String)dynaForm.get(CHANGE_NOTE);
         boolean editNewFormIndicator = "true".equalsIgnoreCase(editNewFormStr);
 
-        FormBuilderService service = getFormBuilderService();
+        FormBuilderService service = getFormBuilderService(request);
         String newFormIdSeq = service.createNewFormVersion(crf.getFormIdseq(), newVersionNumber, changeNote);
         saveMessage("cadsr.formbuilder.create.version.success", request);
         

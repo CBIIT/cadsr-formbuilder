@@ -49,7 +49,7 @@ public class FormDesignationsAction
             contextIdSeq = context.getConteIdseq();  
         }
         try{
-            FormBuilderService service = getFormBuilderService();
+            FormBuilderService service = getFormBuilderService(request);
             Boolean result = service.isAllACDesignatedToContext(cdeIdList , contextIdSeq);
             if (result.booleanValue()){
                 request.setAttribute(FormConstants.ALREADY_DESIGNATED, result);
@@ -83,7 +83,7 @@ public class FormDesignationsAction
         Form crf = (Form) getSessionObject(request, CRF);
         String cdeContextIdSeq = crf.getContext().getConteIdseq();
 
-        FormBuilderService service = getFormBuilderService();
+        FormBuilderService service = getFormBuilderService(request);
         List cdeList = crf.getCDEIdList();
 
         int result = service.saveDesignation(cdeContextIdSeq, cdeList);

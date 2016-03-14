@@ -2,6 +2,7 @@ package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
 import java.io.IOException;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,7 @@ import gov.nih.nci.ncicb.cadsr.common.exception.InvalidUserException;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.AbstractDAOFactoryFB;
 import gov.nih.nci.ncicb.cadsr.common.persistence.dao.UserManagerDAO;
 import gov.nih.nci.ncicb.cadsr.common.resource.NCIUser;
+import gov.nih.nci.ncicb.cadsr.common.servicelocator.spring.SpringObjectLocatorImpl;
 
 
 public class SecureRequestProcessor extends RequestProcessor
@@ -39,6 +41,13 @@ implements CaDSRConstants {
 
 	public SecureRequestProcessor() {
 		super();
+	}
+
+	@PostConstruct
+	public void initPostConstruct()
+	{
+		SpringObjectLocatorImpl beanLocator = new SpringObjectLocatorImpl();
+		daoFactory = (AbstractDAOFactoryFB) beanLocator.findObject("daoFactory");
 	}
 
 	protected ActionForward processActionPerform(

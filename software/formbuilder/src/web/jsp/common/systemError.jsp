@@ -31,7 +31,7 @@ $(document).ready(function()
     <%@ include file="syserror_common_header_inc.jsp" %>
 
     <jsp:include page="tab_inc.jsp" flush="true">
-      <jsp:param name="label" value="System&nbsp;Error"/>
+      <jsp:param name="label" value="System Error"/>
       <jsp:param name="urlPrefix" value=""/>
     </jsp:include>
 
