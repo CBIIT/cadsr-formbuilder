@@ -35,12 +35,31 @@ if (outcome != success) of /subsystem=logging/size-rotating-file-handler=FORMBUI
 /subsystem=logging/size-rotating-file-handler=FORMBUILDER:write-attribute(name="max-backup-index", value="10")
 end-if
 
-if (outcome!= success) of /subsystem=logging/logger=gov.nih.nci.ncicb:read-resource
-/subsystem=logging/logger=gov.nih.nci.ncicb:add(use-parent-handlers=false,handlers=["FORMBUILDER", "CONSOLE"])
+if (outcome != success) of /subsystem=logging/size-rotating-file-handler=CADSRUTIL:read-resource
+/subsystem=logging/size-rotating-file-handler=CADSRUTIL:add(level=@logLevel@, file={"relative-to"=>"jboss.server.log.dir", "path"=>"cadsrutil.log"}, append=false, autoflush=true)
+/subsystem=logging/size-rotating-file-handler=CADSRUTIL:write-attribute(name="formatter", value="%d [%t] %-5p [%c : %L] %m%n") 
+/subsystem=logging/size-rotating-file-handler=CADSRUTIL:write-attribute(name="rotate-size", value="1m")
+/subsystem=logging/size-rotating-file-handler=CADSRUTIL:write-attribute(name="max-backup-index", value="10")
 end-if
 
-if (outcome!= success) of /subsystem=logging/logger=gov.nih.nci.cadsr:read-resource
-/subsystem=logging/logger=gov.nih.nci.cadsr:add(use-parent-handlers=false,handlers=["FORMBUILDER", "CONSOLE"])
+if (outcome!= success) of /subsystem=logging/logger=gov.nih.nci.cadsr.formloader:read-resource
+/subsystem=logging/logger=gov.nih.nci.cadsr.formloader:add(use-parent-handlers=false,handlers=["FORMBUILDER", "CONSOLE"])
+end-if
+
+if (outcome!= success) of /subsystem=logging/logger=gov.nih.nci.cadsr.formbuilder:read-resource
+/subsystem=logging/logger=gov.nih.nci.cadsr.formbuilder:add(use-parent-handlers=false,handlers=["FORMBUILDER", "CONSOLE"])
+end-if
+
+if (outcome!= success) of /subsystem=logging/logger=gov.nih.nci.ncicb.cadsr.common:read-resource
+/subsystem=logging/logger=gov.nih.nci.ncicb.cadsr.common:add(use-parent-handlers=false,handlers=["CADSRUTIL", "CONSOLE"])
+end-if
+
+if (outcome!= success) of /subsystem=logging/logger=gov.nih.nci.ncicb.oracle:read-resource
+/subsystem=logging/logger=gov.nih.nci.ncicb.oracle:add(use-parent-handlers=false,handlers=["CADSRUTIL", "CONSOLE"])
+end-if
+
+if (outcome!= success) of /subsystem=logging/logger=gov.nih.nci.ncicb.webtree:read-resource
+/subsystem=logging/logger=gov.nih.nci.ncicb.webtree:add(use-parent-handlers=false,handlers=["CADSRUTIL", "CONSOLE"])
 end-if
 
 if (outcome != success) of /subsystem=undertow/servlet-container=default/setting=session-cookie:read-resource
