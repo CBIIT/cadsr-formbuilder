@@ -221,7 +221,7 @@ public class ManageClassificationsAction
               FormBuilderService service = getFormBuilderService(request);
               List<TriggerActionChanges> triggerChangesList = (List<TriggerActionChanges>)
                         getSessionObject(request,CLASSIFICATION_ASSOCIATED_TRIGGERS);
-              service.removeFormClassificationUpdateTriggerActions(cscsiId,  crf.getFormIdseq(), triggerChangesList);
+              service.removeFormClassificationUpdateTriggerActions(cscsiId,  crf.getFormIdseq(), triggerChangesList, getLoggedInUsername(request));
               
               //update CRF in session
               removeSessionObject(request, CRF);

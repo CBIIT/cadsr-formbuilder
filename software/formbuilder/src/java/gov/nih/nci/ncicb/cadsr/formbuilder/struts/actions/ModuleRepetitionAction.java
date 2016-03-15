@@ -271,7 +271,7 @@ public class ModuleRepetitionAction extends FormBuilderSecureBaseDispatchAction
         Module savedModeule = null;
         try
         {
-            savedModeule = service.saveQuestionRepititons(module.getModuleIdseq(),repeats.size(),questionRepeatMap,noRepQIdList);
+            savedModeule = service.saveQuestionRepititons(module.getModuleIdseq(),repeats.size(),questionRepeatMap,noRepQIdList, getLoggedInUsername(request));
             //put the triggeractions' target. 
             //Only the idseq is put in the triggeraction target by the EJB, not the target object.
             FormActionUtil.setTargetsForTriggerActions(FormActionUtil.getTriggerActionPossibleTargetMap(crf),FormActionUtil.getModuleAllTriggerActions(savedModeule));

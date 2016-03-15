@@ -36,9 +36,9 @@ public interface FormBuilderService {
         Collection deletedModules,Collection addedModules,
         Collection addedProtocols, Collection removedProtocols,
         Collection protocolTriggerActionChanges,
-        FormInstructionChanges instructionChanges);
+        FormInstructionChanges instructionChanges, String username);
 
-    public Module updateModule(String moduleIdSeq,ModuleChanges moduleChanges);
+    public Module updateModule(String moduleIdSeq,ModuleChanges moduleChanges, String username);
 
     public Form getFormRow(String formPK);
 
@@ -123,7 +123,7 @@ public interface FormBuilderService {
 
     public int removeFFormClassification(String cscsiIdseq, String acId);
     public void removeFormClassificationUpdateTriggerActions(
-        String cscsiId,  String acIdSeq, List<TriggerActionChanges> triggerChangesList);
+        String cscsiId,  String acIdSeq, List<TriggerActionChanges> triggerChangesList, String username);
 
     /**
      * Retrieves all the assigned classifications for an admin component
@@ -165,20 +165,20 @@ public interface FormBuilderService {
 
       public Collection getAllDocumentTypes();
 
-      public int saveDesignation(String contextIdSeq, List acIdList);
+      public int saveDesignation(String contextIdSeq, List acIdList, String username);
       
       public Boolean isAllACDesignatedToContext(List cdeIdList , String contextIdSeq);
         
-      public String createNewFormVersion(String formIdSeq, Float newVersionNumber, String changeNote);
+      public String createNewFormVersion(String formIdSeq, Float newVersionNumber, String changeNote, String username);
 
       public List getFormVersions(int publicId);
 
-      public void setLatestVersion(Version oldVersion, Version newVersion, List changedNoteList);
+      public void setLatestVersion(Version oldVersion, Version newVersion, List changedNoteList, String username);
       public Float getMaxFormVersion(int publicId);
       public void removeFormProtocol(String formIdseq, String protocoldIdseq);
       public void removeFormProtocols(String formIdseq, Collection protocolds);
-      public void addFormProtocol(String formIdseq, String protocoldIdseq);
-      public void addFormProtocols(String formIdseq, Collection protocolds);
+      public void addFormProtocol(String formIdseq, String protocoldIdseq, String username);
+      public void addFormProtocols(String formIdseq, Collection protocolds, String username);
 
       public Protocol getProtocolByPK(String protocoldIdseq);
       public List getAllTriggerActionsForSource(String sourceId);
@@ -189,11 +189,10 @@ public interface FormBuilderService {
      
      public boolean isTargetForTriggerAction(List<String> targetIds);
      
-     public TriggerAction createTriggerAction(TriggerAction action);
+     public TriggerAction createTriggerAction(TriggerAction action, String username);
 
-     public TriggerAction updateTriggerAction(TriggerActionChanges changes);
-     public void updateTriggerActions(
-        List<TriggerActionChanges> changesList);
+     public TriggerAction updateTriggerAction(TriggerActionChanges changes, String username);
+     public void updateTriggerActions(List<TriggerActionChanges> changesList, String username);
 
      public void deleteTriggerAction(String triggerActionId);
 
@@ -202,7 +201,7 @@ public interface FormBuilderService {
     public AdminComponentType getComponentType(String publicId, String version);
                 
     public Module saveQuestionRepititons(String moduleId,int repeatCount
-            , Map<String,List<QuestionRepitition>> repititionMap,List<String> questionWithoutRepitions);
+            , Map<String,List<QuestionRepitition>> repititionMap,List<String> questionWithoutRepitions, String username);
     
     public boolean isDEDerived(String deIdSeq);
 

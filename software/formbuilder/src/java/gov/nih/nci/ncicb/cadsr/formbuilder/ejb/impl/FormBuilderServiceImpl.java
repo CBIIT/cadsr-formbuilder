@@ -607,7 +607,7 @@ public class FormBuilderServiceImpl implements FormBuilderService
         return module;
     }
 
-    public Module updateModule(String moduleIdSeq, ModuleChanges moduleChanges)
+    public Module updateModule(String moduleIdSeq, ModuleChanges moduleChanges, String username)
     {
         ModuleDAO moduleDao = daoFactory.getModuleDAO();
         QuestionDAO questionDao = daoFactory.getQuestionDAO();
@@ -623,7 +623,7 @@ public class FormBuilderServiceImpl implements FormBuilderService
         Module moduleHeader = moduleChanges.getUpdatedModule();
         if (moduleHeader != null)
         {
-            moduleHeader.setModifiedBy(getUserName());
+            moduleHeader.setModifiedBy(username);
             moduleDao.updateModuleComponent(moduleHeader);
         }
         //make module instruction changes
@@ -631,7 +631,7 @@ public class FormBuilderServiceImpl implements FormBuilderService
             moduleChanges.getInstructionChanges();
         if (modInstructionChanges != null && !modInstructionChanges.isEmpty())
         {
-            makeInstructionChanges(moduleInstrDao, modInstructionChanges);
+            makeInstructionChanges(moduleInstrDao, modInstructionChanges, username);
         }
         //make Question instruction changes
 
@@ -642,10 +642,10 @@ public class FormBuilderServiceImpl implements FormBuilderService
                             moduleChanges.getDeletedQuestions());
             updateQuestions(questionDao, questionInstrDao, formValidValueDao,
                             validValueInstrDao,
-                            moduleChanges.getUpdatedQuestions());
+                            moduleChanges.getUpdatedQuestions(), username);
             createNewQuestions(questionDao, questionInstrDao,
                                formValidValueDao, validValueInstrDao,
-                               moduleChanges.getNewQuestions());
+                               moduleChanges.getNewQuestions(), username);
         }
 
         return getModule(moduleIdSeq);
@@ -657,7 +657,7 @@ public class FormBuilderServiceImpl implements FormBuilderService
                            Collection addedProtocolIds,
                            Collection removedProtocolIds,
                            Collection protocolTriggerActionChanges,
-                           FormInstructionChanges instructionChanges)
+                           FormInstructionChanges instructionChanges, String username)
     {
         ModuleDAO dao = daoFactory.getModuleDAO();
         QuestionDAO questionDAO = daoFactory.getQuestionDAO();
@@ -671,7 +671,7 @@ public class FormBuilderServiceImpl implements FormBuilderService
 
         if (formHeader != null)
         {
-            formHeader.setModifiedBy(getUserName());
+            formHeader.setModifiedBy(username);
             formdao.updateFormComponent(formHeader);
         }
         if ((addedModules != null) && !addedModules.isEmpty())
@@ -692,7 +692,7 @@ public class FormBuilderServiceImpl implements FormBuilderService
                      questions.get(i).setModule(addedModule);
                   }
                     this.createNewQuestions(questionDAO,questInstrDAO,formVVDAO,
-                            formVVInstDAO, questions);
+                            formVVInstDAO, questions, username);
                }
             }
         }
@@ -704,7 +704,7 @@ public class FormBuilderServiceImpl implements FormBuilderService
             {
                 Module updatedModule = (Module)updatedIt.next();
                 dao.updateDisplayOrder(updatedModule.getModuleIdseq(), updatedModule
-                                       .getDisplayOrder(), getUserName());
+                                       .getDisplayOrder(), username);
             }
         }
 
@@ -722,15 +722,15 @@ public class FormBuilderServiceImpl implements FormBuilderService
         //Update Instructions
 
         makeInstructionChanges(formInstrdao,
-                               instructionChanges.getFormHeaderInstructionChanges());
+                               instructionChanges.getFormHeaderInstructionChanges(), username);
         makeFooterInstructionChanges(formInstrdao,
-                                     instructionChanges.getFormFooterInstructionChanges());
+                                     instructionChanges.getFormFooterInstructionChanges(), username);
 
         //update form/protocol association
-        addFormProtocols(formIdSeq, addedProtocolIds);
+        addFormProtocols(formIdSeq, addedProtocolIds, username);
         removeFormProtocols(formIdSeq, removedProtocolIds);
         
-        updateTriggerActions((List<TriggerActionChanges>)protocolTriggerActionChanges);
+        updateTriggerActions((List<TriggerActionChanges>)protocolTriggerActionChanges, username);
         return getFormDetails(formIdSeq);
     }
 
@@ -817,13 +817,13 @@ public class FormBuilderServiceImpl implements FormBuilderService
         return null;
     }
 
-    private String getUserName()
+    /*private String getUserName()
     {
     	//TODO: replace EJB SessionContext with user name from principal.
     	return "FORMBUILDERUSER";
         //return context.getCallerPrincipal().getName().toUpperCase();
         //return "JASUR";//jboss
-    }
+    }*/
 
 
     public Collection getAllContexts()
@@ -862,7 +862,7 @@ public class FormBuilderServiceImpl implements FormBuilderService
         QuestionDAO myDAO = daoFactory.getQuestionDAO();
         int ret =
             myDAO.updateQuestionDEAssociation(questionId, deId, newLongName,
-                                                    this.getUserName());
+                                                    username);
 
         return ret;
     }
@@ -959,8 +959,8 @@ public class FormBuilderServiceImpl implements FormBuilderService
     }
 
     public void removeFormClassificationUpdateTriggerActions(String cscsiIdseq, String acId, 
-            List<TriggerActionChanges> triggerChangesList){
-        updateTriggerActions(triggerChangesList);
+            List<TriggerActionChanges> triggerChangesList, String username){
+        updateTriggerActions(triggerChangesList, username);
         removeFFormClassification(cscsiIdseq, acId);
     
     }
@@ -1086,7 +1086,7 @@ public class FormBuilderServiceImpl implements FormBuilderService
                                  QuestionInstructionDAO questionInstrDao,
                                  FormValidValueDAO fvvDao,
                                  FormValidValueInstructionDAO fvvInstrDao,
-                                 List updatedQuestions)
+                                 List updatedQuestions, String username)
     {
         if (updatedQuestions != null && !updatedQuestions.isEmpty())
         {
@@ -1101,14 +1101,14 @@ public class FormBuilderServiceImpl implements FormBuilderService
                     Question currQ = currQuestionChange.getUpdatedQuestion();
                     if (currQ != null)
                     {
-                        currQ.setModifiedBy(getUserName());
+                        currQ.setModifiedBy(username);
                         questionDao
                         .updateQuestionLongNameDispOrderDeIdseq(currQ);
                         
                     }
                     
                     if (currQuestionChange.isQuestAttrChange()){
-                        questionDao.updateQuestAttr(currQuestionChange, getUserName().toUpperCase());
+                        questionDao.updateQuestAttr(currQuestionChange, username.toUpperCase());
                     }
                     
                     // if the DE is derived, default value cannot be set for the question
@@ -1121,7 +1121,7 @@ public class FormBuilderServiceImpl implements FormBuilderService
                         currQuestionChange.getInstrctionChanges();
                     if (qInstrChanges != null && !qInstrChanges.isEmpty())
                         makeInstructionChanges(questionInstrDao,
-                                               qInstrChanges);
+                                               qInstrChanges, username);
 
                     FormValidValueChanges formVVChanges =
                         currQuestionChange.getFormValidValueChanges();
@@ -1130,9 +1130,9 @@ public class FormBuilderServiceImpl implements FormBuilderService
                     	
                         createNewValidValues(fvvDao, fvvInstrDao,
                                              formVVChanges.getNewValidValues(),
-                                             formVVChanges.getQuestionId());
+                                             formVVChanges.getQuestionId(), username);
                         updateValidValues(fvvDao, fvvInstrDao,
-                                          formVVChanges.getUpdatedValidValues());	//JR417 emulate this!
+                                          formVVChanges.getUpdatedValidValues(), username);	//JR417 emulate this!
                         deleteValidValues(fvvDao, fvvInstrDao,
                                           formVVChanges.getDeletedValidValues());
                     }
@@ -1144,7 +1144,7 @@ public class FormBuilderServiceImpl implements FormBuilderService
 
     private void updateValidValues(FormValidValueDAO fvvDao,
                                    FormValidValueInstructionDAO fvvInstrDao,
-                                   List updatedValidValues)
+                                   List updatedValidValues, String username)
     {
         if (updatedValidValues != null && !updatedValidValues.isEmpty())
         {
@@ -1159,23 +1159,21 @@ public class FormBuilderServiceImpl implements FormBuilderService
                         currVVChange.getUpdatedValidValue();
                     if (currVV != null)
                     {
-                        currVV.setModifiedBy(getUserName());
+                        currVV.setModifiedBy(username);
                         fvvDao
                         .updateDisplayOrder(currVV.getValueIdseq(), currVV
-                                                  .getDisplayOrder(),
-                                                  getUserName());                                                
+                                                  .getDisplayOrder(), username);                                                
                     }
                     if (currVVChange.getUpdatedFormValueMeaningText()!=null || 
                         currVVChange.getUpdatedFormValueMeaningDesc()!=null){
                         fvvDao.updateValueMeaning(currVVChange.getValidValueId(), 
                             currVVChange.getUpdatedFormValueMeaningText(), 
-                            currVVChange.getUpdatedFormValueMeaningDesc(), 
-                            getUserName());
+                            currVVChange.getUpdatedFormValueMeaningDesc(), username);
                     }
                     InstructionChanges vvInstrChanges =
                         currVVChange.getInstrctionChanges();
                     if (vvInstrChanges != null && !vvInstrChanges.isEmpty())
-                        makeInstructionChanges(fvvInstrDao, vvInstrChanges);
+                        makeInstructionChanges(fvvInstrDao, vvInstrChanges, username);
 
                 }
             }
@@ -1205,7 +1203,7 @@ public class FormBuilderServiceImpl implements FormBuilderService
 
     private void createNewValidValues(FormValidValueDAO fvvDao,
                                       FormValidValueInstructionDAO fvvInstrDao,
-                                      List newValidValues, String parentId)
+                                      List newValidValues, String parentId, String username)
     {
 
         if (newValidValues != null && !newValidValues.isEmpty())
@@ -1216,11 +1214,11 @@ public class FormBuilderServiceImpl implements FormBuilderService
             {
                 FormValidValue currfvv = (FormValidValue)newIt.next();
                 
-                String newFVVIdseq = fvvDao.createValidValue(currfvv, parentId, getUserName());
+                String newFVVIdseq = fvvDao.createValidValue(currfvv, parentId, username);
                 
                 if (newFVVIdseq != null && newFVVIdseq.length() > 0) {
                 	 fvvDao.updateValueMeaning(newFVVIdseq, currfvv.getFormValueMeaningText(), 
-                			 currfvv.getFormValueMeaningDesc(), getUserName());
+                			 currfvv.getFormValueMeaningDesc(), username);
                 }
                 
                 //instructions
@@ -1284,7 +1282,7 @@ public class FormBuilderServiceImpl implements FormBuilderService
                                     QuestionInstructionDAO questionInstrDao,
                                     FormValidValueDAO fvvDao,
                                     FormValidValueInstructionDAO fvvInstrDao,
-                                    List newQuestions)
+                                    List newQuestions, String username)
     {
     Context questionContext = null;
         if (newQuestions != null && !newQuestions.isEmpty())
@@ -1294,7 +1292,7 @@ public class FormBuilderServiceImpl implements FormBuilderService
             {
                 Question currQuestion = (Question)newIt.next();
                 questionContext = currQuestion.getContext();
-                currQuestion.setCreatedBy(getUserName());
+                currQuestion.setCreatedBy(username);
                 if (currQuestion.getVersion() == null)
                   currQuestion.setVersion(new Float(1.0));
                 Question newQusetion =
@@ -1303,7 +1301,7 @@ public class FormBuilderServiceImpl implements FormBuilderService
                 Instruction qInstr = currQuestion.getInstruction();
                 if (qInstr != null)
                 {
-                    qInstr.setCreatedBy(getUserName());
+                    qInstr.setCreatedBy(username);
                     questionInstrDao
                     .createInstruction(qInstr, newQusetion.getQuesIdseq());
                 }
@@ -1319,18 +1317,18 @@ public class FormBuilderServiceImpl implements FormBuilderService
                     {
                         FormValidValue fvv =
                             (FormValidValue)currQuestionValidValuesIt.next();
-                        fvv.setCreatedBy(getUserName());
+                        fvv.setCreatedBy(username);
                         fvv.setQuestion(newQusetion);
                         
                         
                         //String newFVVIdseq =
                         //    fvvDao.createFormValidValueComponent(
                         //            fvv,newQusetion.getQuesIdseq(),getUserName());
-                        String newFVVIdseq = fvvDao.createValidValue(fvv, newQusetion.getQuesIdseq(), getUserName());
+                        String newFVVIdseq = fvvDao.createValidValue(fvv, newQusetion.getQuesIdseq(), username);
                         
                         if (newFVVIdseq != null && newFVVIdseq.length() > 0) {
                         	 fvvDao.updateValueMeaning(newFVVIdseq, fvv.getFormValueMeaningText(), 
-                                     fvv.getFormValueMeaningDesc(), getUserName());
+                                     fvv.getFormValueMeaningDesc(), username);
                         }
                         
                         //createFormValidValueComponent() will 
@@ -1340,7 +1338,7 @@ public class FormBuilderServiceImpl implements FormBuilderService
                         Instruction vvInstr = fvv.getInstruction();
                         if (vvInstr != null)
                         {
-                            vvInstr.setCreatedBy(getUserName());
+                            vvInstr.setCreatedBy(username);
                             vvInstr.setContext(questionContext);
                             fvvInstrDao
                             .createInstruction(vvInstr, newFVVIdseq);
@@ -1354,20 +1352,20 @@ public class FormBuilderServiceImpl implements FormBuilderService
     }
 
     private void makeInstructionChanges(InstructionDAO dao,
-                                        InstructionChanges changes)
+                                        InstructionChanges changes, String username)
     {
         //Create new ones
         Instruction newInstr = changes.getNewInstruction();
         if (newInstr != null)
         {
-            newInstr.setCreatedBy(getUserName());
+            newInstr.setCreatedBy(username);
             dao.createInstruction(newInstr, changes.getParentId());
         }
         //update
         Instruction updatedInstr = changes.getUpdatedInstruction();
         if (updatedInstr != null)
         {
-            updatedInstr.setModifiedBy(getUserName());
+            updatedInstr.setModifiedBy(username);
             dao.updateInstruction(updatedInstr);
 
         }
@@ -1380,7 +1378,7 @@ public class FormBuilderServiceImpl implements FormBuilderService
 
     }
 
-    private void makeInstructionChanges(InstructionDAO dao, Map changesMap)
+    private void makeInstructionChanges(InstructionDAO dao, Map changesMap, String username)
     {
         //Create new ones
         Map newInstrs =
@@ -1393,7 +1391,7 @@ public class FormBuilderServiceImpl implements FormBuilderService
             {
                 String parentIdSeq = (String)keyIt.next();
                 Instruction instr = (Instruction)newInstrs.get(parentIdSeq);
-                instr.setCreatedBy(getUserName());
+                instr.setCreatedBy(username);
                 dao.createInstruction(instr, parentIdSeq);
             }
         }
@@ -1406,7 +1404,7 @@ public class FormBuilderServiceImpl implements FormBuilderService
             while (updatedInstrIt.hasNext())
             {
                 Instruction instr = (Instruction)updatedInstrIt.next();
-                instr.setModifiedBy(getUserName());
+                instr.setModifiedBy(username);
                 dao.updateInstruction(instr);
             }
         }
@@ -1425,7 +1423,7 @@ public class FormBuilderServiceImpl implements FormBuilderService
     }
 
     private void makeFooterInstructionChanges(FormInstructionDAO dao,
-                                              Map changesMap)
+                                              Map changesMap, String username)
     {
         //Create new ones
         Map newInstrs =
@@ -1438,7 +1436,7 @@ public class FormBuilderServiceImpl implements FormBuilderService
             {
                 String parentIdSeq = (String)keyIt.next();
                 Instruction instr = (Instruction)newInstrs.get(parentIdSeq);
-                instr.setCreatedBy(getUserName());
+                instr.setCreatedBy(username);
                 dao.createFooterInstruction(instr, parentIdSeq);
             }
         }
@@ -1451,7 +1449,7 @@ public class FormBuilderServiceImpl implements FormBuilderService
             while (updatedInstrIt.hasNext())
             {
                 Instruction instr = (Instruction)updatedInstrIt.next();
-                instr.setModifiedBy(getUserName());
+                instr.setModifiedBy(username);
                 dao.updateInstruction(instr);
             }
         }
@@ -1511,9 +1509,9 @@ public class FormBuilderServiceImpl implements FormBuilderService
         return daoFactory.getReferenceDocumentTypeDAO().getAllDocumentTypes();
     }
 
-    public int saveDesignation(String contextIdSeq, List acIdList)
+    public int saveDesignation(String contextIdSeq, List acIdList, String username)
     {
-        return daoFactory.getFormDAO().designate(contextIdSeq, acIdList, getUserName());
+        return daoFactory.getFormDAO().designate(contextIdSeq, acIdList, username);
     }
     
     public Boolean isAllACDesignatedToContext(List cdeIdList , String contextIdSeq){
@@ -1525,10 +1523,10 @@ public class FormBuilderServiceImpl implements FormBuilderService
 
     public String createNewFormVersion(String formIdSeq,
                                        Float newVersionNumber,
-                                       String changeNote)
+                                       String changeNote, String username)
     {
         FormDAO myDAO = daoFactory.getFormDAO();
-        String resultFormPK = myDAO.createNewFormVersion(formIdSeq, newVersionNumber, changeNote, getUserName().toUpperCase());
+        String resultFormPK = myDAO.createNewFormVersion(formIdSeq, newVersionNumber, changeNote, username.toUpperCase());
 
         resultFormPK = resultFormPK.substring(0,36);
         //Form resultForm = this.getFormDetails(resultFormPK);
@@ -1543,10 +1541,10 @@ public class FormBuilderServiceImpl implements FormBuilderService
         return versions;
     }
 
-    public void setLatestVersion(Version oldVersion, Version newVersion, List changedNoteList)
+    public void setLatestVersion(Version oldVersion, Version newVersion, List changedNoteList, String username)
     {
         FormDAO myDAO = daoFactory.getFormDAO();
-        myDAO.setLatestVersion(oldVersion, newVersion, changedNoteList, getUserName());
+        myDAO.setLatestVersion(oldVersion, newVersion, changedNoteList, username);
         return;
     }
 
@@ -1597,7 +1595,7 @@ public class FormBuilderServiceImpl implements FormBuilderService
         return;
     }
 
-    public void addFormProtocol(String formIdseq, String protocoldIdseq)
+    public void addFormProtocol(String formIdseq, String protocoldIdseq, String username)
     {
         //sanity check
         if (protocoldIdseq==null || protocoldIdseq.length()==0){            
@@ -1609,11 +1607,11 @@ public class FormBuilderServiceImpl implements FormBuilderService
         }
         
         FormDAO myDAO = daoFactory.getFormDAO();
-        myDAO.addFormProtocol(formIdseq, protocoldIdseq, getUserName());
+        myDAO.addFormProtocol(formIdseq, protocoldIdseq, username);
         return;
     }
 
-    public void addFormProtocols(String formIdseq, Collection protocols)
+    public void addFormProtocols(String formIdseq, Collection protocols, String username)
     {
         if (protocols == null || protocols.isEmpty())
         {
@@ -1625,7 +1623,7 @@ public class FormBuilderServiceImpl implements FormBuilderService
         {
             String pid = (String)it.next();
             if (pid.length()>0){
-                addFormProtocol(formIdseq, pid);
+                addFormProtocol(formIdseq, pid, username);
             }    
         }
         return;
@@ -1684,32 +1682,32 @@ public class FormBuilderServiceImpl implements FormBuilderService
         return false;
     }
     
-    public TriggerAction createTriggerAction(TriggerAction action)
+    public TriggerAction createTriggerAction(TriggerAction action, String username)
     {
         TriggerActionDAO dao = daoFactory.getTriggerActionDAO();
-        String newId = dao.createTriggerAction(action,getUserName().toUpperCase());
+        String newId = dao.createTriggerAction(action, username.toUpperCase());
         
         //create protocols and classifications
         List protocols = action.getProtocols();
         if (protocols!=null && !protocols.isEmpty()){
             for (Object obj : protocols){
-                dao.addTriggerActionProtocol(newId, ((Protocol)obj).getProtoIdseq(), getUserName().toUpperCase());
+                dao.addTriggerActionProtocol(newId, ((Protocol)obj).getProtoIdseq(), username.toUpperCase());
             }    
         }
         List csiList = action.getClassSchemeItems();
         if (csiList!=null && !csiList.isEmpty()){        
             for (Object obj : csiList){
-                dao.addTriggerActionCSI(newId, ((ClassSchemeItem)obj).getAcCsiIdseq(), getUserName().toUpperCase());
+                dao.addTriggerActionCSI(newId, ((ClassSchemeItem)obj).getAcCsiIdseq(), username.toUpperCase());
             }    
         }
         return getTriggerActionForPK(newId);
 
     }
 
-    public TriggerAction updateTriggerAction(TriggerActionChanges changes)
+    public TriggerAction updateTriggerAction(TriggerActionChanges changes, String username)
     {
         TriggerActionDAO dao = daoFactory.getTriggerActionDAO();
-        String userId = getUserName().toUpperCase();
+        String userId = username.toUpperCase();
         String triggetId = changes.getTriggerActionId();
        if(changes.getNewInstruction()!=null)
        {
@@ -1757,14 +1755,13 @@ public class FormBuilderServiceImpl implements FormBuilderService
         
     }
 
-    public void updateTriggerActions(
-       List<TriggerActionChanges> changesList){
+    public void updateTriggerActions(List<TriggerActionChanges> changesList, String username){
            if (changesList==null || changesList.isEmpty()){
                return;
            }
            
            for (TriggerActionChanges changes:changesList){
-               updateTriggerAction(changes);               
+               updateTriggerAction(changes, username);               
            }
        }
 
@@ -1776,11 +1773,10 @@ public class FormBuilderServiceImpl implements FormBuilderService
     }
     
     public Module saveQuestionRepititons(String moduleId,int repeatCount
-    , Map<String,List<QuestionRepitition>> repititionMap,
-    List<String> questionWithoutRepitions)
+    , Map<String,List<QuestionRepitition>> repititionMap, List<String> questionWithoutRepitions, String username)
     {
         QuestionRepititionDAO dao = daoFactory.getQuestionRepititionDAO();
-        String userId = getUserName().toUpperCase();
+        String userId = username.toUpperCase();
         
         if(questionWithoutRepitions!=null&&!questionWithoutRepitions.isEmpty())
         {
@@ -1914,6 +1910,6 @@ public class FormBuilderServiceImpl implements FormBuilderService
     		idseq = "";
     	}   	
     	return idseq;
-    }
+    }  
     
 }

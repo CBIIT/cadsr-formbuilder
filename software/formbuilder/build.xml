@@ -244,6 +244,10 @@ $Name: not supported by cvs2svn $
 		<delete>
 			<fileset file="${web.dir}/web.xml" />
 		</delete>
+		<filter token="DB.USERNAME" value="${DB.USERNAME}" />
+		<filter token="DB.PSWD" value="${DB.PSWD}" />
+		<filter token="DB.CONN.URL" value="${DB.CONN.URL}" />
+		
 		<copy todir="${artifacts.dir}">
 			<fileset file="build.xml" />
 			<fileset file="${PROP.FILE}" />
@@ -285,19 +289,17 @@ $Name: not supported by cvs2svn $
 		</copy>
 		<!--copy tofile="${web.dir}/spring/applicationContext-domainDao.xml" filtering="true">
 			<fileset file="${conf.dir}/template.applicationContext-domainDao.xml" />
-		</copy-->
-
-
+		</copy>
 		<copy tofile="${web.dir}/jboss-classloading.xml" filtering="true">
 			<fileset file="${conf.dir}/jboss-classloading.xml" />
 		</copy>
 
-		<!--copy tofile="${artifacts.dir}/sql/load_options.sql" filtering="true">
+		<copy tofile="${artifacts.dir}/sql/load_options.sql" filtering="true">
 			<fileset file="${conf.dir}/template.load_options.sql" />
 		</copy>
 		<copy tofile="${artifacts.dir}/jboss/formbuilder-oracle-ds.xml" filtering="true">
 			<fileset file="${conf.dir}/template.formbuilder-oracle-ds.xml" />
-		</copy-->
+		</copy>
 		<copy tofile="${artifacts.dir}/jboss/formbuilder-log4j-appender.xml" filtering="true">
 			<fileset file="${conf.dir}/template.formbuilder-log4j-appender.xml" />
 		</copy>
@@ -310,11 +312,17 @@ $Name: not supported by cvs2svn $
 		<copy tofile="${artifacts.dir}/jboss/cadsrutil-log4j-category.xml" filtering="true">
 			<fileset file="${conf.dir}/template.cadsrutil-log4j-category.xml" />
 		</copy>
-		<!--copy tofile="${artifacts.dir}/jboss/formbuilder-login-config.xml" filtering="true">
+		<copy tofile="${artifacts.dir}/jboss/formbuilder-login-config.xml" filtering="true">
 			<fileset file="${conf.dir}/template.formbuilder-login-config.xml" />
 		</copy-->
 		<copy tofile="${artifacts.dir}/jboss/formbuilder-login-config-service.xml" filtering="true">
 			<fileset file="${conf.dir}/template.formbuilder-login-config-service.xml" />
+		</copy>
+		<copy tofile="${artifacts.dir}/jboss/formbuilder_modules.cli" filtering="true">
+			<fileset file="${basedir}/formbuilder_modules.cli" />
+		</copy>
+		<copy tofile="${artifacts.dir}/jboss/formbuilder_deploy.cli" filtering="true">
+			<fileset file="${basedir}/formbuilder_deploy.cli" />
 		</copy>
 
 		<copy tofile="${artifacts.dir}/jboss/cadsrutil.properties" filtering="true">
@@ -445,32 +453,6 @@ $Name: not supported by cvs2svn $
 			</fileset>
 		</jar>
 	</target>
-
-	<!--target name="-jar_ejb" depends="-compile,-jar_persistence_form,-jar_common" description="builds formbuilder-ejb jar.">
-		<copy tofile="${temp.classes.dir}/ejb/META-INF/ejb-jar.xml" filtering="true">
-			<fileset file="${conf.dir}/template.ejb-jar.xml" />
-		</copy>
-		<copy tofile="${temp.classes.dir}/ejb/META-INF/jboss.xml" filtering="true">
-			<fileset file="${conf.dir}/template.jboss.xml" />
-		</copy>
-
-		<jar jarfile="${artifacts.dir}/jboss/formbuilder-ejb.jar">
-			<fileset dir="${temp.classes.dir}">
-				<patternset>
-					<include name="gov/nih/nci/ncicb/cadsr/formbuilder/ejb/**/*.*"/>
-					<include name="gov/nih/nci/ncicb/cadsr/common/ejb/common/**/*.*"/>
-				</patternset>
-			</fileset>
-			<fileset dir="${temp.classes.dir}/ejb" includes="META-INF/ejb-jar.xml"/>
-			<fileset dir="${temp.classes.dir}/ejb" includes="META-INF/jboss.xml"/>
-			<manifest>
-				<attribute name="Built-By" value="${user.name}"/>
-				<attribute name="Class-Path"
-                value="persistence_form.jar common.jar
-spring.jar commons-logging.jar log4j-1.2.8.jar properties/"/>
-			</manifest>
-		</jar>
-	</target-->
 
 	<target name="-build-formloader-war">
 		<ant antfile="build.xml" target="archive" dir="${formloader.dir}" inheritall="false">

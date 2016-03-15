@@ -585,7 +585,7 @@ System.out.println("sFormIdSeq found !!!!! -- " + sFormIdSeq );
            
           Form updatedCrf = service.updateForm(crf.getFormIdseq(),header, 
             updatedModules, deletedModules,addedModules,addedProtocols, 
-            removedProtocols,protocolTriggerActionChanges, instrChanges);
+            removedProtocols,protocolTriggerActionChanges, instrChanges, getLoggedInUsername(request));
           setSessionObject(request,CRF, updatedCrf,true);
           Form clonedCrf = (Form) updatedCrf.clone();
           setSessionObject(request, CLONED_CRF, clonedCrf,true);
@@ -754,7 +754,7 @@ System.out.println("sFormIdSeq found !!!!! -- " + sFormIdSeq );
           Form updatedCrf = service.updateForm(crf.getFormIdseq(),header, updatedModules
                                                   , deletedModules,addedModules,
                                                   addedProtocols, removedProtocols, 
-                                                  removeSkipPatternTriggerIds, instrChanges);
+                                                  removeSkipPatternTriggerIds, instrChanges, getLoggedInUsername(request));
           setSessionObject(request,CRF, updatedCrf);
           Form clonedCrf = (Form) updatedCrf.clone();
           setSessionObject(request, CLONED_CRF, clonedCrf);

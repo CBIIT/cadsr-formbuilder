@@ -132,7 +132,7 @@ public class FormVersionAction
           FormBuilderService service = getFormBuilderService(request);
 
           if (changed){
-              service.setLatestVersion(oldVersion, newVersion, changedNoteList);
+              service.setLatestVersion(oldVersion, newVersion, changedNoteList, getLoggedInUsername(request));
               //reload the form.
               Form newCRF = service.getFormDetails(newVersion.getId());
               setSessionObject(request, CRF, newCRF);    
@@ -216,7 +216,7 @@ public class FormVersionAction
         boolean editNewFormIndicator = "true".equalsIgnoreCase(editNewFormStr);
 
         FormBuilderService service = getFormBuilderService(request);
-        String newFormIdSeq = service.createNewFormVersion(crf.getFormIdseq(), newVersionNumber, changeNote);
+        String newFormIdSeq = service.createNewFormVersion(crf.getFormIdseq(), newVersionNumber, changeNote, getLoggedInUsername(request));
         saveMessage("cadsr.formbuilder.create.version.success", request);
         
         Form newCRF = service.getFormDetails(newFormIdSeq);

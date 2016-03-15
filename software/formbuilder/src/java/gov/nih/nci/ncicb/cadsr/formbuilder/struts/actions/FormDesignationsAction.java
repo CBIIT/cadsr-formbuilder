@@ -86,7 +86,7 @@ public class FormDesignationsAction
         FormBuilderService service = getFormBuilderService(request);
         List cdeList = crf.getCDEIdList();
 
-        int result = service.saveDesignation(cdeContextIdSeq, cdeList);
+        int result = service.saveDesignation(cdeContextIdSeq, cdeList, getLoggedInUsername(request));
       }
       catch (Exception exp) {
         if (log.isErrorEnabled()) {

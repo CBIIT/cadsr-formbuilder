@@ -758,7 +758,7 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
 
                  try {
                    FormBuilderService service = getFormBuilderService(request);
-                   savedAction = service.createTriggerAction(triggerAction);
+                   savedAction = service.createTriggerAction(triggerAction, getLoggedInUsername(request));
                      saveMessage("cadsr.formbuilder.create.skippattern.success",request);
                  } catch (Exception exp) {
                      if (log.isErrorEnabled()) {
@@ -837,7 +837,7 @@ public class SkipPatternAction extends FormBuilderSecureBaseDispatchAction {
                                }
                     try {
                       FormBuilderService service = getFormBuilderService(request);
-                      savedAction = service.updateTriggerAction(changes);
+                      savedAction = service.updateTriggerAction(changes, getLoggedInUsername(request));
                       saveMessage("cadsr.formbuilder.save.skippattern.success",request);
                       //Add Message
                     } catch (Exception exp) {

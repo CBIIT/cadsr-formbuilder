@@ -772,7 +772,7 @@ public class FormModuleEditAction  extends FormBuilderSecureBaseDispatchAction{
     try{
     //TODO move the method param to a transfer object
      updatedModule = service.updateModule(module.getModuleIdseq(),
-                            moduleChanges);
+                            moduleChanges, getLoggedInUsername(request));
     }
     catch(Exception exp)
     {
