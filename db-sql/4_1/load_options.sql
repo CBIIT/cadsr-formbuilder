@@ -26,7 +26,7 @@ whenever sqlerror exit sql.sqlcode rollback;
 */
 
 MERGE INTO SBREXT.TOOL_OPTIONS_VIEW_EXT S
-USING (SELECT 'FormBuilder' AS TOOL_NAME, 'URL' AS PROPERTY, 'https://formbuilder.nci.nih.gov' AS VALUE, 'The URL for the Form Builder Tool connected this caDSR database.' AS DESCRIPTION, 'US' AS LOCALE FROM DUAL
+USING (SELECT 'FormBuilder' AS TOOL_NAME, 'URL' AS PROPERTY, 'https://formbuilder-stage.nci.nih.gov' AS VALUE, 'The URL for the Form Builder Tool connected this caDSR database.' AS DESCRIPTION, 'US' AS LOCALE FROM DUAL
 UNION SELECT 'FormBuilder' AS TOOL_NAME, 'XML_DOWNLOAD_DIR' AS PROPERTY, '/local/content/formbuilder/output' AS VALUE, 'Download directory for the Form Builder Tool.' AS DESCRIPTION, 'US' AS LOCALE FROM DUAL
 UNION SELECT 'FormBuilder' AS TOOL_NAME, 'XML_PAGINATION_FLAG' AS PROPERTY, 'no' AS VALUE, 'A flag for pagination for download' AS DESCRIPTION, 'US' AS LOCALE FROM DUAL
 UNION SELECT 'FormBuilder' AS TOOL_NAME, 'XML_FILE_MAX_RECORDS' AS PROPERTY, '500' AS VALUE, 'Value for maximum file records' AS DESCRIPTION, 'US' AS LOCALE FROM DUAL
