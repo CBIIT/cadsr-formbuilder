@@ -1,11 +1,9 @@
 package gov.nih.nci.cadsr.common;
 
-import gov.nih.nci.ncicb.cadsr.common.CaDSRUtil;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.Connection;
-import java.util.Map;
 import java.util.Properties;
+
+import gov.nih.nci.ncicb.cadsr.common.CaDSRUtilV2;
 
 /**
  * This class can be used to retrieve property values that dictates the settings of the application from the database, 
@@ -112,7 +110,7 @@ public class PropertyHelper {
 	public static String getDefaultContextName() {
 		if(DEFAULT_CONTEXT_NAME == null) {
 			try {
-				DEFAULT_CONTEXT_NAME = CaDSRUtil.getDefaultContextNameNoCache();
+				DEFAULT_CONTEXT_NAME = CaDSRUtilV2.getDefaultContextNameNoCache();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

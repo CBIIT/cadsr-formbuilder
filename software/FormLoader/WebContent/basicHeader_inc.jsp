@@ -8,7 +8,7 @@
 
 String formbuilderUrl = "";
 try {
-	formbuilderUrl = CaDSRUtil.getFormBuilderUrlNoCache();
+	formbuilderUrl = CaDSRUtilV2.getFormBuilderUrlNoCache();
 } catch (IOException ioe) {
 	System.out.println(ioe.getMessage());
 	formbuilderUrl = "https://formbuilder.nci.nih.gov/FormBuilder/";
@@ -16,7 +16,7 @@ try {
 
 String cdeBrowserUrl = "";
 try {
-  cdeBrowserUrl = CaDSRUtil.getCdeBrowserUrlNoCache();
+  cdeBrowserUrl = CaDSRUtilV2.getCdeBrowserUrlNoCache();
 } catch (IOException ioe) {
   System.out.println(ioe.getMessage());
   cdeBrowserUrl = "https://cdebrowser.nci.nih.gov";

@@ -325,21 +325,24 @@ $Name: not supported by cvs2svn $
 			<fileset file="${basedir}/formbuilder_deploy.cli" />
 		</copy>
 
-		<copy tofile="${artifacts.dir}/jboss/cadsrutil.properties" filtering="true">
+		<copy tofile="${classes.dir}/cadsrutil.properties" filtering="true">
 			<fileset file="${conf.dir}/template.cadsrutil.properties" />
 		</copy>
-
-		<replaceregexp file="${artifacts.dir}/jboss/cadsrutil.properties" match="@tier@" replace="${tier.suffix}" flags="g"/>
+		
+		<copy tofile="${formloader.dir}/resources/cadsrutil.properties" filtering="true">
+			<fileset file="${conf.dir}/template.cadsrutil.properties" />
+		</copy>
 
 		<copy tofile="${formloader.dir}/resources/db-tier.properties" filtering="true">
 			<fileset file="${conf.dir}/template.db-tier.properties" />
 		</copy>
 
-		<echo>replacing text in file from ${formloader.dir}/resource/db-tier.properties </echo>
+		<!--  <echo>replacing text in file from ${formloader.dir}/resource/db-tier.properties </echo>
+		<replaceregexp file="${artifacts.dir}/jboss/cadsrutil.properties" match="@tier@" replace="${tier.suffix}" flags="g"/>
 		<replaceregexp file="${formloader.dir}/resources/db-tier.properties" match="@db.url@" replace="${CADSR.DS.URL}" flags="g"/>
 		<replaceregexp file="${formloader.dir}/resources/db-tier.properties" match="@db.user@" replace="${CADSR.DS.FL.USER}" flags="g"/>
 		<replaceregexp file="${formloader.dir}/resources/db-tier.properties" match="@db.password@" replace="${CADSR.DS.FL.PSWD}" flags="g"/>
-		<!--  <replaceregexp file="${artifacts.dir}/jboss/db-tier.properties" match="@db.url@" replace="${CADSR.DS.URL}" flags="g"/> -->
+		<replaceregexp file="${artifacts.dir}/jboss/db-tier.properties" match="@db.url@" replace="${CADSR.DS.URL}" flags="g"/> -->
 
 
 		<copy todir="${root.dir}/css" >
@@ -456,7 +459,7 @@ $Name: not supported by cvs2svn $
 
 	<target name="-build-formloader-war">
 		<ant antfile="build.xml" target="archive" dir="${formloader.dir}" inheritall="false">
-			<property name="tier" value="${tier}" />
+			<property name="TIER" value="${TIER}" />
 		</ant>
 	</target>
 

@@ -17,10 +17,10 @@ if (outcome != success) of /subsystem=datasources/data-source=FormBuilderDS:read
 data-source add \
 	--name=FormBuilderDS \
 	--driver-name=oracle \
-	--connection-url=jdbc:oracle:thin:@@DB.CONN.URL@ \
+	--connection-url=jdbc:oracle:thin:@@CADSR.DS.URL@ \
 	--jndi-name=java:jboss/datasources/FormBuilderDS \
-	--user-name=@DB.USERNAME@ \
-	--password=@DB.PSWD@ \
+	--user-name=@CADSR.DS.USER@ \
+	--password=@CADSR.DS.PSWD@ \
 	--use-ccm=true \
 	--max-pool-size=100 \ 
 	--blocking-timeout-wait-millis=5000 
@@ -73,5 +73,5 @@ end-if
 if (outcome != success) of ( /subsystem=security/security-domain=FormbuilderDomain/authentication=classic:read-resource)
  /subsystem=security/security-domain=FormbuilderDomain/authentication=classic:add( \
   login-modules=[{code="gov.nih.nci.ncicb.cadsr.common.security.jboss.DBLoginModuleV3", \
-  flag="required", module-options=[applicationUserName=@DB.USERNAME@,applicationPassword=@DB.PSWD@]}])
+  flag="required", module-options=[applicationUserName=@CADSR.DS.USER@,applicationPassword=@CADSR.DS.PSWD@]}])
 end-if

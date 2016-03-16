@@ -77,7 +77,7 @@ import gov.nih.nci.ncicb.cadsr.common.resource.Version;
 import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
 
 @Service("formBuilderService")
-@Transactional(readOnly=false, propagation=Propagation.REQUIRED)
+@Transactional(readOnly=false, propagation=Propagation.REQUIRED, timeout=3000)
 public class FormBuilderServiceImpl implements FormBuilderService
 {
     @Autowired
