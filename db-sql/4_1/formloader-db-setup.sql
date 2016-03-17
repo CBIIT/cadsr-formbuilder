@@ -64,4 +64,6 @@ grant select, insert, update, delete on FORMS_IN_COLLECTION to FORMLOADER;
 
 grant select, insert, update, delete on FORM_COLLECTIONS to FORMLOADER;
 
+grant select, insert, update, delete on sbrext.qc_recs_ext to FORMLOADER;
+
 commit;

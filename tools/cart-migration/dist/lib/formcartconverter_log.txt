@@ -1,0 +1,40 @@
+2014-04-07 10:56:22,837 INFO  [converter.FormCartConverter : 117] started main FormCartConverter
+2014-04-07 10:56:22,864 INFO  [org.springframework.context.support.ClassPathXmlApplicationContext : 94] Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@8965fb: display name [org.springframework.context.support.ClassPathXmlApplicationContext@8965fb]; startup date [Mon Apr 07 10:56:22 EDT 2014]; root of context hierarchy
+2014-04-07 10:56:22,900 INFO  [org.springframework.beans.factory.xml.XmlBeanDefinitionReader : 94] Loading XML bean definitions from class path resource [application-config-client.xml]
+2014-04-07 10:56:22,931 INFO  [org.springframework.beans.factory.xml.XmlBeanDefinitionReader : 94] Loading XML bean definitions from class path resource [OC_application-config-client.xml]
+2014-04-07 10:56:22,955 INFO  [org.springframework.context.support.ClassPathXmlApplicationContext : 94] Bean factory for application context [org.springframework.context.support.ClassPathXmlApplicationContext@8965fb]: org.springframework.beans.factory.support.DefaultListableBeanFactory@1f42b49
+2014-04-07 10:56:22,966 INFO  [org.springframework.beans.factory.support.DefaultListableBeanFactory : 94] Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@1f42b49: defining beans [objectCartServiceInfo,interceptor,objectCartApplicationService,objectCartAuthenticationProvider,objectCartApplicationServiceConfig]; root of factory hierarchy
+2014-04-07 10:56:23,052 INFO  [org.springframework.beans.factory.xml.XmlBeanDefinitionReader : 94] Loading XML bean definitions from resource loaded through InputStream
+2014-04-07 10:56:23,060 INFO  [org.springframework.context.support.GenericApplicationContext : 94] Refreshing org.springframework.context.support.GenericApplicationContext@10a3b24: display name [org.springframework.context.support.GenericApplicationContext@10a3b24]; startup date [Mon Apr 07 10:56:23 EDT 2014]; root of context hierarchy
+2014-04-07 10:56:23,061 INFO  [org.springframework.context.support.GenericApplicationContext : 94] Bean factory for application context [org.springframework.context.support.GenericApplicationContext@10a3b24]: org.springframework.beans.factory.support.DefaultListableBeanFactory@4cee32
+2014-04-07 10:56:23,063 INFO  [org.springframework.beans.factory.support.DefaultListableBeanFactory : 94] Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@4cee32: defining beans [interceptor,applicationService,authenticationProvider]; root of factory hierarchy
+2014-04-07 10:56:23,067 DEBUG [converter.FormCartConverter : 78] created ObjectCartService using URL and objectCartServiceInfo
+2014-04-07 10:56:23,070 INFO  [org.springframework.beans.factory.xml.XmlBeanDefinitionReader : 94] Loading XML bean definitions from resource loaded through InputStream
+2014-04-07 10:56:23,077 INFO  [org.springframework.context.support.GenericApplicationContext : 94] Refreshing org.springframework.context.support.GenericApplicationContext@1cbfe9d: display name [org.springframework.context.support.GenericApplicationContext@1cbfe9d]; startup date [Mon Apr 07 10:56:23 EDT 2014]; root of context hierarchy
+2014-04-07 10:56:23,079 INFO  [org.springframework.context.support.GenericApplicationContext : 94] Bean factory for application context [org.springframework.context.support.GenericApplicationContext@1cbfe9d]: org.springframework.beans.factory.support.DefaultListableBeanFactory@17725c4
+2014-04-07 10:56:23,081 INFO  [org.springframework.beans.factory.support.DefaultListableBeanFactory : 94] Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@17725c4: defining beans [interceptor,applicationService,authenticationProvider]; root of factory hierarchy
+2014-04-07 10:56:23,084 DEBUG [converter.FormCartConverter : 81] created ObjectCartClient using URL https://objcart-dev.nci.nih.gov/objcart10/
+2014-04-07 10:56:23,085 INFO  [converter.FormCartConverter : 86] FormCartConverter created using URL https://objcart-dev.nci.nih.gov/objcart10/ operating on the guest cart
+2014-04-07 10:56:23,089 FATAL [converter.FormCartConverter : 166] java.lang.RuntimeException: FormCartConverter failed to create FormBuilder service 
+java.lang.RuntimeException: FormCartConverter failed to create FormBuilder service 
+	at converter.FormCartConverter.<init>(FormCartConverter.java:108)
+	at converter.FormCartConverter.main(FormCartConverter.java:142)
+Caused by: javax.naming.NoInitialContextException: Cannot instantiate class: org.jnp.interfaces.NamingContextFactory [Root exception is java.lang.ClassNotFoundException: org.jnp.interfaces.NamingContextFactory]
+	at javax.naming.spi.NamingManager.getInitialContext(NamingManager.java:657)
+	at javax.naming.InitialContext.getDefaultInitCtx(InitialContext.java:288)
+	at javax.naming.InitialContext.init(InitialContext.java:223)
+	at javax.naming.InitialContext.<init>(InitialContext.java:197)
+	at converter.FormCartConverter.<init>(FormCartConverter.java:100)
+	... 1 more
+Caused by: java.lang.ClassNotFoundException: org.jnp.interfaces.NamingContextFactory
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:202)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:190)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:306)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:301)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:247)
+	at java.lang.Class.forName0(Native Method)
+	at java.lang.Class.forName(Class.java:249)
+	at com.sun.naming.internal.VersionHelper12.loadClass(VersionHelper12.java:46)
+	at javax.naming.spi.NamingManager.getInitialContext(NamingManager.java:654)
+	... 5 more

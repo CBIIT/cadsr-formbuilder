@@ -8,8 +8,6 @@ set heading off
 set define off
 set scan off
 
-spool ./GF32671_fb_whats_new_link.log
-
 select * from tool_options_view_ext where tool_name = 'FormBuilder' and property = 'WHATS_NEW_URL';
 
 MERGE INTO SBREXT.TOOL_OPTIONS_VIEW_EXT S

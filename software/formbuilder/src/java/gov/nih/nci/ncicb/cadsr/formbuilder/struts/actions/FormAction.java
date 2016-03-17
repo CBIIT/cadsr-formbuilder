@@ -1,6 +1,5 @@
 package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,6 +27,7 @@ import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
 import gov.nih.nci.ncicb.cadsr.common.cdebrowser.DataElementSearchBean;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormTransferObject;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormV2TransferObject;
+import gov.nih.nci.ncicb.cadsr.common.exception.FatalException;
 import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
 import gov.nih.nci.ncicb.cadsr.common.jsp.bean.PaginationBean;
 import gov.nih.nci.ncicb.cadsr.common.resource.Context;
@@ -69,8 +69,40 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
           ActionForward forward = super.dispatchMethod(mapping, form, request, response, name);
           request.getSession().setAttribute("Initialized", "true");
       return forward;
-      }
+      } 
+    
+    public static boolean isHtmlAndScriptClean( List<String> s)
+    {
+    	for( String str: s )
+    	{
+    		if(str.matches( "^.*(%|<|>).*$" ))
+    		{
+    			return false;
+    		}
+    	}
+    	return true;
+    }
 
+    public boolean isValidParmeter(DynaActionForm searchForm)
+    {
+    	List<String> strList = new ArrayList<String>();
+    	strList.add((String) searchForm.get(SEARCH_FORM_NAME));
+    	strList.add((String) searchForm.get(SEARCH_PROTO_IDSEQ));
+    	strList.add((String)searchForm.get(PROTOCOLS_LOV_NAME_FIELD));
+    	strList.add((String) searchForm.get(SEARCH_CONTEXT_IDSEQ));
+    	strList.add((String) searchForm.get(SEARCH_WORKFLOW));
+    	strList.add((String) searchForm.get(SEARCH_CATEGORY_NAME));
+    	strList.add((String) searchForm.get(SEARCH_FORM_TYPE));
+    	strList.add((String) searchForm.get(CS_CSI_ID));
+    	strList.add((String) searchForm.get(CS_ID));
+    	strList.add((String)searchForm.get(SEARCH_FORM_PUBLICID));
+    	strList.add((String)searchForm.get(LATEST_VERSION_INDICATOR));
+    	strList.add((String)searchForm.get(MODULE_LONG_NAME));
+    	strList.add((String)searchForm.get(CDE_PUBLIC_ID)); 
+    	boolean isValid = isHtmlAndScriptClean(strList);
+    	
+    	return isValid;
+    }
 
   /**
    * Returns all forms for the given criteria.
@@ -96,26 +128,28 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
 
     FormBuilderService service = getFormBuilderService(request);
     DynaActionForm searchForm = (DynaActionForm) form;
-    String formLongName = (String) searchForm.get(this.SEARCH_FORM_NAME);
-    String protocolIdSeq = (String) searchForm.get(this.SEARCH_PROTO_IDSEQ);
-    String proptocolName = (String)searchForm.get(this.PROTOCOLS_LOV_NAME_FIELD);
-    String contextIdSeq = (String) searchForm.get(this.SEARCH_CONTEXT_IDSEQ);
-    String workflow = (String) searchForm.get(this.SEARCH_WORKFLOW);
-    String categoryName = (String) searchForm.get(this.SEARCH_CATEGORY_NAME);
-    String type = (String) searchForm.get(this.SEARCH_FORM_TYPE);
-    String csCsiIdSeq = (String) searchForm.get(this.CS_CSI_ID);
-    String csIdseq = (String) searchForm.get(this.CS_ID);
-    String publicId = (String)searchForm.get(this.SEARCH_FORM_PUBLICID);
-    String version = (String)searchForm.get(this.LATEST_VERSION_INDICATOR);
-    String moduleLongName = (String)searchForm.get(this.MODULE_LONG_NAME);
-    String cdePublicId = (String)searchForm.get(this.CDE_PUBLIC_ID); 
+    String formLongName = (String) searchForm.get(SEARCH_FORM_NAME);
+    String protocolIdSeq = (String) searchForm.get(SEARCH_PROTO_IDSEQ);
+    String proptocolName = (String)searchForm.get(PROTOCOLS_LOV_NAME_FIELD);
+    String contextIdSeq = (String) searchForm.get(SEARCH_CONTEXT_IDSEQ);
+    String workflow = (String) searchForm.get(SEARCH_WORKFLOW);
+    String categoryName = (String) searchForm.get(SEARCH_CATEGORY_NAME);
+    String type = (String) searchForm.get(SEARCH_FORM_TYPE);
+    String csCsiIdSeq = (String) searchForm.get(CS_CSI_ID);
+    String csIdseq = (String) searchForm.get(CS_ID);
+    String publicId = (String)searchForm.get(SEARCH_FORM_PUBLICID);
+    String version = (String)searchForm.get(LATEST_VERSION_INDICATOR);
+    String moduleLongName = (String)searchForm.get(MODULE_LONG_NAME);
+    String cdePublicId = (String)searchForm.get(CDE_PUBLIC_ID); 
 
+    if (!isValidParmeter(searchForm))
+    	throw new FatalException("Invalid search parameters.", new Exception("Invalid search parameters"));
    //Set the Context Name
    
-   List contexts = (List)this.getSessionObject(request,this.ALL_CONTEXTS);
+   List contexts = (List)this.getSessionObject(request,ALL_CONTEXTS);
    Context currContext = getContextForId(contexts,contextIdSeq);
    if(currContext!=null)
-    searchForm.set(this.SEARCH_CONTEXT_NAME,currContext.getName());
+    searchForm.set(SEARCH_CONTEXT_NAME,currContext.getName());
    
    Collection forms = null;
    String nodeType = request.getParameter("P_PARAM_TYPE");

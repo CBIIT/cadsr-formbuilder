@@ -50,6 +50,7 @@ $Name: not supported by cvs2svn $
         TOOL.ROOT.DIR = ${TOOL.ROOT.DIR}
         TOOL.LOG.DIR = ${TOOL.LOG.DIR}
     </echo>
+
 	<condition property="check.props">
 		<and>
 			<isset property="JDEBUG" />
@@ -137,7 +138,7 @@ $Name: not supported by cvs2svn $
 
 	<!-- these values that replaces some tags in the tool, are needed at the build time -->
 	<filter token="Tool.ds.jndi.Name" value="FormBuilderDS"/>
-	<filter token="Tool.Version" value="4.1 Formbuilder-4.1-RC-06"/>
+	<filter token="Tool.Version" value="4.1 Formbuilder-4.1-RC-07"/>
 	<!-- <filter token="Tool.Build" value="4"/> -->
 	<filter token="Tool.Support" value="ncicbiit@mail.nih.gov"/>
 	<filter token="Tool.Version.Suffix" value="4_1"/>
@@ -202,7 +203,6 @@ $Name: not supported by cvs2svn $
 		<mkdir dir="${artifacts.dir}/sql"/>
 		<mkdir dir="${tr.dir}"/>
 		<mkdir dir="${web.dir}/lib"/>
-
 	</target>
 
 	<target name="-compile" depends="clean,-prop-check" description="Compiles the project source.">
@@ -244,9 +244,6 @@ $Name: not supported by cvs2svn $
 		<delete>
 			<fileset file="${web.dir}/web.xml" />
 		</delete>
-		<filter token="DB.USERNAME" value="${DB.USERNAME}" />
-		<filter token="DB.PSWD" value="${DB.PSWD}" />
-		<filter token="DB.CONN.URL" value="${DB.CONN.URL}" />
 		
 		<copy todir="${artifacts.dir}">
 			<fileset file="build.xml" />

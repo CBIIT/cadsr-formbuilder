@@ -5,12 +5,11 @@ in the order suggested:
 FormBuilder/FormLoader 4.1 related scripts
 
 1. load_options.sql (SBREXT)
-2. GF32430_fb_help_link.sql (SBREXT)
-3. GF32671_fb_whats_new_link.sql (SBREXT)
-4. formloader-db-setup.sql (SBREXT)
-5. SBREXT_FORM_BUILDER_PKG.pkb (SBREXT)
-6. SBREXT_FORM_BUILDER_PKG.pks (SBREXT)
-7. FormLoader41.sql (SBR)
+2. GF32671_fb_whats_new_link.sql (SBREXT)
+3. formloader-db-setup.sql (SBREXT)
+4. SBREXT_FORM_BUILDER_PKG.pkb (SBREXT)
+5. SBREXT_FORM_BUILDER_PKG.pks (SBREXT)
+6. FormLoader41.sql (SBR)
 
 Change Default Context to NCIP related scripts
 
