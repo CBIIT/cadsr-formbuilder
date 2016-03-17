@@ -604,7 +604,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
 					if (selectedSaveItems != null) {
 						for (Object version2Form : selectedSaveItems) {
 							itemsToRemove.add(((FormV2TransferObject)version2Form).getFormIdseq());
-							FormV2 crf = service.getFormDetailsV2(((FormV2TransferObject)version2Form).getFormIdseq());
+							FormV2 crf = service.getFormDetailsV2New(((FormV2TransferObject)version2Form).getFormIdseq());
 							itemsToAdd.add(translateCartObject((FormV2) crf));
 						}
 	

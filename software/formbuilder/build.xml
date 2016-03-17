@@ -136,7 +136,7 @@ $Name: not supported by cvs2svn $
 
 <!-- these values that replaces some tags in the tool, are needed at the build time -->
 <filter token="Tool.ds.jndi.Name" value="FormBuilderDS"/>
-<filter token="Tool.Version" value="4.1 Formbuilder-4.1-RC-07"/>
+<filter token="Tool.Version" value="4.1 Formbuilder-4.1-RC-08"/>
 <!-- <filter token="Tool.Build" value="4"/> -->
 <filter token="Tool.Support" value="ncicbiit@mail.nih.gov"/>
 <filter token="Tool.Version.Suffix" value="4_1"/>
@@ -206,7 +206,7 @@ $Name: not supported by cvs2svn $
 <classpath refid="libpath"/>
 </javac>
 
-<unzip src="${lib.dir}/cadsrutil.jar" dest="${temp.classes.dir}" overwrite="No"/>
+<unzip src="${lib.dir}/cadsrutil.jar" dest="${temp.classes.dir}" overwrite="false"/>
 <!-- add the jndi name from the template -->	
 <copy tofile="${classes.dir}/gov/nih/nci/ncicb/cadsr/common/jndi.properties" filtering="true" overwrite="Yes">
 <fileset file="${conf.dir}/template.jndi.properties"/>
@@ -520,7 +520,7 @@ spring.jar commons-logging.jar log4j-1.2.8.jar properties/"/>
 		<delete file="${jsp.dir}/cvsdeploy.txt" />
 	</target>
 
-    <target name="-build-ear" depends="-jar_ejb,-build-war,-build-formloader-war" description="builds formbuilder ear.">            
+    <target name="-build-ear" depends="-jar_ejb,-build-war,-build-formloader-war" description="builds formbuilder ear.">         
 	  <copy tofile="${artifacts.dir}/META-INF/application.xml" filtering="true">
 		<fileset file="${conf.dir}/template.application.xml" />
 	  </copy>

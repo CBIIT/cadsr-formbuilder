@@ -31,6 +31,8 @@ public interface FormBuilderServiceRemote {
     public Form getFormDetails(String formPK) throws RemoteException;
 
     public FormV2 getFormDetailsV2(String formPK) throws RemoteException;
+    
+    public FormV2 getFormDetailsV2New(String formPK) throws RemoteException;
 
     public Form updateForm(String formIdSeq, Form formHeader, Collection updatedModules,
         Collection deletedModules,Collection addedModules,

@@ -37,6 +37,8 @@ public interface FormBuilderServiceDelegate {
     public Form getFormDetails(String formPK) throws FormBuilderException;
 
     public FormV2 getFormDetailsV2(String formPK) throws FormBuilderException;
+    
+    public FormV2 getFormDetailsV2New(String formPK) throws FormBuilderException;
 
     public Form updateForm(String formIdSeq, Form formHeader, Collection updatedModules,
         Collection deletedModules,Collection addedModules,
