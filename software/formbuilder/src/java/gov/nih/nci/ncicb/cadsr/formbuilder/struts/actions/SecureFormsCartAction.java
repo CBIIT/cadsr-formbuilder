@@ -212,7 +212,7 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchActionWi
 						Collection displayItemsToMerge = new ArrayList();
 						for (Object version2FormId : selectedSaveItems) {
 							itemsToRemove.add((String)version2FormId);
-							FormV2 crf = service.getFormDetailsV2((String)version2FormId);
+							FormV2 crf = service.getFormDetailsV2New((String)version2FormId);
 							itemsToAdd.add(translateCartObject((FormV2) crf));
 							// TODO add saving to FormDisplayCart as well
 							displayItemsToMerge.add(convertToDisplayItem(crf));

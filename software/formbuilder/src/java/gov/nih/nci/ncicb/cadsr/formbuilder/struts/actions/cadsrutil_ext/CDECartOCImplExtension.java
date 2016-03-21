@@ -120,7 +120,7 @@ public class CDECartOCImplExtension extends gov.nih.nci.ncicb.cadsr.objectCart.i
 			    		log.info("Form " + FCDO.getPublicId() + " " + FCDO.getVersion() + " in cart not found in database");
 			    		FCDO.setLongName(formNotInDatabaseLongNamePrefix + FCDO.getLongName());   		
 					}
-					FCDO.setProtocols(formBuilderService.getFormDetailsV2(FCDO.getIdseq()).getProtocols());
+					FCDO.setProtocols(formBuilderService.getFormDetailsV2New(FCDO.getIdseq()).getProtocols());
 					itemList.add(new FormCartDisplayObjectPersisted(FCDO, true));
 					log.debug("Loaded " + FCDO.getIdseq());
 					

@@ -31,6 +31,8 @@ public interface FormBuilderService {
     public Form getFormDetails(String formPK);
 
     public FormV2 getFormDetailsV2(String formPK);
+    
+    public FormV2 getFormDetailsV2New(String formPK);
 
     public Form updateForm(String formIdSeq, Form formHeader, Collection updatedModules,
         Collection deletedModules,Collection addedModules,
