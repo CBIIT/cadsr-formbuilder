@@ -34,7 +34,7 @@ $(document).ready(function()
     <%@ include file="../common/in_process_common_header_inc.jsp"%>
     <logic:present name="nciUser">
 	    <jsp:include page="../common/tab_inc.jsp" flush="true">
-	      <jsp:param name="label" value="View&nbsp;Valid&nbsp;Values"/>
+	      <jsp:param name="label" value="View Valid Values"/>
 	      <jsp:param name="urlPrefix" value=""/>
 	    </jsp:include>
     </logic:present>

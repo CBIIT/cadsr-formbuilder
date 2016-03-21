@@ -1,8 +1,10 @@
 <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 
 <%
 	String urlPrefix = request.getContextPath();
 	String label = pageContext.getRequest().getParameter("label");
+	System.out.println("*********Value of label here = " + label);
 %>
 
 <TABLE width=100% Cellpadding=0 Cellspacing=0 border=0>
@@ -24,7 +26,8 @@
 			<table border=0 cellpadding=0 cellspacing=0>
 				<tr>
 <TD bgcolor="#336699" width="1%" align=LEFT valign=TOP><IMG SRC="<%=urlPrefix%>/i/ctab_open.gif" alt="image" height=21 width=18 border=0></TD>
-<TD width=2% bgcolor="#336699"><b><font size="-1" face="Arial" color="#FFFFFF"><%=label%></font></b></TD>
+
+<TD width=2% bgcolor="#336699"><b><font size="-1" face="Arial" color="#FFFFFF"><%=label.replace("+", " ")%></font></b></TD>
 <TD bgcolor="#336699" width="1%" align=RIGHT valign=TOP><IMG SRC="<%=urlPrefix%>/i/ctab_close.gif" alt="image" height=21 width=12 border=0></TD>
 				</tr>
 			</table>

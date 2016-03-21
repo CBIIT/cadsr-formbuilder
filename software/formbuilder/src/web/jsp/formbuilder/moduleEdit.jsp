@@ -417,7 +417,7 @@ function clearProtocol() {
       
       <%@ include file="../common/in_process_common_header_inc.jsp"%>
       <jsp:include page="../common/tab_inc.jsp" flush="true">
-        <jsp:param name="label" value="Edit&nbsp;Module"/>
+        <jsp:param name="label" value="Edit Module"/>
         <jsp:param name="urlPrefix" value=""/>
       </jsp:include>
 	  <table>

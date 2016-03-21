@@ -6,8 +6,11 @@ import javax.servlet.http.HttpSessionListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
+import gov.nih.nci.ncicb.cadsr.common.formbuilder.service.LockingService;
 import gov.nih.nci.ncicb.cadsr.common.servicelocator.ApplicationServiceLocator;
 import gov.nih.nci.ncicb.cadsr.common.servicelocator.ServiceLocatorException;
 import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
@@ -27,10 +30,12 @@ public class FormLockerSessionListener implements HttpSessionListener{
     }
 
     public void sessionDestroyed(HttpSessionEvent se) {
-         if (log.isDebugEnabled()){
-             log.debug("Session " + se.getSession().getId() + " is about to be destroyed.");
-         }
-        getApplicationServiceLocator(se.getSession().getServletContext()).findLockingService().unlockFormBySession(se.getSession().getId());
+    	if (log.isDebugEnabled()){
+    		log.debug("Session " + se.getSession().getId() + " is about to be destroyed.");
+    	}
+    	ApplicationContext context =  WebApplicationContextUtils.getWebApplicationContext(se.getSession().getServletContext());
+    	LockingService lockingService = (LockingService) context.getBean("lockingService");
+    	lockingService.unlockFormBySession(se.getSession().getId());
     }
     
     

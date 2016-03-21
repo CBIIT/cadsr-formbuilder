@@ -57,7 +57,7 @@ function setDefaults() {
 <BODY bgcolor="#ffffff" topmargin="0">
   	<%@ include file="../common/in_process_common_header_inc.jsp"%>
       <jsp:include page="../common/tab_inc.jsp" flush="true">
-        <jsp:param name="label" value="Search&nbsp;Preferences"/>
+        <jsp:param name="label" value="Search Preferences"/>
         <jsp:param name="urlPrefix" value=""/>
       </jsp:include>
      

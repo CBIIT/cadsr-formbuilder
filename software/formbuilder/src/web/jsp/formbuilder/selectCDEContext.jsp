@@ -28,7 +28,7 @@
 <BODY topmargin=0 bgcolor="#ffffff">
 <%@ include  file="../common/in_process_common_header_inc.jsp" %>
     <jsp:include page="../common/tab_inc.jsp" flush="true">
-      <jsp:param name="label" value="Data&nbsp;Element&nbsp;Designation"/>
+      <jsp:param name="label" value="Data Element Designation"/>
       <jsp:param name="urlPrefix" value=""/>
 </jsp:include>
 

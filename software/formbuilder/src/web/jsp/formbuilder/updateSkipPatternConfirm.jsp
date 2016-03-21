@@ -37,7 +37,7 @@ function submitFormToUpdateSkipPattern(choice) {
 <%@ include file="../common/in_process_common_header_inc.jsp"%>
 
 <jsp:include page="../common/tab_inc.jsp" flush="true">
-	<jsp:param name="label" value="Update&nbsp;Skip&nbsp;Pattern" />
+	<jsp:param name="label" value="Update Skip Pattern" />
 	<jsp:param name="urlPrefix" value="" />
 </jsp:include>
 <%@ include file="showMessages.jsp" %>

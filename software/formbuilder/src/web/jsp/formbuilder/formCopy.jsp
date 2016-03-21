@@ -33,7 +33,7 @@
 
     <%@ include file="../common/in_process_common_header_inc.jsp"%>
     <jsp:include page="../common/tab_inc.jsp" flush="true">
-      <jsp:param name="label" value="Copy&nbsp;Form"/>
+      <jsp:param name="label" value="Copy Form"/>
       <jsp:param name="urlPrefix" value=""/>
     </jsp:include>
 

@@ -1,7 +1,8 @@
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <%
 	String urlPrefix = pageContext.getRequest().getParameter("urlPrefix");
 	String label = pageContext.getRequest().getParameter("label");
+	System.out.println("*********Value of label here = " + label);
 %>
 
 <TABLE width=100% Cellpadding=0 Cellspacing=0 border=0>
@@ -13,7 +14,7 @@
 
 
 <TD bgcolor="#336699" width="1%" align=LEFT valign=TOP><IMG SRC="<%=urlPrefix%>i/ctab_open.gif" height=21 width=18 border=0></TD>
-<TD width=1% bgcolor="#336699"><b><font size="-1" face="Arial" color="#FFFFFF"><%=label%></font></b></TD>
+<TD width=1% bgcolor="#336699"><b><font size="-1" face="Arial" color="#FFFFFF"><%=label.replace("+", " ")%></font></b></TD>
 <TD bgcolor="#336699" width="1%" align=RIGHT valign=TOP><IMG SRC="<%=urlPrefix%>i/ctab_close.gif" height=21 width=12 border=0></TD>
 
 

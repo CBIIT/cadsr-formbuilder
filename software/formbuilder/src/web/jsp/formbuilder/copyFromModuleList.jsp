@@ -121,7 +121,7 @@ function submitModuleListEdit(methodName) {
       
     <%@ include file="../common/in_process_common_header_inc.jsp"%>
     <jsp:include page="../common/tab_inc.jsp" flush="true">
-      <jsp:param name="label" value="Selected&nbsp;Module&nbsp;cart"/>
+      <jsp:param name="label" value="Selected Module cart"/>
       <jsp:param name="urlPrefix" value=""/>
     </jsp:include>
 

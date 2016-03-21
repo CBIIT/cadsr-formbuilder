@@ -53,7 +53,7 @@ $(document).ready(function()
         <%@ include  file="/jsp/common/common_header_inc.jsp" %>
         
         <jsp:include page="/jsp/common/tab_inc.jsp" flush="true">
-                <jsp:param name="label" value="Form&nbsp;Search" />
+                <jsp:param name="label" value="Form Search" />
                 <jsp:param name="urlPrefix" value="" />
         </jsp:include>
 </logic:notPresent>        
@@ -63,7 +63,7 @@ $(document).ready(function()
             <%@ include  file="/jsp/common/in_process_common_header_no_strip_inc.jsp" %>
             
             <jsp:include page="/jsp/common/tab_inc.jsp" flush="true">
-                    <jsp:param name="label" value="Skip&nbsp;to&nbsp;Form&nbsp;Search" />
+                    <jsp:param name="label" value="Skip to Form Search" />
                     <jsp:param name="urlPrefix" value="../" />
             </jsp:include>
     </logic:present>  
@@ -72,7 +72,7 @@ $(document).ready(function()
             <%@ include  file="/jsp/common/in_process_common_header_no_strip_inc.jsp" %>
             
             <jsp:include page="/jsp/common/tab_inc.jsp" flush="true">
-                    <jsp:param name="label" value="Copy&nbsp;module&nbsp;Form&nbsp;Search" />
+                    <jsp:param name="label" value="Copy module Form Search" />
                     <jsp:param name="urlPrefix" value="../" />
             </jsp:include>
     </logic:present>  

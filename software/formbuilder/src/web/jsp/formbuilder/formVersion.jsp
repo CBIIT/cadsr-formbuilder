@@ -45,7 +45,7 @@ $(document).ready(function()
 <BODY topmargin=0 bgcolor="#ffffff">
 <%@ include  file="../common/in_process_common_header_inc.jsp" %>
     <jsp:include page="../common/tab_inc.jsp" flush="true">
-      <jsp:param name="label" value="Create&nbsp;New&nbsp;Version"/>
+      <jsp:param name="label" value="Create New Version"/>
       <jsp:param name="urlPrefix" value=""/>
 </jsp:include>
 

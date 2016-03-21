@@ -1,4 +1,4 @@
-
+<%@ page pageEncoding="UTF-8"%>
 <%@page import="gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams"%>
 
 <%
