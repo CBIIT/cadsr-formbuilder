@@ -75,7 +75,7 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
     {
     	for( String str: s )
     	{
-    		if(str.matches( "^.*(%|<|>).*$" ))
+    		if(str != null && str.matches( "^.*(%|<|>).*$" ))
     		{
     			return false;
     		}
