@@ -54,7 +54,7 @@ public class FormDownloadXMLAction extends Action {
 		try {
 			//crf = service.getFormDetailsV2(formIdSeq);
 			crf = service.getFormDetailsV2New(formIdSeq);
-		} catch (FormBuilderException exp) {
+		} catch (Exception exp) {
 			log.error("Exception getting CRF", exp);
 			return mapping.findForward(CommonNavigationConstants.FAILURE);
 		}
