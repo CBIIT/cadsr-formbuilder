@@ -5,20 +5,19 @@
 	SRC='<html:rewrite page="/js/helpWinJS.js"/>'></SCRIPT>
 	<BODY topmargin="0">
 		<table width="100%" border="0" cellspacing="0" cellpadding="0">
-			<tr bgcolor="#A90101">
-				<td valign="center" align="left">
+			<tr>
+				<td valign="top" align="left" width="30%">
 					<a href="http://www.cancer.gov" target="_blank">
-						<img src="<%=request.getContextPath()%>/i/brandtype.gif" 
+						<img src="<%=request.getContextPath()%>/i/CBIIT-36px-Logo-COLOR_contrast.png" 
 							alt="NCI Logo" border="0"> </a>
 				</td>
-				<td valign="center" align="right">
-					<a href="http://www.cancer.gov" target="_blank">
-						<img src="<%=request.getContextPath()%>/i/tagline_nologo.gif" 
-							alt="NCI Logo" border="0">
-					</a>
+				<td valign="top" align="right" width="40%">
+					<img src="<%=request.getContextPath()%>/i/cde_form_builder_banner.gif" alt="Form Builder Banner" border="0">
+				</td>
+				<td valign="top" align="right" width="30%" style="text-decoration: underline;font-size: 13.33px;color: #0645AD;">
+					<a href="http://www.cancer.gov/" target="_blank"><span>U.S. National Institutes of Health</span></a>
 				</td>
 			</tr>
 		</table>
 	</BODY>
 </HTML>
-

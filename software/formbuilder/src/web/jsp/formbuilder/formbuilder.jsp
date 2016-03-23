@@ -56,10 +56,10 @@ $(document).ready(function()
 </HEAD>
   <jsp:useBean id="requestMap" scope="request" class="java.util.HashMap"/>
   
-<frameset rows="30,*">
+<frameset rows="52,*">
   <html:frame title="treeHeader" page="/jsp/common/topHeader.jsp" frameborder="0" scrolling = "no" frameName="tree_header"/>
   <frameset cols="25%,*">
-    <frameset rows="7%,*">
+    <frameset rows="8%,*">
        <html:frame title="requestMap" page="/jsp/common/tree_hdr.jsp"
               name="requestMap"
               frameborder="0"
