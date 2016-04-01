@@ -135,6 +135,7 @@ $Name: not supported by cvs2svn $
 	<filter token="TOOL.LOG.DIR" value="${TOOL.LOG.DIR}" />
 	<filter token="JBOSS.LOG.DIR" value="${JBOSS.LOG.DIR}" />
 	<filter token="TOOL.ROOT.DIR" value="${TOOL.ROOT.DIR}" />
+	<filter token="logLevel" value="${logLevel}" />
 
 	<!-- these values that replaces some tags in the tool, are needed at the build time -->
 	<filter token="Tool.ds.jndi.Name" value="FormBuilderDS"/>
