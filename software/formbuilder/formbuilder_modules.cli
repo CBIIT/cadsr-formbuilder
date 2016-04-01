@@ -70,7 +70,7 @@ if (outcome != success) of /subsystem=security/security-domain=FormbuilderDomain
 /subsystem=security/security-domain=FormbuilderDomain:add(cache-type=default)
 end-if
 
-if (outcome != success) of ( /subsystem=security/security-domain=FormbuilderDomain/authentication=classic:read-resource)
+if (outcome != success) of /subsystem=security/security-domain=FormbuilderDomain/authentication=classic:read-resource
  /subsystem=security/security-domain=FormbuilderDomain/authentication=classic:add( \
   login-modules=[{code="gov.nih.nci.ncicb.cadsr.common.security.jboss.DBLoginModuleV3", \
   flag="required", module-options=[applicationUserName=@CADSR.DS.USER@,applicationPassword=@CADSR.DS.PSWD@]}])

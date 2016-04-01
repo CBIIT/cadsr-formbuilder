@@ -252,15 +252,15 @@ $Name: not supported by cvs2svn $
 		</copy>
 
 		<!-- jars needed for initial server setup -->
-		<copy tofile="${artifacts.dir}/jboss/xercesImpl.jar" filtering="true">
+		<copy tofile="${artifacts.dir}/jboss/xercesImpl.jar">
 			<fileset file="${formloader.dir}/build-jars/xercesImpl-2.11.0.jar" />
 		</copy>
 
-		<copy tofile="${artifacts.dir}/jboss/xml-apis-1.4.01.jar" filtering="true">
+		<copy tofile="${artifacts.dir}/jboss/xml-apis-1.4.01.jar">
 			<fileset file="${formloader.dir}/build-jars/xml-apis-1.4.01.jar" />
 		</copy>
 
-		<copy tofile="${artifacts.dir}/jboss/org.eclipse.wst.xml.xpath2.processor_1.1.0.jar" filtering="true">
+		<copy tofile="${artifacts.dir}/jboss/org.eclipse.wst.xml.xpath2.processor_1.1.0.jar">
 			<fileset file="${formloader.dir}/build-jars/org.eclipse.wst.xml.xpath2.processor_1.1.0.jar" />
 		</copy>
 
@@ -268,7 +268,7 @@ $Name: not supported by cvs2svn $
 		<copy file="${lib.dir}/hibernate-annotations-3.2.0.jar" tofile="${artifacts.dir}/jboss/hibernate-annotations-3.2.0.jar" overwrite="true"/>
 		<copy file="${lib.dir}/hibernate-validator-3.0.0.GA.jar" tofile="${artifacts.dir}/jboss/hibernate-validator-3.0.0.GA.jar" overwrite="true"/>
 -->
-		<copy tofile="${artifacts.dir}/jboss/ojdbc5.jar" filtering="true">
+		<copy tofile="${artifacts.dir}/jboss/ojdbc5.jar">
 			<fileset file="${lib.dir}/ojdbc5.jar" />
 		</copy>
 
