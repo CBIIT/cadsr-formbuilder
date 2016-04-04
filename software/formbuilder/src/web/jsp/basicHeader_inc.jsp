@@ -4,10 +4,10 @@
 <%@ include  file="common/topHeader.jsp" %>
 <TABLE width=100% Cellpadding=0 Cellspacing=0 border=0>
   <tr>
-    <td align="left" nowrap>
+    <%-- <td align="left" nowrap>
 
     <img src="<%=request.getContextPath()%>/i/cde_form_builder_banner_full.gif" alt="CDE Form Builder" border=0>
-    </td>
+    </td> --%>
 
     <td align=right valign=top nowrap>
       <TABLE Cellpadding=0 Cellspacing=0 border=0>

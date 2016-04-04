@@ -10,7 +10,7 @@ L--%>
 <HTML>
 <BODY topmargin="0">
 		<table width="100%" border="0" cellspacing="0" cellpadding="0">
-			<tr bgcolor="#A90101">
+			<%-- <tr bgcolor="#A90101">
 				<td valign="center" align="left">
 					<a href="http://www.cancer.gov" target="_blank" alt="NCI Logo">
 						<img src="<%=request.getContextPath()%>/i/brandtype.gif"
@@ -21,6 +21,19 @@ L--%>
 						<img src="<%=request.getContextPath()%>/i/tagline_nologo.gif"
 							border="0">
 					</a>
+				</td>
+			</tr> --%>
+			<tr>
+				<td valign="top" align="left" width="30%">
+					<a href="http://www.cancer.gov" target="_blank">
+						<img src="<%=request.getContextPath()%>/i/CBIIT-36px-Logo-COLOR_contrast.png" 
+							alt="NCI Logo" border="0"> </a>
+				</td>
+				<td valign="top" align="right" width="40%">
+					<img src="<%=request.getContextPath()%>/i/form_loader_banner.jpg" alt="Form Loader Banner" border="0">
+				</td>
+				<td valign="top" align="right" width="30%" style="text-decoration: underline;font-size: 13.33px;color: #0645AD;">
+					<a href="http://www.nih.gov/" target="_blank"><span>U.S. National Institutes of Health</span></a>
 				</td>
 			</tr>
 		</table>

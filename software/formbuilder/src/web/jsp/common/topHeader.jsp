@@ -15,7 +15,7 @@
 					<img src="<%=request.getContextPath()%>/i/cde_form_builder_banner.gif" alt="Form Builder Banner" border="0">
 				</td>
 				<td valign="top" align="right" width="30%" style="text-decoration: underline;font-size: 13.33px;color: #0645AD;">
-					<a href="http://www.cancer.gov/" target="_blank"><span>U.S. National Institutes of Health</span></a>
+					<a href="http://www.nih.gov/" target="_blank"><span>U.S. National Institutes of Health</span></a>
 				</td>
 			</tr>
 		</table>

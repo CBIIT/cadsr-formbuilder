@@ -22,11 +22,11 @@ try {
 <TABLE width=100% Cellpadding=0 Cellspacing=0 border=0>
   <tr>
     <td align="left" valign="TOP">
-       <a href="http://ncicb.nci.nih.gov/NCICB/infrastructure/cacore_overview/cadsr" target="_blank"><img src="<%=request.getContextPath()%>/i/caDSR_logo.gif" border=0></a>
+       <a href="http://cbiit.nci.nih.gov/" target="_blank"><img src="<%=request.getContextPath()%>/i/caDSR_logo.gif" border=0></a>
     </td>
-    <td align="left" nowrap>
+    <%-- <td align="left" nowrap>
     <img src="<%=request.getContextPath()%>/i/form_loader_banner.jpg" border=0>
-    </td>
+    </td> --%>
 
     <td align=right valign=top nowrap>
       <TABLE Cellpadding=0 Cellspacing=0 border=0>
@@ -37,7 +37,7 @@ try {
         </TR>
         <TR>
           <TD valign="TOP" align="center" colspan=1><font color=brown face=verdana size=1>&nbsp;Form Builder&nbsp;</font></TD>
-          <TD valign="TOP" align="left" colspan=1><font color=brown face=verdana size=1>&nbsp;CDE Browser&nbsp;</font></TD>
+          <TD valign="TOP" align="center" colspan=1><font color=brown face=verdana size=1>&nbsp;CDE Browser&nbsp;</font></TD>
           <TD valign="TOP" align="left" colspan=1><font color=brown face=verdana size=1>&nbsp;Help&nbsp;</font></TD>
         </TR> 
       </TABLE>
