@@ -26,12 +26,16 @@ AS (SELECT *
 
 --Remove old names
 delete from sbr.sc_contexts where scl_name = 'caBIG_SC';
+delete from SBR.SC_USER_ACCOUNTS where scl_name = 'caBIG_SC';
+
 delete from sbr.SECURITY_CONTEXTS_LOV where scl_name = 'caBIG_SC';
 
 --Update parents dependencies first
 Insert into SBR.SECURITY_CONTEXTS_LOV (SCL_NAME,DESCRIPTION,CREATED_BY,DATE_CREATED,MODIFIED_BY,DATE_MODIFIED) values ('NCIP_SC','Security Context for NCIP','SBR',to_timestamp('30-APR-04','DD-MON-RR HH.MI.SSXFF AM'),null,null);
 Insert into SBR.SC_CONTEXTS (CONTE_IDSEQ,SCL_NAME,CREATED_BY,DATE_CREATED,MODIFIED_BY,DATE_MODIFIED) values ('D9344734-8CAF-4378-E034-0003BA12F5E7','NCIP_SC','SBR',to_timestamp('14-FEB-02','DD-MON-RR HH.MI.SSXFF AM'),'SBR',to_timestamp('14-FEB-02','DD-MON-RR HH.MI.SSXFF AM'));
-update SBR.SC_USER_ACCOUNTS set SCL_NAME = 'NCIP_SC' where SCL_NAME = 'caBIG_SC';
+
+Insert into SBR.SC_USER_ACCOUNTS(scua_idseq, scl_name, context_admin_ind) select scua_idseq, 'NCIP_SC', context_admin_ind from SBR.SC_USER_ACCOUNTS_BACKUP where scl_name = 'caBIG_SC';
+--update SBR.SC_USER_ACCOUNTS set SCL_NAME = 'NCIP_SC' where SCL_NAME = 'caBIG_SC';
 update SBR.SC_GROUPS set SCL_NAME = 'NCIP_SC' where SCL_NAME = 'caBIG_SC';
 Insert into sbr.groups (GRP_NAME,DESCRIPTION,CREATED_BY,DATE_CREATED,MODIFIED_BY,DATE_MODIFIED) values ('NCIP_CONTRIBUTOR','NCIP_CONTRIBUTOR','SBR',to_timestamp('30-APR-04','DD-MON-RR HH.MI.SSXFF AM'),null,null);
 Insert into sbr.groups (GRP_NAME,DESCRIPTION,CREATED_BY,DATE_CREATED,MODIFIED_BY,DATE_MODIFIED) values ('NCIP_MANAGER','NCIP_MANAGER','SBR',to_timestamp('30-APR-04','DD-MON-RR HH.MI.SSXFF AM'),null,null);
