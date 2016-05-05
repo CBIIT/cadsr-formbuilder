@@ -1,3 +1,7 @@
 connect
 
+if (outcome ==success) of /deployment=formbuilder.ear:read-resource
+undeploy formbuilder.ear
+end-if
+
 deploy --force  /local/content/formbuilder/dist/formbuilder.ear                                                                                                                                 
