@@ -157,7 +157,7 @@ public class ReferenceDocumentAction
    try {
     DBUtil dbUtil = new DBUtil();
 
-    dbUtil.getConnectionFromContainer();  
+    dbUtil.getConnectionFromContainer(request);  
     String sqlStmt = "SELECT blob_content, mime_type, doc_size from sbr.reference_blobs_view where name = ?";
     log.debug(sqlStmt);
     conn = dbUtil.getConnection();
@@ -390,7 +390,7 @@ public class ReferenceDocumentAction
 
       if (attFile != null)
       {
-       if (saveRefDocAttachment(attachment, newRefDoc.getDocIDSeq(), attFile))
+       if (saveRefDocAttachment(attachment, newRefDoc.getDocIDSeq(), attFile, request))
         attachments.remove(attachment);
       }
      }
@@ -1000,7 +1000,7 @@ public class ReferenceDocumentAction
   return false;
  }
 
- private boolean saveRefDocAttachment(Attachment attachment, String rd_idseq, FormFile attFile) throws DMLException {
+ private boolean saveRefDocAttachment(Attachment attachment, String rd_idseq, FormFile attFile, HttpServletRequest request) throws DMLException {
   String
      sqlNewRow = "INSERT INTO sbr.reference_blobs_view (rd_idseq,name,mime_type,doc_size,content_type,blob_content) "
                     + "VALUES (?,?,?,?,?,EMPTY_BLOB())",
@@ -1016,7 +1016,7 @@ public class ReferenceDocumentAction
    DBUtil dbUtil = new DBUtil();
 
    //String dsName = CDEBrowserParams.getInstance("cdebrowser").getSbrDSN();
-   dbUtil.getConnectionFromContainer();  // getOracleConnectionFromContainer();
+   dbUtil.getConnectionFromContainer(request);  // getOracleConnectionFromContainer();
    conn = dbUtil.getConnection();
    conn.setAutoCommit(false);
    //make new row

@@ -110,7 +110,7 @@
 											</logic:notEmpty>
 										</logic:notEqual>
 
-										<html:hidden property='<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>' value="<%= String.valueOf(((Boolean[])((org.apache.struts.action.DynaActionForm)session.getAttribute("moduleRepeatForm")).get(FormConstants.QUESTION_EDITABLES))[defaultIndex]) %>" />
+										<html:hidden property='<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>' value='<%= String.valueOf(((Boolean[])((org.apache.struts.action.DynaActionForm)session.getAttribute("moduleRepeatForm")).get(FormConstants.QUESTION_EDITABLES))[defaultIndex]) %>' />
                                      </td>
                                     </tr>
 
