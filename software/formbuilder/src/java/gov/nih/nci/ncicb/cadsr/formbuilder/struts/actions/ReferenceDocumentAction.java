@@ -417,7 +417,7 @@ public class ReferenceDocumentAction
        FormFile attFile = (FormFile)attachments.get(newAtt);
 
        if (attFile != null)
-        if (saveRefDocAttachment(newAtt, origRefDoc.getDocIDSeq(), attFile)) {
+        if (saveRefDocAttachment(newAtt, origRefDoc.getDocIDSeq(), attFile, request)) {
          attachments.remove(newAtt);
 
          anythingChanged = true;
