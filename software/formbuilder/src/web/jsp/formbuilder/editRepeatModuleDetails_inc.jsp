@@ -169,8 +169,8 @@
 										<logic:empty name="moduleRepeatForm" property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>' >
 											<html:checkbox property='<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>' disabled="true" onclick='<%= "checkHidden(\'"+ FormConstants.QUESTION_EDITABLES+"["+defaultIndex +"]\')" %>'/>
 										</logic:empty>
-										<logic:notEmpty name="moduleRepeatForm" property="<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>">
-											<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" onclick='<%= "checkHidden(\'"+ FormConstants.QUESTION_EDITABLES+"["+defaultIndex +"]\')" %>'/>
+										<logic:notEmpty name="moduleRepeatForm" property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>'>
+											<html:checkbox property='<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>' onclick='<%= "checkHidden(\'"+ FormConstants.QUESTION_EDITABLES+"["+defaultIndex +"]\')" %>'/>
 										</logic:notEmpty>
 									</logic:notEqual>
 
