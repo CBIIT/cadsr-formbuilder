@@ -20,6 +20,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import gov.nih.nci.ncicb.cadsr.common.CommonNavigationConstants;
 import gov.nih.nci.ncicb.cadsr.common.dto.FormElementTransferObject;
@@ -44,8 +46,13 @@ public class FormDownloadAction extends Action {
 	@Autowired
 	FormBuilderService formBuilderService;
 
-	public FormBuilderService getFormBuilderService() {
-		return this.formBuilderService;
+	public FormBuilderService getFormBuilderService(HttpServletRequest request) {
+		if (formBuilderService == null)
+		{
+			ApplicationContext context =  WebApplicationContextUtils.getWebApplicationContext(request.getSession().getServletContext());
+			formBuilderService = (FormBuilderService) context.getBean("formBuilderService");
+		}
+		return formBuilderService;
 	}
 
 	public void setFormBuilderService(FormBuilderService formBuilderService) {
@@ -57,7 +64,7 @@ public class FormDownloadAction extends Action {
 
 		String formIdSeq = (String)request.getParameter(FormConstants.FORM_ID_SEQ);
 
-		FormBuilderService service = getFormBuilderService();
+		FormBuilderService service = getFormBuilderService(request);
 		Form crf = null;
 
 		try {

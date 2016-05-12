@@ -697,10 +697,10 @@ function clearProtocol() {
 
 							<logic:notEqual name="question" property="deDerived" value="true">
 								<logic:empty name="moduleEditForm" property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>'>
-									<html:checkbox property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>' disabled="true" onclick='<%= "checkHidden('"+ FormConstants.QUESTION_EDITABLES+"["+questionIndex +"]')" %>'/>
+									<html:checkbox property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>' disabled="true" onclick='<%= "checkHidden(\'"+ FormConstants.QUESTION_EDITABLES+"["+questionIndex +"]\')" %>' />
 								</logic:empty>
 								<logic:notEmpty name="moduleEditForm" property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>'>
-									<html:checkbox property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>' onclick='<%= "checkHidden('"+ FormConstants.QUESTION_EDITABLES+"["+questionIndex +"]')" %>'/>
+									<html:checkbox property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>' onclick='<%= "checkHidden(\'"+ FormConstants.QUESTION_EDITABLES+"["+questionIndex +"]\')" %>'/>
 								</logic:notEmpty>
 							</logic:notEqual>
 								<html:hidden property='<%=FormConstants.QUESTION_EDITABLES+"["+questionIndex+"]"%>' value="<%= String.valueOf(((Boolean[])((org.apache.struts.action.DynaActionForm)session.getAttribute("moduleEditForm")).get(FormConstants.QUESTION_EDITABLES))[questionIndex.intValue()]) %>" />
@@ -782,7 +782,7 @@ function clearProtocol() {
 								</logic:equal>
 								<logic:notEqual name="question" property="deDerived" value="true">
 									<html:hidden property='<%=FormConstants.QUESTION_DEFAULT_VALIDVALUE_IDS+"["+questionIndex+"]"%>' />
-                              		<html:text property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>' size="70" onkeyup='<%= "setEditable(this, '"+ FormConstants.QUESTION_EDITABLES+"["+questionIndex +"]')" %>' />
+                              		<html:text property='<%=FormConstants.QUESTION_DEFAULTVALUES+"["+questionIndex+"]"%>' size="70" onkeyup='<%= "setEditable(this, \'"+ FormConstants.QUESTION_EDITABLES+"["+questionIndex +"]\')" %>' />
 								</logic:notEqual>
                             </logic:empty>    
                             </td>
