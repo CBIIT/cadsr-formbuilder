@@ -103,10 +103,10 @@
 
 										<logic:notEqual name="question" property="deDerived" value="true">
 											<logic:empty name="moduleRepeatForm" property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>'>
-												<html:checkbox property='<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>' disabled="true" onclick='<%= "checkHidden('"+ FormConstants.QUESTION_EDITABLES+"["+defaultIndex +"]')" %>'/>
+												<html:checkbox property='<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>' disabled="true" onclick='<%= "checkHidden(\'"+ FormConstants.QUESTION_EDITABLES+"["+defaultIndex +"]\')" %>'/>
 											</logic:empty>
 											<logic:notEmpty name="moduleRepeatForm" property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>'>
-												<html:checkbox property='<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>' onclick='<%= "checkHidden('"+ FormConstants.QUESTION_EDITABLES+"["+defaultIndex +"]')" %>'/>
+												<html:checkbox property='<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>' onclick='<%= "checkHidden(\'"+ FormConstants.QUESTION_EDITABLES+"["+defaultIndex +"]\')" %>'/>
 											</logic:notEmpty>
 										</logic:notEqual>
 
@@ -133,7 +133,7 @@
                                         </td>
                                         <td class="OraFieldText">
                                          <html:hidden property='<%=FormConstants.QUESTION_DEFAULT_VV_IDS+"["+defaultIndex+"]"%>' value="" />
-                                         <html:text  styleClass="OraFieldText"  property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>' size="70" onkeyup='<%= "setEditable(this, '"+ FormConstants.QUESTION_EDITABLES+"["+defaultIndex +"]')" %>' />         
+                                         <html:text  styleClass="OraFieldText"  property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>' size="70" onkeyup='<%= "setEditable(this, \'"+ FormConstants.QUESTION_EDITABLES+"["+defaultIndex +"]\')" %>' />         
                                         </td> 
                                       </tr>
                                        </logic:empty>
@@ -167,10 +167,10 @@
 
 									<logic:notEqual name="question" property="deDerived" value="true">
 										<logic:empty name="moduleRepeatForm" property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>' >
-											<html:checkbox property='<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>' disabled="true" onclick='<%= "checkHidden('"+ FormConstants.QUESTION_EDITABLES+"["+defaultIndex +"]')" %>'/>
+											<html:checkbox property='<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>' disabled="true" onclick='<%= "checkHidden(\'"+ FormConstants.QUESTION_EDITABLES+"["+defaultIndex +"]\')" %>'/>
 										</logic:empty>
 										<logic:notEmpty name="moduleRepeatForm" property="<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>">
-											<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" onclick='<%= "checkHidden('"+ FormConstants.QUESTION_EDITABLES+"["+defaultIndex +"]')" %>'/>
+											<html:checkbox property="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>" onclick='<%= "checkHidden(\'"+ FormConstants.QUESTION_EDITABLES+"["+defaultIndex +"]\')" %>'/>
 										</logic:notEmpty>
 									</logic:notEqual>
 
@@ -201,7 +201,7 @@
 		
                                          <logic:notEqual name="question" property="deDerived" value="true">
 											<html:hidden property='<%=FormConstants.QUESTION_DEFAULT_VV_IDS+"["+defaultIndex+"]"%>' value="" />
-                                        	<html:text  styleClass="OraFieldText"  property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>' size="70" onkeyup='<%= "setEditable(this, '"+ FormConstants.QUESTION_EDITABLES+"["+defaultIndex +"]')" %>'/>
+                                        	<html:text  styleClass="OraFieldText"  property='<%=FormConstants.QUESTION_DEFAULTS+"["+defaultIndex+"]"%>' size="70" onkeyup='<%= "setEditable(this, \'"+ FormConstants.QUESTION_EDITABLES+"["+defaultIndex +"]\')" %>'/>
 										</logic:notEqual>         
                                         </td>                                   
                                        </logic:empty>
