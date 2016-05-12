@@ -93,7 +93,7 @@
                                     </tr>
 									<tr class="OraTabledata">
                                       <td class="OraTableColumnHeaderGrayBG" width="10%" nowrap>
-                                          <label for="<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>"><bean:message key="cadsr.formbuilder.form.question.editable"/></label>
+                                          <label for='<%=FormConstants.QUESTION_EDITABLES+"["+defaultIndex+"]"%>'><bean:message key="cadsr.formbuilder.form.question.editable"/></label>
                                      </td>
                                      <td class="OraFieldText">
 										<logic:equal name="question" property="deDerived" value="true">
