@@ -6,7 +6,7 @@
   <tr>
 
     <td align="left" valign="top">
-       <a href="http://cbiit.nci.nih.gov/" target="_blank"><img src="<%=request.getContextPath()%>/i/caDSR_logo.gif" alt="caDSR Logo"  border=0></a>
+       <a href="http://cbiit.nci.nih.gov/ncip/biomedical-informatics-resources/interoperability-and-semantics/metadata-and-models" target="_blank"><img src="<%=request.getContextPath()%>/i/caDSR_logo.gif" alt="caDSR Logo"  border=0></a>
     </td>
 
   </tr>
