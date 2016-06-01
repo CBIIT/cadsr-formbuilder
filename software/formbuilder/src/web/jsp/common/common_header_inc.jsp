@@ -40,7 +40,7 @@ try {
 							TARGET="_top"><IMG SRC="i/cde_cart.gif" alt="Form Cart 1"
 								border=0> </A>
 						<br>
-						<font color=brown face=verdana size=1>&nbsp;Form &nbsp;Cart 1</font>
+						<font color=brown face=verdana size=1>&nbsp;Form &nbsp;Cart1</font>
 					</TD>
 					<TD valign="TOP" align="CENTER" width="1%" colspan=1>
 						<A HREF="<%="formsCartAction.do?method=displayFormsCartV2"%>"
@@ -108,8 +108,9 @@ try {
 		</td>
 		
 		<td align="center" width="10%" height="10">
-			<span style="font-size: 9pt; font-family: Arial"> <a id="idCaDSRAdmin" 
-				href="http://cadsradmin.nci.nih.gov" target="_blank">Admin<br>Tool</a> </span>
+			<span style="font-size: 9pt; font-family: Arial"> 
+			<%--a id="idCaDSRAdmin" href="http://cadsradmin.nci.nih.gov" target="_blank">Admin<br>Tool</a> </span --%>
+			<a id="idCaDSRAdmin" href="<%=params.getAdminToolUrl()%>" target="_blank">Admin<br>Tool</a> </span>
 		</td>
  <%--GF26236 end --%>
  		
