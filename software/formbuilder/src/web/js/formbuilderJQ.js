@@ -63,7 +63,7 @@ function setupLink()
 {
 	var cdeBrowserlink = $("#idCDEBrowser").attr('href');
 	
-	var strAdm="cadsradmin";
+	var strAdm="cadsradmintool";
 	var n = cdeBrowserlink.search("-");
 	
 	if( n == 18 )

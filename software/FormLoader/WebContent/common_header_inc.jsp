@@ -66,7 +66,7 @@ L--%>
 
 		<td align="center" width="10%" height="10">
 			<span style="font-size: 9pt; font-family: Arial"> <a
-				href="http://cadsradmin.nci.nih.gov" target="_blank">Admin Tool</a> </span>
+				href="http://cadsradmintool.nci.nih.gov" target="_blank">Admin Tool</a> </span>
 		</td>
 		
 		<td align="center" width="10%" height="10">
