@@ -10,3 +10,5 @@ AND cart.name in ('formCart', 'formCartV2', 'formDisplayCart', 'formDisplayCart2
 SELECT * FROM object_cart.cart where name in ('formCart', 'formCartV2', 'formDisplayCart', 'formDisplayCart2');
 
 delete FROM object_cart.cart where name in ('formCart', 'formCartV2', 'formDisplayCart', 'formDisplayCart2');
+
+commit;
