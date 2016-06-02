@@ -24,3 +24,6 @@ Change Default Context to NCIP related scripts
 9. gf32649_SBREXT_SET_ROW_SPEC.sql (SBREXT)
 10. gf32649_SBREXT_SET_ROW_BODY_NCIP.sql (SBREXT)
 11. change_user_groups_sc_groups_to_NCIP.sql (SBR)
+
+The following script has to be executed in MySQL on the object_cart database. (This script will delete all the form carts for all the users. Forms added to the cart in version prior to 4.1 will not show up in FB 4.1 after the deployment of this new version because display of carts happens from a formDisplayCart and formDisplayCart2. TO fix this issue, all user form carts are being deleted and the users will have to go back and add forms to their carts in FB 4.1.2.)
+12. mySqlFormCartCleanup.sql
