@@ -42,6 +42,7 @@ import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormCartOptionsUtil;
 import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext.CDECartOCImplExtension;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions.cadsrutil_ext.FormDisplayCartOCIImpl;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormBuilderUtil;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConverterUtil;
 import gov.nih.nci.ncicb.cadsr.objectCart.CDECart;
 import gov.nih.nci.ncicb.cadsr.objectCart.FormDisplayCartTransferObject;
@@ -251,6 +252,12 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
     DynaActionForm searchForm = (DynaActionForm) form;
     String sortField = (String) searchForm.get("sortField");
     Integer sortOrder = (Integer) searchForm.get("sortOrder");
+    
+    List<String> strList = new ArrayList<String>();
+    strList.add(sortField);
+    if (!isHtmlAndScriptClean(strList))
+    	throw new FatalException("Invalid sortField parameter.", new Exception("Invalid sortField parameter"));
+    	
     List forms = (List)getSessionObject(request,FORM_SEARCH_RESULTS);
     StringPropertyComparator comparator = (StringPropertyComparator)getSessionObject(request,FORM_SEARCH_RESULT_COMPARATOR);
     comparator.setRelativePrimary(sortField);
@@ -475,6 +482,10 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
     if (contextIdSeq == null) contextIdSeq = "";
     String csiName = "";
 
+    if (!FormBuilderUtil.validateIdSeqRequestParameter(nodeIdSeq) || !FormBuilderUtil.validateIdSeqRequestParameter(contextIdSeq))
+    	throw new FatalException("Invalid nodeId/contextId parameters.", new Exception("Invalid nodeId/contextId parameters."));
+    	
+    
     if ("PROTOCOL".equals(nodeType)||"PUBLISHING_PROTOCOL".equals(nodeType)) {
       protocolIdSeq = nodeIdSeq;
       protocolLongName = request.getParameter("protocolLongName");
@@ -691,6 +702,10 @@ System.out.println( "Forms Queued in Cart : " + request.getSession().getAttribut
 								
 				if (formIds != null) {
 					for (String formId : formIds) {
+						
+						if (!FormBuilderUtil.validateIdSeqRequestParameter(formId))
+							throw new FatalException("Invalid formId parameters.", new Exception("Invalid formId parameters."));
+							
 						//FormV2 crf = service.getFormDetailsV2(formId);
 						//itemsToAdd.add(crf);
 						//displayItemsToAdd.add(convertToDisplayItem(crf));

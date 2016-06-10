@@ -26,7 +26,10 @@ public class CancelAction extends FormBuilderSecureBaseDispatchAction {
     // Jump to the update location on the screen
       request.setAttribute(CaDSRConstants.ANCHOR,"Q"+questionIndex);
       
-      String moduleIndexStr = (String)request.getParameter(QUESTION_INDEX);
+      String moduleIndexStr = (String)request.getParameter(MODULE_INDEX);
+      
+      if(moduleIndexStr !=null)
+          Integer.parseInt(moduleIndexStr);
       
       request.setAttribute("questionIndex", questionIndexStr);
       request.setAttribute("moduleIndex", moduleIndexStr);

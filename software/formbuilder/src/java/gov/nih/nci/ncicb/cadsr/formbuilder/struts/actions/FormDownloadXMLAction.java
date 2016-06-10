@@ -2,6 +2,8 @@ package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -16,12 +18,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import gov.nih.nci.ncicb.cadsr.common.CommonNavigationConstants;
+import gov.nih.nci.ncicb.cadsr.common.exception.FatalException;
 import gov.nih.nci.ncicb.cadsr.common.formbuilder.struts.common.FormConstants;
 import gov.nih.nci.ncicb.cadsr.common.resource.FormV2;
 import gov.nih.nci.ncicb.cadsr.common.util.CDEBrowserParams;
 import gov.nih.nci.ncicb.cadsr.common.util.logging.Log;
 import gov.nih.nci.ncicb.cadsr.common.util.logging.LogFactory;
 import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormBuilderUtil;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormConverterUtil;
 
 public class FormDownloadXMLAction extends Action {
@@ -52,6 +56,8 @@ public class FormDownloadXMLAction extends Action {
 		FormV2 crf = null;
 
 		try {
+			if (!FormBuilderUtil.validateIdSeqRequestParameter(formIdSeq))
+				throw new FatalException("Invalid form download parameters.", new Exception("Invalid form download parameters."));
 			crf = service.getFormDetailsV2(formIdSeq);
 		} catch (Exception exp) {
 			log.error("Exception getting CRF", exp);

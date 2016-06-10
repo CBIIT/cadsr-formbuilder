@@ -17,12 +17,14 @@ import org.apache.struts.action.DynaActionForm;
 
 import gov.nih.nci.ncicb.cadsr.common.CaDSRConstants;
 import gov.nih.nci.ncicb.cadsr.common.dto.ModuleTransferObject;
+import gov.nih.nci.ncicb.cadsr.common.exception.FatalException;
 import gov.nih.nci.ncicb.cadsr.common.resource.Form;
 import gov.nih.nci.ncicb.cadsr.common.resource.Instruction;
 import gov.nih.nci.ncicb.cadsr.common.resource.Module;
 import gov.nih.nci.ncicb.cadsr.common.resource.Question;
 import gov.nih.nci.ncicb.cadsr.common.struts.formbeans.GenericDynaFormBean;
 import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormActionUtil;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormBuilderUtil;
 
 
 public class CopyModuleAction extends FormBuilderSecureBaseDispatchAction {
@@ -82,6 +84,18 @@ public class CopyModuleAction extends FormBuilderSecureBaseDispatchAction {
          if (formIdSeq==null || formIdSeq.length() == 0){        
              formIdSeq = (String)request.getAttribute("P_IDSEQ");
          }    
+      }
+      
+      try {
+    	  if (!FormBuilderUtil.validateIdSeqRequestParameter(formIdSeq))
+    		  throw new FatalException("Invalid form copy parameters.", new Exception("Invalid form copy parameters."));
+      }
+      catch (Exception exp) {
+    	  if (log.isErrorEnabled()) {
+    		  log.error("Exception getting CRF", exp);
+    	  }      
+    	  saveMessage(ERROR_FORM_RETRIEVE, request);
+    	  return mapping.findForward(FAILURE);
       }
       
       if (isFormLocked(formIdSeq, request.getRemoteUser())){                  

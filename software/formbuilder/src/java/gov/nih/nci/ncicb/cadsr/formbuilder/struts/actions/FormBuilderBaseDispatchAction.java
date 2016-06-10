@@ -37,6 +37,7 @@ import gov.nih.nci.ncicb.cadsr.common.struts.common.BaseDispatchAction;
 import gov.nih.nci.ncicb.cadsr.formbuilder.common.FormBuilderException;
 import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.impl.FormBuilderServiceImpl;
 import gov.nih.nci.ncicb.cadsr.formbuilder.ejb.service.FormBuilderService;
+import gov.nih.nci.ncicb.cadsr.formbuilder.struts.common.FormBuilderUtil;
 
 
 /**
@@ -266,6 +267,10 @@ public class FormBuilderBaseDispatchAction extends BaseDispatchAction
     }
     else if (hrefCRFForm != null) {
       String formIdSeq = (String) hrefCRFForm.get(FORM_ID_SEQ);
+      
+      if (!FormBuilderUtil.validateIdSeqRequestParameter(formIdSeq))
+    	  throw new FatalException("Invalid formId parameters.", new Exception("Invalid formId parameters."));
+		
       //Added to support tree
       if ("".equals(formIdSeq)) {
         formIdSeq = request.getParameter("P_IDSEQ");

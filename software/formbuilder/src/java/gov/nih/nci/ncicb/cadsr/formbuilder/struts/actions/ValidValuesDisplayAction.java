@@ -34,6 +34,16 @@ public class ValidValuesDisplayAction extends
 			return mapping.findForward("error");
 		}
 		
+		try{
+			Integer.parseInt(publicId);
+			Float.parseFloat(version);
+		}
+		catch (NumberFormatException nfe)
+		{
+			nfe.printStackTrace();
+			return mapping.findForward("error");
+		}
+		
 		FormBuilderService service = getFormBuilderService(request);
 		AdminComponentType adminCompType = service.getComponentType(publicId, version);
 		Map pvMap = null;
