@@ -238,6 +238,14 @@ System.out.println( request.getSession().getAttribute("myUsername") );
 		  }
 	  }
 	  
+	  String idSeq;
+	  idSeq = (String)dynaForm.get(CONTEXT_ID_SEQ);
+	  if ((idSeq != null) && (! idSeq.isEmpty())) {//check format if not empty
+			if (! FormBuilderActionUtils.validateIdSeqFormat(idSeq)) {
+				log.info("Wrong ID SEQ format: " + CONTEXT_ID_SEQ + ' ' + idSeq);
+				return false;
+			}
+		}
 	  
 	  StringBuffer sb = new StringBuffer();
 	  //sb.append((String)dynaForm.get(FORM_LONG_NAME));

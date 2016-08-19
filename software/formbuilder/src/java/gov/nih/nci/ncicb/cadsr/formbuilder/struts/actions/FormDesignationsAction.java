@@ -49,6 +49,12 @@ public class FormDesignationsAction
             contextIdSeq = context.getConteIdseq();  
         }
         try{
+    	  if ((contextIdSeq != null) && (! contextIdSeq.isEmpty())) {//check format if not empty
+    			if (! FormBuilderActionUtils.validateIdSeqFormat(contextIdSeq)) {
+    				log.error("Wrong ID SEQ format contextIdSeq: " + contextIdSeq);
+    				return mapping.findForward("failure");
+    			}
+    		}
             FormBuilderService service = getFormBuilderService(request);
             Boolean result = service.isAllACDesignatedToContext(cdeIdList , contextIdSeq);
             if (result.booleanValue()){
