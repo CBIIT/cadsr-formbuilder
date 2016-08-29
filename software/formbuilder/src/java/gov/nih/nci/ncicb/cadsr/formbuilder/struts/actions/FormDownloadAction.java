@@ -72,7 +72,7 @@ public class FormDownloadAction extends Action {
 
 		try {
 			if (!FormBuilderUtil.validateIdSeqRequestParameter(formIdSeq))
-				throw new FatalException("Invalid form download parameters.", new Exception("Invalid form download parameters."));
+				throw new FatalException("Invalid form download parameters.", new Exception("Invalid form download parameters formIdSeq: " + formIdSeq));
 			
 			crf = service.getFormDetails(formIdSeq);
 		} catch (Exception exp) {

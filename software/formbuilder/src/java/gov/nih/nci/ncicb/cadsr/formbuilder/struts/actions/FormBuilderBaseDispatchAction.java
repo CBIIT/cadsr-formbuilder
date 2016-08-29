@@ -269,7 +269,7 @@ public class FormBuilderBaseDispatchAction extends BaseDispatchAction
       String formIdSeq = (String) hrefCRFForm.get(FORM_ID_SEQ);
       
       if (!FormBuilderUtil.validateIdSeqRequestParameter(formIdSeq))
-    	  throw new FatalException("Invalid formId parameters.", new Exception("Invalid formId parameters."));
+    	  throw new FatalException("Invalid formId parameters.", new Exception("Invalid formId parameters: " + formIdSeq));
 		
       //Added to support tree
       if ("".equals(formIdSeq)) {
@@ -279,7 +279,7 @@ public class FormBuilderBaseDispatchAction extends BaseDispatchAction
         }
         
       if (!FormBuilderUtil.validateIdSeqRequestParameter(formIdSeq))
-      	  throw new FatalException("Invalid formId parameters.", new Exception("Invalid formId parameters."));
+      	  throw new FatalException("Invalid formId parameters.", new Exception("Invalid formId parameters: " + formIdSeq));
         
         hrefCRFForm.set(FORM_ID_SEQ,formIdSeq);
       }
