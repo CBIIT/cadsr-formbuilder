@@ -29,8 +29,6 @@ public class FormBuilderLOVAction extends FormBuilderBaseDispatchAction {
 	private static final Pattern INT_PATTERN = Pattern.compile("[0-9]*");
 	private static final Pattern ID_PATTERN = Pattern.compile("[a-zA-Z0-9-]*");
 	private static final Pattern ALPHA_NUMERIC_ARRAY_PATTERN = Pattern.compile("[a-zA-Z0-9\\[\\]]*");
-	public static final Pattern ID_SEQ_PATTERN = Pattern.compile(FormBuilderActionUtils.ID_SEQ_PATTERN_STRING);
-
   /**
    * Returns all forms for the given criteria.
    *
@@ -272,7 +270,6 @@ public class FormBuilderLOVAction extends FormBuilderBaseDispatchAction {
 	  }
 	  if (contextIdSeq != null && valid) {
 		  valid = ID_PATTERN.matcher(contextIdSeq).matches();
-		  valid &= ID_SEQ_PATTERN.matcher(contextIdSeq).matches();
 	  }
 	  if (performQuery != null && valid) {
 		  valid = ALPHA_PATTERN.matcher(performQuery).matches();

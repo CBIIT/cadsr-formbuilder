@@ -15,8 +15,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -52,7 +50,6 @@ import gov.nih.nci.objectCart.domain.CartObject;
 
 
 public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
-	  protected static Log log = LogFactory.getLog(FormAction.class.getName());
 
     /**
      * set a session object.
@@ -91,24 +88,8 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
     {
     	List<String> strList = new ArrayList<String>();
     	strList.add((String) searchForm.get(SEARCH_FORM_NAME));
-    	//validate
-    	String idSeq = (String)searchForm.get(SEARCH_PROTO_IDSEQ);
-    	if ((idSeq != null) && (! idSeq.isEmpty())) {
-    		if (! FormBuilderActionUtils.validateIdSeqFormat(idSeq)) {
-    			log.info("Wrong ID SEQ format: " + SEARCH_PROTO_IDSEQ + ' ' + idSeq);
-    			return false;
-    		}
-    	}  		
     	strList.add((String) searchForm.get(SEARCH_PROTO_IDSEQ));
     	strList.add((String)searchForm.get(PROTOCOLS_LOV_NAME_FIELD));
-    	//validate
-    	idSeq = (String)searchForm.get(SEARCH_CONTEXT_IDSEQ);
-    	if ((idSeq != null) && (! idSeq.isEmpty())) {
-    		if (! FormBuilderActionUtils.validateIdSeqFormat(idSeq)) {
-    			log.info("Wrong ID SEQ format: " + SEARCH_CONTEXT_IDSEQ + ' ' + idSeq);
-    			return false;
-    		}
-    	}
     	strList.add((String) searchForm.get(SEARCH_CONTEXT_IDSEQ));
     	strList.add((String) searchForm.get(SEARCH_WORKFLOW));
     	strList.add((String) searchForm.get(SEARCH_CATEGORY_NAME));
@@ -118,13 +99,6 @@ public class FormAction extends FormBuilderSecureBaseDispatchActionWithCarts {
     	strList.add((String)searchForm.get(SEARCH_FORM_PUBLICID));
     	strList.add((String)searchForm.get(LATEST_VERSION_INDICATOR));
     	strList.add((String)searchForm.get(MODULE_LONG_NAME));
-    	
-    	String strNumeric = (String)searchForm.get(CDE_PUBLIC_ID);
-    	if ((strNumeric != null) && (! strNumeric.isEmpty()) && (! StringUtils.isInteger(strNumeric))) {
-			log.info("Wrong Numeric ID format: " + CDE_PUBLIC_ID + ' ' + strNumeric);
-			return false;   		
-    	}
-    	
     	strList.add((String)searchForm.get(CDE_PUBLIC_ID)); 
     	boolean isValid = isHtmlAndScriptClean(strList);
     	

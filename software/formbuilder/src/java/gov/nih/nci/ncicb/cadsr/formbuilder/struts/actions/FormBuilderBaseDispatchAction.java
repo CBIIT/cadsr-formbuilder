@@ -276,11 +276,7 @@ public class FormBuilderBaseDispatchAction extends BaseDispatchAction
         formIdSeq = request.getParameter("P_IDSEQ");
         if (formIdSeq==null || formIdSeq.length() == 0){        
             formIdSeq = (String)request.getAttribute("P_IDSEQ");
-        }
-        
-      if (!FormBuilderUtil.validateIdSeqRequestParameter(formIdSeq))
-      	  throw new FatalException("Invalid formId parameters.", new Exception("Invalid formId parameters."));
-        
+        }    
         hrefCRFForm.set(FORM_ID_SEQ,formIdSeq);
       }
       if ((formIdSeq != null) && (formIdSeq.length() > 0)) {
