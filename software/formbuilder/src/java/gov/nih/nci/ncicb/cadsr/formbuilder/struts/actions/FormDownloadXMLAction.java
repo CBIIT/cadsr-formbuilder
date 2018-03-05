@@ -71,7 +71,7 @@ public class FormDownloadXMLAction extends Action {
 			String xmlFilename ="Form"  + crf.getPublicId() + "_v" + crf.getVersion();
 			xmlFilename = xmlFilename.replace('/', '_').replace('.', '_');
 			xmlFilename = params.getXMLDownloadDir() + xmlFilename + ".xml";
-
+			log.info("XML File name - download: "+ xmlFilename);
 			FileOutputStream fileOut = new FileOutputStream(xmlFilename);
 			byte[] xmlBytes = convertedForm.getBytes();
 			fileOut.write(xmlBytes);

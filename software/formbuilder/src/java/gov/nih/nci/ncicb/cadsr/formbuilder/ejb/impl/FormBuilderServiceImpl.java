@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
+import org.apache.log4j.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -84,6 +85,8 @@ public class FormBuilderServiceImpl implements FormBuilderService
     @Autowired
     AbstractDAOFactoryFB daoFactory;
 
+    private Logger logger;
+    
     /**
      * Uses the formDAO to get all the forms that match the given criteria
      *
@@ -193,6 +196,8 @@ public class FormBuilderServiceImpl implements FormBuilderService
      */
     public Form getFormDetails(String formPK)
     {
+    	logger.info("In form V1");
+    	System.out.println("In form V1");    	
         Form myForm = null;
         FormDAO fdao = daoFactory.getFormDAO();
         QuestionRepititionDAO qrdao = daoFactory.getQuestionRepititionDAO();
@@ -345,6 +350,8 @@ public class FormBuilderServiceImpl implements FormBuilderService
     
     public FormV2 getFormDetailsV2(String formPK)
     {
+    	logger.info("In form V2");
+    	System.out.println("In form V2");
         FormV2 myForm = null;
         FormDAO fdao = daoFactory.getFormDAO();
         QuestionRepititionDAO qrdao = daoFactory.getQuestionRepititionDAO();
