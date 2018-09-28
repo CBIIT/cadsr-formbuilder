@@ -102,11 +102,16 @@ $(document).ready(function()
   String urlParams = "";
     
  // Security scan fix - Checking 'src' for hazardous characters to prevent Link Injection, Cross-site scripting & Content spoofing 
-  if ((src != null) && (!"".equals(src)) && (src.matches("[^a-zA-Z0-9-]"))) {
+  if ((src != null) && (!"".equals(src))) {
+  	if (src.matches("[^a-zA-Z0-9-]")) {
     modIndex = request.getParameter("moduleIndex");
     quesIndex = request.getParameter("questionIndex");
     doneURL= src+".do?method=displayFormCart";
-    urlParams = "&src="+src+"&method=displayCDECart&moduleIndex="+modIndex+"&questionIndex="+quesIndex;
+    urlParams = "&src="+src+"&method=displayCDECart&moduleIndex="+modIndex+"&questionIndex="+quesIndex; 
+    } else {
+    	src = "";
+    	doneURL="formSearchAction.do";
+    }
   }
   else {
     doneURL="formSearchAction.do";
