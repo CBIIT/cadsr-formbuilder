@@ -8,7 +8,7 @@ try {
 	formbuilderUrl = CaDSRUtil.getFormBuilderUrlNoCache();
 } catch (IOException ioe) {
   System.out.println(ioe.getMessage());
-	formbuilderUrl = "https://formbuilder.nci.nih.gov/FormBuilder";
+	formbuilderUrl = "https://formbuilder.nci.nih.gov/FormBuilder/";
 }
 
 String cdeBrowserUrl = "";
