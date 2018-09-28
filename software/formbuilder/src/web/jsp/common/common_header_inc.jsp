@@ -17,7 +17,7 @@ String formloaderUrl = "";
 try {
 	formloaderUrl = CaDSRUtil.getFormLoaderUrlNoCache();
 } catch (IOException ioe) {
-	formloaderUrl = "https://formbuilder.nih.nci.gov/FormBuilder";
+	formloaderUrl = "https://formbuilder.nci.nih.gov/FormBuilder";
 }
 
 %>
