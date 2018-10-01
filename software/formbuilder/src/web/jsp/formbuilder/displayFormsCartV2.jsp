@@ -101,21 +101,26 @@ $(document).ready(function()
   String quesIndex = "";
   String urlParams = "";
     
- // Security scan fix - Checking 'src' for hazardous characters to prevent Link Injection, Cross-site scripting & Content spoofing 
-  if ((src != null) && (!"".equals(src))) {
-  	if (src.matches("[^a-zA-Z0-9-]") && (src.indexOf(".html")  == -1)) {
-	    modIndex = request.getParameter("moduleIndex");
-	    quesIndex = request.getParameter("questionIndex");
-	    doneURL= src+".do?method=displayFormCart";
-	    urlParams = "&src="+src+"&method=displayCDECart&moduleIndex="+modIndex+"&questionIndex="+quesIndex; 
-    } else {
-    	src = "";
-    	doneURL="formSearchAction.do";
-    }
-  }
-  else {
-    doneURL="formSearchAction.do";
-  }
+ // Security scan fix - Checking 'src' for hazardous characters to prevent Link Injection, Cross-site scripting & phishing attacks 
+  if ((src != null) && (!"".equals(src))) {			  
+	  	if (src.matches("\\w.*")) {			  		
+	  		if (src.indexOf(".html")  > -1) {
+		    	src = "";
+		    	doneURL="formSearchAction.do";
+		    } else {
+			    modIndex = request.getParameter("moduleIndex");
+			    quesIndex = request.getParameter("questionIndex");
+			    doneURL= src+".do?method=displayFormCart";
+			    urlParams = "&src="+src+"&method=displayCDECart&moduleIndex="+modIndex+"&questionIndex="+quesIndex;
+		    }
+	    } else {				    	
+	    	src = "";
+	    	doneURL="formSearchAction.do";
+	    }
+	  } else {
+		 src = "";
+	    doneURL="formSearchAction.do";
+	  }
 %>
 
 <%@ include file="../common/in_process_common_header_inc.jsp"%>
