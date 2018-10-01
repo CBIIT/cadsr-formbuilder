@@ -41,8 +41,8 @@
 
 <td td width="70%" align="right">
   <FONT color="white" size=-3 face=arial>
-     Please send comments and suggestions to <A href="mailto:ncicbiit@mail.nih.gov">
-     	ncicbiit@mail.nih.gov</A>      
+     Please send comments and suggestions to <A href="mailto:NCIAppSupport@nih.gov">
+     	NCIAppSupport@nih.gov</A>      
   </FONT>
    &nbsp; &nbsp;
 </td>
