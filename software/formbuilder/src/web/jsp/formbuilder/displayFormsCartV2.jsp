@@ -102,18 +102,13 @@ $(document).ready(function()
   String urlParams = "";
     
  // Security scan fix - Checking 'src' for hazardous characters to prevent Link Injection, Cross-site scripting & phishing attacks 
-  if ((src != null) && (!"".equals(src))) {			  
-	  	if (src.matches("\\w.*")) {			  		
-	  		if (src.indexOf(".html")  > -1) {
-		    	src = "";
-		    	doneURL="formSearchAction.do";
-		    } else {
-			    modIndex = request.getParameter("moduleIndex");
-			    quesIndex = request.getParameter("questionIndex");
-			    doneURL= src+".do?method=displayFormCart";
-			    urlParams = "&src="+src+"&method=displayCDECart&moduleIndex="+modIndex+"&questionIndex="+quesIndex;
-		    }
-	    } else {				    	
+  if ((src != null) && (!"".equals(src))) {
+	  	if (src.matches("\\w*")) {
+		    modIndex = request.getParameter("moduleIndex");
+		    quesIndex = request.getParameter("questionIndex");
+		    doneURL= src+".do?method=displayFormCart";
+		    urlParams = "&src="+src+"&method=displayCDECart&moduleIndex="+modIndex+"&questionIndex="+quesIndex;
+	    } else {
 	    	src = "";
 	    	doneURL="formSearchAction.do";
 	    }
