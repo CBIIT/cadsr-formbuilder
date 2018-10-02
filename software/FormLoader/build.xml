@@ -138,15 +138,7 @@
     </target>
 	
     <target name="build" depends="compile-war">
-    	<if>
-    	<equals arg1="${TIER}" arg2="-dev"/>
-    	    <then>    		
-    			<filter token="TIER" value="changed" />
-    	    </then>	
-    	<else>
-    		<filter token="TIER" value="${TIER}" />
-    	</else>	
-    	</if>	
+    	<filter token="TIER" value="${TIER}" />
     	<copy todir="${build.dir}">
 			<fileset dir="${web.dir}" excludes="CVS,**/*.class" />
 		</copy>
