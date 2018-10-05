@@ -9,6 +9,8 @@
 String formbuilderUrl = "";
 try {
 	formbuilderUrl = CaDSRUtilV2.getFormBuilderUrlNoCache();
+	if (formbuilderUrl != null) //remove tier information if this is Prod tier.
+		formbuilderUrl = formbuilderUrl.replace("-prod", "");
 } catch (IOException ioe) {
 	System.out.println(ioe.getMessage());
 	formbuilderUrl = "https://formbuilder.nci.nih.gov/FormBuilder/";
@@ -17,6 +19,8 @@ try {
 String cdeBrowserUrl = "";
 try {
   cdeBrowserUrl = CaDSRUtilV2.getCdeBrowserUrlNoCache();
+  if (cdeBrowserUrl != null) //remove tier information if this is Prod tier.
+	cdeBrowserUrl = cdeBrowserUrl.replace("-prod", "");
 } catch (IOException ioe) {
   System.out.println(ioe.getMessage());
   cdeBrowserUrl = "https://cdebrowser.nci.nih.gov";
