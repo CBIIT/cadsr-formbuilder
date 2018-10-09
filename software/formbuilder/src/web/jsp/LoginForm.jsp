@@ -103,7 +103,7 @@ function clearForm()
     <tr>    
       <td align="left" class="OraTipText">
         Guest users can login using username "guest" and password "Nci_gue5t".
-   <br> If you require an account with curator privileges to a specific context other than Test, please contact NCICB Application Support Email: <a href='mailto:ncicbiit@mail.nih.gov'>ncicbiit@mail.nih.gov</a>
+   <br> If you require an account with curator privileges to a specific context other than Test, please contact NCICB Application Support Email: <a href='mailto:NCIAppSupport@nih.gov'>NCIAppSupport@nih.gov</a>
       </td>
     </tr>  
   </table>  
