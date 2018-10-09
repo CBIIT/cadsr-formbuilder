@@ -20,7 +20,6 @@ public class FormLoaderUtil {
 			List fs = forms.getForms();
 		    for(int i=0; i<fs.size(); i++) {
 		        FormDescriptor f = (FormDescriptor)fs.get(i);
-		        System.out.println(i + " " + f.toString() + "\n");
 		    }
 		}
 	}
@@ -29,7 +28,6 @@ public class FormLoaderUtil {
 		if(forms != null) {
 		    for(int i=0; i<forms.size(); i++) {
 		        FormDescriptor f = (FormDescriptor)forms.get(i);
-		        System.out.println(i + " " + f.toString() + "\n");
 		    }
 		}
 	}

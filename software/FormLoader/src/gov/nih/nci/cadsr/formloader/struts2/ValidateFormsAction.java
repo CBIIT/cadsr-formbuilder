@@ -50,7 +50,7 @@ public class ValidateFormsAction extends ActionSupport implements SessionAware {
 	private String versioningRulesUrl;
     
     public String execute() {
-    	System.out.println("in ValidateFormsAction.execute()");
+    	logger.info("in ValidateFormsAction.execute()");
     	servletRequest = ServletActionContext.getRequest();
         try {
         	//List<FormDescriptor> parsedFormsList = (List<FormDescriptor>) servletRequest.getSession().getAttribute("parsedFormsList");

@@ -1401,7 +1401,7 @@ public class JDBCAdminComponentDAOV2 extends JDBCBaseDAOV2
 
       public void setSql(List acIdList, String contextIdSeq) {
        String acIdListStr = getDelimetedIdSeq(acIdList, ", ");
-       System.out.println("acIdListStr=" + acIdListStr);
+
         super.setSql(
           "SELECT ac_idseq from sbr.designations_view where conte_idseq= '" + contextIdSeq + "' " +
           " and detl_name='USED_BY' and lae_name='ENGLISH' and ac_idseq in (" +

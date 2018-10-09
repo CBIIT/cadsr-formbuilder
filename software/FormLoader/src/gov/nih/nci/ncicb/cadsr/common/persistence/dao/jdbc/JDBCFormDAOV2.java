@@ -622,7 +622,6 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
       String maxFormVersionsByPublicId =
                " SELECT MAX(version) from SBREXT.QUEST_CONTENTS_VIEW_EXT crf where (crf.QTL_NAME = 'CRF' or crf.QTL_NAME = 'TEMPLATE') AND QC_ID = " + publicId;
       super.setSql(maxFormVersionsByPublicId);
-      System.out.println("[maxFormVersionsByPublicId Query: " + maxFormVersionsByPublicId + "]");
       compile();
      }
 
@@ -901,7 +900,6 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
         String wrapSql2 = " ) a where ROWNUM <=" + endRow + " ) where rnum  >= " + startRow;
         super.setSql(wrapSql1 + sql + wrapSql2);
         
-        System.out.println("FRM SEARCH QRY: ["+sql+"]");
 
       }   
       
@@ -1163,7 +1161,6 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 
         super.setSql(sql);
         
-        System.out.println("FRM SEARCH QRY: ["+sql+"]");
 
       }   
       
@@ -1544,9 +1541,6 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 	        in.put("p_version", newVersionNumber);
 	        in.put("p_change_note", changeNote);
 	        in.put("p_Created_by", createdBy);
-	        System.out.println(this.getSql());
-	          System.out.println(this.getCallString());
-	          System.out.println(this.getGeneratedKeysColumnNames());
 	        Map out = execute(in);
 	        return out;
 	      }
@@ -1608,9 +1602,7 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 	        in.put("p_version", newVersionNumber);
 	        in.put("p_change_note", changeNote);
 	        in.put("p_Created_by", createdBy);
-	        System.out.println(this.getSql());
-	          System.out.println(this.getCallString());
-	          System.out.println(this.getGeneratedKeysColumnNames());
+
 	        Map out = execute(in);
 	        return out;
 	      }
@@ -1651,7 +1643,6 @@ public class JDBCFormDAOV2 extends JDBCAdminComponentDAOV2 implements FormV2DAO 
 	    	
 	    	FormV2 form = form2Dao.getFormDetailsV2("B6FE2275-F5E5-0321-E040-BB89AD43405B");
 			
-			System.out.println(form.getPublicId());
 			
 	    }
 	    

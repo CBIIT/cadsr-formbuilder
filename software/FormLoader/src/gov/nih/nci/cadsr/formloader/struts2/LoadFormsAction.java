@@ -38,7 +38,7 @@ public class LoadFormsAction extends ActionSupport implements SessionAware{
 	private String[] selectedFormIndices;
     
     public String execute() {
-    	System.out.println("in LoadFormsAction.execute()");
+    	logger.info("in LoadFormsAction.execute()");
     	servletRequest = ServletActionContext.getRequest();
     	
         try {
@@ -80,7 +80,7 @@ public class LoadFormsAction extends ActionSupport implements SessionAware{
 				loadedForms = extractLoadedForm(loadedFormCollection);
 				otherForms = extractOtherForm(loadedFormCollection);
 	        	//servletRequest.getSession().setAttribute("loadedForms", loadedForms);
-	        	System.out.println(loadedForms.size()+" Forms loaded");
+	        	logger.info(loadedForms.size()+" Forms loaded");
 		} catch (FormLoaderServiceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -110,7 +110,7 @@ public class JDBCQuestionDAOFB extends JDBCAdminComponentDAOFB implements Questi
 			String newLongName, String userName) throws DMLException {
 		UpdateQuestionLongName  questionLongName  = new UpdateQuestionLongName (this.getDataSource());
 		int res = questionLongName.updateLongName(questionId,newLongName, userName);
-		System.out.println("result = " +res);
+
 		if (res != 1) {
 			DMLException dml = new DMLException("Did not succeed in updateing the long name");
 			dml.setErrorCode(this.ERROR_UPDATING_QUESTION);
@@ -384,7 +384,7 @@ public class JDBCQuestionDAOFB extends JDBCAdminComponentDAOFB implements Questi
 			ret_val = 0;
 			de.printStackTrace();
 		}
-		System.out.println("After DE"+ret_val);
+		
 		try{
 			ret_val = updateQuestionLongName(questionId,newLongName, username);
 		}
@@ -392,7 +392,7 @@ public class JDBCQuestionDAOFB extends JDBCAdminComponentDAOFB implements Questi
 			ret_val = 0;
 			de.printStackTrace();
 		}
-		System.out.println("After LN"+ret_val);
+		
 		if (ret_val == 1) {
 			return ret_val;
 		}
@@ -588,8 +588,7 @@ public class JDBCQuestionDAOFB extends JDBCAdminComponentDAOFB implements Questi
 			fvv.setPreferredDefinition(rs.getString(7));
 			fvv.setFormValueMeaningText(rs.getString(16)); //Meaning_text
 			if (vm.getPublicId() > 0)	{ //JR417 this is empty e.g. SELECT * FROM SBREXT.FB_VALID_VALUES_VIEW where QUES_IDSEQ = '0EEA9389-56C1-C543-E050-BB89A7B450FF' order by display_order
-				fvv.setFormValueMeaningIdVersion(String.valueOf(vm.getPublicId()) + "v"+String.valueOf(vm.getVersion())); //Meaning_id version
-				System.out.println("JDBCQuestionDAO.java JR417 vm idversion = [" + fvv.getFormValueMeaningIdVersion() + "]");
+				fvv.setFormValueMeaningIdVersion(String.valueOf(vm.getPublicId()) + "v"+String.valueOf(vm.getVersion())); //Meaning_id version				
 			}
 			fvv.setFormValueMeaningDesc(rs.getString("DESCRIPTION_TEXT")); //DESCRIPTION_TEXT          
 			ContextTransferObject contextTransferObject = new ContextTransferObject();

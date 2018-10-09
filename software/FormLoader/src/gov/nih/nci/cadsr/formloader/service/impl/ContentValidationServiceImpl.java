@@ -752,9 +752,9 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 //			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = 
 //					repository.getPermissibleValuesByVdIds(vdSeqIds);	//JR417 pv has the vpIdseq and vm has the vmIdseq after this successful call!
 
-			System.out.println("ContentValidationServiceImpl.java#validateQuestions before FormLoaderHelper.populateQuestionsPV");
+			logger.info("ContentValidationServiceImpl.java#validateQuestions before FormLoaderHelper.populateQuestionsPV");
 			ValueHolder vh = FormLoaderHelper.populateQuestionsPV(form, repository);
-			System.out.println("ContentValidationServiceImpl.java#validateQuestions after FormLoaderHelper.populateQuestionsPV");
+			logger.info("ContentValidationServiceImpl.java#validateQuestions after FormLoaderHelper.populateQuestionsPV");
 			HashMap<String, List<ReferenceDocumentTransferObject>> refdocDtos = null;
 			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = null;
 			try {
@@ -770,9 +770,9 @@ List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(
 			}
 			//JR417 end
 
-			System.out.println("ContentValidationServiceImpl.java#validateQuestions before validateQuestionsInModules");
+			logger.info("ContentValidationServiceImpl.java#validateQuestions before validateQuestionsInModules");
 			validateQuestionsInModules(modules, form, questDtos, cdeDtos, refdocDtos, pvDtos);		
-			System.out.println("ContentValidationServiceImpl.java#validateQuestions after validateQuestionsInModules");
+			logger.info("ContentValidationServiceImpl.java#validateQuestions after validateQuestionsInModules");
 			
 			form.setLoadStatus(FormDescriptor.STATUS_CONTENT_VALIDATED);
 			

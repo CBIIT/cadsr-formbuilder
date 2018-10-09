@@ -649,28 +649,28 @@ public class JDBCFormValidValueDAOFB extends JDBCAdminComponentDAOFB implements 
 		params.addValue("v_qc_idseq", vvidseq);
 
 		params.addValue("p_version", newVV.getVersion().toString());
-		System.out.println(newVV.getVersion().toString());
+
 
 		String longName = newVV.getLongName();
 		params.addValue("p_long_name", longName);
-		System.out.println(longName);
+
 
 		String preferredName = this.generatePreferredName(longName);
 		params.addValue("v_preferred_name", preferredName);
-		System.out.println(preferredName);
+
 
 		params.addValue("p_preferred_definition", newVV.getPreferredDefinition());
 		//System.out.println(prefDef);
 		params.addValue("p_conte_idseq", newVV.getContext().getConteIdseq());
-		System.out.println(newVV.getContext().getConteIdseq());
+
 		//params.addValue("p_proto_idseq", null);
 
 		params.addValue("p_asl_name", newVV.getAslName());
-		System.out.println(newVV.getAslName());
+
 		params.addValue("p_vp_idseq", newVV.getVpIdseq());
-		System.out.println( newVV.getVpIdseq());
+
 		params.addValue("p_created_by", newVV.getCreatedBy());		
-		System.out.println(newVV.getCreatedBy());
+
 		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(this.getDataSource());
 		try {
 			int res = namedParameterJdbcTemplate.update(sql, params);

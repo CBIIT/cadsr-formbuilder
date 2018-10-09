@@ -516,7 +516,7 @@ public class FormLoaderHelper {
 		        if(pv.getValueMeaningV2() != null)
 		        	value = pv.getValueMeaningV2().getLongName();
 		        	//value = pv.getValueMeaningV2().getPreferredDefinition();
-		        System.out.println("pv vm value = [" + value + "] vValue.getMeaningText() = [" + vValue.getMeaningText() + "]");
+		        logger.debug("pv vm value = [" + value + "] vValue.getMeaningText() = [" + vValue.getMeaningText() + "]");
 		        if(value != null && value.equals(vValue.getMeaningText())) {
 		        	ret = pv;
 		        	found = true;
@@ -550,7 +550,7 @@ public class FormLoaderHelper {
 		        pvs = (ArrayList<PermissibleValueV2TransferObject>) pair.getValue();
 		        for(int i=0; i<pvs.size(); i++) {
 			        pv = pvs.get(i);
-			        System.out.println(pair.getKey() + " = " + pv.getValue());
+			        logger.debug(pair.getKey() + " = " + pv.getValue());
 			        if(pvIndex == pvCount) {
 			        	ret = (ValueMeaningV2TransferObject) pv.getValueMeaningV2();
 			        	found = true;
@@ -579,7 +579,7 @@ public class FormLoaderHelper {
 		int count = 1;
 		List<ModuleDescriptor> ret = new ArrayList();
 		for (ModuleDescriptor module : modules) {
-			System.out.println("count [" + module.toString() + "]\n");
+			logger.debug("count [" + module.toString() + "]\n");
 			if(module.getMaximumModuleRepeat() != null && Integer.valueOf(module.getMaximumModuleRepeat()) > 0) {
 				int repeatCount = Integer.valueOf(module.getMaximumModuleRepeat());
 				for(int i=0; i<repeatCount; i++) {

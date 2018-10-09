@@ -116,7 +116,7 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
     String newLongName, String userName) throws DMLException {
     UpdateQuestionLongName  questionLongName  = new UpdateQuestionLongName (this.dataSource);
     int res = questionLongName.updateLongName(questionId,newLongName, userName);
-    System.out.println("result = " +res);
+    
     if (res != 1) {
        DMLException dml = new DMLException("Did not succeed in updateing the long name");
        dml.setErrorCode(this.ERROR_UPDATING_QUESTION);
@@ -281,7 +281,7 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
       ret_val = 0;
       de.printStackTrace();
     }
-    System.out.println("After DE"+ret_val);
+   
     try{
       ret_val = updateQuestionLongName(questionId,newLongName, username);
     }
@@ -289,7 +289,7 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
       ret_val = 0;
       de.printStackTrace();
     }
-   System.out.println("After LN"+ret_val);
+   
     if (ret_val == 1) {
       return ret_val;
     }
@@ -398,9 +398,7 @@ private static Logger logger = Logger.getLogger(JDBCQuestionDAOV2.class.getName(
           "QUESTION", deIdseq
         };
 
-      System.out.println("JR423: generatePreferredName(sm.getLongName())=[" + generatePreferredName(sm.getLongName()) + "]");
-      System.out.println("JR423: 						sm.getLongName()=[" + sm.getLongName() + "]");	//4000
-      System.out.println("JR423: 			 sm.getPreferredDefinition()=[" + sm.getPreferredDefinition() + "]");	//2000 can not be null
+
       int res = update(obj);
 
       return res;

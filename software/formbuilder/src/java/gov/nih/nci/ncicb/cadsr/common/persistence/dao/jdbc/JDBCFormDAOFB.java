@@ -999,7 +999,7 @@ public class JDBCFormDAOFB extends JDBCAdminComponentDAOFB implements FormDAO
                     + initialWhere.toString() + whereClause;
       super.setSql(sql);
       
-      System.out.println("FRM SEARCH QRY: ["+sql+"]");
+
 /*
       if (StringUtils.doesValueExist(moduleName) || StringUtils.doesValueExist(cdePublicId)){
         whereClause = makeWhereClause(
@@ -1478,9 +1478,7 @@ public class JDBCFormDAOFB extends JDBCAdminComponentDAOFB implements FormDAO
         in.put("p_version", newVersionNumber);
         in.put("p_change_note", changeNote);
         in.put("p_Created_by", createdBy);
-        System.out.println(this.getSql());
-          System.out.println(this.getCallString());
-          System.out.println(this.getGeneratedKeysColumnNames());
+
         Map out = execute(in);
         return out;
       }

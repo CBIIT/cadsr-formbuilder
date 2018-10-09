@@ -109,7 +109,7 @@ ServletRequestAware, ValidationAware{
 		servletRequest.getSession().setAttribute("formCollection", aColl);
 		this.description = aColl.getDescription();
 		this.collectionName = aColl.getNameWithRepeatIndicator();
-    	System.out.println(parsedFormsList.size()+" Parsed Forms ");
+    	logger.info(parsedFormsList.size()+" Parsed Forms ");
     	
     	return SUCCESS;
     }
@@ -142,7 +142,7 @@ ServletRequestAware, ValidationAware{
     		inStream.close();
     		outStream.close();
 
-    		System.out.println("File is copied successful!");
+    		logger.info("File is copied successful!");
     		return total;
 
     	} catch(IOException e) {
@@ -181,7 +181,7 @@ ServletRequestAware, ValidationAware{
 			this.description = aColl.getDescription();
 			this.collectionName = aColl.getNameWithRepeatIndicator();
         	//servletRequest.getSession().setAttribute("parsedFormsList", parsedFormsList);
-        	System.out.println(parsedFormsList.size()+" Parsed Forms ");
+        	logger.info(parsedFormsList.size()+" Parsed Forms ");
         	
         	return SUCCESS;
 		} catch (FormLoaderServiceException e) {

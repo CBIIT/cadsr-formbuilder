@@ -591,16 +591,16 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			
 			//do we need to go back to db to get module's public id?
 		
-			System.out.println("LoadServiceRepositoryImpl.java#createModulesInForm before FormLoaderHelper.populateQuestionsPV");
+			logger.info("LoadServiceRepositoryImpl.java#createModulesInForm before FormLoaderHelper.populateQuestionsPV");
 			ValueHolder vh = FormLoaderHelper.populateQuestionsPV(form, repository);
-			System.out.println("LoadServiceRepositoryImpl.java#createModulesInForm after FormLoaderHelper.populateQuestionsPV");
+			logger.info("LoadServiceRepositoryImpl.java#createModulesInForm after FormLoaderHelper.populateQuestionsPV");
 			HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = null;
 			List<DataElementTransferObject> cdeDtos = null;	//repository.getCDEsByPublicIds(questCdePublicIds);
 			try {
 				List data = (ArrayList) vh.getValue();
 				pvDtos = (HashMap<String, List<PermissibleValueV2TransferObject>>) data.get(QuestionsPVLoader.PV_INDEX);
 				cdeDtos = (List<DataElementTransferObject>) data.get(QuestionsPVLoader.CDE_INDEX);
-				System.out.println("LoadServiceRepositoryImpl.java#createModulesInForm before createQuestionsInModule");
+				logger.info("LoadServiceRepositoryImpl.java#createModulesInForm before createQuestionsInModule");
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
@@ -609,7 +609,7 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 
 			repository.getQrdao().updateModuleRepeatCount(moduledto.getModuleIdseq(), moduledto.getNumberOfRepeats(), moduledto.getModifiedBy());	//JR366 new!
 
-			System.out.println("LoadServiceRepositoryImpl.java#createModulesInForm after createQuestionsInModule");
+			logger.info("LoadServiceRepositoryImpl.java#createModulesInForm after createQuestionsInModule");
 		}
 		
 		logger.debug("Done creating modules for form");
@@ -692,15 +692,15 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 		List<QuestionDescriptor.ValidValue>  validValues = question.getValidValues();
 		
 		int idx = 0;
-		System.out.println("LoadServiceRepositoryImpl.java#createQuestionValidValues 1");
+		logger.info("LoadServiceRepositoryImpl.java#createQuestionValidValues 1");
 		for (QuestionDescriptor.ValidValue vValue : validValues) {
-			System.out.println("LoadServiceRepositoryImpl.java#createQuestionValidValues 2");
+			logger.info("LoadServiceRepositoryImpl.java#createQuestionValidValues 2");
 			if (vValue.isSkip()) { 
 				logger.debug("LoadServiceRepositoryImpl.java#createQuestionValidValues vValue " + vValue.getMeaningText() + " vpIdSeq [" + vValue.getVdPermissibleValueSeqid() + "] skipped!");
 				continue;
 			}
 			
-			System.out.println("LoadServiceRepositoryImpl.java#createQuestionValidValues 3");
+			logger.info("LoadServiceRepositoryImpl.java#createQuestionValidValues 3");
 			idx++;
 			
 			//FORMBUILD-424, 425 : Following block of code to be done in validation step and get the correct PV and set values for Meaning Text and Description
@@ -776,7 +776,7 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			}
 			
 			logger.debug("Created new valid valid");
-			System.out.println("LoadServiceRepositoryImpl.java#createQuestionValidValues Created new valid valid [" + validValues + "]");
+			logger.info("LoadServiceRepositoryImpl.java#createQuestionValidValues Created new valid valid [" + validValues + "]");
 
 		}
 	}
