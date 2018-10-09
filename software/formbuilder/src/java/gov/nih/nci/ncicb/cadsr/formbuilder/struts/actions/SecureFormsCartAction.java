@@ -2,6 +2,7 @@ package gov.nih.nci.ncicb.cadsr.formbuilder.struts.actions;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import javax.servlet.ServletException;
@@ -166,10 +167,11 @@ public class SecureFormsCartAction extends FormBuilderSecureBaseDispatchActionWi
     String formCartId) throws IOException, ServletException {
 	     
    FormBuilderService service = getFormBuilderService(request);
-	
-   log.info("add forms in memeory to the cart");
+
    CDECartFormBean myForm = (CDECartFormBean) form;
    String[] selectedSaveItems = myForm.getSelectedSaveItems();
+   String selectedForms = (selectedSaveItems != null) ? Arrays.toString(selectedSaveItems) : "none";
+   log.info("SecureFormsCartAction.ActionForward add forms in memory to the cart: " + selectedForms);
    
    int formsInQueue = 0;
    
