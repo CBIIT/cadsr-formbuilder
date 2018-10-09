@@ -4,7 +4,6 @@
 <%
 	String urlPrefix = request.getContextPath();
 	String label = pageContext.getRequest().getParameter("label");
-	System.out.println("*********Value of label here = " + label);
 %>
 
 <TABLE width=100% Cellpadding=0 Cellspacing=0 border=0>

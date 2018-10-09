@@ -2,16 +2,15 @@
 <%
 String showMessageUsername = (String) session.getAttribute("myUsername");
 String myFormAdded = (String) session.getAttribute("myFormAdded");
-System.out.println("additionalMessages.jsp: myFormAdded : " + myFormAdded );
 
-System.out.println("additionalMessages.jsp:" + showMessageUsername);
+System.out.println("additionalMessages.jsp showMessageUsername: " + showMessageUsername);
 	String formCartInfo;
 	if( session.getAttribute("myFormCartInfo") != null )
 		formCartInfo =(String) session.getAttribute("myFormCartInfo");
 	else
 		formCartInfo = "0";
 	
-System.out.println("additionalMessages.jsp :  " + formCartInfo);
+System.out.println("additionalMessages.jsp formCartInfo: " + formCartInfo);
 session.removeAttribute("myFormAdded");
 %>
 <input type="hidden" id="myInputUserName" name="myInputUserName" value=<%=showMessageUsername %>/>
