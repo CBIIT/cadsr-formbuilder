@@ -417,7 +417,9 @@ public class JDBCClassificationSchemeDAOV2 extends JDBCAdminComponentDAOV2 imple
        	params.addValue("publicId", publicId);
        	params.addValue("version", version);
        	
-       	int recordCount = this.namedParameterJdbcTemplate.queryForInt(sql, params);        
+       	//FORMBUILD-609 this method queryForInt is removed from v.4.3.20
+        //int recordCount = this.namedParameterJdbcTemplate.queryForInt(sql, params);
+       	int recordCount = this.namedParameterJdbcTemplate.queryForObject(sql, params, Integer.class);
         return recordCount;
     }
 
@@ -429,7 +431,9 @@ public class JDBCClassificationSchemeDAOV2 extends JDBCAdminComponentDAOV2 imple
        	params.addValue("publicId", publicId);
        	params.addValue("version", version);
        	
-       	int recordCount = this.namedParameterJdbcTemplate.queryForInt(sql, params);        
+        //FORMBUILD-609 this method queryForInt is removed from v.4.3.20
+       	//int recordCount = this.namedParameterJdbcTemplate.queryForInt(sql, params);        
+       	int recordCount = this.namedParameterJdbcTemplate.queryForObject(sql, params, Integer.class);
         return recordCount;
     }
 }

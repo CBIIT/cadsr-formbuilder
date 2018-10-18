@@ -11,3 +11,4 @@ software/FormLoader/log
 software/FormLoader/resources/formloader.properties
 software/FormLoader/WebContent/WEB-INF/applicationContext.xml
 /bin
+*target

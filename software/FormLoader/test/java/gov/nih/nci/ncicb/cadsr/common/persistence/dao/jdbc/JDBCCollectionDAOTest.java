@@ -71,7 +71,7 @@ public class JDBCCollectionDAOTest {
 	
 	@Test
 	public void testGetMaxNameRepeatNum() {
-		String collName = "collection dao unit test";
+		String collName = "PhenX Protocols - 4";
 		int maxNum = collectionDao.getMaxNameRepeatNum(collName);
 		
 		assertTrue(maxNum > 0);

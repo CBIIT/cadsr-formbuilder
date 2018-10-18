@@ -189,11 +189,9 @@ public class JDBCCollectionDAO extends JDBCBaseDAOV2 implements CollectionDAO {
 		 
 		 MapSqlParameterSource params = new MapSqlParameterSource();
 		 params.addValue("collname", collectionName);
-		 
-		 int maxNum = 
-				 this.namedParameterJdbcTemplate.queryForInt(sql, params);
-				 
-				
+		 //FORMBUILD-609 this method queryForInt is removed from v.4.3.20
+		 //int maxNum = this.namedParameterJdbcTemplate.queryForInt(sql, params);
+	     int maxNum = this.namedParameterJdbcTemplate.queryForObject(sql, params, Integer.class);
 
 		 return maxNum;
 		 
