@@ -15,7 +15,7 @@
 		</constructor-arg>
 	</bean>
 	
-	<bean id="CaDsrInterceptor" class="gov.nih.nci.system.client.proxy.ApplicationServiceProxy" scope="singleton">
+	<bean id="CaDsrInterceptor" class="gov.nih.nci.system.client.proxy.ApplicationServiceProxy">
 		<property name="proxyFactory">
 			<bean class="gov.nih.nci.system.client.proxy.ProxyHelperImpl"/>
 		</property>

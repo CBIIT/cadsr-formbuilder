@@ -23,7 +23,7 @@
 					<include path="META-INF" />
 				</imports>
 			</module>
-			<module name="com.oracle.jdbc5" />
+			<module name="com.oracle.jdbc7" />
 		</dependencies>
 	</sub-deployment>
 </jboss-deployment-structure>
