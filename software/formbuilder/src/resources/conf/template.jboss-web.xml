@@ -4,10 +4,10 @@
    "http://www.jboss.org/j2ee/dtd/jboss-web_5_0.dtd">
 
 <jboss-web>
-    <security-domain>FormbuilderDomain</security-domain>
+<!--     <security-domain>FormbuilderDomain</security-domain>
     <resource-ref>
         <res-ref-name>jdbc/FormBuilderDS</res-ref-name>
         <jndi-name>java:jboss/datasources/FormBuilderDS</jndi-name>
-    </resource-ref>
+    </resource-ref>  -->
 </jboss-web>
 
