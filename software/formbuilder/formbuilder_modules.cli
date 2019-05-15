@@ -1,14 +1,18 @@
 connect
 
-#1 add the jdbc module it doesn't matter if it's already there
+# add the jdbc module it doesn't matter if it's already there
+module add --name=com.oracle.jdbc7 --resources=/local/content/formbuilder/dist/ojdbc7.jar --dependencies=javax.api,javax.transaction.api
+
 # configure datasource
 # is the driver in standalone.xml?
 # if not, add
 if (outcome != success) of /subsystem=datasources/jdbc-driver=oracle:read-resource 
     /subsystem=datasources/jdbc-driver=oracle:add( \
     driver-name=oracle, \
-    driver-module-name=com.oracle.jdbc5, \
-    driver-xa-datasource-class-name=oracle.jdbc.driver.OracleDriver) {allow-resource-service-restart=true}
+    driver-module-name=com.oracle.jdbc7, \
+    driver-class-name=oracle.jdbc.driver.OracleDriver, \
+    driver-xa-datasource-class-name=oracle.jdbc.xa.client.OracleXADataSource \
+    ) {allow-resource-service-restart=true}
 end-if
 
 # is the db connection in standalone.xml?
