@@ -66,8 +66,9 @@ if (outcome!= success) of /subsystem=logging/logger=gov.nih.nci.ncicb.webtree:re
 /subsystem=logging/logger=gov.nih.nci.ncicb.webtree:add(use-parent-handlers=false,handlers=["CADSRUTIL", "CONSOLE"])
 end-if
 
+### The section above does not allow to see the first FB page over http
 if (outcome != success) of /subsystem=undertow/servlet-container=default/setting=session-cookie:read-resource
-/subsystem=undertow/servlet-container=default/setting=session-cookie:add(http-only=true,secure=true)
+/subsystem=undertow/servlet-container=default/setting=session-cookie:add
 end-if
 
 if (outcome != success) of /subsystem=security/security-domain=FormbuilderDomain:read-resource

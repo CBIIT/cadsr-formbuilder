@@ -859,7 +859,7 @@
       <url-pattern>/gotoManageProtocolsFormEdit.do</url-pattern>
       <url-pattern>/saveFormModuleRepeatAction.do</url-pattern>
       <url-pattern>/gotoCreateModule.do</url-pattern>
-      <url-pattern>/formbuilder/*</url-pattern>
+      <url-pattern>/formbuilder/*.jsp</url-pattern>
       <url-pattern>/formCDECartAction.do</url-pattern>
       <url-pattern>/formCDECartRedirectAction.do</url-pattern>
       <url-pattern>/moduleSaveAction.do</url-pattern>
