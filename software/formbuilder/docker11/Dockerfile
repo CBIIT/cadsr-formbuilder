@@ -46,7 +46,7 @@ USER wildfly
 # change to source code workdir #
 WORKDIR /usr/src/cadsrformbuilder
 RUN git clone -b Formbuilder-4.1.2--Java11-1May2019 https://github.com/CBIIT/cadsr-formbuilder/
-WORKDIR /usr/src/cadsrformbuilder/cadsr-formbuilder/formbuilder
+WORKDIR /usr/src/cadsrformbuilder/cadsr-formbuilder/software/formbuilder
 
 EXPOSE 8080
 ENTRYPOINT /usr/bin/run.sh

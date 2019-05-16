@@ -1,8 +1,8 @@
 version: '2'
 services:
   server:
-    container_name: cadsr-passwordchange11
-    image: cadsr-passwordchange11
+    container_name: cadsr-formbuilder11
+    image: cadsr-formbuilder11
     build: ./
     ports:
      - "8102:8080"
@@ -11,6 +11,8 @@ services:
       CADSR_DS_PORT: $CADSR_DS_PORT
       CADSR_DS_USER: $CADSR_DS_USER
       CADSR_DS_PSWD: $CADSR_DS_PSWD
+      CADSR_DS_FL_USER: $CADSR_DS_FL_USER
+      CADSR_DS_FL_PSWD: $CADSR_DS_FL_PSWD
       CADSR_DS_TNS_ENTRY: $CADSR_DS_TNS_ENTRY
       BRANCH_OR_TAG: $BRANCH_OR_TAG
       tag: $BRANCH_OR_TAG
