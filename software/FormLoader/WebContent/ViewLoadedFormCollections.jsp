@@ -178,7 +178,7 @@ Unload means the form will have a new workflow status RETIRED UNLOADED but the f
 				</s:iterator>
 <tr id="buttonRow">
 	<td colspan="1" align="left" nowrap>
-	<s:submit type="image" src="/FormLoader/i/Unload-Forms.gif" action="unloadForms"align="left" theme="simple" /></td>
+	<s:submit type="image" src="/FormLoader/i/Unload-Forms.gif" action="unloadForms" align="left" theme="simple" /></td>
 	<td colspan="1" align="left" nowrap>
 	<input type="image" src="/FormLoader/i/reset.gif"  onClick="return resetAllCheckboxesByName('action:unloadForms', 'selectedFormIds', 0);" /></input></td>
 </tr>
