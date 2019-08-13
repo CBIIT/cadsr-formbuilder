@@ -151,6 +151,7 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 		List<DataElementTransferObject> des = questionV2Dao.getCdesByPublicIds(cdePublicIds);
 		long end = System.currentTimeMillis();
 		logger.info("TEST -- getCDEsByPublicIds(): Dao returns " + des.size() + " CDEs in "+ (end - start) + " ms." );
+		logger.info(" CDEs returned: "+des);
 		
 		return des;
 	}
