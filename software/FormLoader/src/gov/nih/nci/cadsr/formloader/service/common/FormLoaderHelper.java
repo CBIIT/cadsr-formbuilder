@@ -476,8 +476,11 @@ public class FormLoaderHelper {
 			}
 		}
 		
+		long start = System.currentTimeMillis();
 		HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos = 
 				repository.getPermissibleValuesByVdIds(vdSeqIds);	//JR417 pv has the vpIdseq and vm has the vmIdseq after this successful call!
+		long end = System.currentTimeMillis();
+		logger.info("TEST -- getPermissibleValuesByVdIds(): takes "+ (end - start) + " ms." );		
 
 		ValueHolder vh = new ValueHolder(new QuestionsPVLoader(modules, questDtos, cdeDtos, refdocDtos, pvDtos));	//JR417 questDtos is null for some reason, but it's ok
 

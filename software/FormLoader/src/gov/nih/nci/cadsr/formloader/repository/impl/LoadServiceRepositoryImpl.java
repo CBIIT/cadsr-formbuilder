@@ -604,9 +604,11 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
+			long start = System.currentTimeMillis();
 			//Now, onto questions
 			createQuestionsInModule(module, moduledto, form, formdto, pvDtos, cdeDtos);	//JR417 new pvDtos param //JR423 added second new param
-
+			long end = System.currentTimeMillis();
+			logger.info("TEST -- createQuestionsInModule(): takes "+ (end - start) + " ms." );
 			repository.getQrdao().updateModuleRepeatCount(moduledto.getModuleIdseq(), moduledto.getNumberOfRepeats(), moduledto.getModifiedBy());	//JR366 new!
 
 			logger.info("LoadServiceRepositoryImpl.java#createModulesInForm after createQuestionsInModule");
@@ -688,7 +690,7 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 	@Transactional
 	protected void createQuestionValidValues(QuestionDescriptor question, FormDescriptor form, QuestionTransferObject newQuestdto, 
 			ModuleTransferObject moduledto, FormV2TransferObject formdto, HashMap<String, List<PermissibleValueV2TransferObject>> pvDtos) {
-		
+		long start = System.currentTimeMillis();
 		List<QuestionDescriptor.ValidValue>  validValues = question.getValidValues();
 		
 		int idx = 0;
@@ -774,7 +776,8 @@ public class LoadServiceRepositoryImpl extends FormLoaderRepositoryImpl {
 					formValidValueInstructionV2Dao.createInstruction(instrdto, vvSeqid);
 				}
 			}
-			
+			long end = System.currentTimeMillis();
+			logger.info("TEST -- createQuestionValidValues(): takes "+ (end - start) + " ms." );			
 			logger.debug("Created new valid valid");
 			logger.info("LoadServiceRepositoryImpl.java#createQuestionValidValues Created new valid valid [" + validValues + "]");
 

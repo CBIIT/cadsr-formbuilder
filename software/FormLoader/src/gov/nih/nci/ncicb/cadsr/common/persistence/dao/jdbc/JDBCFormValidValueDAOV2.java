@@ -99,10 +99,11 @@ public class JDBCFormValidValueDAOV2 extends JDBCAdminComponentDAOV2
 		params.addValue("p_long_name", newVV.getLongName());
 		logger.debug(newVV.getLongName());
 		
-//		String prefDef =  newVV.getPreferredDefinition();
-//		if (prefDef == null || prefDef.length() == 0)
-//			prefDef = "Form Loader Testing";
-		params.addValue("p_preferred_definition", newVV.getPreferredDefinition());
+		String prefDef =  newVV.getPreferredDefinition();
+		if (prefDef == null || prefDef.length() == 0)
+			prefDef = "No Definition";
+
+		params.addValue("p_preferred_definition", prefDef);
 		logger.debug(newVV.getPreferredDefinition());
 		params.addValue("p_conte_idseq", newVV.getContext().getConteIdseq());
 		logger.debug(newVV.getContext().getConteIdseq());

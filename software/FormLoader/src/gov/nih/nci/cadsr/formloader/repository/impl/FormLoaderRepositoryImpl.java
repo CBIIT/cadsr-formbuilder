@@ -147,8 +147,10 @@ public class FormLoaderRepositoryImpl implements FormLoaderRepository {
 			logger.debug("getCDEsByPublicIds(): cde public id list is null or empty. Unable to querry db.");
 			return null;
 		}
+		long start = System.currentTimeMillis();
 		List<DataElementTransferObject> des = questionV2Dao.getCdesByPublicIds(cdePublicIds);
-		logger.debug("getCDEsByPublicIds(): Dao returns " + des.size() + " CDEs");
+		long end = System.currentTimeMillis();
+		logger.info("TEST -- getCDEsByPublicIds(): Dao returns " + des.size() + " CDEs in "+ (end - start) + " ms." );
 		
 		return des;
 	}
