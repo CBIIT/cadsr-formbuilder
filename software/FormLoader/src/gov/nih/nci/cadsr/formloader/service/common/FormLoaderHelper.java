@@ -413,7 +413,7 @@ public class FormLoaderHelper {
 			logger.debug("Module list is null. Unable to collect public ids.");
 			return;
 		}
-			
+		logger.info("TEST -- modules: "+modules);	
 		for (ModuleDescriptor module : modules) {
 			List<QuestionDescriptor> questions = module.getQuestions();
 			
@@ -430,8 +430,8 @@ public class FormLoaderHelper {
 				else
 					question.addMessage("Question has not associated data element public id. Unable to validate");				
 			}
-			logger.debug("Questions from the module: "+questCdePublicIds);
-			logger.debug("Collected " + questPublicIds.size() + " question public ids and " + questCdePublicIds.size() +
+			logger.info("TEST -- Questions from the module: "+questCdePublicIds);
+			logger.info("Collected " + questPublicIds.size() + " question public ids and " + questCdePublicIds.size() +
 					" cde public ids in module [" + module.getPublicId() + "|" + module.getVersion() + "]");
 		}
 		
