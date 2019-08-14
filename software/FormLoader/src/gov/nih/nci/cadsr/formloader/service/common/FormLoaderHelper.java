@@ -413,18 +413,21 @@ public class FormLoaderHelper {
 			logger.debug("Module list is null. Unable to collect public ids.");
 			return;
 		}
-		logger.info("TEST -- modules: "+modules);	
+	
 		for (ModuleDescriptor module : modules) {
 			List<QuestionDescriptor> questions = module.getQuestions();
 			
 			for (QuestionDescriptor question : questions) {
 				String questPubId = question.getPublicId();
 				//Only need to validate question public id + version if it's an update form
+				logger.info("TEST -- Question Public ID: "+questPubId);
+				logger.info("TEST -- Form Load Type: "+formLoadType);
 				if (formLoadType.equals(FormDescriptor.LOAD_TYPE_UPDATE_FORM)
 						&& questPubId != null && questPubId.length() > 0)
 					questPublicIds.add(questPubId);
 				
 				String cdePublicId = question.getCdePublicId();
+				logger.info("TEST -- CDE public ID:" +cdePublicId);
 				if (cdePublicId != null && cdePublicId.length() > 0)
 					questCdePublicIds.add(cdePublicId); 
 				else
