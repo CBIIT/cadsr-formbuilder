@@ -430,7 +430,7 @@ public class FormLoaderHelper {
 				else
 					question.addMessage("Question has not associated data element public id. Unable to validate");				
 			}
-			
+			logger.debug("Questions from the module: "+questCdePublicIds);
 			logger.debug("Collected " + questPublicIds.size() + " question public ids and " + questCdePublicIds.size() +
 					" cde public ids in module [" + module.getPublicId() + "|" + module.getVersion() + "]");
 		}
