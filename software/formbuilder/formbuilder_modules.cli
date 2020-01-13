@@ -10,10 +10,12 @@ if (outcome != success) of /subsystem=datasources/jdbc-driver=oracle:read-resour
     driver-module-name=com.oracle.jdbc5, \
     driver-xa-datasource-class-name=oracle.jdbc.driver.OracleDriver) {allow-resource-service-restart=true}
 end-if
-
+# if yes remove
+if (outcome == success) of /subsystem=datasources/data-source=FormBuilderDS:read-resource
+data-source remove --name=FormBuilderDS
+end-if
 # is the db connection in standalone.xml?
-# if not, add
-if (outcome != success) of /subsystem=datasources/data-source=FormBuilderDS:read-resource
+
 data-source add \
 	--name=FormBuilderDS \
 	--driver-name=oracle \
@@ -24,7 +26,6 @@ data-source add \
 	--use-ccm=true \
 	--max-pool-size=100 \ 
 	--blocking-timeout-wait-millis=5000 
-end-if
 
 if (outcome != success) of /subsystem=logging/size-rotating-file-handler=FORMBUILDER:read-resource
 /subsystem=logging:write-attribute(name=use-deployment-logging-config, value=false)
