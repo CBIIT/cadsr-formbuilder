@@ -1,5 +1,10 @@
 connect
 
+# We cannot remove old datasource without undeploying the applications
+if (outcome ==success) of /deployment=formbuilder.ear:read-resource
+undeploy formbuilder.ear
+end-if
+
 #1 add the jdbc module it doesn't matter if it's already there
 # configure datasource
 # is the driver in standalone.xml?
