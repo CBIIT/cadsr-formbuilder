@@ -53,10 +53,14 @@
  <table>
 <s:form  method="post" action="login">
   <tr>
-	<s:textfield name="username" key="label.username" size="20" />  </tr>
-	  <tr>
-	<s:password name="password" key="label.password" size="20" />  </tr>
-	  <tr>
+	<td class="tdLabel"><label for="login_username" class="label">Username:</label></td>
+	<td><input type="text" name="username" value="" id="login_username" size="20" autocomplete="off" /></td> 
+   </tr>
+   <tr>
+	  <td class="tdLabel"><label for="login_password" class="label">Password:</label></td>
+	  <td><input type="text" name="password" value="" id="login_password" size="20" autocomplete="off" /></td> 
+   </tr>
+   <tr>
 	  	<td colspan="1" align="left" nowrap>
 <s:submit type="image" src="/FormLoader/i/logon.gif" value="execute" align="left" theme="simple" /></td>
 	  	<td colspan="1" align="left" nowrap>
