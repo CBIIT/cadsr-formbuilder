@@ -7,14 +7,12 @@ L--%>
 
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
-<%@ taglib prefix="sx" uri="/struts-dojo-tags"%>
 <html>
 <head>
 <style type="text/css">
 @import url(css/style.css);
 </style>
 	<title>Load Summary</title>
-	<sx:head />
 </head>
 <div style="padding-left: 50px; padding-right: 50px;">
 <body>
@@ -37,7 +35,7 @@ L--%>
 				<th>Load Type</th>
 				<th>Load Status</th>
 			</tr>
-			<s:iterator value="loadedForms" id = "bean" status="status">
+			<s:iterator value="loadedForms" var = "bean" status="status">
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
 				<td>
 				<a href="<s:property value="getLinkToFormBuilder()" />" target="_blank"><s:property value="publicId" /></a>
@@ -67,7 +65,7 @@ L--%>
 				<th>Long Name in XML</th>
 				<th>Reason</th>
 			</tr>
-			<s:iterator value="otherForms" id = "bean" status="status">
+			<s:iterator value="otherForms" var = "bean" status="status">
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
 				<td><s:property value="publicId" /></td>
 				<td><s:property value="version" /></td>

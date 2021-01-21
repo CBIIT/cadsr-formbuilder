@@ -63,7 +63,7 @@ Unload means the form will have a new workflow status RETIRED UNLOADED but the f
 				<th><a href="<s:url action="sortCollectionListByDate"/>">Loaded Date</a></th>
 			</tr>
 			
-            <s:iterator value="collectionList" id = "bean" status="status">
+            <s:iterator value="collectionList" var = "bean" status="status">
             
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>" id="parent-<s:property value="id" />"> 			    
 				<td id="expandable"><div style="width: 250px;"><img id="imgparent-<s:property value="id" />" src="/FormLoader/i/small_plus.gif" alt="plus">&nbsp;<s:property value= "getNameWithRepeatIndicator()"/></div>

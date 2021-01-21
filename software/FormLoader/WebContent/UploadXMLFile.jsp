@@ -7,12 +7,10 @@ L--%>
 
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
-<%@ taglib prefix="sx" uri="/struts-dojo-tags"%>
 <html>
 <head>
 <title>Upload XML File</title>
 <LINK REL=STYLESHEET TYPE="text/css" HREF="<%=request.getContextPath()%>/css/blaf.css">
-<sx:head />
 </head>
  
 

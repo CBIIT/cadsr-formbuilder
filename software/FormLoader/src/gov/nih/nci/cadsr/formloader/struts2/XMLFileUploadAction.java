@@ -30,7 +30,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.ValidationAware;
+import com.opensymphony.xwork2.interceptor.ValidationAware;
  
 public class XMLFileUploadAction extends ActionSupport implements
 ServletRequestAware, ValidationAware{

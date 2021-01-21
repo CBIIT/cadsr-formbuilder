@@ -7,11 +7,9 @@ L--%>
 
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
-<%@ taglib prefix="sx" uri="/struts-dojo-tags"%>
 <html>
 <head>
 	<title>Summary of Unloaded Forms</title>
-	<sx:head />
 <script src="./js/jquery-1.9.1.js"></script>
   <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
   
@@ -48,7 +46,7 @@ L--%>
 				<th>Comment</th>
 			</tr>
 			
-            <s:iterator value="unloadedForms" id = "bean" status="status">
+            <s:iterator value="unloadedForms" var = "bean" status="status">
             <tbody>
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>" id="<s:property value="id" />">
 				<td align="center">

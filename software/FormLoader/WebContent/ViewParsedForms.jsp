@@ -56,7 +56,7 @@ Select forms to validate the questions against caDSR database
 				<th>Workflow Status in XML</th>
 				<th># Module(s) in XML</th>
 			</tr>
-			<s:iterator value="parsedFormsNoErrorList" id = "bean" status="status">
+			<s:iterator value="parsedFormsNoErrorList" var = "bean" status="status">
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
 				<td>
 					<s:checkbox id="mycheck" name="selectedFormIndices" fieldValue="%{index}" value="false" 
@@ -106,7 +106,7 @@ Select forms to validate the questions against caDSR database
 				<th>Long Name in XML</th>
 				<th>Errors</th>
 			</tr>
-			<s:iterator value="parsedFormsWithErrorList" id = "bean" status="status">
+			<s:iterator value="parsedFormsWithErrorList" var = "bean" status="status">
 			<tr	class="<s:if test="#status.odd == true ">odd</s:if> <s:else>even</s:else>">
 				<td><s:property value="publicId" /></td>
 				<td><s:property value="version" /></td>
