@@ -58,7 +58,7 @@
    </tr>
    <tr>
 	  <td class="tdLabel"><label for="login_password" class="label">Password:</label></td>
-	  <td><input type="text" name="password" value="" id="login_password" size="20" autocomplete="off" /></td> 
+	  <td><input type="password" name="password" value="" id="login_password" size="20" autocomplete="off" /></td> 
    </tr>
    <tr>
 	  	<td colspan="1" align="left" nowrap>
